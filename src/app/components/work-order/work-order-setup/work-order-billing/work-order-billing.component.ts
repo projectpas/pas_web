@@ -48,6 +48,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Output() updateWOBilling = new EventEmitter();
     @Input() workFlowWorkOrderId = 0;
     @Input() workFlowId;
+    @Input() workOrderPartNumberId;
     @Input() labordata: any;
     @Input() workOrderLaborList: any;
     @Input() isbillingNotCreated = false;
@@ -58,7 +59,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
     overAllMarkup: any;
     employeeList: any;
-    workOrderPartNumberId:number
+    //workOrderPartNumberId:number
     customerNamesList: Object;
     soldToCustomername:string;
     shipToCustomername:string;
@@ -164,18 +165,10 @@ export class WorkOrderBillingComponent implements OnInit {
         const data = this.billingorInvoiceForm;
         this.billingorInvoiceFormNew = this.billingorInvoiceForm;
         this.workOrderId = this.savedWorkOrderData.workOrderId;
-        this.workOrderPartNumberId = this.savedWorkOrderData.woPartNoId;
         this.getBillingList();
         this.getEmployeeList(this.workOrderId);
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
         this.employeeId= editValueAssignByCondition('value', this.savedWorkOrderData.employeeId);
-        // this.getShipViaByCustomerId();
-        // this.getPercentageList();
-        // this.getInvoiceList();
-        // this.resetOtherOptions();
-        // this.BindManagementStructure();
-        // this.getCurrencyList();
-
     }
     ngOnChanges(changes: SimpleChanges) {
         if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
@@ -200,9 +193,6 @@ export class WorkOrderBillingComponent implements OnInit {
         this.invoiceStatus = rowData.invoiceStatus;
         this.loadInvoiceView();
     }
-
- 
-
     loadInvoiceView() {
         this.WObillingInvoicingId = this.workOrderBillingInvoiceId;
         this.modal = this.modalService.open(this.printPostModal, { size: "lg", backdrop: 'static', keyboard: false });
@@ -211,20 +201,16 @@ export class WorkOrderBillingComponent implements OnInit {
     {
         this.invoiceStatus = invoiceStatus;
     }
-
     close() {
         this.modal.close();
     }
-
     CommonMethod()
     {
-            
             this.loadcustomerData('');
             if (this.billingorInvoiceForm.soldToCustomerId) 
             {
                 this.getSiteNames(this.customerId,this.billingorInvoiceForm.soldToSiteId);
             }
-
             if (this.billingorInvoiceForm.shipToCustomerId) 
             {
                 this.getSiteNamesByShipCustomerId(this.billingorInvoiceForm.shipToCustomerId.customerId,this.billingorInvoiceFormNew.shipToSiteId);
@@ -237,7 +223,6 @@ export class WorkOrderBillingComponent implements OnInit {
         this.getPercentageList();
         this.getInvoiceList();
         this.resetOtherOptions();
-        //this.BindManagementStructure();
         this.getCurrencyList();
         this.resetMisCharges();
         this.resetMaterial();
@@ -301,7 +286,6 @@ export class WorkOrderBillingComponent implements OnInit {
         }
         this.showBillingForm = true;
     }
-
     billingCreateOrEdit(type) {
         this.isSpinnerVisible = true;
         this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -336,14 +320,12 @@ export class WorkOrderBillingComponent implements OnInit {
             this.errorHandling(error);
         })
     }
-
     PerformWorkBilling()
     {   
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.showBillingForm = true;
         this.billingCreateOrEdit("workorder");
-       
     }
 
     PerformQouteBilling()
@@ -352,13 +334,7 @@ export class WorkOrderBillingComponent implements OnInit {
         this.partSelected = true;
         this.showBillingForm = true;
         this.billingCreateOrEdit("qoute");
-
         this.Getbillinginvoicingdetailsfromquote();
-
-        //this.billingorInvoiceForm.totalWorkOrderValue = 4;
-        // if (this.quoteMaterialList && this.quoteMaterialList.length > 0) {
-        //     this.overAllMarkup = Number(this.quoteMaterialList[0].headerMarkupId);
-        // }
     }
 
     onSelectPartNumber(rowData) {
@@ -370,8 +346,6 @@ export class WorkOrderBillingComponent implements OnInit {
             this.workOrderShippingId = rowData.workOrderShippingId;
             this.partSelected = true;
             this.showBillingForm = true;
-            //this.billingCreateOrEdit();
-            //this.getbillingCostDataForWoOnly();
         }
     }
 
@@ -449,7 +423,6 @@ export class WorkOrderBillingComponent implements OnInit {
         );
     }
 
-
     getEmployeeList(woId) {
         this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName')
             .subscribe(
@@ -462,7 +435,6 @@ export class WorkOrderBillingComponent implements OnInit {
                 }
             )
     }
-
 
     getPercentageList() {
         this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
@@ -512,7 +484,6 @@ export class WorkOrderBillingComponent implements OnInit {
             : null;
     }
 
-
     filterCustomerNames(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loadcustomerData(event.query);
@@ -524,17 +495,14 @@ export class WorkOrderBillingComponent implements OnInit {
         if (this.arrayCustlist.length == 0) {
             this.arrayCustlist.push(0);
         }
-
         if (this.customerId >0) 
         {
             this.arrayCustlist.push(this.customerId);
         }
-
         if (this.billingorInvoiceForm.shipToCustomerId) 
         {
             this.arrayCustlist.push(this.billingorInvoiceForm.shipToCustomerId.customerId);
         }
-      
         this.isSpinnerVisible = true;
         await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.isSpinnerVisible = false;
@@ -797,16 +765,12 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.markUpList.forEach((markup) => {
                     if (markup.value == value) {
                         this.billingorInvoiceForm.totalWorkOrderCostPlus =  this.formateCurrency(Number(this.billingorInvoiceForm.totalWorkOrderCost.toString().replace(/\,/g,'')) + ((Number(this.billingorInvoiceForm.totalWorkOrderCost.toString().replace(/\,/g,'')) / 100) * Number(markup.label)))
-                        //this.billingorInvoiceForm.totalWorkOrderCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.totalWorkOrderCost) + ((Number(this.billingorInvoiceForm.totalWorkOrderCost) * Number(markup.label)) / 100));
                     }
                 })
             }
             catch (e) {
             }
         }
-     
-
-      //  this.billingorInvoiceForm.totalWorkOrderCostPlus = Math.round(Math.round(materialCostPlus) + Math.round(misChargeCostPlus) + Math.round(laborOverHeadCostPlus) + Math.round(freightCostPlus)).toFixed(2);
     }
 
     resetMaterial() {
@@ -864,8 +828,6 @@ export class WorkOrderBillingComponent implements OnInit {
 
     }
 
-
-
     sumOfMaterialList() {
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
             this.billingorInvoiceForm.materialCost = (this.QouteDetails) ? this.QouteDetails.materialFlatBillingAmount : 0.00;
@@ -884,8 +846,6 @@ export class WorkOrderBillingComponent implements OnInit {
             }
             catch (e) {
             }
-           
-            //this.billingorInvoiceForm.materialCostPlus = this.formateCurrency(Number(this.billingorInvoiceForm.materialCost) + ((Number(this.billingorInvoiceForm.materialCost) * Number(value)) / 100));
         }
     }
     sumofLaborOverHead() {
@@ -907,11 +867,8 @@ export class WorkOrderBillingComponent implements OnInit {
             }
             catch (e) {
             }
-            //this.billingorInvoiceForm.laborOverHeadCostPlus = Math.round(Number(this.billingorInvoiceForm.laborOverHeadCost) + ((Number(this.billingorInvoiceForm.laborOverHeadCost) * Number(value)) / 100)).toFixed(2);
         }
     }
-
-
     sumofCharges() {
 
         if (this.billingorInvoiceForm && this.isWorkOrder == false && this.quotestatusofCurrentPart == 'Approved') {
@@ -938,7 +895,6 @@ export class WorkOrderBillingComponent implements OnInit {
             }
             catch (e) {
             }
-           // this.billingorInvoiceForm.miscChargesCostPlus = Math.round(Number(this.billingorInvoiceForm.miscChargesCost) + ((Number(this.billingorInvoiceForm.miscChargesCost) * Number(value)) / 100)).toFixed(2);
         }
     }
 
@@ -956,7 +912,6 @@ export class WorkOrderBillingComponent implements OnInit {
             }
             catch (e) {
             }
-            //this.billingorInvoiceForm.freightCostPlus = Math.round(Number(this.billingorInvoiceForm.freightCost) + ((Number(this.billingorInvoiceForm.freightCost) * Number(value)) / 100)).toFixed(2);
         }
     }
     calculateGrandTotal() {
@@ -976,8 +931,6 @@ export class WorkOrderBillingComponent implements OnInit {
             {
                 this.Iswocheckbox = false;
             }
-
-
           }
 
             if (this.billingorInvoiceForm.totalWorkOrder === false) {
@@ -999,7 +952,6 @@ export class WorkOrderBillingComponent implements OnInit {
                 this.billingorInvoiceForm.grandTotal = this.formateCurrency(Number(totalWorkOrderCostPlus.toString().replace(/\,/g,'')));
             }
         }
-
     }
 
     get userName(): string {
@@ -1011,13 +963,8 @@ export class WorkOrderBillingComponent implements OnInit {
         this.saveWorkOrderBilling(InvoiceTypeEnum.Billed);
     }
     updateWorkOrderBilling() { }
-
-
     saveWorkOrderBilling(invoiceStatus: InvoiceTypeEnum) {
         let billingItems: BillingItems[] = [];
-
-         
-
         this.billingList.filter(a => {
             for (let i = 0; i < a.workOrderBillingInvoiceChild.length; i++) {
                 if (i==0) 
@@ -1058,14 +1005,10 @@ export class WorkOrderBillingComponent implements OnInit {
 
         //     billingItems.push(p);
         // }
-
-       
         
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId['customerId'];
         this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['customerId'];
-       // this.soldToCustomername = billingorInvoiceFormTemp.soldToCustomerId['customerName'];
-        //this.shipToCustomername = billingorInvoiceFormTemp.shipToCustomerId['customerName'];
         this.billingorInvoiceForm.shipToSiteId = billingorInvoiceFormTemp.shipToSiteId;
         this.billingorInvoiceForm.soldToSiteId = billingorInvoiceFormTemp.soldToSiteId;
         this.billingorInvoiceForm.createdDate = new Date();
@@ -1098,7 +1041,6 @@ export class WorkOrderBillingComponent implements OnInit {
             this.showBillingForm = false;
             this.workOrderId = result[0].workOrderId;
             this.workOrderBillingInvoiceId = result[0].woBillingInvoicingId;
-            //this.loadInvoiceView();
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
