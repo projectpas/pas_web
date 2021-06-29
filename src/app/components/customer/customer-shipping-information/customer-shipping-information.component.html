@@ -1387,9 +1387,9 @@
               </div>
               <div class="col-md-3 cli_vds">
                 <div class="form-group">
-                  <label>Ship Via <span class="clr-red"></span></label>
+                  <label>Ship Via <span class="clr-red">*</span></label>
                   <p-dropdown name="company1" (ngModelChange)="enableSaveShipViaDomestic()" #wocompanyId="ngModel"
-                    [options]="shipViaDropdownList" placeholder="Select Ship Via"
+                    [options]="shipViaDropdownList" placeholder="Select Ship Via" required
                     class="p-dropdown-custom-md p-dropdown-cus-fullwidth" [(ngModel)]="shipViaDomestic.shipViaId">
                   </p-dropdown>
                 </div>

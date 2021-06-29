@@ -1441,7 +1441,7 @@ resetallcost()
                  
                  .first-block-sold {
                    position: relative;
-                   min-height: 120px;
+                   min-height: 141px;
                    height:auto;
                    float: left;
                    border-right:1px solid black;

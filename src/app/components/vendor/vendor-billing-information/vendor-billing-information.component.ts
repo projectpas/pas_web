@@ -456,7 +456,7 @@ export class VendorBillingInformationComponent {
     private onAuditHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
         this.billingauditHisory = auditHistory;
         this.isSpinnerVisible = false;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
 
     editItemAndCloseModel() {        

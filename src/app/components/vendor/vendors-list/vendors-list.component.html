@@ -167,7 +167,7 @@
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" class="table-column-width" />
+          <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -544,7 +544,13 @@
                 >
                   {{ audit.vendorPhoneContact }}
                 </td>
-                <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled></p></td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
+                    </label>
+                  </span>
+                </td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td
                   [ngStyle]="{
@@ -565,7 +571,13 @@
                     >
                       {{ audit.updatedBy }}
                 </td>
-                <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto">
+                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                    </label>
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>

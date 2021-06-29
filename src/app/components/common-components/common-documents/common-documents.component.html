@@ -449,10 +449,10 @@
               <th>Memo</th>
               <th>File Name</th>
               <th>Created Date</th>
-              <th>Created By</th>
+              <th style="width:100px">Created By</th>
               <th> Updated Date</th>
-              <th>Updated By</th>
-              <th>Is Deleted</th>
+              <th style="width:100px">Updated By</th>
+              <th style="width:100px">Is Deleted</th>
             </tr>
           </thead>
           <tbody>
@@ -462,7 +462,9 @@
               </td>
               <td class="truncate-text"
                 [ngStyle]="{'color': getColorCodeForHistory(i, 'docDescription', audit.docDescription)  ? 'black' : 'red'  }">
-             <p > {{audit.docDescription}}</p>
+             <!-- <p > -->
+                {{audit.docDescription}}
+              <!-- </p> -->
               </td>
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
                 {{audit.name}}
