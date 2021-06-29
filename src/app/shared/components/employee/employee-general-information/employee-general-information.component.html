@@ -413,12 +413,12 @@
                                 </div>
                             </div>
                             <div class="m-b-10">
-                                <button type="button" [disabled]="!isEnableNext" class="btn btn-primary pull-right"
+                                <button *ngIf="isNextVisible && isEditContent" type="button" [disabled]="!isEnableNext" class="btn btn-primary pull-right"
                                     (click)="nextClick('Next')"> Next</button>
-                                <button *ngIf="!isEditContent" type="button"
+                                <button *ngIf="isAdd && !isEditContent" type="button"
                                     [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )"
                                     class="btn btn-primary pull-right" (click)="onSubmit2()">Save </button>
-                                <button *ngIf="isEditContent" type="button"
+                                <button *ngIf="isEdit && isEditContent" type="button"
                                     [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )"
                                     class="btn btn-primary pull-right" (click)="onSubmit2()">Update </button>
                             </div>

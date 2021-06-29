@@ -305,9 +305,9 @@
                                         </div>
                               
                                     <div class="buttons-margin">
-                                        <button *ngIf="isNextVisible" type="button"  [disabled]="!isEnableNext" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next</button>
-                                        <button *ngIf ="isAdd && !isEditContent" type="button" [disabled]="nextbuttonEnable == false" class="btn btn-primary pull-right" (click)="savetrainigSection()">Save </button>
-                                        <button *ngIf ="isEdit && isEditContent"type="button" [disabled]="disableSave" class="btn btn-primary pull-right" (click)="savetrainigSection()"> {{ !sourceEmployee.employeeTrainingId ? 'Save' : 'Update' }} </button>
+                                        <button *ngIf="isNextVisible && isEnableNext" type="button"  [disabled]="!isEnableNext" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next</button>
+                                        <button *ngIf ="isAdd && !sourceEmployee.employeeTrainingId" type="button" [disabled]="nextbuttonEnable == false" class="btn btn-primary pull-right" (click)="savetrainigSection()">Save </button>
+                                        <button *ngIf ="isEdit && sourceEmployee.employeeTrainingId > 0"type="button" [disabled]="disableSave" class="btn btn-primary pull-right" (click)="savetrainigSection()"> {{ !sourceEmployee.employeeTrainingId ? 'Save' : 'Update' }} </button>
                                         <button *ngIf="isPrevVisible" type="button" class="btn btn-primary pull-right"  (click)="nextClick('Previous')" >Previous</button>
                                     </div>
                             </div>

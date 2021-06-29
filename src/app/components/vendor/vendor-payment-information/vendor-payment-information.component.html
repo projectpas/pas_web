@@ -335,9 +335,13 @@
                                     </div>                                   
                                 </div>
                                 <div class="form-row pull-right">
-                                    <button type="button" class="btn btn-primary pull-right"
+                                    <button *ngIf="isAdd && !domesticSaveObj.domesticWirePaymentId" type="button" class="btn btn-primary pull-right"
                                         [disabled]="disableSave || !addDomesticWireForm.valid"
                                         (click)="saveDomesticPaymentInfo()">Save</button>
+
+                                    <button *ngIf="isEdit && domesticSaveObj.domesticWirePaymentId > 0" type="button" class="btn btn-primary pull-right"
+                                        [disabled]="disableSave || !addDomesticWireForm.valid"
+                                        (click)="saveDomesticPaymentInfo()">Update</button>
                                 </div>
                             </form>
                         </p-tabPanel>
@@ -426,9 +430,13 @@
                                     </div>
                                 </div>
                                 <div class="form-row  pull-right">
-                                    <button type="button" class="btn btn-primary pull-right"
+                                    <button *ngIf="isAdd && !internationalSaveObj.internationalWirePaymentId" type="button" class="btn btn-primary pull-right"
                                         [disabled]="disableSave || !addInternationalWireForm.valid"
                                         (click)="saveInternationalPaymentInfo()">Save</button>
+
+                                    <button *ngIf="isEdit && internationalSaveObj.internationalWirePaymentId > 0" type="button" class="btn btn-primary pull-right"
+                                        [disabled]="disableSave || !addInternationalWireForm.valid"
+                                        (click)="saveInternationalPaymentInfo()">Update</button>
                                 </div>                                
                             </form>
                         </p-tabPanel>
@@ -474,8 +482,10 @@
                                 </div>
                             </div>
                             <div class="form-row" class="m-t-10">
-                                <button type="button" class="btn btn-primary"
+                                <button *ngIf="isAdd && !defaultSaveObj.vendorPaymentId" type="button" class="btn btn-primary"
                                     [disabled] = "disableSave" (click)="saveDefaultPaymentInfo()">Save</button>
+                                <button *ngIf="isEdit && defaultSaveObj.vendorPaymentId > 0" type="button" class="btn btn-primary"
+                                    [disabled] = "disableSave" (click)="saveDefaultPaymentInfo()">Update</button>
                             </div>
                         </p-tabPanel>
                     </p-tabView>

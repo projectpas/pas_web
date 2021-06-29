@@ -634,36 +634,34 @@ export class VendorsListComponent implements OnInit {
         this.CertifiedModuleName="VendorCertified";
         this.AuditModuleName="VendorAudit";
         this.moduleNameVendor="Vendor"
-        
-        this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
-            
-            this.vendorData = res;    
-            this.isSpinnerVisible = false;        
-        },error => this.isSpinnerVisible = false); 
-        this.toGetVendorGeneralDocumentsList(row.vendorId);
-        this.toGetVendorCertifiedDocumentsList(row.vendorId);
-        this.toGetVendorAuditDocumentsList(row.vendorId);
-        this.getVendorProcess1099FromTransaction(row.vendorId);
-        this.getDomesticWithVendorId(row.vendorId);
-        this.InternatioalWithVendorId(row.vendorId);
-        this.DefaultWithVendorId(row.vendorId);
 
-        if (this.isPaymentInfo) {
+        if (this.isGeneralInforView) {
+            this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {            
+                this.vendorData = res;    
+                this.isSpinnerVisible = false;        
+            },error => this.isSpinnerVisible = false); 
+        }
+        //this.toGetVendorGeneralDocumentsList(row.vendorId);
+        //this.toGetVendorCertifiedDocumentsList(row.vendorId);
+        //this.toGetVendorAuditDocumentsList(row.vendorId);
+        if (this.isFinancialInfo) {
+            this.getVendorProcess1099FromTransaction(row.vendorId);
+        }
+        if(this.isPaymentInfo){
+            this.getDomesticWithVendorId(row.vendorId);
+            this.InternatioalWithVendorId(row.vendorId);
+            this.DefaultWithVendorId(row.vendorId)
             this.loadPayamentData(row.vendorId);
         }
-
         if (this.isMemoView) {
             this.loadMemosData(row.vendorId);
         }
-
         if (this.isFinancialInfo) {
             this.getVendorFinanceInfo(row.vendorId);
         }
-
         this.isSpinnerVisible = false;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-        $('#step1').collapse('show');  
-       
+        $('#step1').collapse('show');         
     }
 
     openHelpText(content) {

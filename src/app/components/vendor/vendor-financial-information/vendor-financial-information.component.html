@@ -131,12 +131,12 @@
                         </div>
                         <div>
                             <button *ngIf="isNextVisible" type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')">Next</button>
-                            <button *ngIf ="!enableUpdate" type="button" class="btn btn-primary pull-right"
+                            <button *ngIf ="!enableUpdate && isVFIAdd" type="button" class="btn btn-primary pull-right"
                                     [disabled]="!finInfoForm.valid || disableCreditTerms || disableCurrency"
                                     (click)="editItemAndCloseModel(true)">
                                 Save
                             </button>
-                            <button *ngIf ="enableUpdate" type="button" class="btn btn-primary pull-right"
+                            <button *ngIf ="enableUpdate && isVFIEdit" type="button" class="btn btn-primary pull-right"
                                     [disabled]="!finInfoForm.valid || disableCreditTerms || disableCurrency || disableUpdate"
                                     (click)="editItemAndCloseModel(true)">
                                 Update

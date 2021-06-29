@@ -347,13 +347,14 @@
 
                 <hr />
               </div>
-              <div class="panel-heading">
+              <div class="panel-heading" *ngIf="isGeneralInfo">
                 <h4 class="panel-title">
-                  <a *ngIf="isGeneralInfo" class="collapsed" data-toggle="collapse" href="#step1">General
+                  <a class="collapsed" data-toggle="collapse" href="#step1">General
                     Information</a>
                 </h4>
               </div>
-              <div id="step1" class="panel-collapse collapse" *ngIf="allEmployeelist">
+
+              <div id="step1" class="panel-collapse collapse" *ngIf="allEmployeelist && isGeneralInfo">
                 <div class="panel-body">
                   <div class="card">
                     <div class="card-body">
@@ -640,10 +641,10 @@
                 </div>
               </div>
 
-              <div class="panel panel-default">
+              <div class="panel panel-default" *ngIf="isCert">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a *ngIf="isCert" class="collapsed" data-toggle="collapse" href="#step2">Certification</a>
+                    <a  class="collapsed" data-toggle="collapse" href="#step2">Certification</a>
                   </h4>
                 </div>
                 <div id="step2" class="panel-collapse collapse">
@@ -728,10 +729,10 @@
                 </div>
               </div>
 
-              <div class="panel panel-default">
+              <div class="panel panel-default" *ngIf="isTraining">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a *ngIf="isTraining" class="collapsed" data-toggle="collapse" href="#step3">Training</a>
+                    <a class="collapsed" data-toggle="collapse" href="#step3">Training</a>
                   </h4>
                 </div>
                 <div id="step3" class="panel-collapse collapse">
@@ -837,10 +838,10 @@
                 </div>
               </div>
 
-              <div class="panel panel-default">
+              <div class="panel panel-default" *ngIf="isMgmtStruct">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a *ngIf="isMgmtStruct" class="collapsed" data-toggle="collapse" href="#step4">Management
+                    <a  class="collapsed" data-toggle="collapse" href="#step4">Management
                       Structure</a>
                   </h4>
                 </div>
