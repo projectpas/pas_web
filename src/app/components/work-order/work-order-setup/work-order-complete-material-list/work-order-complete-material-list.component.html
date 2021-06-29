@@ -646,7 +646,7 @@
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead history_hg">
-                        <table class="table table-bordered header-table-width">
+                        <table class="table table-bordered">
 
                             <!-- <span class="clr-red">*</span> -->
                             <ng-container>
@@ -836,19 +836,17 @@
                         </table>
                     </div>
                     <ng-template *ngIf="auditHistoryList && auditHistoryList.length==0">
-                        <div class="text-center">
+                        
                             <div class="text-center">
                                 <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
                                 <h4 class="no-history-found-msg">No History Found </h4>
                             </div>
-                        </div>
+                      
                     </ng-template>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                    Close
-                </button>
+                <button class="btn btn-danger history-close-button" data-dismiss="modal" type="button">Close</button>
             </div>
         </div>
        

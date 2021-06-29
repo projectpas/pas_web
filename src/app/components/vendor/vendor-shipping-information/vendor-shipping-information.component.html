@@ -460,7 +460,7 @@
                             </div>
                             
                             <div id="domesticShippingHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-                                <div class="modal-dialog modal-xl">
+                                <div class="modal-dialog modal-xlg">
 
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -760,8 +760,8 @@
                                                          [rowsPerPageOptions]="[10,20,50,100]" [columns]="shipViacols" selectionMode="multiple"
                                                          [(selection)]="selectedShipViaColumns" [resizableColumns]="true" [reorderableColumns]="true"
                                                          (onPage)="pageIndexChangeForShipViaDom($event)" [loading]="loaderForDomesticShipVia">
-                                                    <ng-template pTemplate="caption">
-                                                    </ng-template>
+                                                    <!-- <ng-template pTemplate="caption">
+                                                    </ng-template> -->
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
                                                             <th class="width-50">Flag</th>
@@ -803,9 +803,9 @@
                                                                     : rowData[col.field]
                                                                 }}
                                                               </td>
-                                                              <td *ngIf="col.field == 'memo'">
-                                                                  <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
-                                                                  [matTooltip]="parsedText(rowData[col.field])" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                                              <td  class="table-column-width" *ngIf="col.field == 'memo'">
+                                                                  <p class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above" 
+                                                                  [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                                                               </td>
                                                               </ng-container>
 
@@ -1447,18 +1447,25 @@
                                                     </td>
                                                     <td class="table-column-width ui-resizable-column" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                                         pReorderableRowHandle>
-                                                        <ng-container *ngIf="col.field != 'amount' && col.field == 'createdDate' || col.field == 'updatedDate' && col.field != 'amount'">
+                                                        <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate' && col.field != 'amount'">
                                                             {{
-                                                                          col.field == 'createdDate'
-                                                                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                                                                            : rowData[col.field] && col.field == 'updatedDate'
-                                                                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                                                                            : rowData[col.field]
+                                                                col.field == 'createdDate'
+                                                                ? (rowData[col.field] )
+                                                                : rowData[col.field] && col.field == 'updatedDate'
+                                                                ? (rowData[col.field] )
+                                                                : rowData[col.field] && col.field == 'expirationDate'
+                                                                ? (rowData[col.field] )
+                                                                : rowData[col.field] && col.field == 'startDate'
+                                                                ? (rowData[col.field] )
+                                                                : rowData[col.field]
                                                             }}
                                                         </ng-container>
-                                                        <ng-container style="text-align: right !important;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+                                                        <ng-container class="text-right" *ngIf="col.field == 'amount' &&col.field != 'createdDate' && col.field != 'updatedDate'">
                                                             {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                                         </ng-container>
+                                                        <!-- <ng-container *ngIf="col.field == 'amount'">
+                                                            <p class="m-0 p-0 text-right"> {{ rowData[col.field] | twoDecimalGlobalNumberFormatPipe }}</p>
+                                                        </ng-container> -->
                                                        
                                                     </td>
                                                     

@@ -226,7 +226,7 @@ export class VendorsListComponent implements OnInit {
             { field: 'vendorName', header: 'Vendor Name' },
             { field: 'vendorCode', header: 'Vendor Code' },
             { field: 'description', header: 'Vendor Type' },
-            { field: 'classificationName', header: 'Vendor Classification' },
+            { field: 'classificationName', header: 'Vendor Classification' ,width:"180px"},
             { field: 'vendorEmail', header: 'Email' },
             { field: 'city', header: 'Vendor City' },
             { field: 'stateOrProvince', header: 'Vendor State' },

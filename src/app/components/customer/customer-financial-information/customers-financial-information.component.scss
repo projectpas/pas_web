@@ -64,13 +64,19 @@
     padding: 0 10px;
     background-color: #fff;
 }
-
-select { 
-    text-align-last: right; 
+.select-right select {    
+    text-align-last: right;
 }
-option {
-     direction: rtl; 
-    }
+.select-right option {
+    direction: rtl; 
+   }
+
+// select { 
+//     text-align-last: right; 
+// }
+// option {
+//      direction: rtl; 
+//     }
 .tax-type option {
     direction: ltr;
 }

@@ -35,12 +35,12 @@ export class VendorATAInformationComponent implements OnInit {
     isSpinnerVisible: boolean = false;
     ataHeaders = [
         { field: 'firstName', header: 'Contact' },
-        { field: 'ataChapterName', header: 'ATA Chapter' },
-        { field: 'ataSubChapterDescription', header: 'ATA Sub-Chapter' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' }
+        { field: 'ataChapterName', header: 'ATA Chapter' ,width:"180px"},
+        { field: 'ataSubChapterDescription', header: 'ATA Sub-Chapter',width:"180px" },
+        { field: 'createdDate', header: 'Created Date' ,width:"100px"},
+        { field: 'createdBy', header: 'Created By',width:"100px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"100px"  },
+        { field: 'updatedBy', header: 'Updated By' ,width:"100px" }
     ]
     showAdvancedSearchCard: boolean = false;
     selectedColumns = this.ataHeaders;
