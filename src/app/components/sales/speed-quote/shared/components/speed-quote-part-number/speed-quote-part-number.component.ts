@@ -601,6 +601,9 @@ export class SpeedQuotePartNumberComponent {
       this.summaryParts = this.selectedParts;
     }
   }
+  enablesave(){
+    this.canSaveParts = false;
+  }
   editPart(rowIndex = null) {
     this.summaryParts[rowIndex].isEditPart = false;
   }
@@ -654,6 +657,7 @@ export class SpeedQuotePartNumberComponent {
         pmaStatus == selectedPmaStatus
       ) {
         this.selectedParts.splice(i, 1);
+        this.onPartsSavedEvent.emit(this.selectedParts);
       }
     }
     this.filterParts();

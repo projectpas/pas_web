@@ -1840,6 +1840,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
                     text-align: center;
                     font-size: 12px;
                   }
+                  .aligntop{
+                    margin-top:300px;
+                  }
             
                         </style>
         </head>

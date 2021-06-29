@@ -131,18 +131,19 @@ export class SpeedQuoteListComponent implements OnInit {
         this.headers = [
             { field: "customerName", header: "Customer Name", width: "160px" },
             { field: "customerCode", header: "Customer Code", width: "160px" },
-            { field: "accountTypeName", header: "Acct Type", width: "160px" },
+            //{ field: "accountTypeName", header: "Acct Type", width: "160px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
             { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
             { field: "leadSourceName", header: "Lead Source", width: "160px" },
+            { field: "leadSourceReference", header: "Lead Ref", width: "160px" },
             { field: "probability", header: "Probability", width: "90px" },
             { field: "quoteDate", header: "Quote Date", width: "120px" },
             { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
             { field: "quoteExpireDate", header: "Valid Until", width: "120px" },
+            { field: "status", header: "Qte Status", width: "100px" },
             { field: "salesPerson", header: "Salesperson", width: "150px" },
             //{ field: "salesOrderNumber", header: "SO Num", width: "120px" },
-            { field: "status", header: "Qte Status", width: "100px" },
             //{ field: "customerType", header: "Customer Type", width: "120px" },
             //{ field: "versionNumber", header: "Quote Ver Num", width: "120px" },
             //{ field: "priorityType", header: "Priority", width: "100px" },
@@ -223,9 +224,10 @@ export class SpeedQuoteListComponent implements OnInit {
                         .map(x => {
                             return {
                                 ...x,
-                                quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy') : '',
-                                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
-                                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                                quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy hh:mm a') : '',
+                                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy') : '',
+                                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy') : '',
+                                quoteExpireDate: x.quoteExpireDate ? this.datePipe.transform(x.quoteExpireDate, 'MM/dd/yyyy') : '',
                             }
                         });
                     this.totalRecords = response[0].totalRecordsCount;
@@ -412,6 +414,7 @@ export class SpeedQuoteListComponent implements OnInit {
                         quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MMM-dd-yyyy') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        quoteExpireDate: x.quoteExpireDate ? this.datePipe.transform(x.quoteExpireDate, 'MM/dd/yyyy') : '',
                     }
                 });
 
