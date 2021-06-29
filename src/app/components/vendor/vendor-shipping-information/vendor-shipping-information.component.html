@@ -1460,12 +1460,12 @@
                                                                 : rowData[col.field]
                                                             }}
                                                         </ng-container>
-                                                        <ng-container class="text-right" *ngIf="col.field == 'amount' &&col.field != 'createdDate' && col.field != 'updatedDate'">
+                                                        <!-- <ng-container class="text-right" *ngIf="col.field == 'amount' &&col.field != 'createdDate' && col.field != 'updatedDate'">
                                                             {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
-                                                        </ng-container>
-                                                        <!-- <ng-container *ngIf="col.field == 'amount'">
-                                                            <p class="m-0 p-0 text-right"> {{ rowData[col.field] | twoDecimalGlobalNumberFormatPipe }}</p>
                                                         </ng-container> -->
+                                                        <ng-container *ngIf="col.field == 'amount'">
+                                                            <p class="m-0 p-0 text-right"> {{ rowData[col.field] | twoDecimalGlobalNumberFormatPipe }}</p>
+                                                        </ng-container>
                                                        
                                                     </td>
                                                     
@@ -2188,7 +2188,7 @@
                             <td [ngStyle]="{'color':  getColorCodeForInternationalHistory(i, 'expirationDate', audit.expirationDate)  ? 'black' : 'red'  }">
                                 {{audit.expirationDate | date: 'MM/dd/yyyy'}}
                             </td>
-                            <td [ngStyle]="{'color':  getColorCodeForInternationalHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
+                            <td class="text-right" [ngStyle]="{'color':  getColorCodeForInternationalHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">
                                 {{audit.amount | twoDecimalGlobalNumberFormatPipe}}
                             </td>
                             <td [ngStyle]="{'color':  getColorCodeForInternationalHistory(i, 'shipToCountry', audit.shipToCountry)  ? 'black' : 'red'  }">
