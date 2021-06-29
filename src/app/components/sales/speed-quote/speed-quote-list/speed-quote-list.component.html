@@ -164,11 +164,11 @@
               {{convertDate(col.field , rowData)}}
             </span>
             <span
-              *ngIf="col.field != 'quoteAmount'&& col.field != 'probability' && col.field != 'createdDate' && col.field != 'updatedDate'">
+              *ngIf="col.field != 'quoteAmount'&& col.field != 'probability' && col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'quoteDate'">
               {{convertDate(col.field , rowData)}}
             </span>
-            <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-              {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy h:mm a '}}
+            <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate' || col.field == 'quoteDate'">
+              {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy'}}
             </span>
           </td>
           <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">

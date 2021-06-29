@@ -1,4 +1,5 @@
-<div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+<div
+  [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
   style="min-height: 130px !important;">
   <div class="tableFixHead">
     <table class="table table-bordered " id="po-table">
@@ -14,10 +15,10 @@
           <th>PN</th>
           <th>PN Description</th>
           <th>Item Type</th>
-          <td style="text-align: center;">Qty</td>
+          <td style="text-align: center;">Qty<span class="clr-red">*</span></td>
           <td style="text-align: center;">Unit Price</td>
           <td style="text-align: center;">Est Price</td>
-          <td>Occurance (%)*</td>
+          <td>Occurance (%)</td>
           <td style="text-align: center;">Notes</td>
           <td *ngIf="isViewMode == false" style="text-align: center;">Action</td>
         </tr>
@@ -31,7 +32,8 @@
             <td class="parts-des-td">{{partList.description}}</td>
             <td *ngIf="isViewMode == false">
               <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add PN"
-                matTooltipPosition="above" style="padding: 0px 4px !important;" (click)="addNewPartNumber(partList)"></i>
+                matTooltipPosition="above" style="padding: 0px 4px !important;"
+                (click)="addNewPartNumber(partList)"></i>
             </td>
             <td style="width:250px;">
               <p-autoComplete appendTo="body" [(ngModel)]="partList.partNumber" [suggestions]="partCollection"
@@ -47,22 +49,26 @@
             <td style="width:50px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"
                 (keyup)="calculateExtendedCost(partList)" [(ngModel)]="partList.exQuantity"
-                [disabled]="partList['isEditPart'] == true" value="{{ partList.exQuantity }}" name="exQuantity_{{row_index}}" />
+                [disabled]="partList['isEditPart'] == true" value="{{ partList.exQuantity }}"
+                name="exQuantity_{{row_index}}" />
             </td>
             <td style="width:80px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-                (blur)="calculateExtendedCost(partList)" [ngModel]="partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe"
-                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice }}" name="exUnitPrice_{{row_index}}"
-                [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="partList.exUnitPrice=formatStringToNumberGlobal($event)" />
+                (blur)="calculateExtendedCost(partList)"
+                [ngModel]="partList.exUnitPrice | twoDecimalGlobalNumberFormatPipe"
+                [disabled]="partList['isEditPart'] == true" value="{{ partList.exUnitPrice }}"
+                name="exUnitPrice_{{row_index}}" [ngModelOptions]="{updateOn:'blur'}"
+                (ngModelChange)="partList.exUnitPrice=formatStringToNumberGlobal($event)" />
             </td>
             <td style="width:80px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-                [ngModel]="partList.exExtPrice | twoDecimalGlobalNumberFormatPipe"
-                value="{{ partList.exExtPrice }}" name="exExtPrice_{{row_index}}" maxlength="15" (ngModelChange)="enableSave()" disabled/>
+                [ngModel]="partList.exExtPrice | twoDecimalGlobalNumberFormatPipe" value="{{ partList.exExtPrice }}"
+                name="exExtPrice_{{row_index}}" maxlength="15" (ngModelChange)="enableSave()" disabled />
             </td>
             <td style="width:90px;">
               <select class="form-control wf-pub-id full-width select-right" id="ddlEstimatedOccurance"
-                [disabled]="partList['isEditPart'] == true" [(ngModel)]="partList.exOccurance" name="exOccurance_{{row_index}}"> Occurance
+                [disabled]="partList['isEditPart'] == true" [(ngModel)]="partList.exOccurance"
+                name="exOccurance_{{row_index}}"> Occurance
                 <option class="text-right" value="-1">--Select--</option>
                 <option class="text-right" value="{{ occurance.label }}" *ngFor="
                                                 let occurance of exclusionEstimatedOccurances;
@@ -71,9 +77,9 @@
             </td>
             <td style="width:100px;">
               <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
-                <div style="width:100%;" [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
-                  [matTooltip]="parsedText(partList.exNotes)"></div>
-                <i class="fa fa-pencil ci_cls  m-t-5"  data-toggle="modal" data-target="#textarea-popupexclusion"
+                <div style="width:100%;" [innerHTML]="partList.exNotes" class="text_editor_box"
+                  matTooltipPosition="above" [matTooltip]="parsedText(partList.exNotes)"></div>
+                <i class="fa fa-pencil ci_cls  m-t-5" data-toggle="modal" data-target="#textarea-popupexclusion"
                   matTooltip="Notes" matTooltipPosition="above" [class.disabled]="isViewMode"
                   [ngClass]="{'btn_disabled': isViewMode}" (click)="onAddTextAreaInfo(partList,row_index)"></i>
               </div>
@@ -81,16 +87,19 @@
               <div *ngIf="isViewMode == true" class="form-group memo-popup-cstm mat_emo textarea-memo-div">
                 <div [innerHTML]="partList.exNotes" class="text_editor_box" matTooltipPosition="above"
                   [matTooltip]="parsedText(partList.exNotes)"></div>
-      
+
               </div>
             </td>
             <td *ngIf="isViewMode == false">
-              <a [class.disabled]="isViewMode"
-                                            [ngClass]="{'btn_disabled': isViewMode}"
-                                            class="btn nobg view-part-eye" (click)="editPart(row_index)"
-                                            matTooltip="Edit PN" matTooltipPosition="above">
-                                            <i class="fa fa-pencil" style="color:#337ab7 !important"></i>
-                                        </a>
+              <a [class.disabled]="isViewMode" [ngClass]="{'btn_disabled': isViewMode}" class="btn nobg view-part-eye"
+                (click)="editPart(row_index)" matTooltip="Edit PN" matTooltipPosition="above">
+                <i class="fa fa-pencil" style="color:#337ab7 !important"></i>
+              </a>
+              <a [class.disabled]="partList['exclusionPartId'] == 0"
+                [ngClass]="{'btn_disabled': partList['exclusionPartId'] == 0 }" class="btn nobg"
+                (click)="openDelete(content,partList)" matTooltip="Remove" matTooltipPosition="above">
+                <i class="fa fa-trash"></i>
+              </a>
             </td>
           </tr>
         </ng-container>
@@ -98,10 +107,12 @@
     </table>
   </div>
   <div class="float-right" *ngIf="isViewMode == false">
-    <button class="btn btn-primary m-t-10" *ngIf="saveButton" [disabled]="disabledSave" (click)="saveSpeedQuoteExclusions(errorpopup)">
+    <button class="btn btn-primary m-t-10" *ngIf="saveButton" [disabled]="disabledSave"
+      (click)="saveSpeedQuoteExclusions(errorpopup)">
       Update
     </button>
-    <button class="btn btn-primary m-t-10" *ngIf="!saveButton" [disabled]="disabledSave" (click)="saveSpeedQuoteExclusions(errorpopup)">
+    <button class="btn btn-primary m-t-10" *ngIf="!saveButton" [disabled]="disabledSave"
+      (click)="saveSpeedQuoteExclusions(errorpopup)">
       Save
     </button>
   </div>
@@ -130,38 +141,37 @@
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
-      <div class="lds-roller">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-      </div>
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </div>
 <ng-template class="modal fade" #errorpopup let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-content">
-      <div class="modal-header">
-          <h4 class="modal-title">Alert</h4>
-          <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-              <span aria-hidden="true">&times;</span>
-          </button>
-      </div>
-      <div class="modal-body">
-          <strong>
-              <span [ngStyle]="{'color':'red'}">
-              <div [innerHTML]="alertText"></div>
-              </span>
-          </strong>
-          
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-danger"
-              (click)="dismissModel();">close</button>
-      </div>
+    <div class="modal-header">
+      <h4 class="modal-title">Alert</h4>
+      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <strong>
+        <span [ngStyle]="{'color':'red'}">
+          <div [innerHTML]="alertText"></div>
+        </span>
+      </strong>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="dismissModel();">close</button>
+    </div>
   </div>
 </ng-template>
 <ng-template #content let-c="close" let-d="dismiss">
