@@ -149,8 +149,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
        this.disableUpdateButton=false;
      }
      this.calculateExtendedCost();
- console.log("edit part",this.part)
- console.log("edit editData",this.editData)
   }
 
   get masterCompanyId(): number {
