@@ -68,7 +68,7 @@
             <td style="width:90px;">
               <select class="form-control wf-pub-id full-width select-right" id="ddlEstimatedOccurance"
                 [disabled]="partList['isEditPart'] == true" [(ngModel)]="partList.exOccurance"
-                name="exOccurance_{{row_index}}"> Occurance
+                name="exOccurance_{{row_index}}" (ngModelChange)="enableSave()"> Occurance
                 <option class="text-right" value="-1">--Select--</option>
                 <option class="text-right" value="{{ occurance.label }}" *ngFor="
                                                 let occurance of exclusionEstimatedOccurances;
@@ -95,9 +95,10 @@
                 (click)="editPart(row_index)" matTooltip="Edit PN" matTooltipPosition="above">
                 <i class="fa fa-pencil" style="color:#337ab7 !important"></i>
               </a>
-              <a [class.disabled]="partList['exclusionPartId'] == 0"
-                [ngClass]="{'btn_disabled': partList['exclusionPartId'] == 0 }" class="btn nobg"
-                (click)="openDelete(content,partList)" matTooltip="Remove" matTooltipPosition="above">
+              <!-- [class.disabled]="partList['exclusionPartId'] == 0"
+                [ngClass]="{'btn_disabled': partList['exclusionPartId'] == 0 }" -->
+              <a class="btn nobg"
+                (click)="openDelete(content,partList,row_index)" matTooltip="Remove" matTooltipPosition="above">
                 <i class="fa fa-trash"></i>
               </a>
             </td>
