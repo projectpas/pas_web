@@ -1613,4 +1613,49 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             );
         }
     }
+
+    closeDeleteModal() {
+        $("#downloadConfirmation").modal("hide");
+    }
+    workOrderMaterial:any=[];
+    uniqueParts:any=[];
+    originalMaterialList:any=[];
+    orginalSummaryColumns:any=[];
+    exportCSV(dt,isMaterial){
+		this.isSpinnerVisible = true;
+		const isdelete=false;
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":false,"isDeleted":isdelete},"globalFilter":""}
+		let filters = Object.keys(dt.filters);
+		filters.forEach(x=>{
+			PagingData.filters[x] = dt.filters[x].value;
+        })
+        this.originalMaterialList=[...this.workOrderMaterialList];
+       this.orginalSummaryColumns= [...this.summaryColumns]
+        if(isMaterial==true){
+            this.workOrderMaterialList.map((element,index) => {
+                element.line=index+1;
+            });
+            dt._value=this.workOrderMaterialList;
+        }else{
+            
+            this.workOrderMaterialList.forEach(element => { 
+                if(element && element.childParts && element.childParts.length !=0){
+                    element.childParts.forEach(child => {
+                        this.uniqueParts.push(child)
+                    });
+                }
+            });
+            dt._columns=this.childColumnsData;
+            this.uniqueParts.map((element,index) => {
+                element.line=index+1;
+            });
+            dt._value=this.uniqueParts;
+        }
+			dt.exportCSV();
+            this.summaryColumns=this.orginalSummaryColumns;
+            this.workOrderMaterialList=this.originalMaterialList
+			dt.value = this.workOrderMaterialList;
+        	this.isSpinnerVisible = false;
+    }
+ 
 }

@@ -674,6 +674,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.upDateDisabeldbutton=true;
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
+                                    // this.memo=
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
                                     this.getQuoteMaterialListByWorkOrderQuoteId();
                                     this.quoteCreated=true;
@@ -700,7 +701,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.accountsReceivableBalance = res.workOrderQuote.accountsReceivableBalance;
                                     this.warnings = res.warnings;
                                     this.salesPerson=res.salesPersonName;
-                                    this.memo = res.memo;
+                                    this.memo = res.memo ? res.memo : this.savedWorkOrderData.memo;
                                     this.approvedDate = new Date(res.approvedDate);
                                     this.sentDate = new Date(res.sentDate);
                                     this.isSpinnerVisible = false;
@@ -889,7 +890,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             WorkOrderId: (quoteHeader.workOrderId) ? quoteHeader.workOrderId : quoteHeader.WorkOrderId,
             WorkFlowWorkOrderId: (quoteHeader.workFlowWorkOrderId) ? quoteHeader.workFlowWorkOrderId : quoteHeader.WorkFlowWorkOrderId,
             openDate: quoteHeader.openDate,
-            QuoteDueDate: this.quoteDueDate,
+            // QuoteDueDate: this.quoteDueDate,
             ValidForDays: this.validFor,
             ExpirationDate: this.expirationDate,
             QuoteStatusId: quoteHeader.expirationDateStatus,
