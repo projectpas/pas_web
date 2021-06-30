@@ -427,8 +427,8 @@
                                                     class="clr-red">*</span></th>
                                             <th rowspan="2" style=" min-width: 100px !important;">Cond <span
                                                     class="clr-red">*</span></th>
-                                            <th rowspan="2" style=" min-width: 100px !important;">CMM/Pub Ref</th>
-                                            <th rowspan="2" style=" min-width: 100px !important;">Workflow ID </th>
+                                            <th rowspan="2" style=" min-width: 148px !important;">CMM/Pub Ref</th>
+                                            <th rowspan="2" style=" min-width: 166px !important;">Workflow ID </th>
                                             <th rowspan="2" style="width:130px !important">Item Group</th>
                                             <th rowspan="2">Cust Ref</th>
                                             <th rowspan="2">AC Tail Num</th>
@@ -642,8 +642,18 @@
                                                     [disabled]="isView || quotestatusofCurrentPart =='Approved'"
                                                     appendTo="body">
                                                 </p-dropdown>
+
+                                                <span data-toggle="modal" data-target="#cmmView" *ngIf="workOrderPartNumber.cMMId!=0 && workOrderPartNumber.cMMId!=null"
+                                                [ngClass]="{pointerEvents : workOrderPartNumber.cMMId==0 || workOrderPartNumber.cMMId==null}">
+                                                <a class="btn nobg btn-view-cstm"
+                                                    (click)="viewCmm(workOrderPartNumber)"
+                                                    matTooltip="View Publication" matTooltipPosition="above">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </span>
                                             </td>
-                                            <td class="lign_flex">
+                                            <td >
+                                                <!-- class="lign_flex" -->
                                                 <span class="inline-block">
                                                     <p-dropdown filter="true"
                                                         [options]="getDynamicVariableData('dynamicWorkflowList',i)"
@@ -814,6 +824,28 @@
 
                             <!-- <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'quote'}"
                             (click)="gridTabChange('quote');">Quote</a> -->
+                        </div>
+                        
+                        <div id="cmmView" class="modal fade" role="dialog" data-backdrop="static">
+                            <div class="modal-dialog modal-xlg">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            (click)="closeModel()">&times;</button>
+                                        <h4 class="modal-title">Publication OverView</h4>
+
+                                    </div>
+                                    <div class="modal-body" *ngIf="currentcmmId !=undefined">
+                                        <app-common-publicationView    
+                                            [publicationId]="currentcmmId"></app-common-publicationView>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                            (click)="closeModel()">Close</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div id="workflowView" class="modal fade" role="dialog" data-backdrop="static">
                             <div class="modal-dialog modal-xlg">

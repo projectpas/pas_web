@@ -663,6 +663,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quoteForm['creditTermsId'] = res.customerDetails['creditTermsId'];
                     this.quoteForm.masterCompanyId = this.authService.currentUser.masterCompanyId;
                     this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
+                    this.currency = res.customerDetails.currencyId;
+                    this.accountsReceivableBalance = res.customerDetails.accountsReceivableBalance;
                     this.quoteForm['versionNo'] = 'V1';
                     this.salesPerson = res.salesPerson.name;
                     const workorderid =res.workOrderId ==0 ? this.workOrderId :res.workOrderId; 
