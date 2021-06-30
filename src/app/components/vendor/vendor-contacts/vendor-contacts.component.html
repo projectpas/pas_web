@@ -273,7 +273,7 @@
                                           (click)="openDelete(deleteContent, rowData);dt.reset();" 
                                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                       </span>
-                                      <span data-target="#ATAADD" data-toggle="modal" *ngIf="isATA">
+                                      <span data-target="#ATAADD" data-toggle="modal" *ngIf="isATAView">
                                           <a class="btn nobg btn-users-cstm"
                                              matTooltip="ATA Chapters"
                                              matTooltipPosition="above"
@@ -1192,7 +1192,7 @@
                   </div>
 
                   <div class="col-md-2"> 
-                    <button style="margin-top: 20px;" type="button" class="btn btn-primary" [disabled]="!add_SelectedId" (click)="addATAMapping()">
+                    <button style="margin-top: 20px;" *ngIf="isATAAdd" type="button" class="btn btn-primary" [disabled]="!add_SelectedId" (click)="addATAMapping()">
                       Save
                     </button>
                   </div>
@@ -1237,12 +1237,12 @@
                     <td class="action-icons-cstm text-center table-column-width">
                       <div *ngIf="currentATADeletedstatus == false">
 
-                          <span *ngIf="!isViewMode" data-toggle="modal" data-target="#editATAChapter"><a class="btn nobg"
+                          <span *ngIf="!isViewMode && isATAEdit" data-toggle="modal" data-target="#editATAChapter"><a class="btn nobg"
                             (click)="editContactATAChapters(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                               class="fa fa-pencil"></i></a>
                         </span>
 
-                        <button *ngIf="!isViewMode" class="btn btn-danger nobg" (click)="deleteATAMapped(deleteContent1, rowData)"
+                        <button *ngIf="!isViewMode && isATADelete" class="btn btn-danger nobg" (click)="deleteATAMapped(deleteContent1, rowData)"
                           matTooltip="Delete" matTooltipPosition="above">
                           <i class="fa fa-trash"></i>
                         </button>
@@ -1256,7 +1256,7 @@
                         <span data-toggle="modal" data-target="#contentATAChapterHist"><a class="btn nobg"
                           (click)="getATAAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i
                             class="fa fa-history"></i></a></span>
-                        <span *ngIf="isViewMode == false" ><a class="btn nobg btn-users-cstm" (click)="restoreATAMapped(restoreATAContent,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        <span *ngIf="isViewMode == false && isATAEdit" ><a class="btn nobg btn-users-cstm" (click)="restoreATAMapped(restoreATAContent,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                       </div>
                     </td>
                   </tr>

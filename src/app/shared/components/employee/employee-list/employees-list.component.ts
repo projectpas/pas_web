@@ -766,20 +766,20 @@ export class EmployeesListComponent implements OnInit {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
-    openView(row) {
+    openView(row) {       
         this.isSpinnerVisible = true;
-        $('#step1').collapse('show');
-        this.toGetEmployeeDetailsByEmpId(row.employeeId);
-        this.toGetDocumentsListNew(row.employeeId);
+        $('#step1').collapse('show');        
+        this.toGetEmployeeDetailsByEmpId(row.employeeId);        
+        //this.toGetDocumentsListNew(row.employeeId);
         this.viewEmpID = row.employeeId;
         if(this.isMgmtStruct==true){
-        this.loadEmployeeRoles(row.employeeId);
+            this.loadEmployeeRoles(row.employeeId);
         }
-        this.isSpinnerVisible = false;
+        this.isSpinnerVisible = false;       
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
             error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
-        );
+        );        
     }
 
     dismissModel() {
