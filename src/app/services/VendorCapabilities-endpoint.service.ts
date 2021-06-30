@@ -91,7 +91,8 @@ export class VendorCapabilitiesEndpoint extends EndpointFactory {
     }
 
     getVendorCapabilitybyId(vendorCapesId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/Vendor/getVendorCapabilitybyId/${vendorCapesId}`)
+        let endpointUrl = `${this.configurations.baseUrl}/api/Vendor/getVendorCapabilitybyId/${vendorCapesId}`
+        return this.http.get<any>(endpointUrl,this.getRequestHeaders()) 
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getVendorCapabilitybyId(vendorCapesId));
         });

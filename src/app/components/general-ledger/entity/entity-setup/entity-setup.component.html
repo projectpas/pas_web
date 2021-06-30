@@ -67,7 +67,7 @@
                                    class="btn btn-pluspo-cstm viewBtn nobg"><span  *ngIf="isAdd"><i class="fa fa-plus"></i></span></a>
 
                                 <span *ngIf="!currentDeletedstatus">
-                                    <a class="btn viewBtn nobg" (click)="openContentEdit(contentEdit,rowData)"
+                                    <a class="btn viewBtn nobg" (click)="openContentEdit(contentEdit,rowData,rowNode)"
                                        matTooltip="Edit Management Structure" style="color:#0252b1"
                                        matTooltipPosition="above"><i  *ngIf="isEdit" class="fa fa-pencil"></i></a>
                                 </span>

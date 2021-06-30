@@ -108,7 +108,7 @@
                         style="padding: 4px 10px !important;">
                     Sample File Download
             </button>
-            <div class="excel-upload  excel-upload-cstm">
+            <div  *ngIf="isUpload" class="excel-upload  excel-upload-cstm">
                 <input type="file" name="upload[]" id="upload"
                       (change)="customExcelUpload($event)" class="uploaddoc upload-file"
                       accept=".xlsx, .xls, .csv">
@@ -299,7 +299,7 @@
             <div *ngIf="currentDeletedstatus == false">
               <ng-container *ngIf="!isViewMode">
                 <p-inputSwitch
-                  *ngIf="!isViewMode"
+                  *ngIf="!isViewMode && isEdit"
                   name="isActive{{ rowIndex }}"
                   matTooltip="Active"
                   [disabled]="rowData.isDefaultContact == true"
@@ -376,7 +376,7 @@
             </div>
             <div *ngIf="currentDeletedstatus == true">
               <p-inputSwitch
-                *ngIf="!isViewMode"
+                *ngIf="!isViewMode && isEdit"
                 name="isActive{{ rowIndex }}"
                 matTooltip="Active"
                 matTooltipPosition="above"

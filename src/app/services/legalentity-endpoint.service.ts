@@ -522,7 +522,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	
 
 	getMSHistoryDataById(msID) {
-		return this.http.get<any>(`${this.baseUrl}/api/ManagementStrcture/mshistory/?msID=${msID}`).catch(error => {
+		return this.http.get<any>(`${this.baseUrl}/api/ManagementStrcture/mshistory/?msID=${msID}`,this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDataById(msID));
 		});
 	}
