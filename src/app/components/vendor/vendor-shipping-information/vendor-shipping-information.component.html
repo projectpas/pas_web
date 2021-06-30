@@ -1445,28 +1445,21 @@
                                                                class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                                         </span>
                                                     </td>
-                                                    <td class="table-column-width ui-resizable-column" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
+                                                    <td class="table-column-width ui-resizable-column"
+                                                    [ngClass]="(col.field == 'amount' )?'text-right':''" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                                         pReorderableRowHandle>
-                                                        <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate' && col.field != 'amount'">
+                                                        <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
                                                             {{
-                                                                col.field == 'createdDate'
-                                                                ? (rowData[col.field] )
-                                                                : rowData[col.field] && col.field == 'updatedDate'
-                                                                ? (rowData[col.field] )
-                                                                : rowData[col.field] && col.field == 'expirationDate'
-                                                                ? (rowData[col.field] )
-                                                                : rowData[col.field] && col.field == 'startDate'
-                                                                ? (rowData[col.field] )
-                                                                : rowData[col.field]
+                                                                          col.field == 'createdDate'
+                                                                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                                                                            : rowData[col.field] && col.field == 'updatedDate'
+                                                                            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                                                                            : rowData[col.field]
                                                             }}
                                                         </ng-container>
-                                                        <!-- <ng-container class="text-right" *ngIf="col.field == 'amount' &&col.field != 'createdDate' && col.field != 'updatedDate'">
-                                                            {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
-                                                        </ng-container> -->
-                                                        <ng-container *ngIf="col.field == 'amount'">
-                                                            <p class="m-0 p-0 text-right"> {{ rowData[col.field] | twoDecimalGlobalNumberFormatPipe }}</p>
-                                                        </ng-container>
-                                                       
+                                                        <ng-container  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" >
+                                                            {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                                        </ng-container>                                                       
                                                     </td>
                                                     
                                                     <td class="action-icons-cstm table-column-width" style="width:150px !important">
