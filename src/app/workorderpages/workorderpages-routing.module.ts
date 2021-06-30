@@ -27,6 +27,7 @@ import { PurchaseOrderReportComponent } from '../components/reports/purchase-ord
 import { ReceivingLogReportComponent } from '../components/reports/receiving-log/receiving-log-report.component';
 import { InventoryReportComponent } from '../components/reports/inventory/inventory-report.component';
 import { SalesOrderService } from '../services/salesorder.service';
+import { WorkOrderAssignmentComponent } from '../components/work-order/work-order-setup/wo-assignment/wo-assignment.component';
 // import { CommonTeardownComponent } from '../components/work-order/work-order-setup/work-order-teardown/common-teardown/common-teardown.component';
 
 const workorderPagesRoutes: Routes = [
@@ -39,6 +40,13 @@ const workorderPagesRoutes: Routes = [
         component: WorkOrderListComponent,
         data: { title: "Work Order's List" }
       },
+
+      {
+        path: 'app-assignment-list',
+        component: WorkOrderAssignmentComponent,
+        data: { title: "Work Order's List" }
+      },
+      
       {
         path: 'app-direct-labour',
         component: DirectLabourComponent,

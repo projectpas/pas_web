@@ -45,12 +45,12 @@
     </div>
     <div class="col-2 column">
       <div class="form-group"> 
-        <!-- [disabled]="!isStockLine" -->
+        <!-- [disabled]="!isStockLine" onChangeQuantityFromThis();-->
         <label>Quantity from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
             *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
         <input type="number" class="form-control   text-right" name="stocklineQuantity"
          [(ngModel)]="formObject.stocklineQuantity" 
-          (input)="onChangeQuantityFromThis();calculateExtendedCost()" (ngModelChange)="getActive()"
+          (input)="calculateExtendedCost()" (ngModelChange)="getActive()"
           name="quantity" autocomplete="off" [disabled]="part.method=='ItemMaster'" />
           <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
           <span style="color:red" *ngIf="part.method=='ItemMaster'">Value cannot be greater than qty to be required </span>
@@ -86,7 +86,7 @@
   </div>
   <div class="1col- column mar_ad1">
     <label class="width_100per text_start">Provision<span class="clr-red">*</span></label>
-    <select class="form-control wf-pub-id qtyWidth" [disabled]="isStockView" (ngModelChange)="getActive()"
+    <select class="form-control wf-pub-id qtyWidth" [disabled]="isStockView || formObject.subWorkOrderId !=0" (ngModelChange)="getActive()"
       [(ngModel)]="formObject.provisionId" name="provision" required>
       <option value="0">--Select--</option>
       <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
@@ -127,42 +127,46 @@
     <div class="form-group memo-popup-cstm mat_emo">
       <div [innerHTML]="formObject.memo" matTooltipPosition="above" [matTooltip]="parsedText(formObject.memo)"
         class="text_editor_box"></div>
-      <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{ pointerEv: isStockView}" data-toggle="modal"
-        data-target="#textarea-popup2" matTooltip="Memo" matTooltipPosition="above"
-        (click)="onAddTextAreaInfo(formObject)"></i>
+      <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{ pointerEv: isStockView}"  
+          matTooltip="Memo" matTooltipPosition="above"
+        (click)="onAddTextAreaInfo(contentMemo,formObject)"></i>
     </div>
   </div>
 </div>
-<div class="modal fade" id="textarea-popup2" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-        <h4 class="modal-title">Edit Memo</h4>
-      </div>
-      <div class="modal-body">
-        <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
-          name="textAreaInfo" required></p-editor>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" [disabled]="disableEditor"
-          (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-        <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+
 <div class="modal-footer">
   <button class="btn btn-primary" *ngIf="!isEdit"
     [disabled]="formObject.stocklineQuantity==0 || formObject.taskId==0 || formObject.provisionId==0 || disableUpdateButton"
     (click)="savePart($event)">
     Save
   </button>
-  <button class="btn btn-primary" *ngIf="isEdit" [disabled]="formObject.stocklineQuantity==0" (click)="upDatePart($event)">
+  <button class="btn btn-primary" *ngIf="isEdit && part.method=='ItemMaster'" [disabled]="disableUpdateButton || formObject.stocklineQuantity==0" (click)="upDatePart($event)">
+    Update
+  </button>
+  <button class="btn btn-primary" *ngIf="isEdit && part.method=='StockLine'" [disabled]="disableUpdateButton || formObject.stocklineQuantity==0" (click)="upDatePart($event)">
     Update
   </button>
   <button type="button" (click)="onClose($event)" class="btn btn-danger">
     Close
   </button>
  </div>
-<!--disableUpdateButton ||  -->
+<!--disableUpdateButton ||  --> 
+
+<ng-template #contentMemo let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Memo </h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseTextAreaInfo()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body"> 
+    <p-editor [(ngModel)]="textAreaInfoModel" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+    name="textAreaInfoModel" required></p-editor> 
+    <div class="editor-buttons">
+      <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
+      (click)="onSaveTextAreaInfo()" [disabled]="disableEditor">Save</button>
+      <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+    </div>
+  </div>
+</ng-template>
