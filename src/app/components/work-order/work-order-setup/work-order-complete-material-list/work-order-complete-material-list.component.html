@@ -85,7 +85,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="closeMaterial()">&times;</button>
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserve Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 2">Issued Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 2">Issue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 4">Unissue Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 5">Unreserve Parts</h4>
@@ -865,13 +865,69 @@
             <div></div>
         </div>
     </div>
-</div>
+</div> 
 <div *ngIf="!ispickticket">
     <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
         style="min-height: 130px !important;">
-        <p-table class=" rpo-table-cstm1 rro-table-cstm materialListTable" id="custome_material"
+        <p-table   class=" rpo-table-cstm rro-table-cstm materialListTable" id="custome_material"
             [columns]="summaryColumns" #materialTble [value]="workOrderMaterialList" [paginator]="true"
-            [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]" (onPage)="pageIndexChange($event)">
+            [rows]="pageSize"  selectionMode="multiple"  [reorderableColumns]="true" [metaKeySelection]="true" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]" (onPage)="pageIndexChange($event)">
+            <ng-template pTemplate="caption">
+            <div class="row">
+                <div class="col">
+              <button  type="button"
+                        class="btn btn-primary exports-button1"
+                        matTooltip="Download Data"
+                        matTooltipPosition="above"
+                        pButton
+                        icon="fa-download"
+                        iconPos="left"
+                        label="Export Parent"
+                        data-toggle="modal"
+                        (click)="isMaterial = true; targetData = materialTble;" 
+                        data-target="#downloadConfirmation"
+                      ></button>
+                      <button
+                        type="button"
+                        class="btn btn-primary exports-button1"
+                        matTooltip="Download Selected Data"
+                        matTooltipPosition="above"
+                        pButton
+                        icon="fa-download"
+                        iconPos="left"
+                        data-target="#downloadConfirmation"
+                        data-toggle="modal"
+                        label="Export Stk Lines"
+                        (click)="isMaterial = false; targetData = materialTble;"></button>   
+             
+             
+                    </div>
+           </div>
+
+           
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close close_export" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title text_st">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body text_st" *ngIf="targetData">
+				<strong>
+					<span *ngIf="!selectedOnly">
+                        <!-- {{targetData.totalRecords}} of -->
+						You are attempting to export  records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="exportCSV(targetData,isMaterial); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+        </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th class="table-column-width" [ngStyle]="{'width': col.width}"
@@ -892,9 +948,9 @@
                          [ngClass]="(isView == false) ? 'width-170' : 'width-80'">Actions </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
-                <tr>
-                    <td class=" summary-column" *ngFor="let col of columns">
+            <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns"  >
+                <tr class="ui-widget-header" [pReorderableRow]="i" [pSelectableRow]="rowData" pReorderableRowHandle>
+                    <td class="summary-column" *ngFor="let col of columns">
                         <input type="checkbox" name="contract {{i}}" #contract="ngModel"
                             *ngIf="col.field =='isFromWorkFlow'" class="form-control w60 defered-check"
                             [(ngModel)]="rowData.isFromWorkFlow" disabled>
@@ -1012,8 +1068,8 @@
                     </td>
                     <td   class="lastcol-fix"
                         style="position: sticky !important; min-width: 145px !important; width:80px"></td>
-                </tr>
-                <tr class="child-data splitship-child child-data-back " pReorderableRowHandle
+                </tr> 
+                <tr class="child-data splitship-child child-data-back " pReorderableRowHandle [pSelectableRow]="rowData"  
                     *ngFor="let childRowData of rowData.childParts; let stockIndex1 = index">
                     <td *ngFor="let childcol of childColumnsData; let i = index" class="summary-column"
                         pReorderableRowHandle>

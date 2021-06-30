@@ -45,18 +45,18 @@
                  </div>
                  <div class="form-group ">
                      <label> Valid For Days <span class="clr-red">*</span></label>
-                     <input class="form-control" (change)="calculateExpiryDate()"  (ngModelChange)="getValid()" required type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView" />
+                     <input class="form-control text_start" (change)="calculateExpiryDate()"  (ngModelChange)="getValid()" required type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView" />
                  </div>
                  <div class="form-group ">
                      <label> Expiration Date <span class="clr-red">*</span></label>
                      <p-calendar [showIcon]="true" [(ngModel)]="expirationDate"  (ngModelChange)="getValid()"
                      [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" required name="ExpDate" [disabled]="true"></p-calendar>
                  </div>
-                 <div class="form-group ">
+                 <!-- <div class="form-group ">
                      <label>Quote Due Date <span class="clr-red">*</span></label>
                      <p-calendar [showIcon]="true" [(ngModel)]="quoteDueDate"  (ngModelChange)="getValid()"
                      [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" required name="QuoteDueDate" aria-readonly [disabled]="isView"></p-calendar>
-                 </div>
+                 </div> -->
                  <div class="form-group ">
                      <label for="workflownum">
                         Warning
@@ -101,22 +101,7 @@
                      <label> DSO </label>
                      <input class="form-control" type="text"  maxlength="50" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
                  </div>
-                 <div class="form-group memo-popup-cstm">
-                     <label>
-                         Memo <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
-                             matTooltipPosition="above" matTooltip="Memo"
-                             (click)="onAddDescription(1)"></i>
-                     </label>
-                     <span>
-                         <div class="form-group memo-popup-cstm mat_emo">
-                             <div [innerHTML]="memo"
-                                 [matTooltip]="parsedText(memo)"
-                                 matTooltipPosition="above"
-                                 class="form-control text_editor_box memo_cehck1" style="width: 100%;line-height:1.5;">
-                             </div>
-                         </div>
-                     </span>
-                 </div>
+               
              </div>
              <div class="col-md-3">
  
@@ -156,12 +141,12 @@
                  </div>
              </div>
              <div class="col-md-3">
-                 <div class="form-group ">
+                 <!-- <div class="form-group ">
                      <label for="customerRef">
                          Customer Ref
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerRef" name="customerRef" readonly />
-                 </div>
+                 </div> -->
                  <div class="form-group">
                      <label for="credit">
                          Credit Limit &amp; Terms <span class="clr-red">*</span>
@@ -193,6 +178,22 @@
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="employeeName" name="csr" readonly />
                  </div>
+                 <div class="form-group memo-popup-cstm">
+                    <label>
+                        Memo <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
+                            matTooltipPosition="above" matTooltip="Memo"
+                            (click)="onAddDescription(1)"></i>
+                    </label>
+                    <span>
+                        <div class="form-group memo-popup-cstm mat_emo">
+                            <div [innerHTML]="memo"
+                                [matTooltip]="parsedText(memo)"
+                                matTooltipPosition="above"
+                                class="form-control text_editor_box memo_cehck1" style="width: 100%;line-height:1.5;">
+                            </div>
+                        </div>
+                    </span>
+                </div>
              </div>
              <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
                  <button class="btn btn-primary wo-quote-btn-margin pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
