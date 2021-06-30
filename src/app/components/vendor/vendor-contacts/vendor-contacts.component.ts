@@ -206,6 +206,12 @@ export class VendorContactsComponent implements OnInit {
     isPrevVisible:Boolean=true;
     tempIsDefaultContact: boolean=true;
 
+    isATAView:boolean=true;
+    isATAAdd:boolean=true;
+    isATAEdit:boolean=true;
+    isATADelete:boolean=true;    
+    isATADownload:Boolean=true;
+
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
         private route: Router,
@@ -279,6 +285,13 @@ export class VendorContactsComponent implements OnInit {
         this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Download])
         this.isATA=this.authService.ShowTab('Create Vendor','ATA Chapter');
         this.isContactView=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.View]);
+
+        this.isATAView = this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter + "." + PermissionConstants.View]);
+        this.isATAAdd=this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter+'.'+PermissionConstants.Add])
+		this.isATAEdit=this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter+'.'+PermissionConstants.Update])
+        this.isATADelete=this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter+'.'+PermissionConstants.Delete])        
+        this.isATADownload = this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter + "." + PermissionConstants.Download])        
+
         this.alertService.stopLoadingMessage();
         this.isNextVisible=this.authService.ShowTab('Create Vendor','ATA Chapter');
         this.isPrevVisible=this.authService.ShowTab('Create Vendor','Capabilities');

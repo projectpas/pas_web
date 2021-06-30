@@ -778,7 +778,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arraycurrencylist.length == 0) {
             this.arraycurrencylist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20000, this.arraycurrencylist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 0, this.arraycurrencylist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.allCurrencyData = response.map(x => {
                 return {
                     currencyId: x.value,
@@ -1216,7 +1216,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         // );
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 1000, '0', this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
             this.shiftValues = res;
             // this.legalEntityList_Forgrid = res;
             // this.legalEntityList_ForShipping = res;
@@ -1258,7 +1258,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arraymultileavelist.length == 0) {
             this.arraymultileavelist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType', strText, true, 2000, this.arraymultileavelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType', strText, true, 0, this.arraymultileavelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.leavemultiValues = response;
             this.leavemultiValues = this.leavemultiValues.reduce((unique, o) => {
                 if (!unique.some(obj => obj.label === o.label)) {
@@ -1444,7 +1444,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayExpertiselist.length == 0) {
             this.arrayExpertiselist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', strText, true, 2000, this.arrayExpertiselist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', strText, true, 0, this.arrayExpertiselist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.allEmployeeExpertiseInfo = response;
         }, err => {
             this.isSpinnerVisible = false;
@@ -2210,7 +2210,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayAllStationlist.length == 0) {
             this.arrayAllStationlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20000, this.arrayAllStationlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 0, this.arrayAllStationlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.getAllAllStationInfodrpData = response;
         }, err => {
             this.isSpinnerVisible = false;

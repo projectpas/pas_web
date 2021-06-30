@@ -20,6 +20,7 @@ import { DiscountValue } from '../../../models/discountvalue';
 import { CommonService } from '../../../services/common.service';
 import { validateRecordExistsOrNot, getObjectById, selectedValueValidate, editValueAssignByCondition } from '../../../generic/autocomplete';
 import { emailPattern, urlPattern, phonePattern } from '../../../validations/validation-pattern';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-vendor-financial-information',
@@ -122,6 +123,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     showAllowNettingOfAPAR: boolean = false;
     isNextVisible: Boolean=true;
     isPrevVisible: Boolean=true;
+    isVFIAdd: Boolean=true;
+    isVFIEdit: Boolean=true;
+    isVFIDelete: Boolean=true;
 
     constructor(private cdRef: ChangeDetectorRef, public CreditTermsService: CreditTermsService, public currencyService: CurrencyService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private commonservice: CommonService) {
         if(window.localStorage.getItem('vendorService')){
@@ -184,7 +188,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         }
 
         this.isNextVisible=this.authService.ShowTab('Create Vendor','ATA Chapter');
-        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Billing Information');
+        this.isPrevVisible=this.authService.ShowTab('Create Vendor','Billing Information');       
+        this.isVFIAdd=this.authService.checkPermission([ModuleConstants.Vendors_FinancialInformation+'.'+PermissionConstants.Add]);
+		this.isVFIEdit=this.authService.checkPermission([ModuleConstants.Vendors_FinancialInformation+'.'+PermissionConstants.Update]);                  
     }
 
     ngOnInit(): void {

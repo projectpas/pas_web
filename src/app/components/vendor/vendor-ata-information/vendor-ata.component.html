@@ -164,7 +164,7 @@
                 </ng-template>
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
-                        <col *ngFor="let col of columns" class="table-column-width" />
+                        <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
@@ -172,7 +172,7 @@
                         <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="table-actions-column">Actions</th>
+                        <th class="table-actions-column width-60">Actions</th>
                     </tr>
                     <tr>
                         <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -184,7 +184,7 @@
             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
               name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                         </th>
-                        <th class="table-actions-column" ></th>
+                        <th class="table-actions-column width-60"  ></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
@@ -198,7 +198,7 @@
                                 : rowData[col.field]
                               }}
                         </td>
-                        <td class="action-icons-cstm table-column-width">
+                        <td class="action-icons-cstm table-column-width width-60">
                             <span data-toggle="modal">
                                 <a class="btn nobg"
                                    (click)="getATAAuditHistoryById(contentATAChapterHist,rowData)" matTooltip="History" matTooltipPosition="above"><i
@@ -303,7 +303,7 @@
                                 <th>Created By</th>
                                 <th>Updated Date</th>
                                 <th>Updated By</th>      
-                                <th>Is Deleted</th>                           
+                                <th style="width:70px">Is Deleted</th>                           
                             </tr>
                         </thead>
                         <tbody *ngIf="auditHistoryATA.length > 0">

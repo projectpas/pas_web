@@ -740,7 +740,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
 		this.auditHisory = auditHistory;
 		this.isSpinnerVisible = false;
-		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+		this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
 	}
 
 	private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {

@@ -54,7 +54,7 @@ export class CustomersListComponent implements OnInit {
         { field: 'customerCode', header: 'Code' },
         { field: 'accountType', header: 'Account Type' },
         { field: 'customerType', header: 'Type' },
-        { field: 'customerClassification', header: 'Classification' },
+        { field: 'customerClassification', header: 'Classification',width:"180px" },
         { field: 'email', header: 'Email' },
         { field: 'city', header: 'City' },
         { field: 'stateOrProvince', header: 'State' },

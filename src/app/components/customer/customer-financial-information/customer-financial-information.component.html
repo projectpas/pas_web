@@ -44,9 +44,9 @@
                       <label>
                         <span class="pull-left">Mark Up %</span>
                       </label>
-                      <select class="text-left" name="markUpPercentageId" (ngModelChange)="enableSave()"
+                      <select class="text-left select-right" name="markUpPercentageId" (ngModelChange)="enableSave()"
                         [(ngModel)]="savedGeneralInformationData.markUpPercentageId">
-                        <!-- <option value="0">-- Select --</option> -->
+                        <option value="0">-- Select --</option>
                         <option *ngFor="let Percentlist of percentageList" [ngValue]="Percentlist.value">
                           {{ Percentlist.label }}
                         </option>
@@ -56,8 +56,8 @@
                       <label>
                         <span class="pull-left">Discount % </span>
                       </label>
-                      <select name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
-                        <!-- <option value="0">-- Select --</option> -->
+                      <select class="select-right" name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
+                        <option value="0">-- Select --</option>
                         <option class="text-right" *ngFor="let discontValue of discountList1"
                           [ngValue]="discontValue.value">
                           {{ discontValue.label }}
@@ -105,7 +105,7 @@
                     <div class="form-group">
                       <label>Currency <span class="clr-red">*</span></label>
                       <select name="currencyId" [(ngModel)]="savedGeneralInformationData.currencyId" (ngModelChange)="enableSave()" required>
-                        <!-- <option value="0">-- Select --</option> -->
+                        <option value="0">-- Select --</option>
                         <option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
                           [ngValue]="currencyName.currencyId">
                           {{ currencyName.code }}
