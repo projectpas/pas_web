@@ -23,9 +23,9 @@
                             <th class="th-warning-name">Task</th>
                             <th class="th-warning-name wd_cond"> </th>
                             <th class="th-font wd_Na">NA</th>
-                            <th class="th-font wd-200">Memo</th>
                             <th class="th-font wd_user">User</th>
                             <th class="th-font wd_user">Date/Time</th>
+                            <th class="th-font wd-200">Memo</th>
                             <th class="th-font">Action</th>
                           </tr>
                         </thead>
@@ -54,14 +54,7 @@
                             <td class="th-font"><input type="checkbox" name="ballow{{i}}" [(ngModel)]="wData.isvalue_NA"
                                 (change)="bSectionClick($event,wData)" [disabled]="wData && wData.isenableUpdate==false" (ngModelChange)="enableSave()" class="form-control" />
                             </td>
-                            <td>
-                              <div class="form-group memo-popup-cstm mat_emo3">
-                                <div [innerHTML]="wData.memo" matTooltipPosition="above" [matTooltip]="parsedText(wData.memo)" style="width: 290px !important;"
-                                  class="text_editor_box"></div>
-                                <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled pointerEvents':wData && wData.isenableUpdate==false && wData.workOrderSettlementName !='Mat Required = Mat Issued'}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo" style="    margin-top: 4px;"
-                                  matTooltipPosition="above" (click)="onAddTextAreaInfo(wData,i)"></i>
-                              </div>
-                            </td>
+                           
                             <td>
                               <!-- [suggestions]="employeeList" -->
                               <!-- (completeMethod)="filterEmployee($event)" -->
@@ -82,6 +75,14 @@
                               [disabled]="true" appendTo="body">
                           </p-calendar>
                             </td>
+                            <td>
+                              <div class="form-group memo-popup-cstm mat_emo3">
+                                <div [innerHTML]="wData.memo" matTooltipPosition="above" [matTooltip]="parsedText(wData.memo)" style="width: 290px !important;"
+                                  class="text_editor_box"></div>
+                                <i class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled pointerEvents':wData && wData.isenableUpdate==false && wData.workOrderSettlementName !='Mat Required = Mat Issued'}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo" style="    margin-top: 4px;"
+                                  matTooltipPosition="above" (click)="onAddTextAreaInfo(wData,i)"></i>
+                              </div>
+                            </td> 
                             <td class="back_clor">
                               <span *ngIf="!isView">
                                 <span *ngIf=""></span>

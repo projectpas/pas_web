@@ -262,7 +262,7 @@
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteAnalysis'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteAnalysis');">Work Order Quote Analysis</button>
                  <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteprint'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteprint');">Work Order Quote Print</button>
-                <button *ngIf="!isView" class="btn btn-primary"  style="float: right;" (click)="onClickBackToWO()">
+                <button *ngIf="(!isListView && !fromWoqList ) || isWoTab"  class="btn btn-primary"  style="float: right;" (click)="onClickBackToWO()">
                     Back To Work Order
                 </button>
                 </div>
@@ -273,30 +273,30 @@
                             id="mpn-list-table">
                          <thead>
                              <tr class="pad_workflo">
-                                 <th rowspan="2">MPN <span class="clr-red">*</span></th>
-                                 <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
-                                 <th rowspan="2">Revised MPN</th>
-                                 <th rowspan="2" style="min-width:100px">Serial Number</th>
-                                 <th rowspan="2">QTY</th>
-                                 <th rowspan="2">Rec'd Date</th>
-                                 <th rowspan="2">Cust Req Date <span class="clr-red">*</span></th>
-                                 <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
-                                 <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
-                                 <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-90">MPN <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-180">MPN Description <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-90">Revised MPN</th>
+                                 <th rowspan="2" class="min-width-100">Serial Num</th>
+                                 <th rowspan="2">Qty</th>
+                                 <th rowspan="2" class="min-width-90">Rec'd Date</th>
+                                 <th rowspan="2" class="min-width-90">Cust Req Date <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-90">Promised Date <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-90">Est. Comp Date <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-90">Est. Ship Date <span class="clr-red">*</span></th>
                                  <th rowspan="2">WO Stage <span class="clr-red">*</span></th>
-                                 <th rowspan="2" style="min-width:100px">WO Status <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-100">WO Status <span class="clr-red">*</span></th>
                                  <th rowspan="2">Tech Name <span class="clr-red">*</span></th>
                                  <th rowspan="2">Station ID</th>
-                                 <th rowspan="2" style="min-width:80px">Work Scope <span class="clr-red">*</span></th>
+                                 <th rowspan="2" class="min-width-100">Work Scope <span class="clr-red">*</span></th>
                                  <th rowspan="2">Priority <span class="clr-red">*</span></th>
                                  <th rowspan="2">Condition <span class="clr-red">*</span></th>
                                  <th rowspan="2">CMM/Pub Ref</th>
                                  <th rowspan="2">Workflow ID </th>
                                  <th rowspan="2">Item Group</th>                       
-                                 <th rowspan="2" style="min-width:200px">Cust Ref</th>
+                                 <th rowspan="2" class="min-width-100">Cust Ref</th>
                                  <th rowspan="2">Contract</th>
-                                 <th rowspan="2">Contract No</th>
-                                 <th rowspan="2">Stk Line</th>
+                                 <th rowspan="2" class="min-width-100">Contract No</th>
+                                 <th rowspan="2" class="min-width-80">Stk Line</th>
                                  <th rowspan="2">NTE</th>
                                  <th rowspan="2">PMA</th>
                                  <th rowspan="2">DER</th>                                
@@ -325,19 +325,19 @@
                                  <label class="text-right w60">{{workOrderPart['quantity'] }}</label>
                              </td>
                              <td>
-                                 <label>{{workOrderPart['receivedDate'] | date: 'MM/dd/yyyy'}}</label>
+                                 {{workOrderPart['receivedDate'] | date: 'MM/dd/yyyy'}}
                              </td>
                              <td>
-                                 <label>{{workOrderPart['customerRequestDate'] | date: 'MM/dd/yyyy'}}</label>
+                               {{workOrderPart['customerRequestDate'] | date: 'MM/dd/yyyy'}}
                              </td>
                              <td>
-                                 <label>{{workOrderPart['promisedDate']  | date: 'MM/dd/yyyy'}}</label>
+                                {{workOrderPart['promisedDate']  | date: 'MM/dd/yyyy'}}
                              </td>
                              <td>
-                                 <label>{{workOrderPart['estimatedShipDate']  | date: 'MM/dd/yyyy'}}</label>
+                               {{workOrderPart['estimatedShipDate']  | date: 'MM/dd/yyyy'}}
                              </td>
                              <td>
-                                 <label>{{workOrderPart['estimatedCompletionDate']  | date: 'MM/dd/yyyy'}}</label>
+                                {{workOrderPart['estimatedCompletionDate']  | date: 'MM/dd/yyyy'}}
                              </td>
                              <td>
                                  <label>{{workOrderPart['workOrderStage']}}</label>
@@ -370,20 +370,20 @@
                                      <label>{{workOrderPart['itemGroup']}}</label>
                                  </td>
                                  <td>
-                                     <label class=" w60">   {{workOrderPart['refNo']}}  </label>
+                                       {{workOrderPart['refNo']}} 
                                  </td>
                                  <td>
                                      <input type="checkbox" class="form-control w60" name="contract{{i}}"
                                       #isDER="ngModel" [(ngModel)]="workOrderPart.iscontract" disabled>
                                   </td>
                                   <td>
-                                      <label class="text-right w60">{{workOrderPart['contractNo']}}</label>
+                                     {{workOrderPart['contractNo']}}
                                   </td>
                                   <td>
-                                     <label>{{workOrderPart['stockLine']}}</label>
+                                    {{workOrderPart['stockLine']}}
                                  </td>
                                  <td>
-                                     <label class="text-right w60">{{workOrderPart['nte']}}</label>
+                                    {{workOrderPart['nte']}}
                                  </td>
                                  <td>
                                      <input type="checkbox" class="form-control w60 pointer_event_none" name="isPMA{{i}}"
@@ -420,8 +420,12 @@
                                      </label>
                                  </td>
                                  <td class="table-actions-column woq-actions-width" >
-                                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
-                                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
+                                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">
+                                         <!-- Display Historical WOs -->WO History
+                                        </button>
+                                     <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">
+                                         <!-- Display Historical WO Quotes -->WOQ History
+                                        </button>
                                  </td>
                              </tr>
                              <tr *ngIf="workOrderPartsDetail && workOrderPartsDetail.length ==0">
@@ -754,7 +758,7 @@
                                                     [disabled]="isView || isViewForApprovedPart"
                                                     (click)="(!isView)?tmchange():''"></p-radioButton>
                                      <div>
-                                         <select  class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
+                                         <select  class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart" style="width: 70px !important;"
                                          >
                                              <option value="">Select</option>
                                              <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -1847,7 +1851,7 @@
           class="modal fade"
           role="dialog"
           data-backdrop="static">
-         <div class="modal-dialog modal-xl">
+         <div class="modal-dialog modal-xl"> 
              <!-- Modal content-->
              <div class="modal-content">
                  <div class="modal-header">
@@ -1855,8 +1859,8 @@
                          &times;
                      </button>
                  </div> 
-                 <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
-                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
+                 <div class="modal-body table-responsive" *ngIf="selectedHistoricalWorkOrder">
+                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [fromWoqList]="true" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                  </div>
                  <div >
                      <button type="button" class="btn btn-danger foot_bt"  (click)="hideModal('historicalWorkOrderView')"

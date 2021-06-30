@@ -274,13 +274,13 @@ export class SpeedQuoteService {
     return this.speedQuoteEndPointSevice.createSpeedQuoteMarginSummary(marginSummary);
   }
 
-  initiateQuoteCopying(salesQuoteId: number): Observable<ISalesQuoteView[]> {
+  initiateQuoteCopying(salesQuoteId: number): Observable<ISpeedQuoteView[]> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.initiateQuoteCopying(salesQuoteId)
     );
   }
 
-  closeSpeedQuote(salesQuoteId: number, updatedBy: string): Observable<ISalesQuoteView[]> {
+  closeSpeedQuote(salesQuoteId: number, updatedBy: string): Observable<ISpeedQuoteView[]> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.closeSpeedQuoteEndPoint(salesQuoteId, updatedBy)
     );

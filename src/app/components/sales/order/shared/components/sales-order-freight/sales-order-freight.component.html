@@ -257,10 +257,10 @@
                         <ng-container *ngIf="costPlusType == 3">
                             <td class="table-column-width">
                                 <input type="text" pInputText pKeyFilter="money" class="text-right"
-                                    [ngModel]="freightFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
+                                    [ngModel]="freightFlatBillingAmount | twoDecimalGlobalNumberFormatPipe"
                                     [ngModelOptions]="{updateOn:'blur'}"
-                                    (ngModelChange)="freightFlatBillingAmount=formatStringToNumberGlobal($event)"
-                                    (blur)="freightFlatBillingAmount = (freightFlatBillingAmount)?formateCurrency(freightFlatBillingAmount):'0.00'"
+                                    (ngModelChange)="freightFlatBillingAmount=formatStringToNumberGlobal($event); validated()"
+                                    (blur)="onBlurFlatBillingAmout()"
                                     [disabled]="isView" />
                             </td>
                         </ng-container>

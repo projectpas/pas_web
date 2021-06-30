@@ -7,11 +7,12 @@
       </button>
       <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
             style="min-height: 10px !important;">
-            <div class="tableFixHead">
-                <table class="table table-bordered" id="soq-table">
+            <div class="tableFixHead" style="overflow-x:scroll">
+                <table class="table table-bordered parts-list-header" id="soq-table" style="white-space: nowrap;">
                     <!-- <tr class="header-table-width" style="font-size: 10px"> -->
+                        <thead>
                     <tr class="font-size-10">
-                        <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
+                        <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'width': summaryColumn.width}">
                             <!-- <ng-container *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                      || summaryColumn.field == 'customerRef'
                                      || summaryColumn.field == 'quantityRequested'">
@@ -25,11 +26,13 @@
                             <ng-container>
                               {{ summaryColumn.header }}
                             </ng-container>
+                           
                         </th>
                         <!-- <th colspan="11"></th> -->
                         <th *ngIf="isViewMode == false" class="table-column-width sales-part-action-column">Actions
                         </th>
                     </tr>
+                    </thead>
                     <ng-container *ngIf="summaryParts.length > 0">
                         <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
                             <tbody>
@@ -81,7 +84,7 @@
                                         <ng-container *ngIf="summaryColumn.field == 'notes'">
                                             <!-- <td class="width-120" *ngIf="isViewMode == false"> -->
                                             <div  *ngIf="isViewMode == false"class="form-group notes-popup-cstm mat_emo"
-                                            style="margin-bottom: 0;">
+                                            style="margin-bottom: 0;min-width:200px !important">
                                             <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
                                             [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box_exclusion"></div>
                                             <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"

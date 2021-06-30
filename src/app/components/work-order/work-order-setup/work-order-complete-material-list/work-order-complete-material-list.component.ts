@@ -1039,6 +1039,15 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
     selectedParts(currentRecord, event) {
+
+        const newData=[...  this.reservedList];
+        const arrayWithFilterObjects= newData.filter((o) => o.isParentSelected === true);
+        if((arrayWithFilterObjects && arrayWithFilterObjects.length)==(newData&&newData.length)){
+          this.isAllow=true;
+        }else{
+          this.isAllow=false
+        }
+
         if (this.statusId === 1 || this.statusId === 5) {
             if (currentRecord.isParentSelected == true && currentRecord.quantityReserved != 0) {
                 this.savebutonDisabled = true;
@@ -1401,7 +1410,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.summaryColumns = [
             { field: 'line', header: 'Line Num', align: 0, width: "64px" },
             { field: 'taskName', header: 'Task', align: 0, width: "100px" },
-            { field: 'isFromWorkFlow', header: 'Is From WorkFlow', align: 0, width: "110px" },
+            { field: 'isFromWorkFlow', header: 'Is From WF', align: 0, width: "110px" },
             { field: 'partNumber', header: 'PN', align: 0, width: "160px" },
             { field: 'partDescription', header: 'PN Description', align: 0, width: "200px" },
             { field: 'condition', header: 'Cond', align: 0, width: "100px" },
@@ -1420,17 +1429,17 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'manufacturerName', header: 'Manufacturer', align: 0, width: "120px" },
             { field: 'needDate', header: 'Need Date', align: 0 },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "68px" },
-            { field: 'extendedCost', header: 'Extended Cost', align: 1, width: "96px" },
+            { field: 'unitCost', header: 'Unit Cost', align: 1, width: "64px" },
+            { field: 'extendedCost', header: 'Ext cost', align: 1, width: "64px" },
             { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
             { field: 'subWorkOrderNo', header: 'Sub-WO Num', align: 0, width: "100px" },
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
-            { field: 'memo', header: 'Memo', align: 0, width: "250px" },
             { field: 'isDeferred', header: 'Deferred', align: 0, width: "90px" },
             { field: 'qtyOnOrder', header: 'Qty On Order', align: 1, width: "86px" },
             { field: 'qtyOnBkOrder', header: 'Qty on BK Order', align: 1, width: "110px" },
             { field: 'poNum', header: 'PO Num' },
             { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date', width: "115px" },
+            { field: 'memo', header: 'Memo', align: 0, width: "250px" },
         ]
 
         this.childColumnsData = [
@@ -1455,12 +1464,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'manufacturerName', header: 'Manufacturer', align: 0, width: "120px" },
             { field: 'needDate', header: 'Need Date', align: 0, width: "70px" },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
-            { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "61px" },
-            { field: 'stocklineExtendedCost', header: 'Extended Cost', align: 1, width: "90px" },
+            { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "64px" },
+            { field: 'stocklineExtendedCost', header: 'Ext cost', align: 1, width: "64px" },
             { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
             { field: 'controlId', header: 'Cntl ID', align: 0, width: "70px" },
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
-            { field: 'memo', header: 'Memo', align: 0, width: "250px" },
             { field: 'costDate', header: 'Cost Date', align: 0, width: "70px" },
             { field: 'repairOrderNumber', header: 'RO Num', align: 0, width: "100px" },
             { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date', align: 0, width: "120px" },
@@ -1469,11 +1477,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'subWorkOrderNo', header: 'Sub-WO Num', align: 0, width: "100px" },
             { field: 'salesOrder', header: 'SO Num', align: 0, width: "100px" },
             { field: 'figure', header: 'Figure', align: 0, width: "70px" },
-            { field: 'site', header: 'Site', align: 0, width: "100px" },
-            { field: 'wareHouse', header: 'Warehouse', align: 0, width: "100px" },
-            { field: 'location', header: 'Location', align: 0, width: "100px" },
-            { field: 'shelf', header: 'Shelf', align: 0, width: "100px" },
-            { field: 'bin', header: 'Bin', align: 0, width: "100px" },
+            { field: 'memo', header: 'Memo', align: 0, width: "250px" },
+            // { field: 'site', header: 'Site', align: 0, width: "100px" },
+            // { field: 'wareHouse', header: 'Warehouse', align: 0, width: "100px" },
+            // { field: 'location', header: 'Location', align: 0, width: "100px" },
+            // { field: 'shelf', header: 'Shelf', align: 0, width: "100px" },
+            // { field: 'bin', header: 'Bin', align: 0, width: "100px" },
         ]
     }
 

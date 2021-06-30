@@ -166,15 +166,15 @@ export class SpeedQuotePartNumberComponent {
       { field: 'conditionDescription', header: 'Cond', width: "130px" },
       { field: 'quantityRequested', header: 'Qty', width: "50px" },
       { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
-      { field: 'oempmader', header: 'Item Type', width: "75px" },
-      { field: 'unitSalePrice', header: 'Unit Price', width: "90px" },
+      { field: 'oempmader', header: 'Item Type', width: "9px" },
+      { field: 'unitSalePrice', header: 'Unit Price', width: "100px" },
       { field: 'salesPriceExtended', header: 'Ext Price', width: "90px" },
       { field: 'unitCost', header: 'Unit Cost', width: "90px" },
       { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
       { field: 'marginAmountExtended', header: 'Margin Amt', width: "103px" },
       { field: 'marginPercentageExtended', header: 'Margin %', width: "80px" },
       { field: 'tat', header: 'TAT', width: "50px" },
-      { field: 'notes', header: "Notes", width: "140px" },
+      { field: 'notes', header: "Notes", width: "200px" },
     ]
     // if (!this.isViewMode) {
     //   // { header: "Notes", width: "100px" },

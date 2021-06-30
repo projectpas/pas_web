@@ -428,7 +428,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 {
                   label: 'Work Order in Process List',
-                  routerLink: '/#',
+                  routerLink:  '/workordersmodule/workorderspages/app-assignment-list',
                 },
                 {
                   label: 'Assign WO to Tech',

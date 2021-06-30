@@ -51,19 +51,19 @@ export class CustomersListComponent implements OnInit {
     selectedColumnsForDomesticShipVia = this.selectedColumnsForInternationShipViaTable;
     headers = [
         { field: 'name', header: 'Name' },
-        { field: 'customerCode', header: 'Code' },
+        { field: 'customerCode', header: 'Code',width:"100px" },
         { field: 'accountType', header: 'Account Type' },
-        { field: 'customerType', header: 'Type' },
-        { field: 'customerClassification', header: 'Classification',width:"180px" },
-        { field: 'email', header: 'Email' },
-        { field: 'city', header: 'City' },
-        { field: 'stateOrProvince', header: 'State' },
+        { field: 'customerType', header: 'Type',width:"100px" },
+        { field: 'customerClassification', header: 'Classification',width:"200px" },
+        { field: 'email', header: 'Email' ,width:"180px"},
+        { field: 'city', header: 'City',width:"100px" },
+        { field: 'stateOrProvince', header: 'State',width:"100px" },
         { field: 'contact', header: 'Contact' },
-        { field: 'salesPersonPrimary', header: 'Sales Person' },
+        { field: 'salesPersonPrimary', header: 'Sales Person' ,width:"110px"},
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
+        { field: 'createdBy', header: 'Created By' ,width:"100px"},
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' }
+        { field: 'updatedBy', header: 'Updated By',width:"100px" }
     ]
     selectedColumns = this.headers;
     data: any;

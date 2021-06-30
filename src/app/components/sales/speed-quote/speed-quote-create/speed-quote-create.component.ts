@@ -861,9 +861,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
         //this.verifySalesQuoteConversion(this.speedQuoteView.verificationResult);
         this.toggle_po_header = false;
       }
-      if (this.deletePartsWhileCopieng == true) {
-        this.speedQuoteView.parts = [];
-      }
+      // if (this.deletePartsWhileCopieng == true) {
+      //   this.speedQuoteView.parts = [];
+      // }
 
       let partList: any[] = this.speedQuoteView.parts;
       this.selectedParts = [];
@@ -1188,82 +1188,87 @@ export class SpeedQuoteCreateComponent implements OnInit {
       for (let i = 0; i < this.selectedParts.length; i++) {
         let partNameAdded = false;
         let selectedPart = this.selectedParts[i];
-        // if (!selectedPart.customerRequestDate) {
-        //   this.isSpinnerVisible = false;
-        //   invalidParts = true;
-        //   if (!partNameAdded) {
-        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //     partNameAdded = true;
-        //   }
-        //   errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
-        // }
-        // if (!selectedPart.estimatedShipDate) {
-        //   this.isSpinnerVisible = false;
-        //   invalidParts = true;
-        //   if (!partNameAdded) {
-        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //     partNameAdded = true;
-        //   }
-        //   errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
-        // }
-        // if (!selectedPart.promisedDate) {
-        //   this.isSpinnerVisible = false;
-        //   invalidParts = true;
-        //   if (!partNameAdded) {
-        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //     partNameAdded = true;
-        //   }
-        //   errmessage = errmessage + '<br />' + "Please enter Promised Date."
-        // }
-        // if (!selectedPart.priorityId) {
-        //   this.isSpinnerVisible = false;
-        //   invalidParts = true;
-        //   if (!partNameAdded) {
-        //     errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //     partNameAdded = true;
-        //   }
-        //   errmessage = errmessage + '<br />' + "Please enter priority ID."
-        // }
+        if (!selectedPart.customerRequestDate) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          if (!partNameAdded) {
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
+          errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
+        }
+        if (!selectedPart.estimatedShipDate) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          if (!partNameAdded) {
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
+          errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
+        }
+        if (!selectedPart.promisedDate) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          if (!partNameAdded) {
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
+          errmessage = errmessage + '<br />' + "Please enter Promised Date."
+        }
+        if (!selectedPart.priorityId) {
+          this.isSpinnerVisible = false;
+          invalidParts = true;
+          if (!partNameAdded) {
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
+          errmessage = errmessage + '<br />' + "Please enter priority ID."
+        }
 
-        // if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-        //   let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
-        //   let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
-        //   let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
-        //   let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+        if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
 
-        //   if (crdate < opendate || esdate < opendate || pdate < opendate) {
-        //     invalidDate = true;
-        //     if (crdate < opendate) {
-        //       this.isSpinnerVisible = false;
-        //       invalidParts = true;
-        //       if (!partNameAdded) {
-        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //         partNameAdded = true;
-        //       }
-        //       errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
-        //     }
-        //     if (esdate < opendate) {
-        //       this.isSpinnerVisible = false;
-        //       invalidParts = true;
-        //       if (!partNameAdded) {
-        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //         partNameAdded = true;
-        //       }
-        //       errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
-        //     }
-        //     if (pdate < opendate) {
-        //       this.isSpinnerVisible = false;
-        //       invalidParts = true;
-        //       if (!partNameAdded) {
-        //         errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
-        //         partNameAdded = true;
-        //       }
-        //       errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
-        //     }
-        //   }
-        // }
+          if (crdate < opendate || esdate < opendate || pdate < opendate) {
+            invalidDate = true;
+            if (crdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              if (!partNameAdded) {
+                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+                partNameAdded = true;
+              }
+              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
+            }
+            if (esdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              if (!partNameAdded) {
+                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+                partNameAdded = true;
+              }
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
+            }
+            if (pdate < opendate) {
+              this.isSpinnerVisible = false;
+              invalidParts = true;
+              if (!partNameAdded) {
+                errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+                partNameAdded = true;
+              }
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
+            }
+          }
+        }
+        let partNumberObj;
+        if (this.isCopyMode) {
+          partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
+          partList.push(partNumberObj);
+        }
         if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
+          partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
       }
@@ -1311,14 +1316,14 @@ export class SpeedQuoteCreateComponent implements OnInit {
           });
         }
       } else {
-        // if (this.isCopyMode == true) {
-        //   this.speedQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
-        //   this.speedQuoteView.speedQuote.speedQuoteId = null;
-        //   this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
-        //   if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
-        //     this.speedQuoteView.parts.filter(x => x.speedQuotePartId = null)
-        //   }
-        // }
+        if (this.isCopyMode == true) {
+          this.speedQuoteView.originalSpeedQuoteId = parseInt(this.quoteCopyRefId);
+          this.speedQuoteView.speedQuote.speedQuoteId = null;
+          this.speedQuoteView.speedQuote.speedQuoteNumber = undefined;
+          if (this.speedQuoteView.parts && this.speedQuoteView.parts.length > 0) {
+            this.speedQuoteView.parts.filter(x => x.speedQuotePartId = null)
+          }
+        }
         this.speedQuoteService.create(this.speedQuoteView).subscribe(data => {
           this.SpeedQuoteId = data[0].speedQuoteId;
           this.speedQuoteView.speedQuote.speedQuoteId = this.SpeedQuoteId;
@@ -1416,22 +1421,24 @@ export class SpeedQuoteCreateComponent implements OnInit {
   // }
 
   initiateQuoteCopying() {
-    let content = this.copyQuotePopup;
-    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    // let content = this.copyQuotePopup;
+    // this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    this.copySpeedQuote();
   }
 
-  copySalesOrderQuote() {
+  copySpeedQuote() {
     let considerParts = false;
-    if (this.copyConsiderations.isPartsAllowForCopy == true) {
-      considerParts = true
-    } else {
-      considerParts = false;
-    }
+    // if (this.copyConsiderations.isPartsAllowForCopy == true) {
+    //   considerParts = true
+    // } else {
+    //   considerParts = false;
+    // }
     let considerApprovers = false;
     this.speedQuoteService.initiateQuoteCopying(this.id).subscribe(
       results => {
-        this.closeModal()
-        this.router.navigate(['/salesmodule/salespages/speed-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
+        //this.closeModal();
+        this.speedQuoteView.parts = results[0].parts;
+        this.router.navigate(['/salesmodule/salespages/speed-quote-create/' + results[0].speedQuote.customerId], { queryParams: { copyRef: results[0].originalSpeedQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
       }, error => {
         this.isSpinnerVisible = false;
       }
@@ -1862,7 +1869,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
           MessageSeverity.success
         );
         this.closeModal();
-        this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
+        this.router.navigateByUrl(`salesmodule/salespages/speed -quote-list`);
       }, error => {
         this.isSpinnerVisible = false;
       }
@@ -1871,7 +1878,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   newQuoteEvent() {
     this.closeModal();
-    this.router.navigateByUrl('/salesmodule/salespages/sales-quote-create/' + this.customerId);
+    this.router.navigateByUrl('/salesmodule/salespages/speed-quote-create/' + this.customerId);
   }
 
   closeModal() {

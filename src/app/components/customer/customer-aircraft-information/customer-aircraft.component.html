@@ -112,11 +112,11 @@
           <div class="advance-search-card" >
             <div class="form-row advance-search">
               <div class="col-md-1">
-                <h4 class="f-s-14 search-label">Search :</h4>
+                <h4 class="search-font search-label" style="margin-left:55%">Search :</h4>
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <label class="fs12 input-width-100-percent">Aircraft </label>
+                  <label class="input-width-100-percent">Aircraft </label>
                   <p-dropdown [options]="manufacturerData" placeholder="-- Select --" name="searchAircraft" filter="true"
                    [ngModelOptions]="{ standalone: true }" class="p-dropdown-cus-fullwidth" [(ngModel)]="selectAircraftManfacturer" [showClear]="true"
                     (onChange)="getAircraftModelByManfacturerType($event.value)"></p-dropdown>
@@ -124,7 +124,7 @@
               </div> 
               <div class="col-md-2">
                 <div class="form-group">
-                  <label class="fs12">
+                  <label style="width:95%">
                     Aircraft Model
                   </label>
                   <p-multiSelect  [maxSelectedLabels]="2" [options]="search_AircraftModelList" [disabled]="!selectAircraftManfacturer"
@@ -134,7 +134,7 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <label class="fs12">DashNumber </label>
+                  <label style="width:95%">Dash Number </label>
                   <p-multiSelect [maxSelectedLabels]="2" [options]="search_AircraftDashNumberList" [disabled]="selectedAircraftModel.length==0"
                     [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{ standalone: true }" class="pub-multi"
                     [selectionLimit]="30"></p-multiSelect>

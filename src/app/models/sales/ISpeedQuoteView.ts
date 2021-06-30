@@ -12,7 +12,7 @@ import { ISpeedQuote } from './ISpeedQuote.model';
 
 export interface ISpeedQuoteView {
     createNewVersion: boolean;
-    originalSalesOrderQuoteId: Number;
+    originalSpeedQuoteId: Number;
     speedQuote: ISpeedQte;
     parts: ISpeedQuotePart[];
     priorities: IPriority[];

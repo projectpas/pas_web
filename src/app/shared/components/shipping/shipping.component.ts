@@ -345,7 +345,6 @@ onSelectPartNumber(rowData) {
 }
 
 bindData() {
-    debugger;
     // this.getShippingList();
     // this.getShipVia();
     // this.getCountriesList();
