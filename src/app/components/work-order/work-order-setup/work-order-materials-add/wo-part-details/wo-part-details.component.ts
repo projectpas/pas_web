@@ -269,6 +269,7 @@ export class WoPartDetailsComponent implements OnChanges {
         this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :0;
         this.materialCreateObject.subWorkOrderMaterialsId=0;
        }
+       this.materialCreateObject.subWorkOrderId=(this.editData && this.editData.subWorkOrderId)? this.editData.subWorkOrderId:0;
       this.materialCreateObject.stockLineId= null;
       this.materialCreateObject.quantity=this.formObject.quantity;
       this.materialCreateObject.provisionId=this.formObject.provisionId;
@@ -333,6 +334,7 @@ export class WoPartDetailsComponent implements OnChanges {
       this.materialCreateObject.workOrderMaterialsId=this.formObject.workOrderMaterialsId ? this.formObject.workOrderMaterialsId :null;
       this.materialCreateObject.subWorkOrderMaterialsId=0;
      }
+     this.materialCreateObject.subWorkOrderId=(this.editData && this.editData.subWorkOrderId)? this.editData.subWorkOrderId:0;
     this.materialCreateObject.stockLineId= part.stockLineId;
     this.materialCreateObject.quantity=this.formObject.quantity
     this.materialCreateObject.provisionId=this.formObject.provisionId;

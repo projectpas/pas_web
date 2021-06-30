@@ -514,11 +514,11 @@
                                   {{
                                 allEmployeelist.fax ? allEmployeelist.fax : '-'
                                               }}
-                                </span>
-                              </p>
-                              <p>
-                                <span class="label"><b>Email: </b></span><span class="value">
-                                  {{
+                                          </span>
+                                      </p>
+                                      <p>
+                                          <span class="label"><b>Email: <span class="clr-red">*</span></b></span><span class="value">
+                                              {{
                                 allEmployeelist.email
                                   ? allEmployeelist.email
                                   : '-'
@@ -1082,7 +1082,7 @@
 <div id="employeeHistory" style="z-index: 10000 !important;" class="modal fade" role="dialog" data-backdrop="static"
   data-keyboard="false" data-backdrop="static">
 
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -1101,7 +1101,7 @@
               <tr>
                 <th>First Name <span class="clr-red">*</span></th>
                 <th>Last Name <span class="clr-red">*</span></th>
-                <th>Emp ID</th>
+                <th>Emp ID <span class="clr-red">*</span></th>
                 <th>Job Title <span class="clr-red">*</span></th>
                 <th>Emp Expertise <span class="clr-red">*</span></th>
                 <!-- <th>Job Type</th> -->
@@ -1110,10 +1110,10 @@
                 <th>Pay Type</th>
                 <th>Is Active</th>               
                 <th>Created Date</th>
-                <th>Created By</th>               
+                <th style="width:100px">Created By</th>               
                 <th>Updated Date</th>
-                <th>Updated By</th>
-                <th>Is Deleted</th>
+                <th style="width:100px">Updated By</th>
+                <th style="width:100px">Is Deleted</th>
               </tr>
             </thead>
             <tbody class="audithistory-cstm">

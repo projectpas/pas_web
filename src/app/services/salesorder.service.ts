@@ -351,13 +351,13 @@ export class SalesOrderService {
     );
   }
 
-  createFreight(freightsList: ISOFreight[]): Observable<ISalesOrderQuote[]> {
+  createFreight(freightsList: any): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.createFreight(freightsList)
     );
   }
 
-  createSOCharge(chargesList: ISalesOrderCharge[]): Observable<ISalesOrderQuote[]> {
+  createSOCharge(chargesList: any): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.createCharges(chargesList)
     );

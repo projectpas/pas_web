@@ -78,7 +78,8 @@ margin-top: 0;
 margin-bottom: 0;
 }
 
-@page {size: landscape}
+// @page {size: landscape}
+@page {size: portrait}
 } 
               table {font-size:12px !important}        
   table thead { background: #808080;}    

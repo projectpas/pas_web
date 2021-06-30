@@ -110,12 +110,12 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  initiateQuoteCopying(salesQuoteId: number): Observable<any> {
-    const URL = `${this.getCopyEndpointUrl}/${salesQuoteId}`;
+  initiateQuoteCopying(speedQuoteId: number): Observable<any> {
+    const URL = `${this.getCopyEndpointUrl}/${speedQuoteId}`;
     return this.http
       .get(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.initiateQuoteCopying(salesQuoteId));
+        return this.handleErrorCommon(error, () => this.initiateQuoteCopying(speedQuoteId));
       });
   }
 

@@ -274,9 +274,9 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             //this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
 
             this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId, this.deletedStatusInfo).subscribe(response => {
-                if (response && response.length > 0) {
-                    this.salesOrderFreightList = response;
-                    this.saveFreightListForSO.emit(this.salesOrderFreightList);
+                if (response.salesOrderQuoteFreights && response.salesOrderQuoteFreights.length > 0) {
+                    this.salesOrderFreightList = response.salesOrderQuoteFreights;
+                    this.saveFreightListForSO.emit(response);
                 }
             }, error => { });
         }, error => {

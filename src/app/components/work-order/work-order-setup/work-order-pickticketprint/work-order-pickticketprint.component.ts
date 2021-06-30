@@ -78,7 +78,8 @@ export class WorkOrderPickticketprintComponent implements OnInit {
               margin-bottom: 0;
               }
             
-              @page {size: landscape}
+              // @page {size: landscape}
+              @page {size: portrait}
             } 
             span {
               /* font-weight: normal; */
