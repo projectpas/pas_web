@@ -154,7 +154,8 @@
                 matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
           </div>
         </td>
-        <td class="action-icons-cstm table-column-width" style="width:131px !important;display:flex;min-height:29px" *ngIf="isViewMode == true">
+        <td class="action-icons-cstm table-column-width"  *ngIf="isViewMode == true">
+          <!-- style="width:131px !important;display:flex;min-height:29px" -->
           <span>
             <a class="btn btn-info boxed-float-btn nobg"
               (click)="openDocument(rowData,documentView)" matTooltip="View" matTooltipPosition="above">

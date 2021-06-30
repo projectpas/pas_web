@@ -149,7 +149,7 @@ table thead tr th {
   margin-bottom: 16px;
 }
 .dis_bt{
-  width: 170px !important;
+  width: 100px !important;
   font-size: 11px !important;
   margin-left: 6px !important;
   padding: 3px !important;
@@ -162,7 +162,13 @@ table thead tr th {
   margin: 0px;
 }
 .woq-actions-width{
-  min-width:363px;
+  min-width:222px;
+}
+.m-t-5{
+  margin-top:5px !important
+}
+.m-b-5{
+  margin-bottom:5px !important;
 }
 .freight-isview-th{
   background: #fff !important; border: 1px solid #e7ecf1 !important;padding: 0 !important;
