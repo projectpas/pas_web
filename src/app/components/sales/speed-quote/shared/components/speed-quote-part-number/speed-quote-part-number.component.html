@@ -23,7 +23,7 @@
                                     && summaryColumn.field != 'quantityRequested'">
                                 {{ summaryColumn.header }}
                             </ng-container> -->
-                            <ng-container [ngClass]="(summaryColumn.field == 'notes') ? 'width-200' : ''">
+                            <ng-container>
                               {{ summaryColumn.header }}
                             </ng-container>
                            
@@ -81,7 +81,7 @@
                                             [ngModel]="summaryPart[summaryColumn.field]"
                                             pInputText type="text"/>
                                           </ng-container>
-                                        <ng-container *ngIf="summaryColumn.field == 'notes'">
+                                        <ng-container *ngIf="summaryColumn.field == 'notes'" style="min-width:200px !important">
                                             <!-- <td class="width-120" *ngIf="isViewMode == false"> -->
                                             <div  *ngIf="isViewMode == false"class="form-group notes-popup-cstm mat_emo"
                                             style="margin-bottom: 0;">
