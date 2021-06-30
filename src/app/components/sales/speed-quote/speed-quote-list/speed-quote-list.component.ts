@@ -130,13 +130,13 @@ export class SpeedQuoteListComponent implements OnInit {
     initColumns() {
         this.headers = [
             { field: "customerName", header: "Customer Name", width: "160px" },
-            { field: "customerCode", header: "Customer Code", width: "160px" },
+            { field: "customerCode", header: "Customer Code", width: "130px" },
             //{ field: "accountTypeName", header: "Acct Type", width: "160px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
-            { field: "speedQuoteNumber", header: "Quote Num", width: "120px" },
-            { field: "leadSourceName", header: "Lead Source", width: "160px" },
-            { field: "leadSourceReference", header: "Lead Ref", width: "160px" },
+            { field: "speedQuoteNumber", header: "Quote Num", width: "100px" },
+            { field: "leadSourceName", header: "Lead Source", width: "100px" },
+            { field: "leadSourceReference", header: "Lead Ref", width: "120px" },
             { field: "probability", header: "Probability", width: "90px" },
             { field: "quoteDate", header: "Quote Date", width: "120px" },
             { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
