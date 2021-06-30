@@ -318,9 +318,9 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.refreshOnDataSaveOrEditORDelete();
       //this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
       this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId, this.deletedStatusInfo).subscribe(response => {
-        if (response && response.length > 0) {
-          this.salesOrderChargesList = response;
-          this.saveChargesListForSO.emit(this.salesOrderChargesList);
+        if (response.salesOrderQuoteCharges && response.salesOrderQuoteCharges.length > 0) {
+          this.salesOrderChargesList = response.salesOrderQuoteCharges;
+          this.saveChargesListForSO.emit(response);
         }
       }, error => { });
     }, error => {

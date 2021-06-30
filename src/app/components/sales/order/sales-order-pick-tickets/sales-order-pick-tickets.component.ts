@@ -354,7 +354,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     if (invalidQty) {
       this.isSpinnerVisible = false;
       this.alertService.resetStickyMessage();
-      this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+      this.alertService.showMessage('Sales Order', errmessage, MessageSeverity.error);
     }
     else {
       this.disableSubmitButton = true;

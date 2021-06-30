@@ -1266,15 +1266,20 @@ export class SalesOrderCreateComponent implements OnInit {
   setFreightsAtPartLevel(freightList) {
     if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
       this.salesQuoteService.selectedParts.forEach((part, i) => {
-        let freightFound = freightList.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
-        if (freightFound !== undefined && freightFound.length > 0) {
-          let total = 0;
+        if (freightList.freightBuildMethod && freightList.freightBuildMethod == 3) {
+          this.salesQuoteService.selectedParts[i].freight = freightList.freightFlatBillingAmount;
+        }
+        else {
+          let freightFound = freightList.salesOrderFreights.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+          if (freightFound !== undefined && freightFound.length > 0) {
+            let total = 0;
 
-          freightFound.forEach(element => {
-            total += element.billingAmount;
-          });
+            freightFound.forEach(element => {
+              total += element.billingAmount;
+            });
 
-          this.salesQuoteService.selectedParts[i].freight = total; //freightFound[0].total; //this.totalFreights;
+            this.salesQuoteService.selectedParts[i].freight = total; //freightFound[0].total; //this.totalFreights;
+          }
         }
       });
     }
@@ -1316,15 +1321,20 @@ export class SalesOrderCreateComponent implements OnInit {
   setChargesAtPartLevel(chargeList) {
     if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
       this.salesQuoteService.selectedParts.forEach((part, i) => {
-        let chargeFound = chargeList.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
-        if (chargeFound !== undefined && chargeFound.length > 0) {
-          let total = 0;
+        if (chargeList.freightBuildMethod && chargeList.freightBuildMethod == 3) {
+          this.salesQuoteService.selectedParts[i].misc = chargeList.chargesFlatBillingAmount;
+        }
+        else {
+          let chargeFound = chargeList.salesOrderCharges.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+          if (chargeFound !== undefined && chargeFound.length > 0) {
+            let total = 0;
 
-          chargeFound.forEach(element => {
-            total += element.billingAmount;
-          });
+            chargeFound.forEach(element => {
+              total += element.billingAmount;
+            });
 
-          this.salesQuoteService.selectedParts[i].misc = total; //chargeFound[0].total; //this.totalCharges;
+            this.salesQuoteService.selectedParts[i].misc = total; //chargeFound[0].total; //this.totalCharges;
+          }
         }
       });
     }
