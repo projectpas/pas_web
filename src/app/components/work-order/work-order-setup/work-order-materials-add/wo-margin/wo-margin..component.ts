@@ -319,18 +319,18 @@ onChangeQuantityFromThis() {
     //   this.disableUpdateButton=true;
     // }
   }else{
-    if (Number(this.formObject.stocklineQuantity) != 0) {
-      if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
+    if (Number(parseInt(this.formObject.stocklineQuantity)) != 0) {
+      if ( Number(parseInt(this.formObject.stocklineQuantity)) > Number(parseInt(this.formObject.quantity))) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
         this.disableUpdateButton=true;
       }
    
-      else if ( this.isStockLine && Number(this.formObject.stocklineQuantity-this.formObject.newStocklineqty ) > Number(this.part.quantity-this.formObject.totalStocklineQtyReq)) {
+      else if ( this.isStockLine && Number(parseInt(this.formObject.stocklineQuantity)-parseInt(this.formObject.newStocklineqty) ) > Number(parseInt(this.part.quantity)-parseInt(this.formObject.totalStocklineQtyReq))) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
-      }else if ( !this.isStockLine && Number(this.formObject.stocklineQuantity + this.formObject.totalStocklineQtyReq ) > Number(this.formObject.quantity)) {
+      }else if ( !this.isStockLine && Number(parseInt(this.formObject.stocklineQuantity) + parseInt(this.formObject.totalStocklineQtyReq) ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
@@ -345,7 +345,7 @@ onChangeQuantityFromThis() {
       //   this.disableUpdateButton=true;
       // } 
     } else {
-      this.invalidQuantityenteredForQuantityFromThis = true;
+      this.invalidQuantityenteredForQuantityFromThis = false;
       this.disableUpdateButton=true;
     }
   }
