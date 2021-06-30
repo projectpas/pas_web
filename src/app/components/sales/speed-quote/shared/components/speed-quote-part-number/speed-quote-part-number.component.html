@@ -81,10 +81,10 @@
                                             [ngModel]="summaryPart[summaryColumn.field]"
                                             pInputText type="text"/>
                                           </ng-container>
-                                        <ng-container *ngIf="summaryColumn.field == 'notes'" style="min-width:200px !important">
+                                        <ng-container *ngIf="summaryColumn.field == 'notes'">
                                             <!-- <td class="width-120" *ngIf="isViewMode == false"> -->
                                             <div  *ngIf="isViewMode == false"class="form-group notes-popup-cstm mat_emo"
-                                            style="margin-bottom: 0;">
+                                            style="margin-bottom: 0;min-width:200px !important">
                                             <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
                                             [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box_exclusion"></div>
                                             <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
