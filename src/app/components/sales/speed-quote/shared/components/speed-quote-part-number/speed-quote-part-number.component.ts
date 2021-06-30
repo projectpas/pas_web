@@ -601,6 +601,18 @@ export class SpeedQuotePartNumberComponent {
       this.summaryParts = this.selectedParts;
     }
   }
+  onChangetat(index,event)
+  {
+    let tatvalue = event;
+    for(let i=0;i<this.selectedParts.length;i++)
+    {
+      if(i == index)
+      {
+        this.selectedParts[i].tat = tatvalue;
+      }
+      this.summaryParts = this.selectedParts;
+    }
+  }
   enablesave(){
     this.canSaveParts = false;
   }
