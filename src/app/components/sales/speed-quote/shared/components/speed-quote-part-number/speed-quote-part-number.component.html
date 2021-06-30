@@ -77,7 +77,7 @@
                                         </ng-container>
                                         <ng-container *ngIf="summaryColumn.field == 'tat'">
                                             <input style="width: 50px;" class="table-header-input-width text-right" name="tat{{i}}"
-                                            (ngModelChange)="enablesave();" [disabled]="summaryPart['isEditPart'] == true"
+                                            (ngModelChange)="onChangetat(rowIndex,$event); enablesave();" [disabled]="summaryPart['isEditPart'] == true"
                                             [ngModel]="summaryPart[summaryColumn.field]"
                                             pInputText type="text"/>
                                           </ng-container>
