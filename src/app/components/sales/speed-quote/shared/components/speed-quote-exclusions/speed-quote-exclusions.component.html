@@ -2,10 +2,12 @@
   [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
   style="min-height: 130px !important;">
   <div class="tableFixHead">
-    <table class="table table-bordered " id="po-table">
+    <table class="table table-bordered " id="po-table" style="white-space: nowrap;">
       <thead>
         <tr>
-          <th colspan="12" class="font-size-12">Excluded Items</th>
+          <th colspan="10" class="font-size-12">Excluded Items</th>
+          <th></th>
+          <th></th>
         </tr>
         <tr class="font-size-10">
           <!-- <th class="min-width-30">Line#</th> -->
@@ -14,13 +16,13 @@
           <th *ngIf="isViewMode == false"></th>
           <th>PN</th>
           <th>PN Description</th>
-          <th>Item Type</th>
-          <td style="text-align: center;">Qty<span class="clr-red">*</span></td>
-          <td style="text-align: center;">Unit Price</td>
-          <td style="text-align: center;">Est Price</td>
-          <td>Occurance (%)</td>
-          <td style="text-align: center;">Notes</td>
-          <td *ngIf="isViewMode == false" style="text-align: center;">Action</td>
+          <th style="width:85px">Item Type</th>
+          <th class="text-center">Qty<span class="clr-red">*</span></th>
+          <th style="width:100px" class="text-center">Unit Price</th>
+          <th style="width:100px" class="text-center">Est Price</th>
+          <th style="width:100px">Occurance (%)</th>
+          <th class="text-center">Notes</th>
+          <th *ngIf="isViewMode == false" style="text-align: center;width:60px">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -31,7 +33,7 @@
             <td class="parts-des-td" style="width:230px;">{{partList.pn}}</td>
             <td class="parts-des-td">{{partList.description}}</td>
             <td *ngIf="isViewMode == false">
-              <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add PN"
+              <i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add Excluded PN"
                 matTooltipPosition="above" style="padding: 0px 4px !important;"
                 (click)="addNewPartNumber(partList)"></i>
             </td>

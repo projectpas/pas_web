@@ -7,8 +7,15 @@
   .speed-actions-width{
     min-width:130px;
   }
+  .parts-list-header thead tr th{
+    letter-spacing: 0.3px !important;
+    font-size: 10px !important;
+  }
   .summary-column{
     width:auto !important;
+  }
+  .width-200{
+    width:200px !important;
   }
   .min-width{
     min-width: 10px !important;

@@ -14,15 +14,22 @@ textarea {
 .form-control[readonly] {
   background-color: #e9ecef !important;
 }
+.min-width-80{
+min-width:80px !important;
+}
+.min-width-100{
+  min-width:100px !important;
+}
 .approval-memo{
   width:92% !important;
+}
+.min-width-180{
+  min-width:180px !important;
 }
 .min-width-130{
   min-width:130px;
 }
-.min-width-80{
-  min-width:80px;
-}
+
 .tabs-padding-5{
   padding-left:5px;
   padding-right:5px;
