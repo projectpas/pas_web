@@ -1,15 +1,15 @@
 ﻿
 import { Component, ViewChild, OnInit } from '@angular/core';
-import {  FormBuilder} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { fadeInOut } from '../../../services/animations';
-declare var $ : any;
-import {  MatTableDataSource, MatDialog } from '@angular/material';
+declare var $: any;
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CustomerService } from '../../../services/customer.service';
 import { MasterComapnyService } from '../../../services/mastercompany.service';
-import {  Table } from 'primeng/table';
+import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { DatePipe } from '@angular/common';
@@ -27,7 +27,7 @@ import * as moment from 'moment';
     providers: [DatePipe]
 })
 export class CustomersListComponent implements OnInit {
-    moduleName="Customer"
+    moduleName = "Customer"
     isSpinnerVisible: Boolean = true;
     totalRecords: number = 0;
     totalPages: number = 0;
@@ -44,24 +44,24 @@ export class CustomersListComponent implements OnInit {
     selectedColumnsForInternationShipViaTable = [
         { field: 'shipVia', header: 'Ship Via' },
         { field: 'shippingAccountInfo', header: 'Shipping AccountInfo' },
-          { field: 'memo', header: 'Memo' }
+        { field: 'memo', header: 'Memo' }
     ];
     selectedColumnsForDomesticShipVia = this.selectedColumnsForInternationShipViaTable;
     headers = [
         { field: 'name', header: 'Name' },
-        { field: 'customerCode', header: 'Code',width:"100px" },
+        { field: 'customerCode', header: 'Code', width: "100px" },
         { field: 'accountType', header: 'Account Type' },
-        { field: 'customerType', header: 'Type',width:"100px" },
-        { field: 'customerClassification', header: 'Classification',width:"200px" },
-        { field: 'email', header: 'Email' ,width:"180px"},
-        { field: 'city', header: 'City',width:"100px" },
-        { field: 'stateOrProvince', header: 'State',width:"100px" },
+        { field: 'customerType', header: 'Type', width: "100px" },
+        { field: 'customerClassification', header: 'Classification', width: "200px" },
+        { field: 'email', header: 'Email', width: "180px" },
+        { field: 'city', header: 'City', width: "100px" },
+        { field: 'stateOrProvince', header: 'State', width: "100px" },
         { field: 'contact', header: 'Contact' },
-        { field: 'salesPersonPrimary', header: 'Sales Person' ,width:"110px"},
+        { field: 'salesPersonPrimary', header: 'Sales Person', width: "110px" },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' ,width:"100px"},
+        { field: 'createdBy', header: 'Created By', width: "100px" },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By',width:"100px" }
+        { field: 'updatedBy', header: 'Updated By', width: "100px" }
     ]
     selectedColumns = this.headers;
     data: any;
@@ -69,12 +69,12 @@ export class CustomersListComponent implements OnInit {
     pageIndex: number = 0;
     first = 0;
     tax: boolean = false;
-    @ViewChild('dt',{static:false})
+    @ViewChild('dt', { static: false })
     private table: Table;
     lazyLoadEventData: any;
     viewData: any[];
     modal: NgbModalRef;
-    viewDataGeneralInformation: any={};
+    viewDataGeneralInformation: any = {};
     viewDataclassification: any[];
     viewDocumnets: any;
     viewDataIntegration: any[];
@@ -84,7 +84,7 @@ export class CustomersListComponent implements OnInit {
     selectedContactColumns: any[];
     allContacts: any[] = [];
     customerauditHisory: any[];
-    createdDate:any;
+    createdDate: any;
     selectedRowforDelete: any;
     restorerecord: any = {}
     pageIndexForInternationalShipVia: number = 0;
@@ -176,8 +176,8 @@ export class CustomersListComponent implements OnInit {
     breadcrumbs: MenuItem[];
     status: string = 'Active';
     currentstatus: string = 'Active';
-    currentDeletedstatus:boolean=false;
-    onDeletedActionState:boolean=false;
+    currentDeletedstatus: boolean = false;
+    onDeletedActionState: boolean = false;
     lazyLoadEventDataInput: any;
     selectedOnly: boolean = false;
     targetData: any;
@@ -199,7 +199,7 @@ export class CustomersListComponent implements OnInit {
     }
 
     ngOnInit() {
-       this.breadcrumbs = [
+        this.breadcrumbs = [
             { label: 'Customers' },
             { label: 'Customers List' },
         ];
@@ -227,29 +227,29 @@ export class CustomersListComponent implements OnInit {
         this.getList(PagingData);
     }
 
-    getDeleteListByStatus(value){
-        this.currentDeletedstatus=value;
+    getDeleteListByStatus(value) {
+        this.currentDeletedstatus = value;
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex >= 1 ? pageIndex : 0;
-        if(value==true){
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, isDeleted: this.currentDeletedstatus};
+        if (value == true) {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, isDeleted: this.currentDeletedstatus };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
-        }else{
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, isDeleted: this.currentDeletedstatus};
+        } else {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, isDeleted: this.currentDeletedstatus };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         }
     }
 
     globalSearch(value) {
-      const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;
+        const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex >= 1 ? pageIndex : 0;
-        this.lazyLoadEventDataInput.globalFilter=value;
+        this.lazyLoadEventDataInput.globalFilter = value;
         //this.status = status;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, isDeleted: this.currentDeletedstatus };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
@@ -262,7 +262,7 @@ export class CustomersListComponent implements OnInit {
         this.pageIndex = pageIndex;
         this.pageSize = event.rows;
         event.first = pageIndex >= 1 ? pageIndex : 0;
-        event.globalFilter='';
+        event.globalFilter = '';
         this.lazyLoadEventDataInput = event;
         this.lazyLoadEventDataInput.filters = {
             ...this.lazyLoadEventDataInput.filters,
@@ -271,22 +271,21 @@ export class CustomersListComponent implements OnInit {
         this.getList(event)
     }
 
-    getList(data) {        
+    getList(data) {
         this.isSpinnerVisible = true;
         data.filters.isDeleted = this.currentDeletedstatus;
         data.filters.status = this.currentstatus;
-        data.filters.masterCompanyId = this.currentUserMasterCompanyId;      
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
-        this.customerService.getCustomerAll(PagingData).subscribe(res => {  
-            if(res)
-            {
+        this.customerService.getCustomerAll(PagingData).subscribe(res => {
+            if (res) {
                 this.data = res['results'].map(x => {
                     return {
                         ...x,
-                        createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                        updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                     }
-                });	
+                });
 
                 //this.data = res.results;
                 this.onDeletedActionState = this.currentDeletedstatus;
@@ -298,48 +297,47 @@ export class CustomersListComponent implements OnInit {
                 if (res.results.length < 1) {
                     this.totalRecords = 0;
                     this.totalPages = 0;
-                } 
-            }   
-            else{this.isSpinnerVisible = false;}                      
-        }, error => {this.isSpinnerVisible = false;})
+                }
+            }
+            else { this.isSpinnerVisible = false; }
+        }, error => { this.isSpinnerVisible = false; })
     }
 
     dateFilterForTableCustomerList(date, field) {
         const minyear = '1900';
         const dateyear = moment(date).format('YYYY');;
-        this.dateObject={}
-                date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-            if(dateyear > minyear)
-            {
-                if(field=='createdDate'){
-                    this.dateObject={'createdDate':date}
-                }else if(field=='updatedDate'){
-                    this.dateObject={'updatedDate':date}
+        this.dateObject = {}
+        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if (dateyear > minyear) {
+                if (field == 'createdDate') {
+                    this.dateObject = { 'createdDate': date }
+                } else if (field == 'updatedDate') {
+                    this.dateObject = { 'updatedDate': date }
                 }
-                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus ,...this.dateObject};
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, ...this.dateObject };
                 const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-                this.getList(PagingData); 
-            }            
-        }else{
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,  status: this.currentstatus,...this.dateObject};
-            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
+                this.getList(PagingData);
+            }
+        } else {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, ...this.dateObject };
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
                 delete this.lazyLoadEventDataInput.filters.createdDate;
             }
-            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
                 delete this.lazyLoadEventDataInput.filters.updatedDate;
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus,...this.dateObject};
-                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-                this.getList(PagingData); 
-        }              
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus, ...this.dateObject };
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        }
     }
-    
-    restoreRecord(){
-        this.commonService.updatedeletedrecords('Customer','CustomerId',this.restorerecord.customerId, ).subscribe(res => {
+
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('Customer', 'CustomerId', this.restorerecord.customerId).subscribe(res => {
             this.modal.close();
             //this.getDeleteListByStatus(true)
-            const pageIndex = parseInt(this.lazyLoadEventDataInput.first); 
+            const pageIndex = parseInt(this.lazyLoadEventDataInput.first);
             this.pageIndex = pageIndex;
             this.pageSize = this.lazyLoadEventDataInput.rows;
             this.lazyLoadEventDataInput.first = pageIndex >= 1 ? pageIndex : 0;
@@ -347,7 +345,7 @@ export class CustomersListComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
             this.alertService.showMessage("Success", `Restored Records Successfully`, MessageSeverity.success);
-        }, error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -370,10 +368,9 @@ export class CustomersListComponent implements OnInit {
     }
     changeStatus(rowData) {
         this.isSpinnerVisible = true;
-        this.customerService.updateActionforActive(rowData, this.userName).subscribe(res => {       
-            if(res)
-            {
-                const pageIndex = parseInt(this.lazyLoadEventDataInput.first); 
+        this.customerService.updateActionforActive(rowData, this.userName).subscribe(res => {
+            if (res) {
+                const pageIndex = parseInt(this.lazyLoadEventDataInput.first);
                 this.pageIndex = pageIndex;
                 //this.currentstatus = status;
                 this.pageSize = this.lazyLoadEventDataInput.rows;
@@ -383,13 +380,13 @@ export class CustomersListComponent implements OnInit {
                 this.getList(PagingData);
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
                 //this.isSpinnerVisible = false;            
-            }     
-            else{
+            }
+            else {
                 this.isSpinnerVisible = false;
             }
-            
-        }, error => {this.isSpinnerVisible = false;})
-        
+
+        }, error => { this.isSpinnerVisible = false; })
+
     }
     edit(rowData) {
         const { customerId } = rowData;
@@ -475,13 +472,13 @@ export class CustomersListComponent implements OnInit {
         this.customerId = rowData.customerId;
         this.modal = this.modalService.open(restorePopupId, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    
+
     deleteItemAndCloseModel() {
         let customerId = this.customerId;
         if (customerId > 0) {
             this.isSpinnerVisible = true;
             this.customerService.updateListstatus(customerId).subscribe(response => {
-                const pageIndex = parseInt(this.lazyLoadEventDataInput.first); 
+                const pageIndex = parseInt(this.lazyLoadEventDataInput.first);
                 this.pageIndex = pageIndex;
                 this.pageSize = this.lazyLoadEventDataInput.rows;
                 this.lazyLoadEventDataInput.first = pageIndex >= 1 ? pageIndex : 0;
@@ -490,7 +487,7 @@ export class CustomersListComponent implements OnInit {
                 this.getList(PagingData);
                 this.isDeleteMode = false;
                 this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-            },error => {this.isSpinnerVisible = false;});
+            }, error => { this.isSpinnerVisible = false; });
         }
         this.modal.close();
     }
@@ -527,11 +524,11 @@ export class CustomersListComponent implements OnInit {
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
-    openDocumentsList(content, row) {      
-        const { customerId } = row;        
+    openDocumentsList(content, row) {
+        const { customerId } = row;
         this.selectedRow = row;
         this.customerId = customerId;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });   
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
     private loadContactDataData(customerId) {
@@ -571,7 +568,7 @@ export class CustomersListComponent implements OnInit {
         this.alertService.startLoadingMessage();
         this.customerService.getCustomerHistory(row.customerId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false;});
+            error => { this.isSpinnerVisible = false; });
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
@@ -602,34 +599,34 @@ export class CustomersListComponent implements OnInit {
 
     }
 
-    exportCSV(dt){
-		this.isSpinnerVisible = true;
-		const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":this.currentstatus,"isDeleted":isdelete},"globalFilter":""}
-		let filters = Object.keys(dt.filters);
-		filters.forEach(x=>{
-			PagingData.filters[x] = dt.filters[x].value;
+    exportCSV(dt) {
+        this.isSpinnerVisible = true;
+        const isdelete = this.currentDeletedstatus ? true : false;
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "masterCompanyId": this.currentUserMasterCompanyId, "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
         })
-        
-		this.customerService.getCustomerAll(PagingData).subscribe(res => {
+
+        this.customerService.getCustomerAll(PagingData).subscribe(res => {
             dt._value = res['results'].map(x => {
-				return {
-					...x,
+                return {
+                    ...x,
                     // createdDate: new Date(x.createdDate).getFullYear() +'/'+
                     //  (new Date(x.createdDate).getMonth() + 1) +'/'+
                     //   new Date(x.createdDate).getDate() +'  '+ new Date(x.createdDate).getHours() +':'+
                     //    new Date(x.createdDate).getMinutes() +':'+ new Date(x.createdDate).getSeconds(),
                     // updatedDate: new Date(x.updatedDate).getFullYear() +'/'+ (new Date(x.updatedDate).getMonth() + 1) +'/'+ new Date(x.updatedDate).getDate() +'  '+ new Date(x.updatedDate).getHours() +':'+ new Date(x.updatedDate).getMinutes() +':'+ new Date(x.updatedDate).getSeconds(),
 
-                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
 
 
-				}
-			});	
-			dt.exportCSV();
-			dt.value = this.data;
-        	this.isSpinnerVisible = false;
-        },error => this.isSpinnerVisible = false)
+                }
+            });
+            dt.exportCSV();
+            dt.value = this.data;
+            this.isSpinnerVisible = false;
+        }, error => this.isSpinnerVisible = false)
     }
 }

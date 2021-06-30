@@ -181,8 +181,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
   moduleName: any = "SpeedQuote";
   enforceApproval: boolean;
   selectedIndex: number = 0;
-  exclusionCount:number = 0;
-  exclusionSelectDisable:boolean=false;
+  exclusionCount: number = 0;
+  exclusionSelectDisable: boolean = false;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -350,7 +350,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
-      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, [warningTypeId].join(), 0),
       this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(), this.masterCompanyId),
       this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
       this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(), this.masterCompanyId),
@@ -1111,7 +1111,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     } else {
       this.display = false;
       this.isSpinnerVisible = true;
-      if(this.id)
+      if (this.id)
         this.speedQuote.speedQuoteId = this.id;
       this.speedQuote.speedQuoteTypeId = this.salesQuote.speedQuoteTypeId;
       this.speedQuote.openDate = this.salesQuote.openDate.toDateString();
@@ -2021,7 +2021,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   changeToExclusionTab(event) {
-    console.log("rowdata",event);
+    console.log("rowdata", event);
     this.selectedIndex = 1;
     this.speedQuoteExclusionsComponent.addPartNumber(event);
   }
@@ -2034,9 +2034,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
   initiateSpeedQuotePrint() {
     this.speedQuotePrintCriteraObj.speedQuoteId = this.id;
     this.speedQuotePrintCriteraObj.printQuote = true;
-    if(this.exclusionCount > 0){
+    if (this.exclusionCount > 0) {
       this.speedQuotePrintCriteraObj.printExclusion = true;
-    }else{
+    } else {
       this.speedQuotePrintCriteraObj.printExclusion = false;
       this.exclusionSelectDisable = true;
     }
@@ -2044,12 +2044,12 @@ export class SpeedQuoteCreateComponent implements OnInit {
     let content = this.speedQuotePrintCritariaPopup;
     this.printmodal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
   }
-  printQuoteAndExclusion(){
-      let content = this.salesQuotePrintPopup;
-      this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
+  printQuoteAndExclusion() {
+    let content = this.salesQuotePrintPopup;
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
   }
 
-  onExlusionLoad(count){
+  onExlusionLoad(count) {
     this.exclusionCount = count;
   }
   sendSpeedQuoteEMail() {
