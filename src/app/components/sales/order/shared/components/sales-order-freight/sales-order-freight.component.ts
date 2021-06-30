@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { AuthService } from '../../../../../../services/auth.service';
 import { CommonService } from '../../../../../../services/common.service';
-import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from '../../../../../../generic/autocomplete';
+import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule, formatStringToNumber } from '../../../../../../generic/autocomplete';
 import { SOFreight } from '../../../../../../models/sales/SOFreight';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -166,14 +166,24 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         })
     }
 
+    onBlurFlatBillingAmout() {
+        this.freightFlatBillingAmount = (this.freightFlatBillingAmount) ? this.formateCurrency(this.freightFlatBillingAmount) : '0.00'
+    }
+
     setFreightsData(res) {
-        if (res && res.length > 0) {
-            this.salesOrderFreightList = res;
-            this.costPlusType = res[0].headerMarkupId;
-            this.overAllMarkup = res[0].headerMarkupPercentageId;
-            if (Number(this.costPlusType) == 3) {
-                this.freightFlatBillingAmount = res[0].markupFixedPrice;
+        //if (res && res.length > 0) {
+        if (res) {
+            this.salesOrderFreightList = res.salesOrderFreights;
+            //this.costPlusType = res[0].headerMarkupId;
+            this.costPlusType = res.freightBuildMethod;
+            //this.overAllMarkup = res[0].headerMarkupPercentageId;
+            if (res.salesOrderFreights.length > 0) {
+                this.overAllMarkup = res.salesOrderFreights[0].headerMarkupPercentageId;
             }
+            this.freightFlatBillingAmount = this.formateCurrency(res.freightFlatBillingAmount);
+            // if (Number(this.costPlusType) == 3) {
+            //     this.freightFlatBillingAmount = res[0].markupFixedPrice;
+            // }
             this.isUpdate = true;
         } else {
             this.salesOrderFreightList = [];
@@ -331,9 +341,9 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         sendData = sendData.map((f) => {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
         })
-        let result = { 'data': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
+        let result = { 'salesOrderFreights': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'freightBuildMethod': this.costPlusType, 'salesOrderId': this.salesOrderId }
         this.isSpinnerVisible = true;
-        this.salesOrdeService.createFreight(sendData).subscribe(result => {
+        this.salesOrdeService.createFreight(result).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 'Success',
@@ -343,9 +353,10 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             this.refreshFreightsOnSaveOrDelete();
             //this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
             this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, this.deletedStatusInfo).subscribe(response => {
-                if (response && response.length > 0) {
-                    this.salesOrderFreightList = response;
-                    this.saveFreightListForSO.emit(this.salesOrderFreightList);
+                if (response.salesOrderFreights && response.salesOrderFreights.length > 0) {
+                    this.salesOrderFreightList = response.salesOrderFreights;
+                    //this.saveFreightListForSO.emit(this.salesOrderFreightList);
+                    this.saveFreightListForSO.emit(response);
                 }
             }, error => { });
         }, error => {
@@ -581,7 +592,11 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     }
 
     dismissModelAlettRestore() { }
-    formatStringToNumberGlobal($event) { }
+    
+    formatStringToNumberGlobal(val) {
+        let tempValue = Number(val.toString().replace(/\,/g, ''));
+        return formatStringToNumber(tempValue);
+    }
 
     shipViaId: number = 0;
     getShipViaId(event) {

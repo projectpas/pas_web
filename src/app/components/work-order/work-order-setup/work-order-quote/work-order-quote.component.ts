@@ -36,12 +36,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() hidehistoricalBtns: boolean = false;
     
     @Input() enableEditBtn: boolean = false;
-    @Input() ispop: boolean = false;
+    @Input() ispop: boolean = false; 
     @Input() isQuoteListView: boolean = false;
     @Input() customerId: any;
     @Input() selectedDisplayType: string = '';
     @Input() isWoTab: boolean = false;
     @Input() isListView: boolean = false;
+    @Input() fromWoqList: boolean = false;
     @Output() Workorderprint = new EventEmitter();
     customerName: string;
     creditLimit: any;
@@ -1179,6 +1180,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     
     getDisplayData(buildType) {
         this.showDisplayData=false;
+      if(this.isView){
+        this.fromWoqList=true;
+      }
         this.displayType = buildType;
         var partId;
         var workScopeId;

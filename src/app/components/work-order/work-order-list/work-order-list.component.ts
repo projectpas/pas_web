@@ -140,6 +140,7 @@ export class WorkOrderListComponent implements OnInit {
         if (this.isWorkOrderMainView) {
             this.view({ workOrderId: this.workOrderId })
         }
+        this.isSpinnerVisible = true;
     }
     ngOnDestroy(): void {
         this.onDestroy$.next();

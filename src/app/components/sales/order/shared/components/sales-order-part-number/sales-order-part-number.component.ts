@@ -48,30 +48,29 @@ export class SalesOrderPartNumberComponent {
   clearData = false;
   selectedSummaryRowIndex = null;
   @ViewChild("addPart", { static: false }) addPart: ElementRef;
-  @Input() salesOrderId: any;
-  @Input() defaultSettingPriority;
   @ViewChild("salesMargin", { static: false }) salesMargin: ElementRef;
   @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
+  @ViewChild("updatePNDetailsModal", { static: false }) public updatePNDetailsModal: ElementRef;
+  @Input() salesOrderId: any;
+  @Input() defaultSettingPriority;
   @Input() customer: any;
   @Input() totalFreights = 0;
   @Input() totalCharges = 0;
   @Input() salesQuote: ISalesQuote;
   @Input() employeesList: any = [];
   @Input() isViewMode: Boolean;
+  @Input() salesOrderView: ISalesOrderView;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
   @Output() reserve: EventEmitter<any> = new EventEmitter<any>();
   @Output('on-parts-save') onPartsSavedEvent: EventEmitter<ISalesOrderPart[]> = new EventEmitter<ISalesOrderPart[]>();
+  @Output() myEvent = new EventEmitter();
   query: ItemMasterSearchQuery;
   isEdit: boolean = false;
   isEditMode: boolean = false;
   isQtyAdjust: boolean = false;
   selectedPartActionType: any;
-  @Input() salesOrderView: ISalesOrderView;
-  @ViewChild("updatePNDetailsModal", { static: false })
-  public updatePNDetailsModal: ElementRef;
   modal: NgbModalRef;
-  @Output() myEvent = new EventEmitter();
   isPNView: boolean = true;
   salesOrderReferenceData: SalesOrderReference
   defaultCurrencyId: any;
@@ -396,7 +395,6 @@ export class SalesOrderPartNumberComponent {
   }
 
   openSalesMargin(event) {
-    debugger;
     this.isEdit = false;
     let contentMargin = this.salesMargin;
     this.selectedPart = event.part;
