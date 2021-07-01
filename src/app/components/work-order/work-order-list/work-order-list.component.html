@@ -147,8 +147,8 @@
                             <input type="date" *ngIf="col.field == 'estimatedCompletionDateType'"
                                 name="estimatedCompletionDate" class="table-header-input-width"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
-                            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
-                                (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <!-- <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
+                                (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
                             <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" class="table-header-input-width"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
                         </th>
@@ -212,7 +212,7 @@
                 </ng-template> 
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
-                        <td colspan="19" class="no-records-msg no-records-cstm">
+                        <td colspan="17" class="no-records-msg no-records-cstm">
                             No records found
                         </td>
                     </tr>

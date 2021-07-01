@@ -109,8 +109,12 @@ export class WorkOrderPickticketprintComponent implements OnInit {
                  font-size: 12.5px;text-transform: capitalize; z-index: 1;} 
             table tbody{   overflow-y: auto; max-height: 500px;  }
             table tbody tr td{ background: #fff;
-               padding: 2px;line-height: 22px;
-               height:22px;color: #333;
+               padding: 2px;
+              //  line-height: 22px;
+              //  height:22px;
+              line-height:17px;
+              height:17px;
+               color: #333;
               //  border-right:1px solid black !important;
               font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight;normal;
               font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}

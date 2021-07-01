@@ -45,18 +45,18 @@
                  </div>
                  <div class="form-group ">
                      <label> Valid For Days <span class="clr-red">*</span></label>
-                     <input class="form-control" (change)="calculateExpiryDate()"  (ngModelChange)="getValid()" required type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView" />
+                     <input class="form-control text_start" (change)="calculateExpiryDate()"  (ngModelChange)="getValid()" required type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView" />
                  </div>
                  <div class="form-group ">
                      <label> Expiration Date <span class="clr-red">*</span></label>
                      <p-calendar [showIcon]="true" [(ngModel)]="expirationDate"  (ngModelChange)="getValid()"
                      [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" required name="ExpDate" [disabled]="true"></p-calendar>
                  </div>
-                 <div class="form-group ">
+                 <!-- <div class="form-group ">
                      <label>Quote Due Date <span class="clr-red">*</span></label>
                      <p-calendar [showIcon]="true" [(ngModel)]="quoteDueDate"  (ngModelChange)="getValid()"
                      [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" required name="QuoteDueDate" aria-readonly [disabled]="isView"></p-calendar>
-                 </div>
+                 </div> -->
                  <div class="form-group ">
                      <label for="workflownum">
                         Warning
@@ -101,22 +101,7 @@
                      <label> DSO </label>
                      <input class="form-control" type="text"  maxlength="50" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
                  </div>
-                 <div class="form-group memo-popup-cstm">
-                     <label>
-                         Memo <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
-                             matTooltipPosition="above" matTooltip="Memo"
-                             (click)="onAddDescription(1)"></i>
-                     </label>
-                     <span>
-                         <div class="form-group memo-popup-cstm mat_emo">
-                             <div [innerHTML]="memo"
-                                 [matTooltip]="parsedText(memo)"
-                                 matTooltipPosition="above"
-                                 class="form-control text_editor_box memo_cehck1" style="width: 100%;line-height:1.5;">
-                             </div>
-                         </div>
-                     </span>
-                 </div>
+               
              </div>
              <div class="col-md-3">
  
@@ -156,12 +141,12 @@
                  </div>
              </div>
              <div class="col-md-3">
-                 <div class="form-group ">
+                 <!-- <div class="form-group ">
                      <label for="customerRef">
                          Customer Ref
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerRef" name="customerRef" readonly />
-                 </div>
+                 </div> -->
                  <div class="form-group">
                      <label for="credit">
                          Credit Limit &amp; Terms <span class="clr-red">*</span>
@@ -193,6 +178,22 @@
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="employeeName" name="csr" readonly />
                  </div>
+                 <div class="form-group memo-popup-cstm">
+                    <label>
+                        Memo <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
+                            matTooltipPosition="above" matTooltip="Memo"
+                            (click)="onAddDescription(1)"></i>
+                    </label>
+                    <span>
+                        <div class="form-group memo-popup-cstm mat_emo">
+                            <div [innerHTML]="memo"
+                                [matTooltip]="parsedText(memo)"
+                                matTooltipPosition="above"
+                                class="form-control text_editor_box memo_cehck1" style="width: 100%;line-height:1.5;">
+                            </div>
+                        </div>
+                    </span>
+                </div>
              </div>
              <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
                  <button class="btn btn-primary wo-quote-btn-margin pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
@@ -730,16 +731,23 @@
          <div class="header" >
              <div class="row">
                  <div class="col">
-                     <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Material list</h4>
+                     <h4 class="header-name"> Material list</h4>
+                     <!-- {{isQuote? 'Work Order Quote' :'Work Order'}} -->
                  </div>
-                 <div *ngIf="!isView &&  !isViewForApprovedPart">
-                     <button type="button" matTooltipPosition="above" matTooltip="Load Materials From Work Order" *ngIf="loadworkorderData" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadMaterials()">
-                        Load WO Materials
+                 <!-- <div *ngIf="!isView &&  !isViewForApprovedPart">
+                     <button type="button" matTooltipPosition="above" matTooltip="Transfer Materials From Work Order" *ngIf="loadworkorderData" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadMaterials()">
+                        Transfer WO Materials
                      </button>
-                     <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part No</button>
-                 </div>
+                     <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part Num</button>
+                 </div> -->
              </div>
            </div>
+           <div *ngIf="!isView &&  !isViewForApprovedPart" class="m-t-5 m-b-5">
+            <button type="button" matTooltipPosition="above" matTooltip="Transfer Materials From Work Order" *ngIf="loadworkorderData" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadMaterials()">
+               Transfer WO Materials
+            </button>
+            <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part Num</button>
+        </div>
          <div class="table-responsive table-overflow headertable-width m-t-0">
              <div class="tableFixHead">
              <table class="table table-bordered lastcol-fix">
@@ -784,15 +792,15 @@
                      </tr>
                      <tr>
                          <th style="width: 100px;">Task</th>
-                         <th style="width: 200px;">PN</th>
-                         <th style="width: 200px;">PN Description</th>
+                         <th style="width: 130px;">PN</th>
+                         <th style="width: 250px;">PN Description</th>
                          <th>Provision</th>
                          <th>Qty</th>
                          <th>UOM</th>
-                         <th>Cond Type</th>
-                         <th>Stock Type</th>
-                         <th>Unit Cost</th>
-                         <th style="width: 90px;">Total Part Cost</th>
+                         <th>Cond </th>
+                         <th style="width: 70px;">Stock Type</th>
+                         <th style="width: 70px;">Unit Cost</th>
+                         <th style="width: 70px;">Ext Cost</th>
                          <th style="width: 100px;">Billing Method</th>
                          <th style="width: 70px !important;">Mark Up</th>
                          <th>

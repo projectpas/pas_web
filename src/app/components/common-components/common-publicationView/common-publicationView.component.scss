@@ -1,0 +1,112 @@
+﻿.x_panel {
+    padding: 0 10px;
+    background-color: #fff;
+}
+label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+}
+.docs{
+    position: relative;
+    top: -2px;
+
+}
+.downld{
+    background: transparent !important;
+    border: none !important;
+}
+.text_c{
+    text-align: center;
+}
+.viewform-cstm .label { 
+    width: 120px !important;
+    //text-align: right;
+}
+.viewform-cstm .value {
+    margin-left: 10px;
+}
+.form-control:disabled {
+    background-color: #e9ecef !important;
+}
+input[type="text"], input[type="number"], input[type="email"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+    height: 24px !important;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.label-cstm {
+    width: auto;
+    float: left;
+    text-align: left;
+    margin-right: 0;
+    font-weight: normal;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.checkbox-cstm {
+    margin-left: 10px;
+}
+.cus-contact-table tr th {
+    padding: 7px;
+}
+.cus-contact-table tr td {
+    padding: 4px;
+}
+// @media (min-width: 768px) {
+//     .col-md-3 {
+//         max-width: 22%;
+//         margin-right: 15px;
+//     }
+//     .col-md-6 {
+//         max-width: 44%;
+//         margin-right: 15px;
+//     }
+// }
+td {
+    // padding: 5px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+:host ::ng-deep .ui-table-summary{
+    margin-right: 0px !important;
+}
+.font_chck{
+    font-size: 24px;
+}
+.show-deleted-width{
+    width: 395px !important; float: right !important; padding-top: 3px !important;
+}
+.float-left{
+    float: left !important;
+}
+.margin-bottom-30{
+    margin-bottom: 30px !important;
+}
+.margin-right{
+    margin-right: 0px !important;
+}
+.circle-span{
+    margin-left:3px !important;cursor:pointer !important;
+}
+.margin-left-10{
+    margin-left:10px !important;
+}
+.memo-margin-bottom{
+    margin-bottom:3px !important;
+}
+.test_ct{
+    width: 100%;
+    text-align: center;
+}
+input{
+    border: 1px solid grey !important;
+}

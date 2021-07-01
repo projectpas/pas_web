@@ -8,7 +8,7 @@
 
 
     <div class="clear"></div>
-    <form id="" name="" action="#" class="aligntop" method="post" onsubmit="return false;" *ngIf="speedQuotePrintCriteraObj.printQuote == true">
+    <form id="" name="" action="#" method="post" onsubmit="return false;" *ngIf="speedQuotePrintCriteraObj.printQuote == true">
       <div class="image">
         <div style="padding: 0; margin: 0;">
 
@@ -163,7 +163,7 @@
                 <tbody>
                   <tr>
                     <td colspan="2">{{this.speedQuote.firstName}}</td>
-                    <td></td>
+                    <td>{{this.speedQuote.customerReference}}</td>
                     <td>{{this.speedQuote.creditTerms}}</td>
                     <td></td>
                     <td>{{this.speedQuote.salesPersonName}}</td>
@@ -257,24 +257,25 @@
                         <td *ngIf="price.conditionDescription == 'Bench Check' "  style="text-align: right;">{{price.tat}}</td>
                       </ng-container>
                     </tr>
-                    <tr>
+                    <!-- <tr> -->
                       <!-- <td></td>
                       <td colspan="3" rowspan="3" style="border:1px solid black">Notes:</td> -->
-                      <td></td>
+                      <!-- <td></td> -->
                       <!-- <td colspan="3" rowspan="3" style="border:1px solid black">Notes:
                         <label *ngFor="let price of part.unitPriceData let i=index">
                           {{price.notes != '' ? price.conditionDescription + '-' + price.notes : ''}}
                         </label>
                       </td> -->
-                      <td colspan="3" style="border:1px solid black">
+                      <!-- <td colspan="3" style="border:1px solid black">
                       </td>
                       <td colspan="4"></td>
-                    </tr>
+                    </tr> -->
                     <!-- <tr></tr>
                     <tr> </tr> -->
-                    <tr>
-                      <td colspan="8" >Notes: {{this.speedQuote.notes}}</td>
-                    </tr>
+                    <!-- <tr> -->
+                      <!-- <td colspan="8" >Notes: {{getFormattedNotes(this.speedQuote.notes)}}</td> -->
+                      <!-- <td colspan="8" ></td>
+                    </tr> -->
                   </ng-container>
 
 
@@ -289,7 +290,26 @@
           </form>
         </div>
       </div>
-      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      <!-- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> -->
+      <br/><br/><br/>
+    </form>
+    <form id="" name="" action="#" method="post" onsubmit="return false;" *ngIf="speedQuotePrintCriteraObj.printQuote == true">
+      <table>
+        <thead><th>Notes</th></thead>
+        <tbody>
+          <tr><td>
+            <div class="form-group memo-popup-cstm mat_emo">
+              <div [innerHTML]="speedQuote.notes"
+                  [matTooltip]="parsedText(speedQuote.notes)" matTooltipPosition="above"
+                  class="form-control"
+                  style="height: 60px !important; width:100% !important"
+                  class="text_editor_box">
+              </div>
+          </div>
+          </td></tr>
+        </tbody>
+      </table>
+      <br/><br/><br/>
     </form>
     <form id="" name="" action="#" method="post" onsubmit="return false;" *ngIf="speedQuotePrintCriteraObj.printExclusion == true">
       <div class="image aligntop">

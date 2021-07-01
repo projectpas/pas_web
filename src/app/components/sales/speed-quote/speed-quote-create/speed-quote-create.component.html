@@ -368,9 +368,16 @@
                                             <div class="col-md-6" style="padding-left:0px">
                                             <label>Speed Quote Status<span class="clr-red">*</span></label>
                                             
-                                                <input type="text" class="form-control"
+                                                <!-- <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
-                                                    [disabled]="true" required/>
+                                                    [disabled]="true" required/> -->
+                                                
+                                                    <select name="status" [(ngModel)]="salesQuote.statusId"
+                                                    [disabled]="true" #statusId="ngModel">
+                                                    <option value='-1'>--Select--</option>
+                                                    <option *ngFor="let item of soStatusList" [ngValue]="item.value">
+                                                        {{ item.label }}</option>
+                                                </select>
                                             </div>
                                             <!-- <div class="col-md-6">
                                                 <p-calendar name="statusChangeDate" [yearNavigator]="true"
@@ -872,7 +879,11 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendSpeedQuoteEMail()">Send Email</button>
+        <button type="button" class="btn-sm header-button" data-toggle="modal"
+                    data-target="#addNewMemo" (click)="addMemo()">
+                    Send Email
+        </button>
+        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendSpeedQuoteEMail()">Send Email</button> -->
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
     </div>
@@ -934,3 +945,130 @@
         </div>
     </div>
 </div>
+<div id="addNewMemo" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" style="margin-top:0%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Email</h4>
+            </div>
+            <form #attachDocForm="ngForm" class="form-horizontal" ngNativeValidate>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group col-md-12">
+                                    <label>Email Type <span class="clr-red">*</span></label>
+                                    <select [(ngModel)]="emailType" class="form-control" name="emailType" required>
+                                        <option value="">Select</option>
+                                        <option *ngFor="let emailTy of emailTypes" [value]="emailTy.value">
+                                            {{emailTy.label}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <!-- <label class="col-md-12"><span *ngIf="type==1">Customer</span> <span
+                                            *ngIf="type==2">Vendor</span> Contact <span class="clr-red">*</span></label> -->
+                                    <label class="col-md-12">To <span class="clr-red">*</span></label>
+                                    <p-autoComplete field="firstName" [(ngModel)]="customerContact" required
+                                        name="cusContact" #cusContact="ngModel" errorMessage="Records not found"
+                                        [forceSelection]="true" [dropdown]="true" [suggestions]="cusContactList"
+                                        (completeMethod)="filterCustomerContact($event)" [size]="30" [minLength]="1"
+                                        (onSelect)="contactSelected($event)" class="p-autoComplete-ctsm">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>BCC</label>
+                                    <input class="form-control" type="email" [pattern]="emailPattern"
+                                        #bccEmail="ngModel" name="bcc" [(ngModel)]="bcc" multiple="true">
+                                    <div *ngIf="bccEmail.errors" [ngClass]="'error'">
+                                        <div *ngIf="bccEmail.errors.pattern">
+                                            <span class="clr-red">Email not valid</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-12">Sent By <span class="clr-red">*</span></label>
+                                    <p-autoComplete field="name" [(ngModel)]="contactBy" required name="employees"
+                                        #employees="ngModel" errorMessage="Records not found" [forceSelection]="true"
+                                        [dropdown]="true" [suggestions]="employeeList"
+                                        (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1"
+                                        [dropdown]="true" class="p-autoComplete-ctsm">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-12">Email Address <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="email" name="email" [(ngModel)]="toEmail" required
+                                        disabled>
+                                </div>
+                                <div class="form-group col-md-12" style="margin-top:-7px">
+                                    <label>CC</label>
+                                    <input class="form-control" type="email" name="cc" [pattern]="emailPattern"
+                                        #ccEmail="ngModel" [(ngModel)]="cc" multiple="true">
+                                    <div *ngIf="ccEmail.errors" [ngClass]="'error'">
+                                        <div *ngIf="ccEmail.errors.pattern">
+                                            <span class="clr-red">Email not valid</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 ">
+                            <div class="form-group email-margin">
+                                <label class="col-md-12">Email Subject <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" [(ngModel)]="subject" name="subject" rows="1"
+                                    required>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email Body <span class="clr-red">*</span></label>
+                                    <p-editor class="p-editor-cstm" [(ngModel)]="emailBody" style="overflow-y: auto;;"
+                                        [style]="{'height':'150px'}" name="emailBody" required></p-editor>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="attachments-label">Attachments:</label>
+                                    <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple"
+                                        [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
+                                        (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"
+                                        class="form-control col-md-12 fileupload"></p-fileUpload>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary editor-buttons-margin"
+                        (click)="send(attachDocForm.valid)"
+                        [disabled]="!attachDocForm.valid || bccEmail.errors || ccEmail.errors">
+                        Send
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ng-template #emailSendQuotePopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h6>
+            Are you sure you want to send this Quote to
+            Customer?
+        </h6>
+        <a style="padding:0px" class="filelink btn btn-link" (click)="downloadFileUpload(pdfPath)" target="_blank"
+            download>Preview Quote</a>
+        <!-- <a href="{{pdfPath}}" class="btn btn-link" target="_blank" >Preview Quote</a> -->
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="triggerMailSalesQuote()">Yes</button>
+    </div>
+</ng-template>

@@ -363,7 +363,8 @@ table, thead, th {
     border-bottom:1px solid black !important;
   }
   .table-margins{
-    margin-top:20px;margin-left:-1px
+    // margin-top:20px;
+    margin-left:-1px
   }
   .invoice-border{border-bottom: 1px solid;
       min-height: 120px;

@@ -3943,13 +3943,16 @@ export class WorkOrderAddComponent implements OnInit {
     viewWorkflow(workOrderPartNumber) {
         this.currentWorkflowId = workOrderPartNumber.workflowId;
     }
-    workflowTransfer: any = {};
-    currentRowIndex: any;
-    tranferCheckbox(ev, currentRecord, currentIndex) {
-        this.currentRowIndex = currentIndex;
+    viewCmm(workOrderPartNumber){
+        this.currentcmmId=undefined;
+        this.currentcmmId=workOrderPartNumber.cMMId;
+    }     
+    workflowTransfer:any={};
+    currentRowIndex:any;
+    tranferCheckbox(ev,currentRecord,currentIndex){
+        this.currentRowIndex=currentIndex;
         if (ev.target.checked) {
             $('#workFlowTransfer').modal('show');
-
         } else {
             $('#workFlowTransfer').modal('show');
         }
