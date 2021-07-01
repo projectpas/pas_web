@@ -133,7 +133,13 @@ export class CommonPublicationViewComponent implements OnInit,OnChanges, OnDestr
             this.isSpinnerVisible = false;
         });
     }
-
+    closeModal() {
+        this.viewAircraftData = {};
+        this.viewAtaData={};
+        if (this.modal) {
+          this.modal.close()
+        }
+      }
     viewPublicationDetails() {
         this.publicationRecordId=undefined;
         // this.allDocumentsList=row.attachmentDetails
