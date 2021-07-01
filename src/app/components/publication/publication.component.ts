@@ -134,12 +134,12 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     ];
     aircraftInformationCols: any[] = [
         { field: 'partNumber', header: 'PN Number' },
-        { field: 'partDescription', header: 'PN Description' },
+        { field: 'partDescription', header: 'PN Description' ,width:"200px"},
         { field: 'manufacturerName', header: 'Manufacturer' },
-        { field: 'itemGroup', header: 'Item Group' },
+        { field: 'itemGroup', header: 'Item Group',width:"130px" },
         { field: 'aircraft', header: 'Aircraft' },
-        { field: 'model', header: 'Model' },
-        { field: 'dashNumber', header: 'Dash Numbers' },
+        { field: 'model', header: 'Model',width:"100px" },
+        { field: 'dashNumber', header: 'Dash Numbers' ,width:"100px"},
     ];
     atacols = [
         { field: 'partNumber', header: 'PN Number' },
@@ -212,13 +212,13 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         ];
         this.cols = [
             { field: 'partNos', header: 'PN' },
-            { field: 'pnDescription', header: 'PN Description' },
-            { field: 'revisionNum', header: 'Revision Num' },
+            { field: 'pnDescription', header: 'PN Description' ,width:"200px"},
+            { field: 'revisionNum', header: 'Revision Num' ,width:"110px"},
             { field: 'publicationId', header: 'Pub ID' },
             { field: 'description', header: 'Pub Description' },
             { field: 'publicationType', header: 'Pub Type' },
             { field: 'publishedBy', header: 'Published By' },
-            { field: 'revisionDate', header: 'Revision Date' },
+            { field: 'revisionDate', header: 'Revision Date',width:"110px" },
             { field: 'nextReviewDate', header: 'Next Review Date' },
             { field: 'expirationDate', header: 'Expiration Date' },
             { field: 'location', header: 'Location' },

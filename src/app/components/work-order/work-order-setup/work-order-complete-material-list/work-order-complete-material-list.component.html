@@ -1021,7 +1021,7 @@
                         <span *ngIf="!isSubWorkOrder && !isView">
                             <button class="btn nobg" mat-icon-button
                                 (click)="pickticketItemInterface(rowData,pickticketieminterface)"
-                                matTooltip="Add Pick Ticket" matTooltipPosition="above" style="font-weight: bold;"
+                                matTooltip="Create Pick Ticket" matTooltipPosition="above" style="font-weight: bold;"
                                 [disabled]="!(rowData.partStatusId >0)">
                                 <i class="fa fa-plus" [ngClass]="{'btn_disabled':!(rowData.partStatusId >0)}"></i>
                             </button>

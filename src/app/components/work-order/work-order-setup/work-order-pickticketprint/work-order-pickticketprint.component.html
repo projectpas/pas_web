@@ -141,7 +141,7 @@
             <div class="clear"></div>
             <div class="clear"></div>
             <div class="col-sm-12">
-              <table rules=none class="parttable table-margins">
+              <table rules=none class="parttable table-margins" style="margin-top:-5px">
                 <thead>
                   <tr>
                     <th>Line Num</th>
@@ -229,7 +229,10 @@
                           </tr>
                           <tr>
                             <td>Whse: {{part.warehouseName}}
-                              Loc: {{part.locationName}}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Loc: {{part.locationName}}
                             </td>
                           </tr>
                           <tr>
@@ -265,7 +268,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td style="border:1px solid black" rowspan="2" colspan="5">
+                      <td style="border:1px solid black" colspan="5">
                         <b>
                           Notes: {{part.notes}}
                         </b>

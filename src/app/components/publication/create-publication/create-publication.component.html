@@ -174,7 +174,7 @@
                                     [(ngModel)]="sourcePublication.revisionNum" />
                             </div>
                             <div class="form-group">
-                                <label>Revision Date</label>
+                                <label>Revision Date<span class="clr-red">*</span></label>
                                 <p-calendar name="openDate" [(ngModel)]="sourcePublication.revisionDate"
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [maxDate]="currentDate"
                                     (onSelect)="onChangeInput()" [showIcon]="true" id="openDate" #revisionDate="ngModel"
@@ -385,7 +385,7 @@
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width"/>
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
@@ -395,7 +395,7 @@
                                         {{ col.header }}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th class="table-actions-column">Actions</th>
+                                    <th class="table-actions-column" style="width:60px !important">Actions</th>
                                 </tr>
                                 <tr>
                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -403,7 +403,7 @@
                         pnMappingTable.filter($event.target.value, col.field, 'contains')
                         " />
                                     </th>
-                                    <th class="table-actions-column"></th>
+                                    <th class="table-actions-column" style="width:60px !important"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -411,7 +411,7 @@
                                     <td *ngFor="let col of columns" class="table-column-width ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
-                                    <td class="action-icons-cstm table-column-width">
+                                    <td class="action-icons-cstm table-column-width" style="width:60px !important">
 
                                         <div  *ngIf="currentDeletedstatus == false">
 
@@ -489,60 +489,7 @@
                 </div>
               
             <div>
-                <div class="col-md-12 " *ngIf="showAdvancedSearchCardAircraft == true">
-                    
-                        <div class="col-md-1">
-                            <h4 class="f-s-14" style="margin-top: 22px;">Search:</h4>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="popup-plusicon-cstm">Part Number </label>
-                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnAircraftData"
-                                    filter="true" [(ngModel)]="selectedAircraftPartNumber"
-                                    name="selectedAircraftPartNumber" id="selectedAircraftPartNumber"
-                                    title="Part Number" placeholder="Select Part Number" [showClear]="true">
-                                </p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group ">
-                                <label class="fs12">Aircraft </label>
-                                <p-multiSelect [options]="airCraftTypesList" [(ngModel)]="selectAircraftManfacturer"
-                                    (onChange)="getAircraftModelByManfacturerType()" class="pub-multi"
-                                    [resetFilterOnHide]="true"></p-multiSelect>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="fs12">
-                                    Aircraft Model
-                                </label>
-                                <p-multiSelect [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel"
-                                    [selectionLimit]="30"
-                                    (onChange)="getDashNumberByManfacturerandModel(); multiSelectMaxLengthAlert();"
-                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group ">
-                                <label class="fs12">DashNumber </label>
-                                <p-multiSelect [options]="dashNumberList" [selectionLimit]="30"
-                                    [(ngModel)]="selectedDashNumbers" (onChange)="multiSelectMaxLengthAlert();"
-                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
-                            </div>
-                        </div>
-
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <button class="btn btn-primary mtop20 btn-cstm" (click)="searchAircraftInformation()">
-                                    <i class="pi pi-search pi-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
-                   
-                </div>
+               
                 <div class="col-md-12">
                    
                         <p-table #aircraftTable class="rpo-table-cstm rro-table-cstm"
@@ -593,11 +540,66 @@
                                             Advanced Search <i class="fa fa-caret-up"></i>
                                         </button>
                                     </div>
+                                    <div class="col-md-12 " *ngIf="showAdvancedSearchCardAircraft == true">
+                    
+                                        <div class="col-md-1">
+                                            <h4 class="search-font search-label" style="margin-left:55%">Search:</h4>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label style="width:95%;font-weight: 700 !important;">Part Number </label>
+                                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnAircraftData"
+                                                    filter="true" [(ngModel)]="selectedAircraftPartNumber"
+                                                    name="selectedAircraftPartNumber" id="selectedAircraftPartNumber"
+                                                    title="Part Number" placeholder="Select Part Number" [showClear]="true">
+                                                </p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group ">
+                                                <label style="width:95%;font-weight: 700 !important;">Aircraft </label>
+                                                <p-multiSelect [options]="airCraftTypesList" [(ngModel)]="selectAircraftManfacturer"
+                                                    (onChange)="getAircraftModelByManfacturerType()" class="pub-multi"
+                                                    [resetFilterOnHide]="true"></p-multiSelect>
+                                            </div>
+                                        </div>
+                
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label style="width:95%;font-weight: 700 !important;">
+                                                    Aircraft Model
+                                                </label>
+                                                <p-multiSelect [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel"
+                                                    [selectionLimit]="30"
+                                                    (onChange)="getDashNumberByManfacturerandModel(); multiSelectMaxLengthAlert();"
+                                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group ">
+                                                <label style="width:95%;font-weight: 700 !important;">DashNumber </label>
+                                                <p-multiSelect [options]="dashNumberList" [selectionLimit]="30"
+                                                    [(ngModel)]="selectedDashNumbers" (onChange)="multiSelectMaxLengthAlert();"
+                                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                            </div>
+                                        </div>
+                
+                                        <div class="col-md-1 padding-top-20">
+                                            <div class="form-group">
+                                                <button class="btn btn-primary mtop20 " (click)="searchAircraftInformation()">
+                                                    <i class="pi pi-search pi-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                   
                                 </div>
+                                </div>
+                               
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width"/>
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
@@ -607,7 +609,7 @@
                                         {{ col.header }}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th class="table-actions-column">Actions</th>
+                                    <th class="table-actions-column" style="width:60px !important">Actions</th>
                                 </tr>
                                 <tr>
                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -615,7 +617,7 @@
                         aircraftTable.filter($event.target.value, col.field, 'contains')
                         " />
                                     </th>
-                                    <th class="table-actions-column"></th>
+                                    <th class="table-actions-column" style="width:60px !important"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -637,7 +639,7 @@
 
                                     </td>
 
-                                    <td class="action-icons-cstm table-column-width">
+                                    <td class="action-icons-cstm table-column-width" style="width:60px !important">
                                         <span data-toggle=" modal" data-target="#airCraftView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                 (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
@@ -701,45 +703,7 @@
                 </div>
               
             <div>
-                <div class="col-md-12" *ngIf="showAdvancedSearchCardAta == true">
-                    <div class="shadow-Box">
-                        <div class="col-md-1">
-                            <h4 class="f-s-14" style="margin-top: 22px;">Search:</h4>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="popup-plusicon-cstm">Part Number </label>
-                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true"
-                                    [(ngModel)]="selectedPartNumber" name="selectedPartNumber" id="selectedPartNumber"
-                                    title="Part Number" required placeholder="Select Part Number" [showClear]="true">
-                                </p-dropdown>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group ">
-                                <label class="fs12">ATA Chapter</label>
-                                <p-multiSelect [options]="ataChapterList" [(ngModel)]="selectedATAchapter"
-                                    (onChange)="getSubChapterByATAChapter()" class="pub-multi"
-                                    [resetFilterOnHide]="true"></p-multiSelect>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="fs12">ATA Sub Chapter</label>
-                                <p-multiSelect [options]="ataSubChapterList" [(ngModel)]="selectedATASubChapter"
-                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <button class="btn btn-primary mtop20 btn-cstm" (click)="searchATA()">
-                                    <i class="pi pi-search pi-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
+               
                 <div class="col-md-12">
                     
                         <p-table #ataTable class="rpo-table-cstm rro-table-cstm" [columns]="selectedatacols"
@@ -788,12 +752,53 @@
                                             (click)="enableDisableAdvancedSearchAta(false)">
                                             Advanced Search <i class="fa fa-caret-up"></i>
                                         </button>
+                                        <div class="advance-search-card" *ngIf="showAdvancedSearchCardAta == true">
+                                            <div class="col-md-12 ">
+                                            <div class="col-md-12 ">
+                                                <div class="col-md-1 col-md-1-cstm">
+                                                    <h4 class="search-font search-label" style="margin-left:55%">Search:</h4>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label style="width:95%;font-weight: 700 !important;">Part Number <span class="clr-red">*</span></label>
+                                                        <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true"
+                                                            [(ngModel)]="selectedPartNumber" name="selectedPartNumber" id="selectedPartNumber"
+                                                            title="Part Number" required placeholder="Select Part Number" [showClear]="true">
+                                                        </p-dropdown>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group ">
+                                                        <label style="width:95%;font-weight: 700 !important;">ATA Chapter</label>
+                                                        <p-multiSelect [options]="ataChapterList" [(ngModel)]="selectedATAchapter"
+                                                            (onChange)="getSubChapterByATAChapter()" class="pub-multi"
+                                                            [resetFilterOnHide]="true"></p-multiSelect>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label style="width:95%;font-weight: 700 !important;">ATA Sub Chapter</label>
+                                                        <p-multiSelect [options]="ataSubChapterList" [(ngModel)]="selectedATASubChapter"
+                                                            class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 padding-top-20">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary mtop20" (click)="searchATA()">
+                                                            <i class="pi pi-search pi-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="clear"></div>
+                                            </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width" />
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
@@ -803,7 +808,7 @@
                                         {{ col.header }}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th class="table-actions-column">Actions</th>
+                                    <th class="table-actions-column" style="width:60px !important">Actions</th>
                                 </tr>
                                 <tr>
                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -811,7 +816,7 @@
                       ataTable.filter($event.target.value, col.field, 'contains')
                       " />
                                     </th>
-                                    <th class="table-actions-column"></th>
+                                    <th class="table-actions-column" style="width:60px !important"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -819,7 +824,7 @@
                                     <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
-                                    <td class="action-icons-cstm table-column-width">
+                                    <td class="action-icons-cstm table-column-width" style="width:60px !important">
                                         <span data-toggle="modal" data-target="#ataView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                 (click)="openAtaView(rowData, ataView)" matTooltip="View"

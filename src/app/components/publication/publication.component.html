@@ -102,7 +102,7 @@
 
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" class="table-column-width" />
+          <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
         </colgroup>
       </ng-template>
 
@@ -311,7 +311,7 @@
 
 
 <div id="publicationHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
@@ -322,7 +322,7 @@
       <div class="modal-body" *ngIf="auditHistory">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
           <div class="tableFixHead">
-            <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+            <table class="table table-bordered" style="white-space: nowrap;" *ngIf="auditHistory.length > 0; else noDatavailable">
               <!-- <div
               class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
               <div class="table-responsive">
@@ -446,7 +446,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                    {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
+                    {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
                   </td>
                   <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
@@ -986,7 +986,7 @@
                           (onPage)="aircraftPageIndexChange($event)">
                           <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" class="table-column-width"/>
+                                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                             </colgroup>
                         </ng-template>
                           <ng-template pTemplate="header" let-columns>
@@ -998,7 +998,7 @@
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
-                              <th class="table-actions-column">Actions</th>
+                              <th class="table-actions-column" style="width:50px !important">Actions</th>
                             </tr>
                             <tr>
                               <th *ngFor="let col of columns" class="table-column-width" [ngSwitch]="col.field">
@@ -1010,7 +1010,7 @@
                                     )
                                   " />
                               </th>
-                              <th class="table-actions-column">&nbsp;</th>
+                              <th class="table-actions-column" style="width:50px !important">&nbsp;</th>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -1031,7 +1031,7 @@
                               </span>
 
                               </td>
-                              <td class="table-actions-column">
+                              <td class="table-actions-column" style="width:50px !important">
                                 <span data-toggle="modal" data-target="#airCraftView">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
@@ -1302,7 +1302,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRecord()">
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
