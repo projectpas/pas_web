@@ -67,6 +67,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly _getSaveCharges: string = environment.baseUrl + "/api/SalesOrder/createsalesordercharges";
   private readonly _getCharges: string = environment.baseUrl + "/api/SalesOrder/gesalesorderchargeslist";
   private readonly _getChargesById: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderChargesBySOId";
+  private readonly _getFreightsById: string = environment.baseUrl + "/api/SalesOrder/getSalesOrderFreightsBySOId";
   private readonly _getDeleteCharge: string = environment.baseUrl + "/api/SalesOrder/deletesalesordercharge";
   private readonly _getSoMarginSummary: string = environment.baseUrl + "/api/SalesOrder/create-so-margin-data";
   private readonly _getMarginSummary: string = environment.baseUrl + "/api/SalesOrder/get-sales-margin-data";
@@ -585,6 +586,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getSalesOrderChargesById(id, isDeleted));
+      });
+  }
+
+  getSalesOrderFreightsById(id, isDeleted) {
+    const URL = `${this._getFreightsById}?SalesOrderId=${id}&isDeleted=${isDeleted}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderFreightsById(id, isDeleted));
       });
   }
 

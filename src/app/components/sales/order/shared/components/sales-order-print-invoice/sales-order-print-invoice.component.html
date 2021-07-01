@@ -15,8 +15,10 @@
                 <div class="col-sm-12 invoice-border">
                     <div class="very-first-block col-sm-8">
                         <div class="col-sm-12 address-block" style="width:100%;display:flex;">
-                            <div class="col-sm-6" style="width:50%" *ngIf="this.salesOrderInvoice.managementStructureHeaderData">
-                                <img class="logo" src="{{this.endPointURL + this.salesOrderInvoice.managementStructureHeaderData.logo}}" />
+                            <div class="col-sm-6" style="width:50%"
+                                *ngIf="this.salesOrderInvoice.managementStructureHeaderData">
+                                <img class="logo"
+                                    src="{{this.endPointURL + this.salesOrderInvoice.managementStructureHeaderData.logo}}" />
                             </div>
                             <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
                                 <div class="col-sm-12 first-block-name">
@@ -32,7 +34,7 @@
                             </div>
                             <br />
                             <br /> -->
-                               
+
                                 <div class="col-sm-12 first-block-name">
                                     <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Address1 :</label> -->
                                     <label class="col-sm-12 first-block-label"
@@ -258,7 +260,7 @@
                         <tbody>
                             <ng-container
                                 *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
-                                <tr>
+                                <tr style="border:1px solid black">
                                     <td rowspan="3">{{i+1}}</td>
                                     <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
                                         <br />
@@ -285,28 +287,51 @@
                                         <td></td>
                                     </tr> -->
                                 <tr></tr>
-                            </ng-container>
-                            <ng-container *ngFor="let child of this.salesOrderCharges; let i = index;">
-                                <tr>
-                                    <td>NA</td>
-                                    <td colspan="3"> MISC: {{child.chargeType}}
-                                    </td>
-                                    <td> - </td>
-                                    <td>{{child.cond}}</td>
-                                    <td> - </td>
-                                    <td style="text-align: right;border-bottom:1px solid black;">{{child.quantity}}</td>
-                                    <td style="text-align: right;border-bottom: 1px solid black;">
-                                        {{child.unitCost | number : '1.2-2'}}</td>
-                                    <td style="text-align: right;border-bottom:1px solid black;">
-                                        {{child.billingAmount | number : '1.2-2'}}</td>
-                                </tr>
-                                <!-- <tr>
-                                        <td colspan="7"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr> -->
-                                <tr></tr>
+                                <ng-container *ngFor="let chargeChild of this.salesOrderCharges; let i = index;">
+                                    <tr *ngIf="chargeChild.itemMasterId == child.itemMasterId">
+                                        <td>NA</td>
+                                        <td colspan="3"> MISC: {{chargeChild.chargeType}}
+                                        </td>
+                                        <td style="border: 1px solid black"> - </td>
+                                        <td style="border: 1px solid black">{{child.chargeChild}}</td>
+                                        <td style="border: 1px solid black"> - </td>
+                                        <td style="text-align: right;border-bottom:1px solid black;">{{chargeChild.quantity}}
+                                        </td>
+                                        <td style="text-align: right;border-bottom: 1px solid black;">
+                                            {{chargeChild.unitCost | number : '1.2-2'}}</td>
+                                        <td style="text-align: right;border-bottom:1px solid black;">
+                                            {{chargeChild.billingAmount | number : '1.2-2'}}</td>
+                                    </tr>
+                                    <!-- <tr>
+                                            <td colspan="7"></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr> -->
+                                    <tr></tr>
+                                </ng-container>
+                                <ng-container *ngFor="let freightChild of this.salesOrderFreights; let i = index;">
+                                    <tr *ngIf="freightChild.itemMasterId == child.itemMasterId">
+                                        <td>NA</td>
+                                        <td colspan="3"> FREIGHT: {{freightChild.shipViaName}}
+                                        </td>
+                                        <td style="border: 1px solid black"> {{freightChild.uom}} </td>
+                                        <td style="border: 1px solid black"> - </td>
+                                        <td style="border: 1px solid black"> - </td>
+                                        <td style="text-align: right;border-bottom:1px solid black;">1</td>
+                                        <td style="text-align: right;border-bottom: 1px solid black;">
+                                            {{freightChild.amount | number : '1.2-2'}}</td>
+                                        <td style="text-align: right;border-bottom:1px solid black;">
+                                            {{freightChild.billingAmount | number : '1.2-2'}}</td>
+                                    </tr>
+                                    <!-- <tr>
+                                            <td colspan="7"></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr> -->
+                                    <tr></tr>
+                                </ng-container>
                             </ng-container>
                             <!-- <tr>
                                     <td colspan="7"></td>
@@ -406,7 +431,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2" rowspan="3">Barcode
-                                    <br /><img style="width: 100px;" src="{{this.salesOrderInvoice.barcode}}" alt="barcode" width="98%" /></td>
+                                    <br /><img style="width: 100px;" src="{{this.salesOrderInvoice.barcode}}"
+                                        alt="barcode" width="98%" /></td>
                                 <!-- <td class="border-transparent" colspan="2">USA</td> -->
                                 <!-- <td class="border-transparent" colspan="3">Account Name: PowerAeroSuites.com
                                     </td> -->
