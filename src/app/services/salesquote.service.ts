@@ -19,7 +19,6 @@ import { SalesOrderConversionCritera } from "../components/sales/quotes/models/s
 import { SalesOrderView } from "../models/sales/SalesOrderView";
 import { BehaviorSubject } from "rxjs";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
-import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { SalesOrderQuotePart } from "../models/sales/SalesOrderQuotePart";
 import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
@@ -287,9 +286,9 @@ export class SalesQuoteService {
       this.salesQuoteEndPointSevice.closeSalesOrderQuoteEndPoint(salesQuoteId, updatedBy)
     );
   }
-  convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<SalesOrderView[]> {
+  convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera, currentEmployeeId: number): Observable<SalesOrderView[]> {
     return Observable.forkJoin(
-      this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria)
+      this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId)
     );
   }
 
@@ -340,13 +339,13 @@ export class SalesQuoteService {
     );
   }
 
-  createFreight(freightsList: ISalesOrderFreight[]): Observable<ISalesOrderQuote[]> {
+  createFreight(freightsList: any): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesQuoteEndPointSevice.createFreight(freightsList)
     );
   }
 
-  createSOQCharge(chargesList: ISalesOrderQuoteCharge[]): Observable<ISalesOrderQuote[]> {
+  createSOQCharge(chargesList: any): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesQuoteEndPointSevice.createCharges(chargesList)
     );
@@ -397,7 +396,7 @@ export class SalesQuoteService {
 
   getNetSalesAmount(marginSummary) {
     let netSalesAmount: number = 0;
-    netSalesAmount = marginSummary.sales + marginSummary.misc;
+    netSalesAmount = Number(marginSummary.sales) + Number(marginSummary.misc);
     return netSalesAmount;
   }
 
@@ -438,7 +437,7 @@ export class SalesQuoteService {
     partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
     partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
     partNumberObj.salesBeforeDiscount = formatStringToNumber(selectedPart.salesPriceExtended);
-    partNumberObj.discount = selectedPart.discount ? Number(selectedPart.discount) : 0;
+    partNumberObj.discount = selectedPart.salesDiscount ? formatStringToNumber(selectedPart.salesDiscount) : 0;
     partNumberObj.discountAmount = selectedPart.salesDiscountPerUnit;
     partNumberObj.netSales = formatStringToNumber(selectedPart.netSalesPriceExtended);
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
@@ -475,8 +474,8 @@ export class SalesQuoteService {
     partNumberObj.currencyId = selectedPart.currencyId;
     partNumberObj.uom = selectedPart.uom;
     partNumberObj.controlNumber = selectedPart.controlNumber;
-    partNumberObj.grossSalePrice = selectedPart.grossSalePrice;
     partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
+    partNumberObj.grossSalePrice = selectedPart.grossSalePrice + selectedPart.misc;
     partNumberObj.notes = selectedPart.notes;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.customerReference = selectedPart.customerRef;
@@ -522,7 +521,7 @@ export class SalesQuoteService {
     partNumberObj.description = selectedPart.partDescription;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
     partNumberObj.customerRef = selectedPart.customerReference;
-    partNumberObj.uom = selectedPart.uomName;
+    partNumberObj.uomName = selectedPart.uomName;
     partNumberObj.pmaStatus = selectedPart.stockType;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.quantityOnHand = selectedPart.quantityOnHand;
@@ -606,5 +605,9 @@ export class SalesQuoteService {
     return Observable.forkJoin(
       this.salesQuoteEndPointSevice.deleteMultiplePart(salesOrderQuotePartIds)
     );
+  }
+
+  getSalesQuoteParts(id, isDeleted) {
+    return this.salesQuoteEndPointSevice.getSalesQuoteParts(id, isDeleted);
   }
 }

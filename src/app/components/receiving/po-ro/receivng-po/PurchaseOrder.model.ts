@@ -77,7 +77,8 @@ export class PurchaseOrderPart {
     conditionCode: string;
     quantityActuallyReceived: number;
     quantityRejected: number;
-    uomId: number;
+    unitOfMeasureId: number;
+    unitOfMeasure:string;
     quantityOrdered: number;
     quantityBackOrdered: number;
     unitCost: number;
@@ -198,8 +199,7 @@ export class PurchaseOrderPart {
     timeLife: TimeLife[];
     stockLineDraft: StockLine[];
     timeLifeDraft: TimeLife[];
-
-
+    showHeader: boolean;
 }
 
 export class TimeLife {
@@ -355,9 +355,11 @@ export class StockLine {
     manufacturingTrace: string;
     partCertificationNumber: string;
     certifiedBy: string;
+    certifiedById : string;
     certifiedDate: Date;
     tagDate: Date;
     tagType: any;
+    taggedBy: string;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;
@@ -443,6 +445,8 @@ export class StockLine {
     obtainFromObject: DropDownData;
     ownerObject: DropDownData;
     traceableToObject: DropDownData;
+    taggedByObject: DropDownData;
+    certByObject: DropDownData;
 }
 
 // export class StockLineDraft {
@@ -615,6 +619,7 @@ export class StockLineDraft {
     manufacturingBatchNumber: string = null;
     partCertificationNumber: string = null;
     certifiedBy: string = null;
+    certifiedTypeId: number = null;    //-----------------------------------------
     certifiedDate: Date = null;
     tagDate: Date = null;
     tagType: any = null;
@@ -649,6 +654,7 @@ export class StockLineDraft {
     obtainFromType: number = null;
     ownerType: number = null;
     traceableToType: number = null;
+    taggedByType : number = null;  
     unitCostAdjustmentReasonTypeId: number = null;
     unitSalePriceAdjustmentReasonTypeId: number = null;
     idNumber: string = null;
@@ -721,6 +727,9 @@ export class StockLineDraft {
     obtainFromObject: DropDownData = null;
     ownerObject: DropDownData = null;
     traceableToObject: DropDownData = null;
+
+    taggedByObject: DropDownData = null;   
+    certByObject : DropDownData = null;   //------------------------------
     createdBy: string = null;
     updatedBy: string = null;
 
@@ -739,9 +748,9 @@ export class StockLineDraft {
     Condition: string = null;
     Warehouse: string = null;
     Location: string = null;
-    ObtainFromName: string = null;
-    OwnerName: string = null;
-    TraceableToName: string = null;
+    obtainFromName: string = null;
+    ownerName: string = null;
+    traceableToName: string = null;
     GLAccount: string = null;
     AssetName: string = null;
     LegalEntityName: string = null;
@@ -751,12 +760,22 @@ export class StockLineDraft {
     ObtainFromTypeName: string = null;
     OwnerTypeName: string = null;
     TraceableToTypeName: string = null;
+
+    taggedByTypeName: string = null;   // ---------------------------------------
+
     UnitCostAdjustmentReasonType: string = null;
     UnitSalePriceAdjustmentReasonType: string = null;
     ShippingVia: string = null;
     WorkOrder: string = null;
     WorkOrderMaterialsName: string = null;
     tagTypeId: any = null;
+    taggedBy:number = null;         
+    taggedByName: string = null;
+    unitOfMeasureId:any = null;
+    unitOfMeasure: string = null;
+    tagTypeobject:any=null;
+
+    certifiedById:number = null;    // ---------------------------------------   
 }
 
 export class ReceiveParts {
@@ -783,3 +802,60 @@ export class DropDownData {
     Value: string;
 }
 
+export class TimeLifeDraftData {
+
+    timeLifeCyclesId: number = 0;
+    cyclesRemaining: string = null;
+    cyclesSinceNew: string = null;
+    cyclesSinceOVH: string = null;
+    cyclesSinceInspection: string = null;
+    cyclesSinceRepair: string = null;
+    
+    timeRemaining: string = null;
+    timeSinceNew: string = null;
+    timeSinceOVH: string = null;
+    timeSinceInspection: string = null;
+    timeSinceRepair: string = null;
+    lastSinceNew: string = null;
+    lastSinceOVH: string = null;
+    lastSinceInspection: string = null;
+    
+    masterCompanyId: number = 0;
+    isActive: boolean;
+    StockLineDraftId: number = 0;
+    detailsNotProvided: boolean = false;
+    purchaseOrderId: number = null;
+    purchaseOrderPartRecordId: number = null;
+    RepairOrderId: number = null;
+    RepairOrderPartRecordId: number = null;
+
+    cyclesRemainingHrs: number;
+    cyclesRemainingMin: number;
+    cyclesSinceNewHrs: number;
+    cyclesSinceNewMin: number;
+    cyclesSinceOVHHrs: number;
+    cyclesSinceOVHMin: number;
+    cyclesSinceInspectionHrs: number;
+    cyclesSinceInspectionMin: number;
+    cyclesSinceRepairHrs: number;
+    cyclesSinceRepairMin: number;
+
+    timeRemainingHrs: number;
+    timeRemainingMin: number;
+    timeSinceNewHrs: number;
+    timeSinceNewMin: number;
+    timeSinceOVHHrs: number;
+    timeSinceOVHMin: number;
+    timeSinceInspectionHrs: number;
+    timeSinceInspectionMin: number;
+    timeSinceRepairHrs: number;
+    timeSinceRepairMin: number;
+
+    lastSinceNewHrs: number;
+    lastSinceNewMin: number;
+    lastSinceOVHHrs: number;
+    lastSinceOVHMin: number;
+    lastSinceInspectionHrs: number;
+    lastSinceInspectionMin: number;
+    stockLineId: number; 
+}

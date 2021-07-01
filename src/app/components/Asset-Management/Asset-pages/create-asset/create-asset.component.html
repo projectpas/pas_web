@@ -201,6 +201,11 @@
                                             [ngModelOptions]="{standalone: true}" (keypress)="omit_special_char($event)" [(ngModel)]="currentAsset.model">
                                     </div>
                                     <div class="form-group">
+                                        <label>Cntrl Num</label>
+                                        <input class="form-control" type="text" name="controlNumber"
+                                            [(ngModel)]="currentAsset.controlNumber" disabled>
+                                    </div>
+                                    <div class="form-group">
                                         <div class="checkbox-cstm" style="margin-left: 0;">
                                             <label>
                                                 <input type="checkbox" [ngModelOptions]="{standalone: true}"

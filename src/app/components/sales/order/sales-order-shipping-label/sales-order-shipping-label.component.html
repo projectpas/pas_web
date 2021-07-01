@@ -1,8 +1,8 @@
 ﻿<div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <!-- <h4 class="modal-title" id="modal-basic-title"></h4> -->
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 </div>
-<div class="modal-content pdf-block " style="width:90%" id="soShippingLabel">
+<div class="modal-content" id="soShippingLabel">
     <div class="modal-body">
         <form id="" name="" action="#" method="post" onsubmit="return false;">
             <div class="image">
@@ -12,20 +12,21 @@
                             <div *ngIf="!isPrint" class="pick-ticket-header"
                                 style="margin-bottom: 15px; display: flex;">
                                 <h4 style="width: 130px">Service Class:</h4>
-                                <select class="form-control" style="width: 95px" name="serviceClass"
-                                    [(ngModel)]="this.salesOrderShipping.serviceClass" required>
+                                <select class="form-control" style="width: 95px;border:1px solid black !important"
+                                    name="serviceClass" [(ngModel)]="this.salesOrderShipping.serviceClass" required>
                                     <option value="First Class">First Class</option>
                                     <option value="Priority">Priority</option>
                                 </select>
                             </div>
-                            <div *ngIf="isPrint" class="pick-ticket-header" style="margin-bottom: 15px; display: flex;">
+                            <div *ngIf="isPrint" class="pick-ticket-header"
+                                style="margincu-bottom: 15px; display: flex;">
                                 <h4 style="width: 130px">Service Class:</h4>
                                 <h4 style="width: 95px">{{this.salesOrderShipping.serviceClass}}</h4>
                             </div>
                             <div class="first-block">
                                 <!-- <div class="col-sm-4 first-block-4"> -->
                                 <div class="col-sm-12 sold-block-div">
-                                    <label class="col-sm-3 first-block-label"><b>Cust Ref:</b></label>
+                                    <label class="col-sm-3 first-block-label bold-word"><b>Cust Ref:</b></label>
                                     <label class="col-sm-8 first-block-label"
                                         disabled>{{this.salesOrderShipping.customerRef}}</label>
                                 </div>
@@ -36,8 +37,8 @@
                                         disabled>{{this.salesOrderShipping.shipDate | date:'medium'}}</label>
                                 </div>
                                 <br />
-                                <div class="col-sm-12 sold-block-div" style="margin-top:15px">
-                                    <label class="col-sm-3 first-block-label"><b>Origin:</b></label>
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label bold-word"><b>Origin:</b></label>
                                     <label class="col-sm-8 first-block-label" disabled></label>
                                 </div>
                                 <br />
@@ -72,8 +73,8 @@
                                         disabled>{{this.salesOrderShipping.originCountry}}</label>
                                 </div>
                                 <br />
-                                <div class="col-sm-12 sold-block-div" style="margin-top:15px">
-                                    <label class="col-sm-3 first-block-label"><b>Ship To:</b></label>
+                                <div class="col-sm-12 sold-block-div">
+                                    <label class="col-sm-3 first-block-label bold-word"><b>Ship To:</b></label>
                                     <label class="col-sm-8 first-block-label" disabled></label>
                                 </div>
                                 <br />
@@ -116,12 +117,14 @@
                                 <br />
                                 <div class="col-sm-12 sold-block-div">
                                     <label class="col-sm-3 first-block-label">Phone:</label>
-                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled></label>
+                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled>
+                                        {{this.salesOrderShipping.shipToPhone}}</label>
                                 </div>
                                 <br />
                                 <div class="col-sm-12 sold-block-div">
                                     <label class="col-sm-3 first-block-label">Attn:</label>
-                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled></label>
+                                    <label class="col-sm-8 first-block-label" style="width:80%" disabled>
+                                        {{this.salesOrderShipping.shipToAttention}}</label>
                                 </div>
                                 <br />
 
@@ -138,9 +141,8 @@
                                 </div> -->
                                 <div class="form-group second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
-                                    <label type="text" class="form-control"
-                                        style="background:#fff !important; width: 160px;" name="salesOrderNumber"
-                                        disabled>{{this.salesOrderShipping.salesOrderNumber}}
+                                    <label style="background:#fff !important; width: 160px;height:20px"
+                                        name="salesOrderNumber" disabled>{{this.salesOrderShipping.salesOrderNumber}}
                                     </label>
                                 </div>
                                 <br />
@@ -152,15 +154,33 @@
                                         <label class="col-sm-4 first-block-label input-field-border"
                                             disabled>{{this.salesOrderShipping.uom}}</label> -->
                                     <label class="col-sm-2">Weight</label>
-                                    <label class="col-sm-3 form-control input-width input-field-border" name="weight"
-                                        style="background:#fff !important; padding-left: 10px !important"
+                                    <label class="col-sm-3" name="weight"
+                                        style="background:#fff !important; padding-left: 10px !important;height:15px;"
                                         disabled>{{this.salesOrderShipping.weight}}</label>
-                                    <label class="col-sm-2">UOM </label>
-                                    <label class="col-sm-3  form-control input-width input-field-border" name="uom"
-                                        style="background:#fff !important; padding-left: 10px !important"
+                                    <label class="col-sm-2" style="margin-left:10px">UOM </label>
+                                    <label class="col-sm-3" name="uom"
+                                        style="background:#fff !important; padding-left: 10px !important;height:15px;"
                                         disabled>{{this.salesOrderShipping.uom}}</label>
                                 </div>
                                 <br />
+                                <div class="form-group second-block-div">
+                                    <label class="col-sm-4 second-block-label">Dimension</label>
+                                    <label style="background:#fff !important; width: 160px;height:20px"
+                                        name="salesOrderNumber" disabled>
+                                    </label>
+                                </div>
+                                <div class="form-group second-block-div">
+                                    <label class="col-sm-4 second-block-label">Num of Pieces</label>
+                                    <label style="background:#fff !important; width: 160px;height:20px"
+                                        name="salesOrderNumber" disabled>
+                                    </label>
+                                </div>
+                                <div class="form-group second-block-div">
+                                    <label class="col-sm-4 second-block-label">Num of Containers</label>
+                                    <label style="background:#fff !important; width: 160px;height:20px"
+                                        name="salesOrderNumber" disabled>
+                                    </label>
+                                </div>
                             </div>
                             <div class="clear"></div>
 

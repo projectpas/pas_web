@@ -5,18 +5,11 @@
 		  <div class="col">
 			<h4 class="header-name">Work Order Quote List</h4>
 		  </div>
-		  <div>
-			<button
-			  type="button"
-			  class="btn-sm header-button"
-              [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote']"
-              >
-			  Add Work Order Quote
-			</button>
-		  </div>
 		</div>
       </div>
       <div class="header-body"> 
+     
+    
     <p-table #dt
     class="rpo-table-cstm rro-table-cstm"
     [value]="woQuoteList"
@@ -37,9 +30,9 @@
     [scrollable]="true"
     [metaKeySelection]="true"
     scrollHeight="450px"
-    (onPage)="pageIndexChange($event)">
+    (onPage)="pageIndexChange($event)"> 
     <ng-template pTemplate="caption">
-      <div class="row">
+        <div class="row">
           <div class="col">
               <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
                   [(ngModel)]="selectedColumns" class="multiselect-field"
@@ -51,19 +44,82 @@
                 <input type="text" pInputText size="50" class="form-control"
                     (input)="globalSearch($event.target.value)" placeholder=" Filter" />
             </div>
+           </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
+        <div class="row">
+            <div class="col" style="width: 30%;">
                   <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                   matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                   data-toggle="modal"
                   (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
-              <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download"
+                <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download"
                   iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                   matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
-          </div>
-          </div>
+            </div>
+            <!-- <div class="col" style="width: 70%;"> -->
+                <div class="pull-right buttons-div-align">
+                    <div class="col">
+                        <div class="col buttons-top-padding">
+                            <div class="form-group">
+                                <label class="radiobtn-label status-left">Status:</label>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control" value="open"
+                                            [(ngModel)]="currentStatus" (click)="changeOfStatus('open', '')">
+                                        <span class="checkmark"></span>Open
+                                    </label>
+                                </div>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control" value="closed"
+                                            [(ngModel)]="currentStatus" (click)="changeOfStatus('closed', '')">
+                                        <span class="checkmark"></span>Closed
+                                    </label>
+                                </div>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control"
+                                            value="canceled" [(ngModel)]="currentStatus"
+                                            (click)="changeOfStatus('canceled', '')">
+                                        <span class="checkmark"></span>Cancelled
+                                    </label>
+                                </div>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control"
+                                            value="delayed" [(ngModel)]="currentStatus"
+                                            (click)="changeOfStatus('delayed', '')">
+                                        <span class="checkmark"></span>Delayed
+                                    </label>
+                                </div>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control"
+                                            value="approved" [(ngModel)]="currentStatus"
+                                            (click)="changeOfStatus('approved', '')">
+                                        <span class="checkmark"></span>Approved
+                                    </label>
+                                </div>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control"
+                                            value="pending" [(ngModel)]="currentStatus"
+                                            (click)="changeOfStatus('pending', '')">
+                                        <span class="checkmark"></span>Pending
+                                    </label>
+                                </div>
+                                <div class="pull-left radio-buttons-align">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="woStatus" class="form-control" value="all"
+                                            [(ngModel)]="currentStatus" (click)="changeOfStatus('all', '')">
+                                        <span class="checkmark"></span>All
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
          
     </ng-template>
     <ng-template pTemplate="colgroup" let-columns>
@@ -92,15 +148,11 @@
                 && col.field !== 'estimatedShipDateType'
                 && col.field !== 'estimatedCompletionDateType'" 
                class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains');fieldSearch(col.field) ">
-
                 <input type="date" class="table-header-input-width" *ngIf="col.field == 'openDate'" name="openDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date" class="table-header-input-width" *ngIf=" col.field == 'promisedDate'" name="promisedDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date" class="table-header-input-width" *ngIf=" col.field == 'estCompletionDate'" name="estCompletionDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date" class="table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date" class="table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
-               
-               
-               
                 <input type="date" class="table-header-input-width" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date" class="table-header-input-width" *ngIf="col.field == 'promisedDateType'" name="promisedDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date" class="table-header-input-width" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
@@ -114,35 +166,20 @@
                      let-rowIndex="rowIndex"
                      let-expanded="expanded"
                      let-columns="columns">
-
-          
-            <tr class="ui-widget-header">
-                <!--  <td>
-                   <a [pRowToggler]="rowData">
-                     <i
-                       (click)="getWorkOrderPartListByWorkOrderId(rowData)"
-                       [ngClass]="
-                         expanded
-                           ? 'fa fa-fw fa-chevron-circle-down'
-                           : 'fa fa-fw fa-chevron-circle-right'
-                       "
-                     ></i>
-                     <span> {{ rowData.workOrderNum }}</span>
-                   </a>
- 
-                 </td> -->
-                 <!-- [ngStyle]="{'color': convertDate(col.field , rowData)   == 'Multiple' ? 'green' : 'red'  }" -->
+            <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle>
                 <td class="table-column-width" *ngFor="let col of columns" style="text-overflow: ellipsis; overflow: hidden; " [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" 
                 [ngStyle]="{'color': getColorCodeForMultiple(rowData)}"
-                
                 > 
                 {{convertDate(col.field , rowData)}}
-                    
                 </td>
-
-                <td class="table-actions-column table-column-width action-icons-cstm" *ngIf="selectedColumns.length > 0">
+                <td class="table-actions-column table-column-width width-131 action-icons-cstm" *ngIf="selectedColumns.length > 0">
                     <span data-toggle="modal" data-target="#viewWorkOrder"><a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                    <span><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                    <!-- <span><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span> -->
+                    <span><a [class.disabled]="rowData.quoteStatus === 'Closed' || rowData.isVersionIncrease || rowData.quoteStatus === 'Expired'"
+                        [ngClass]="{'btn_disabled': rowData.quoteStatus === 'Closed' || rowData.isVersionIncrease || rowData.quoteStatus === 'Expired'}"
+                        class="btn nobg" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above">
+                        <i class="fa fa-pencil"></i>
+                      </a></span>
                 </td>
             </tr>
             
@@ -163,7 +200,6 @@
             pInputText type="text" />
     </ng-template>
   </p-table>
-
 </div>
 </div>
 <ng-template #downloadConfirmation let-c="close" let-d="dismiss" data-backdrop="static">
@@ -199,8 +235,7 @@
                 <h4 class="modal-title">Work Order Quote View</h4>
             </div>
             <div *ngIf="woQuoteViewData">
-                    <app-work-order-quote [workorderid]="woQuoteViewData.workOrderId" isView="true"></app-work-order-quote>
-                <!-- <app-work-order-quote isView="true" isQuoteListView="true" [quoteListViewData]="woQuoteViewData"></app-work-order-quote> -->
+                    <app-work-order-quote [workorderid]="woQuoteViewData.workOrderId" [fromWoqList]="true" isView="true"></app-work-order-quote>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeView.emit(false)">

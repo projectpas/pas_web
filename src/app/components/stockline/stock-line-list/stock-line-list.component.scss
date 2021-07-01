@@ -8,8 +8,23 @@ table th {
 .stockline-audit table th {
     min-width: 80px;
 }
-table td {
-    padding: 4px;
+// table td {
+//     padding: 4px;
+// }
+.min-w-130{
+    min-width:130px;
+}
+.min-width-60{
+    min-width:60px !important;
+}
+.min-width-80{
+    min-width:80px !important;
+}
+.min-width-90{
+    min-width:90px !important;
+}
+.min-width-250{
+    min-width:250px !important;
 }
 .stockline-radios{
     float: right !important; padding: 3px 0 0 !important;
@@ -32,4 +47,7 @@ input.hidePlaceHolder:active {
 }
 .min-w-100 {
     min-width: 100px;
+}
+.shop-employee-checkbox{
+    margin: 0px auto !important; display: block !important;
 }

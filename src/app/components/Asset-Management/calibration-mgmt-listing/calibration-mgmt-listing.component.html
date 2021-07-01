@@ -398,7 +398,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="editcalibration" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="editcalibration" role="dialog" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content" style="width: 1000px;margin-left: -210px;">
 			<div class="modal-header">
@@ -406,25 +406,29 @@
 				<h4 class="modal-title">{{Certifytype}}</h4>
 			</div>
 			<div class="modal-body">
-                <div id="adminsearchlocationajax" class="table-responsive default-bg clear"> 
-                    <p class="w250"><span class="label"><b>Asset ID: </b></span><span class="value" name ="AssetId">{{calibrationForm.AssetId}}</span></p>
-                    <p class="w250"><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{calibrationForm.AltAssetId}}</span></p>
-                    <p class="w250"><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>                    
-                    <p class="w250"><span class="label"><b>Location: </b></span><span class="value">{{calibrationForm.Location}}</span></p>
-                    <p class="w250"><span class="label"><b>Serial Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
-                    <p class="w250"><span class="label"><b>Control ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
-                    <p class="w250"><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
-                    <div class="clear"></div>
-                    <hr>
-                    <p class="w400"><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
-                    <p class="w400"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
-                    <p class="w400"><span class="label"><b>Vendor or Employee: </b></span>
+                <div id="adminsearchlocationajax" class="table-responsive default-bg clear col-md-12"> 
+                  <div class="col-md-6"> 
+                  <p><span class="label"><b>Asset ID: </b></span><span class="value" name ="AssetId">{{calibrationForm.AssetId}}</span></p>
+                    <p><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{calibrationForm.AltAssetId}}</span></p>
+                    <p><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>                    
+                    <p><span class="label"><b>Location: </b></span><span class="value">{{calibrationForm.Location}}</span></p>
+                    <p><span class="label"><b>Serial Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
+                    <p><span class="label"><b>Control ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                    <p ><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
+                    <!-- <div class="clear"></div>
+                    <hr> -->
+                    <p *ngIf="CalibrationId !=0" ><span class="label"><b>Last {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.LastCalibrationDate}}</span></p>
+                    <p *ngIf="CalibrationId !=0"><span class="label"><b>Last {{Certifytype}} By: </b></span><span class="value">{{calibrationForm.LastCalibrationBy}}</span></p>
+                    <p *ngIf="CalibrationId !=0"><span class="label"><b>Vendor or Employee: </b></span>
                         <span class="value">
-                            <label class="w60 text-left"><input type="radio" disabled="" checked=""> Vendor</label>
-                            <label class="w80 text-left"><input type="radio" disabled=""> Employee</label>
+                            <label class="text-left"><input name="olddata" type="radio" value="vendor1" [checked]="selectvendororemp" disabled=""> Vendor</label>
+                            <label class="text-left"><input name="olddata" type="radio" value="employee1" [checked]="selectvendororemp" disabled=""> Employee</label>
                         </span>
                     </p>
-                    <p class="w400"><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
+                    <p *ngIf="CalibrationId !=0" ><span class="label"><b>Next {{Certifytype}} Date: </b></span><span class="value">{{calibrationForm.NextCalibrationDate}}</span></p>
+                    </div>
                     <div class="clear"></div>
                     <hr>
                     <div *ngIf="isscheduleprocess== false"><a (click)="showscheduleprocess()" class="btn btn-primary add-verification-btn">Schedule a {{Certifytype}}</a></div>
@@ -433,77 +437,80 @@
                         <div class="col-sm-12"><h4>Schedule a {{Certifytype}}</h4></div>
                   <div class="col-sm-6">
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Vendor or Employee</label>
+                          <label class="control-label col-sm-4">Vendor or Employee <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <label class="w70 text-left"><input type="radio" name="verification-vendor-employee" value="vendor" (click)="checkedvendor(calibrationForm.ScheduleIsVendor)" [(ngModel)]="calibrationForm.ScheduleIsVendor"> Vendor</label>
-                            <label class="w80 text-left"><input type="radio" name="verification-vendor-employee" value="employee" (click)="checkedemployee(calibrationForm.ScheduleIsEmployee)" [(ngModel)]="calibrationForm.ScheduleIsEmployee"> Employee</label>  
-                          </div>
+                            <label class="w70 text-left"><input type="radio" name="Schedule" value="vendor"    (onChange)="enableSave()" (click)="checkedvendor(calibrationForm.IsVendororEmployee)" [(ngModel)]="calibrationForm.IsVendororEmployee"> Vendor</label>
+                            <label class="w80 text-left"><input type="radio" name="Schedule" value="employee"  (onChange)="enableSave()" (click)="checkedemployee(calibrationForm.IsVendororEmployee)" [(ngModel)]="calibrationForm.IsVendororEmployee"> Employee</label>  
+                          </div> 
                         </div>
                       <div class="form-group col-sm-12 verification-vendor-employee verification-vendor" *ngIf="isvendor">
-                          <label class="control-label col-sm-4">Select Vendor</label>
+                          <label style="margin-top: 23px" class="control-label col-sm-4">Select Vendor <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
                               <p-autoComplete  class="p-autoComplete-ctsm" field="name" name="vendorName" [dropdown]="true"
                               errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
                               (completeMethod)="filterWarentyVendor($event)"  [size]="30" [minLength]="1"
-                              [(ngModel)]="calibrationForm.VendorId"  #prellRevInsp="ngModel" >
+                              [(ngModel)]="calibrationForm.VendorId" (onChange)="enableSave()" #prellRevInsp="ngModel" required >
                           </p-autoComplete>
                               </div>
                              
                           </div>
                         </div>
                       <div class="form-group col-sm-12 verification-vendor-employee verification-employee" *ngIf="isemployee">
-                          <label class="control-label col-sm-4">Select Employee</label>
+                          <label class="control-label col-sm-4">Select Employee <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
                               <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete"  field="label" name="employee" [dropdown]="true"
                               errorMessage="Records not found" [forceSelection]="true" [suggestions]="employeeList"
-                              (completeMethod)="filterEmployee($event); " [size]="30" [minLength]="1" [(ngModel)]="calibrationForm.EmployeeId"
-                              emptyMessage="No Match Found">
+                              (completeMethod)="filterEmployee($event);" (onChange)="enableSave()" [size]="30" [minLength]="1" [(ngModel)]="calibrationForm.EmployeeId"
+                              emptyMessage="No Match Found" required>
                             </p-autoComplete>      
                               </div>                          
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Cost</label>
+                          <label class="control-label col-sm-4">Cost <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <input type="text" class="form-control" id="" name="">                           
+                            <input  required [(ngModel)]="calibrationForm.UnitCost"  (change)="formatToGlobal()"  (ngModelChange)="enableSave()" type="number" class="form-control" id="" name="">                           
                           </div>
                         </div>
                   </div> 
                      <div class="col-sm-6">
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">{{Certifytype}} Date</label>
+                          <label class="control-label col-sm-4">{{Certifytype}} Date <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                            <p-calendar [showIcon]="true" name ="CalibrationDate" [ngModelOptions]="{standalone: true}"
                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                [maxDate]="currentDate" (ngModelChange)="editorgetmemo($event)"
-                                [(ngModel)]="calibrationForm.CalibrationDate"></p-calendar> 
-                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#calibration-schedules" class="btn btn-link pull-right" style="padding: 0;">View Verification Schedule</a>
+                                [minDate]="currentDate" (onChange)="enableSave()" 
+                              
+                                [(ngModel)]="calibrationForm.CalibrationDate" required></p-calendar> 
+                            <a   data-toggle="modal" data-target="#CalibartionmgmtList" (click)="OpemCalibartionMgmtList(calibrationForm.AssetRecordId)" class="btn btn-link pull-right" style="padding: 0;">View {{Certifytype}} Schedule</a>
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Currency</label>
+                          <label class="control-label col-sm-4">Currency <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
-                            <p-dropdown placeholder="Select Currency"  appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
-                            class="p-dropdown-custom-md" [(ngModel)]="calibrationForm.currencyId">
+                            <p-dropdown placeholder="Select Currency" (onChange)="enableSave()"  appendTo="body" [baseZIndex]="9999"  [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
+                            class="p-dropdown-100" [(ngModel)]="calibrationForm.currencyId" required>
                            </p-dropdown>
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
                           <label class="control-label col-sm-4">{{Certifytype}} Memo</label>
                           <div class="col-sm-7">
-                            <div class="align_adh">
+
+                            <textarea  [(ngModel)]="calibrationForm.memo" class="h50 text" style="margin: 0px; height: 53px;">Sample Memo</textarea>
+                            <!-- <div class="align_adh">
                               <div [innerHTML]="calibrationForm.memo" class="text_editor_box"  [matTooltip]="parsedText(calibrationForm.memo)"
                                   style="width: 100% !important;"></div>
                               <i class="fa  fa fa-pencil contoel_v" data-toggle="modal"   matTooltipPosition="above"
                                   data-target="#textarea-popup" matTooltip="Memo"
                                   matTooltipPosition="above"
                                   (click)="onAddTextAreaInfo(currentAsset)"></i> 
-                          </div>
+                          </div> -->
                           </div>
                         </div>
-                    <button type="button" class="btn btn-info pull-right verification-process-btn" (click)="savecalibrationprocess()" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
+                    <button type="button" class="btn btn-info pull-right verification-process-btn" (click)="savecalibrationprocess()" [disabled]="disableSaveForEdit" id="" name="" data-toggle="tooltip" title="This will generate a PO if a vendor is selected to perfrom Calibration OR Send a notification to employee if employee is selected">Process</button>
                   </div> 
                         </div>
                 </div>
@@ -568,6 +575,89 @@
         <button type="button" class="btn btn-danger" (click)="closeviewModal()">Cancel</button>
 			</div>
 		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="CalibartionmgmtList" role="dialog" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 1000px;margin-left: -210px;">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closecalibartionviewModal()">&times;</button>
+				<h4 class="modal-title"> Details of Asset "{{calibrationForm.AssetId}}"</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-3">
+                      <p><span class="label"><b>Asset ID: </b></span><span class="value">{{calibrationForm.AssetId}}</span></p>                    
+                  </div>
+                  <div class="col-sm-3">
+                      <p><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>
+                  </div>
+                  <div class="col-sm-3">
+                      <p><span class="label"><b>Control Num: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                  </div>
+                  <div class="col-sm-3">
+                      <p><span class="label"><b>In service Date: </b></span><span class="value">{{calibrationForm.Inservicedate}}</span></p>
+                  </div> 
+                <div class="clear"></div>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Asset Existing Cost</th>
+                      <th>Calibration Schedule</th>
+                      <th>Calibrated Date</th>
+                      <th>Calibrated By</th>
+                      <th>Last Calibrated Memo</th>
+                      <th>Calibrated Cost</th>
+                      <th>PO Num</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="hrow" *ngFor="let caldata of allcalibrationbyidInfo; let k=index; ">
+                      <td>{{caldata.assetUnitCost}}</td>
+                      <td *ngIf="caldata.isedit==false">{{caldata.createdDate1}}</td>
+                      <td *ngIf="caldata.isedit">
+                        <p-calendar   [showIcon]="true"  name="CreatedDate{{k}}"  [ngModelOptions]="{standalone: true}"
+                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                             (ngModelChange)="editorgetmemo($event)"
+                             #createdDate="ngModel"
+                            [(ngModel)]="caldata.createdDate"></p-calendar> 
+                       </td>
+                       <td *ngIf="caldata.isedit==false">{{caldata.calibrationDate1}}</td>
+                       <td  *ngIf="caldata.isedit">
+                        <p-calendar  [showIcon]="true" name="calibrationDate{{k}}" [ngModelOptions]="{standalone: true}"
+                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                             (ngModelChange)="editorgetmemo($event)"
+                            [(ngModel)]="caldata.calibrationDate"></p-calendar> 
+                       </td>
+                       <td>{{caldata.lastCalibrationBy}}</td>
+                      <!-- <td *ngIf="caldata.isedit" class="dis-btns">
+                          <div class="inner-addon right-addon inline-block"> <i class="fa fa-pencil"></i>
+                              <input type="text" class="form-control names text ui-autocomplete-input" id="" name="" [(ngModel)]="caldata.lastCalibrationBy" autocomplete="off">
+                          </div>
+                        </td> -->
+                      <td *ngIf="caldata.isedit==false">
+                          <p [innerHTML]="caldata.memo"  class="h50 text"></p>
+                     </td>
+                     <td *ngIf="caldata.isedit">
+                         <textarea  [(ngModel)]="caldata.memo" class="h50 text" style="margin: 0px; height: 53px; width: 135px;">{{caldata.memo}}</textarea>
+                   </td>
+                   <td *ngIf="caldata.isedit==false">{{caldata.unitCost}}
+                   </td>
+                    <td *ngIf="caldata.isedit"><input [(ngModel)]="caldata.unitCost" type="text" class="text"></td>
+                      <td>NA</td>
+                      <td><span class="edt-btn"> <a  (click)="updaterowcalibartion(caldata)" class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a> </span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-info" (click)="Updatetcalibartion()">Update</button>
+                <button type="button" class="btn btn-danger"(click)="closecalibartionviewModal()">Close</button>
+            </div>
+          </div>
 	</div>
 </div>
 

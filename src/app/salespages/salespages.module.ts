@@ -53,7 +53,6 @@ import { CustomerDetailComponent } from "../components/sales/shared/components/a
 import { PartNumberFilterComponent } from "../components/sales/shared/components/add-sales-part-number/part-number-filter/part-number-filter.component";
 import { PartDetailsComponent } from "../components/sales/shared/components/add-sales-part-number/part-details/part-details.component";
 import { ItemMasterService } from "../services/itemMaster.service";
-import { SalesPartNumbersComponent } from "../components/sales/quotes/shared/components/sales-part-number/sales-part-numbers.component";
 import { StocklinePartDetailsComponent } from "../components/sales/shared/components/add-sales-part-number/stockline-part-details/stockline-part-details.component";
 import { SalesMarginComponent } from "../components/sales/shared/components/sales-margin/sales-margin..component";
 //Sales Order Components - Start
@@ -105,8 +104,27 @@ import { SOApprovalRuleComponent } from "../components/sales/order/shared/compon
 import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { SalesShippingLabelComponent } from "../components/sales/order/sales-order-shipping-label/sales-order-shipping-label.component";
 import { SalesOrderPrintInvoiceComponent } from "../components/sales/order/shared/components/sales-order-print-invoice/sales-order-print-invoice.component";
-import { AddPaymentComponent } from "../components/sales/shared/components/payment/invoice-payment.component";
 import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sales-order-Packaging-Label/sales-order-packaging-label.component";
+import { SalesOrderPrintTemplateComponent } from "../components/sales/order/sales-order-print-template/sales-order-print-template.component";
+import { SalesMultiShippingLabelComponent } from "../components/sales/order/sales-order-multi-shipping-label/sales-order-multi-shipping-label.component";
+import { SalesOrderMultiPackagingLabelComponent } from "../components/sales/order/sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component";
+import { SalesOrderMultiPickTicketComponent } from "../components/sales/order/sales-order-multi-pickTicket/sales-order-multi-pickTicket.component";
+import { SpeedQuoteListComponent } from "../components/sales/speed-quote/speed-quote-list/speed-quote-list.component";
+import { SpeedQuoteCreateComponent } from "../components/sales/speed-quote/speed-quote-create/speed-quote-create.component";
+import { SpeedQuoteComponent } from "../components/sales/speed-quote/speed-quote/speed-quote-component";
+import { SpeedQuoteService } from "../services/speedquote.service";
+import { SpeedQuoteEndpointService } from "../services/speedquote-endpoint.service";
+import { SpeedQuotePartNumberComponent } from "../components/sales/speed-quote/shared/components/speed-quote-part-number/speed-quote-part-number.component";
+import { AddSpeedQuotePartNumberComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/add-speed-quote-part-number.component";
+import { SpeedQuoteCustpmerDetailsComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-custpmer-details/speed-quote-custpmer-details.component";
+import { SpeedQuotePartNumberFilterComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-part-number-filter/speed-quote-part-number-filter.component";
+import { SpeedQuotePartDetailsComponent } from "../components/sales/speed-quote/shared/components/add-speed-quote-part-number/speed-quote-part-details/speed-quote-part-details.component";
+import { SpeedQuoteMarginComponent } from "../components/sales/speed-quote/shared/components/speed-quote-margin/speed-quote-margin.component";
+import { SpeedQuoteExclusionsComponent } from "../components/sales/speed-quote/shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
+import { SpeedQuoteViewComponent } from "../components/sales/speed-quote/shared/components/speed-quote-view/speed-quote-view.component";
+import { SpeedQuotePrintTemplateComponent } from "../components/sales/speed-quote/shared/components/speed-quote-print-template/speed-quote-print-template.component";
+import { SpeedQuoteExclusionPrintTemplateComponent } from "../components/sales/speed-quote/shared/components/speed-quote-exclusion-print-template/speed-quote-exclusion-print-template.component";
+import { SpeedQuotePrintingTemplateComponent } from "../components/sales/speed-quote/shared/components/speed-quote-printing-template/speed-quote-printing-template.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -153,9 +171,12 @@ import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sal
   declarations: [
     SalesPagesComponent,
     SalesQuoteListComponent,
+    SpeedQuoteListComponent,
     SalesOrderConfirmationListComponent,
     SalesQuoteCreateComponent,
+    SpeedQuoteCreateComponent,
     SalesQuoteComponent,
+    SpeedQuoteComponent,
     SalesApproveComponent,
     SalesPartNumberComponent,
     SalesAddressComponent,
@@ -164,7 +185,6 @@ import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sal
     CustomerDetailComponent,
     PartNumberFilterComponent,
     PartDetailsComponent,
-    SalesPartNumbersComponent,
     StocklinePartDetailsComponent,
     SalesMarginComponent,
     SalesOrderListComponent,
@@ -186,7 +206,9 @@ import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sal
     SalesQuotePrintTemplateComponent,
     SalesOrderCopyComponent,
     SalesStockLineDetailsViewComponent,
-    SalesOrderpickTicketComponent, SalesReserveUnreserveComponent, MemoComponent,
+    SalesOrderpickTicketComponent, 
+    SalesReserveUnreserveComponent, 
+    MemoComponent,
     EmailComponent,
     PhoneComponent,
     TextComponent,
@@ -203,10 +225,24 @@ import { SalesOrderPackagingLabelComponent } from "../components/sales/order/sal
     SalesOrderPickTicketsComponent,
     SalesShippingLabelComponent,
     SalesOrderPrintInvoiceComponent,
-    AddPaymentComponent,
-    SalesOrderPackagingLabelComponent
+    SalesOrderPackagingLabelComponent,
+    SalesOrderPrintTemplateComponent,
+    SalesMultiShippingLabelComponent,
+    SalesOrderMultiPackagingLabelComponent,
+    SalesOrderMultiPickTicketComponent,
+    SpeedQuotePartNumberComponent,
+    AddSpeedQuotePartNumberComponent,
+    SpeedQuoteCustpmerDetailsComponent,
+    SpeedQuotePartNumberFilterComponent,
+    SpeedQuotePartDetailsComponent,
+    SpeedQuoteMarginComponent,
+    SpeedQuoteExclusionsComponent,
+    SpeedQuoteViewComponent,
+    SpeedQuotePrintTemplateComponent,
+    SpeedQuoteExclusionPrintTemplateComponent,
+    SpeedQuotePrintingTemplateComponent
   ],
-  providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, AddPaymentComponent, SalesOrderPackagingLabelComponent]
+  providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe, SpeedQuoteService, SpeedQuoteEndpointService],
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent, SalesOrderPackagingLabelComponent, SalesMultiShippingLabelComponent, SalesOrderMultiPackagingLabelComponent, SalesOrderMultiPickTicketComponent]
 })
 export class SalesPagesModule { }

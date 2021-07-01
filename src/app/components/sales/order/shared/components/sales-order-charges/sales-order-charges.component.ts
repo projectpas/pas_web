@@ -7,7 +7,7 @@ import { AuthService } from '../../../../../../services/auth.service';
 import { CommonService } from '../../../../../../services/common.service';
 import { ActionService } from '../../../../../../Workflow/ActionService';
 import { VendorService } from '../../../../../../services/vendor.service';
-import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from '../../../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber } from '../../../../../../generic/autocomplete';
 import { SalesOrderCharge } from '../../../../../../models/sales/SalesOrderCharge';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from "@angular/forms";
@@ -31,6 +31,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     @Input() view: boolean = false;
     @Input() isQuote = false;
     @Input() isView: boolean = false;
+    salesOrderPartsList = [];
     markupList: any = [];
     mainEditingIndex: any;
     subEditingIndex: any;
@@ -110,7 +111,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.isSpinnerVisible = true;
         forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo),
             this.actionService.getCharges(),
-            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId),
+            this.salesOrderService.getSalesOrderParts(this.salesOrderId, this.deletedStatusInfo)
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
@@ -118,7 +120,18 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             this.markupList = res[2];
             this.setVendors();
             this.vendorList('');
+            this.setPartsData(res[3]);
         }, error => this.isSpinnerVisible = false);
+    }
+
+    setPartsData(res) {
+        if (res && res.length > 0) {
+            this.salesOrderPartsList = res;
+            this.isUpdate = true;
+        } else {
+            this.salesOrderPartsList = [];
+            this.isUpdate = false;
+        }
     }
 
     private vendorList(value) {
@@ -172,7 +185,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             }
             if (fromDelete) {
                 this.getTotalBillingAmount();
-                this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+                //this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+                this.updateChargesListForSO.emit(this.salesOrderChargesList);
             }
         }, error => {
             this.isSpinnerVisible = false;
@@ -180,14 +194,20 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     }
 
     setChargesData(res) {
-        if (res && res.length > 0) {
-            this.salesOrderChargesList = res;
+        //if (res && res.length > 0) {
+        if (res) {
+            this.salesOrderChargesList = res.salesOrderCharges;
             this.setVendors();
-            this.costPlusType = res[0].headerMarkupId;
-            this.overAllMarkup = res[0].headerMarkupPercentageId;
-            if (Number(this.costPlusType) == 3) {
-                this.chargesFlatBillingAmount = res[0].markupFixedPrice;
+            //this.costPlusType = res[0].headerMarkupId;
+            this.costPlusType = res.chargesBuildMethod;
+            //this.overAllMarkup = res[0].headerMarkupPercentageId;
+            if (res.salesOrderCharges.length > 0) {
+                this.overAllMarkup = res.salesOrderCharges[0].headerMarkupPercentageId;
             }
+            this.chargesFlatBillingAmount = this.formateCurrency(res.chargesFlatBillingAmount);
+            // if (Number(this.costPlusType) == 3) {
+            //     this.chargesFlatBillingAmount = res[0].markupFixedPrice;
+            // }
             this.isUpdate = true;
         } else {
             this.salesOrderChargesList = [];
@@ -327,9 +347,9 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             }
         })
 
-        let result = { 'data': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
+        let result = { 'salesOrderCharges': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'chargesBuildMethod': this.costPlusType, 'salesOrderId': this.salesOrderId }
         this.isSpinnerVisible = true;
-        this.salesOrderService.createSOCharge(sendData).subscribe(result => {
+        this.salesOrderService.createSOCharge(result).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 'Success',
@@ -337,7 +357,14 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
                 MessageSeverity.success
             );
             this.refreshOnDataSaveOrEditORDelete();
-            this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+            //this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
+            this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo).subscribe(response => {
+                if (response.salesOrderCharges && response.salesOrderCharges.length > 0) {
+                    this.salesOrderChargesList = response.salesOrderCharges;
+                    //this.saveChargesListForSO.emit(this.salesOrderChargesList);
+                    this.saveChargesListForSO.emit(response);
+                }
+            }, error => { });
         }, error => this.isSpinnerVisible = false)
         this.isSaveChargesDesabled = true;
         this.storedData = [];
@@ -615,5 +642,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.isSaveChargesDesabled = false;
     }
 
-    formatStringToNumberGlobal($event) { }
+    formatStringToNumberGlobal(val) {
+        let tempValue = Number(val.toString().replace(/\,/g, ''));
+        return formatStringToNumber(tempValue);
+    }
 }

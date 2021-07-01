@@ -121,7 +121,7 @@
                                     </span>
                                 </p>
                                 <p *ngIf="viewItemMaster.isExpirationDateAvailable">
-                                    <span class="label"><b>Lesser Of: </b></span><span class="value">{{viewItemMaster.expirationDate | date: 'MM-dd-yyyy'}}</span>
+                                    <span class="label"><b>Lesser Of: </b></span><span class="value">{{viewItemMaster.expirationDate | date: 'MM/dd/yyyy h:mm a'}}</span>
                                 </p>
                                 <div class="form-row" *ngIf="viewItemMaster.isExpirationDateAvailable">
                                     <div class="col-md-6">
@@ -347,7 +347,8 @@
                                 </p>
                                 <p>
                                     <span class="label"><b>Memo: </b></span><span class="value">
-                                        <p class="p-0 m-0 p_textEditor" [innerHTML]="viewItemMaster.memo"></p>
+                                        <p class=" m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(viewItemMaster.memo)" [innerHTML]="viewItemMaster.memo"></p>
                                     </span> 
                                 </p>
                                 <p>
@@ -388,7 +389,12 @@
 
                             <div class="col-sm-12">
 
-                                <p-table #table3 class="rpo-table-cstm rro-table-cstm"
+                                <app-common-documents [moduleName]="moduleName"   
+                                             [referenceId]="itemMasterRowData.itemMasterId"
+                                             [isViewMode]="true" [offLineUpload]="true">
+                                </app-common-documents>
+
+                                <!-- <p-table #table3 class="rpo-table-cstm rro-table-cstm"
                                          [paginator]="allDocumentsList.length > 0"
                                          [value]="allDocumentsList" [rows]="5" [pageLinks]="3"
                                          [rowsPerPageOptions]="[10,20,50,100]" [columns]="documentTableColumns" [scrollable]="true" scrollHeight="500px"
@@ -481,7 +487,7 @@
                                             </td>
                                         </tr>
                                     </ng-template>
-                                </p-table>
+                                </p-table> -->
 
                             </div>
 
@@ -633,8 +639,8 @@
             </div>            
             <div id="step2" class="panel-collapse collapse" style="height:0" aria-expanded="false">
                   
-                <div class="panel-body">
-                    <div class="modal-content p-1 aircraft-table-div">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
                          
                         <p-table #aircraft [value]="aircraftListDataValues"
                                  class="rpo-table-cstm rro-table-cstm"
@@ -748,8 +754,8 @@
                 </h4>
             </div>
             <div id="step3" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="modal-content p-1 aircraft-table-div">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
                         <p-table #ataDataTable class="rpo-table-cstm rro-table-cstm "
                                  [value]="ataMappedList" [rows]="ataPageSize" [columns]="atasub"
                                  [scrollable]="true" [style]="{width:'100%'}" [paginator]="true"
@@ -944,14 +950,14 @@
                                         <td class="text-right"> <p> 
                                             {{field.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td> <p> {{field.pP_LastListPriceDate | date:'MM/dd/yyyy h:mm a'}}</p></td>
                                         <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p > {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td> <p > {{field.pP_LastPurchaseDiscDate | date:'MM/dd/yyyy h:mm a'}}</p></td>
                                         <td class="text-right"> <p> 
                                             {{field.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
@@ -966,7 +972,7 @@
                                         <td class="text-right"> <p> 
                                             {{field.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p > {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td> <p > {{field.sP_FSP_LastFlatPriceDate | date:'MM/dd/yyyy h:mm a'}}</p></td>
                                         <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
@@ -974,7 +980,7 @@
                                             {{field.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td> <p > 
-                                            {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM-dd-yyyy'}}</p>
+                                            {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM/dd/yyyy h:mm a'}}</p>
                                         </td>
                                         <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
@@ -986,12 +992,12 @@
                                             {{field.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td> <p> 
-                                            {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy'}}</p>
+                                            {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                                         </td>
                                         <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <a class="btn nobg"
                                             (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)"
                                             matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
@@ -1408,9 +1414,10 @@
                                 <th>Created Date</th>
                                 <th>Updated By</th>
                                 <th>Updated Date</th>
-                                <th>Is Deleted</th>
+                                <th>Is Delete</th>
                             </tr>
                         </thead>
+                        <tbody>
 
                         <tr *ngFor="let audit of aircraftauditHistory; let i = index">
                             <td [ngStyle]="{
@@ -1450,8 +1457,15 @@
                             <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
                             <td>{{ audit.createdBy }}</td>
                             <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                            <td class="background-white"><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                            <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
+                                       <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                    </label>
+                                </span>
+                            </td>
                         </tr>
+                        </tbody>
                     </table>
                     </div>
                 </div>
@@ -1535,11 +1549,16 @@
                                     {{audit.ataSubChapterCode}}
                                 </td>
                                 <td>{{ audit.createdBy }}</td>
-                                <td><p>{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
 
                                 <td>{{ audit.updatedBy }}</td>
-                                <td><p>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                                <td><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td><p>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                           <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                        </label>
+                                    </span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1674,7 +1693,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >    {{ audit.pP_LastListPriceDate  | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
@@ -1696,7 +1715,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >  {{ audit.pP_LastPurchaseDiscDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
@@ -1745,7 +1764,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
@@ -1766,7 +1785,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
@@ -1794,7 +1813,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p >   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                          <p >   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM/dd/yyyy h:mm a' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
@@ -1806,11 +1825,17 @@
                       
                       
                       
-                        <td><p > {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                         <td><p > {{ audit.createdBy }}</p></td>
-                        <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p> {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                         <td><p > {{ audit.updatedBy }}</p></td>
-                        <td><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        <td class="text-center width-60">
+                            <span class="value">
+                              <label class="wauto">
+                                  <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                </label>
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>

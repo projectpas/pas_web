@@ -116,9 +116,9 @@ export class AddressComponentComponent implements OnInit {
 		this.getCountriesList();
 		this.loadShippingViaList();
 		this.showIsPoOnlyButton = this.addressType == AddressTypeEnum.PurchaseOrder;
-		this.sourcePoApproval.shipToUserTypeId = this.companyModuleId;
-		this.sourcePoApproval.billToUserTypeId = this.companyModuleId;
-		
+		this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
+		this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
+
 		if (this.id !== 0 && this.id !== undefined) {
 			if (this.addressType == AddressTypeEnum.PurchaseOrder) {
 				this.ModuleID = AppModuleEnum.PurchaseOrder;
@@ -144,9 +144,15 @@ export class AddressComponentComponent implements OnInit {
 					this.getShipToBillToDropDown(res)
 				});
 			}
-			else if(this.addressType == AddressTypeEnum.ExchangeQUote){
+			else if (this.addressType == AddressTypeEnum.ExchangeQUote) {
 				this.ModuleID = AppModuleEnum.ExchangeQuote;
-				this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
+				this.commonService.getAllAddEditID(this.id, this.ModuleID).subscribe(res => {
+					this.getShipToBillToDropDown(res)
+				});
+			}
+			else if (this.addressType == AddressTypeEnum.ExchangeSalesOrder) {
+				this.ModuleID = AppModuleEnum.ExchangeSalesOrder;
+				this.commonService.getAllAddEditID(this.id, this.ModuleID).subscribe(res => {
 					this.getShipToBillToDropDown(res)
 				});
 			}
@@ -157,8 +163,8 @@ export class AddressComponentComponent implements OnInit {
 
 	getShipToBillToDropDown(res) {
 		const result = res;
-		var shipUsertype = 9;
-		var billUsertype = 9;
+		var shipUsertype = 2;
+		var billUsertype = 2;
 		if (result && result.length > 0) {
 			result.forEach(x => {
 				if (x.label == "SHIP_TYPE") {
@@ -176,6 +182,11 @@ export class AddressComponentComponent implements OnInit {
 					this.userShipingIdList.push(x.value);
 				}
 				else if (x.label == "MSCOMPANYID") {
+					this.defaultMSCOMPANYID = x.value;
+					this.userBillingIdList.push(x.value);
+					this.userShipingIdList.push(x.value);
+				}
+				else if (x.label == "VENDORID") {
 					this.defaultMSCOMPANYID = x.value;
 					this.userBillingIdList.push(x.value);
 					this.userShipingIdList.push(x.value);
@@ -205,13 +216,11 @@ export class AddressComponentComponent implements OnInit {
 					this.isSpinnerVisible = false;
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+
 				});
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+
 			});
 
 		}
@@ -401,8 +410,8 @@ export class AddressComponentComponent implements OnInit {
 			this.allShipViaInfo = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			// const errorLog = err;
+			// this.errorMessageHandler(errorLog);
 		});
 	}
 
@@ -411,8 +420,8 @@ export class AddressComponentComponent implements OnInit {
 			this.allCountriesList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			// const errorLog = err;
+			// this.errorMessageHandler(errorLog);
 		})
 	}
 
@@ -444,34 +453,34 @@ export class AddressComponentComponent implements OnInit {
 		}
 			, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 	}
 
-	errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if (errorLog.message) {
-			if (errorLog.error && errorLog.error.errors && errorLog.error.errors.length > 0) {
-				for (let i = 0; i < errorLog.error.errors.length; i++) {
-					msg = msg + errorLog.error.errors[i].message + '<br/>'
-				}
-			}
-			this.alertService.showMessage(
-				errorLog.error.message,
-				msg,
-				MessageSeverity.error
-			);
-		}
-		else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			);
-		}
-	}
+	// errorMessageHandler(log) {
+	// 	const errorLog = log;
+	// 	var msg = '';
+	// 	if (errorLog.message) {
+	// 		if (errorLog.error && errorLog.error.errors && errorLog.error.errors.length > 0) {
+	// 			for (let i = 0; i < errorLog.error.errors.length; i++) {
+	// 				msg = msg + errorLog.error.errors[i].message + '<br/>'
+	// 			}
+	// 		}
+	// 		this.alertService.showMessage(
+	// 			errorLog.error.message,
+	// 			msg,
+	// 			MessageSeverity.error
+	// 		);
+	// 	}
+	// 	else {
+	// 		this.alertService.showMessage(
+	// 			'Error',
+	// 			log.error,
+	// 			MessageSeverity.error
+	// 		);
+	// 	}
+	// }
 
 	onModuleTypeChange() {
 		if (this.sourcePoApproval.shipToUserTypeId == 9) {
@@ -610,8 +619,8 @@ export class AddressComponentComponent implements OnInit {
 				);
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			await this.commonService.createShipVia(customerData).subscribe(response => {
@@ -624,8 +633,8 @@ export class AddressComponentComponent implements OnInit {
 				);
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			})
 		}
 
@@ -642,7 +651,7 @@ export class AddressComponentComponent implements OnInit {
 		}
 	}
 	getShipViaDetailsForShipTo(id?) {
-		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue,this.authService.currentUser.masterCompanyId).subscribe(response => {
+		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue, this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.shipViaList = response;
 			if (this.shipViaList && this.shipViaList.length != 0) {
 				for (var i = 0; i < this.shipViaList.length; i++) {
@@ -659,8 +668,8 @@ export class AddressComponentComponent implements OnInit {
 		},
 			err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				///const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			})
 	}
 
@@ -678,8 +687,8 @@ export class AddressComponentComponent implements OnInit {
 
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			})
 		}
 	}
@@ -744,8 +753,8 @@ export class AddressComponentComponent implements OnInit {
 
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -784,8 +793,8 @@ export class AddressComponentComponent implements OnInit {
 					}
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -840,10 +849,24 @@ export class AddressComponentComponent implements OnInit {
 					}
 					if (this.shipToContactDataList && this.shipToContactDataList.length > 0) {
 						this.sourcePoApproval.shipToContactId = this.shipToContactDataList[0].contactId;
+						this.shipToContactDataList.forEach(
+							x => {
+								if (x.isPrimary) {
+									this.sourcePoApproval.shipToContactId = x.contactId;
+								}
+							}
+						)
 					}
 
 					if (this.shipViaList && this.shipViaList.length > 0) {
 						this.sourcePoApproval.shippingViaId = this.shipViaList[0].shippingViaId;
+						this.shipViaList.forEach(
+							x => {
+								if (x.isPrimary) {
+									this.sourcePoApproval.shippingViaId = x.shippingViaId;
+								}
+							}
+						)
 						this.getShipViaDetails(this.sourcePoApproval.shippingViaId);
 					}
 
@@ -874,8 +897,8 @@ export class AddressComponentComponent implements OnInit {
 
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -935,6 +958,13 @@ export class AddressComponentComponent implements OnInit {
 
 					if (this.billToContactDataList && this.billToContactDataList.length > 0) {
 						this.sourcePoApproval.billToContactId = this.billToContactDataList[0].contactId;
+						this.billToContactDataList.forEach(
+							x => {
+								if (x.isPrimary) {
+									this.sourcePoApproval.billToContactId = x.contactId;
+								}
+							}
+						)
 					}
 
 					this.billingSieListOriginal = this.billToSite.map(x => {
@@ -947,8 +977,8 @@ export class AddressComponentComponent implements OnInit {
 
 				}, err => {
 					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					//const errorLog = err;
+					//this.errorMessageHandler(errorLog);
 				});
 		}
 	}
@@ -1046,8 +1076,8 @@ export class AddressComponentComponent implements OnInit {
 			this.userShipingList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		});
 	}
 
@@ -1067,8 +1097,8 @@ export class AddressComponentComponent implements OnInit {
 			this.userBillingList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		});
 	}
 
@@ -1187,8 +1217,14 @@ export class AddressComponentComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			} else {
 				this.isEditModeAdd = false;
-				this.sourcePoApproval.shipToUserTypeId = this.companyModuleId;
-				this.sourcePoApproval.billToUserTypeId = this.companyModuleId;
+				if (this.ModuleID == AppModuleEnum.SalesOrder || this.ModuleID == AppModuleEnum.SalesQuate || this.ModuleID == AppModuleEnum.ExchangeQuote) {
+					this.sourcePoApproval.shipToUserTypeId = 1;
+					this.sourcePoApproval.billToUserTypeId = 1;
+				}
+				else {
+					this.sourcePoApproval.shipToUserTypeId = this.vendorModuleId;
+					this.sourcePoApproval.billToUserTypeId = this.vendorModuleId;
+				}
 				if (this.defaultMSCOMPANYID > 0) {
 					this.sourcePoApproval.shipToUserId = getObjectById('userID', this.defaultMSCOMPANYID, this.userShipingList),
 						this.sourcePoApproval.billToUserId = getObjectById('userID', this.defaultMSCOMPANYID, this.userBillingList);
@@ -1209,8 +1245,8 @@ export class AddressComponentComponent implements OnInit {
 
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		})
 
 	}
@@ -1351,8 +1387,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1372,8 +1408,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1416,8 +1452,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1437,8 +1473,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1478,8 +1514,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1499,8 +1535,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1542,8 +1578,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		} else {
 			this.commonService.createAllAddres(addressData).subscribe(response => {
@@ -1563,8 +1599,8 @@ export class AddressComponentComponent implements OnInit {
 				}
 			}, err => {
 				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
@@ -1833,8 +1869,8 @@ export class AddressComponentComponent implements OnInit {
 			);
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		});
 	}
 

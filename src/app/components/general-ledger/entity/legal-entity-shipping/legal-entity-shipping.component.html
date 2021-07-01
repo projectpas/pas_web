@@ -880,7 +880,7 @@
     <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static" class="popup-blur">
         <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
         <div class="modal-header">
-            <h4 class="modal-title">History of  Ship Via  Info</h4>
+            <h4 class="modal-title">History of Ship Via Info</h4>
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -888,7 +888,7 @@
         <div class="modal-body">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                 <div class="tableFixHead">  
-                <table class="table table-bordered header-table-width">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Ship Via <span class="clr-red">*</span></th>
@@ -903,11 +903,13 @@
                             <th>Is Deleted</th>
                         </tr>
                     </thead>
+                    <tbody>
                     <tr *ngFor="let audit of shippingViaauditHisory; let i = index;">
                         <td [ngStyle]="{'color':  getColorCodeForShipViaHistory(i, 'shipViaName', audit.shipViaName)  ? 'black' : 'red'  }">{{audit.shipViaName}}</td>
                         <td [ngStyle]="{'color':  getColorCodeForShipViaHistory(i, 'shippingAccountInfo', audit.shippingAccountInfo)  ? 'black' : 'red'  }">{{audit.shippingAccountInfo}}</td>
                         <td [ngStyle]="{'color':  getColorCodeForShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
-                            <span  [innerHTML]="audit.memo" class="text_editor_box" style="border: none;"></span>
+                            <span  [innerHTML]="audit.memo" class="text_editor_box m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                            [matTooltip]="parsedText(audit.memo)" style="border: none;"></span>
                         </td>
                         <td class="text-center">
                             <span class="value">
@@ -935,9 +937,8 @@
                               </label>
                             </span>
                           </td>
-
-
                     </tr>
+                    </tbody>
                 </table>
                 </div>
             </div>
@@ -1390,7 +1391,8 @@
                             </td>
                             <td style="width: auto" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                 <!-- {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}} -->
-                                <span *ngIf="col.field == 'memo'" [innerHTML]="rowData[col.field]" class="text_editor_box" style="border: none;"></span>
+                                <span *ngIf="col.field == 'memo'" [innerHTML]="rowData[col.field]" class="text_editor_box m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                [matTooltip]="parsedText(rowData[col.field])" style="border: none;"></span>
                                 <span *ngIf="col.field != 'memo'">
                                   {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                 </span>
@@ -1504,7 +1506,7 @@
         <div class="modal-body">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                 <div class="tableFixHead">  
-                <table class="table table-bordered header-table-width">
+                <table class="table table-bordered ">
                     <thead>
                         <tr>
                             <th>Ship Via <span class="clr-red">*</span></th>
@@ -1521,11 +1523,13 @@
 
                         </tr>
                     </thead>
+                    <tbody>
                     <tr *ngFor="let audit of intershippingViaauditHisory; let i = index;">
                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shipViaName', audit.shipViaName)  ? 'black' : 'red'  }">{{audit.shipViaName}}</td>
                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shippingAccountInfo', audit.shippingAccountInfo)  ? 'black' : 'red'  }">{{audit.shippingAccountInfo}}</td>
                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
-                            <span  [innerHTML]="audit.memo" class="text_editor_box" style="border: none;"></span>
+                            <span  [innerHTML]="audit.memo" class="text_editor_box  m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                            [matTooltip]="parsedText(audit.memo)" style="border: none;"></span>
                            </td>
                        
                        
@@ -1556,6 +1560,7 @@
                             </span>
                           </td>
                     </tr>
+                    </tbody>
                 </table>
                 </div>
             </div>
@@ -1879,7 +1884,8 @@
                                 </span>
                             </td>
                             <td  style="width: 120px;" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
-                              <span *ngIf="col.field == 'memo'" [innerHTML]="rowData[col.field]" class="text_editor_box" style="border: none;"></span>
+                              <span *ngIf="col.field == 'memo'" [innerHTML]="rowData[col.field]" class="text_editor_box  m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                              [matTooltip]="parsedText(rowData[col.field])" style="border: none;"></span>
                               <span *ngIf="col.field != 'memo'">
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                               </span>
@@ -2028,7 +2034,7 @@
                     <p><span class="label"><b>ShippingId: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingId}}</span></p>-->
                     <p><span class="label"  ><b>Memo: </b></span><span class="value"> 
                         <span  [innerHTML]="sourceViewforInterShippingVia.memo"   matTooltipPosition="above"
-                         [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" class="text_editor_box memo-p"
+                         [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" class="text_editor_box memo-p  m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
                         ></span>
                         </span></p>
                     <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforInterShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
@@ -2094,7 +2100,7 @@
                     <p><span class="label"><b>Memo: </b></span><span class="value">
                         <span [innerHTML]="sourceViewforDomesticShippingVia.memo" matTooltipPosition="above"
                          [matTooltip]="parsedText(sourceViewforDomesticShippingVia.memo)" 
-                         class="text_editor_box memo-p"
+                         class="text_editor_box memo-p m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
                      ></span>
                         </span></p>
                     <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforDomesticShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
@@ -2212,7 +2218,7 @@
     <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
-            <table class="table table-bordered header-table-width">
+            <table class="table table-bordered ">
                 <thead>
                     <tr>
                         <th>Site Name <span class="clr-red"></span></th>
@@ -2232,6 +2238,7 @@
                         <th>Is Deleted</th>
                     </tr>
                 </thead>
+                <tbody>
                 <tr *ngFor="let audit of shippingauditHisory; let i = index;">
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">{{audit.siteName}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'attention', audit.attention)  ? 'black' : 'red'  }">{{audit.attention}}</td>
@@ -2267,6 +2274,7 @@
                         </span>
                       </td>
                 </tr>
+                </tbody>
             </table>
             </div>
         </div>
@@ -2300,7 +2308,7 @@
     <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
-            <table class="table table-bordered header-table-width">
+            <table class="table table-bordered ">
                 <thead>
                     <tr>
                         <th>Export License</th>
@@ -2319,6 +2327,7 @@
                         <th>Is Deleted</th>
                     </tr>
                 </thead>
+                <tbody>
                 <tr *ngFor="let audit of interShippingauditHisory; let i = index;">
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'exportLicense', audit.exportLicense)  ? 'black' : 'red'  }">{{audit.exportLicense}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">{{audit.description}}</td>
@@ -2354,6 +2363,7 @@
                         </span>
                       </td>
                 </tr>
+                </tbody>
             </table>
             </div>
         </div>

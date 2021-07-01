@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import {
   NgForm,
-  FormBuilder,
   FormGroup
 } from "@angular/forms";
 import { CustomerSearchQuery } from "../models/customer-search-query";
@@ -24,7 +23,6 @@ import { EmployeeService } from "../../../../services/employee.service";
 import { AuthService } from "../../../../services/auth.service";
 import { Router } from "@angular/router";
 import { getValueFromArrayOfObjectById } from "../../../../generic/autocomplete";
-
 import {
   getObjectById,
   editValueAssignByCondition
@@ -178,13 +176,14 @@ export class SalesQuoteCreateComponent implements OnInit {
   managementValidCheck: boolean;
   moduleName: any = "SalesQuote";
   enforceApproval: boolean;
+  effectiveDate: Date;
+  todayDate: Date = new Date();
 
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
     private salesQuoteService: SalesQuoteService,
-    private formBuilder: FormBuilder,
     private commonservice: CommonService,
     private commonService: CommonService,
     public currencyService: CurrencyService,
@@ -342,10 +341,10 @@ export class SalesQuoteCreateComponent implements OnInit {
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
-      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(),this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, [warningTypeId].join(), 0),
+      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(), this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(), this.masterCompanyId),
 
       this.salesQuoteService.getAllSalesOrderQuoteSettings(this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
@@ -729,7 +728,16 @@ export class SalesQuoteCreateComponent implements OnInit {
       if (!this.isEdit) {
         this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
       }
-
+      else {
+        if (this.salesQuote != undefined) {
+          this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList);
+          this.salesQuote.employeeName = getObjectById(
+            "value",
+            this.salesOrderQuoteObj.employeeId,
+            this.allEmployeeList
+          );
+        }
+      }
       this.changeDetector.detectChanges();
     }, err => {
       this.isSpinnerVisible = false;
@@ -890,6 +898,8 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesOrderQuoteObj = this.salesQuoteView.salesOrderQuote;
         this.verifySalesQuoteConversion(this.salesQuoteView.verificationResult);
         this.toggle_po_header = false;
+        this.enforceApproval = this.salesOrderQuoteObj.isEnforceApproval;
+        this.effectiveDate = this.salesOrderQuoteObj.enforceEffectiveDate;
       }
       if (this.deletePartsWhileCopieng == true) {
         this.salesQuoteView.parts = [];
@@ -984,12 +994,14 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.salesQuote.statusName = validDaysObject.defaultStatusName;
         }
         this.defaultSettingPriority = validDaysObject.defaultPriorityId;
-        this.enforceApproval = validDaysObject.isApprovalRule;
+        if (!this.id) {
+          this.enforceApproval = validDaysObject.isApprovalRule;
+          this.effectiveDate = validDaysObject.effectiveDate;
+        }
       } else {
         this.salesQuote.validForDays = 10;
         if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
           this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
-
         }
       }
     } else {
@@ -998,6 +1010,11 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
       }
     }
+  }
+
+  checkEnforceInternalApproval() {
+    return this.enforceApproval &&
+      new Date(this.todayDate) >= new Date(this.effectiveDate);
   }
 
   getNewSalesQuoteInstance(customerId: number, isInitialCall = false) {
@@ -1092,6 +1109,10 @@ export class SalesQuoteCreateComponent implements OnInit {
       : 1;
   }
 
+  onCreateNewVersionEvent(event) {
+    this.onSubmit(true, true);
+  }
+
   onSubmit(submitType: Boolean, createNewVersion: boolean = false) {
     this.errorMessages = [];
     let haveError = false;
@@ -1155,6 +1176,8 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesOrderQuote.buId = this.salesQuote.buId;
       this.salesOrderQuote.departmentId = this.salesQuote.departmentId;
       this.salesOrderQuote.divisionId = this.salesQuote.divisionId;
+      this.salesOrderQuote.enforceEffectiveDate = this.effectiveDate;
+      this.salesOrderQuote.isEnforceApproval = this.enforceApproval;
       this.salesOrderQuote.salesPersonId = editValueAssignByCondition(
         "employeeId",
         this.salesQuote.salesPersonName
@@ -1265,7 +1288,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Request Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
             }
             if (esdate < opendate) {
               this.isSpinnerVisible = false;
@@ -1274,7 +1297,7 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
             }
             if (pdate < opendate) {
               this.isSpinnerVisible = false;
@@ -1283,12 +1306,18 @@ export class SalesQuoteCreateComponent implements OnInit {
                 errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
                 partNameAdded = true;
               }
-              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be greater than opem date."
+              errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
             }
           }
         }
-        if (!invalidParts && !invalidDate) {
-          let partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+
+        let partNumberObj;
+        if (this.isCopyMode) {
+          partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
+          partList.push(partNumberObj);
+        }
+        else if (!invalidParts && !invalidDate) {
+          partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
       }
@@ -1375,116 +1404,116 @@ export class SalesQuoteCreateComponent implements OnInit {
     }
   }
 
-  saveSalesQuoteHeader() {
-    if (this.headerInfo.companyId == "null") {
-      let haveError = false;
-      if (this.salesQuote.quoteTypeId <= 0) {
-        this.errorMessages.push("Please select Quote Type");
-        haveError = true;
-      }
-      if (!this.salesQuote.openDate) {
-        this.errorMessages.push("Please select Open Date");
-        haveError = true;
-      }
-      if (this.salesQuote.validForDays < 1) {
-        this.errorMessages.push("Please enter Valid For (Days)");
-        haveError = true;
-      }
-      if (!this.salesQuote.quoteExpiryDate) {
-        this.errorMessages.push("Please select Quote Expiry Date");
-        haveError = true;
-      }
-      if (this.salesQuote.accountTypeId <= 0) {
-        this.errorMessages.push("Please select Account Type");
-        haveError = true;
-      }
-      if (this.salesQuote.customerContactId < 0) {
-        this.errorMessages.push("Please select Customer Contact");
-        haveError = true;
-      }
-      if (!this.salesQuote.customerReferenceName) {
-        this.errorMessages.push("Please enter Customer Reference Name");
-        haveError = true;
-      }
-      if (!this.salesQuote.employeeId) {
-        this.errorMessages.push("Please select employee");
-        haveError = true;
-      }
-      if (this.salesQuote.managementStructureId <= 0) {
-        this.errorMessages.push("Please select Management Structure");
-        haveError = true;
-      }
+  // saveSalesQuoteHeader() {
+  //   if (this.headerInfo.companyId == "null") {
+  //     let haveError = false;
+  //     if (this.salesQuote.quoteTypeId <= 0) {
+  //       this.errorMessages.push("Please select Quote Type");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.openDate) {
+  //       this.errorMessages.push("Please select Open Date");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.validForDays < 1) {
+  //       this.errorMessages.push("Please enter Valid For (Days)");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.quoteExpiryDate) {
+  //       this.errorMessages.push("Please select Quote Expiry Date");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.accountTypeId <= 0) {
+  //       this.errorMessages.push("Please select Account Type");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.customerContactId < 0) {
+  //       this.errorMessages.push("Please select Customer Contact");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.customerReferenceName) {
+  //       this.errorMessages.push("Please enter Customer Reference Name");
+  //       haveError = true;
+  //     }
+  //     if (!this.salesQuote.employeeId) {
+  //       this.errorMessages.push("Please select employee");
+  //       haveError = true;
+  //     }
+  //     if (this.salesQuote.managementStructureId <= 0) {
+  //       this.errorMessages.push("Please select Management Structure");
+  //       haveError = true;
+  //     }
 
-      if (haveError) {
-        let content = this.errorMessagePop;
-        this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-        this.display = true;
-      } else {
-        this.display = false;
-        this.isSpinnerVisible = true;
-      }
-    }
-    else {
-      const headerInfoObj = {
-        quoteTypeId: this.salesQuote.quoteTypeId,
-        openDate: this.salesQuote.openDate.toDateString(),
-        validForDays: this.salesQuote.validForDays,
-        quoteExpireDate: this.salesQuote.quoteExpiryDate.toDateString(),
-        accountTypeId: this.salesQuote.accountTypeId,
-        customerId: this.salesQuote.customerId,
-        customerContactId: this.salesQuote.customerContactId,
-        customerReference: this.salesQuote.customerReferenceName,
-        contractReference: this.salesQuote.contractReferenceName,
-        managementStructureId: this.salesQuote.managementStructureId,
-        salesOrderQuoteNumber: this.salesQuote.salesOrderQuoteNumber,
-        versionNumber: this.salesQuote.versionNumber,
-        salesPersonId: editValueAssignByCondition("employeeId", this.salesQuote.salesPersonName),
-        agentId: editValueAssignByCondition("employeeId", this.salesQuote.agentId),
-        agentName: editValueAssignByCondition("name", this.salesQuote.agentId),
-        customerSeviceRepId: editValueAssignByCondition("employeeId", this.salesQuote.customerServiceRepName),
-        probabilityId: this.salesQuote.probabilityId,
-        employeeId: editValueAssignByCondition("employeeId", this.salesQuote.employeeId),//editValueAssignByCondition("value", this.salesQuote.employeeName),
-        leadSourceId: this.salesQuote.leadSourceId,
-        creditLimit: this.salesQuote.creditLimit,
-        creditTermId: this.salesQuote.creditLimitTermsId,
-        restrictPMA: this.salesQuote.restrictPMA,
-        restrictDER: this.salesQuote.restrictDER,
-        currencyId: this.salesQuote.currencyId,
-        customerWarningId: this.salesQuote.warningId[0],
-        memo: this.salesQuote.memo,
-        notes: this.salesQuote.notes,
-        createdBy: this.userName,
-        updatedBy: this.userName,
-        createdOn: new Date().toDateString(),
-        updatedOn: new Date().toDateString()
-      }
+  //     if (haveError) {
+  //       let content = this.errorMessagePop;
+  //       this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  //       this.display = true;
+  //     } else {
+  //       this.display = false;
+  //       this.isSpinnerVisible = true;
+  //     }
+  //   }
+  //   else {
+  //     const headerInfoObj = {
+  //       quoteTypeId: this.salesQuote.quoteTypeId,
+  //       openDate: this.salesQuote.openDate.toDateString(),
+  //       validForDays: this.salesQuote.validForDays,
+  //       quoteExpireDate: this.salesQuote.quoteExpiryDate.toDateString(),
+  //       accountTypeId: this.salesQuote.accountTypeId,
+  //       customerId: this.salesQuote.customerId,
+  //       customerContactId: this.salesQuote.customerContactId,
+  //       customerReference: this.salesQuote.customerReferenceName,
+  //       contractReference: this.salesQuote.contractReferenceName,
+  //       managementStructureId: this.salesQuote.managementStructureId,
+  //       salesOrderQuoteNumber: this.salesQuote.salesOrderQuoteNumber,
+  //       versionNumber: this.salesQuote.versionNumber,
+  //       salesPersonId: editValueAssignByCondition("employeeId", this.salesQuote.salesPersonName),
+  //       agentId: editValueAssignByCondition("employeeId", this.salesQuote.agentId),
+  //       agentName: editValueAssignByCondition("name", this.salesQuote.agentId),
+  //       customerSeviceRepId: editValueAssignByCondition("employeeId", this.salesQuote.customerServiceRepName),
+  //       probabilityId: this.salesQuote.probabilityId,
+  //       employeeId: editValueAssignByCondition("employeeId", this.salesQuote.employeeId),//editValueAssignByCondition("value", this.salesQuote.employeeName),
+  //       leadSourceId: this.salesQuote.leadSourceId,
+  //       creditLimit: this.salesQuote.creditLimit,
+  //       creditTermId: this.salesQuote.creditLimitTermsId,
+  //       restrictPMA: this.salesQuote.restrictPMA,
+  //       restrictDER: this.salesQuote.restrictDER,
+  //       currencyId: this.salesQuote.currencyId,
+  //       customerWarningId: this.salesQuote.warningId[0],
+  //       memo: this.salesQuote.memo,
+  //       notes: this.salesQuote.notes,
+  //       createdBy: this.userName,
+  //       updatedBy: this.userName,
+  //       createdOn: new Date().toDateString(),
+  //       updatedOn: new Date().toDateString()
+  //     }
 
-      if (!this.isCreateModeHeader) {
-        this.salesQuoteService.saveSalesQuoteHeader({ ...headerInfoObj }).subscribe(saveddata => {
-          this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
-          this.qoId = saveddata.salesOrderQuoteId;
-          this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
+  //     if (!this.isCreateModeHeader) {
+  //       this.salesQuoteService.saveSalesQuoteHeader({ ...headerInfoObj }).subscribe(saveddata => {
+  //         this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
+  //         this.qoId = saveddata.salesOrderQuoteId;
+  //         this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
 
-          if (this.qoId) {
-            this.isCreateModeHeader = true;
-          }
-        }, error => {
-          this.isSpinnerVisible = false;
-        })
-      } else {
-        const poHeaderEdit = { ...headerInfoObj, SalesOrderQuoteId: parseInt(this.qoId) };
-        this.salesQuoteService.saveSalesQuoteHeader({ ...poHeaderEdit }).subscribe(saveddata => {
-          this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
+  //         if (this.qoId) {
+  //           this.isCreateModeHeader = true;
+  //         }
+  //       }, error => {
+  //         this.isSpinnerVisible = false;
+  //       })
+  //     } else {
+  //       const poHeaderEdit = { ...headerInfoObj, SalesOrderQuoteId: parseInt(this.qoId) };
+  //       this.salesQuoteService.saveSalesQuoteHeader({ ...poHeaderEdit }).subscribe(saveddata => {
+  //         this.SalesOrderQuoteId = saveddata.salesOrderQuoteId;
 
-          this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
+  //         this.headerInfo.salesOrderQuoteNumber = saveddata.salesOrderQuoteNumber;
 
-        }, error => {
-          this.isSpinnerVisible = false;
-        });
-      }
-      this.toggle_po_header = true;
-    }
-  }
+  //       }, error => {
+  //         this.isSpinnerVisible = false;
+  //       });
+  //     }
+  //     this.toggle_po_header = true;
+  //   }
+  // }
 
   quote: any = {
     quoteTypeId: null,
@@ -1530,7 +1559,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.isSpinnerVisible = true;
     this.salesOrderConversionCriteriaObj.salesOrderQuoteId = this.id;
 
-    this.salesQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj).subscribe(
+    this.salesQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj, this.employeeId).subscribe(
       results => {
         this.alertService.showMessage(
           "Success",
@@ -1552,21 +1581,24 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   initiateQuoteCopying() {
-    let content = this.copyQuotePopup;
-    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    // let content = this.copyQuotePopup;
+    // this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    this.copySalesOrderQuote();
   }
 
   copySalesOrderQuote() {
     let considerParts = false;
-    if (this.copyConsiderations.isPartsAllowForCopy == true) {
-      considerParts = true
-    } else {
-      considerParts = false;
-    }
+    // if (this.copyConsiderations.isPartsAllowForCopy == true) {
+    //   considerParts = true
+    // } else {
+    //   considerParts = false;
+    // }
+    considerParts = true;
     let considerApprovers = false;
     this.salesQuoteService.initiateQuoteCopying(this.id).subscribe(
       results => {
-        this.closeModal()
+        //this.closeModal();
+        this.salesQuoteView.parts = results[0].parts;
         this.router.navigate(['/salesmodule/salespages/sales-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
       }, error => {
         this.isSpinnerVisible = false;
@@ -1766,35 +1798,89 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    let indexToInc: number = 0;
+    if (!this.enforceApproval ||
+      (this.enforceApproval
+        && new Date(this.effectiveDate) > new Date(this.todayDate))) {
+      indexToInc = 1;
+    }
+
     if (event.index == 0) {
       this.salesPartNumberComponent.refresh();
     }
-    if (event.index == 1) {
+    if (event.index == 1 && (this.enforceApproval
+      && new Date(this.todayDate) >= new Date(this.effectiveDate))) {
       this.salesApproveComponent.refresh(this.marginSummary);
     }
-    if (event.index == 2) {
+    if (event.index == (2 - indexToInc)) {
       this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.salesOrderQuoteId);
     }
-    if (event.index == 4) {
+    if (event.index == (4 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteFreightComponent.refresh(false);
       } else {
         this.salesOrderQuoteFreightComponent.refresh(true);
       }
     }
-    if (event.index == 5) {
+    if (event.index == (5 - indexToInc)) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteChargesComponent.refresh(false);
       } else {
         this.salesOrderQuoteChargesComponent.refresh(true);
       }
     }
-    if (event.index == 6) {
+    if (event.index == (6 - indexToInc)) {
       this.salesQuoteDocumentsComponent.refresh();
     }
-    if (event.index == 7) {
+    if (event.index == (7 - indexToInc)) {
       this.salesQuoteAnalysisComponent.refresh(this.id);
     }
+  }
+
+  setFreightsAtPartLevel(freightList) {
+    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
+      this.salesQuoteService.selectedParts.forEach((part, i) => {
+        if (freightList.freightBuildMethod && freightList.freightBuildMethod == 3) {
+          this.salesQuoteService.selectedParts[i].freight = freightList.freightFlatBillingAmount;
+        }
+        else {
+          let freightFound = freightList.salesOrderQuoteFreights.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+          if (freightFound !== undefined && freightFound.length > 0) {
+            let total = 0;
+
+            freightFound.forEach(element => {
+              total += element.billingAmount;
+            });
+
+            this.salesQuoteService.selectedParts[i].freight = total; //freightFound[0].total; //this.totalFreights;
+          }
+        }
+      });
+    }
+    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+  }
+
+  setChargesAtPartLevel(chargeList) {
+    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
+      this.salesQuoteService.selectedParts.forEach((part, i) => {
+        if (chargeList.chargesBuildMethod && chargeList.chargesBuildMethod == 3) {
+          this.salesQuoteService.selectedParts[i].misc = chargeList.chargesFlatBillingAmount;
+        }
+        else {
+          let chargeFound = chargeList.salesOrderQuoteCharges.filter(a => a.itemMasterId == this.salesQuoteService.selectedParts[i].itemMasterId);
+          if (chargeFound !== undefined && chargeFound.length > 0) {
+            let total = 0;
+
+            chargeFound.forEach(element => {
+              total += element.billingAmount;
+            });
+
+            this.salesQuoteService.selectedParts[i].misc = total; //chargeFound[0].total; //this.totalCharges;
+          }
+        }
+      });
+    }
+    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
   }
 
   setFreightsOrCharges() {
@@ -1808,38 +1894,78 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   saveSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    this.salesQuoteService.setTotalFreights(e);
-    this.setFreightsOrCharges();
+    let freightList = e;
+    this.setFreightsAtPartLevel(freightList);
     this.updateMarginSummary();
+
+    // this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.salesQuoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   updateSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    this.salesQuoteService.setTotalFreights(e);
-    this.setFreightsOrCharges();
+    let freightList = e;
+    let listFreight = [];
+
+    freightList.forEach((freight, i) => {
+      let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == freight.salesOrderQuotePartId).itemMasterId;
+      let total = Number(this.getTotalTaskBillingAmount(freight));
+      listFreight.push({ itemMasterId, total });
+    });
+
+    this.setFreightsAtPartLevel(listFreight);
     this.updateMarginSummary();
+
+    // this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.salesQuoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    //this.updateMarginSummary();
+  }
+
+  getTotalTaskBillingAmount(freight) {
+    let total = 0;
+    if (freight.billingAmount && !freight.isDeleted) {
+      total += Number(freight.billingAmount.toString().replace(/\,/g, ''));
+    }
+    return total.toFixed(2);
   }
 
   getFreightList() {
   }
 
   saveSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    this.marginSummary.misc = this.totalCharges;
-    this.salesQuoteService.setTotalCharges(e);
-    this.setFreightsOrCharges();
+    let chargeList = e;
+    this.setChargesAtPartLevel(chargeList);
     this.updateMarginSummary();
+
+    // this.totalCharges = e;
+    // this.marginSummary.misc = this.totalCharges;
+    // this.salesQuoteService.setTotalCharges(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   updateSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    this.salesQuoteService.setTotalCharges(e);
-    this.marginSummary.misc = this.totalCharges;
-    this.setFreightsOrCharges();
+    let chargeList = e;
+    let listCharge = [];
+
+    chargeList.forEach((charge, i) => {
+      let itemMasterId = this.salesQuoteService.selectedParts.find(a => a.salesOrderQuotePartId == charge.salesOrderQuotePartId).itemMasterId;
+      let total = Number(this.getTotalTaskBillingAmount(charge));
+      listCharge.push({ itemMasterId, total });
+    });
+
+    this.setChargesAtPartLevel(listCharge);
     this.updateMarginSummary();
+
+    // this.totalCharges = e;
+    // this.salesQuoteService.setTotalCharges(e);
+    // this.marginSummary.misc = this.totalCharges;
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
   }
 
   getChargesList() {

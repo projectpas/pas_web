@@ -1,0 +1,16 @@
+<form #addPartNumbers="ngForm" class="form-horizontal" (ngSubmit)="onAddPartNumberSubmit($event)">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="onClose()">
+      &times;
+    </button>
+    <h4 class="modal-title" *ngIf="isView">View Inventory</h4>
+    <h4 class="modal-title" *ngIf="!isView"> {{isEdit ? 'Edit PN' : 'Add PN'}}</h4>
+  </div>
+  <div class="modal-body">
+    <app-wo-customer-detail [customer]="customer"></app-wo-customer-detail>
+    <ng-container>
+      <app-wo-part-details (close)="onClose($event)"    [isSubWorkOrder]="isSubWorkOrder"  [isEdit]="isEdit" [isView]="isView" [editData]="editData" [parts]="parts" [query]="query" [customer]="customer" [allConditionInfo]="allConditionInfoArray" (select)="onSelect($event)" [clearData]="clearData"
+        [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)" (saveMaterialListData)="saveMaterial($event)" (updateMaterialListData)="updateMaterial($event)" (onPartSelect)="onShowModalMargin($event)"></app-wo-part-details>
+    </ng-container>
+  </div>
+</form>

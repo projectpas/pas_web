@@ -6,7 +6,8 @@
                     <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Sales Order Quote Settings</h4>
                 </div>
                 <div>
-                    <button type="button" class="btn-sm header-button" [routerLink]="['/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list']">
+                    <button type="button" class="btn-sm header-button"
+                        [routerLink]="['/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list']">
                         Sales Order Quote Settings List
                     </button>
                 </div>
@@ -102,13 +103,23 @@
                                 </p-dropdown>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12">
                         <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
                             <div class="form-group">
                                 <p-checkbox name="isApprovalRule" binary="true"
                                     [(ngModel)]="receivingForm.isApprovalRule">
                                 </p-checkbox>
-                                <label style="padding-left:10px;">Apply Approval Rule
+                                <label style="padding-left:10px;">Enforce Approval
                                 </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 work_order_teardown" *ngIf="receivingForm.isApprovalRule">
+                            <div class="form-group">
+                                <label>Effective Date </label>
+                                <p-calendar class="calendar" [showIcon]="true" appendTo="body" name="effectiveDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [(ngModel)]="receivingForm.effectiveDate" #startDate="ngModel" [required]="receivingForm.isApprovalRule == true"></p-calendar>
                             </div>
                         </div>
                     </div>

@@ -205,7 +205,7 @@
     </div>
     
     <div class="table-responsive" *ngIf="gridActiveTab === 'labor'">
-        <app-work-order-labor [taskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData" 
+        <app-work-order-labor [labortaskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData" 
         (saveworkOrderLabor)="saveworkOrderLabor($event)" isQuote="true" [markupList]="markupList" isView="true" isEdit="false"
         view="true"
         ></app-work-order-labor>

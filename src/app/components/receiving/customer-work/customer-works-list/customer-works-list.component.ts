@@ -1,8 +1,8 @@
 ﻿import { ReceivingCustomerWorkService } from '../../../../services/receivingcustomerwork.service';
 import { Component, OnInit } from '@angular/core';
-import {MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { fadeInOut } from '../../../../services/animations';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
@@ -15,7 +15,7 @@ import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { StocklineService } from '../../../../services/stockline.service';
 // declare var $ : any;
-declare var $ : any;
+declare var $: any;
 import { ConfigurationService } from '../../../../services/configuration.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
@@ -28,7 +28,7 @@ import { DatePipe } from '@angular/common';
     providers: [DatePipe],
 })
 
-export class CustomerWorksListComponent implements OnInit {   
+export class CustomerWorksListComponent implements OnInit {
     private isEditMode: boolean = false;
     loadingIndicator: boolean;
     dataSource: any;
@@ -65,32 +65,32 @@ export class CustomerWorksListComponent implements OnInit {
     public biuName: any;
     public compnayname: any;
     currentStatusCW: any = "1";
-    moduleName:any='ReceivingCustomerWork';
+    moduleName: any = 'ReceivingCustomerWork';
     breadcrumbs: MenuItem[] = [
         { label: 'Receiving' },
         { label: 'Customer Work' },
         { label: 'Customer Work List' }
     ];
-    cols = [             
-    { field: 'customerName', header: 'Customer Name' },
-    { field: 'partNumber', header: 'MPN' },
-    { field: 'partDescription', header: 'MPN Description' },
-    { field: 'serialNumber', header: 'Serial Num',width:"90px" },
-    { field: 'stockLineNumber', header: 'StockLine Num' ,width:"116px"},
-    { field: 'woNumber', header: 'WO Num',width:"90px" },
-    { field: 'receivingNumber', header: 'Receiver Num',width:"106px" },
-    { field: 'receivedDate', header: 'Received Date' },
-    { field: 'receivedBy', header: 'Received By' },
-    { field: 'levelCode1', header: 'Level 01' },
-    { field: 'levelCode2', header: 'Level 02' },
-    { field: 'levelCode3', header: 'Level 03' },
-    { field: 'levelCode4', header: 'Level 04' },
-    { field: 'stageCode', header: 'Stage Code' },
-    { field: 'status', header: 'Status' },
-    { field: 'createdDate', header: 'Created Date' },
-	{ field: 'createdBy', header: 'Created By' },
-	{ field: 'updatedDate', header: 'Updated Date' },
-	{ field: 'updatedBy', header: 'Updated By' },
+    cols = [
+        { field: 'customerName', header: 'Customer Name' },
+        { field: 'partNumber', header: 'MPN' },
+        { field: 'partDescription', header: 'MPN Description' },
+        { field: 'serialNumber', header: 'Serial Num', width: "90px" },
+        { field: 'stocklineNumber', header: 'StockLine Num', width: "116px" },
+        { field: 'woNumber', header: 'WO Num', width: "90px" },
+        { field: 'receivingNumber', header: 'Receiver Num', width: "106px" },
+        { field: 'receivedDate', header: 'Received Date' },
+        { field: 'receivedBy', header: 'Received By' },
+        { field: 'levelCode1', header: 'Level 01' },
+        { field: 'levelCode2', header: 'Level 02' },
+        { field: 'levelCode3', header: 'Level 03' },
+        { field: 'levelCode4', header: 'Level 04' },
+        { field: 'stageCode', header: 'Stage Code' },
+        { field: 'status', header: 'Status' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'createdBy', header: 'Created By' },
+        { field: 'updatedDate', header: 'Updated Date' },
+        { field: 'updatedBy', header: 'Updated By' },
     ];
 
     sourceViewforDocumentAudit: any = [];
@@ -121,26 +121,26 @@ export class CustomerWorksListComponent implements OnInit {
     editData: any;
     restrictID: any;
     warningID: any;
-    isEditCustomer: boolean=false;
-    isAddWorkOrder: boolean=false;
+    isEditCustomer: boolean = false;
+    isAddWorkOrder: boolean = false;
     currentDeletedstatus: boolean = false;
     lazyLoadEventDataInput: any;
     filterText: any = '';
-    allCustomerFinanceDocumentsListOriginal:any=[];
+    allCustomerFinanceDocumentsListOriginal: any = [];
     restorerecord: any = {};
-    rcId:any;
+    rcId: any;
     dateObject: any = {};
 
     constructor(private receivingCustomerWorkService: ReceivingCustomerWorkService,
         private datePipe: DatePipe, private masterComapnyService: MasterComapnyService, private _route: Router, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private commonService: CommonService, private stocklineService: StocklineService, private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
-        this.receivingCustomerWorkService.isEditMode = false;       
+        this.receivingCustomerWorkService.isEditMode = false;
     }
 
     ngOnInit() {
-      this.getCustomerWarningsList()
+        this.getCustomerWarningsList()
     }
-    
+
     dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
             this.customerWorkDocumentsList = this.allCustomerFinanceDocumentsListOriginal;
@@ -212,9 +212,9 @@ export class CustomerWorksListComponent implements OnInit {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     loadData(event) {
@@ -225,7 +225,7 @@ export class CustomerWorksListComponent implements OnInit {
         event.first = pageIndex;
         this.lazyLoadEventDataInput = event;
 
-        event.filters = {...event.filters, woFilter: this.currentStatusCW}
+        event.filters = { ...event.filters, woFilter: this.currentStatusCW }
         if (this.filterText == '') {
             this.getList(event);
         } else {
@@ -236,8 +236,8 @@ export class CustomerWorksListComponent implements OnInit {
     getList(data) {
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
-        data.filters.masterCompanyId= this.currentUserMasterCompanyId;
-        data.filters.employeeId= this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
+        data.filters.employeeId = this.employeeId;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.isSpinnerVisible = true;
         this.receivingCustomerWorkService.getCustomerWorkAll(PagingData).subscribe(res => {
@@ -262,19 +262,19 @@ export class CustomerWorksListComponent implements OnInit {
             this.isSpinnerVisible = false;
         })
     }
-   
+
     getCustWorkStatus(value) {
         this.currentStatusCW = value;
-        this.lazyLoadEventData.filters = {...this.lazyLoadEventData.filters, woFilter: value}
+        this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters, woFilter: value }
         this.getList(this.lazyLoadEventData);
     }
-        
+
     openView(rowData) {
         this.viewCustWorkInfo = {};
         this.timeLifeInfo = {};
         this.customerWorkDocumentsList = [];
-        const {receivingCustomerWorkId} = rowData;
-        this.rcId=rowData.receivingCustomerWorkId;
+        const { receivingCustomerWorkId } = rowData;
+        this.rcId = rowData.receivingCustomerWorkId;
         this.isSpinnerVisible = true;
         this.receivingCustomerWorkService.getCustomerWorkdataById(receivingCustomerWorkId).subscribe(res => {
             this.isSpinnerVisible = false;
@@ -285,13 +285,13 @@ export class CustomerWorksListComponent implements OnInit {
                 expDate: res.expDate ? new Date(res.expDate) : '',
                 timeLifeDate: res.timeLifeDate ? new Date(res.timeLifeDate) : '',
             }
-            if(res.timeLifeCyclesId != null  && res.timeLifeCyclesId != 0 && res.timeLifeCyclesId != undefined) {
+            if (res.timeLifeCyclesId != null && res.timeLifeCyclesId != 0 && res.timeLifeCyclesId != undefined) {
                 this.getTimeLifeOnEdit(res.timeLifeCyclesId);
-            } 
+            }
         },
-        err => {
-            this.isSpinnerVisible = false;
-        });
+            err => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     viewSelectedRowdbl(rowData) {
@@ -301,27 +301,27 @@ export class CustomerWorksListComponent implements OnInit {
 
     getManagementStructureCodes(id) {
         this.commonService.getManagementStructureCodes(id).subscribe(res => {
-			if (res.Level1) {
-				this.managementStructure.level1 = res.Level1;
+            if (res.Level1) {
+                this.managementStructure.level1 = res.Level1;
             } else {
                 this.managementStructure.level1 = '-';
             }
             if (res.Level2) {
-				this.managementStructure.level2 = res.Level2;
+                this.managementStructure.level2 = res.Level2;
             } else {
                 this.managementStructure.level2 = '-';
             }
             if (res.Level3) {
-				this.managementStructure.level3 = res.Level3;
+                this.managementStructure.level3 = res.Level3;
             } else {
                 this.managementStructure.level3 = '-';
             }
             if (res.Level4) {
-				this.managementStructure.level4 = res.Level4;
-			} else {
+                this.managementStructure.level4 = res.Level4;
+            } else {
                 this.managementStructure.level4 = '-';
             }
-		})
+        })
     }
 
     getTimeLifeOnEdit(timeLifeId) {
@@ -330,22 +330,22 @@ export class CustomerWorksListComponent implements OnInit {
         });
     }
 
-	openHist(content, row) {
-		this.alertService.startLoadingMessage();
-		this.loadingIndicator = true;
-		this.sourcereceving = row;
-		this.isSaving = true;
-       
+    openHist(content, row) {
+        this.alertService.startLoadingMessage();
+        this.loadingIndicator = true;
+        this.sourcereceving = row;
+        this.isSaving = true;
+
         this.receivingCustomerWorkService.historyReason(this.sourcereceving.chargeId).subscribe(
-			results => this.onHistoryLoadSuccessful(results[0], content),
-			error => this.saveFailedHelper(error));
+            results => this.onHistoryLoadSuccessful(results[0], content),
+            error => this.saveFailedHelper(error));
     }
-    
+
     private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.auditHisory = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
     }
 
     private saveFailedHelper(error: any) {
@@ -354,48 +354,48 @@ export class CustomerWorksListComponent implements OnInit {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
-  
-    exportCSV(dt){
-		this.isSpinnerVisible = true;
-        const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"woFilter": this.currentStatusCW, "isDeleted":isdelete, "masterCompanyId": this.currentUserMasterCompanyId, "employeeId": this.employeeId},"globalFilter":""}
-		let filters = Object.keys(dt.filters);
-		filters.forEach(x=>{
-			PagingData.filters[x] = dt.filters[x].value;
+
+    exportCSV(dt) {
+        this.isSpinnerVisible = true;
+        const isdelete = this.currentDeletedstatus ? true : false;
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "woFilter": this.currentStatusCW, "isDeleted": isdelete, "masterCompanyId": this.currentUserMasterCompanyId, "employeeId": this.employeeId }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
         })
         this.receivingCustomerWorkService.getCustomerWorkAll(PagingData).subscribe(res => {
             dt._value = res['results'].map(x => {
-				return {
-					...x,
-                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
-                    receivedDate: x.receivedDate ?  this.datePipe.transform(x.receivedDate, 'MMM-dd-yyyy'): '',
-				}
-			});	
-			dt.exportCSV();
-			dt.value = this.allRecevinginfo;
-        	this.isSpinnerVisible = false;
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    receivedDate: x.receivedDate ? this.datePipe.transform(x.receivedDate, 'MMM-dd-yyyy') : '',
+                }
+            });
+            dt.exportCSV();
+            dt.value = this.allRecevinginfo;
+            this.isSpinnerVisible = false;
         }, err => {
-			this.isSpinnerVisible = false;
-		});
+            this.isSpinnerVisible = false;
+        });
     }
 
     closeDeleteModal() {
-		$("#downloadConfirmation").modal("hide");
-	}
+        $("#downloadConfirmation").modal("hide");
+    }
 
     deleteItemAndCloseModel() {
         this.isSaving = true;
         this.isDeleteMode = true;
         this.sourcereceving.isdelete = false;
-       this.sourcereceving.updatedBy = this.userName;
+        this.sourcereceving.updatedBy = this.userName;
         this.receivingCustomerWorkService.deleteReason(this.sourcereceving.receivingCustomerWorkId, this.userName).subscribe(
-           response => this.saveCompleted(this.sourcereceving),
+            response => this.saveCompleted(this.sourcereceving),
             error => this.saveFailedHelper(error));
         this.modal.close();
     }
 
-    openDelete(content, row) {     
+    openDelete(content, row) {
         this.isEditMode = false;
         this.isDeleteMode = true;
         this.selectedRowForDelete = row;
@@ -420,7 +420,7 @@ export class CustomerWorksListComponent implements OnInit {
         }
     }
 
-    toggleIsActive(rowData, e) {      
+    toggleIsActive(rowData, e) {
         if (e.checked == false) {
             this.sourcereceving = rowData;
             this.sourcereceving.updatedBy = this.userName;
@@ -442,7 +442,7 @@ export class CustomerWorksListComponent implements OnInit {
     }
 
     openHistory(content, rowData) {
-           this.alertService.startLoadingMessage();
+        this.alertService.startLoadingMessage();
         this.receivingCustomerWorkService.getAuditHistory(rowData.receivingCustomerWorkId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results[0], content),
             error => this.saveFailedHelper(error));
@@ -451,7 +451,7 @@ export class CustomerWorksListComponent implements OnInit {
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         this.customerWorkHisory = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' }); 
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -490,7 +490,7 @@ export class CustomerWorksListComponent implements OnInit {
             this.getList(this.lazyLoadEventDataInput);
         }
     }
-   
+
     restoreRecord() {
         this.commonService.updatedeletedrecords('ReceivingCustomerWork', 'ReceivingCustomerWorkId', this.restorerecord.receivingCustomerWorkId).subscribe(res => {
             this.getDeleteListByStatus(true)
@@ -503,7 +503,7 @@ export class CustomerWorksListComponent implements OnInit {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-   
+
 
     refreshList() {
         if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
@@ -519,9 +519,9 @@ export class CustomerWorksListComponent implements OnInit {
         else el.classList.remove("hidePlaceHolder");
     }
 
-    downloadFileUpload(rowData) {	
+    downloadFileUpload(rowData) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
-		window.location.assign(url);       
+        window.location.assign(url);
     }
 
     // getCustomerWarningsList(): void {
@@ -534,15 +534,16 @@ export class CustomerWorksListComponent implements OnInit {
     //         });
     //     })
     // } 
-    setEditArray:any=[]
+    setEditArray: any = []
     getCustomerWarningsList(): void {
-        const strText='Receive MPN';
+        // const strText='Receive MPN'; 
+        const strText = 'Create WO for MPN';
         this.setEditArray.push(0);
-    const mcId= this.authService.currentUser
-    ? this.authService.currentUser.masterCompanyId
-    : null;
-        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
-         res.forEach(element => {
+        const mcId = this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 0, this.setEditArray.join(), 0).subscribe(res => {
+            res.forEach(element => {
                 if (element.label == 'Create WO for MPN') {
                     this.customerWarningListId = element.value;
                     return;
@@ -551,17 +552,17 @@ export class CustomerWorksListComponent implements OnInit {
         })
     }
     openEdits(row) {
-        this.editData=row;
-        this.isEditCustomer=true;
-        const {receivingCustomerWorkId}=row
+        this.editData = row;
+        this.isEditCustomer = true;
+        const { receivingCustomerWorkId } = row
         this._route.navigateByUrl(`receivingmodule/receivingpages/app-customer-work-setup/edit/${receivingCustomerWorkId}`);
     }
 
     gotoWorkOrder(rowData) {
-        this.editData=rowData;
-        this.isAddWorkOrder=true;
+        this.editData = rowData;
+        this.isAddWorkOrder = true;
         this.customerWarnings(rowData.customerId);
-       this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
+        //    this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
     }
 
     gotoCustomer(rowData) {
@@ -580,20 +581,19 @@ export class CustomerWorksListComponent implements OnInit {
     }
     validateWarnings(customerId, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
-        this.commonService.customerWarnings(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
+        this.commonService.customerWarnings(cusId, id, this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
-                this.restrictID =0;
+                this.restrictID = 0;
                 if (res.customerWarningId != 0) {
                     this.showAlertWarningMessage();
-                } else 
-                { 
+                } else {
                     this.customerResctrictions(customerId, this.warningMessage, id);
                 }
             }
         },
-            err => { 
+            err => {
                 this.handleError(err);
             })
     }
@@ -603,7 +603,7 @@ export class CustomerWorksListComponent implements OnInit {
     customerResctrictions(customerId, warningMessage, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.restrictMessage = '';
-        this.commonService.customerResctrictions(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
+        this.commonService.customerResctrictions(cusId, id, this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
@@ -613,18 +613,17 @@ export class CustomerWorksListComponent implements OnInit {
                     this.showAlertMessage();
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage();
-                } else
-                {
-                    const {receivingCustomerWorkId}=this.editData;
-                    if( this.isEditCustomer==true && this.restrictID ==0){
+                } else {
+                    const { receivingCustomerWorkId } = this.editData;
+                    if (this.isEditCustomer == true && this.restrictID == 0) {
                         this._route.navigateByUrl(`receivingmodule/receivingpages/app-customer-work-setup/edit/${receivingCustomerWorkId}`);
-                    }else if(this.isAddWorkOrder==true && this.restrictID ==0){
+                    } else if (this.isAddWorkOrder == true && this.restrictID == 0) {
                         this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
                     }
                 }
             }
         },
-            err => { 
+            err => {
                 this.handleError(err);
             })
     }
@@ -632,30 +631,29 @@ export class CustomerWorksListComponent implements OnInit {
     showAlertWarningMessage() {
         $('#warningMesg').modal("show");
     }
-    showAlertMessage(){
+    showAlertMessage() {
         $('#warnRestrictMesg').modal("show");
     }
-    notmoveclick() 
-    {
+    notmoveclick() {
         $('#warningMesg').modal("hide");
         $('#warnRestrictMesg').modal("hide");
-        this.warningMessage='';
-        this.restrictMessage='';
-      }
+        this.warningMessage = '';
+        this.restrictMessage = '';
+    }
 
-    WarnRescticModel(){
+    WarnRescticModel() {
         $('#warnRestrictMesg').modal("hide");
         $('#warningMesg').modal("hide");
-        this.warningMessage='';
-        this.restrictMessage='';
-        const {receivingCustomerWorkId}=this.editData;
-        if( this.isEditCustomer==true && this.restrictID ==0){
+        this.warningMessage = '';
+        this.restrictMessage = '';
+        const { receivingCustomerWorkId } = this.editData;
+        if (this.isEditCustomer == true && this.restrictID == 0) {
             this._route.navigateByUrl(`receivingmodule/receivingpages/app-customer-work-setup/edit/${receivingCustomerWorkId}`);
-        }else if(this.isAddWorkOrder==true && this.restrictID ==0){
+        } else if (this.isAddWorkOrder == true && this.restrictID == 0) {
             this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
         }
-        this.isAddWorkOrder=false;
-        this.isEditCustomer=false;
+        this.isAddWorkOrder = false;
+        this.isEditCustomer = false;
     }
 
     openHistoryDoc(rowData) {
@@ -685,13 +683,13 @@ export class CustomerWorksListComponent implements OnInit {
         }
     }
     parsedText(text) {
-    
-        if(text){
+
+        if (text) {
             const dom = new DOMParser().parseFromString(
                 '<!doctype html><body>' + text,
                 'text/html');
-                const decodedString = dom.body.textContent;
-                return decodedString;
+            const decodedString = dom.body.textContent;
+            return decodedString;
         }
-          }
+    }
 }

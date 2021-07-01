@@ -40,7 +40,7 @@
                                     <div class="clear"></div>
                                     <hr />
                                     <div class="card-body header-body">
-                                        <p-table #dt class="rpo-table-cstm lastcol-fix" 
+                                        <p-table #dt class="rpo-table-cstm rro-table-cstm ptable-f10" 
                                                     [value]="allActions" 
                                                     [style]="{ width: '100%' }"
                                                     [metaKeySelection]="true"
@@ -112,7 +112,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns"  [ngStyle]="{'width': col.width}" />
+                                                    <col *ngFor="let col of columns"  class="table-column-width" />
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
@@ -421,15 +421,7 @@
                                             <input class="form-control" type="text" name="swiftCode"
                                                 [(ngModel)]="internationalSaveObj.swiftCode" (ngModelChange)="enableSave()" required value="" autocomplete="new-password">
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <label>Beneficiary Customer</label>
-                                            <input type="text" pInputText size="50"
-                                            class="form-control ui-autocomplete-input" name="beneficiaryCustomer"
-                                            [(ngModel)]="internationalSaveObj.beneficiaryCustomer" (ngModelChange)="enableSave()"
-                                         style="height: 28px !important;">
-                                        </div>
-                                        <div *ngIf="disablesaveforBeneficiary" class="clr-red">Select From DropDown
-                                        </div> -->
+                                        
                                     </div>
                                 </div>
                                 <div class="form-row  pull-right">
@@ -557,7 +549,7 @@
 
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                    <col *ngFor="let col of columns" class="table-column-width">
                                 </colgroup>
                             </ng-template>
 

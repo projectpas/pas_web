@@ -70,13 +70,14 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "controlNumber", header: "Cntr Num   ", width: "80px" },
                 { field: "condition", header: "Condition Type    ", width: "100px" },
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
-                { field: "quantity", header: "Qty Required ", width: "100px" },
-                { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
-                { field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
-                { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
-                { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
-                { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
-                { field: "quantityOnOrder", header: "Qty On Order", width: "100px" },
+                { field: "quantity", header: "Qty Required ", width: "60px" },
+                { field: "quantityReserved", header: "Qty Reserved", width: "60px" },
+                { field: "qtyToBeReserved", header: "Qty To Be Reserved", width: "60px" },
+                { field: "qtyToReserve", header: "Qty Actually Reserving", width: "80px" },
+                //{ field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
+                { field: "quantityOnHand", header: "Qty On Hand", width: "60px" },
+                { field: "quantityAvailable", header: "Qty Available   ", width: "60px" },
+                { field: "quantityOnOrder", header: "Qty On Order", width: "60px" },
                 { field: "reservedDate", header: "Reserved Date", width: "150px" },
                 { field: "reservedById", header: "Reserved By", width: "150px" }
             ];
@@ -89,13 +90,13 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "controlNumber", header: "Cntr Num   ", width: "80px" },
                 { field: "condition", header: "Condition Type    ", width: "100px" },
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
-                { field: "quantity", header: "Qty Required ", width: "100px" },
-                { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
-                { field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
-                { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
-                { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
-                { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
-                { field: "quantityOnOrder", header: "Qty On Order", width: "100px" },
+                { field: "quantity", header: "Qty Required ", width: "60px" },
+                { field: "quantityReserved", header: "Qty Reserved", width: "60px" },
+                //{ field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
+                { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "80px" },
+                { field: "quantityOnHand", header: "Qty On Hand", width: "60px" },
+                { field: "quantityAvailable", header: "Qty Available   ", width: "60px" },
+                { field: "quantityOnOrder", header: "Qty On Order", width: "60px" },
                 { field: "reservedDate", header: "UnReserved Date", width: "150px" },
                 { field: "reservedById", header: "UnReserved By", width: "150px" }
             ];
@@ -185,22 +186,24 @@ export class SalesReserveUnreserveComponent implements OnInit {
             if (event == true) {
                 this.parts[i]['isSelected'] = true;
                 this.disableSubmitButtonForAction = false;
-
+                this.parts[i]['qtyToReserve'] = this.parts[i]['qtyToBeReserved'];
             } else {
                 this.parts[i]['isSelected'] = false;
                 this.disableSubmitButtonForAction = true;
-
+                this.parts[i]['qtyToReserve'] = null;
             }
         }
     }
 
-    onChangeOfPartSelection(event) {
+    onChangeOfPartSelection(event, rowData) {
         let selectedPartsLength = 0;
         for (let i = 0; i < this.parts.length; i++) {
             if (event == true) {
                 selectedPartsLength = selectedPartsLength + 1;
+                rowData.qtyToReserve = rowData.qtyToBeReserved;
             }
             else {
+                rowData.qtyToReserve = null;;
                 if (selectedPartsLength != 0) {
                     selectedPartsLength = selectedPartsLength - 1;
                 }
@@ -393,6 +396,36 @@ export class SalesReserveUnreserveComponent implements OnInit {
             }
 
             this.parts[i].reservedById = getObjectById('value', this.employeeId, this.employees);
+        }
+    }
+
+    validatePartsQuantity(event, data) {
+        if (this.selectedPartActionType == 'Reserve') {
+            if (data.qtyToReserve > data.quantityAvailable) {
+
+                this.alertService.showMessage(
+                    '',
+                    ' Qty Actually Reserving Cant be greater than Qty Available',
+                    MessageSeverity.warn
+                );
+                data.qtyToReserve = null;
+            } else if (data.qtyToReserve > data.qtyToBeReserved) {
+                this.alertService.showMessage(
+                    '',
+                    ' Qty Actually Reserving Cant be greater than Qty To Be Reserved',
+                    MessageSeverity.warn
+                );
+                data.qtyToReserve = null;
+            }
+        } else {
+            if (data.qtyToUnReserve > data.quantityReserved) {
+                this.alertService.showMessage(
+                    '',
+                    'Qty Unreserving Cant be greater than Qty Reserved',
+                    MessageSeverity.warn
+                );
+                data.qtyToUnReserve = null;
+            }
         }
     }
 }

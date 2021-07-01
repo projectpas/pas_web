@@ -54,8 +54,8 @@ export class ItemMasterService {
     isCapsEditMode: boolean;
     capabilityCollection: any;
     capsCollection: any;
-    ataDeletedStatus:boolean = false;
-    airCraftDeletedStatus:boolean = false;
+    ataDeletedStatus: boolean = false;
+    airCraftDeletedStatus: boolean = false;
 
     constructor(
         private router: Router,
@@ -108,21 +108,21 @@ export class ItemMasterService {
         return Observable.forkJoin(
             this.itemMasterEndpoint.getCpaesData<any[]>(itemid));
     }
-    getItemStockList(value) {
+    getItemStockList(value, masterCompanyId) {
         return Observable.forkJoin(
-            this.itemMasterEndpoint.getitemListEndpoint<any[]>(value));
+            this.itemMasterEndpoint.getitemListEndpoint<any[]>(value, masterCompanyId));
     }
-    getItemMasterStockListData(data){
+    getItemMasterStockListData(data) {
         return Observable.forkJoin(
             this.itemMasterEndpoint.getItemStockListEndPoint<any[]>(data));
     }
 
-    getAllStockDataforDownload(){
+    getAllStockDataforDownload() {
         return Observable.forkJoin(
             this.itemMasterEndpoint.getAllStockDataforDownload<any[]>());
     }
 
-    getItemMasterNonStockListData(data){
+    getItemMasterNonStockListData(data) {
         return Observable.forkJoin(
             this.itemMasterEndpoint.getItemNonStockListEndPoint<any[]>(data));
     }
@@ -319,7 +319,7 @@ export class ItemMasterService {
     }
     newItemMasterAircarftClass(action: any) {
         return this.itemMasterEndpoint.getNewitemAircraftEndpoint<any>(action);
-    }    
+    }
     newItemMasterATAClass(action: any) {
         return this.itemMasterEndpoint.getNewitemATAEndpoint<any>(action);
     }
@@ -355,15 +355,15 @@ export class ItemMasterService {
         return this.itemMasterEndpoint.saveATAMapping<any>(action);
     }
     updateATAMapping(action: any, ItemMasterATAMappingId) {
-        return this.itemMasterEndpoint.updateATAMapping<any>(action,ItemMasterATAMappingId);
+        return this.itemMasterEndpoint.updateATAMapping<any>(action, ItemMasterATAMappingId);
     }
     searchAirMappedByMultiTypeIdModelIDDashID(ItemmasterId: number, searchUrl: string) {
         return this.itemMasterEndpoint.searchAirMappedByMultiTypeIDModelIDDashID<any>(ItemmasterId, searchUrl);
     }
-    searchATAMappedByMultiTypeIdModelIDDashID(ItemmasterId: number, searchUrl: string, ) {
+    searchATAMappedByMultiTypeIdModelIDDashID(ItemmasterId: number, searchUrl: string,) {
         return this.itemMasterEndpoint.searchATAMappedByMultiATAIDATASUBID<any>(ItemmasterId, searchUrl);
     }
-    searchItemMasterATAMappedByMultiTypeIdModelIDDashID(ItemmasterId: number, searchUrl: string, ) {
+    searchItemMasterATAMappedByMultiTypeIdModelIDDashID(ItemmasterId: number, searchUrl: string,) {
         return this.itemMasterEndpoint.searchItemMasterATAMappedByMultiATAIDATASUBID<any>(ItemmasterId, searchUrl);
     }
     deleteItemMasterATA(ItemMasterATAMappingId: number) {
@@ -374,10 +374,10 @@ export class ItemMasterService {
     }
     deleteItemMasterAir(ItemMasterAirMappingId: number) {
         return this.itemMasterEndpoint.deleteitemMasterMappedAirEndpoint<any>(ItemMasterAirMappingId);
-    }  
+    }
     restoreAircraftRow(ItemMasterAirMappingId: number) {
         return this.itemMasterEndpoint.restoreAircraftRow<any>(ItemMasterAirMappingId);
-    }    
+    }
     deleteItemMasterPurcSale(ItemMasterPurcSaleId: number) {
         return this.itemMasterEndpoint.deleteitemMasterMappedPurcSaleEndpoint<any>(ItemMasterPurcSaleId);
     }
@@ -435,9 +435,9 @@ export class ItemMasterService {
             this.itemMasterEndpoint.searchPartNumber<any[]>(partNumber));
     }
 
-    getalterqquparts(ItemMasterId: number,masterCompanyId?){
+    getalterqquparts(ItemMasterId: number, masterCompanyId?) {
         return Observable.forkJoin(
-            this.itemMasterEndpoint.getalterqquparts<any>(ItemMasterId,masterCompanyId));
+            this.itemMasterEndpoint.getalterqquparts<any>(ItemMasterId, masterCompanyId));
     }
 
     createnhatlaaltequpart(data: any) {
@@ -452,17 +452,17 @@ export class ItemMasterService {
     }
 
     deleteNTAERow(ItemMasterId: any, userId: any) {
-        return this.itemMasterEndpoint.deleteNTAERow<any>(ItemMasterId,userId);
+        return this.itemMasterEndpoint.deleteNTAERow<any>(ItemMasterId, userId);
     }
 
     restoreNTAERow(ItemMasterId: any, userId: any) {
-        return this.itemMasterEndpoint.restoreNTAERow<any>(ItemMasterId,userId);
+        return this.itemMasterEndpoint.restoreNTAERow<any>(ItemMasterId, userId);
     }
-    
-    createNTAEFileUploadForEquivalency(file){
+
+    createNTAEFileUploadForEquivalency(file) {
         return this.itemMasterEndpoint.createNTAEFileUploadForEquivalency(file);
     }
-    updateNTAEFileUploadForEquivalency(file){
+    updateNTAEFileUploadForEquivalency(file) {
         return this.itemMasterEndpoint.updateNTAEFileUploadForEquivalency(file);
     }
 
@@ -474,10 +474,10 @@ export class ItemMasterService {
             this.itemMasterEndpoint.getPartnumberswithManufacturerEndpoint<any>());
     }
 
-    saveItemMasterCapes(data){
+    saveItemMasterCapes(data) {
         return this.itemMasterEndpoint.saveItemMasterCapes(data)
     }
-    updateItemMasterCapes(itemMasterCapId, data){
+    updateItemMasterCapes(itemMasterCapId, data) {
         return this.itemMasterEndpoint.updateItemMasterCapes(itemMasterCapId, data)
     }
     deleteCapabilityById(capabilityId, user) {
@@ -486,23 +486,23 @@ export class ItemMasterService {
     restoreCapabilityById(capabilityId, user) {
         return this.itemMasterEndpoint.restoreCapabilityById<any>(capabilityId, user);
     }
-    getItemMasterCapabilityAuditHistory(capabilityId){
+    getItemMasterCapabilityAuditHistory(capabilityId) {
         return this.itemMasterEndpoint.getItemMasterCapabilityAuditHistory(capabilityId)
     }
-    getnhatlaaltequparthistory(itemMappingId){
-        return this.itemMasterEndpoint.getnhatlaaltequparthistory(itemMappingId)   
+    getnhatlaaltequparthistory(itemMappingId) {
+        return this.itemMasterEndpoint.getnhatlaaltequparthistory(itemMappingId)
     }
 
-    getItemMasterAircraftAuditHistory(id){
+    getItemMasterAircraftAuditHistory(id) {
         return this.itemMasterEndpoint.getItemMasterAircraftAuditHistory(id);
     }
-    getATAMappedAudit(id){
+    getATAMappedAudit(id) {
         return this.itemMasterEndpoint.getATAMappedAudit(id);
     }
     updateItemMasterAircraftById(data) {
         return this.itemMasterEndpoint.updateItemMasterAircraftById(data);
     }
-    getItemMasterNonStockDataById(id){
+    getItemMasterNonStockDataById(id) {
         return this.itemMasterEndpoint.getItemMasterNonStockDataById(id);
     }
 
@@ -510,7 +510,7 @@ export class ItemMasterService {
         return Observable.forkJoin(
             this.itemMasterEndpoint.advancedSerachStockListEndPoint<any[]>(data));
     }
-    
+
     advancedSearchNonStockListData(data) {
         return Observable.forkJoin(
             this.itemMasterEndpoint.advancedSearchNonStockListEndPoint<any[]>(data));
@@ -522,32 +522,35 @@ export class ItemMasterService {
     getItemMasterAltEquiMappingParts(id) {
         return this.itemMasterEndpoint.getItemMasterAltEquiMappingParts(id);
     }
-    getItemMasterNhaMappingParts(id){
+    getItemMasterNhaMappingParts(id) {
         return this.itemMasterEndpoint.getItemMasterNhaMappingParts(id);
     }
-    getItemMasterTlaMappingParts(id){
+    getItemMasterTlaMappingParts(id) {
         return this.itemMasterEndpoint.getItemMasterTlaMappingParts(id);
     }
-    getDataForStocklineByItemMasterId(id){
+    getDataForStocklineByItemMasterId(id) {
         return this.itemMasterEndpoint.getDataForStocklineByItemMasterId(id);
     }
-    getItemMasterDataById(id){
+    getItemMasterDataById(id) {
         return this.itemMasterEndpoint.getItemMasterDataById(id);
     }
-    getActivePartListByItemType(type,masterCompanyId){
-        return this.itemMasterEndpoint.getActivePartListByItemType(type,masterCompanyId);
+    getActivePartListByItemType(type, masterCompanyId) {
+        return this.itemMasterEndpoint.getActivePartListByItemType(type, masterCompanyId);
     }
-    getItemMasterClassificationByType(type, masterCompanyId){
-        return this.itemMasterEndpoint.getItemMasterClassificationByType(type,masterCompanyId);
+    getItemMasterClassificationByType(type, masterCompanyId) {
+        return this.itemMasterEndpoint.getItemMasterClassificationByType(type, masterCompanyId);
     }
-    getItemMasterMappingPart(id){
+    getItemMasterMappingPart(id) {
         return this.itemMasterEndpoint.getItemMasterMappingPart(id);
     }
-    GetManufacturerByitemMasterId(id){
+    GetManufacturerByitemMasterId(id) {
         return this.itemMasterEndpoint.GetManufacturerByitemMasterId(id);
     }
     searchitemmasterfromExchangeQuotepop(searchParameters: any) {
         return this.itemMasterEndpoint.searchitemmasterfromExchangeQuotepop(searchParameters);
     }
-    
+    searchitemmasterfromSpeedQuotepop(searchParameters: any) {
+        return this.itemMasterEndpoint.searchitemmasterfromSpeedQuotepop(searchParameters);
+    }
+
 }

@@ -4,7 +4,7 @@
   </button>
 </div> -->
 <div class="header" *ngIf=" !isQuote">
-  <div class="row">
+  <div class="row" *ngIf="!isSummarizedView">
       <div class="col">
           <h4 class="header-name">Work Order Charges List</h4>
       </div>
@@ -12,10 +12,11 @@
           <button type="button" class="btn-sm header-button " data-target="#addNewCharges" data-toggle="modal" (click)="createNew()">
               Create Charge
           </button>
+
       </div>
   </div>
 </div>
-<div id="addNewCharges" class="modal fade" role="dialog" data-backdrop="static" *ngIf="!view">
+<div id="addNewCharges" class="modal fade" role="dialog" data-backdrop="static" *ngIf="!view && !isSummarizedView">
   <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -33,7 +34,7 @@
           </grd-charges>
         </div>
         <!-- && addNewCharges -->
-        <div *ngIf="isEdit && editData ">
+        <div *ngIf="isEdit && editData "> 
           <grd-charges [isEdit]="isEdit" [editData]="editData" [workFlow]="workFlowObject" [isWorkOrder]="isWorkOrder"
             [markupList]="markupList" [isQuote]="isQuote" [taskList]="taskList"
             (updateChargesListForWO)="updateChargesList($event)"></grd-charges> 
@@ -47,7 +48,7 @@
 
   <p-table #dt1 class="rpo-table-cstm rro-table-cstm lastcol-fix pub-ptable-cstm ptable-f10" [columns]="cols" [value]="workOrderChargesList"  (onPage)="pageIndexChange($event)"
   [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [rows]="10">
-    <ng-template pTemplate="caption">
+    <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
         <div class="checkbox-cstm pull-right checkbox-align" *ngIf="isQuote==false">
         <label class="checkbox-label-align" >
             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
@@ -61,7 +62,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr class="tr-color" *ngIf="isQuote">
         <th colspan="9" class="th-color">&nbsp;</th>
-            <th colspan="5" class="freight-isview-th" *ngIf="isView">
+            <th colspan="4" class="freight-isview-th" *ngIf="isView">
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -82,7 +83,7 @@
       
                 <div class="display-flex">
                   <div class="form-group freight-isview-div">
-                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div> 
@@ -93,18 +94,18 @@
                       </select>
                     </div>
                   </div>
-                  <div class="radio-align">
-                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
-                      label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                  <div class="radios-margin">
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
+                      label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal " name="costPlusType"
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                       value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                 </div>
               </th>
-            <th colspan="5" class="isview-th"  *ngIf="!isView" >
+            <th colspan="5" class="isview-th" style="width:50px" *ngIf="!isView" >
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -129,7 +130,8 @@
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                     <div>
-                      <select (ngModelChange)="getValidCrg()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                      <!-- [ngClass]="{setRequiredSelect : costPlusType ==billingMethod.tm}" -->
+                      <select  (ngModelChange)="getValidCrg()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                         [disabled]="isView || costPlusType != 1">
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -153,35 +155,117 @@
               <th colspan="4"></th> -->
             </tr>
       <tr>
-        <th style="width:180px !important">Task <span style="color: #ff0000;">*</span></th>
+        <th style="width:200px !important">Task <span style="color: #ff0000;">*</span></th>
         <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns">
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <ng-container *ngIf="isQuote">
-          <th class="table-column-width">Billing Method</th>
-          <th class="table-column-width">Mark Up</th>
+          <th class="table-column-width" style="width:100px !important">Billing Method</th>
+          <th class="table-column-width" style="width:100px !important">Mark Up</th>
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Flate Rate</th> -->
-          <th class="table-column-width">
+          <th class="table-column-width" style="width:100px !important">
             Billing Rate
           </th>
-          <th class="table-column-width">
+          <th class="table-column-width" style="width:100px !important">
             Billing Amount
           </th>
         </ng-container>
-        <th class="table-actions-column" >Actions</th>
+        <th class="table-actions-column" *ngIf="isQuote && !isView">Actions</th>
+        <th class="table-actions-column" *ngIf="!isQuote">Actions</th>
         <!-- <th colspan="4" class="text-center" *ngIf="!isView"></th> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-mainIndex="rowIndex">
       <ng-container *ngFor="let dt of rowData; let subIndex = index">
         <!-- *ngIf="!dt['isDeleted']" --> 
-          <tr >
+          <tr  *ngIf="!dt['isDeleted'] && isQuote">
             <td style="width:180px !important">
               <!-- <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
               </select> -->
+              <p class="mr_o">{{dt.taskName}}</p>
+            </td>
+            <ng-container *ngFor="let col of columns">
+              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId' && col.field != 'description'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+                <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
+                {{dt[col.field]}}
+              </td>
+              <td class="truncate-text" *ngIf="col.field == 'description'" matTooltipPosition="above"
+              [matTooltip]="parsedText(dt[col.field])"> {{dt[col.field]}}
+              </td>
+              <td class="table-column-width" *ngIf="col.field == 'roNumberId'">
+                <select class="form-control select-read-only width-130" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
+                 name="roNum_{{mainIndex}}" disabled>
+                  <option [value]="0">Select</option>
+                  <option [value]="ctype.value" *ngFor="let ctype of roNumList">{{
+                    ctype.label
+                  }}</option>
+                </select>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="isQuote">
+              <td class="table-column-width">
+                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = dt.unitCost ;dt.billingAmount = dt.extendedCost;">
+                  <option value="">Select</option>
+                  <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
+                    [value]="bm.value">{{bm.label}}</option>
+                </select>
+              </td>
+              <td class="table-column-width">
+                <select [ngClass]="{setRequiredSelect : dt.billingMethodId == billingMethod.tm}" class="form-control select-markup" (ngModelChange)="getValidCrg()"  (change)="markupChanged(dt, 'row')"
+                  [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
+                  <option value="">Select</option>
+                  <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
+                </select>
+              </td>
+              <!-- <td>{{ dt.tmAmount }}</td>
+              <td>
+                <input type="number" [(ngModel)]="dt.flateRate" [disabled]="dt.billingMethodId != 2"/>
+              </td> -->
+              <td class="content-to-end table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
+              <td class="table-column-width">
+                <input type="text" class="form-control text-right" (ngModelChange)="getValidCrg()"  pInputText pKeyFilter="money" (change)="calculatebCost($event.target.value,dt)" [(ngModel)]="dt.billingAmount"
+                  [disabled]="isView || dt.billingMethodId != '2'" />
+              </td>
+            </ng-container>
+            <td class="table-column-width action-icons-cstm" *ngIf="!isView">
+              <div *ngIf="currentDeletedstatus == false">
+              <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+                (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+                  class="fa fa-trash"></i></a> </span> 
+                  <span *ngIf="!isQuote">
+                    <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
+                        matTooltip="History" matTooltipPosition="above"><i
+                            class="fa fa-history"></i></a>
+                </span>
+              </div>
+                  <div *ngIf="currentDeletedstatus == true">
+                    <!-- <span data-toggle="modal" data-target="#viewWorkOrder">
+                        <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
+                            matTooltipPosition="above">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </span> -->
+                 
+                    <span *ngIf="!isView">
+                        <a class="btn nobg" (click)="restore(restoreIdWo,dt); "
+                            matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
+                                aria-hidden="true"></i></a>
+                    </span>
+                       <span>
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
+                            matTooltip="History" matTooltipPosition="above"><i
+                                class="fa fa-history"></i></a>
+                    </span>
+                </div>
+            </td>
+          </tr>
+
+          <tr  *ngIf="!isQuote">
+            <td style="width:180px !important">
               <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
@@ -201,7 +285,7 @@
             </ng-container>
             <ng-container *ngIf="isQuote">
               <td class="table-column-width">
-                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
+                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="markupChanged(dt, 'row')"  (change)="dt.markupPercentageId = '';dt.billingRate = 0;">
                   <option value="">Select</option>
                   <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                     [value]="bm.value">{{bm.label}}</option>
@@ -224,10 +308,10 @@
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>
-            <td class="table-column-width action-icons-cstm" >
+            <td class="table-column-width action-icons-cstm">
               <div *ngIf="currentDeletedstatus == false">
               <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
-                (click)="edit(dt, mainIndex, subIndex)" *ngIf="!isView" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+                (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
             <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span> 
                   <span *ngIf="!isQuote">
@@ -272,10 +356,10 @@
         <!-- <td>&nbsp;</td> -->
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
         <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf=" !isEdit">&nbsp;</td>
-    
+        <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
+        <td *ngIf=" !isEdit && !isQuote">&nbsp;</td>
+        <td *ngIf=" !isEdit &&  isQuote && !isView">&nbsp;</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
@@ -283,32 +367,34 @@
           <td *ngIf="!isQuote"colspan="10" class="no-records-msg no-records-cstm">
               No records found
           </td>
-          <td *ngIf="isQuote" colspan="14" class="no-records-msg no-records-cstm">
+          <!-- <td *ngIf="isQuote" colspan="14" class="no-records-msg no-records-cstm">
             No records found
-        </td>
+        </td> -->
+        <td *ngIf="isQuote && isView" colspan="13" class="no-records-msg no-records-cstm">
+          No records found
+      </td>
       </tr>
   </ng-template>
     <ng-template pTemplate="footer" *ngIf="isQuote">
       <tr class="footer">
         <td>Total</td>
         <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
         <td class="content-to-end"><strong>{{ getTotalQuantity() }} </strong></td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="content-to-end"><strong>{{ getTotalUnitCost() }} </strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td></td>
+        <td *ngIf="isQuote">&nbsp;</td>
         <ng-container *ngIf="costPlusType != 3">
           <td class="content-to-end"><strong>{{ getTotalBillingAmount()}} </strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
-            <input type="number" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg()"  [disabled]="isView" />
+            <input type="text" class="text-ee" pInputText pKeyFilter="money"  (blur)="chargesFlatRateBillingAmount = (chargesFlatRateBillingAmount)?formateCurrency(chargesFlatRateBillingAmount):'0.00'" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg();"  [disabled]="isView" />
         </ng-container>
-        <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="!isView">&nbsp;</td>
       </tr>
     </ng-template>
@@ -321,6 +407,9 @@
           pInputText type="text" />
   </ng-template>
   </p-table>
+  <button class="btn btn-primary pull-right" (click)="createChargeQuote()" [disabled]="disableCrg || checkValidationforMarkUp()" *ngIf="isQuote && !isView">
+    {{workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
+  </button>
 <ng-template #restoreIdWo let-c="close" let-d="dismiss" data-backdrop="static">
 
   <div class="modal-header">
@@ -341,9 +430,7 @@
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>
-  <button class="btn btn-primary pull-right" (click)="createChargeQuote()" [disabled]="disableCrg" *ngIf="isQuote && !isView">
-    {{workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
-  </button>
+ 
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">

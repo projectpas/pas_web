@@ -205,6 +205,10 @@ getIntangibleList(){
         return Observable.forkJoin(
             this.assetEndpoint.getCapabilityTypeListEndpoint<any[]>(assetRecordId));
     }
+    getAssetInventoryAdjList(id) {
+		return this.assetEndpoint.getAssetInventoryAdjList(id);
+	}
+
 
     getAssetCapesAll(data, id) {
         return this.assetEndpoint.getAssetCapesAll(data, id);
@@ -237,6 +241,10 @@ getIntangibleList(){
     getAuditDataByInventoryId(id: number) {
         return this.assetEndpoint.getAuditDataByInventoryId(id);
     }
+
+    GetAuditDataByAssetList(id: number) {
+        return this.assetEndpoint.GetAuditDataByAssetList(id);
+    }
     getAuditDataBycalibrationId(id: number) {
         return this.assetEndpoint.getAuditDataBycalibrationId(id);
     }
@@ -261,6 +269,16 @@ getIntangibleList(){
     downloadAllCalibrationList(data){
         return this.assetEndpoint.downloadAllCalibrationList(data);
     }
+
+    getCalibartionListByID(assetRecordId) {
+        return Observable.forkJoin(
+            this.assetEndpoint.getCalibartionListByID<any[]>(assetRecordId));
+    }
+
+    UpdatecalibartionMgmt(CalibrationManagment) {
+        return this.assetEndpoint.UpdatecalibartionMgmt(CalibrationManagment)
+    }
+
 
 
 }

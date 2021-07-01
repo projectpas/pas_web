@@ -4,814 +4,1077 @@
     </button>
     <button type="button" class="btn btn-secondary" (click)="CloseAllCustomerDetailsModelEdit()">
         Close All
-    </button> 
-    <button *ngIf="showViewTemplate==true" type="button" data-target="#addNewCharges" data-toggle="modal" class="btn btn-primary view_bt" (click)="tearDownView()">
+    </button>
+    <button *ngIf="showViewTemplate==true" type="button" data-target="#addNewCharges" data-toggle="modal"
+        class="btn btn-primary view_bt" (click)="tearDownView()">
         View
-    </button>  
+    </button>
 </div>
-<form name="form"  (ngSubmit)="createTearDownData(f)" #f="ngForm" >
-<div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Removal Reasons') && saveTearDownData">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <div></div>
-                <input type="checkbox" name="isRemovalReasons"   class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderRemovalReasons,1)"
-                [(ngModel)]="saveTearDownData.isRemovalReasons" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name=" Removal Reasons" value="saveTearDownData.isRemovalReasons" label=" Removal Reasons" [(ngModel)]="saveTearDownData.isRemovalReasons" inputId="ny"></p-checkbox> -->
-                <a data-toggle="collapse" class="ac_cs" href="#stepadd1"> Removal Reasons</a>
-            </h4>
-        </div>
-        <div id="stepadd1" class="panel-collapse collapse in show">
-            <div class="panel-body">
-                <div class="form-row">
-                    <div class="col-md-3">
-                            <div >
-                                <!-- {{saveTearDownData.isRemovalReasons}} -->
-                                <label> Reason <span class="clr-red" *ngIf="saveTearDownData.isRemovalReasons">*</span></label>
-                                <p-dropdown  name="company1"
-                                #wocompanyId="ngModel"  required
-                                [options]="RemovalReasonsList" placeholder="Select Reason"
-                                class="p-dropdown-custom-md-2"
-                                (onChange)="selectedReason($event.value,1)" #removalReason="ngModel"
-                                [(ngModel)]="saveTearDownData.workOrderRemovalReasons.reasonId" [disabled]="!saveTearDownData.isRemovalReasons">
-                               </p-dropdown>
-                            </div>
-                            <div *ngIf="f.submitted && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
-                                <div  class="red_bomb">Reason is required</div>
-                            </div>
-                    </div>  
-                    <div class="col-md-9">
-                        <div >
-                            <!-- {{saveTearDownData.workOrderRemovalReasons.reasonId !=0}} ,{{!saveTearDownData.isRemovalReasons}} -->
-                            <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isRemovalReasons">*</span></label>
-                            <!-- <textarea class="form-control text-area-cstm" required name="removal_Memo"  #removalMemo="ngModel" [disabled]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo1" required [readonly]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></p-editor>
-                            <!-- <p-editor [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo" [style]="{'height':'320px'}"></p-editor> -->
-                        </div>
-                        <div *ngIf="f.submitted && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.memo ==''" >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                </div>
+<form name="form" (ngSubmit)="createTearDownData(f)" #f="ngForm">
+    <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion">
+        <div class="panel panel-default"
+            *ngIf="checkForTeardownAvalabilityFromWO('Removal Reasons') && saveTearDownData">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <div></div>
+                    <input type="checkbox" name="isRemovalReasons" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderRemovalReasons,1)"
+                        [(ngModel)]="saveTearDownData.isRemovalReasons" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name=" Removal Reasons" value="saveTearDownData.isRemovalReasons" label=" Removal Reasons" [(ngModel)]="saveTearDownData.isRemovalReasons" inputId="ny"></p-checkbox> -->
+                    <a data-toggle="collapse" class="ac_cs" href="#stepadd1"> Removal Reasons</a>
+                </h4>
             </div>
-        </div>
-    </div>
-    </div>
-
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('PMA/DER & Bulletins')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract2"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderPmaDerBulletins,2)"
-                [(ngModel)]="saveTearDownData.isPmaDerBulletins" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="PMA/DER & Bulletins" value="saveTearDownData.isPmaDerBulletins" label="PMA/DER & Bulletins" [(ngModel)]="saveTearDownData.isPmaDerBulletins" inputId="ny1"></p-checkbox> -->
-                <a class="collapsed ac_cs" data-toggle="collapse"  href="#stepadd2">PMA/DER & Bulletins</a>
-            </h4>
-        </div>
-        <div id="stepadd2" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-<div class="form-row">
-    <div class="col-md-3">
-        <div >
-            <!-- {{saveTearDownData.isPmaDerBulletins}} -->
-          <label>Airworthiness Directives  <span class="clr-red" *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-          <input class="form-control" name="Airworthine"  #Airworthiness="ngModel" [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.airworthinessDirecetives" [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="AirworthinessDirecetives" name="AirworthinessDirecetives" required/>
-        </div>
-        <div *ngIf="f.submitted  && Airworthiness.errors && saveTearDownData.isPmaDerBulletins">
-            <div *ngIf="Airworthiness.errors.required" class="red_bomb">Airworthiness Directives  is required</div>
-        </div>
-        </div>
-        <div class="col-md-3">
-            <div >
-              <label>Mandatory Service Bulletins  <span class="clr-red" *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-              <input class="form-control"  name="MandatoryS"  #MandatoryServ="ngModel" [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.mandatoryService" [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="MandatoryService" name="MandatoryService" required/>
-            </div>
-            <div *ngIf="(f.submitted) && MandatoryServ.errors && saveTearDownData.isPmaDerBulletins" >
-                <div *ngIf="MandatoryServ.errors.required" class="red_bomb">Mandatory Service Bulletins is required</div>
-            </div>
-            </div>
-            <div class="col-md-3">
-                <div >
-                  <label>Requested Service Bulletins <span class="clr-red" *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                  <input class="form-control"  name="Requesteds"  #reqServic="ngModel" [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.requestedService" [disabled]="!saveTearDownData.isPmaDerBulletins"  type="text" id="RequestedService" name="RequestedService" required/>
-                </div>
-                <div *ngIf="(f.submitted) && reqServic.errors && saveTearDownData.isPmaDerBulletins" >
-                    <div *ngIf="reqServic.errors.required" class="red_bomb">Requested Service Bulletins is required</div>
-                </div>
-                </div>
-                <div class="col-md-3">
-                    <div >
-                      <label>Service Letters <span class="clr-red" *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label >
-                      <input class="form-control"  name="Servicel"  #ServiceLetters="ngModel" [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.serviceLetters" [disabled]="!saveTearDownData.isPmaDerBulletins"  type="text" id="ServiceLetters" name="ServiceLetters" required/>
-                    </div>
-                    <div *ngIf="(f.submitted) && ServiceLetters.errors && saveTearDownData.isPmaDerBulletins" >
-                        <div *ngIf="ServiceLetters.errors.required" class="red_bomb">Service Letters is required</div>
-                    </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div >
-                          <label>Pma Parts <span class="clr-red" *ngIf="saveTearDownData.isPmaDerBulletins">*</span> </label>
-                          <input class="form-control"  name="Pma"  #PmaPart="ngModel" [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.pmaParts"  [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="PMAParts" name="PMAParts" required/>
-                        </div>
-                        <div *ngIf="(f.submitted) && PmaPart.errors && saveTearDownData.isPmaDerBulletins" >
-                            <div *ngIf="PmaPart.errors.required" class="red_bomb">Pma Parts is required</div>
-                        </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div >
-                              <label>Der Repairs <span class="clr-red" *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                              <input class="form-control"   name="Der"  #DerRepair="ngModel" [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.derRepairs"  [disabled]="!saveTearDownData.isPmaDerBulletins" type="text"  id="DERRepairs4" name="DERRepairs6" required/>
-                            </div>
-                            <div *ngIf="(f.submitted) && DerRepair.errors && saveTearDownData.isPmaDerBulletins " >
-                                <div *ngIf="DerRepair.errors.required" class="red_bomb">Der Repairs is required</div>
-                            </div>
-                            </div>
-</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Preliinary Review')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract44"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderPreliinaryReview,3)"
-                [(ngModel)]="saveTearDownData.isPreliinaryReview" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Preliinary Review" value="saveTearDownData.isPreliinaryReview" label="Preliinary Review" [(ngModel)]="saveTearDownData.isPreliinaryReview" inputId="ny2"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd3"> Preliinary Review</a>
-            </h4>
-        </div>
-        <div id="stepadd3" class="panel-collapse  collapse">
-            <div class="panel-body aircraft-panel">
-                <div class="form-row">
-                    <div class="col-md-3">
-              
-                        <div>
-                            <label> Reason <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
-                            <p-dropdown  name="company2"   placeholder="Select Reason" required
-                            [options]="prelinnaryReview" class="p-dropdown-custom-md-2" [disabled]="!saveTearDownData.isPreliinaryReview"
-                            (onChange)="selectedReason($event.value,2)" #prelinaryReason="ngModel" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.reasonId">
-                </p-dropdown>
-                        </div>
-                        <div *ngIf="f.submitted &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
-                            <!-- <textarea required class="form-control text-area-cstm" name="prellrevMemo"  #prelinaryRev="ngModel" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo2" required [readonly]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></p-editor>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.memo==''" >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                        </div>
-                    </div>
+            <div id="stepadd1" class="panel-collapse collapse in show">
+                <div class="panel-body">
                     <div class="form-row">
                         <div class="col-md-3">
+                            <div>
+                                <!-- {{saveTearDownData.isRemovalReasons}} -->
+                                <label> Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isRemovalReasons">*</span></label>
+                                <p-dropdown name="company1" #wocompanyId="ngModel" required
+                                    [options]="RemovalReasonsList" placeholder="Select Reason"
+                                    class="p-dropdown-custom-md-2" (onChange)="selectedReason($event.value,1)"
+                                    #removalReason="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderRemovalReasons.reasonId"
+                                    [disabled]="!saveTearDownData.isRemovalReasons">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <!-- {{saveTearDownData.workOrderRemovalReasons.reasonId !=0}} ,{{!saveTearDownData.isRemovalReasons}} -->
+                                <label>Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isRemovalReasons">*</span></label>
+                                <!-- <textarea class="form-control text-area-cstm" required name="removal_Memo"  #removalMemo="ngModel" [disabled]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo1" required
+                                    [readonly]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons"
+                                    [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo"></p-editor>
+                                <!-- <p-editor [(ngModel)]="saveTearDownData.workOrderRemovalReasons.memo" [style]="{'height':'320px'}"></p-editor> -->
+                            </div>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.memo ==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12"  *ngIf="saveTearDownData &&  saveTearDownData.workOrderRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId">
+                            <app-common-documents [moduleName]="moduleNameeRemoval"  
+                                [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
+                                [isViewMode]="isView"   [offLineUpload]="false"></app-common-documents>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('PMA/DER & Bulletins')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract2" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderPmaDerBulletins,2)"
+                        [(ngModel)]="saveTearDownData.isPmaDerBulletins" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="PMA/DER & Bulletins" value="saveTearDownData.isPmaDerBulletins" label="PMA/DER & Bulletins" [(ngModel)]="saveTearDownData.isPmaDerBulletins" inputId="ny1"></p-checkbox> -->
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd2">PMA/DER & Bulletins</a>
+                </h4>
+            </div>
+            <div id="stepadd2" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <!-- {{saveTearDownData.isPmaDerBulletins}} -->
+                                <label>Airworthiness Directives <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
+                                <input class="form-control" name="Airworthine" #Airworthiness="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.airworthinessDirecetives"
+                                    [disabled]="!saveTearDownData.isPmaDerBulletins" type="text"
+                                    id="AirworthinessDirecetives" name="AirworthinessDirecetives" required />
+                            </div>
+                            <div *ngIf="f.submitted  && Airworthiness.errors && saveTearDownData.isPmaDerBulletins">
+                                <div *ngIf="Airworthiness.errors.required" class="red_bomb">Airworthiness Directives is
+                                    required</div>
+                            </div>
                         </div>
                         <div class="col-md-3">
-                            <div > 
-                                <label for="dataentered">Inspector   <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector1" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
-                                    errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                    (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                    [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorId"  #prellRevInsp="ngModel" >
-                                </p-autoComplete>
-                                </div>
-                                <div *ngIf="f.submitted && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.inspectorId ==0" >
-                                <div  class="red_bomb">Inspector is required</div>
+                            <div>
+                                <label>Mandatory Service Bulletins <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
+                                <input class="form-control" name="MandatoryS" #MandatoryServ="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.mandatoryService"
+                                    [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="MandatoryService"
+                                    name="MandatoryService" required />
                             </div>
-                            <div >
-                                <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
-                                <p-calendar class="p-calendar-cstm" required [showIcon]="true"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="InspectorDate" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
+                            <div *ngIf="(f.submitted) && MandatoryServ.errors && saveTearDownData.isPmaDerBulletins">
+                                <div *ngIf="MandatoryServ.errors.required" class="red_bomb">Mandatory Service Bulletins
+                                    is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <label>Requested Service Bulletins <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
+                                <input class="form-control" name="Requesteds" #reqServic="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.requestedService"
+                                    [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="RequestedService"
+                                    name="RequestedService" required />
+                            </div>
+                            <div *ngIf="(f.submitted) && reqServic.errors && saveTearDownData.isPmaDerBulletins">
+                                <div *ngIf="reqServic.errors.required" class="red_bomb">Requested Service Bulletins is
+                                    required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <label>Service Letters <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
+                                <input class="form-control" name="Servicel" #ServiceLetters="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.serviceLetters"
+                                    [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="ServiceLetters"
+                                    name="ServiceLetters" required />
+                            </div>
+                            <div *ngIf="(f.submitted) && ServiceLetters.errors && saveTearDownData.isPmaDerBulletins">
+                                <div *ngIf="ServiceLetters.errors.required" class="red_bomb">Service Letters is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <label>Pma Parts <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPmaDerBulletins">*</span> </label>
+                                <input class="form-control" name="Pma" #PmaPart="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.pmaParts"
+                                    [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="PMAParts"
+                                    name="PMAParts" required />
+                            </div>
+                            <div *ngIf="(f.submitted) && PmaPart.errors && saveTearDownData.isPmaDerBulletins">
+                                <div *ngIf="PmaPart.errors.required" class="red_bomb">Pma Parts is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <label>Der Repairs <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
+                                <input class="form-control" name="Der" #DerRepair="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.derRepairs"
+                                    [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="DERRepairs4"
+                                    name="DERRepairs6" required />
+                            </div>
+                            <div *ngIf="(f.submitted) && DerRepair.errors && saveTearDownData.isPmaDerBulletins ">
+                                <div *ngIf="DerRepair.errors.required" class="red_bomb">Der Repairs is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Preliinary Review')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract44" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderPreliinaryReview,3)"
+                        [(ngModel)]="saveTearDownData.isPreliinaryReview" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Preliinary Review" value="saveTearDownData.isPreliinaryReview" label="Preliinary Review" [(ngModel)]="saveTearDownData.isPreliinaryReview" inputId="ny2"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd3"> Prellinary Review</a>
+                </h4>
+            </div>
+            <div id="stepadd3" class="panel-collapse  collapse">
+                <div class="panel-body aircraft-panel">
+                    <div class="form-row">
+                        <div class="col-md-3">
+
+                            <div>
+                                <label> Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
+                                <p-dropdown name="company2" placeholder="Select Reason" required
+                                    [options]="prelinnaryReview" class="p-dropdown-custom-md-2"
+                                    [disabled]="!saveTearDownData.isPreliinaryReview"
+                                    (onChange)="selectedReason($event.value,2)" #prelinaryReason="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector1"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorId"
+                                    #prellRevInsp="ngModel">
+                                </p-autoComplete>
+                            </div>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
+                                <p-calendar class="p-calendar-cstm" required [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="InspectorDate"
+                                    [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
                                     [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorDate"></p-calendar>
                             </div>
                         </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label> Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
+                                <!-- <textarea required class="form-control text-area-cstm" name="prellrevMemo"  #prelinaryRev="ngModel" [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo2" required
+                                    [readonly]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
+                                    [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.memo==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12"  *ngIf="saveTearDownData && saveTearDownData.workOrderPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.reasonId">
+                            <app-common-documents [moduleName]="moduleNameePrellinary"  
+                                [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
+                                [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
+                        </div>
                     </div>
+                    <!-- <div class="form-row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                    </div> -->
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Pre-Assessment Results')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract54"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderPreAssmentResults,4)"
-                [(ngModel)]="saveTearDownData.isPreAssmentResults" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Pre-Assessment Results" value="saveTearDownData.isPreAssmentResults" label="Pre-Assessment Results" [(ngModel)]="saveTearDownData.isPreAssmentResults" inputId="ny3"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd4">Pre-Assessment Results</a>
-            </h4>
-        </div>
-        <div id="stepadd4" class="panel-collapse collapse">
-            <div class="panel-body">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label>Reason  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                            <p-dropdown  name="company3"   placeholder="Select Reason" required
-                            [options]="tearDownReasonList" class="p-dropdown-custom-md-2" [disabled]="!saveTearDownData.isPreAssmentResults"
-                            (onChange)="selectedReason($event.value,3)" #pressResutReason="ngModel"  [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.reasonId">
-                </p-dropdown>
-                        </div>
-                        <div *ngIf="f.submitted  &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label>Memo  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                            <!-- <textarea required class="form-control text-area-cstm" name="pressResut_Memo"  #pressResutMemo="ngModel" [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo3" required [readonly]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></p-editor>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.memo ==''" >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                    </div>
-                    </div>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Pre-Assessment Results')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract54" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderPreAssmentResults,4)"
+                        [(ngModel)]="saveTearDownData.isPreAssmentResults" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Pre-Assessment Results" value="saveTearDownData.isPreAssmentResults" label="Pre-Assessment Results" [(ngModel)]="saveTearDownData.isPreAssmentResults" inputId="ny3"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd4">Pre-Assessment Results</a>
+                </h4>
+            </div>
+            <div id="stepadd4" class="panel-collapse collapse">
+                <div class="panel-body">
                     <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican3" [dropdown]="true"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianId"  #pressResultTech="ngModel">
+                            <div>
+                                <label>Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                                <p-dropdown name="company3" placeholder="Select Reason" required
+                                    [options]="preAssesmentResults" class="p-dropdown-custom-md-2"
+                                    [disabled]="!saveTearDownData.isPreAssmentResults"
+                                    (onChange)="selectedReason($event.value,3)" #pressResutReason="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+
+
+
+                            <div>
+                                <label for="dataentered">Technican <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican3"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="technicianList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWTechnician($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianId"
+                                    #pressResultTech="ngModel">
                                 </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted   && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderDiscovery.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
                             </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                <p-calendar class="p-calendar-cstm" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" required name="TechnicianDate"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianDate"></p-calendar>
+                            <div
+                                *ngIf="f.submitted   && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderDiscovery.technicianId ==0">
+                                <div class="red_bomb">Technican is required</div>
                             </div>
+                            <div>
+                                <label> Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                                <p-calendar class="p-calendar-cstm" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [showIcon]="true" required name="TechnicianDate"
+                                    [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.technicianDate">
+                                </p-calendar>
+                            </div>
+
+
+
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                                <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector2"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1" required
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorId"
+                                    #pressResultsInsp="ngModel">
+                                </p-autoComplete>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                                <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorDate">
+                                </p-calendar>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label>Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
+                                <!-- <textarea required class="form-control text-area-cstm" name="pressResut_Memo"  #pressResutMemo="ngModel" [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo3" required
+                                    [readonly]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.memo ==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.reasonId">
+                            <app-common-documents [moduleName]="moduleNameePreAssesment"  
+                                [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
+                                [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
+                        </div>
+                    </div>
+                    <!-- <div class="form-row">
+                        <div class="col-md-3">
+                            
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                    <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector2" [dropdown]="true"  [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1" required
-                                      [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorId"  #pressResultsInsp="ngModel">
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted  && saveTearDownData.isPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssmentResults">*</span></label>
-                                    <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 || !saveTearDownData.isPreAssmentResults"
-                                    [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorDate"></p-calendar>
-                                </div>
+                               
                             </div>
-                            </div>
+                            </div> -->
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Teardown Discovery')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract74"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderDiscovery,5)"
-                [(ngModel)]="saveTearDownData.isDiscovery" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Teardown Discovery" value="saveTearDownData.isDiscovery" label="Teardown Discovery" [(ngModel)]="saveTearDownData.isDiscovery" inputId="ny4"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd5">Teardown Discovery</a>
-            </h4>
-        </div>
-        <div id="stepadd5" class="panel-collapse collapse">
-            <div class="panel-body">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label> Reason  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                            <p-dropdown  name="company4" [disabled]="!saveTearDownData.isDiscovery"
-                              placeholder="Select Reason"
-                            [options]="tearDownDescovery" required
-                            class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,4)" #tddescoverReason="ngModel"
-                            [(ngModel)]="saveTearDownData.workOrderDiscovery.reasonId">
-                </p-dropdown>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                    <div >
-                        <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                        <!-- <textarea required class="form-control text-area-cstm" name="tearDesMemos"  #tddescoverMemo="ngModel" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery" [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></textarea> -->
-                        <p-editor  [style]="{'height':'100px'}" name="textAreaInfo4" required [readonly]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery" [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></p-editor>
-                    </div>
-                    <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.memo==''" >
-                        <div  class="red_bomb">Memo is required</div>
-                    </div>
-                    </div>
-                    </div>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Teardown Discovery')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract74" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderDiscovery,5)"
+                        [(ngModel)]="saveTearDownData.isDiscovery" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Teardown Discovery" value="saveTearDownData.isDiscovery" label="Teardown Discovery" [(ngModel)]="saveTearDownData.isDiscovery" inputId="ny4"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd5">Teardown Discovery</a>
+                </h4>
+            </div>
+            <div id="stepadd5" class="panel-collapse collapse">
+                <div class="panel-body">
                     <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican8" [dropdown]="true" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianId"  #tddescoverTech="ngModel" >
+                            <div>
+                                <label> Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                                <p-dropdown name="company4" [disabled]="!saveTearDownData.isDiscovery"
+                                    placeholder="Select Reason" [options]="tearDownDescovery" required
+                                    class="p-dropdown-custom-md-2" (onChange)="selectedReason($event.value,4)"
+                                    #tddescoverReason="ngModel"
+                                    [(ngModel)]="saveTearDownData.workOrderDiscovery.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+
+                            <div>
+                                <label for="dataentered">Technican <span class="clr-red"
+                                        *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican8"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="technicianList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWTechnician($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianId"
+                                    #tddescoverTech="ngModel">
                                 </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
                             </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.technicianId ==0">
+                                <div class="red_bomb">Technican is required</div>
+                            </div>
+                            <div>
+                                <label> Date <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
                                 <p-calendar class="p-calendar-cstm" required [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianDate"></p-calendar>
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                                    [(ngModel)]="saveTearDownData.workOrderDiscovery.technicianDate"></p-calendar>
                             </div>
+
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector6"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorId"
+                                    #tddescoverInsp="ngModel">
+                                </p-autoComplete>
                             </div>
-                            <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                    <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector6" [dropdown]="true" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorId"  #tddescoverInsp="ngModel">
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.inspectorId ==0" >
-                                    <div class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
-                                    <p-calendar class="p-calendar-cstm" required [showIcon]="true"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" 
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                                <p-calendar class="p-calendar-cstm" required [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="startDate"
                                     [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
                                     [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorDate"></p-calendar>
-                                </div>
                             </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label> Memo <span class="clr-red" *ngIf="saveTearDownData.isDiscovery">*</span></label>
+                                <!-- <textarea required class="form-control text-area-cstm" name="tearDesMemos"  #tddescoverMemo="ngModel" [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery" [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo4" required
+                                    [readonly]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
+                                    [(ngModel)]="saveTearDownData.workOrderDiscovery.memo"></p-editor>
                             </div>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Pre Assembly Inspection')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract85"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderPreAssemblyInspection,6)"
-                [(ngModel)]="saveTearDownData.isPreAssemblyInspection" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Pre Assembly Inspection" value="saveTearDownData.isPreAssemblyInspection" label="Pre Assembly Inspection" [(ngModel)]="saveTearDownData.isPreAssemblyInspection" inputId="ny5"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd6">Pre Assembly Inspection</a>
-            </h4>
-        </div>
-        <div id="stepadd6" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label>Reason  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                            <p-dropdown  required  name="company5"  placeholder="Select Reason"
-                            #preassemReasons="ngModel"   [disabled]="!saveTearDownData.isPreAssemblyInspection"
-                            [options]="preAssemblyInspection" class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,5)"  [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.reasonId">
-                </p-dropdown>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isDiscovery && saveTearDownData.workOrderDiscovery.memo==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
                         </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
+                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderDiscovery && saveTearDownData.workOrderDiscovery.reasonId">
+                            <app-common-documents [moduleName]="moduleNameeTearDescovery"  
+                                [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
+                                [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
                         </div>
                     </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label>Memo  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                            <!-- <textarea required name="preassemInsp"  #preassemMemo="ngModel" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo" class="form-control text-area-cstm"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo5" required [readonly]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo"></p-editor>
-                        </div>
-                       <div *ngIf="f.submitted  && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.memo==''" >
-                        <div  class="red_bomb">Memo is required</div>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican7" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianId"  #preassITech="ngModel">
-                                </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted  && preassITech.errors && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
-                            </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianDate"></p-calendar>
-                            </div>
+                           
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                    <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector7" [dropdown]="true" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorId"  #pressInsp="ngModel">
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted   && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
-                                    <p-calendar required class="p-calendar-cstm" [showIcon]="true"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
-                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorDate"></p-calendar>
-                                </div>
+                              
                             </div>
-                            </div>
+                            </div> -->
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Worked Performed')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract35"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderWorkPerformed,7)"
-                [(ngModel)]="saveTearDownData.isWorkPerformed" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Worked Performed" value="saveTearDownData.isWorkPerformed" label="Worked Performed" [(ngModel)]="saveTearDownData.isWorkPerformed" inputId="ny14"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd7">Worked Performed</a>
-            </h4>
-        </div>
-        <div id="stepadd7" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label> Reason   <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                            <p-dropdown  required name="company6"  placeholder="Select Reason"
-                            #wpReasons="ngModel"  [disabled]="!saveTearDownData.isWorkPerformed"
-                            [options]="workPerformed"
-                            class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,6)"
-                            [(ngModel)]="saveTearDownData.workOrderWorkPerformed.reasonId">
-                </p-dropdown>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                            <!-- <textarea required name="removal_Memo"  #wpMemo="ngModel"[disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed" [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo" class="form-control text-area-cstm"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo6" required [readonly]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed" [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo"></p-editor>
-                        </div>
-                        <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.memo ==''" >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                  </div>
-                    </div>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Pre Assembly Inspection')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract85" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderPreAssemblyInspection,6)"
+                        [(ngModel)]="saveTearDownData.isPreAssemblyInspection" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Pre Assembly Inspection" value="saveTearDownData.isPreAssemblyInspection" label="Pre Assembly Inspection" [(ngModel)]="saveTearDownData.isPreAssemblyInspection" inputId="ny5"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd6">Pre Assembly Inspection</a>
+                </h4>
+            </div>
+            <div id="stepadd6" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
                     <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican6" [dropdown]="true" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianId"   #workPerfomedInsp="ngModel" >
+                            <div>
+                                <label>Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                                <p-dropdown required name="company5" placeholder="Select Reason"
+                                    #preassemReasons="ngModel" [disabled]="!saveTearDownData.isPreAssemblyInspection"
+                                    [options]="preAssemblyInspection" class="p-dropdown-custom-md-2"
+                                    (onChange)="selectedReason($event.value,5)"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+                            <div>
+                                <label for="dataentered">Technican <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican7"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="technicianList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWTechnician($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianId"
+                                    #preassITech="ngModel">
                                 </p-autoComplete>
-                              </div>
-                              <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
                             </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                            <div
+                                *ngIf="f.submitted  && preassITech.errors && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.technicianId ==0">
+                                <div class="red_bomb">Technican is required</div>
+                            </div>
+                            <div>
+                                <label> Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
                                 <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianDate"></p-calendar>
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.technicianDate">
+                                </p-calendar>
                             </div>
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector7"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorId"
+                                    #pressInsp="ngModel">
+                                </p-autoComplete>
+                            </div>
+                            <div
+                                *ngIf="f.submitted   && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="startDate"
+                                    [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorDate">
+                                </p-calendar>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label>Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isPreAssemblyInspection">*</span></label>
+                                <!-- <textarea required name="preassemInsp"  #preassemMemo="ngModel" [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo" class="form-control text-area-cstm"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo5" required
+                                    [readonly]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 || !saveTearDownData.isPreAssemblyInspection"
+                                    [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.memo==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.reasonId">
+                            <app-common-documents [moduleName]="moduleNameePreAssembly"  
+                                [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
+                                [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
+                        </div>
+                    </div>
+                    <!-- <div class="form-row">
+                        <div class="col-md-3">
+                          
                             </div>
                             <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                    <!-- <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector8" [dropdown]="true"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId" >
-                                    </p-autoComplete> -->
-                                    <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector12" [dropdown]="true" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
-                                    errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                    (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId"   #workPerformedInsp="ngModel">
-                                  </p-autoComplete>
+                               
+                            </div>
+                            </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Worked Performed')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract35" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderWorkPerformed,7)"
+                        [(ngModel)]="saveTearDownData.isWorkPerformed" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Worked Performed" value="saveTearDownData.isWorkPerformed" label="Worked Performed" [(ngModel)]="saveTearDownData.isWorkPerformed" inputId="ny14"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd7">Worked Performed</a>
+                </h4>
+            </div>
+            <div id="stepadd7" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <label> Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                                <p-dropdown required name="company6" placeholder="Select Reason" #wpReasons="ngModel"
+                                    [disabled]="!saveTearDownData.isWorkPerformed" [options]="workPerformed"
+                                    class="p-dropdown-custom-md-2" (onChange)="selectedReason($event.value,6)"
+                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+                            <div>
+                                <label for="dataentered">Technican <span class="clr-red"
+                                        *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Technican6"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="technicianList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWTechnician($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianId"
+                                    #workPerfomedInsp="ngModel">
+                                </p-autoComplete>
+                            </div>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.technicianId ==0">
+                                <div class="red_bomb">Technican is required</div>
+                            </div>
+                            <div>
+                                <label> Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.technicianDate"></p-calendar>
+                            </div>
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                                <!-- <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector8" [dropdown]="true"
+                              errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList"
+                              (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                              [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId" >
+                            </p-autoComplete> -->
+                                <p-autoComplete required class="p-autoComplete-ctsm" field="name" name="Inspector12"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorId"
+                                    #workPerformedInsp="ngModel">
+                                </p-autoComplete>
 
 
-                                  </div>
-                                  <div *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
-                                    <p-calendar required class="p-calendar-cstm" [showIcon]="true"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                            </div>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="startDate"
+                                    [disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
                                     [(ngModel)]="saveTearDownData.workOrderWorkPerformed.inspectorDate"></p-calendar>
-                                </div>
                             </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label> Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isWorkPerformed">*</span></label>
+                                <!-- <textarea required name="removal_Memo"  #wpMemo="ngModel"[disabled]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed" [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo" class="form-control text-area-cstm"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo6" required
+                                    [readonly]="saveTearDownData.workOrderWorkPerformed.reasonId ==0 || !saveTearDownData.isWorkPerformed"
+                                    [(ngModel)]="saveTearDownData.workOrderWorkPerformed.memo"></p-editor>
                             </div>
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isWorkPerformed && saveTearDownData.workOrderWorkPerformed.memo ==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div> 
+                    </div>
+                    <!-- <div class="form-row">
+                        <div class="col-md-3">
+                           
+                            </div>
+                            <div class="col-md-3">
+                               
+                            </div>
+                            </div> -->
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Test Data Used')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract854"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderTestDataUsed,8)"
-                [(ngModel)]="saveTearDownData.isTestDataUsed" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Test Data Used" value="saveTearDownData.isTestDataUsed" label="Test Data Used" [(ngModel)]="saveTearDownData.isTestDataUsed" inputId="ny8"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd8">Test Data Used</a>
-            </h4>
-        </div>
-        <div id="stepadd8" class="panel-collapse collapse">
-            <div class="panel-body">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label>Reason  <span class="clr-red" *ngIf="saveTearDownData.isTestDataUsed">*</span></label>
-                            <p-dropdown  required name="company7"  placeholder="Select Reason"
-                            #testDataUsedReasons="ngModel"  [disabled]=" !saveTearDownData.isTestDataUsed"
-                            [options]="testDataUsed"
-                            class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,7)"
-                            [(ngModel)]="saveTearDownData.workOrderTestDataUsed.reasonId">
-                </p-dropdown>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Test Data Used')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract854" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderTestDataUsed,8)"
+                        [(ngModel)]="saveTearDownData.isTestDataUsed" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Test Data Used" value="saveTearDownData.isTestDataUsed" label="Test Data Used" [(ngModel)]="saveTearDownData.isTestDataUsed" inputId="ny8"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd8">Test Data Used</a>
+                </h4>
+            </div>
+            <div id="stepadd8" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <label>Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isTestDataUsed">*</span></label>
+                                <p-dropdown required name="company7" placeholder="Select Reason"
+                                    #testDataUsedReasons="ngModel" [disabled]=" !saveTearDownData.isTestDataUsed"
+                                    [options]="testDataUsed" class="p-dropdown-custom-md-2"
+                                    (onChange)="selectedReason($event.value,7)"
+                                    [(ngModel)]="saveTearDownData.workOrderTestDataUsed.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
                         </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label>Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isTestDataUsed">*</span></label>
+                                <!-- <textarea  required class="form-control text-area-cstm" name="testData"  #testDataUsed="ngModel" [disabled]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"  [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo7" required
+                                    [readonly]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"
+                                    [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isTestDataUsed && saveTearDownData.workOrderTestDataUsed.memo ==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div> 
                     </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isTestDataUsed">*</span></label>
-                            <!-- <textarea  required class="form-control text-area-cstm" name="testData"  #testDataUsed="ngModel" [disabled]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"  [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo7" required [readonly]="saveTearDownData.workOrderTestDataUsed.reasonId ==0 || !saveTearDownData.isTestDataUsed"  [(ngModel)]="saveTearDownData.workOrderTestDataUsed.memo"></p-editor>
-                        </div>
-                       <div *ngIf="f.submitted  && saveTearDownData.isTestDataUsed && saveTearDownData.workOrderTestDataUsed.memo ==''" >
-                        <div  class="red_bomb">Memo is required</div>
-                    </div>
-                        </div>
-                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Bulletins And Modifications')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract345"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderBulletinsModification,9)"
-                [(ngModel)]="saveTearDownData.isBulletinsModification" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Bulletins And Modifications" value="saveTearDownData.isBulletinsModification" label="Bulletins And Modifications" [(ngModel)]="saveTearDownData.isBulletinsModification" inputId="ny9"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd9">Bulletins And Modifications</a>
-            </h4>
-        </div>
-        <div id="stepadd9" class="panel-collapse  collapse">
-            <div class="panel-body">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label> Reason <span class="clr-red" *ngIf="saveTearDownData.isBulletinsModification">*</span></label>
-                            <p-dropdown required  name="company8"  placeholder="Select Reason"
-                            #bulletModifyReason="ngModel"  [disabled]="!saveTearDownData.isBulletinsModification"
-                            [options]="bullitensAndModifications"
-                            class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,8)"
-                            [(ngModel)]="saveTearDownData.workOrderBulletinsModification.reasonId">
-                </p-dropdown>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Bulletins And Modifications')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract345" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderBulletinsModification,9)"
+                        [(ngModel)]="saveTearDownData.isBulletinsModification" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Bulletins And Modifications" value="saveTearDownData.isBulletinsModification" label="Bulletins And Modifications" [(ngModel)]="saveTearDownData.isBulletinsModification" inputId="ny9"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd9">Bulletins And Modifications</a>
+                </h4>
+            </div>
+            <div id="stepadd9" class="panel-collapse  collapse">
+                <div class="panel-body">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <label> Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isBulletinsModification">*</span></label>
+                                <p-dropdown required name="company8" placeholder="Select Reason"
+                                    #bulletModifyReason="ngModel" [disabled]="!saveTearDownData.isBulletinsModification"
+                                    [options]="bullitensAndModifications" class="p-dropdown-custom-md-2"
+                                    (onChange)="selectedReason($event.value,8)"
+                                    [(ngModel)]="saveTearDownData.workOrderBulletinsModification.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isBulletinsModification && saveTearDownData.workOrderBulletinsModification.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
                         </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isBulletinsModification && saveTearDownData.workOrderBulletinsModification.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label> Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isBulletinsModification">*</span></label>
+                                <!-- <textarea  required class="form-control text-area-cstm" name="bulletMod"  #bulletModify="ngModel" [disabled]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification" [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo8" required
+                                    [readonly]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification"
+                                    [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isBulletinsModification && saveTearDownData.workOrderBulletinsModification.reasonId ==0">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div> 
                     </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isBulletinsModification">*</span></label>
-                            <!-- <textarea  required class="form-control text-area-cstm" name="bulletMod"  #bulletModify="ngModel" [disabled]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification" [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo8" required [readonly]="saveTearDownData.workOrderBulletinsModification.reasonId ==0 || !saveTearDownData.isBulletinsModification" [(ngModel)]="saveTearDownData.workOrderBulletinsModification.memo"></p-editor>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isBulletinsModification && saveTearDownData.workOrderBulletinsModification.reasonId ==0" >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                        </div>
-                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Final Test')">
-        <div class="panel-heading">
-            <h4 class="panel-title ">
-                <input type="checkbox" name="contract553"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderFinalTest,10)"
-                [(ngModel)]="saveTearDownData.isFinalTest" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Final Test" value="saveTearDownData.isFinalTest" label="Final Test" [(ngModel)]="saveTearDownData.isFinalTest" inputId="ny10"></p-checkbox> -->
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd10">Final Test</a>
-            </h4>
-        </div>
-        <div id="stepadd10" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label>Reason  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
-                            <p-dropdown required name="company9" [disabled]="!saveTearDownData.isFinalTest"
-                            #finaltestReason="ngModel"   placeholder="Select Reason"
-                            [options]="finalTest" class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,9)" [(ngModel)]="saveTearDownData.workOrderFinalTest.reasonId">
-                </p-dropdown>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Final Test')">
+            <div class="panel-heading">
+                <h4 class="panel-title ">
+                    <input type="checkbox" name="contract553" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderFinalTest,10)"
+                        [(ngModel)]="saveTearDownData.isFinalTest" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Final Test" value="saveTearDownData.isFinalTest" label="Final Test" [(ngModel)]="saveTearDownData.isFinalTest" inputId="ny10"></p-checkbox> -->
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd10">Final Test</a>
+                </h4>
+            </div>
+            <div id="stepadd10" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <label>Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalTest">*</span></label>
+                                <p-dropdown required name="company9" [disabled]="!saveTearDownData.isFinalTest"
+                                    #finaltestReason="ngModel" placeholder="Select Reason" [options]="finalTest"
+                                    class="p-dropdown-custom-md-2" (onChange)="selectedReason($event.value,9)"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalTest.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
                         </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
+                        <div class="col-md-9">
+                            <div>
+                                <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
+                                <!-- <textarea required class="form-control text-area-cstm" name="finaltestmemo1" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest" [(ngModel)]="saveTearDownData.workOrderFinalTest.memo" [required]="saveTearDownData.isFinalTest"  #finaltestMemo="ngModel"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo9" required
+                                    [readonly]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalTest.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.memo==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label>Memo  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
-                            <!-- <textarea required class="form-control text-area-cstm" name="finaltestmemo1" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest" [(ngModel)]="saveTearDownData.workOrderFinalTest.memo" [required]="saveTearDownData.isFinalTest"  #finaltestMemo="ngModel"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo9" required [readonly]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest" [(ngModel)]="saveTearDownData.workOrderFinalTest.memo"></p-editor>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.memo==''" >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                        </div>
+                     
                     </div>
                     <div class="form-row">
                         <div class="col-md-3">
-                              <div >
-                                <label for="dataentered">Technican  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
-                                <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Technican1" [dropdown]="true" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
-                                  errorMessage="Records not found" [forceSelection]="true" [suggestions]="technicianList" emptyMessage="No Records Found"
-                                  (completeMethod)="filterTWTechnician($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                  [(ngModel)]="saveTearDownData.workOrderFinalTest.technicianId" required  #finaltestTech="ngModel" >
-                                </p-autoComplete> 
-                              </div>
-                              <div *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.technicianId ==0" >
-                                <div  class="red_bomb">Technican is required</div>
+                            <div>
+                                <label for="dataentered">Technican <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalTest">*</span></label>
+                                <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Technican1"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="technicianList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWTechnician($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalTest.technicianId" required
+                                    #finaltestTech="ngModel">
+                                </p-autoComplete>
                             </div>
-                              <div>
-                                <label> Date  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isFinalTest && saveTearDownData.workOrderFinalTest.technicianId ==0">
+                                <div class="red_bomb">Technican is required</div>
+                            </div>
+                            <div>
+                                <label> Date <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
                                 <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
-                                [(ngModel)]="saveTearDownData.workOrderFinalTest.technicianDate"></p-calendar>
-                                
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalTest.technicianDate"></p-calendar>
+
                             </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalTest">*</span></label>
+                                <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector9"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalTest.inspectorId" required
+                                    #finaltestInsp="ngModel">
+                                </p-autoComplete>
                             </div>
-                            <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
-                                    <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector9" [dropdown]="true" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderFinalTest.inspectorId"  required  #finaltestInsp="ngModel" >
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted  && saveTearDownData.isFinalTest  && saveTearDownData.workOrderFinalTest.inspectorId ==0"  >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
-                                    <p-calendar required class="p-calendar-cstm" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="startDate" [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isFinalTest  && saveTearDownData.workOrderFinalTest.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red" *ngIf="saveTearDownData.isFinalTest">*</span></label>
+                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="startDate"
+                                    [disabled]="saveTearDownData.workOrderFinalTest.reasonId ==0 || !saveTearDownData.isFinalTest"
                                     [(ngModel)]="saveTearDownData.workOrderFinalTest.inspectorDate"></p-calendar>
-                                </div>
                             </div>
-                            </div>
+                        </div>
+                    </div> 
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Final Inspection')">
-        <div class="panel-heading">
-            <h4 class="panel-title ">
-                <input type="checkbox" name="contract866"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderFinalInspection,11)"
-                [(ngModel)]="saveTearDownData.isFinalInspection" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Final Inspection" value="saveTearDownData.isFinalInspection" label="Final Inspection" [(ngModel)]="saveTearDownData.isFinalInspection" inputId="ny11"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd11">Final Inspection</a>
-            </h4>
-        </div>
-        <div id="stepadd11" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label> Reason  <span class="clr-red" *ngIf="saveTearDownData.isFinalInspection">*</span></label>
-                            <p-dropdown  required name="company10"  placeholder="Select Reason"
-                            #finalInspReason="ngModel"  [disabled]="!saveTearDownData.isFinalInspection"
-                            [options]="finalInspection"
-                            class="p-dropdown-custom-md-2"
-                            (onChange)="selectedReason($event.value,10)"
-                            [(ngModel)]="saveTearDownData.workOrderFinalInspection.reasonId">
-                </p-dropdown>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Final Inspection')">
+            <div class="panel-heading">
+                <h4 class="panel-title ">
+                    <input type="checkbox" name="contract866" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderFinalInspection,11)"
+                        [(ngModel)]="saveTearDownData.isFinalInspection" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Final Inspection" value="saveTearDownData.isFinalInspection" label="Final Inspection" [(ngModel)]="saveTearDownData.isFinalInspection" inputId="ny11"></p-checkbox> -->
+
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd11">Final Inspection</a>
+                </h4>
+            </div>
+            <div id="stepadd11" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <label> Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalInspection">*</span></label>
+                                <p-dropdown required name="company10" placeholder="Select Reason"
+                                    #finalInspReason="ngModel" [disabled]="!saveTearDownData.isFinalInspection"
+                                    [options]="finalInspection" class="p-dropdown-custom-md-2"
+                                    (onChange)="selectedReason($event.value,10)"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalInspection.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isFinalInspection && saveTearDownData.workOrderFinalInspection.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
                         </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isFinalInspection && saveTearDownData.workOrderFinalInspection.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label> Memo  <span class="clr-red" *ngIf="saveTearDownData.isFinalInspection">*</span></label>
-                            <!-- <textarea required name="finalInsp_Memo"  #finalInspMemo="ngModel" class="form-control text-area-cstm" [disabled]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection" [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo10" required [readonly]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection" [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></p-editor>
-                        </div>
-                       <div *ngIf="f.submitted  && saveTearDownData.isFinalInspection  && saveTearDownData.workOrderFinalInspection.memo ==''"  >
-                        <div class="red_bomb">Memo is required</div>
-                    </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label> Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalInspection">*</span></label>
+                                <!-- <textarea required name="finalInsp_Memo"  #finalInspMemo="ngModel" class="form-control text-area-cstm" [disabled]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection" [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo10" required
+                                    [readonly]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalInspection.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isFinalInspection  && saveTearDownData.workOrderFinalInspection.memo ==''">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-3">
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <label for="dataentered">Inspector <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalInspection">*</span></label>
+                                <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector10"
+                                    [dropdown]="true"
+                                    [disabled]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection"
+                                    errorMessage="Records not found" [forceSelection]="true"
+                                    [suggestions]="inspectionList" emptyMessage="No Records Found"
+                                    (completeMethod)="filterTWInspections($event)"
+                                    (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
+                                    [(ngModel)]="saveTearDownData.workOrderFinalInspection.inspectorId" required
+                                    #finalInsptor="ngModel">
+                                </p-autoComplete>
                             </div>
-                            <div class="col-md-3">
-                                <div >
-                                    <label for="dataentered">Inspector  <span class="clr-red" *ngIf="saveTearDownData.isFinalInspection">*</span></label>
-                                    <p-autoComplete class="p-autoComplete-ctsm" field="name" name="Inspector10" [dropdown]="true" [disabled]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection"
-                                      errorMessage="Records not found" [forceSelection]="true" [suggestions]="inspectionList" emptyMessage="No Records Found"
-                                      (completeMethod)="filterTWInspections($event)" (onSelect)="onSelectedTechnician($event);" [size]="30" [minLength]="1"
-                                      [(ngModel)]="saveTearDownData.workOrderFinalInspection.inspectorId" required  #finalInsptor="ngModel" >
-                                    </p-autoComplete>
-                                  </div>
-                                  <div *ngIf="f.submitted && saveTearDownData.isFinalInspection && saveTearDownData.workOrderFinalInspection.inspectorId ==0" >
-                                    <div  class="red_bomb">Inspector is required</div>
-                                </div>
-                                <div>
-                                    <label>Date  <span class="clr-red" *ngIf="saveTearDownData.isFinalInspection">*</span></label>
-                                    <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" 
+                            <div
+                                *ngIf="f.submitted && saveTearDownData.isFinalInspection && saveTearDownData.workOrderFinalInspection.inspectorId ==0">
+                                <div class="red_bomb">Inspector is required</div>
+                            </div>
+                            <div>
+                                <label>Date <span class="clr-red"
+                                        *ngIf="saveTearDownData.isFinalInspection">*</span></label>
+                                <p-calendar required class="p-calendar-cstm" [showIcon]="true" name="startDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [disabled]="saveTearDownData.workOrderFinalInspection.reasonId ==0 || !saveTearDownData.isFinalInspection"
                                     [(ngModel)]="saveTearDownData.workOrderFinalInspection.inspectorDate"></p-calendar>
-                                </div>
                             </div>
-                            </div>
+                        </div>
+                    </div> 
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Additional Comments')">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <input type="checkbox" name="contract234"  class="set_cds" (change)="checkValue($event,saveTearDownData.workOrderAdditionalComments,12)"
-                [(ngModel)]="saveTearDownData.isAdditionalComments" [disabled]="isView">
-                <!-- <p-checkbox class="set_cds" name="Additional Comments" value="saveTearDownData.isAdditionalComments" label="Additional Comments" [(ngModel)]="saveTearDownData.isAdditionalComments" inputId="ny12"></p-checkbox> -->
-               
-                <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd12">Additional Comments</a>
-            </h4>
-        </div>
-        <div id="stepadd12" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-                <div class="form-row">
-                    <div class="col-md-3">
-                        <div >
-                            <label>Reason  <span class="clr-red" *ngIf="saveTearDownData.isAdditionalComments">*</span></label>
-                            <p-dropdown  required name="company"  placeholder="Select Reason"
-                            #addcReason="ngModel"  [disabled]="!saveTearDownData.isAdditionalComments"
-                            [options]="additionalComments"
-                            class="p-dropdown-custom-md-2" [required]="saveTearDownData.isAdditionalComments"
-                            (onChange)="selectedReason($event.value,11)"
-                            [(ngModel)]="saveTearDownData.workOrderAdditionalComments.reasonId">
-                          </p-dropdown>
-                        </div> 
-                         <div *ngIf="f.submitted  && saveTearDownData.isAdditionalComments && saveTearDownData.workOrderAdditionalComments.reasonId ==0" >
-                            <div  class="red_bomb">Reason is required</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div >
-                            <label>Memo <span class="clr-red" *ngIf="saveTearDownData.isAdditionalComments">*</span></label>
-                            <!-- <textarea [required]="saveTearDownData.isAdditionalComments" class="form-control text-area-cstm" name="addcMemo_Memo"  #addcMemo="ngModel" [disabled]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"  [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></textarea> -->
-                            <p-editor  [style]="{'height':'100px'}" name="textAreaInfo11" required [readonly]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"  [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></p-editor>
-                        </div>
-                        <div *ngIf="f.submitted  && saveTearDownData.isAdditionalComments && saveTearDownData.workOrderAdditionalComments.memo=='' " >
-                            <div  class="red_bomb">Memo is required</div>
-                        </div>
-                        </div>
-                    </div>
-            </div>
-        </div>
-    </div>
+        <div class="panel panel-default" *ngIf="checkForTeardownAvalabilityFromWO('Additional Comments')">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <input type="checkbox" name="contract234" class="set_cds"
+                        (change)="checkValue($event,saveTearDownData.workOrderAdditionalComments,12)"
+                        [(ngModel)]="saveTearDownData.isAdditionalComments" [disabled]="isView">
+                    <!-- <p-checkbox class="set_cds" name="Additional Comments" value="saveTearDownData.isAdditionalComments" label="Additional Comments" [(ngModel)]="saveTearDownData.isAdditionalComments" inputId="ny12"></p-checkbox> -->
 
-</div>
-<div *ngIf="!isView">
-    <button type="submit " class="btn btn-primary pull-right m-t-20" >Submit</button>
-</div>
+                    <a class="collapsed ac_cs" data-toggle="collapse" href="#stepadd12">Additional Comments</a>
+                </h4>
+            </div>
+            <div id="stepadd12" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div>
+                                <label>Reason <span class="clr-red"
+                                        *ngIf="saveTearDownData.isAdditionalComments">*</span></label>
+                                <p-dropdown required name="company" placeholder="Select Reason" #addcReason="ngModel"
+                                    [disabled]="!saveTearDownData.isAdditionalComments" [options]="additionalComments"
+                                    class="p-dropdown-custom-md-2" [required]="saveTearDownData.isAdditionalComments"
+                                    (onChange)="selectedReason($event.value,11)"
+                                    [(ngModel)]="saveTearDownData.workOrderAdditionalComments.reasonId">
+                                </p-dropdown>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isAdditionalComments && saveTearDownData.workOrderAdditionalComments.reasonId ==0">
+                                <div class="red_bomb">Reason is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                                <label>Memo <span class="clr-red"
+                                        *ngIf="saveTearDownData.isAdditionalComments">*</span></label>
+                                <!-- <textarea [required]="saveTearDownData.isAdditionalComments" class="form-control text-area-cstm" name="addcMemo_Memo"  #addcMemo="ngModel" [disabled]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"  [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></textarea> -->
+                                <p-editor [style]="{'height':'360px'}" name="textAreaInfo11" required
+                                    [readonly]="saveTearDownData.workOrderAdditionalComments.reasonId==0  || !saveTearDownData.isAdditionalComments"
+                                    [(ngModel)]="saveTearDownData.workOrderAdditionalComments.memo"></p-editor>
+                            </div>
+                            <div
+                                *ngIf="f.submitted  && saveTearDownData.isAdditionalComments && saveTearDownData.workOrderAdditionalComments.memo=='' ">
+                                <div class="red_bomb">Memo is required</div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div *ngIf="!isView">
+        <button type="submit " class="btn btn-primary pull-right m-t-20">Submit</button>
+    </div>
 </form>
 <!-- teardown view -->
 <div id="addNewCharges" class="modal fade" role="dialog" data-backdrop="static" *ngIf="isView">
     <div class="modal-dialog modal-xl">
-      <!-- Modal content-->
+        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" (click)="closeViewdiv()">
-                &times;
-            </button>
-            <h4 class="modal-title">Tear Down View</h4>
+                <button type="button" class="close" data-dismiss="modal" (click)="closeViewdiv()">
+                    &times;
+                </button>
+                <h4 class="modal-title">Tear Down View</h4>
             </div>
             <div class="modal-body">
-                <app-teardown-overview  *ngIf="isView"  [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [workFlowWorkOrderId1]="workFlowWorkOrderId"></app-teardown-overview>
+                <app-teardown-overview *ngIf="isView" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId"
+                    [workFlowWorkOrderId1]="workFlowWorkOrderId"></app-teardown-overview>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeViewdiv()">
+                    Close
+                </button>
             </div>
         </div>
     </div>

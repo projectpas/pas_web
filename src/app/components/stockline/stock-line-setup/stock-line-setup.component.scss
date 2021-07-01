@@ -14,13 +14,19 @@ textarea {
 .black-reason{
     margin-top:-4px !important;
 }
+.display-flex{
+    display: flex;
+}
+.m-l-10{
+    margin-left:10px;
+}
 .black-reason-icon-align{
     margin-top:-3px !important;
 }
 .blacklist-memo-div{
     margin-top:-8px !important;
 }
-.memo-width{
+.stock-line-memo-width{
     width:100% !important;
 }
 .inner-addon .ui-autocomplete-input {
@@ -157,3 +163,6 @@ table td {
     border-color: black transparent transparent transparent;
   }
   
+  .tl-input{
+    width: 23% !important;
+}

@@ -295,12 +295,12 @@ export class ExchangeQuotePartNumberComponent {
     // if(!this.checkForDuplicates(event)){
     this.exchangequoteService.getSearchPartObject().subscribe(data => {
       this.query = data;
-      this.query.partSearchParamters.quantityAlreadyQuoted =
-        Number(this.query.partSearchParamters.quantityAlreadyQuoted) +
-        Number(event.quantityFromThis);
-      this.query.partSearchParamters.quantityToQuote =
-        Number(this.query.partSearchParamters.quantityRequested) -
-        Number(this.query.partSearchParamters.quantityAlreadyQuoted);
+      // this.query.partSearchParamters.quantityAlreadyQuoted =
+      //   Number(this.query.partSearchParamters.quantityAlreadyQuoted) +
+      //   Number(event.quantityFromThis);
+      // this.query.partSearchParamters.quantityToQuote =
+      //   Number(this.query.partSearchParamters.quantityRequested) -
+      //   Number(this.query.partSearchParamters.quantityAlreadyQuoted);
     });
     this.part.quantityToBeQuoted = Number(event.quantityFromThis);
     this.part.quantityAlreadyQuoted = Number(event.quantityFromThis);
@@ -427,7 +427,6 @@ export class ExchangeQuotePartNumberComponent {
   }
   enableUpdateButton: boolean = false;
   approve() {
-    console.log("selectedParts",this.selectedParts);
     this.enableUpdateButton = true;
     let partList: any = [];
     this.exchangeQuoteView.parts = [];
@@ -437,11 +436,75 @@ export class ExchangeQuotePartNumberComponent {
     for (let i = 0; i < this.selectedParts.length; i++) {
       let selectedPart = this.selectedParts[i];
       let partNameAdded = false;
-      //if (!invalidParts && !invalidDate) {
+      if (!selectedPart.customerRequestDate) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
+      }
+      if (!selectedPart.estimatedShipDate) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
+      }
+      if (!selectedPart.promisedDate) {
+        this.isSpinnerVisible = false;
+        invalidParts = true;
+        if (!partNameAdded) {
+          errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+          partNameAdded = true;
+        }
+        errmessage = errmessage + '<br />' + "Please enter Promised Date."
+      }
+      if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
+        let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+        let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+        let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+        let opendate = new Date(Date.UTC(this.exchangeQuote.openDate.getUTCFullYear(), this.exchangeQuote.openDate.getUTCMonth(), this.exchangeQuote.openDate.getUTCDate()));
+
+        if (crdate < opendate || esdate < opendate || pdate < opendate) {
+          invalidDate = true;
+          if (crdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Request Date cannot be less than open date."
+          }
+          if (esdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Est. Ship Date cannot be less than open date."
+          }
+          if (pdate < opendate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if (!partNameAdded) {
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Cust Prmsd Date cannot be less than open date."
+          }
+        }
+      }
+      if (!invalidParts && !invalidDate) {
         let partNumberObj = this.exchangequoteService.marshalExchangeQuotePartToSave(selectedPart, this.userName);
         this.exchangeQuoteView.parts.push(partNumberObj);
         console.log("this.exchangeQuoteView.parts" , this.exchangeQuoteView.parts);
-      //}
+      }
     }
     this.isSpinnerVisible = true;
     this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
@@ -476,5 +539,40 @@ export class ExchangeQuotePartNumberComponent {
         }
       })
     }
+  }
+
+  isEditDisabled(quote: IExchangeQuote, part: any): boolean {
+    if (part.createdBy && part.createdBy == this.userName) {
+      return ((quote.isApproved || part.isApproved) && part.methodType != "S")
+    } else {
+      return true;
+    }
+  }
+
+  openPartToEdit(part) {
+    this.isEdit = true;
+    let contentPartEdit = this.salesMargin;
+    this.part = part;
+    if (this.part) {
+      this.exchangequoteService.getSearchPartObject().subscribe(data => {
+        this.query = data;
+        this.part = part;
+        // this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
+        // this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
+        // this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+      });
+      this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
+    }
+  }
+  onCustomerDateChange(stockIndex, rowIndex) {
+    let requestDate = this.summaryParts[rowIndex].childParts[stockIndex].customerRequestDate;
+    this.summaryParts[rowIndex].childParts[stockIndex].promisedDate = requestDate;
+    this.summaryParts[rowIndex].childParts[stockIndex].estimatedShipDate = requestDate;
+    this.combineParts(this.summaryParts);
+    this.canSaveParts = false;
+  }
+  onEditPartDetails() {
+    this.combineParts(this.summaryParts);
+    this.canSaveParts = false;
   }
 }

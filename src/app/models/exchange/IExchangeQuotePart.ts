@@ -1,6 +1,7 @@
 import { ExchangeQuoteScheduleBilling } from "../../components/exchange-quote/shared/components/models/ExchangeQuoteScheduleBilling";
 export interface IExchangeQuotePart {
-    exchangeQuotepartPartId: number;
+    //exchangeQuotepartPartId: number;
+    exchangeQuotePartId: number;
     exchangeQuoteId: number;
     itemMasterId: number;
     stockLineId: number;
@@ -65,6 +66,7 @@ export interface IExchangeQuotePart {
     exchangeOutrightPrice: number;
     daysForCoreReturn: number;
     billingIntervalDays: string;
+    exchangeOverhaulCost:number;
     currencyId: number;
     currency: string;
     depositeAmount: number;

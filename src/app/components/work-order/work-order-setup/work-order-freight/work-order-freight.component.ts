@@ -9,7 +9,7 @@ import { CommonService } from '../../../../services/common.service';
 import { getModuleIdByName } from '../../../../generic/enums';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
-@Component({
+@Component({ 
     selector: 'app-work-order-freight',
     templateUrl: './work-order-freight.component.html',
     styleUrls: ['./work-order-freight.component.css'],
@@ -24,6 +24,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     @Output() refreshData = new EventEmitter();
     @Output() saveFreightsListDeletedStatus = new EventEmitter();
     @Input() view: boolean = false;
+    @Input() isSummarizedView: boolean = false;
     @Input() subWorkOrderDetails;
     @Input() isWorkOrder;
     @Input() isQuote = false;
@@ -33,12 +34,14 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     @Input() buildMethodDetails: any = {};
     @Input() isSubWorkOrder:any=false;
     @Input() subWOPartNoId;
+    @Input() isLoadWoFreights:any=false;
+    @Output() refreshFreightsWO = new EventEmitter();
     customerId: any;
     shipViaList: any;
     carrierList: any;
     mainEditingIndex: any;
     subEditingIndex: any;
-    overAllMarkup: any;
+    overAllMarkup: any='';
     costPlusType: number = 0;
     modal: NgbModalRef;
     isSpinnerVisible: boolean = false;
@@ -49,44 +52,44 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     ]
 
     auditHistoryHeaders = [
-        { field: 'taskName', header: 'Task',isRequired:false },
-        { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Weight',isRequired:false },
-        { field: 'uom', header: 'UOM',isRequired:false },
-        { field: 'length', header: 'Length',isRequired:false },
-        { field: 'height', header: 'Height',isRequired:false },
-        { field: 'width', header: 'Width',isRequired:false },
-        { field: 'dimensionUOM', header: 'Dimension UOM',isRequired:false },
-        { field: 'currency', header: 'Currency',isRequired:false },
-        { field: 'amount', header: 'Amount',isRequired:true },
-        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
-        { field: 'memo', header: 'Memo',isRequired:false },
-        { field: 'createdDate', header: 'Created Date',isRequired:false },
-        { field: 'createdBy', header: 'Created By',isRequired:false },
-        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+        { field: 'taskName', header: 'Task',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'shipVia', header: 'Ship Via',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'weight', header: 'Weight',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'uom', header: 'UOM',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'length', header: 'Length',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'height', header: 'Height',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'width', header: 'Width',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'dimensionUOM', header: 'Dimension UOM',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'currency', header: 'Currency',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'amount', header: 'Amount',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false ,isCheckbox:true,isDate:false},
+        { field: 'memo', header: 'Memo',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'createdDate', header: 'Created Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'createdBy', header: 'Created By',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
       ]
       auditHistoryQuoteHeaders = [
-        { field: 'taskName', header: 'Task',isRequired:false },
-        { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Weight',isRequired:false },
-        { field: 'uom', header: 'UOM',isRequired:false },
-     { field: 'length', header: 'Length',isRequired:false },
-        { field: 'height', header: 'Height',isRequired:false },
-        { field: 'width', header: 'Width',isRequired:false },
-        { field: 'dimensionUomName', header: 'Dimension UOM',isRequired:false },
-        { field: 'currency', header: 'Currency',isRequired:false },
-        { field: 'amount', header: 'Amount',isRequired:true },
-        { field: 'memo', header: 'Memo',isRequired:false },
-        { field: 'billingName', header: 'Billing Method',isRequired:false },
-        { field: 'markUp', header: 'Mark Up',isRequired:false },
-        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
-        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'taskName', header: 'Task',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'shipVia', header: 'Ship Via',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'weight', header: 'Weight',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'uom', header: 'UOM',isRequired:false ,isCheckbox:false,isDate:false},
+     { field: 'length', header: 'Length',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'height', header: 'Height',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'width', header: 'Width',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'dimensionUomName', header: 'Dimension UOM',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'currency', header: 'Currency',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'amount', header: 'Amount',isRequired:true ,isCheckbox:false,isDate:false},
+        { field: 'memo', header: 'Memo',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'billingName', header: 'Billing Method',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'markUp', header: 'Mark Up',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false ,isCheckbox:true,isDate:false},
 
-        { field: 'createdDate', header: 'Created Date',isRequired:false },
-        { field: 'createdBy', header: 'Created By',isRequired:false },
-        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'createdBy', header: 'Created By',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
+        { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
       ]
     isEdit: boolean = false;
     unitOfMeasureList: any = [];
@@ -98,6 +101,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     totalRecords: number = 0;
     totalPages: number = 0;
     pageSize: number = 10;
+    billingMethod:any={
+        tm:1,
+        actual:2
+    }
     constructor(private workOrderService: WorkOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -105,21 +112,39 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         private cdRef: ChangeDetectorRef) {
     }
     ngOnInit() {
+        this.billingMethod=this.billingMethod;
         if (this.freightForm) {
             this.freightForm = [...this.freightForm, new Freight()];
         }
+        if(this.savedWorkOrderData){
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
-        this.getShipViaByCustomerId();
+        }
+       // this.getShipViaByCustomerId();
+     if(!this.isSummarizedView){
+        this.getshipvia();
         this.getUOMList('');
-        this.getCurrencyList('');
-        // this.getCarrierList();
+        this.getCurrencyList(''); 
         this.getTaskList();
+     }
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
         }
         if(this.buildMethodDetails){
-            this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == 0 || this.buildMethodDetails['freightBuildMethod'] == undefined)
+            {
+                this.costPlusType = 1;
+                this.tmchange();
+            }else{
+                this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+            }
+
+              if(this.isLoadWoFreights)
+            {
+                this.tmchange();
+            }
+            
+           
             if(this.buildMethodDetails['freightFlatBillingAmount']){
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
             }
@@ -127,8 +152,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     originalList:any=[]
     ngOnChanges() {
+        this.isLoadWoFreights=this.isLoadWoFreights;
+        this.billingMethod=this.billingMethod;
         this.originalList=this.workOrderFreightList;
-        // console.log("hello",this.originalList)
         // if(this.originalList && this.originalList[0] && this.originalList[0].workOrderQuoteDetailsId !=undefined){
         //     this.disableFrt=true;
         // }else{
@@ -144,10 +170,13 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
               r[a.taskId].push(a);
               return r;
             }, Object.create(null));
+
+
             this.workOrderFreightList = [];
             for(let x in this.workOrderFreightLists){
               this.workOrderFreightList.push(this.workOrderFreightLists[x]);
             }
+            
             if (this.workOrderFreightList && this.workOrderFreightList.length > 0) {
                 this.totalRecords = this.workOrderFreightList.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -156,8 +185,22 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 this.totalPages = 0;
             }
         }
-        if(this.buildMethodDetails){
-            this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+        
+        if(this.buildMethodDetails)
+        {
+            if(this.buildMethodDetails['freightBuildMethod'] == null || this.buildMethodDetails['freightBuildMethod'] == 0  || this.buildMethodDetails['freightBuildMethod'] == undefined)
+            {
+                this.costPlusType = 1;
+                
+            }else{
+                this.costPlusType = this.buildMethodDetails['freightBuildMethod'];
+            }
+
+            if(this.isLoadWoFreights)
+            {
+                this.tmchange();
+            }
+          
             if(this.buildMethodDetails['freightFlatBillingAmount']){
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
             }
@@ -261,7 +304,13 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.subEditingIndex = subIndex;
         this.isEdit = true;
         rowData.amount=rowData.amount? this.formateCurrency( rowData.amount) : '0.00';
-        this.freightForm = [rowData];
+
+        let newFreight = new Freight();
+        newFreight = { ...rowData }
+        this.freightForm = [newFreight];
+
+
+       // this.freightForm = [rowData];
         this.getCurrencyList('');
        this.getUOMList('');
        this.getTaskList();
@@ -290,6 +339,12 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         else {
             this.freightForm.isDelete = true;
         }
+
+        if(this.freightForm.length ==0)
+        {
+            this.disableUpdate=true;
+        }
+        
     }
     memoIndex;
     onAddTextAreaInfo(material, index) {
@@ -307,6 +362,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     onCloseTextAreaInfo() {
         $("#textarea-popupFreight").modal("hide");
+    }
+    loadFreiht(){
+        this.refreshFreightsWO.emit(true);
     }
     saveFreightList() {
         if (!this.isQuote) {
@@ -336,15 +394,25 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                     dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                     currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                     billingAmount: this.formateCurrency(x.amount),
-                    billingMethodId:this.costPlusType? this.costPlusType :0,
-                    markupPercentageId: this.overAllMarkup ? this.overAllMarkup : 0,
+                    billingMethodId:this.costPlusType? this.costPlusType :'',
+                    markupPercentageId: this.overAllMarkup ? this.overAllMarkup : '',
                     // currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 }
             });
+
+            this.taskList.forEach(
+                (task)=>{
+                  if(task.taskId == this.freightForm[0].taskId)
+                  {
+                    this.freightForm[0].taskName = task.description ? task.description :task.label
+                  }
+                }
+              )
             if (this.isEdit) {
                 this.workOrderFreightList[this.mainEditingIndex][this.subEditingIndex] = this.freightForm[0];
                 $('#addNewFreight').modal('hide');
                 this.isEdit = false;
+                this.markupChanged(this.workOrderFreightList[this.mainEditingIndex][this.subEditingIndex],'row')
             }
             else {    
                 let temp = [];
@@ -366,6 +434,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             }
         }
         this.disableFrt=false;
+    if(this.isQuote){
+        this.markupChanged(this.workOrderFreightLists, 'row')
+    }
     }
 
     createFreightsQuote() {
@@ -384,8 +455,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                       "FreightBilling":this.getTotalTaskBillingAmount(taskCharge),
                       "FreightRevenue":this.getTotalTaskBillingAmount(taskCharge),
                       "masterCompanyId":this.authService.currentUser.masterCompanyId,
-                      "CreatedBy":"admin",
-                      "UpdatedBy":"admin",
+                      "CreatedBy":this.userName,
+                      "UpdatedBy":this.userName,
                       "CreatedDate":new Date().toDateString(),
                       "UpdatedDate":new Date().toDateString(),
                       "IsActive":true,
@@ -410,6 +481,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         let result = {'data': sendData, 'taskSum': WorkOrderQuoteTask, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType}
 
         this.saveFreightListForWO.emit(result);
+        this.buildMethodDetails['freightBuildMethod'] =this.costPlusType;
+        this.buildMethodDetails['freightFlatBillingAmount']=this.freightFlatBillingAmount;
         this.disableFrt=true;
     }
     currentRow:any={};
@@ -419,6 +492,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       this.modal.result.then(() => { 
       }, () => {  })
   }
+
+  
   dismissModel() {
     this.modal.close();
   }
@@ -427,8 +502,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
 // if(this.currentRow.workOrderFreightId !=null){
     this.currentRow.isDeleted = true;
 // }
-this.refreshData.emit();
-            $('#addNewFreight').modal('hide');
+           //this.refreshData.emit();
+           this.modal.close();
             this.isEdit = false;
             this.disableFrt=false;
         }
@@ -472,22 +547,26 @@ this.refreshData.emit();
     }
 
     tmchange() {
+        let billingMethodId = Number(this.costPlusType);
         for (let mData of this.workOrderFreightList) {
             mData.forEach(
               (x)=>{
-                x.billingMethodId = this.costPlusType;
+                x.billingMethodId = (billingMethodId == 3) ? '' : billingMethodId;
+               // x.billingMethodId = this.costPlusType;
                 x.markupPercentageId = '';
                 x.billingAmount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g,'')));
-                if(this.costPlusType == 3){
-                    x.billingAmount = '0.00';
-                    this.freightFlatBillingAmount = '0.00';
-                }
+                // if(this.costPlusType == 3){
+                //     x.billingAmount = '0.00';
+                //     this.freightFlatBillingAmount = '0.00';
+                // }
                 if(Number(this.costPlusType) == 1){
                     this.overAllMarkup = '';
                 }
               }
             )
         }
+
+        this.getTotalBillingAmount();
     }
 
     getTotalAmount() {
@@ -507,7 +586,7 @@ this.refreshData.emit();
         if (tData) {
             tData.forEach(
                 (material) => {
-                    if (material.amount) {
+                    if (material.amount && !material.isDeleted) {
                         total += Number(material.amount.toString().replace(/\,/g,''));
                     }
                 }
@@ -666,4 +745,73 @@ this.refreshData.emit();
             return false;
         return true;
     }
+    shipViaId: number = 0;
+    getShipViaId(event) {
+        this.shipViaId = event;
+    }
+
+    IsAddShipVia: boolean = false;
+    ShipViaEditID: number;
+    shipviaindex;
+    isEditModeShipVia: boolean = false;
+
+    onEditShipVia(value, id, index) {
+        this.shipviaindex = index;
+        if (value == 'Add') {
+            this.ShipViaEditID = 0;
+        }
+        else {
+            this.ShipViaEditID = id;
+            this.isEditModeShipVia = true;
+        }
+        this.IsAddShipVia = true;
+    }
+
+    RefreshAfterAddShipVia(ShippingViaId) {
+        if (ShippingViaId != undefined || ShippingViaId > 0) {
+            this.isSpinnerVisible = true;
+            this.commonService.getShipVia(this.authService.currentUser.masterCompanyId).subscribe(response => {
+                this.isSpinnerVisible = false;
+                this.setShipViaList(response);
+                this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+                //this.isEnableUpdateButton = false;
+            }, error => this.isSpinnerVisible = false);
+        }
+        this.IsAddShipVia = false;
+        $('#AddShipVia').modal('hide');
+    }
+    getshipvia()
+    {
+        this.commonService.getShipVia(this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.setShipViaList(res);
+        })
+    }
+    setShipViaList(res) {
+        if (res && res.length > 0) {
+            this.shipViaList = res.map(x => {
+                return {
+                    label: x.name,
+                    value: x.shippingViaId
+                }
+            });
+        } else {
+            this.shipViaList = [];
+        }
+    }
+
+        // Markup Validation 
+        checkValidationforMarkUp() {
+            var result = false;
+         if(this.workOrderFreightList && this.workOrderFreightList[0] && this.workOrderFreightList[0].length !=0){
+            this.workOrderFreightList[0].forEach(
+                data => {
+                  if (data.billingMethodId==1) { 
+                    if (data.markupPercentageId == ''  || data.markupPercentageId == undefined || data.markupPercentageId == null) {
+                      result = true;
+                    }
+                  }
+                })
+         }
+            return result;
+          }
 }

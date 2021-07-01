@@ -22,6 +22,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     @Input() customerContactList: any;
     @Input() subWorkOrderDetails;
     @Input() isSubWorkOrder: any = false;
+    @Input() isSummarizedView: any = false;
+    
     @Input() subWOPartNoId;
     @Input() moduleId;
     @Input() referenceId;
@@ -35,20 +37,20 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     data: any = [];
     modal: NgbModalRef;
     headers = [
-        { field: 'SERIAL_NO', header: 'Serial No' },
-        { field: 'description', header: 'Memo' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        // { field: 'SERIAL_NO', header: 'Serial Num' },
+        { field: 'descriptionData', header: 'Memo' ,width:"200px"},
+        { field: 'createdDate', header: 'Created Date',width:"100px" },
+        { field: 'createdBy', header: 'Created By',width:"100px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"100px" },
+        { field: 'updatedBy', header: 'Updated By',width:"100px" },
     ]
     selectedColumns = [
-        { field: 'SERIAL_NO', header: 'Serial No' },
-        { field: 'descriptionData', header: 'Memo' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        // { field: 'SERIAL_NO', header: 'Serial Num' },
+        { field: 'descriptionData', header: 'Memo',width:"200px" },
+        { field: 'createdDate', header: 'Created Date' ,width:"100px" },
+        { field: 'createdBy', header: 'Created By',width:"100px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"100px" },
+        { field: 'updatedBy', header: 'Updated By',width:"100px" },
     ];
     addList: any = [];
     isEdit: any;
@@ -112,6 +114,10 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     }
     closeDeleteModal() {
 		$("#memodownloadConfirmation").modal("hide");
+	}
+
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
 	}
     addMemo() {
         this.enableSaveMemo();
@@ -178,6 +184,11 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Memo Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllMemoList();
                     }, err => {
                         this.errorMessageHandler();
@@ -192,6 +203,11 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Memo Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllMemoList();
                     }, err => {
                         this.errorMessageHandler();
@@ -295,7 +311,15 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     pageIndexChange(event) {
         this.pageSize = event.rows;
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     getHtml(data, field) {
         if (field == 'description') {
             return $.parseHTML(data)[0];

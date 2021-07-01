@@ -26,28 +26,30 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
     totalPages: number = 10;
     data: any[] = [];
     globalSettings: any = {};
+    isSpinnerVisible:boolean=false;
     global_lang: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     headers = [
-        { field: 'partNumber', header: 'Main PN' },
-        { field: 'revisedPartNo', header: 'Revised PN' },
-        { field: 'partDescription', header: 'PN Description' },
-        { field: 'workOrderNum', header: 'WO Num' },
-        { field: 'stage', header: 'Stage' },
-        { field: 'revenue', header: 'Revenue',width:"80px" },
-        { field: 'materialCost', header: 'Parts Cost' ,width:"80px"},
-        { field: 'materialRevenuePercentage', header: 'Parts Rev %' ,width:"80px"},
-        { field: 'laborCost', header: 'Labor Cost',width:"80px" },
-        { field: 'laborRevenuePercentage', header: 'Labor Rev %',width:"80px" },
-        { field: 'overHeadCost', header: 'Overhead Cost',width:"80px" },
-        { field: 'overHeadCostRevenuePercentage', header: 'Overhead Cost %' ,width:"80px"},
-        { field: 'otherCost', header: 'Other Cost',width:"80px" },
-        { field: 'directCost', header: 'Direct Cost',width:"80px" },
-        { field: 'directCostRevenuePercentage', header: 'Direct Cost Rev %',width:"80px" },
-        { field: 'margin', header: 'Margin',width:"80px" },
-        { field: 'marginPercentage', header: 'Margin %',width:"80px" },
-        { field: 'customerName', header: 'Customer' },
-        { field: 'status', header: 'Status' },
+        { field: 'partNumber', header: 'Main PN',width:"120px" },
+        { field: 'revisedPartNo', header: 'Revised PN',width:"100px" },
+        { field: 'partDescription', header: 'PN Description',width:"250px" },
+        { field: 'workOrderNum', header: 'WO Num',width:"100px" },
+        { field: 'stage', header: 'Stage',width:"100px" },
+        { field: 'revenue', header: 'Revenue',width:"100px" },
+        { field: 'materialCost', header: 'Parts Cost' ,width:"100px"},
+        { field: 'materialRevenuePercentage', header: 'Parts Rev %' ,width:"100px"},
+        { field: 'laborCost', header: 'Labor Cost',width:"100px" },
+        { field: 'laborRevenuePercentage', header: 'Labor Rev %',width:"100px" },
+        { field: 'overHeadCost', header: 'Overhead Cost',width:"110px" },
+        { field: 'overHeadCostRevenuePercentage', header: 'Overhead Cost %' ,width:"130px"},
+        { field: 'otherCost', header: 'Other Cost',width:"100px" },
+        { field: 'freightCost', header: 'Freight Cost',width:"100px" },
+        { field: 'directCost', header: 'Direct Cost',width:"100px" },
+        { field: 'directCostRevenuePercentage', header: 'Direct Cost Rev %',width:"120px" },
+        { field: 'margin', header: 'Margin',width:"100px" },
+        { field: 'marginPercentage', header: 'Margin %',width:"100px" },
+        { field: 'customerName', header: 'Customer',width:"120px" },
+        { field: 'status', header: 'Status',width:"100px" },
     ]
     selectedColumns = this.headers;
     workOrderId: any;
@@ -79,14 +81,18 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
     }
 
     getWorkOrderAnalysisData(workOrderId) {
+        this.isSpinnerVisible=true;
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
         this.workOrderService.workOrderAnalysisData(workOrderId, id, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
+
+                    this.isSpinnerVisible=false;
                     if (res) {
                         this.data = res.map(x => {
                             return {
                                 ...x,
+                                revenue: this.formatCost(x.revenue),
                                 materialCost: this.formatCost(x.materialCost),
                                 materialRevenuePercentage: this.formatCost(x.materialRevenuePercentage),
                                 laborCost: this.formatCost(x.laborCost),
@@ -94,8 +100,11 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
                                 overHeadCost: this.formatCost(x.overHeadCost),
                                 otherCost: this.formatCost(x.otherCost),
                                 directCost: this.formatCost(x.directCost),
-                                otherCostRevenuePercentage: this.formatCost(x.otherCostRevenuePercentage),
-                                revenuePercentage: this.formatCost(x.revenuePercentage)
+                                freightCost: this.formatCost(x.freightCost),
+                                directCostRevenuePercentage: this.formatCost(x.directCostRevenuePercentage),
+                                revenuePercentage: this.formatCost(x.revenuePercentage),
+                                margin: this.formatCost(x.margin),
+                                marginPercentage: this.formatCost(x.marginPercentage)
                             }
                         });
                         // if (this.data.length != 0) {
@@ -103,6 +112,8 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
                         //   this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
                         // }
                     }
+                }, error => {
+                    this.isSpinnerVisible = false;
                 }
             )
     }

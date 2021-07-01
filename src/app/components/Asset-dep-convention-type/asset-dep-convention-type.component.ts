@@ -161,7 +161,6 @@ export class AssetDepConventionTypeComponent implements OnInit {
     public allWorkFlows: AssetDepConvention[] = [];
 
     private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
-        // debugger;
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.auditHisory = auditHistory;
@@ -280,8 +279,6 @@ export class AssetDepConventionTypeComponent implements OnInit {
     }
 
     SaveandEditDepConvension() {
-        // debugger;
-
         this.isSaving = true;
         console.log(this);
 

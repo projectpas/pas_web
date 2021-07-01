@@ -312,7 +312,7 @@ export class VendorCapesComponent implements OnInit {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 2000, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
-            this.CapesTypelistCollection = res;
+            this.CapesTypelistCollection = res;            
             this.isSpinnerVisible = false;
         },err => {
             const errorLog = err;
@@ -369,11 +369,15 @@ export class VendorCapesComponent implements OnInit {
         this.isSpinnerVisible = false;
     }
 
-    onChangeCapabilityTypeId(field)
-    {
-        var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);
-        if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
-            field.capabilityTypeDescription = ObjCapabilityType.label;
+    onChangeCapabilityTypeId(field){
+        // var ObjCapabilityType = getObjectById('value', field.capabilityTypeId, this.CapesTypelistCollection);        
+        // if(ObjCapabilityType != undefined && ObjCapabilityType !=  null)
+        //     field.capabilityTypeDescription = ObjCapabilityType.label;
+
+        this.commonService.GetCapabilityTypeDescription(field.capabilityTypeId).subscribe(response => {			
+			field.capabilityTypeDescription = response.description;
+		},err => {			
+		});
     }
 
     onChangeCostAmt(field)
@@ -401,30 +405,7 @@ export class VendorCapesComponent implements OnInit {
 			}, error => this.isSpinnerVisible = false) //this.saveFailedHelper(error))
     }
 
-    saveVendorCapes(){
-        // var errmessage = '';
-
-        // for (let i = 0; i < this.fieldArray.length; i++) {
-        //     this.alertService.resetStickyMessage();	
-        //     if(this.fieldArray[i].TAT == 0 || this.fieldArray[i].TAT == null) {	
-		// 		this.isSpinnerVisible = false;	
-		// 		errmessage = errmessage + "TAT values must be greater than zero."
-        //     }
-        //     if(this.fieldArray[i].cost == 0 || this.fieldArray[i].cost == null) {	
-        //         this.isSpinnerVisible = false;	
-        //         if(errmessage != '') {
-        //             errmessage = errmessage + '<br />' + "Cost values must be greater than zero."
-        //         }
-        //         else
-        //         {
-        //             errmessage = errmessage + "Cost values must be greater than zero."
-        //         }				
-        //     }
-        //     if(errmessage != '') {
-		// 		this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
-		// 		return;
-		//     }
-        // }
+    saveVendorCapes(){       
 
         const data = this.fieldArray.map(obj => {
             obj.isPMA = obj.isPMA;
@@ -625,8 +606,20 @@ export class VendorCapesComponent implements OnInit {
 
     previousOrNextTab(previousOrNext){
         this.nextOrPreviousTab = previousOrNext;
-        let content = this.tabRedirectConfirmationModal;
-        this.modal = this.modalService.open(content, { size: "sm" });
+        if(!this.disableCapes){
+            let content = this.tabRedirectConfirmationModal;
+            this.modal = this.modalService.open(content, { size: "sm" });
+        } else {
+            if(this.nextOrPreviousTab == "Previous"){
+                this.activeIndex = 1;
+                this.vendorService.changeofTab(this.activeIndex);
+                
+            } else {
+                this.activeIndex = 3;
+                this.editVendorId.emit(this.vendorId);
+                this.vendorService.changeofTab(this.activeIndex);
+            }
+        }
     }
 
     redirectToTab(){

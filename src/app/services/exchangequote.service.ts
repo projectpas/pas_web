@@ -21,6 +21,11 @@ import { PartDetail } from "../components/exchange-quote/shared/components/model
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { ExchangeQuotePart } from '../models/exchange/ExchangeQuotePart';
 import { ExchangeQUoteMarginSummary } from '../models/exchange/ExchangeQUoteMarginSummary';
+import { IExchangeQuoteCharge } from '../models/exchange/IExchangeQuoteCharge';
+import { IExchangeQuoteFreight } from '../models/exchange/IExchangeQuoteFreight';
+import { ExchangeSalesOrderConversionCritera } from "../components/exchange-quote/models/exchange-sales-order-conversion-criteria";
+import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
+import { ExchangeSalesOrderView } from "../models/exchange/ExchangeSalesOrderView";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -36,7 +41,9 @@ export class ExchangequoteService {
   selectedParts: PartDetail[];
   activeStep = new Subject();
   query: ItemMasterSearchQuery;
-
+  totalFreights = 0;
+  totalCharges = 0;
+  totalcost=0;
   constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
 
   getNewExchangeQuoteInstance(customerId: number) {
@@ -116,8 +123,8 @@ export class ExchangequoteService {
     });
   }
 
-  getAllExchangeQuoteSettings() {
-    return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings();
+  getAllExchangeQuoteSettings(masterCompanyId) {
+    return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings(masterCompanyId);
   }
 
   marshalExchangeQuotePartToSave(selectedPart, userName) {
@@ -127,12 +134,12 @@ export class ExchangequoteService {
     //   }
     // })
     let partNumberObj = new ExchangeQuotePart();
-    partNumberObj.exchangeQuotepartPartId = selectedPart.exchangeQuotepartPartId;
+    partNumberObj.exchangeQuotePartId = selectedPart.exchangeQuotePartId;
     partNumberObj.stockLineId = selectedPart.stockLineId;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-    // partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
-    // partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
-    // partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
+    partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
+    partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
+    partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
     //partNumberObj.priorityId = selectedPart.priorityId;
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
     partNumberObj.fxRate = selectedPart.fixRate;
@@ -186,13 +193,19 @@ export class ExchangequoteService {
 
     partNumberObj.exchangeCurrencyId=selectedPart.exchangeCurrencyId;
     partNumberObj.loanCurrencyId=selectedPart.loanCurrencyId;
-    partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
+    //partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
+    partNumberObj.exchangeListPrice = selectedPart.exchangeListPrice ? formatStringToNumber(selectedPart.exchangeListPrice) : 0;
     partNumberObj.entryDate=selectedPart.entryDate;
-    partNumberObj.exchangeOverhaulPrice=selectedPart.exchangeOverhaulPrice;
-    partNumberObj.exchangeCorePrice=selectedPart.exchangeCorePrice;
+    //partNumberObj.exchangeOverhaulPrice=selectedPart.exchangeOverhaulPrice;
+    partNumberObj.exchangeOverhaulPrice = selectedPart.exchangeOverhaulPrice ? formatStringToNumber(selectedPart.exchangeOverhaulPrice) : 0;
+    //partNumberObj.exchangeCorePrice= formatStringToNumber(Number(selectedPart.exchangeCorePrice).toFixed(2));
+    partNumberObj.exchangeCorePrice = selectedPart.exchangeCorePrice ? formatStringToNumber(selectedPart.exchangeCorePrice) : 0;
     partNumberObj.estOfFeeBilling=selectedPart.estOfFeeBilling;
     partNumberObj.billingStartDate=selectedPart.billingStartDate;
-    partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
+    //partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
+    partNumberObj.exchangeOutrightPrice = selectedPart.exchangeOutrightPrice ? formatStringToNumber(selectedPart.exchangeOutrightPrice) : 0;
+    //partNumberObj.exchangeOverhaulCost=selectedPart.exchangeOverhaulCost;
+    partNumberObj.exchangeOverhaulCost = selectedPart.exchangeOverhaulCost ? formatStringToNumber(selectedPart.exchangeOverhaulCost) : 0;
     partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
     partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
     partNumberObj.currencyId=selectedPart.currencyId;
@@ -233,13 +246,16 @@ export class ExchangequoteService {
     //partNumberObj.statusName = selectedPart.statusName;
     partNumberObj.description = selectedPart.partDescription;
     partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-    partNumberObj.exchangeQuotePartId = selectedPart.salesOrderQuotePartId;
+    partNumberObj.exchangeQuotePartId = selectedPart.exchangeQuotePartId;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
     partNumberObj.createdBy = selectedPart.createdBy;
     partNumberObj.serialNumber = selectedPart.serialNumber;
     // partNumberObj.totalSales = selectedPart.totalSales;
     // partNumberObj.idNumber = selectedPart.idNumber;
     // partNumberObj.isApproved = selectedPart.isApproved;
+    partNumberObj.customerRequestDate = new Date(selectedPart.customerRequestDate);
+    partNumberObj.promisedDate = new Date(selectedPart.promisedDate);
+    partNumberObj.estimatedShipDate = new Date(selectedPart.estimatedShipDate);
     partNumberObj.exchangeCurrencyId=selectedPart.exchangeCurrencyId;
     partNumberObj.loanCurrencyId=selectedPart.loanCurrencyId;
     partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
@@ -250,6 +266,7 @@ export class ExchangequoteService {
     partNumberObj.billingStartDate=selectedPart.billingStartDate;
     partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
     partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
+    partNumberObj.exchangeOverhaulCost=selectedPart.exchangeOverhaulCost;
     partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
     partNumberObj.currencyId=selectedPart.currencyId;
     partNumberObj.currency=selectedPart.currency;
@@ -303,7 +320,7 @@ export class ExchangequoteService {
         //   }
         // })
         exchangefees=parseFloat(part.exchangeListPrice);
-        overhaulprice=parseFloat(part.exchangeOverhaulPrice);
+        overhaulprice= part.exchangeOverhaulPrice ? parseFloat(part.exchangeOverhaulPrice) : 0;
         othercharges=0;
         //const totalestrevenue = parseFloat(parseFloat(exchangefees) + parseFloat(overhaulprice))
         if(part.exchangeQuoteScheduleBilling.length>0){
@@ -312,7 +329,7 @@ export class ExchangequoteService {
         else{
           cogsfees=0;
         }
-        overhaulcost=parseFloat(part.exchangeOverhaulCost);
+        overhaulcost= part.exchangeOverhaulCost ? parseFloat(part.exchangeOverhaulCost) : 0;
         othercost=0;
         //const marginamount=(parseFloat(totalestrevenue)-parseFloat(totalestcost));
         //const marginpercentage=(parseFloat(marginamount)/parseFloat(totalestrevenue));
@@ -332,7 +349,7 @@ export class ExchangequoteService {
 
   getTotalEstRevenue(marginSummary) {
     let totalEstRevenue: number = 0;
-    totalEstRevenue = marginSummary.exchangeFees + marginSummary.overhaulPrice;
+    totalEstRevenue = marginSummary.exchangeFees + marginSummary.overhaulPrice + this.totalCharges;
     return totalEstRevenue;
   }
 
@@ -350,7 +367,7 @@ export class ExchangequoteService {
 
   getTotalEstCost(marginSummary) {
     let totalEstCost: number = 0;
-    totalEstCost = marginSummary.cogsFees + marginSummary.overhaulCost;
+    totalEstCost = marginSummary.cogsFees + marginSummary.overhaulCost + this.totalcost;
     return totalEstCost;
   }
 
@@ -361,5 +378,96 @@ export class ExchangequoteService {
   getAllExchangeQuoteAnalysis(id) {
     return this.exchangeQuoteEndpointService.getAllExchangeQuoteAnalysis(id);
   }
+  getCustomerQuotesList(exchangeQuoteId) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getCustomerQuotesList(exchangeQuoteId)
+    );
+  }
+  sentForInternalApproval(data) {
+    return this.exchangeQuoteEndpointService.sentForInternalApproval(data);
+  }
+  getExchangeQuoteCharges(id, isDeleted) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteCharges(id, isDeleted);
+  }
 
+  createExchangeQuoteCharge(chargesList: IExchangeQuoteCharge[]): Observable<IExchangeQuote[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.createExchangeQuoteCharge(chargesList)
+    );
+  }
+  setTotalCharges(amount) {
+    this.totalCharges = amount;
+  }
+  setTotalFreights(amount) {
+    this.totalFreights = amount;
+  }
+  setTotalcost(amount) {
+    this.totalCharges = amount;
+  }
+
+  getExchangeQuoteFreights(id, isDeleted) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteFreights(id, isDeleted);
+  }
+
+  createFreight(freightsList: IExchangeQuoteFreight[]): Observable<IExchangeQuote[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.createFreight(freightsList)
+    );
+  }
+
+  deleteexchangeQuoteChargesList(chargesId, userName) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.deleteexchangeQuoteChargesList(chargesId, userName)
+    );
+  }
+
+  deleteexchangeQuoteFreightList(friegntId, userName) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.deleteexchangeQuoteFreightList(friegntId, userName)
+    );
+  }
+
+  getExchangeQuoteFreightsHistory(id) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteFreightsHistory(id);
+  }
+  getExchangeQuoteChargesHistory(id) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteChargesHistory(id);
+  }
+
+  delete(exchangeQuoteId: number): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.delete(exchangeQuoteId)
+    );
+  }
+
+  getExchangeQuoteHistory(exchangeQuoteId) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteHistory(exchangeQuoteId);
+  }
+  getview(exchangeQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getview(exchangeQuoteId)
+    );
+  }
+  getleasingCompany(masterCompanyId?) {
+    return this.exchangeQuoteEndpointService.getleasingCompany(masterCompanyId);
+  }
+  convertfromquote(salesQuoteConversionCriteria: ExchangeSalesOrderConversionCritera, currentEmployeeId: number): Observable<ExchangeSalesOrderView[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId)
+    );
+  }
+  resetSalesOrderQuote() {
+    // this.approvers = [];
+    // this.initializeApprovals();
+    this.selectedParts = [];
+    this.totalFreights = 0;
+    this.totalCharges = 0;
+    this.exchangeOrderQuote = new ExchangeOrderQuote();
+  }
+  getSalesOrderQuteInstance() {
+    return Observable.create(observer => {
+      observer.next(this.exchangeOrderQuote);
+      observer.complete();
+    });
+  }
 }

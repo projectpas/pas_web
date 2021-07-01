@@ -68,7 +68,10 @@ export class SalesOrderActionsComponent implements OnInit {
       this.openConfirmationModal(actionType, this.confirmationModal.header, this.confirmationModal.body.cancel);
     } else if (actionType == SalesOrderActionType.CloseSalesOrder) {
       this.openConfirmationModal(actionType, this.confirmationModal.header, this.confirmationModal.body.close);
-    } else {
+    } else if (actionType == SalesOrderActionType.MakeDuplicate) {
+      this.copySalesOrder();
+    }
+    else {
       this.onActionClick.emit(new SalesOrderEventArgs(actionType, SalesOrderConfirmationType.None));
     }
   }
@@ -121,7 +124,6 @@ export class SalesOrderActionsComponent implements OnInit {
       {
         label: 'Email', command: () => {
           this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Email, SalesOrderConfirmationType.None));
-
         }
       },
       {
@@ -164,36 +166,36 @@ export class SalesOrderActionsComponent implements OnInit {
 
   initActions(): void {
     this.actionItems = [
-      {
-        label: 'Email SO', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.EmailSalesOrder, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Make Duplicate', command: () => {
-          this.copySalesOrder();
-        }
-      },
-      {
-        label: 'Sales Register', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.SalesRegister, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Activity', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Activity, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Authorize Return', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.AuthorizeReturn, SalesOrderConfirmationType.None));
-        }
-      },
-      {
-        label: 'Refund', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Refund, SalesOrderConfirmationType.None));
-        }
-      }
+      // {
+      //   label: 'Email SO', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.EmailSalesOrder, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Make Duplicate', command: () => {
+      //     this.copySalesOrder();
+      //   }
+      // },
+      // {
+      //   label: 'Sales Register', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.SalesRegister, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Activity', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Activity, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Authorize Return', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.AuthorizeReturn, SalesOrderConfirmationType.None));
+      //   }
+      // },
+      // {
+      //   label: 'Refund', command: () => {
+      //     this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.Refund, SalesOrderConfirmationType.None));
+      //   }
+      // }
     ];
   }
 

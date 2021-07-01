@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 declare var $ : any;
 import {AlertService} from '../../../../services/alert.service';
 import * as moment from 'moment';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { DatePipe } from "@angular/common";
 import { Table } from 'primeng/table';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -37,6 +37,7 @@ export class WorkOrderQuoteListComponent implements OnInit {
     { field: 'workOrderNum', header: 'WO Num' },
     { field: 'customerName', header: 'Cust Name' },
     { field: 'customerCode', header: 'Cust Code' },
+    { field: 'versionNo', header: 'Quote Version' },
     { field: 'openDate', header: 'Open Date' },
     { field: 'promisedDate', header: 'Promise Date' },
     { field: 'estCompletionDate', header: 'Est. Comp Date' },
@@ -56,7 +57,9 @@ export class WorkOrderQuoteListComponent implements OnInit {
   isGlobalFilter: boolean = false;
   filterText: any = '';
   filteredText: any = '';
-  constructor(private router: ActivatedRoute,      private authService: AuthService, private modalService: NgbModal, private datePipe: DatePipe,private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService:AlertService, private workorderMainService: WorkOrderService, private currencyService:CurrencyService, private cdRef: ChangeDetectorRef,  private route: Router) {}
+  currentStatus = 'open';
+
+  constructor(private router: ActivatedRoute, private routs: Router, private authService: AuthService, private modalService: NgbModal, private datePipe: DatePipe,private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService:AlertService, private workorderMainService: WorkOrderService, private currencyService:CurrencyService, private cdRef: ChangeDetectorRef,  private route: Router) {}
   ngOnInit() {
     this.breadcrumbs = [
       { label: 'Work Order Quote' },
@@ -93,7 +96,6 @@ openDownload(content) {
 }
 
 closeModal() {
-  //$("#downloadConfirmation").modal("hide");
   this.modal.close();
 }
 
@@ -130,7 +132,6 @@ refreshList() {
         return data['stage']
     } else if (key === 'estimatedCompletionDateType') {
         return this.convertmultipleDates(data['estimatedCompletionDate']);
-        // return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM-DD-YYYY') : data['estimatedCompletionDate'];
     } else {
         return data[key]
     }
@@ -145,7 +146,7 @@ refreshList() {
     return arrDates;
   }
   edit(data){
-    window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${data.workOrderId}`, "_self");
+    this.routs.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${data.workOrderId}`);
   }
   view(data){
     this.woQuoteViewData = undefined;
@@ -166,6 +167,14 @@ loadData(event) {
   this.pageIndex = pageIndex;
   this.pageSize = event.rows;
   event.first = pageIndex;
+
+  if (this.currentStatus) {
+    this.lazyLoadEventData.filters = {
+        ...this.lazyLoadEventData.filters,
+        status: this.lazyLoadEventData.filters.status == undefined ? this.currentStatus : this.lazyLoadEventData.filters.status,
+    }
+}
+  
   if (!this.isGlobalFilter) {   
     this.getAllWorkOrderQuoteList(event);       
 } else {
@@ -173,12 +182,23 @@ loadData(event) {
 }
 }
 
+changeOfStatus(status) {        
+  const lazyEvent = this.lazyLoadEventData;
+  this.currentStatus = status === '' ? this.currentStatus : status;
+  this.isSpinnerVisible = true;
+  this.getAllWorkOrderQuoteList({
+      ...lazyEvent,
+      filters: {
+          ...lazyEvent.filters,
+          status: this.currentStatus,
+      }
+  })
+}
+
 fieldSearch(field) {
   this.isGlobalFilter = false;
-  // if (field === 'workOrderStatus') {
-  //     this.currentStatus = 'open';
-  // }
 }
+
 globalSearch(value) {
   this.pageIndex = 0;
   this.filteredText = value;
@@ -228,8 +248,6 @@ get currentUserMasterCompanyId(): number {
             this.totalRecords = 0;
             this.totalPages = 0;
         }
-
-
       },err=>{
         this.isSpinnerVisible = false;
       })

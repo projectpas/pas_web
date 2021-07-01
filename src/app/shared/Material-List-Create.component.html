@@ -1,5 +1,6 @@
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table "
   style="overflow: hidden;">
+  <!-- column-r1-fixed -->
   <div>
     <span class="cat-heading cat4" *ngIf="!isEdit">
       Add {{ isWorkOrder ? 'PN' : ' Material' }}<i (click)="addRow()" class="fa fa-plus"></i>
@@ -9,7 +10,7 @@
     </span>
   </div>
   <form #materialCreateForm="ngForm">
-    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+    <div [ngClass]="(isEdit == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'">
     <div class="tableFixHead">
     <table class="table table-bordered" style="height:auto;max-height:350px !important">
       <thead>
@@ -29,7 +30,7 @@
           <th style="min-width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="min-width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="width:60px">Deferred</th>
-          <th style="z-index:1">Memo</th>
+          <th >Memo</th>
           <th *ngIf="!isEdit">Actions</th>
         </tr>
       </thead>
@@ -37,10 +38,10 @@
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
+            <select class="form-control wf-pub-id qtyWidth text_tranform" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
               name="task_{{ i }}" required (change)="onTaskChange(material)">
-              <option value="">Select </option>
-              <option *ngFor="let task of taskList" [value]="task.taskId">{{
+              <!-- <option value="">Select </option> -->
+              <option *ngFor="let task of taskList"  [value]="task.taskId">{{
                 task.description
                 }}</option>
             </select> 
@@ -61,16 +62,16 @@
               </div>
             </div>
           </td>
-          <td class="min-width-150">
+          <td class="min-width-250">
             {{ material.partDescription }}
           </td>
           <td>
-            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
-              (onChange)="getPNDetails(material)" class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
+            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" id="mat_condition" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
+              (onChange)="getPNDetails(material)" class="p-dropdown-1001"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
               required>
             </p-dropdown>
           </td>
-          <td>
+          <td> 
             <select class="form-control wf-pub-id full-width qtyWidth mauto" (ngModelChange)="getActive()" [(ngModel)]="material.materialMandatoriesId"
               (change)="onSelectMaterialManditory(material)"  name="mandi_{{ i }}">
               <option value="0">--select--</option>
@@ -143,9 +144,9 @@
             </button>
           </td>
         </tr>
-      </tbody>
-      <tfoot *ngIf="workFlow.materialList.length > 0 && !isWorkOrder">
-        <tr>
+      <!-- </tbody>
+      <tfoot *ngIf="workFlow.materialList.length > 0 && !isWorkOrder"> -->
+        <tr *ngIf="workFlow.materialList.length > 0 && !isWorkOrder">
           <td>
             <b>Total</b>
           </td>
@@ -162,8 +163,14 @@
           <td *ngIf="!isQuote"></td>
           <td>&nbsp;</td> 
           <td>&nbsp;</td>
+          <td *ngIf="isQuote">&nbsp;</td>
+          
+          <td *ngIf="!isEdit" style="background: #f1efef !important;position:sticky !important">&nbsp;</td>
+       
+
         </tr>
-      </tfoot>
+      <!-- </tfoot> -->
+      </tbody>
     </table>
     </div>
     </div>
@@ -241,7 +248,7 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <h4 class="modal-title">Are You Sure Want to Remove?</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
       <span aria-hidden="true">&times;</span>
     </button>

@@ -14,6 +14,24 @@
   max-width: 150px;
   margin: 0 auto;
 }
+.width-160{
+  width: 160px !important;
+}
+.width-170{
+  width:170px !important;
+}
+.width-80{
+  width:80px !important;
+}
+.history-close-button{
+  width:50px;font-size:10.5px !important
+}
+.create_po_crl{
+  color: #36c6d3 !important;
+}
+.min-width-250{
+  min-width:250px !important;
+}
 .mr-top5{
   margin-top: 5px;
 }
@@ -42,7 +60,15 @@ font-size: 10px !important;
   width:65px !important;
 }
 .defered-check{
-  pointer-events: none !important;margin-left: 43% !important;
+  pointer-events: none !important;
+  margin-left: 39% !important;
+}
+.defered-check2{
+  pointer-events: none !important;
+}
+.defered-check3{
+  pointer-events: none !important;
+  margin-left: 3% !important;
 }
 .roleUpd{
   width: 24px !important;
@@ -195,4 +221,166 @@ input[type='number']::-webkit-outer-spin-button {
 }
 .Materials_wo tr ,td {
   padding: 0px 2px !important;
+}
+
+
+
+
+
+
+
+// new css for wo material list table
+
+button {
+  border-radius: 5px;
+}
+p-table tr td {
+  text-align: left !important;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+.footer-t-rec {
+  margin-left: 65%;
+}
+.footer--count {
+  margin-right: 0px;
+}
+
+.zui-table {
+  border: none;
+  border-right: solid 1px #DDEFEF;
+  border-collapse: separate;
+  border-spacing: 0;
+  font: normal 13px Arial, sans-serif;
+}
+.zui-table tr th {
+  background-color: #DDEFEF;
+  border: none;
+  color: #336B6B;
+  width:100px;
+  padding: 10px;
+  text-align: left;
+  text-shadow: 1px 1px 1px #fff;
+  white-space: nowrap;
+}
+.zui-table tr td {
+  border-bottom: solid 1px #DDEFEF;
+  width:100px;
+  color: #333;
+  padding: 10px;
+  text-shadow: 1px 1px 1px #fff;
+  white-space: nowrap;
+}
+.zui-wrapper {
+  position: relative;
+}
+.zui-scroller {
+  overflow-y: hidden;
+  padding-bottom: 5px;
+  width: 1279px;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.zui-scroller-view {
+  overflow-y: hidden;
+  padding-bottom: 5px;
+  width: 1097px;
+  border: 1px solid rgba(0,0,0,.125);
+}
+.zui-table .zui-sticky-col {
+  border-left: solid 1px #DDEFEF;
+  border-right: solid 1px #DDEFEF;
+  left: 0;
+  position: absolute;
+  top: auto;
+  width: 120px;
+}
+
+.ui-table-scrollable-body {
+  margin-right: 17px !important;
+}
+
+.ui-table-scrollable-body {
+  margin-right: 17px !important;
+}
+///// this code below is for width of the scroll bar
+::-webkit-scrollbar {
+  width: 10px;
+}
+.ui-table-scrollable-header {
+  overflow-y: scroll;
+}
+.alternate-part-label{
+  color: #ff5663 !important;
+}
+.row-bg1 {
+  background-color: #ffe4e2 !important;
+}
+.sales-quote-part-search-data tr td:first-child {
+   background: #4298ff;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+.sales-quote-part-search-data tr td:last-child {
+  background: #FFF;
+  position: -webkit-sticky;
+  position: sticky ;
+  right: 0;
+  width:80px !important;
+}
+.sales-quote-part-search-data tr th:first-child {
+   background: #4298ff;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+.sales-quote-part-search-data tr th:last-child {
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+}
+.font-size-10{
+  font-size: 10px !important;
+}
+.summary-column{
+  width:auto !important; background-color: #EAF2C5 !important;
+}
+.part-number-button{
+  width:55px !important;height:20px !important;
+}
+.part-buttons{
+  text-align:right ; width:100% !important; padding-top:5px !important;
+}
+.save-close-button{
+  padding: 6px 12px !important;margin-top: 10px !important;
+}
+.width-120{
+  width:120px !important
+}
+.width-107{
+  width:107px !important
+}
+.color-white{
+  color: #fff !important;
+}
+.no-recordscusMsg{
+  color: red !important;
+  font-size: 10px !important;
+  text-transform: capitalize;
+  padding: 6px !important;
+  padding-left: 13% !important;
+}
+.close_export{
+  float: right !important;
+    color: #595959 !important;
+    margin-right: 0px !important;
+}
+.text_st{
+  text-align: start !important;
 }

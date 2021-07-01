@@ -153,11 +153,14 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
 
     getConditionsList() { 
         this.isSpinnerVisible = true;
-        let consitionIds = [];
-        if (this.UpdateMode) {
-            consitionIds = this.workFlow.exclusions.reduce((acc, x) => {
-                return consitionIds.push(acc.conditionId);
-            }, 0)
+        let consitionIds = []; 
+        if (this.UpdateMode) { 
+            // consitionIds = this.workFlow.exclusions.reduce((acc, x) => {
+            //  consitionIds.push(this.editData? this.editData.conditionId:0);
+            // }, 0)
+            this.workFlow.exclusions.forEach(element => {
+                consitionIds.push(element.conditionId)
+            });
         }
         if(consitionIds && consitionIds.length ==0){
             consitionIds.push(0)
@@ -255,13 +258,19 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         object.partNumber = null;
     }
 
-    onPartSelect(event, exclusion, index) {
-        var isEpnExist = this.workFlow.exclusions.filter(x => x.partNumber == event.partNumber && x.taskId == this.workFlow.taskId);
-        if (isEpnExist.length > 1) {
+    onPartSelect(event, exclusion, index) { 
+        var isEpnExist = this.workFlow.exclusions.find(x => x.isDeleted==false && x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
+        if (isEpnExist != undefined) {
+            exclusion.partName=undefined;
+            exclusion.itemMasterId="";
+            exclusion.conditionId="";
+            exclusion.itemClassification="";
+            exclusion.stockType="";
+            exclusion.quantity="";
+            exclusion.estimtPercentOccurrance="";
             exclusion.itemMasterId = "";
             exclusion.partDescription = "";
             exclusion.partNumber = "";
-            exclusion.partName = "";
             exclusion.itemClassificationId = '';
             exclusion.createdBy = this.userName;
             event = "";
@@ -507,5 +516,14 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         }
         this.reCalculate();
         this.dismissModel();
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
     }
 }

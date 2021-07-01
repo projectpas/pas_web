@@ -1,48 +1,18 @@
 ﻿import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { fadeInOut } from '../../services/animations';
-import { PageHeaderComponent } from '../../shared/page-header.component';
-declare var $ : any;
+declare var $: any;
 import { AlertService, MessageSeverity } from '../../services/alert.service';
-import { ItemMasterService } from '../../services/itemMaster.service';
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
-import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { MenuItem } from 'primeng/api';//bread crumb
-import { Charge } from '../../models/charge.model';
-import { MasterCompany } from '../../models/mastercompany.model';
-import { AuditHistory } from '../../models/audithistory.model';
 import { AuthService } from '../../services/auth.service';
-import { ReceivingCustomerWorkService } from '../../services/receivingcustomerwork.service';
-import { MasterComapnyService } from '../../services/mastercompany.service';
 import { CustomerService } from '../../services/customer.service';
-import { Condition } from '../../models/condition.model';
-import { ConditionService } from '../../services/condition.service';
-import { VendorService } from '../../services/vendor.service';
-import { BinService } from '../../services/bin.service';
-import { SiteService } from '../../services/site.service';
-import { Site } from '../../models/site.model';
-import { LegalEntityService } from '../../services/legalentity.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition } from '../../generic/autocomplete';
+import { Router } from '@angular/router';
 import { CommonService } from '../../services/common.service';
 import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
-import { StocklineService } from '../../services/stockline.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { WorkOrderService } from '../../services/work-order/work-order.service';
-import { WorkOrderType } from '../../models/work-order-type.model';
-import { WorkOrderSettingsService } from '../../services/work-order-settings.service';
 import { SalesQuoteService } from '../../services/salesquote.service';
 import { SOQSettingsModel } from '../../components/sales/quotes/models/verify-sales-quote-model';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-create-sales-quote-settings',
@@ -50,18 +20,13 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
     styleUrls: ['./create-sales-quote-settings.component.scss'],
     providers: [DatePipe]
 })
-
 export class CreateSalesQuoteSettingsComponent implements OnInit {
-
-
     accountTypes: any[] = [];
     receivingForm: SOQSettingsModel = new SOQSettingsModel();
-
-    @ViewChild("errorMessagePop",{static:false}) public errorMessagePop: ElementRef;
+    @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
     errorModal: NgbModalRef;
-    // salesOrderViewList = [];
-    salesOrderStatusList:any = [];
-    salesOrderPriorityList:any = [];
+    salesOrderStatusList: any = [];
+    salesOrderPriorityList: any = [];
     isEditMode: boolean = false;
     private onDestroy$: Subject<void> = new Subject<void>();
     breadcrumbs: MenuItem[] = [
@@ -77,6 +42,7 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
     errorMessages: any[] = [];
     salesOrderViewList = [{ label: "PN View", value: 1 },
     { label: "SOQ View", value: 2 }];
+
     constructor(private router: Router,
         private salesQuoteService: SalesQuoteService,
         private alertService: AlertService,
@@ -90,10 +56,12 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
         if (this.salesQuoteService.isEditSOQuoteSettingsList) {
             this.isEditMode = true;
             this.receivingForm = this.salesQuoteService.soQuoteSettingsData;
+            if (this.receivingForm.effectiveDate) {
+                this.receivingForm.effectiveDate = new Date(this.receivingForm.effectiveDate);
+            }
         }
         this.getInitialData();
     }
-
 
     get masterCompanyId(): number {
         return this.authService.currentUser
@@ -110,17 +78,10 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
     getAccountTypes() {
         this.customerService.getCustomerTypes().subscribe(result => {
             this.accountTypes = result[0];
-        })
+        });
     }
 
-
-
     getInitialData() {
-        // this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description"),
-        //     this.customerService.getCustomerTypes(),
-        //     this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
-        //     this.commonservice.smartDropDownList("Priority", "PriorityId", "Description")
-
         let quoteTypeId = this.receivingForm.quoteTypeId ? this.receivingForm.quoteTypeId : 0;
         let defaultStatusId = this.receivingForm.defaultStatusId ? this.receivingForm.defaultStatusId : 0;
         let defaultPriorityId = this.receivingForm.defaultPriorityId ? this.receivingForm.defaultPriorityId : 0;
@@ -128,20 +89,16 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
 
         this.isSpinnerVisible = true;
         forkJoin(
-            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [quoteTypeId].join(),this.masterCompanyId),
-            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join(),this.masterCompanyId),
-            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join(),this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [quoteTypeId].join(), this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join(), this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join(), this.masterCompanyId),
         ).subscribe(result => {
             this.isSpinnerVisible = false;
             this.salesOrderTypes = result[0];
-            // this.accountTypes = result[1][0];
-            // this.allSettings = result[2];
             this.salesOrderStatusList = result[1];
             this.salesOrderPriorityList = result[2];
         }, error => {
             this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog);
         })
     }
 
@@ -151,23 +108,17 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
                 this.salesOrderTypes = result[0];
             }, error => {
                 this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadFailed(errorLog)
             }
         );
     }
 
     saveOrUpdateSOQuoteSetting() {
+        this.isSpinnerVisible = true;
         let validSettings = this.validateSettings();
         if (validSettings) {
+            this.isSpinnerVisible = false;
             let content = this.errorMessagePop;
             this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-            this.errorModal.result.then(
-                () => {
-                },
-                () => {
-                }
-            );
         } else {
             if (!this.isEditMode) {
                 this.receivingForm.createdDate.toDateString();
@@ -181,6 +132,7 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
             this.salesQuoteService.saveOrUpdateSOQuoteSetting(this.receivingForm)
                 .subscribe(
                     (res) => {
+                        this.isSpinnerVisible = false;
                         this.alertService.showMessage(
                             this.moduleName,
                             `Setting ${(this.isEditMode) ? 'updated' : 'created'} successfully`,
@@ -189,8 +141,6 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
                         this.router.navigateByUrl('/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list');
                     }, error => {
                         this.isSpinnerVisible = false;
-                        const errorLog = error;
-                        this.onDataLoadFailed(errorLog)
                     }
                 )
         }
@@ -237,36 +187,12 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
             this.errorMessages.push("Please select SOQ Status");
             haveError = true;
         }
+        if (this.receivingForm.isApprovalRule) {
+            if (this.receivingForm.effectiveDate == null) {
+                this.errorMessages.push("Effective Date Required!");
+                haveError = true;
+            }
+        }
         return haveError;
     }
-
-    onDataLoadFailed(log) {
-        // this.isSpinnerVisible = false;
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
-
-
 }
-
-
-

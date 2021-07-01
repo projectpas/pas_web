@@ -72,9 +72,9 @@ export class CustomerAircraftComponent implements OnInit {
     ];
     colsaircraftLD = [
         { field: "aircraftType", header: "Aircraft" },
-        { field: "aircraftModel", header: "Model",width:"60px" },
+        { field: "aircraftModel", header: "Model",width:"70px" },
         { field: "dashNumber", header: "Dash Numbers" },
-        { field: "inventory", header: "Inventory" ,width:"70px"},        
+        { field: "inventory", header: "Inventory" ,width:"90px"},        
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },     
         { field: 'updatedDate', header: 'Updated Date' },
@@ -681,14 +681,15 @@ export class CustomerAircraftComponent implements OnInit {
     }
     nextClick() {
         this.stopmulticlicks = true;
-        this.tab.emit('Atachapter');
+        //this.tab.emit('Atachapter');
+        this.tab.emit('Financial');
         setTimeout(() => {
             this.stopmulticlicks = false;
         }, 500)
     }
     backClick() {
-
-        this.tab.emit('Contacts');
+        //this.tab.emit('Contacts');
+        this.tab.emit('Atachapter');
     }
     private saveCompleted(user?: any) {
 

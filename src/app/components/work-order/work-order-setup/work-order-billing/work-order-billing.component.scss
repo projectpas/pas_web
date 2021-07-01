@@ -13,6 +13,9 @@
 .nav-pills-cstm li {
   float: left;
 }
+.number-text-align{
+  text-align: right;
+}
 .m-t-15{
   margin-top: 15px !important;
 }
@@ -28,6 +31,7 @@
 }
 .grand-total-span{
   color: red !important; float: right !important;
+  padding-top:3px !important;
 }
 .tr-back{
   color: #f1f1f1 !important; background-color: #fff !important;
@@ -187,7 +191,13 @@ textarea {
   min-width: 80px;
 }
 .table tbody tr td {
-  padding: 4px;
+  // padding: 4px;
+}
+.invoice-div{
+  padding-left:25px !important; padding-top:5px !important;
+}
+.invoice-button-div{
+  margin-right: 10px !important;margin-bottom: 9px !important;float:right 
 }
 
 // end

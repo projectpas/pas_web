@@ -47,7 +47,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         private alertService: AlertService) {
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void {  
         if (this.isWorkOrder) {
             this.workFlow = this.workFlowObject;
             this.row = this.workFlow.equipments[0];
@@ -92,7 +92,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(): void {
-        if (this.isWorkOrder) {
+        if (this.isWorkOrder) { 
             this.workFlow = this.workFlowObject;
             this.workFlow.equipments = [];
             this.row = this.workFlow.equipments[0]; 
@@ -122,6 +122,8 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.workflowChargeTypeId = "";
         newRow.partNumber = "";
         newRow.isDeleted = false;
+        newRow.assetIdName="";
+        newRow.assetRecordId=0;
         this.workFlow.equipments.push(newRow);
     }
     clearautoCompleteInput(currentRecord) {
@@ -157,7 +159,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
 		if (event.query !== undefined && event.query !== null) {
             this.ptnumberlistdata(event.query)
         }else{
-            this.ptnumberlistdata('');
+            // this.ptnumberlistdata('');
         }
     }
     get currentUserMasterCompanyId(): number {
@@ -168,12 +170,16 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         let equipmentIds = [];
         equipmentIds.push(0);
-        if (this.UpdateMode) {
-           this.workFlow.equipments.forEach(acc => {
-                equipmentIds.push(acc.assetTypeId);
-            })
+        if(this.editData){
+        if (this.isEdit || this.UpdateMode) {
+           equipmentIds.push(this.editData? this.editData.assetRecordId:0);
         }
-
+    }
+        if (this.UpdateMode && this.isWorkFlow) {
+            this.workFlow.equipments.forEach(acc => {
+                 equipmentIds.push(acc.assetRecordId);
+             })
+            }
         this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds,this.currentUserMasterCompanyId)
             .subscribe(results => {
                 this.isSpinnerVisible = false;
@@ -296,7 +302,21 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
   editorgetmemo(ev) {
       this.disableEditor = false;
   }
+  close() {
+    this.isEdit = false;
+    this.editData = undefined;
+    this.workFlow.equipments = []; 
+    this.closeEvent.emit(true)
+}
 
+allowNumberOnly(evt) {
+  
+    // Only ASCII charactar in that range allowed
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+        return false;
+    return true;
+}
 }
 
 

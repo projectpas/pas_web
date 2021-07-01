@@ -11,6 +11,7 @@ import { emailPattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { SalesQuoteService } from '../../../../services/salesquote.service';
+import { SalesOrderService } from '../../../../services/salesorder.service';
 
 @Component({
     selector: 'app-common-email',
@@ -22,6 +23,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     @Input() moduleId;
     @Input() CurrentModuleName;
     @Input() referenceId;
+    @Input() isSummarizedView: any = false;
     @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
     @Input() workOrderId: any;
     @Input() isView: boolean = false;
@@ -49,11 +51,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     emailType: number;
     data: any = [];
     headers = [
-        { field: 'emailType', header: 'Email Type' },
-        { field: 'toEmail', header: 'To Email' },
-        { field: 'subject', header: 'Subject' },
-        { field: 'contactBy', header: 'Contacted By' },
-        { field: 'contactDate', header: 'Contact Date' }
+        { field: 'emailType', header: 'Email Type',width:"90px" },
+        { field: 'toEmail', header: 'To Email',width:"200px" },
+        { field: 'subject', header: 'Subject' ,width:"200px"},
+        { field: 'contactBy', header: 'Contacted By',width:"90px" },
+        { field: 'contactDate', header: 'Contact Date',width:"90px" }
     ]
     selectedColumns = this.headers;
     addList: any = [];
@@ -78,14 +80,15 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         private commonService: CommonService, private datePipe: DatePipe,
         private authService: AuthService, private modalService: NgbModal, 
         private alertService: AlertService, private configurations: ConfigurationService,
-        private salesOrderQuoteService: SalesQuoteService) { }
+        private salesOrderQuoteService: SalesQuoteService,
+        private salesOrderService: SalesOrderService) { }
 
     ngOnInit(): void {
         if (this.type == 1) {
-            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact',width:"100px" })
         } else {
 
-            this.headers.unshift({ field: 'vendorContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' ,width:"100px"})
         }
     }
 
@@ -166,7 +169,15 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.pageSize = event.rows;
         event.first = pageIndex;
     }
-
+    parsedText(text) {
+        if (text) {
+          const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+        }
+      }
     addMemo() {
         this.isEditMode = false;
         this.formData = new FormData();
@@ -188,6 +199,14 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                 if (data) {
                     let quote = data && data.length ? data[0] : null;
                     this.subject = quote.salesOrderQuote.customerName + ', Sales Quote Number: ' + quote.salesOrderQuote.salesOrderQuoteNumber;
+                }
+            });
+        }
+        else if (this.CurrentModuleName == "SalesOrder") {
+            this.salesOrderService.getSalesOrder(this.referenceId).subscribe(data => {
+                if (data) {
+                    let salesOrder = data && data.length ? data[0] : null;
+                    this.subject = salesOrder.salesOrder.customerName + ', Sales Order Number: ' + salesOrder.salesOrder.salesOrderNumber;
                 }
             });
         }
@@ -382,7 +401,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                     this.isSpinnerVisible = false;
                     this.emailViewData = res;
                     this.attachmentDetails = res.attachmentDetails;
-                    console.log("res ", res);;
                 }, err => {
                     this.errorMessageHandler();
                 }
@@ -435,7 +453,10 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     arrayContactlist: any = []
     getAllEmployees(strText = '') {
         this.arrayContactlist.push(0);
-        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+        //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
+			true, 0, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+
             this.employeeList = res.map(x => {
                 return {
                     ...x,
@@ -443,7 +464,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                     name: x.label
                 }
             });
-
         }, err => {
             this.errorMessageHandler();
         })
@@ -455,6 +475,9 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             this.getAllEmployees('');
         }
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
     filterEmployee1(event): void {
         this.employeeList = this.employeesOriginalData;
         if (event.query !== undefined && event.query !== null) {

@@ -241,9 +241,13 @@
 							<span>
 								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(viewRO,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
                             </span>
-							<span *ngIf="isReceivingRolist == false">
-								<a class="btn nobg btn-edit-cstm" (click)="edit(rowData)"
+							<span >
+								<a *ngIf="(rowData.statusId == pendingStatusId || rowData.statusId == openStatusId) && isReceivingRolist == false" class="btn nobg btn-edit-cstm" (click)="edit(rowData)"
 								   matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a>
+
+								<a *ngIf="rowData.statusId == fulfillingStatusId && isReceivingRolist == false"
+									class="btn nobg btn-edit-cstm" data-dismiss="modal"><i class="fa fa-pencil"
+										style="color:gray !important;"></i></a>
 							</span>
 							<span *ngIf="isReceivingRolist == false" data-toggle="modal" data-target="#roDelete">
 								<a class="btn nobg btn-delete-cstm" (click)="delete(rowData)"
@@ -254,21 +258,21 @@
 								   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
 							</span>
 
-							<span *ngIf="rowData.statusId == 3 && isReceivingRolist == true" (click)="getSelectedRow(rowData)">
+							<span *ngIf="rowData.statusId == fulfillingStatusId && isReceivingRolist == true" (click)="getSelectedRow(rowData)">
 								<a data-toggle="tooltip" matTooltip="Receive RO" matTooltipPosition="above" class="btn nobg btn-users-cstm" data-original-title="" edit="">
 									<i class=" fa fa-chevron-down"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData.statusId == 3 && isReceivingRolist == true" (click)="editStockLine(rowData)">
+							<span *ngIf="rowData.statusId == fulfillingStatusId && isReceivingRolist == true" (click)="editStockLine(rowData)">
 								<a class="btn nobg"  matTooltip="Edit Received Parts" matTooltipPosition="above">
 									<i class="fa fa-pencil"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData.statusId == 4 && isReceivingRolist == true" (click)="viewSummary(rowData)">
+							<!-- <span *ngIf="rowData.statusId == closedStatusId && isReceivingRolist == true" (click)="viewSummary(rowData)">
 								<a data-toggle="tooltip" matTooltip="View Summary" matTooltipPosition="above"  class="btn nobg" data-original-title="" edit="">
 									<i class="fa fa-external-link"></i>
 								</a>
-							</span>
+							</span> -->
 
 						</div>
 						<div *ngIf="currentDeletedstatus == true">							
@@ -389,7 +393,7 @@
 		</strong>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+		<button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
 		<button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
 	</div>
 </ng-template>
@@ -437,12 +441,24 @@
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">{{audit.status}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'requestedBy', audit.requestedBy)  ? 'black' : 'red'  }">{{audit.requestedBy}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'approvedBy', audit.approvedBy)  ? 'black' : 'red'  }">{{audit.approvedBy}}</td>
-								<td><p style="background-color: #fff !important;"> <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled></p></td>
+								<td class="text-center width-60">
+									<span class="value">
+									  <label class="wauto">
+									<input type="checkbox" name="isActive"
+									 [(ngModel)]=" audit.isActive" disabled>
+									</label>
+								</span>
+								</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">{{audit.createdBy}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">{{audit.updatedBy}}</td>
-								<td><p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+								<td class="text-center width-60">
+									<span class="value">
+									  <label class="wauto"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+									  </label>
+									</span>
+								</td>
 							</tr>							
 						</tbody>
 					</table>

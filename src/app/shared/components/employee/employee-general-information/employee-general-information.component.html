@@ -6,358 +6,424 @@
                     <form #empform="ngForm" class="form-horizontal add-custustomer">
                         <div class="card new-card">
                             <div class="card-header header">
-                                <h4 class="header-name">Employee General Info</h4>             
-                                </div>
-                                <div class="card-body header-body">                                    
-                                    <div class="form-row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>User Name <span class="clr-red">*</span></label>
-                                                <input class="form-control" type="text" name="userName" (ngModelChange)="enableSave()" [attr.disabled]="isEditContent==true?true:null" #userName="ngModel"  [(ngModel)]="sourceEmployee.userName" value="" autocomplete="new-password" required>
-                                                <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="alert alert-danger alert-danger-cstm">
-                                                    <div *ngIf="userName.errors.required">
-                                                        <small> User Name is required </small>
-                                                    </div>
+                                <h4 class="header-name">Employee General Info</h4>
+                            </div>
+                            <div class="card-body header-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>User Name <span class="clr-red">*</span></label>
+                                            <input class="form-control" type="text" name="userName"
+                                                (ngModelChange)="enableSave()"
+                                                [attr.disabled]="isEditContent==true?true:null" #userName="ngModel"
+                                                [(ngModel)]="sourceEmployee.userName" value=""
+                                                autocomplete="new-password" required>
+                                            <div *ngIf="userName.invalid && (userName.dirty || userName.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="userName.errors.required">
+                                                    <small> User Name is required </small>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label>First Name <span class="clr-red">*</span></label>
-                                                <p-autoComplete field="firstName" class="pautocomp-cstm"
-                                                                [(ngModel)]="sourceEmployee.firstName" (ngModelChange)="enableSave()" name="firstName" [suggestions]="firstCollection" (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1" [dropdown]="true" #firstName="ngModel" value="" autocomplete="new-password" required>
-                                                </p-autoComplete>
-                                                <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger alert-danger-cstm">
-                                                    <div *ngIf="firstName.errors.required">
-                                                        <small> First Name is required </small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Middle Name</label>
-                                                <p-autoComplete field="middleName" class="pautocomp-cstm"
-                                                                [(ngModel)]="sourceEmployee.middleName" (ngModelChange)="enableSave()" name="middleName" [suggestions]="middleNameCollection" (completeMethod)="filtermiddleName($event)" [size]="30" [minLength]="1" [dropdown]="true" value="" autocomplete="new-password">
-                                                </p-autoComplete>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Last Name <span class="clr-red">*</span></label>
-                                                <p-autoComplete field="lastName" class="pautocomp-cstm"
-                                                                [(ngModel)]="sourceEmployee.lastName" (ngModelChange)="enableSave()" name="lastName" [suggestions]="lastNameCollection" (completeMethod)="filterlastName($event)" [size]="30" [minLength]="1" [dropdown]="true" #lastName="ngModel" value="" autocomplete="new-password" required>
-                                                </p-autoComplete>
-                                                <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger alert-danger-cstm">
-                                                    <div *ngIf="lastName.errors.required">
-                                                        <small> Last Name is required </small>
-                                                    </div>
-                                                </div>
-                                               
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Emp ID <span class="clr-red">*</span></label>
-                                                <input #sourceEmpID="ngModel" class="form-control" type="text" name="employeeIdTemp" [(ngModel)]="employeeIdTemp" disabled>
-                                            </div>                                            
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>
-                                                    Job Title <span class="clr-red">*</span>
-                                                    <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addJobTitle" (click)="openjobtitle(content)"></a></span> -->
-                                                </label>
-                                                <!--                                            <select name="jobTitleId" class="form-control" [formControl]="empCreationForm.controls['jobTitleId']" required>-->
+                                        <div class="form-group">
+                                            <label>First Name <span class="clr-red">*</span></label>
+                                            <p-autoComplete field="firstName" class="pautocomp-cstm"
+                                                [(ngModel)]="sourceEmployee.firstName" (ngModelChange)="enableSave()"
+                                                name="firstName" [suggestions]="firstCollection"
+                                                (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
+                                                [dropdown]="true" #firstName="ngModel" value=""
+                                                autocomplete="new-password" required>
+                                            </p-autoComplete>
+                                            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="firstName.errors.required">
+                                                    <small> First Name is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Middle Name</label>
+                                            <p-autoComplete field="middleName" class="pautocomp-cstm"
+                                                [(ngModel)]="sourceEmployee.middleName" (ngModelChange)="enableSave()"
+                                                name="middleName" [suggestions]="middleNameCollection"
+                                                (completeMethod)="filtermiddleName($event)" [size]="30" [minLength]="1"
+                                                [dropdown]="true" value="" autocomplete="new-password">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Last Name <span class="clr-red">*</span></label>
+                                            <p-autoComplete field="lastName" class="pautocomp-cstm"
+                                                [(ngModel)]="sourceEmployee.lastName" (ngModelChange)="enableSave()"
+                                                name="lastName" [suggestions]="lastNameCollection"
+                                                (completeMethod)="filterlastName($event)" [size]="30" [minLength]="1"
+                                                [dropdown]="true" #lastName="ngModel" value=""
+                                                autocomplete="new-password" required>
+                                            </p-autoComplete>
+                                            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="lastName.errors.required">
+                                                    <small> Last Name is required </small>
+                                                </div>
+                                            </div>
 
-                                                <select name="jobTitleId" (ngModelChange)="enableSave()" class="form-control" [(ngModel)]="sourceEmployee.jobTitleId" required>
-                                                    <option value="0"> -- Select --</option>
-                                                    <ng-container *ngFor="let jobtitleName of allJobTitlesinfo">
-                                                        <option [ngValue]="jobtitleName.value">{{jobtitleName.label}}</option>
-                                                    </ng-container>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>
-                                                    Emp Expertise <span class="clr-red">*</span>
-                                                    <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addEmpExprt" (click)="openemployeeExpertise(contentEdit)"></a></span> -->
-                                                </label>
-                                                <select name="employeeExpertiseId" (ngModelChange)="enableSave()" class="form-control" [(ngModel)]="sourceEmployee.employeeExpertiseId" required>
-                                                    <option value="0">-- Select --</option>
-                                                    <ng-container *ngFor="let employeeName of allEmployeeExpertiseInfo">
-                                                        <option [ngValue]="employeeName.value">{{employeeName.label}}</option>
-                                                    </ng-container>
-                                                </select>
-                                            </div>                                          
-                                            <div class="form-group">
-                                                <label>Station ID</label>
-                                                <select name="stationId" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.stationId">
-                                                    <option value="0">-- Select --</option>
-                                                    <option *ngFor="let statio of getAllAllStationInfodrpData" [ngValue]="statio.value">{{statio.label}}</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Email<span class="clr-red">*</span></label>
-                                                <input class="form-control" type="text" name="email" (ngModelChange)="enableSave()" [attr.disabled]="isEditContent==true?true:null" #email="ngModel" [(ngModel)]="sourceEmployee.email"  required>
-                                            </div>
-                                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger alert-danger-cstm">
-                                                <div *ngIf="email.errors.required">
-                                                    <small> Email is required </small>
-                                                </div>
-                                            </div>
-                                            <div *ngIf="email.errors?.pattern &&
-                                                        email.touched" class="alert alert-danger alert-danger-cstm">                                               
-                                                    <small> Enter Valid email  </small>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Emp ID (Per Payroll)</label>
-                                                <input class="form-control" type="text" (ngModelChange)="enableSave()" name="employeeIdAsPerPayroll" [(ngModel)]="sourceEmployee.employeeIdAsPerPayroll" value="" autocomplete="new-password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Emp ID <span class="clr-red">*</span></label>
+                                            <input #sourceEmpID="ngModel" class="form-control" required type="text"
+                                                name="employeeIdTemp" [(ngModel)]="employeeIdTemp" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>
+                                                Job Title <span class="clr-red">*</span>
+                                                <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addJobTitle" (click)="openjobtitle(content)"></a></span> -->
+                                            </label>
+                                            <!--                                            <select name="jobTitleId" class="form-control" [formControl]="empCreationForm.controls['jobTitleId']" required>-->
+
+                                            <select name="jobTitleId" (ngModelChange)="enableSave()"
+                                                class="form-control" [(ngModel)]="sourceEmployee.jobTitleId" required>
+                                                <option value="0"> -- Select --</option>
+                                                <ng-container *ngFor="let jobtitleName of allJobTitlesinfo">
+                                                    <option [ngValue]="jobtitleName.value">{{jobtitleName.label}}
+                                                    </option>
+                                                </ng-container>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                Emp Expertise <span class="clr-red">*</span>
+                                                <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addEmpExprt" (click)="openemployeeExpertise(contentEdit)"></a></span> -->
+                                            </label>
+                                            <select name="employeeExpertiseId" (ngModelChange)="enableSave()"
+                                                class="form-control" [(ngModel)]="sourceEmployee.employeeExpertiseId"
+                                                required>
+                                                <option value="0">-- Select --</option>
+                                                <ng-container *ngFor="let employeeName of allEmployeeExpertiseInfo">
+                                                    <option [ngValue]="employeeName.value">{{employeeName.label}}
+                                                    </option>
+                                                </ng-container>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Station ID</label>
+                                            <select name="stationId" (ngModelChange)="enableSave()"
+                                                [(ngModel)]="sourceEmployee.stationId">
+                                                <option value="0">-- Select --</option>
+                                                <option *ngFor="let statio of getAllAllStationInfodrpData"
+                                                    [ngValue]="statio.value">{{statio.label}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email<span class="clr-red">*</span></label>
+                                            <input class="form-control" type="text" name="email"
+                                                (ngModelChange)="enableSave()" #email="ngModel"
+                                                [(ngModel)]="sourceEmployee.email" required>
+                                        </div>
+                                        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="email.errors.required">
+                                                <small> Email is required </small>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="card management-structure-card">
-                                                <div class="card-header management-structure-card-header" >
-                                                    <h5 class="management-structure-header">Management Structure <span class="clr-red">*</span></h5>
-                                                </div>
-                                                <div class="card-body structure-card-body">                                                
-                                                    <div class="form-group">                                                       
-                                                        <select class="form-control" (ngModelChange)="enableSave()" name="company"
-                                                                [(ngModel)]="managementStructure.companyId"
-                                                                (change)="getBUList(managementStructure.companyId);"
-                                                                #companyName="ngModel" required>
-                                                            <option value="0">-- Select -- </option>
-                                                            <option *ngFor="let name of maincompanylist" [ngValue]="name.value">
-                                                                {{name.label}}
-                                                            </option>
-                                                        </select>
-                                                        <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)"
-                                                             class="alert alert-danger alert-danger-cstm">
-                                                            <div *ngIf="companyName.errors.required">
-                                                                <small> Managmetn Structure Name is required </small>
-                                                            </div>
+                                        <div *ngIf="email.errors?.pattern &&
+                                                        email.touched" class="alert alert-danger alert-danger-cstm">
+                                            <small> Enter Valid email </small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Emp ID (Per Payroll)</label>
+                                            <input class="form-control" type="text" (ngModelChange)="enableSave()"
+                                                name="employeeIdAsPerPayroll"
+                                                [(ngModel)]="sourceEmployee.employeeIdAsPerPayroll" value=""
+                                                autocomplete="new-password">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card management-structure-card">
+                                            <div class="card-header management-structure-card-header">
+                                                <h5 class="management-structure-header">Management Structure <span
+                                                        class="clr-red">*</span></h5>
+                                            </div>
+                                            <div class="card-body structure-card-body">
+                                                <div class="form-group">
+                                                    <select class="form-control" (ngModelChange)="enableSave()"
+                                                        name="company" [(ngModel)]="managementStructure.companyId"
+                                                        (change)="getBUList(managementStructure.companyId);"
+                                                        #companyName="ngModel" required>
+                                                        <option value="0">-- Select -- </option>
+                                                        <option *ngFor="let name of maincompanylist"
+                                                            [ngValue]="name.value">
+                                                            {{name.label}}
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)"
+                                                        class="alert alert-danger alert-danger-cstm">
+                                                        <div *ngIf="companyName.errors.required">
+                                                            <small> Managmetn Structure Name is required </small>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <!-- <label>BU </label> -->
-                                                        <select class="form-control" (ngModelChange)="enableSave()" [(ngModel)]="managementStructure.buId"
-                                                                name="buId" (change)="getDivisionlist(managementStructure.buId)">
-                                                            <option value="0">-- Select --</option>
-                                                            <option *ngFor="let name of bulist" [ngValue]="name.value">
-                                                                {{name.label}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">                                                        
-                                                        <select class="form-control" (ngModelChange)="enableSave()" [(ngModel)]="managementStructure.divisionId"
-                                                                name="divisionId"
-                                                                (change)="getDepartmentlist(managementStructure.divisionId)">
-                                                            <option value="0">-- Select --</option>
-                                                            <option *ngFor="let name of divisionlist" [ngValue]="name.value">
-                                                                {{name.label}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">                                                       
-                                                        <select class="form-control" (ngModelChange)="enableSave()" (ngModelChange)="enableSave()" [(ngModel)]="managementStructure.departmentId"
-                                                                name="departmentId"
-                                                                (change)="getDepartmentId(managementStructure.departmentId)">
-                                                            <option value="0">-- Select --</option>
-                                                            <option *ngFor="let name of departmentList" [ngValue]="name.value">
-                                                                {{name.label}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <!-- <label>BU </label> -->
+                                                    <select class="form-control" (ngModelChange)="enableSave()"
+                                                        [(ngModel)]="managementStructure.buId" name="buId"
+                                                        (change)="getDivisionlist(managementStructure.buId)">
+                                                        <option value="0">-- Select --</option>
+                                                        <option *ngFor="let name of bulist" [ngValue]="name.value">
+                                                            {{name.label}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control" (ngModelChange)="enableSave()"
+                                                        [(ngModel)]="managementStructure.divisionId" name="divisionId"
+                                                        (change)="getDepartmentlist(managementStructure.divisionId)">
+                                                        <option value="0">-- Select --</option>
+                                                        <option *ngFor="let name of divisionlist"
+                                                            [ngValue]="name.value">
+                                                            {{name.label}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control" (ngModelChange)="enableSave()"
+                                                        (ngModelChange)="enableSave()"
+                                                        [(ngModel)]="managementStructure.departmentId"
+                                                        name="departmentId"
+                                                        (change)="getDepartmentId(managementStructure.departmentId)">
+                                                        <option value="0">-- Select --</option>
+                                                        <option *ngFor="let name of departmentList"
+                                                            [ngValue]="name.value">
+                                                            {{name.label}}
+                                                        </option>
+                                                    </select>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Date Of Birth</label>
+                                            <p-calendar [showIcon]="true" (ngModelChange)="enableSave()"
+                                                name="dateOfBirth" [maxDate]="dateTime" [yearNavigator]="true"
+                                                [monthNavigator]="true" yearRange="1900:2100"
+                                                [(ngModel)]="sourceEmployee.dateOfBirth"></p-calendar>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Start Date <span class="clr-red">*</span></label>
+                                            <p-calendar name="startDate" (ngModelChange)="enableSave()"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                [showIcon]="true" [(ngModel)]="sourceEmployee.startDate" required>
+                                            </p-calendar>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cell</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" (ngModelChange)="enableSave()" type="text"
+                                                    id="mobilePhone" name="mobilePhone" [pattern]="phonePattern"
+                                                    #mobilePhone="ngModel" class="form-control" minlength="6"
+                                                    maxlength="14" (keypress)="patternMobilevalidationWithSpl($event)"
+                                                    [(ngModel)]="sourceEmployee.mobilePhone"
+                                                    (ngModelChange)="enableSave()" value=""
+                                                    autocomplete="new-password" />
+                                            </div>
+                                            <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
+                                                <div *ngIf="mobilePhone.errors.pattern">
+                                                    <span class="clr-red">Please enter atleast 6 digits</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <hr />
-
-                                    <div class="form-row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Date Of Birth</label>
-                                                <p-calendar [showIcon]="true"  (ngModelChange)="enableSave()" name="dateOfBirth"
-                                                 [maxDate]="dateTime" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                  [(ngModel)]="sourceEmployee.dateOfBirth"></p-calendar>
-                                            </div>                                        
-                                            <div class="form-group">
-                                                <label>Start Date <span class="clr-red">*</span></label>
-                                                <p-calendar name="startDate"  (ngModelChange)="enableSave()"
-                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                 [minDate]="sourceEmployee.dateOfBirth" [showIcon]="true" [(ngModel)]="sourceEmployee.startDate"
-                                                  required></p-calendar>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Cell</label>
-                                                <div class="inner-addon right-addon inline-block">
-                                                    <input
-                                                    class="form-control" (ngModelChange)="enableSave()"
-                                                    type="text"
-                                                    id="mobilePhone"
-                                                    name="mobilePhone"
-                                                    [pattern]="phonePattern"
-                                                    #mobilePhone="ngModel"
-                                                    class="form-control"
-                                                    minlength="6"
-                                                    maxlength="14"
-                                                    (keypress)="patternMobilevalidationWithSpl($event)"
-                                                    [(ngModel)]="sourceEmployee.mobilePhone"
-                                                    (ngModelChange)="enableSave()"                              
-                                                    value="" autocomplete="new-password" />                                                  
-                                                </div>
-                                                <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
-                                                    <div *ngIf="mobilePhone.errors.pattern">
-                                                      <span class="clr-red">Please enter atleast 6 digits</span>
-                                                    </div>
-                                                  </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Business Phone</label>
-                                                <div class="inner-addon right-addon inline-block">
-                                                    <input
-                                                    class="form-control" (ngModelChange)="enableSave()"
-                                                    type="text"
-                                                    id="workPhone"
-                                                    name="workPhone"
-                                                    [pattern]="phonePattern"
-                                                    #workPhone="ngModel"
-                                                    class="form-control"
-                                                    minlength="6"
-                                                    maxlength="14"
-                                                    (keypress)="patternMobilevalidationWithSpl($event)"
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Business Phone</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" (ngModelChange)="enableSave()" type="text"
+                                                    id="workPhone" name="workPhone" [pattern]="phonePattern"
+                                                    #workPhone="ngModel" class="form-control" minlength="6"
+                                                    maxlength="14" (keypress)="patternMobilevalidationWithSpl($event)"
                                                     [(ngModel)]="sourceEmployee.workPhone"
-                                                    (ngModelChange)="enableSave()"                              
-                                                    value="" autocomplete="new-password" />                                                  
-                                                </div>
-                                                <div *ngIf="workPhone.errors" [ngClass]="'error'">
-                                                    <div *ngIf="workPhone.errors.pattern">
-                                                      <span class="clr-red">Please enter atleast 6 digits</span>
-                                                    </div>
-                                                </div>                                                
+                                                    (ngModelChange)="enableSave()" value=""
+                                                    autocomplete="new-password" />
                                             </div>
-                                            <div class="form-group">
-                                                <label>Fax</label>
-                                                <div class="inner-addon right-addon inline-block">
-                                                    <input class="form-control" (ngModelChange)="enableSave()" (keypress)="patternMobilevalidationWithSpl($event)"  type="text" name="fax" [(ngModel)]="sourceEmployee.fax" value="" autocomplete="new-password">
-                                                </div>
-                                            </div>                                                                                       
-                                            <div class="form-group">
-                                                <label>SS#</label>
-                                                <div class="inner-addon right-addon inline-block">
-                                                    <input class="form-control" (ngModelChange)="enableSave()" type="text" name="ssn" [(ngModel)]="sourceEmployee.ssn" value="" autocomplete="new-password">
+                                            <div *ngIf="workPhone.errors" [ngClass]="'error'">
+                                                <div *ngIf="workPhone.errors.pattern">
+                                                    <span class="clr-red">Please enter atleast 6 digits</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label >Shift</label>
-                                                <div class="col-md-12 shift-margin">
-                                                    <p-radioButton name="groupname" (ngModelChange)="enableSave()" value="0" label="Single Shift" class="p-radiobutton-label-horizontal p-radiobutton-cstm"
-                                                                   [(ngModel)]="sourceEmployee.inMultipleShifts" (click)="singleClick('single')"></p-radioButton>
-                                                    <p-radioButton name="groupname" (ngModelChange)="enableSave()" value="1" label="Multiple Shifts" class="p-radiobutton-label-horizontal p-radiobutton-cstm"
-                                                                   [(ngModel)]="sourceEmployee.inMultipleShifts" (click)="singleClick('multiple')"></p-radioButton>
+                                        <div class="form-group">
+                                            <label>Fax</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" (ngModelChange)="enableSave()"
+                                                    (keypress)="patternMobilevalidationWithSpl($event)" type="text"
+                                                    name="fax" [(ngModel)]="sourceEmployee.fax" value=""
+                                                    autocomplete="new-password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>SS#</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" (ngModelChange)="enableSave()" type="text"
+                                                    name="ssn" [(ngModel)]="sourceEmployee.ssn" value=""
+                                                    autocomplete="new-password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Shift</label>
+                                            <div class="col-md-12 shift-margin">
+                                                <p-radioButton name="groupname" (ngModelChange)="enableSave()" value="0"
+                                                    label="Single Shift"
+                                                    class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+                                                    [(ngModel)]="sourceEmployee.inMultipleShifts"
+                                                    (click)="singleClick('single')"></p-radioButton>
+                                                <p-radioButton name="groupname" (ngModelChange)="enableSave()" value="1"
+                                                    label="Multiple Shifts"
+                                                    class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+                                                    [(ngModel)]="sourceEmployee.inMultipleShifts"
+                                                    (click)="singleClick('multiple')"></p-radioButton>
 
-                                                </div>                                              
-                                            </div>
-                                            <div class="form-group col-sm-12 shiftmultiple-block" *ngIf="showMultiple">
-                                                <label>Shift Type</label>
-                                                <p-multiSelect [options]="shiftValues" name="multipleShiftType" [(ngModel)]="sourceEmployee.shiftIds" (ngModelChange)="enableSave()" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
-                                            </div>
-                                            <div class="form-group col-sm-12 shiftsingle-block" *ngIf="showsingle">
-                                                <label>Shift Type</label>
-                                                <select name="singleShiftType" [(ngModel)]="sourceEmployee.shiftId" (ngModelChange)="enableSave()" > 
-                                                    <option *ngFor="let shift of shiftValues" [ngValue]="shift.value">{{shift.label}}</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="m-t-15">Extra Hours</label>
-                                                <div class="form-group">
-                                                    <!--<div class="checkbox-cstm">-->
-                                                        <div>
-                                                        <label>
-                                                            <input type="checkbox" name="allowOvertime" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.allowOvertime">
-                                                            <!--<span class="cr"><i class="cr-icon pi pi-check"></i></span>-->
-                                                            Allow Overtime
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <!--<div class="checkbox-cstm">-->
-                                                        <div>
-                                                        <label>
-                                                            <input type="checkbox" name="allowDoubletime" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.allowDoubleTime">
-                                                            <!--<span class="cr"><i class="cr-icon pi pi-check"></i></span>-->
-                                                            Allow Double-Time
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="pay-type-label">Pay Type <span class="clr-red"></span></label>
-                                                <div style="display: block;">
-                                                     <label *ngFor="let radiobutton of radioItems" class="pay-label-width">
-                                                        <input type="radio" name="radiobutton" (ngModelChange)="enableSave()"  (click)="model.option = radiobutton" (change)="handlePayType(model.option)"
-                                                               [checked]="radiobutton === model.option">{{radiobutton}}
-                                                    </label>                                                  
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="form-group col-sm-12 hourpay-block" *ngIf="hourly">
-                                                   <label>Hourly Pay</label>
-                                                    <div class="inner-addon right-addon inline-block">
-                                                        <input class="form-control amount pay-align" (ngModelChange)="enableSave()" 
-                                                        type="text" pInputText pKeyFilter="pnum" maxlength="10" name="hourlyPay" 
-                                                        (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  
-                                                        value="" autocomplete="new-password">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-12 salarypay-block" *ngIf="yearly">
-                                                   <label>Monthly Pay</label>
-                                                    <div class="inner-addon right-addon inline-block">
-                                                        <input class="form-control amount pay-align" (ngModelChange)="enableSave()" 
-                                                        type="text" pInputText pKeyFilter="pnum" maxlength="10"  name="monthlyPay" 
-                                                        (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  
-                                                        value="" autocomplete="new-password">
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 shiftmultiple-block" *ngIf="showMultiple">
+                                            <label>Shift Type</label>
+                                            <p-multiSelect [options]="shiftValues" name="multipleShiftType"
+                                                [(ngModel)]="sourceEmployee.shiftIds" (ngModelChange)="enableSave()"
+                                                [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+                                        </div>
+                                        <div class="form-group col-sm-12 shiftsingle-block" *ngIf="showsingle">
+                                            <label>Shift Type</label>
+                                            <select name="singleShiftType" [(ngModel)]="sourceEmployee.shiftId"
+                                                (ngModelChange)="enableSave()">
+                                                <option value="0"> -- Select --</option>
+                                                <option *ngFor="let shift of shiftValues" [ngValue]="shift.value">
+                                                    {{shift.label}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="m-t-15">Extra Hours</label>
                                             <div class="form-group">
-                                                <label>Currency <span class="clr-red"></span></label>
-                                                <p-autoComplete field="code" class="pautocomp-cstm" (ngModelChange)="enableSave()" 
-                                                [(ngModel)]="sourceEmployee.currencyId" name="currencyId" [suggestions]="currencyList" 
-                                                (completeMethod)="filterCurrencyList($event)" 
-                                                [size]="30" [minLength]="1" [dropdown]="true" 
-                                                errorMessage="Records not found" [forceSelection]="true">
-                                                </p-autoComplete>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>
-                                                    Leave Type
-                                                </label>
-                                                <p-multiSelect [options]="leavemultiValues" name="leaveType" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.leaveTypeIds" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
-                                            </div>
-                                            <div class="form-group">                                               
+                                                <!--<div class="checkbox-cstm">-->
                                                 <div>
                                                     <label>
-                                                        <input type="checkbox" name="certification-radio" id="certification-radio" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.employeeCertifyingStaff">
-                                                          Emp Certifying Staff
+                                                        <input type="checkbox" name="allowOvertime"
+                                                            (ngModelChange)="enableSave()"
+                                                            [(ngModel)]="sourceEmployee.allowOvertime">
+                                                        <!--<span class="cr"><i class="cr-icon pi pi-check"></i></span>-->
+                                                        Allow Overtime
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Supervisor Name</label>
-                                                <p-autoComplete field="name" name="supervisorName" [suggestions]="supervisorList" (completeMethod)="filterSupervisorList($event)"
-                                                    class="pautocomp-cstm" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                    [forceSelection]="true" (ngModelChange)="enableSave()" [(ngModel)]="supervisorId">
-                                                </p-autoComplete>
-                                            </div>                                         
+                                                <!--<div class="checkbox-cstm">-->
+                                                <div>
+                                                    <label>
+                                                        <input type="checkbox" name="allowDoubletime"
+                                                            (ngModelChange)="enableSave()"
+                                                            [(ngModel)]="sourceEmployee.allowDoubleTime">
+                                                        <!--<span class="cr"><i class="cr-icon pi pi-check"></i></span>-->
+                                                        Allow Double-Time
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="pay-type-label">Pay Type <span class="clr-red"></span></label>
+                                            <div style="display: block;">
+                                                <label *ngFor="let radiobutton of radioItems" class="pay-label-width">
+                                                    <input type="radio" name="radiobutton"
+                                                        (ngModelChange)="enableSave()"
+                                                        (click)="model.option = radiobutton"
+                                                        (change)="handlePayType(model.option)"
+                                                        [checked]="radiobutton === model.option">{{radiobutton}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="form-group col-sm-12 hourpay-block" *ngIf="hourly">
+                                                <label>Hourly Pay</label>
+                                                <div class="inner-addon right-addon inline-block">
+                                                    <input class="form-control amount pay-align"
+                                                        (ngModelChange)="enableSave()" type="text" pInputText
+                                                        pKeyFilter="pnum" maxlength="10" name="hourlyPay"
+                                                        (change)="formateNumber(sourceEmployee)"
+                                                        [(ngModel)]="sourceEmployee.hourlyPay" value=""
+                                                        autocomplete="new-password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12 salarypay-block" *ngIf="yearly">
+                                                <label>Monthly Pay</label>
+                                                <div class="inner-addon right-addon inline-block">
+                                                    <input class="form-control amount pay-align"
+                                                        (ngModelChange)="enableSave()" type="text" pInputText
+                                                        pKeyFilter="pnum" maxlength="10" name="monthlyPay"
+                                                        (change)="formateNumber(sourceEmployee)"
+                                                        [(ngModel)]="sourceEmployee.hourlyPay" value=""
+                                                        autocomplete="new-password">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>               
-                                <div class="m-b-10">
-                                    <button type="button" [disabled]="!isEnableNext" class="btn btn-primary pull-right" (click)="nextClick('Next')"> Next</button>
-                                    <button *ngIf ="!isEditContent" type="button" [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )" class="btn btn-primary pull-right" (click)="onSubmit2()">Save </button>
-                                    <button *ngIf ="isEditContent" type="button" [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )" class="btn btn-primary pull-right" (click)="onSubmit2()">Update </button>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Currency <span class="clr-red"></span></label>
+                                            <p-autoComplete field="code" class="pautocomp-cstm"
+                                                (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.currencyId"
+                                                name="currencyId" [suggestions]="currencyList"
+                                                (completeMethod)="filterCurrencyList($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                                [forceSelection]="true">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                Leave Type
+                                            </label>
+                                            <p-multiSelect [options]="leavemultiValues" name="leaveType"
+                                                (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.leaveTypeIds"
+                                                [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+                                        </div>
+                                        <div class="form-group">
+                                            <div>
+                                                <label>
+                                                    <input type="checkbox" name="certification-radio"
+                                                        id="certification-radio" (ngModelChange)="enableSave()"
+                                                        [(ngModel)]="sourceEmployee.employeeCertifyingStaff">
+                                                    Emp Certifying Staff
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Supervisor Name</label>
+                                            <p-autoComplete field="name" name="supervisorName"
+                                                [suggestions]="supervisorList"
+                                                (completeMethod)="filterSupervisorList($event)" class="pautocomp-cstm"
+                                                [size]="30" [minLength]="1" [dropdown]="true"
+                                                errorMessage="Records not found" [forceSelection]="true"
+                                                (ngModelChange)="enableSave()" [(ngModel)]="supervisorId">
+                                            </p-autoComplete>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="m-b-10">
+                                <button type="button" [disabled]="!isEnableNext" class="btn btn-primary pull-right"
+                                    (click)="nextClick('Next')"> Next</button>
+                                <button *ngIf="!isEditContent" type="button"
+                                    [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )"
+                                    class="btn btn-primary pull-right" (click)="onSubmit2()">Save </button>
+                                <button *ngIf="isEditContent" type="button"
+                                    [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )"
+                                    class="btn btn-primary pull-right" (click)="onSubmit2()">Update </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -399,8 +465,10 @@
                         <label class="control-label">Job Type<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobTypeName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onJobTypeKeyUP() (onSelect)="onSelectJob($event)" [suggestions]="localCollection" (completeMethod)="filterJobs($event)" [size]="30"
-                                        [minLength]="1" [dropdown]="true">
+                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobTypeName"
+                            [ngModelOptions]="{standalone: true}" (onKeyUp)=onJobTypeKeyUP()
+                            (onSelect)="onSelectJob($event)" [suggestions]="localCollection"
+                            (completeMethod)="filterJobs($event)" [size]="30" [minLength]="1" [dropdown]="true">
                             <ng-template let-jobName pTemplate="item">
                                 <div class="ui-helper-clearfix">{{jobName}}</div>
                             </ng-template>
@@ -413,7 +481,8 @@
                         <label class="control-label">Job Type Description</label>
                     </div>
                     <div class="col-sm-5">
-                        <input #memo="ngModel" class="form-control" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="jobTypeDescription">
+                        <input #memo="ngModel" class="form-control" id="memo" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="jobTypeDescription">
                     </div>
                 </div>
 
@@ -456,7 +525,8 @@
                 <div class="col-sm-6">
                     <div class="checkbox-cstm">
                         <label>
-                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked
+                                id="isActive" [(ngModel)]="sourceAction.isActive">
                             <span class="cr">
                                 <i class="cr-icon pi pi-check"></i>
                             </span>
@@ -506,8 +576,10 @@
                         <label class="control-label">Job Title <span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onjobTitleKeyUP() (onSelect)="onSelectJob($event)" [suggestions]="localCollection" (completeMethod)="filterJObTitles($event)" [size]="30"
-                                        [minLength]="1" [dropdown]="true">
+                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobName"
+                            [ngModelOptions]="{standalone: true}" (onKeyUp)=onjobTitleKeyUP()
+                            (onSelect)="onSelectJob($event)" [suggestions]="localCollection"
+                            (completeMethod)="filterJObTitles($event)" [size]="30" [minLength]="1" [dropdown]="true">
                             <ng-template let-jobName pTemplate="item">
                                 <div class="ui-helper-clearfix">{{jobName}}</div>
                             </ng-template>
@@ -520,11 +592,14 @@
                         <label class="control-label">Memo</label>
                     </div>
                     <div class="col-sm-5">
-                        <input #memo="ngModel" class="form-control" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceAction.memo" minlength="2">
-                        <div *ngIf="memo.dirty && memo.errors?.required && memo.errors" class="invalid-form-error-message">
+                        <input #memo="ngModel" class="form-control" id="memo" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="sourceAction.memo" minlength="2">
+                        <div *ngIf="memo.dirty && memo.errors?.required && memo.errors"
+                            class="invalid-form-error-message">
                             Memo is required.
                         </div>
-                        <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors" class="invalid-form-error-message">
+                        <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors"
+                            class="invalid-form-error-message">
                             Memo must be at least 2 characters long.
                         </div>
                     </div>
@@ -592,7 +667,8 @@
                 <div class="col-sm-6">
                     <div class="checkbox-cstm">
                         <label>
-                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked
+                                id="isActive" [(ngModel)]="sourceAction.isActive">
                             <span class="cr">
                                 <i class="cr-icon pi pi-check"></i>
                             </span>
@@ -634,11 +710,15 @@
         <div class="modal-body">
             <div class="form-group">
                 <div class="col-sm-12 leave-type-padding">
-                  
+
                     <div class="col-sm-12">
-                        <label class="control-label table-header-input-width">Leave Type <span class="clr-red">*</span></label>
-                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="leaveType" [ngModelOptions]="{standalone: true}" [suggestions]="localleaveCollection" (onKeyUp)=onKeyUpLeaveNames($event) (onSelect)="onSelectLeaveName($event)" (onBlur)="onBlurLeaveName($event)" (completeMethod)="filterLeaves($event)" [size]="30"
-                                        [minLength]="1" [dropdown]="true">
+                        <label class="control-label table-header-input-width">Leave Type <span
+                                class="clr-red">*</span></label>
+                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="leaveType"
+                            [ngModelOptions]="{standalone: true}" [suggestions]="localleaveCollection"
+                            (onKeyUp)=onKeyUpLeaveNames($event) (onSelect)="onSelectLeaveName($event)"
+                            (onBlur)="onBlurLeaveName($event)" (completeMethod)="filterLeaves($event)" [size]="30"
+                            [minLength]="1" [dropdown]="true">
                             <ng-template let-description pTemplate="item">
                                 <div class="ui-helper-clearfix">{{description}}</div>
                             </ng-template>
@@ -646,12 +726,12 @@
                         <div *ngIf="disableSaveLeaveName" class="clr-red">Already Exist</div>
                     </div>
                     <div class="col-sm-12">
-                    <label class="control-label">Description</label>
-                    <textarea  [(ngModel)]="descriptiontype"></textarea>
+                        <label class="control-label">Description</label>
+                        <textarea [(ngModel)]="descriptiontype"></textarea>
                     </div>
                     <div class="col-sm-12">
-                    <label class="control-label">Memo</label>
-                    <textarea  [(ngModel)]="memo"></textarea>
+                        <label class="control-label">Memo</label>
+                        <textarea [(ngModel)]="memo"></textarea>
                     </div>
                 </div>
 
@@ -673,7 +753,8 @@
                 <div class="col-sm-6">
                     <div class="checkbox-cstm">
                         <label>
-                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked
+                                id="isActive" [(ngModel)]="sourceAction.isActive">
                             <span class="cr">
                                 <i class="cr-icon pi pi-check"></i>
                             </span>
@@ -720,8 +801,10 @@
                         <label class="control-label">Employee Expertise <span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <p-autoComplete id="memo" class="p-autoComplete-ctsm" [(ngModel)]="employeeName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onEmpExpertiseKeyUP() (onSelect)="onSelectEmpExpertise($event)" [suggestions]="localCollection" (completeMethod)="filterEMpExpertise($event)" [size]="30"
-                                        [minLength]="1" [dropdown]="true">
+                        <p-autoComplete id="memo" class="p-autoComplete-ctsm" [(ngModel)]="employeeName"
+                            [ngModelOptions]="{standalone: true}" (onKeyUp)=onEmpExpertiseKeyUP()
+                            (onSelect)="onSelectEmpExpertise($event)" [suggestions]="localCollection"
+                            (completeMethod)="filterEMpExpertise($event)" [size]="30" [minLength]="1" [dropdown]="true">
                             <ng-template let-jobName pTemplate="item">
                                 <div class="ui-helper-clearfix">{{jobName}}</div>
                             </ng-template>
@@ -734,11 +817,14 @@
                         <label class="control-label">Memo</label>
                     </div>
                     <div class="col-sm-5">
-                        <input #memo="ngModel" class="form-control" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceAction.memo" minlength="2">
-                        <div *ngIf="memo.dirty && memo.errors?.required && memo.errors" class="invalid-form-error-message">
+                        <input #memo="ngModel" class="form-control" id="memo" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="sourceAction.memo" minlength="2">
+                        <div *ngIf="memo.dirty && memo.errors?.required && memo.errors"
+                            class="invalid-form-error-message">
                             Memo is required.
                         </div>
-                        <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors" class="invalid-form-error-message">
+                        <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors"
+                            class="invalid-form-error-message">
                             Memo must be at least 2 characters long.
                         </div>
                     </div>
@@ -804,7 +890,8 @@
                 <div class="col-sm-6">
                     <div class="checkbox-cstm">
                         <label>
-                            <input type="checkbox" name="isWorksInShop" class="form-check-input" id="isWorksInShop" [(ngModel)]="isWorksInShop">
+                            <input type="checkbox" name="isWorksInShop" class="form-check-input" id="isWorksInShop"
+                                [(ngModel)]="isWorksInShop">
                             <span class="cr">
                                 <i class="cr-icon pi pi-check"></i>
                             </span>
@@ -818,7 +905,8 @@
                 <div class="col-sm-6">
                     <div class="checkbox-cstm">
                         <label>
-                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked
+                                id="isActive" [(ngModel)]="sourceAction.isActive">
                             <span class="cr">
                                 <i class="cr-icon pi pi-check"></i>
                             </span>
@@ -847,25 +935,35 @@
 </ng-template>
 <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
-      <h4 class="modal-title">Confirmation</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
     </div>
     <div class="modal-body">
-      <h6 class="text-left">
-        Do you want to Save changes and Continue ?
-      </h6>
+        <h6 class="text-left">
+            Do you want to Save changes and Continue ?
+        </h6>
     </div>
-    <div class="modal-footer">  
-      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="redirectToTabWithoutSave()">No</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal"
-      [disabled]="(!empform.valid || !sourceEmployee.hourlyPay || sourceEmployee.hourlyPay == '0.00' || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )"
-       (click)="redirectToTab()">Yes</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+            (click)="redirectToTabWithoutSave()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            [disabled]="(!empform.valid || !sourceEmployee.hourlyPay || sourceEmployee.hourlyPay == '0.00' || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )"
+            (click)="redirectToTab()">Yes</button>
     </div>
-  </ng-template>
-  <div class="preloader"  *ngIf="isSpinnerVisible">
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
-        <div class="lds-roller"><div>			
-        </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div class="lds-roller">
+            <div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </div>
-<app-spinner  *ngIf="isSpinnerVisible"></app-spinner>
+<app-spinner *ngIf="isSpinnerVisible"></app-spinner>

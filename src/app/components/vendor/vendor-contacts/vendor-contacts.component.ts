@@ -195,6 +195,7 @@ export class VendorContactsComponent implements OnInit {
     restorerecord:any={};
     vendorCodeandName: any;
     allActionsOriginal: any = [];
+    tempIsDefaultContact: boolean=true;
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -501,9 +502,16 @@ export class VendorContactsComponent implements OnInit {
             this.getAllTagNameSmartDropDown('', row.contactTagId);
         }
         
-        if(this.sourceVendor.isDefaultContact == true) {
-            this.sourceVendor['tempIsDefaultContact'] = this.sourceVendor.isDefaultContact;
-        }
+      
+        if ((this.sourceVendor.isActive == true && this.sourceVendor.isDefaultContact==true)|| this.sourceVendor.isActive == false) {
+            this.tempIsDefaultContact = false;
+        } 
+        
+        
+        
+        
+       
+        
     }
 
     openView(content, row) {

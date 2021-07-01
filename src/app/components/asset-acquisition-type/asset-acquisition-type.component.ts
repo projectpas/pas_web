@@ -329,9 +329,6 @@ export class AssetAcquisitionTypeComponent implements OnInit {
     }
 
     SaveandEditAssetAcquisitionType() {
-        // debugger;
-
-
         this.isSaving = true;
         console.log(this.sourceAction);
 

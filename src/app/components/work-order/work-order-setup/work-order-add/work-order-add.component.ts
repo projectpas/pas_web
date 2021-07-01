@@ -29,7 +29,8 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { DBkeys } from '../../../../services/db-Keys';
 import { MenuItem } from 'primeng/api';
-import {AppModuleEnum} from "../../../../enum/appmodule.enum";
+import { AppModuleEnum } from "../../../../enum/appmodule.enum";
+import { SalesQuoteService } from '../../../../services/salesquote.service';
 
 @Component({
     selector: 'app-work-order-add',
@@ -41,12 +42,12 @@ import {AppModuleEnum} from "../../../../enum/appmodule.enum";
 
 export class WorkOrderAddComponent implements OnInit {
     workOrderModule = "WorkOrder";
-    subWorkOrderModule = "SubWorkOrder"
+    subWorkOrderModule = "SubWorkOrder";
     breadcrumbs: MenuItem[];
     @Input() isView: boolean = false;
     @Input() isEdit: boolean = false;
     @Input() workOrderTypes;
-    @Input() workOrderStatusList;
+    @Input() workOrderStatusList: any = [];
     @Input() creditTerms;
     @Input() jobTitles;
     @Input() employeesOriginalData;
@@ -58,7 +59,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() technicianByExpertiseTypeList;
     @Input() workOrderStagesList;
     @Input() priorityList;
-    @Input() partNumberOriginalData:any=[];
+    @Input() partNumberOriginalData: any = [];
     @Input() workOrderGeneralInformation;
     @Input() isSubWorkOrder: boolean = false;
     @Input() subWorkOrderDetails;
@@ -72,6 +73,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() isListView: boolean = false;
     @Input() subWoMpnGridUpdated = false;
     @Input() triggerSubWoMpn = false;
+    //@Output() onWorkOrderPrintLoad = new EventEmitter();
     technicianOriginalList1: any = [];
     isRecCustomer: boolean;
     selectedCustomer: Customer;
@@ -104,9 +106,9 @@ export class WorkOrderAddComponent implements OnInit {
     data: any;
     saveTearDownData: any = [];
     workFlowList: any;
-    moduleId:any;
+    moduleId: any;
     tearDownReportList = [{
-        label: 'Station 2', 
+        label: 'Station 2',
         value: 20
     }]
     WorkOrderMPN = { ...new WorkOrderPartNumber() };
@@ -115,6 +117,7 @@ export class WorkOrderAddComponent implements OnInit {
     partNumberList: any;
     technicianList: any[];
     cmmList: any;
+    cmmListNew: any;
     savedWorkOrderData: any;
     workFlowWorkOrderData: any;
     workOrderAssetList: any = [];
@@ -160,7 +163,7 @@ export class WorkOrderAddComponent implements OnInit {
     businessUnitList: any;
     divisionList: any;
     departmentList: any;
-    currentWarningMessage:any;
+    currentWarningMessage: any;
     managementStructure = {
         companyId: null,
         buId: null,
@@ -263,9 +266,12 @@ export class WorkOrderAddComponent implements OnInit {
     selectedMPNSubWo: any;
     moduleNamee: any;
     disableForMemo: boolean = false;
-    wflowitems:any=[];
-    showWorkflowLabel:any='View WF';
-    currentDate=new Date();
+    wflowitems: any = [];
+    showWorkflowLabel: any = 'View WF';
+    currentDate = new Date();
+    taskName: any;
+    isAllowLaberSave: boolean = false;
+
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -279,22 +285,28 @@ export class WorkOrderAddComponent implements OnInit {
         private quoteService: WorkOrderQuoteService,
         private salesOrderReferenceStorage: SalesOrderReferenceStorage,
         public vendorService: VendorService,
+        private salesQuoteService: SalesQuoteService,
     ) {
         this.moduleName = 'Work Order';
+
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.wflowitems = [
-            {label: 'View WF', command: () => {
-                this.showWorkflowLabel='View WF';
-                this.subTabWorkFlowChange('viewworkFlow');
-            }},
-            {label: 'Edit Existing WF', command: () => {
-                this.showWorkflowLabel='editworkFlow';
-                this.subTabWorkFlowChange('editworkFlow');
-            }}
+            {
+                label: 'View WF', command: () => {
+                    this.showWorkflowLabel = 'View WF';
+                    this.subTabWorkFlowChange('viewworkFlow');
+                }
+            },
+            {
+                label: 'Edit Existing WF', command: () => {
+                    this.showWorkflowLabel = 'editworkFlow';
+                    this.subTabWorkFlowChange('editworkFlow');
+                }
+            }
         ];
-        this.moduleId= AppModuleEnum.WorkOrder;
+        this.moduleId = AppModuleEnum.WorkOrder;
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
@@ -309,8 +321,13 @@ export class WorkOrderAddComponent implements OnInit {
             },
                 err => {
                     this.handleError(err);
-                }) 
+                })
         }
+
+        if (this.isEdit == undefined) {
+            this.isEdit = false;
+        }
+
         if (this.isEdit == true) {
             this.disableSaveForEdit = true;
             this.isDetailedView = false;
@@ -322,7 +339,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.getTaskList();
         this.createModeData();
         this.workOrderService.creditTerms = this.creditTerms;
-        this.mpnFlag = true; 
+        this.mpnFlag = true;
         this.selectedCustomer = new Customer();
         if (!this.isSubWorkOrder) { // subWorkOrder false
             this.modifyWorkorderdata();
@@ -337,10 +354,10 @@ export class WorkOrderAddComponent implements OnInit {
                 workOrderId: this.workOrderId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId
             }
-           
+
         }
         if (!this.isSubWorkOrder) {
-            this.workOrderStatus();
+            this.workOrderStatus('onload');
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -368,28 +385,34 @@ export class WorkOrderAddComponent implements OnInit {
                 { label: 'Edit Work Order' },
             ];
         }
-setTimeout(() => {
-    this.getAllEmployees('');
-    this.getAllWorkScpoes('');
-    this.getConditionsList('');
-    this.getAllTecStations('');
-    this.getAllPriority('');
-}, 1000);
+        setTimeout(() => {
+            this.getAllEmployees('');
+            this.getAllWorkScpoes('');
+            this.getConditionsList('');
+            this.getAllTecStations('');
+            this.getAllPriority('');
+        }, 1000);
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        if (changes.workOrderStatusList) {
+            this.workOrderStatusList = this.workOrderStatusList
+        }
         if (changes.subWoMpnGridUpdated) {
             this.subWoMpnGridUpdated = changes.subWoMpnGridUpdated.currentValue;
-             if (this.subWoMpnGridUpdated == true) {
+            if (this.subWoMpnGridUpdated == true) {
                 this.dropdownlistSubWoMpn();
             }
         }
-         if (changes.workorderSettings) {
+        if (changes.workorderSettings) {
             this.workorderSettings = this.workorderSettings;
         }
-        
+
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : '0.00';
+        }
+        if (this.isEdit == undefined) {
+            this.isEdit = false;
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -405,7 +428,7 @@ setTimeout(() => {
                 }
             )
         }
-        if (!this.isSubWorkOrder) { 
+        if (!this.isSubWorkOrder) {
             this.moduleNamee = this.workOrderModule;
         } else {
             this.moduleNamee = this.subWorkOrderModule;
@@ -413,7 +436,7 @@ setTimeout(() => {
     }
 
     dropdownlistSubWoMpn() {
-        this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId,this.currentUserMasterCompanyId).subscribe(res => {
+        this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId, this.currentUserMasterCompanyId).subscribe(res => {
             this.mpnDropdownList = res.map(x => {
                 return {
                     value:
@@ -428,8 +451,10 @@ setTimeout(() => {
                 }
             });
             if (this.mpnDropdownList && this.mpnDropdownList.length != 0) {
+
                 this.changeofMPNForSubWo(this.mpnDropdownList[0].value);
                 this.selectedMPNSubWo = this.mpnDropdownList[0].value;
+
             }
         },
             err => {
@@ -438,34 +463,39 @@ setTimeout(() => {
     }
 
     changeofMPNForSubWo(data) {
-        this.workFlowId =  (data.workFlowId !=0 || data.workFlowId !=null )? data.workFlowId: 0;
+        this.workOrderService.partNumberData = data;
+        this.workFlowId = (data.workFlowId != 0 || data.workFlowId != null) ? data.workFlowId : 0;
         this.subWOPartNoId = data.subWOPartNoId;
         this.workOrderPartNumberId = data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId = data.workFlowId;
-
+        this.selectedPartNumber = data.datas;
         if (this.workFlowId != null) {
             this.gridActiveTab = "workFlow";
             this.subTabWorkFlow = "viewworkFlow";
-            this.showWorkflowLabel='View WF';
+            this.showWorkflowLabel = 'View WF';
             this.subTabWorkFlowChange('viewworkFlow');
         } else {
             this.gridActiveTab = 'materialList';
             this.gridTabChange(this.gridActiveTab)
         }
     }
-    expriryarray:any=[];
-    modifyWorkorderdata() { 
+    expriryarray: any = [];
+    modifyWorkorderdata() {
         if (!this.isEdit) { // create new WorkOrder
             this.isEditLabor = true;
-            if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
-                this.getCustomerWarningsList();
-            }
+            //             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
+            //                 // this.getCustomerWarningsList();
+            //                 // this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+            //                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
+            //                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
+            //                 }
+            //             }
             this.addMPN();
             this.getAllGridModals();
             this.getEmployeeData();
             this.isRecCustomer = false;
             this.workOrderStatusvalue = "open";
-            this.expriryarray=[];
+            this.expriryarray = [];
             this.workOrderGeneralInformation.partNumbers.forEach(
                 x => {
                     if (x.customerRequestDate) {
@@ -480,14 +510,17 @@ setTimeout(() => {
                 }
             )
         } else { // edit WorkOrder
-            if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
+            if (this.recCustomerId != 0 || this.recCustomerId != undefined || this.recCustomerId != null) {
                 // this.getCustomerWarningsList();
+                if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.customerDetails) {
+                    this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+                }
             }
             //for tat calculation get data
             this.isEditWorkordershowMsg = true;
-            if (this.isView == false && (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null)) {
-                this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
-            }
+            // if (this.isView == false && (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null)) {
+            //     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId)
+            // }
             this.getWorkOrderDatesFoRTat();
             // check this in differnt scenarios
             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
@@ -500,9 +533,12 @@ setTimeout(() => {
             this.workOrderId = data.workOrderId;
             if (this.workOrderGeneralInformation.partNumbers[0].workflowId == null) {
                 // if(this.workOrderGeneralInformation.isSinglePN){
-                    this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
+                this.workFlowWorkOrderId = this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
                 // }
                 // this.gridTabChange('materialList');
+            }
+            if (this.workOrderGeneralInformation.isSinglePN == true) {
+                this.workOrderService.partNumberData = this.workOrderGeneralInformation.partNumbers[0];
             }
             this.gridActiveTab = 'materialList'
             this.gridTabChange('materialList');
@@ -516,16 +552,24 @@ setTimeout(() => {
                     // x.technicianName='Suresh-33 Reddy';
                     this.getStockLineByItemMasterId(x.masterPartId, x.conditionId, index);
                     this.calculatePartTat(x);
-                    this.getPartPublicationByItemMasterId(x, x.masterPartId);
-                    this.getWorkFlowByPNandScope(null,x,'onload',index);
+                    this.getPartPublicationByItemMasterId(x, x.masterPartId, index);
+                    this.getWorkFlowByPNandScope(null, x, 'onload', index);
+                    if (this.workorderSettings) {
+                        x.workOrderStageId = x.workOrderStageId ? x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
+                        x.workOrderPriorityId = x.workOrderPriorityId ? x.workOrderPriorityId : this.workorderSettings.defaultPriorityId;
+                        x.workOrderStatusId = x.workOrderStatusId ? x.workOrderStatusId : this.workorderSettings.defaultStatusId;
+                    }
+                    x.workOrderStageId = x.workOrderStageId ? x.workOrderStageId : 0;
+                    x.workOrderPriorityId = x.workOrderPriorityId ? x.workOrderPriorityId : 0;
                     return {
                         ...x,
-                        
-                        partTechnicianId:{name:x.technicianName,employeeId:x.technicianId},
+
+                        partTechnicianId: { name: x.technicianName, employeeId: x.technicianId },
                         // partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
                         mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
                         masterPartId: x.woPart,
                         customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
+                        receivedDate: x.receivedDate ? new Date(x.receivedDate) : new Date(this.currentDate),
                         estimatedCompletionDate: (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
                         estimatedShipDate: (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
                         promisedDate: (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate),
@@ -544,7 +588,7 @@ setTimeout(() => {
                 this.showTabsGrid = true;
                 this.showGridMenu = true;
                 if (this.workFlowId != null) {
-                    this.showWorkflowLabel='View WF';
+                    this.showWorkflowLabel = 'View WF';
                     this.subTabWorkFlowChange('viewworkFlow')
                 }
             } else {
@@ -559,58 +603,23 @@ setTimeout(() => {
         }
 
 
-if(!this.isView){
-    setTimeout(() => {
-        this.workOrderGeneralInformation.partNumbers.map((x, index) => {
-            if(x.publicatonExpirationDate){ 
-                // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-               if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-                setTimeout(() => {
-                    x.cMMId=0;
-                    this.disableSaveForPart=false;
-                }, 2000);
-                // this.removePublication(x,index);
-               
-                // this.expriryarray.push(x);
-         
-                $('#warningForCmmPublication').modal('show');
-               }
-            }
-            if(x.workflowExpirationDate){ 
-                // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
-               if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
-               
-                // this.removeWorkflow(x,index);
-                setTimeout(() => {
-                    x.workflowId=0;
-                    this.disableSaveForPart=false;
-                }, 2000);
-                $('#warningForCmmWorkflow').modal('show');
-                // this.expriryarray.push(x);
-        
-               }
-            }
-           }); 
-    }, 5000);
-}
+        this.showWaringForPublication()
+        this.showWaringForWorkflow()
     }
-    removePublication(currentRecord,index){
-setTimeout(() => {
-    // currentRecord.cMMId=0;
-    this.disableSaveForPart=false;
-}, 2000);
+    removePublication(currentRecord, index) {
+        setTimeout(() => {
+            // currentRecord.cMMId=0;
+            this.disableSaveForPart = false;
+        }, 2000);
     }
 
-    removeWorkflow(currentRecord,index){
+    removeWorkflow(currentRecord, index) {
         setTimeout(() => {
-        // currentRecord.workflowId=0;
-        this.disableSaveForPart=false;
-    }, 2000);
+            // currentRecord.workflowId=0;
+            this.disableSaveForPart = false;
+        }, 2000);
     }
-    tranferCheckbox(ev){
-        // console.log("ev",ev)
-        $('#workFlowTransfer').modal('show'); 
-    }
+
     getEmployeeData() {
         this.workOrderGeneralInformation.woEmployee = this.authService.currentEmployee.name;
     }
@@ -633,21 +642,26 @@ setTimeout(() => {
         return result;
     }
 
-    checkTechnician() { 
+    checkTechnician() {
         var result = false;
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.partNumbers) {
             this.workOrderGeneralInformation.partNumbers.forEach(
                 x => {
-                    if (x.partTechnicianId == 0 || (typeof x.partTechnicianId =='object' && x.partTechnicianId.employeeId==null)) {
+                    if (x.partTechnicianId == 0 || (typeof x.partTechnicianId == 'object' && x.partTechnicianId.employeeId == null)) {
                         result = true;
                     }
-                    
+                    if (x.workOrderStageId == 0 || x.workOrderStageId == null) {
+                        result = true;
+                    }
+                    if (x.workOrderPriorityId == 0 || x.workOrderPriorityId == null) {
+                        result = true;
+                    }
                 }
             )
         }
         return result;
     }
-    
+
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
@@ -687,7 +701,7 @@ setTimeout(() => {
             this.arrayCustomerIdList.push(0);
         }
         if (this.isRecCustomer) {
-            this.commonService.getReceivingCustomers(value,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getReceivingCustomers(value, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
             },
                 err => {
@@ -718,15 +732,71 @@ setTimeout(() => {
         if (this.isView == false && type == 'formHtml') {
             this.customerWarnings(object.customerId);
         }
-        currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2):'0.00';
+        currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2) : '0.00';
         currentRecord.creditTermsId = object.creditTermsId;
-        currentRecord.creditTerm = object.creditTerm;
+        currentRecord.creditTerms = object.creditTerms;
         this.myCustomerContact = object.customerContact;
         currentRecord.customerPhoneNo = object.customerPhoneNo;
         currentRecord.csrId = object.csrId;
         currentRecord.salesPersonId = object.salesPersonId;
-        currentRecord.csr = getObjectById('employeeId', object.csrId, this.csrOriginalList);
-        currentRecord.salesPerson = getObjectById('employeeId', object.salesPersonId, this.salesAgentsOriginalList);
+        currentRecord.csr = object.csrId ? { 'employeeId': object.csrId, 'name': object.csrName } : "";
+        currentRecord.salesPerson = object.salesPersonId ? { 'employeeId': object.salesPersonId, 'name': object.salesPerson } : "";
+        // currentRecord.csr = getObjectById('employeeId', object.csrId, this.csrOriginalList);
+        // currentRecord.salesPerson = getObjectById('employeeId', object.salesPersonId, this.salesAgentsOriginalList);
+
+        if (this.workOrderGeneralInformation) {
+            this.workOrderGeneralInformation.partNumbers.forEach(
+                x => {
+
+                    x.masterPartId = undefined;
+                    x.description = '';
+                    x.revisedPartNo = '';
+
+                    x.description = '';
+                    x.revisedPartNo = '';
+
+                    x.serialNumber = '';
+                    x.quantity = 1;
+                    x.tatDaysStandard = 0;
+                    x.tatDaysCurrent = 0;
+                    x.nte = 0;
+
+                    x.stockLineNumber = '';
+                    x.contractNo = '';
+
+                    x.customerReference = '';
+                    x.itemGroup = '';
+
+                    x.receivedDate = undefined;
+                    x.customerRequestDate = new Date();
+                    x.promisedDate = new Date();
+                    x.estimatedCompletionDate = new Date();
+                    x.estimatedShipDate = new Date();
+                    x.workOrderStageId = 0;
+                    x.workOrderStatusId
+                    x.partTechnicianId = undefined;
+                    x.techStationId = 0;
+                    x.workOrderScopeId = 0;
+                    x.workOrderPriorityId = 0;
+                    x.conditionId = 0;
+                    x.cMMId = 0;
+                    x.workflowId = 0;
+                    x.level1 = '';
+                    x.level2 = '';
+                    x.level3 = '';
+                    x.level4 = '';
+                    x.isDER = false;
+                    x.isPMA = false;
+
+
+                }
+            )
+        }
+
+        var index = 0;
+        this['cmmPublicationList' + index] = [];
+        this['dynamicWorkflowList' + index] = [];
+        // this['cmmPublicationList']=[];
 
         if (this.workOrderGeneralInformation.workOrderTypeId == 1) // Customer
         {
@@ -736,7 +806,7 @@ setTimeout(() => {
             this.getPartNosByCustomer(object.customerId, 0);
         this.getAllCustomerContact(object.customerId, 'select');
     }
-  // this.getMultiplePartsNumbers();
+    // this.getMultiplePartsNumbers();
     selectEmployee(data, currentRecord) {
     }
 
@@ -745,15 +815,16 @@ setTimeout(() => {
         this.modal.componentInstance.customerId = customerId;
     }
 
-    clearautoCompleteInput(currentRecord, field) {
-        // currentRecord[field] = null;
-    } 
 
     getMaterialListHandle() {
+        this.gridActiveTab == '';
+        this.gridActiveTab == 'materialList';
         if (this.isSubWorkOrder == true) {
             this.getMaterialListByWorkOrderIdForSubWO();
         } else {
-            this.getMaterialListByWorkOrderId();
+            // this.getMaterialListByWorkOrderId();
+            //new one
+            this.getNewMaterialListByWorkOrderId();
         }
     }
 
@@ -781,7 +852,9 @@ setTimeout(() => {
             if (this.isSubWorkOrder == true) {
                 this.getMaterialListByWorkOrderIdForSubWO();
             } else {
-                this.getMaterialListByWorkOrderId();
+                // this.getMaterialListByWorkOrderId();
+                // new one
+                this.getNewMaterialListByWorkOrderId();
             }
         }
         if (value === 'labor') {
@@ -802,9 +875,20 @@ setTimeout(() => {
             this.billingCreateOrEdit();
             const { customerId } = this.workOrderGeneralInformation.customerId;
         }
+        if (value == 'pickticket') {
+            this.isSpinnerVisible = true;
+            this.workOrderService.getPickTicketListMainPart(this.workOrderId, this.workFlowWorkOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                const data = res;
+                this.managementStructureId = res.managementStructureId;
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                });
+        }
         if (value == 'shipping') {
             this.isSpinnerVisible = true;
-            this.workOrderService.viewWorkOrderHeader(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.viewWorkOrderHeader(this.workOrderId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 const data = res;
                 this.managementStructureId = res.managementStructureId;
@@ -848,7 +932,7 @@ setTimeout(() => {
         }
         if (this.workFlowWorkOrderId > 0) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getworkOrderTearDownData(this.workFlowWorkOrderId, this.isSubWorkOrder,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getworkOrderTearDownData(this.workFlowWorkOrderId, this.isSubWorkOrder, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.saveTearDownData = res;
             },
@@ -857,7 +941,7 @@ setTimeout(() => {
                     // this.isSpinnerVisible = false;
                 });
         }
-    } 
+    }
 
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
@@ -868,17 +952,26 @@ setTimeout(() => {
         this.workOrderGeneralInformation.workOrderTypeId = value;
         this.getLatestDefaultSettingByWorkOrderTypeId.emit(value);
     }
+    SingleMpnValid() {
+        this.workOrderGeneralInformation.partNumbers = [];
+        const workOrderSettingsAdded = new WorkOrderPartNumber();
+        this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
+        this.array = [];
 
+        var index = 0;
+        this['cmmPublicationList' + index] = [];
+        this['dynamicWorkflowList' + index] = [];
+    }
     // added new MPN
     addMPN() {
-  
+
         if (!this.workOrderGeneralInformation.isSinglePN && this.workorderSettings) {
             const workOrderSettingsAdded = new WorkOrderPartNumber();
             workOrderSettingsAdded.workOrderStageId = this.workorderSettings.defaultStageCodeId;
             workOrderSettingsAdded.workOrderPriorityId = this.workorderSettings.defaultPriorityId;
             this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
         } else {
-            const workOrderSettingsAdded = new WorkOrderPartNumber(); 
+            const workOrderSettingsAdded = new WorkOrderPartNumber();
             if (this.salesOrderReferenceData) {
                 workOrderSettingsAdded.masterPartId = {
                     itemMasterId: this.salesOrderReferenceData.itemMasterId,
@@ -890,7 +983,7 @@ setTimeout(() => {
             }
             this.workOrderGeneralInformation.partNumbers.push(workOrderSettingsAdded);
             if (this.salesOrderReferenceData) {
-                this.onSelectedPartNumber(workOrderSettingsAdded.masterPartId, this.workOrderGeneralInformation.partNumbers[0], 0,'onload')
+                this.onSelectedPartNumber(workOrderSettingsAdded.masterPartId, this.workOrderGeneralInformation.partNumbers[0], 0, 'onload')
             }
         }
     }
@@ -958,7 +1051,7 @@ setTimeout(() => {
         this.modal.close();
     }
 
-    workOrderStatus() {
+    workOrderStatus(from) {
         this.allValuesSame = this.workOrderGeneralInformation.partNumbers.every((val, i, arr) => val.workOrderStatusId === arr[0].workOrderStatusId);
         if (this.allValuesSame) {
             this.statusId = this.workOrderGeneralInformation.partNumbers[0].workOrderStatusId;
@@ -967,102 +1060,236 @@ setTimeout(() => {
             this.statusId = 1;
             this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
         }
-        if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
-            this.workOrderStatusList.forEach(element => {
-                if (element.value == this.statusId) {
-                    this.workOrderNumberStatus = element.label;
-                    this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
+        setTimeout(() => {
+            if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
+                this.workOrderStatusList.forEach(element => {
+                    if (element.value == this.statusId) {
+                        this.workOrderNumberStatus = element.label;
+                        this.workOrderGeneralInformation.workOrderStatusId = this.statusId;
+                    }
+                });
+            } else {
+                this.workOrderNumberStatus = 'Open';
+                this.workOrderGeneralInformation.workOrderStatusId = 1;
+            }
+            if (from == 'onload') {
+                if (this.workOrderNumberStatus == 'Closed') {
+                    this.isView = true;
                 }
-            });
-        } else {
-            this.workOrderNumberStatus = 'Open';
-            this.workOrderGeneralInformation.workOrderStatusId = 1;
-        }
-        if(this.workOrderNumberStatus=='Close'){
-            this.isView=true;
-        }
+            }
+        }, 1000);
     }
-    dismissModelTask(){
+    dismissModelTask() {
         $('#confirmationSave').modal('hide');
     }
+
+    validationForMpnParts(): any {
+
+
+
+        // partTechnicianId:{name:x.technicianName,employeeId:x.technicianId},
+        // // partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
+        // mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
+        // masterPartId: x.woPart,
+        // customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
+        // receivedDate: x.receivedDate ? new Date(x.receivedDate) : null,
+        // estimatedCompletionDate: (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
+        // estimatedShipDate: (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
+        // promisedDate: (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate),
+        // x.workOrderStageId =x.workOrderStageId?x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
+        // x.workOrderPriorityId = x.workOrderPriorityId? x.workOrderPriorityId:this.workorderSettings.defaultPriorityId;
+
+
+    }
+
+
+    clearautoCompleteInput(currentRecord, field) {
+        // currentRecord[field] = null;
+    }
+    clearautoCompleteTechinician(currentRecord, field) {
+        currentRecord[field] = null;
+        currentRecord.partTechnicianId = 0;
+    }
+    clearautoCompletePartNum(currentRecord, field) {
+        // currentRecord[field] = null;
+        currentRecord.itemMasterId = undefined;
+        currentRecord.description = "";
+        currentRecord.revisedPartNo = "";
+        currentRecord.serialNumber = "";
+        currentRecord.receivedDate = undefined;
+        currentRecord.customerRequestDate = undefined;
+        currentRecord.promisedDate = new Date();
+        currentRecord.estimatedShipDate = undefined;
+
+        currentRecord.estimatedCompletionDate = new Date();
+        currentRecord.workOrderStageId = 0;
+        currentRecord.workOrderStatusId = 0;
+        currentRecord.partTechnicianId = 0;
+        currentRecord.techStationId = 0;
+
+
+        currentRecord.workOrderScopeId = 0;
+        currentRecord.workOrderPriorityId = 0;
+        currentRecord.conditionId = 0;
+        currentRecord.cMMId = 0;
+        currentRecord.workflowId = 0;
+
+        currentRecord.itemGroup = "";
+        currentRecord.isMPNContract = false;
+        currentRecord.contractNo = "";
+        currentRecord.stockLineNumber = "";
+        currentRecord.nte = "";
+
+        currentRecord.isPMA = false;
+        currentRecord.isDER = false;
+        currentRecord.tatDaysCurrent = 0;
+        currentRecord.tatDaysStandard = 0;
+    }
+    isValidationfailed: boolean = false;
+
     saveWorkOrder(): void {
         this.mpnPartNumbersList = [];
         const generalInfo = this.workOrderGeneralInformation;
- if(generalInfo.creditLimit<=0){
-    $('#confirmationSave').modal('show');
-     return
- } 
-        const data1 = {
-            ...generalInfo,
-            customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
-            woEmployee: {employeeId: this.authService.currentEmployee.employeeId, Name: this.userName },
-            employeeId: this.authService.currentEmployee.employeeId,
-            salesPersonId: generalInfo.salesPerson ? generalInfo.salesPerson.employeeId : generalInfo.salesPersonId,
-            csrId: generalInfo.csr ? generalInfo.csr.employeeId : generalInfo.csrId,
-            customerContact: getValueFromObjectByKey('contactName', this.myCustomerContact),
-            masterCompanyId: this.authService.currentUser.masterCompanyId,
-            customerContactId: getValueFromObjectByKey('customerContactId', this.myCustomerContact),
-            createdBy: this.userName,
-            updatedBy: this.userName,
-            revisedPartId: this.revisedPartId == 0 ? null :  this.revisedPartId,
-            partNumbers: generalInfo.partNumbers.map(x => {
-                return {
-                    ...x,
-                    masterPartId: editValueAssignByCondition('itemMasterId', x.masterPartId),
-                    itemMasterId: editValueAssignByCondition('itemMasterId', x.masterPartId),
-                    workOrderStageId: editValueAssignByCondition('workOrderStageId', x.workOrderStageId),
-                    mappingItemMasterId: editValueAssignByCondition('mappingItemMasterId', x.mappingItemMasterId),
-                    technicianId: editValueAssignByCondition('employeeId', x.partTechnicianId),
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
-                    cMMId:x.cMMId==0 ? null :x.cMMId,
-                    masterCompanyId : this.currentUserMasterCompanyId,
-                    workflowId: this.workOrderGeneralInformation.workflowId == 0 ? null : this.workOrderGeneralInformation.workflowId,
-                    revisedPartId: this.workOrderGeneralInformation.revisedPartId ? this.workOrderGeneralInformation.revisedPartId : null,
-                }
-            })
-        };
-        if (this.isEdit && this.isRecCustomer === false) {
-            this.isSpinnerVisible = true;            
-            this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
-                result => {
-                    this.isSpinnerVisible = false;
-                    this.disableSaveForEdit = true;
-                    this.disableSaveForPart = true;
-                    this.saveWorkOrderGridLogic(result, generalInfo);
-                    this.alertService.showMessage(
-                        this.moduleName,
-                        'Work Order Updated Succesfully',
-                        MessageSeverity.success
-                    );
-                },
-                err => {
-                    this.handleError(err);
-                }
-            );
-        } else {
-            this.isSpinnerVisible = true;            
-            this.workOrderService.createNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
-                result => {
-                    this.isSpinnerVisible = false;
-                    this.isEdit = true;
-                    this.disableSaveForPart = true;
-                    this.router.navigate([`workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`]);
-                    this.saveWorkOrderGridLogic(result, generalInfo)
-                    if (window.location.href.includes('app-work-order-receivingcustworkid')) {
-                        window.history.replaceState({}, '', `/workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`);
+        if (generalInfo.creditLimit <= 0) {
+            $('#confirmationSave').modal('show');
+            return
+        }
+        this.isValidationfailed = false;
+        //  if (!this.validationForMpnParts()) {
+        //     return;
+        // }
+        this.workOrderGeneralInformation.partNumbers.map(x => {
+
+            if (!x.workOrderStageId || x.workOrderStage == 0) {
+                this.alertService.showMessage('Work Order', 'Stage is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+
+            }
+            if (!x.workOrderPriorityId || x.workOrderPriorityId == 0) {
+                this.alertService.showMessage('Work Order', 'Priority is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.estimatedShipDate || x.estimatedShipDate == undefined) {
+                this.alertService.showMessage('Work Order', 'Est. Ship Date is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.estimatedCompletionDate || x.estimatedCompletionDate == undefined) {
+                this.alertService.showMessage('Work Order', 'Est. Comp Date is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.promisedDate || x.promisedDate == undefined) {
+                this.alertService.showMessage('Work Order', 'Promised Date is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.receivedDate || x.receivedDate == undefined) {
+                this.alertService.showMessage('Work Order', '  Recd  Date is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.customerRequestDate || x.customerRequestDate == undefined) {
+                this.alertService.showMessage('Work Order', 'Cust Req Date is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.conditionId || x.conditionId == undefined) {
+                this.alertService.showMessage('Work Order', 'Condition is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.workOrderScopeId || x.workOrderScopeId == undefined) {
+                this.alertService.showMessage('Work Order', 'Work Scope is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.partTechnicianId.employeeId || x.partTechnicianId.employeeId == null) {
+                this.alertService.showMessage('Work Order', 'Tech Name is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+            if (!x.masterPartId.itemMasterId || x.masterPartId.itemMasterId == undefined || x.masterPartId.itemMasterId == null) {
+                this.alertService.showMessage('Work Order', 'MPN is required', MessageSeverity.error);
+                this.isValidationfailed = true;
+            }
+        })
+        if (this.isValidationfailed == false) {
+            const data1 = {
+                ...generalInfo,
+                customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
+                woEmployee: { employeeId: this.authService.currentEmployee.employeeId, Name: this.userName },
+                employeeId: this.authService.currentEmployee.employeeId,
+                salesPersonId: generalInfo.salesPerson ? generalInfo.salesPerson.employeeId : generalInfo.salesPersonId,
+                csrId: generalInfo.csr ? generalInfo.csr.employeeId : generalInfo.csrId,
+                customerContact: getValueFromObjectByKey('contactName', this.myCustomerContact),
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                customerContactId: getValueFromObjectByKey('customerContactId', this.myCustomerContact),
+                createdBy: generalInfo.createdBy ? generalInfo.createdBy : this.userName,
+                updatedBy: this.userName,
+                revisedPartId: this.revisedPartId == 0 ? null : this.revisedPartId,
+
+                partNumbers: generalInfo.partNumbers.map(x => {
+                    return {
+                        ...x,
+                        masterPartId: editValueAssignByCondition('itemMasterId', x.masterPartId),
+                        itemMasterId: editValueAssignByCondition('itemMasterId', x.masterPartId),
+                        workOrderStageId: editValueAssignByCondition('workOrderStageId', x.workOrderStageId),
+                        mappingItemMasterId: editValueAssignByCondition('mappingItemMasterId', x.mappingItemMasterId),
+                        technicianId: editValueAssignByCondition('employeeId', x.partTechnicianId),
+                        createdBy: generalInfo.createdBy ? generalInfo.createdBy : this.userName,
+                        updatedBy: this.userName,
+                        workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
+                        cMMId: x.cMMId == 0 || x.cMMId == undefined ? null : x.cMMId,
+                        masterCompanyId: this.currentUserMasterCompanyId,
+                        workflowId: x.workflowId == 0 || x.workflowId == undefined ? null : x.workflowId,
+                        revisedPartId: this.workOrderGeneralInformation.revisedPartId ? this.workOrderGeneralInformation.revisedPartId : null,
                     }
-                    this.alertService.showMessage(
-                        this.moduleName,
-                        'Work Order Added Succesfully',
-                        MessageSeverity.success
-                    );
-                },
-                err => {
-                    this.handleError(err);
-                }
-            );
+                })
+            };
+
+            if (this.isEdit && this.isRecCustomer === false) {
+                this.isSpinnerVisible = true;
+                // if(this.workOrderNumberStatus=='Closed'){
+                //     data1.workOrderStatusId=this.statusId
+                // }
+                this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
+                    result => {
+                        this.isValidationfailed = false
+                        this.isSpinnerVisible = false;
+                        this.disableSaveForEdit = true;
+                        this.disableSaveForPart = true;
+                        // this.workOrderStatus();
+                        if (this.workOrderNumberStatus == 'Closed') {
+                            this.isView = true;
+                        }
+                        this.saveWorkOrderGridLogic(result, generalInfo);
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            'Work Order Updated Succesfully',
+                            MessageSeverity.success
+                        );
+                    },
+                    err => {
+                        this.handleError(err);
+                    }
+                );
+            } else {
+                this.isSpinnerVisible = true;
+                this.workOrderService.createNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
+                    result => {
+                        this.isValidationfailed = false
+                        this.isSpinnerVisible = false;
+                        this.isEdit = true;
+                        this.disableSaveForPart = true;
+                        this.router.navigate([`workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`]);
+                        this.saveWorkOrderGridLogic(result, generalInfo)
+                        if (window.location.href.includes('app-work-order-receivingcustworkid')) {
+                            window.history.replaceState({}, '', `/workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`);
+                        }
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            'Work Order Added Succesfully',
+                            MessageSeverity.success
+                        );
+                    },
+                    err => {
+                        this.handleError(err);
+                    }
+                );
+            }
         }
     }
 
@@ -1077,7 +1304,12 @@ setTimeout(() => {
         if (!this.workOrderQuoteId) {
             this.customerWarnings(customerId)
         } else {
-            window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+            );
+
         }
     }
 
@@ -1094,8 +1326,8 @@ setTimeout(() => {
             this.showTabsGrid = true;  // Show Grid Boolean
             this.workOrderPartNumberId = result.partNumbers[0].id;
             this.workFlowId = result.partNumbers[0].workflowId;
-    
-            
+
+
             this.workFlowWorkOrderId = result.workFlowWorkOrderId;
             this.workScope = result.partNumbers[0].workScope;
             this.showGridMenu = true;
@@ -1103,7 +1335,7 @@ setTimeout(() => {
             this.getWorkFlowTabsData();
             if (this.workFlowId != null) {
                 this.isWorkOrder = true;
-                this.showWorkflowLabel='View WF';
+                this.showWorkflowLabel = 'View WF';
                 this.subTabWorkFlowChange('viewworkFlow');
             }
         } else {
@@ -1134,17 +1366,14 @@ setTimeout(() => {
         }
     }
 
-    onSelectedPartNumber(object, currentRecord, index,from) {
-        if(from=='html'){ 
-            currentRecord.workOrderScopeId=object.workOderScopeId;
+    onSelectedPartNumber(object, currentRecord, index, from) {
+        if (from == 'html') {
+            currentRecord.workOrderScopeId = object.workOderScopeId;
             if (this.workorderSettings) {
-                currentRecord.conditionId = (this.workorderSettings.defaultConditionId !=0 &&  this.workorderSettings.defaultConditionId !=null) ? this.workorderSettings.defaultConditionId: object.conditionId; 
+                currentRecord.conditionId = (this.workorderSettings.defaultConditionId != 0 && this.workorderSettings.defaultConditionId != null) ? this.workorderSettings.defaultConditionId : object.conditionId;
             }
         }
-        // console.log("hell object",object)
-        // console.log("hell",currentRecord)
-        currentRecord.workOrderScopeId= currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId :object.workOderScopeId;
-//  console.log("hell2",currentRecord.workOrderScopeId)
+        currentRecord.workOrderScopeId = currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId : object.workOderScopeId;
         if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
@@ -1164,10 +1393,12 @@ setTimeout(() => {
         if (!this.workOrderGeneralInformation.isSinglePN) {
         }
         const { itemMasterId } = object;
-        this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
+        this['cmmPublicationList' + index] = [];
+        this['dynamicWorkflowList' + index] = [];
+        this.getPartPublicationByItemMasterId(currentRecord, itemMasterId, index);
         // currentRecord.masterPartId=object.itemMasterId;
         // getWorkFlowByPNandScope(workOrderPartNumber);
-        this.getWorkFlowByPNandScope(null,currentRecord,'onload',index);
+        this.getWorkFlowByPNandScope(null, currentRecord, 'onload', index);
         currentRecord.description = object.partDescription
         currentRecord.isPMA = object.pma == null ? false : object.pma;
         currentRecord.isDER = object.der == null ? false : object.der;
@@ -1200,7 +1431,7 @@ setTimeout(() => {
 
     onSelectedTechnician(object, currentRecord) {
         if (object.employeeId != undefined && object.employeeId > 0) {
-            this.commonService.getTechnicianStation(object.employeeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getTechnicianStation(object.employeeId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 currentRecord.techStationId = res.stationId;
             },
                 err => {
@@ -1217,7 +1448,7 @@ setTimeout(() => {
         itemMasterId = editValueAssignByCondition('itemMasterId', itemMasterId)
         if (itemMasterId !== 0 && conditionId !== null) {
             this.isSpinnerVisible = true;
-            await this.workOrderService.getStockLineByItemMasterId(itemMasterId, conditionId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            await this.workOrderService.getStockLineByItemMasterId(itemMasterId, conditionId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this['stockLineList' + index] = res.map(x => {
                     return {
@@ -1236,25 +1467,49 @@ setTimeout(() => {
         return this[variable + index]
     }
 
-    async getPartPublicationByItemMasterId(currentRecord, itemMasterId) {
+    async getPartPublicationByItemMasterId(currentRecord, itemMasterId, index) {
         this.isSpinnerVisible = true;
-        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
+            this.cmmList = [];
+            this.cmmListNew = [];
+            this.cmmListNew = res;
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,
-                    label: x.publicationId
+                    label: x.publicationId,
+                    expirationDate: x.expirationDate
                 }
             });
-            if (this.cmmList && this.cmmList.length > 0) {
-                currentRecord.cMMId = this.cmmList[0].value;
+            this['cmmPublicationList' + index] = []
+            this['cmmPublicationList' + index] = this.cmmList;
+            if (this.cmmList && this['cmmPublicationList' + index].length > 0) {
+                currentRecord.cMMId = this['cmmPublicationList' + index][0].value;
+                this.workOrderGeneralInformation.partNumbers[index].cMMId = this['cmmPublicationList' + index][0].value;
+
+                if (this.cmmListNew && this.cmmListNew[0].expirationDate) {
+                    this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmListNew[0].expirationDate;
+                    // this.showWaringForPublication();
+                }
             }
         },
             err => {
                 this.handleError(err);
             })
     }
-
+    onSelectPublication(event, currentRecord, i) {
+        if (this['cmmPublicationList' + i] && this['cmmPublicationList' + i].length != 0) {
+            this['cmmPublicationList' + i].forEach(element => {
+                if (element.value == event.value) {
+                    this.workOrderGeneralInformation.partNumbers[i].publicatonExpirationDate = element.expirationDate;
+                    this.workOrderGeneralInformation.partNumbers[i].publicationNo = element.label;
+                }
+            });
+        }
+        if (this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers[i].publicatonExpirationDate) {
+            this.showWaringForPublication();
+        }
+    }
     selectedCondition(value, currentRecord, index,) {
         this.conditionList.forEach(element => {
             if (element.value == value) {
@@ -1262,7 +1517,7 @@ setTimeout(() => {
                 this.workOrderGeneralInformation.partNumbers[index].condition = element.label;
             }
         });
-        this.workOrderStatus();
+        this.workOrderStatus('onCondition');
     }
 
     selectedStage(value, currentRecord, index,) {
@@ -1272,7 +1527,7 @@ setTimeout(() => {
                 this.workOrderGeneralInformation.partNumbers[index].workOrderStatusId = element.workOrderStausId;
             }
         });
-        this.workOrderStatus();
+        this.workOrderStatus('onStage');
     }
 
     filterRevisedPartNumber(event, index) {
@@ -1293,7 +1548,7 @@ setTimeout(() => {
 
         if ((stockLineId !== null && stockLineId !== 0) && (conditionId !== null && conditionId !== 0)) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getSerialNoByStockLineId(stockLineId, conditionId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getSerialNoByStockLineId(stockLineId, conditionId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     workOrderPart.serialNumber = res.serialNumber;
@@ -1305,50 +1560,84 @@ setTimeout(() => {
         }
     }
 
-    getWorkFlowByPNandScope(value,workOrderPart,form,index) {
-        if(value !=null && form=='html'){
-            workOrderPart.workOrderScopeId=value;
-        } 
-//  console.log("hello Changed",workOrderPart.workOrderScopeId)
-    workOrderPart.workOrderScopeId=(workOrderPart.workOrderScopeId !=undefined || workOrderPart.workOrderScopeId !=null)?workOrderPart.workOrderScopeId :0;
-    // console.log("hello Changed",workOrderPart.workOrderScopeId)
-    const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId);
-    const { workOrderScopeId } = workOrderPart;
-    if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
-        this.isSpinnerVisible = true;
-        this.workOrderService.getWorkFlowByPNandScope(itemMasterId, workOrderScopeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-         if(res && res.length!=0){
-            this.workFlowList = res.map(x => {
-                return {
-                    label: x.workFlowNo,
-                    value: x.workFlowId
+    onSelectWorkflow(event, currentRecord, i) {
+        if (this['dynamicWorkflowList' + i] && this['dynamicWorkflowList' + i].length != 0) {
+            this['dynamicWorkflowList' + i].forEach(element => {
+                if (element.value == event.value) {
+                    this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate = element.expirationDate;
+                    this.workOrderGeneralInformation.partNumbers[i].workFlowNo = element.label;
                 }
-            })
-            workOrderPart.workflowId = this.workFlowList[0].value;
-            this.workFlowId=this.workFlowList[0].value;
-            this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
-         }else{
-            this.workFlowList=[];
-         }
-     },err => {
+            });
+        }
+        currentRecord.disabledForWorkflow = false;
+        this.workOrderGeneralInformation.partNumbers[i].disabledForWorkflow = false;
+        if (this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers[i].workflowExpirationDate) {
+            this.showWaringForWorkflow();
+        }
+    }
+    getWorkFlowByPNandScope(value, workOrderPart, form, index) {
+        if (value != null && form == 'html') {
+            workOrderPart.workOrderScopeId = value;
+        }
+        workOrderPart.workOrderScopeId = (workOrderPart.workOrderScopeId != undefined || workOrderPart.workOrderScopeId != null) ? workOrderPart.workOrderScopeId : 0;
+        const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId);
+        const { workOrderScopeId } = workOrderPart;
+        if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkFlowByPNandScope(itemMasterId, workOrderScopeId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                if (res && res.length != 0) {
+                    this.workFlowList = res.map(x => {
+                        return {
+                            ...x,
+                            label: x.workFlowNo,
+                            value: x.workFlowId
+                        }
+                    })
+                    this['dynamicWorkflowList' + index] = [];
+                    this['dynamicWorkflowList' + index] = this.workFlowList;
+                    if (this['dynamicWorkflowList' + index] && this['dynamicWorkflowList' + index].length != 0) {
+                        this.workFlowId = this.workFlowList[0].value;
+                        this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+                        if (res && res[0].expirationDate) {
+                            this.workOrderGeneralInformation.partNumbers[index].workflowExpirationDate = res[0].expirationDate;
+                            this.showWaringForWorkflow();
+                        }
+                    }
+                    // workOrderPart.workflowId = this.workFlowList[0].value;
+
+
+                    // if(this.cmmList[0].workflowExpirationDate){
+                    //     this.workOrderGeneralInformation.partNumbers[index].workflowExpirationDate = this.cmmList[0].workflowExpirationDate;
+
+
+                    //     this.showWaringForPubWorkflow();
+                    //     }
+
+
+                } else {
+                    this.workFlowList = [];
+                }
+            }, err => {
                 this.handleError(err);
             })
-    }
-    this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
- 
+        }
+        this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart, index);
+
     }
 
-    getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
+    getNTEandSTDByItemMasterId(itemMasterId, currentRecord, index) {
         if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
             const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
             if (itemMasterId !== undefined && currentRecord.workOrderScopeId !== undefined) {
                 this.isSpinnerVisible = true
-                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
                     if (res !== null) {
-                        currentRecord.nte = res.nteHours;
-                        currentRecord.tatDaysStandard = res.stdHours;
+                        this.workOrderGeneralInformation.partNumbers[index].nte = res.nteHours;
+                        this.workOrderGeneralInformation.partNumbers[index].tatDaysStandard = res.stdHours;
+                        // currentRecord.nte = res.nteHours;
+                        // currentRecord.tatDaysStandard = res.stdHours;
                     }
                 },
                     err => {
@@ -1358,11 +1647,11 @@ setTimeout(() => {
         }
     }
 
-    getWorkFlowData() { 
+    getWorkFlowData() {
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
         if (this.selectedWorkFlowId != null) {
-            this.isSpinnerVisible = true; 
-            this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId,this.currentUserMasterCompanyId)
+            this.isSpinnerVisible = true;
+            this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId, this.currentUserMasterCompanyId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
                     (workFlowData) => {
                         this.isSpinnerVisible = false;
@@ -1377,6 +1666,9 @@ setTimeout(() => {
     changeofMPN(data) {
         this.quotestatusofCurrentPart = data.quoteStatus;
         this.selectedPartNumber = data;
+        // if(this.workOrderGeneralInformation.isSinglePN==true){
+        this.workOrderService.partNumberData = data.datas;
+        // }
         this.mpnGridData = data.datas;
         this.workFlowId = data.workflowId,
             this.workFlowWorkOrderId = data.workOrderWorkFlowId;
@@ -1408,6 +1700,9 @@ setTimeout(() => {
         else if (this.gridActiveTab === 'quote') {
             this.gridTabChange('quote');
         }
+        else if (this.gridActiveTab === 'pickticket') {
+            this.gridTabChange('pickticket');
+        }
         else if (this.gridActiveTab === 'shipping') {
             this.gridTabChange('shipping');
         }
@@ -1422,7 +1717,6 @@ setTimeout(() => {
         }
         else if (this.gridActiveTab === 'documents') {
             this.gridTabChange('documents');
-            // this.getDocumentsByWorkOrderId();/
         }
         else if (this.gridActiveTab === 'workComplete') {
             this.gridTabChange('workComplete');
@@ -1448,7 +1742,7 @@ setTimeout(() => {
     closeWorkOrderMainView(value) {
         this.isWorkOrderMainView = value;
     }
-  
+
     savedWorkFlowData(workFlowDataObject) {
         this.isSpinnerVisible = true;
         if (this.isSubWorkOrder == true) {
@@ -1460,12 +1754,12 @@ setTimeout(() => {
         delete workFlowDataObject.customerName;
         if (workFlowDataObject.equipments && workFlowDataObject.equipments.length != 0) {
             workFlowDataObject.equipments.forEach(element => {
-                element.partNumber=element.partNumber.name
+                element.partNumber = element.partNumber.name
             });
         }
-        workFlowDataObject.masterCompanyId=workFlowDataObject.masterCompanyId ? workFlowDataObject.masterCompanyId : this.currentUserMasterCompanyId;
-        workFlowDataObject.publication.forEach(element => {element.allDashNumbers=""; })
-        this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
+        workFlowDataObject.masterCompanyId = workFlowDataObject.masterCompanyId ? workFlowDataObject.masterCompanyId : this.currentUserMasterCompanyId;
+        workFlowDataObject.publication.forEach(element => { element.allDashNumbers = ""; })
+        this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
             this.workFlowWorkOrderId = res.workFlowWorkOrderId;
@@ -1473,7 +1767,7 @@ setTimeout(() => {
                 this.isDisabledSteps = true;
             }
             this.getWorkOrderWorkFlowNos();
-           this.alertService.showMessage(
+            this.alertService.showMessage(
                 '',
                 'Work Order Work Flow Saved Succesfully',
                 MessageSeverity.success
@@ -1481,13 +1775,13 @@ setTimeout(() => {
             setTimeout(
                 () => {
                     this.workOrderGeneralInformation.partNumbers.map(
-                        (workorderpn,index) => {
-                            this.getWorkFlowByPNandScope(null,workorderpn,'onload',index);
+                        (workorderpn, index) => {
+                            this.getWorkFlowByPNandScope(null, workorderpn, 'onload', index);
                         }
                     )
                     this.editWorkFlowData = undefined;
-                    this.isSpinnerVisible = true; 
-                    this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                    this.isSpinnerVisible = true;
+                    this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                         this.isSpinnerVisible = false;
                         this.workFlowtService.listCollection = res[0];
                         this.workFlowtService.enableUpdateMode = true;
@@ -1504,15 +1798,15 @@ setTimeout(() => {
             err => {
                 this.handleError(err);
             })
-    } 
-    closeModel(){
-        
+    }
+    closeModel() {
+        this.isShowSummary = false;
     }
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false
                 this.workOrderWorkFlowOriginalData = res;
                 if (this.isEdit && res.length === 1 && this.workOrderGeneralInformation.isSinglePN == true) {
@@ -1545,14 +1839,17 @@ setTimeout(() => {
                     }
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
+
                     }
                     // if (this.workFlowId == null) {
-                        this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
-                        if (this.isSubWorkOrder == true) {
-                            this.getMaterialListByWorkOrderIdForSubWO();
-                        } else {
-                            this.getMaterialListByWorkOrderId();
-                        }
+                    this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
+                    if (this.isSubWorkOrder == true) {
+                        this.getMaterialListByWorkOrderIdForSubWO();
+                    } else {
+                        // this.getMaterialListByWorkOrderId();
+                        // nw one
+                        this.getNewMaterialListByWorkOrderId();
+                    }
                     // }
                 }
             },
@@ -1565,8 +1862,282 @@ setTimeout(() => {
     getmemo($event) {
         this.disableSaveForEdit = false;
     }
+    //new form for material list
+    saveMaterials(data) {
+        if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible = true;
+            const newData = {
+                ...data,
+                workOrderId: this.subWorkOrderDetails.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId,
+                subWOPartNoId: this.subWOPartNoId,
+                subWorkOrderMaterialsId: data.subWorkOrderMaterialsId ? data.subWorkOrderMaterialsId : 0,
+                subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
+                extendedCost: data.extendedCost ? data.extendedCost : 0,
+                unitCost: data.unitCost ? data.unitCost : 0,
+                // partNumber: data.partItem.partName,
+                isActive: true,
+                isDeleted: false,
+                createdBy: this.userName,
+                updatedBy: this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                taskId: (typeof data.taskId == 'object') ? data.taskId.taskId : data.taskId
+            }
+            this.workOrderService.createSubWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Sub Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderIdForSubWO();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        } else {
 
-    saveWorkOrderMaterialList(data) { 
+            const newData = {
+                ...data,
+                workOrderId: this.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId == 0 ? null : this.workFlowWorkOrderId,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                extendedCost: data.extendedCost ? data.extendedCost : 0,
+                unitCost: data.unitCost ? data.unitCost : 0,
+                // partNumber: data.partItem.partName,
+                taskId: (typeof data.taskId == 'object') ? data.taskId.taskId : data.taskId,
+                stockLineId: data.stockLineId == 0 ? null : data.stockLineId,
+                isActive: true,
+                isDeleted: false,
+                createdBy: this.userName,
+                updatedBy: this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                quantity: data.quantity ? data.quantity : 0,
+                provisionId: data.provisionId ? data.provisionId : 0
+            }
+            this.isSpinnerVisible = true;
+            this.workOrderService.createWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                // newMaterial list get
+                this.getNewMaterialListByWorkOrderId();
+                // old material list get
+                // this.getMaterialListByWorkOrderId();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
+    isSubWorkorderCheck(data) {
+        if (data == true) {
+            this.isSubWorkOrder = true;
+        }
+    }
+    //new form for material list
+    updateMaterials(data) {
+        if (this.isSubWorkOrder == true) {
+            const newData = {
+                ...data,
+                workOrderId: this.subWorkOrderDetails.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId,
+                subWOPartNoId: this.subWOPartNoId,
+                subWorkOrderMaterialsId: data.subWorkOrderMaterialsId ? data.subWorkOrderMaterialsId : 0,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
+                extendedCost: data.extendedCost ? data.extendedCost : 0,
+                unitCost: data.unitCost ? data.unitCost : 0,
+                isActive: true,
+                isDeleted: false,
+                createdBy: this.userName,
+                updatedBy: this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                // partNumber: data.partItem.partName,
+                taskId: (typeof data.taskId == 'object') ? data.taskId.taskId : data.taskId
+            }
+            this.isSpinnerVisible = true;
+            this.workOrderService.updatesubworkordermaterials([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated Sub Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                this.getMaterialListByWorkOrderIdForSubWO();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        } else {
+            const newData = {
+                ...data,
+                workOrderId: this.workOrderId,
+                workFlowWorkOrderId: this.workFlowWorkOrderId == 0 ? null : this.workFlowWorkOrderId,
+                masterCompanyId: this.authService.currentUser.masterCompanyId,
+                extendedCost: data.extendedCost ? data.extendedCost : 0,
+                unitCost: data.unitCost ? data.unitCost : 0,
+                // partNumber: data.partItem.partName,
+                taskId: (typeof data.taskId == 'object') ? data.taskId.taskId : data.taskId,
+                stockLineId: data.stockLineId == 0 ? null : data.stockLineId,
+                isActive: true,
+                isDeleted: false,
+                createdBy: this.userName,
+                updatedBy: this.userName,
+                createdDate: new Date(),
+                updatedDate: new Date(),
+                quantity: data.quantity ? data.quantity : 0,
+                provisionId: data.provisionId ? data.provisionId : 0
+            }
+
+            this.isSpinnerVisible = true;
+            this.workOrderService.updateWorkOrderMaterialList([newData]).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.materialList = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated Work Order MaterialList Succesfully',
+                    MessageSeverity.success
+                );
+                // newMaterial list get
+                this.getNewMaterialListByWorkOrderId();
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
+
+
+    workOrderMaterial: any = [];
+    getNewMaterialListByWorkOrderId() {
+        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+            this.workOrderMaterialList = [];
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.salesQuoteService.selectedParts = [];
+                if (res && res.length > 0) {
+                    res.forEach(element => {
+                        this.getValues(element)
+                        element.isShowPlus = true;
+                        if (element.defered == 'No') {
+                            element.defered = false;
+                        } else {
+                            element.defered = true;
+                        }
+                    });
+                    this.workOrderMaterial = res;
+                    this.workOrderMaterial.forEach(element => {
+                        element.currency = element.currency;
+                        element.unitCost = element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                        element.extendedCost = element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                    });
+                    if (this.gridActiveTab === 'billorInvoice') {
+                        this.quoteMaterialList = res;
+                    }
+                    this.materialStatus = res[0].partStatusId;
+                    this.salesQuoteService.selectedParts = [];
+                    this.salesQuoteService.selectedParts = this.workOrderMaterial;
+
+                    this.filterParts();
+                }
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
+
+    getMaterialListByWorkOrderIdForSubWO() {
+        this.workOrderMaterialList = [];
+        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.salesQuoteService.selectedParts = [];
+            if (res && res.length > 0) {
+                res.forEach(element => {
+                    this.getValues(element)
+                    element.isShowPlus = true;
+                    if (element.defered == 'No') {
+                        element.defered = false;
+                    } else {
+                        element.defered = true;
+                    }
+                });
+                this.workOrderMaterial = [];
+                this.workOrderMaterial = res;
+                this.workOrderMaterial.forEach(element => {
+                    element.currency = element.currency;
+                    element.unitCost = element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                    element.extendedCost = element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                });
+                this.materialStatus = res[0].partStatusId;
+                // this.salesQuoteService.selectedParts = this.workOrderMaterial;
+                this.salesQuoteService.selectedParts = [];
+                this.salesQuoteService.selectedParts = this.workOrderMaterial;
+                this.filterParts();
+            }
+        },
+            err => {
+                this.handleError(err);
+            })
+    }
+    summaryParts: any = [];
+    totalRecords: number;
+    pageLinks: any;
+    filterParts() {
+        this.summaryParts = [];
+        let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
+        if (uniqueParts.length > 0) {
+            uniqueParts.forEach((part, i) => {
+                let childParts = this.workOrderMaterial.filter(selectedPart => selectedPart.stockLineId != 0 && selectedPart.partNumber == part.partNumber && selectedPart.conditionCodeId == part.conditionCodeId && selectedPart.stockType == part.stockType)
+                if (childParts && childParts.length > 0) {
+                    //   uniqueParts[i] = this.calculateSummarizedRow(childParts, part);
+                    uniqueParts[i].childParts = childParts;
+                } else {
+                    uniqueParts[i].childParts = [];
+                }
+            });
+            uniqueParts.map((x, xindex) => {
+                if (x.childParts && x.childParts.length != 0) {
+                    x.childParts.map((y, yindex) => {
+                        y.line = (xindex + 1) + '.' + (yindex + 1);
+                        y.stocklineUnitCost = y.stocklineUnitCost ? formatNumberAsGlobalSettingsModule(y.stocklineUnitCost, 2) : '0.00';
+                        y.stocklineExtendedCost = y.stocklineExtendedCost ? formatNumberAsGlobalSettingsModule(y.stocklineExtendedCost, 2) : '0.00';
+                    })
+                }
+            })
+            this.workOrderMaterialList = uniqueParts;
+        }
+        this.totalRecords = this.workOrderMaterialList.length;
+        this.pageLinks = Math.ceil(
+            this.totalRecords / 10
+        );
+        // this.checkUpdateOrsaveButton();
+    }
+    getUniqueParts(myArr, prop1, prop2, prop3) {
+        let uniqueParts = JSON.parse(JSON.stringify(myArr));
+        uniqueParts.reduceRight((acc, v, i) => {
+            if (acc.some(obj => v[prop1] === obj[prop1] && v[prop2] === obj[prop2] && v[prop3] === obj[prop3])) {
+                uniqueParts.splice(i, 1);
+            } else {
+                acc.push(v);
+            }
+            return acc;
+        }, []);
+        return uniqueParts;
+    }
+    //old material list save
+    saveWorkOrderMaterialList(data) {
         if (this.isSubWorkOrder == true) {
             const materialArr = data.materialList.map(x => {
                 return {
@@ -1580,19 +2151,19 @@ setTimeout(() => {
                     subWOPartNoId: this.subWOPartNoId,
                     subWorkOrderMaterialsId: 0,
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
-                    extendedCost:x.extendedCost? x.extendedCost : 0,
-                    unitCost:x.unitCost?  x.unitCost: 0,
+                    extendedCost: x.extendedCost ? x.extendedCost : 0,
+                    unitCost: x.unitCost ? x.unitCost : 0,
                     partNumber: x.partItem.partName,
-                    taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
+                    taskId: (typeof x.taskId == 'object') ? x.taskId.taskId : x.taskId
                 }
             })
-            this.isSpinnerVisible = true;            
+            this.isSpinnerVisible = true;
             this.workOrderService.createSubWorkOrderMaterialList(materialArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Saved Sub Work Order MaterialList  Succesfully',
+                    'Saved Sub Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -1609,21 +2180,21 @@ setTimeout(() => {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    AltPartMasterPartId : null,
-                    materialMandatoriesId :x.materialMandatoriesId,
-                    extendedCost:x.extendedCost? x.extendedCost : 0,
-                    unitCost:x.unitCost?  x.unitCost: 0,
+                    AltPartMasterPartId: null,
+                    materialMandatoriesId: x.materialMandatoriesId,
+                    extendedCost: x.extendedCost ? x.extendedCost : 0,
+                    unitCost: x.unitCost ? x.unitCost : 0,
                     partNumber: x.partItem.partName,
-                    taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
+                    taskId: (typeof x.taskId == 'object') ? x.taskId.taskId : x.taskId
                 }
             })
-            this.isSpinnerVisible = true;            
+            this.isSpinnerVisible = true;
             this.workOrderService.createWorkOrderMaterialList(materialArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Saved Work Order MaterialList  Succesfully',
+                    'Saved Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderId();
@@ -1646,8 +2217,8 @@ setTimeout(() => {
                     workOrderId: this.subWorkOrderDetails.workOrderId,
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
-                    extendedCost:x.extendedCost? x.extendedCost : 0,
-                    unitCost:x.unitCost?  x.unitCost: 0,
+                    extendedCost: x.extendedCost ? x.extendedCost : 0,
+                    unitCost: x.unitCost ? x.unitCost : 0,
                     partNumber: x.partItem.partName
                 }
             })
@@ -1657,7 +2228,7 @@ setTimeout(() => {
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Sub Work Order MaterialList  Succesfully',
+                    'Updated Sub Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -1674,8 +2245,8 @@ setTimeout(() => {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    extendedCost:x.extendedCost? x.extendedCost : 0,
-                    unitCost:x.unitCost?  x.unitCost: 0,
+                    extendedCost: x.extendedCost ? x.extendedCost : 0,
+                    unitCost: x.unitCost ? x.unitCost : 0,
                     partNumber: x.partItem.partName
                 }
             })
@@ -1685,7 +2256,7 @@ setTimeout(() => {
                 this.workFlowObject.materialList = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Work Order MaterialList  Succesfully',
+                    'Updated Work Order MaterialList Succesfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderId();
@@ -1696,27 +2267,208 @@ setTimeout(() => {
         }
     }
 
+    getMaterialListByWorkOrderId() {
+        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+            this.workOrderMaterialList = [];
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                if (res.length > 0) {
+                    res.forEach(element => {
+                        this.getValues(element)
+                        element.isShowPlus = true;
+                        if (element.defered == 'No') {
+                            element.defered = false;
+                        } else {
+                            element.defered = true;
+                        }
+                    });
+                    this.workOrderMaterialList = res;
+                    this.workOrderMaterialList.forEach(element => {
+                        element.currency = element.currency;
+                        element.unitCost = element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                        element.extendedCost = element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                    });
+                    if (this.gridActiveTab === 'billorInvoice') {
+                        this.quoteMaterialList = res;
+                    }
+                    this.materialStatus = res[0].partStatusId;
+                }
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
+    }
 
+    // formWorkerOrderLaborJson(data) {
 
+    //     return this.result;
+    // }
     saveworkOrderLabor(data) {
-        this.isSpinnerVisible = true;
+        this.isAllowLaberSave = false;
         if (this.isSubWorkOrder) {
             data.subWorkOrderLaborHeaderId = 0;
             data.subWOPartNoId = this.subWOPartNoId,
                 data.workOrderId = this.subWorkOrderDetails.workOrderId,
                 data.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
         }
-        this.workOrderService.createWorkOrderLabor(this.formWorkerOrderLaborJson(data), this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saved Work Order Labor  Succesfully',
-                MessageSeverity.success
-            );
-        },
-            err => {
-                this.handleError(err);
-            })
+        if (this.isSubWorkOrder == true) {
+            this.result = {
+                "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
+                "subWorkOrderId": data['subWorkOrderId'] ? data['subWorkOrderId'] : this.subWorkOrderDetails.subWorkOrderId,
+                "subWOPartNoId": data['subWOPartNoId'] ? data['subWOPartNoId'] : this.subWorkOrderDetails.subWOPartNoId,
+                "workFlowWorkOrderId": this.workFlowWorkOrderId,
+                "workOrderId": data['workOrderId'],
+                "dataEnteredBy": data['dataEnteredBy'],
+                "expertiseId": data['expertiseId'],
+                "employeeId": data['employeeId'],
+                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
+                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
+                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 1 : 2,
+                "hoursorClockorScan": data['hoursorClockorScan'],
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
+                "CreatedBy": "admin",
+                "UpdatedBy": "admin",
+                "IsActive": true,
+                "isDeleted": data['IsDeleted'],
+                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
+                "totalWorkHours": data['totalWorkHours'],
+                "labourMemo": data['labourMemo'],
+                "LaborList": [
+                ],
+                "WorkOrderQuoteTask": data['WorkOrderQuoteTask'],
+
+            }
+            data.WorkOrderQuoteTask.forEach(element => {
+                element.subWorkOrderLaborId = element.subWorkOrderLaborId ? element.subWorkOrderLaborId : 0;
+                element.subWorkOrderLaborHeaderId = element.subWorkOrderLaborHeaderId ? element.subWorkOrderLaborHeaderId : 0;
+            });
+        } else {
+            this.result = {
+                "workFlowWorkOrderId": this.workFlowWorkOrderId,
+                "workOrderId": data['workOrderId'],
+                "dataEnteredBy": data['dataEnteredBy'],
+                "expertiseId": data['expertiseId'],
+                "employeeId": data['employeeId'],
+                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
+                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
+                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 1 : 2,
+                "hoursorClockorScan": data['hoursorClockorScan'],
+                "masterCompanyId": this.authService.currentUser.masterCompanyId,
+                "CreatedBy": "admin",
+                "UpdatedBy": "admin",
+                "IsActive": true,
+                "isDeleted": data['IsDeleted'],
+                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
+                "totalWorkHours": data['totalWorkHours'],
+                "labourMemo": data['labourMemo'],
+                "LaborList": [
+
+                ],
+                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
+            }
+        }
+        for (let labList in data.workOrderLaborList) {
+            for (let labSubList of data.workOrderLaborList[labList]) {
+                if (labSubList && labSubList['expertiseId'] != null) {
+                    labSubList.masterCompanyId = this.currentUserMasterCompanyId;
+                    labSubList.directLaborOHCost = labSubList.directLaborOHCost ? labSubList.directLaborOHCost : 0;
+                    labSubList.totalCost = labSubList.totalCost ? labSubList.totalCost : 0;
+                    labSubList.burdaenRatePercentageId = labSubList.burdaenRatePercentageId != 0 ? labSubList.burdaenRatePercentageId : null
+                    this.result.LaborList.push(labSubList);
+                    this.result.expertiseId = labSubList['expertiseId'];
+                    this.result.employeeId = labSubList['employeeId'];
+                }
+            }
+        }
+        //         if(this.result &&  this.result.LaborList && this.result.LaborList.length==0){
+        //             this.isAllowLaberSave=true;
+        //  this.alertService.showMessage(
+        //             this.moduleName,
+        //             'Add Atleast one Task',
+        //             MessageSeverity.warn
+        //         );
+        //         return;
+        //         }
+        if (this.result && this.result.LaborList && this.result.LaborList.length != 0) {
+            this.isAllowLaberSave = false;
+            this.taskName = '';
+            this.result.LaborList.forEach(element => {
+                this.taskList.forEach(subel => {
+                    if (subel.taskId == element.taskId) {
+                        this.taskName = subel.description;
+                    }
+                });
+                if (element.expertiseId == undefined || element.expertiseId == null || element.expertiseId == '') {
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Expertise',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave = true;
+                    return;
+                }
+                if ((element.burdaenRatePercentageId == 0 || element.burdaenRatePercentageId == undefined || element.burdaenRatePercentageId == null || element.burdaenRatePercentageId == '') && element.burdenRateAmount == 0) {
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Set Burdaen Rate Percentage or Burden Rate Amount From Settings',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave = true;
+                    return;
+                }
+
+
+
+                if (element.employeeId == undefined || element.employeeId == null || element.employeeId == '') {
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Employee Name',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave = true;
+                    return;
+                }
+                if (Number(element.hours.toString().split(',').join('')) == undefined || Number(element.hours.toString().split(',').join('')) == null || element.hours == '' || Number(element.hours.toString().split(',').join('')) <= 0) {
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Hours',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave = true;
+                    return;
+                }
+                if (Number(element.adjustments.toString().split(',').join('')) > 0 && element.memo == '') {
+                    this.alertService.showMessage(
+                        this.taskName,
+                        'Add Memo',
+                        MessageSeverity.warn
+                    );
+                    this.isAllowLaberSave = true;
+                    return;
+                }
+            });
+        }
+
+
+        // this.formWorkerOrderLaborJson(data)
+        if (this.isAllowLaberSave == false) {
+            this.isSpinnerVisible = true;
+            this.workOrderService.createWorkOrderLabor(this.result, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.isAllowLaberSave = false;
+                this.islaborCreated = true;
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Saved Work Order Labor Succesfully',
+                    MessageSeverity.success
+                );
+            },
+                err => {
+                    this.handleError(err);
+                })
+        }
     }
 
     openCurrency(content) {
@@ -1740,7 +2492,7 @@ setTimeout(() => {
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     subWOPartNoId: this.subWOPartNoId,
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
-                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
+                    taskId: (typeof x.taskId == 'string') ? x.taskId : x.taskId.taskId
                 }
             })
             this.isSpinnerVisible = true;
@@ -1749,7 +2501,7 @@ setTimeout(() => {
                 this.workFlowObject.charges = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Saved Sub Work Order Charges  Succesfully',
+                    'Saved Sub Work Order Charges Succesfully',
                     MessageSeverity.success
                 );
                 this.getChargesListByWorkOrderId();
@@ -1767,7 +2519,7 @@ setTimeout(() => {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
+                    taskId: (typeof x.taskId == 'string') ? x.taskId : x.taskId.taskId
                 }
             })
             this.isSpinnerVisible = true;
@@ -1809,7 +2561,7 @@ setTimeout(() => {
                 this.workFlowObject.charges = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Sub Work Order Charges  Succesfully',
+                    'Updated Sub Work Order Charges Succesfully',
                     MessageSeverity.success
                 );
                 this.getChargesListByWorkOrderId();
@@ -1835,7 +2587,7 @@ setTimeout(() => {
                 this.workFlowObject.charges = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Work Order Charges  Succesfully',
+                    'Updated Work Order Charges Succesfully',
                     MessageSeverity.success
                 );
                 this.getChargesListByWorkOrderId();
@@ -1847,96 +2599,42 @@ setTimeout(() => {
         }
     }
 
-    formWorkerOrderLaborJson(data) {
-        if (this.isSubWorkOrder == true) {
-            this.result = {
-                "subWorkOrderLaborHeaderId": data['subWorkOrderLaborHeaderId'] ? data['subWorkOrderLaborHeaderId'] : 0,
-                "subWorkOrderId": data['subWorkOrderId'] ? data['subWorkOrderId'] : this.subWorkOrderDetails.subWorkOrderId,
-                "subWOPartNoId": data['subWOPartNoId'] ? data['subWOPartNoId'] : this.subWorkOrderDetails.subWOPartNoId,
-                "workFlowWorkOrderId": this.workFlowWorkOrderId,
-                "workOrderId": data['workOrderId'],
-                "dataEnteredBy": data['dataEnteredBy'],
-                "expertiseId": data['expertiseId'],
-                "employeeId": data['employeeId'],
-                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
-                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
-                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'workFlow') ? 1 : (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 2 : 3,
-                "hoursorClockorScan": data['hoursorClockorScan'],
-                "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
-                "IsActive": true,
-                "isDeleted": data['IsDeleted'],
-                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
-                "totalWorkHours": data['totalWorkHours'],
-                "labourMemo": data['labourMemo'],
-                "LaborList": [
-                ],
-                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
-            }
-            data.WorkOrderQuoteTask.forEach(element => {
-                element.subWorkOrderLaborId = element.subWorkOrderLaborId ? element.subWorkOrderLaborId : 0;
-                element.subWorkOrderLaborHeaderId = element.subWorkOrderLaborHeaderId ? element.subWorkOrderLaborHeaderId : 0;
-            });
-        } else {
-            this.result = {
-                "workFlowWorkOrderId": this.workFlowWorkOrderId,
-                "workOrderId": data['workOrderId'],
-                "dataEnteredBy": data['dataEnteredBy'],
-                "expertiseId": data['expertiseId'],
-                "employeeId": data['employeeId'],
-                "isTaskCompletedByOne": data['isTaskCompletedByOne'],
-                "workFloworSpecificTaskorWorkOrder": data['workFloworSpecificTaskorWorkOrder'],
-                "workOrderHoursType": (data['workFloworSpecificTaskorWorkOrder'] == 'workFlow') ? 1 : (data['workFloworSpecificTaskorWorkOrder'] == 'specificTasks') ? 2 : 3,
-                "hoursorClockorScan": data['hoursorClockorScan'],
-                "masterCompanyId": this.authService.currentUser.masterCompanyId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
-                "IsActive": true,
-                "isDeleted": data['IsDeleted'],
-                "workOrderLaborHeaderId": data['workOrderLaborHeaderId'],
-                "totalWorkHours": data['totalWorkHours'],
-                "labourMemo": data['labourMemo'],
-                "LaborList": [
 
-                ],
-                "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
-            }
-        }
-        for (let labList in data.workOrderLaborList) {
-            for (let labSubList of data.workOrderLaborList[labList]) {
-                if (labSubList && labSubList['expertiseId'] != null){
-                    labSubList.masterCompanyId=this.currentUserMasterCompanyId;
-                    this.result.LaborList.push(labSubList);
-                }
-            }
-        }
-        return this.result;
-    }
-    saveReservedPartorIssue(alternatePartData) {  
-        alternatePartData.masterCompanyId=alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
+    saveReservedPartorIssue(alternatePartData) {
+        alternatePartData.masterCompanyId = alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
+        this.gridActiveTab == '';
+        this.gridActiveTab == 'materialList';
         if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible = true;
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Parts Data',
+                    'Parts Data Updated successfully',
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
             },
                 err => {
+                    this.isSpinnerVisible = false;
                     this.handleError(err);
                 })
         } else {
+            this.isSpinnerVisible = true;
             this.workOrderService.saveReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Parts Data',
+                    'Parts Data Updated successfully',
                     MessageSeverity.success
                 );
-                this.getMaterialListByWorkOrderId();
+                // this.getMaterialListByWorkOrderId();
+
+                // new one
+                this.getNewMaterialListByWorkOrderId();
             },
                 err => {
+                    this.isSpinnerVisible = false;
                     this.handleError(err);
                 })
         }
@@ -1971,70 +2669,7 @@ setTimeout(() => {
             }
         }
     }
-    getMaterialListByWorkOrderId() {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.workOrderMaterialList = [];
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                if (res.length > 0) {
-                    res.forEach(element => {
-                        this.getValues(element)
-                        element.isShowPlus = true;
-                        if (element.defered == 'No') {
-                            element.defered = false;
-                        } else {
-                            element.defered = true;
-                        }
-                    });
-                    this.workOrderMaterialList = res;
-                    this.workOrderMaterialList.forEach(element => {
-                       element.currency=element.currency ;
-                       element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
-                       element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
-                    }); 
-                    if (this.gridActiveTab === 'billorInvoice') {
-                        this.quoteMaterialList = res;
-                    }
-                    this.materialStatus = res[0].partStatusId;
-                }
-            },
-                err => {
-                    this.handleError(err);
-                })
-        }
-    }
-    // getDocumentsByWorkOrderId() {
-    //     if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-    //         this.documentsDestructuredData = [];
-    //         this.isSpinnerVisible = true;
-    //         this.workOrderService.getDocumentsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId ? this.subWOPartNoId : 0).subscribe(res => {
-    //             this.isSpinnerVisible = false;
-    //             let arr = [];
-    //             const data = res.map(x => {
-    //                 for (var i = 0; i < x.attachmentDetails.length; i++) {
-    //                     const y = x.attachmentDetails;
-    //                     arr.push({
-    //                         ...x,
-    //                         fileName: y[i].fileName,
-    //                         fileCreatedDate: y[i].createdDate,
-    //                         fileCreatedBy: y[i].createdBy,
-    //                         fileUpdatedBy: y[i].updatedBy,
-    //                         fileUpdatedDate: y[i].updatedDate,
-    //                         fileSize: y[i].fileSize,
-    //                         link: y[i].link,
-    //                         attachmentDetailId: y[i].attachmentDetailId
-    //                     })
-    //                 }
-    //             })
-    //             this.documentsDestructuredData = arr;
-    //         }, err => {
-    //             this.handleError(err);
-    //             this.isSpinnerVisible = false;
-    //             this.documentsDestructuredData = [];
-    //         })
-    //     }
-    // }
+
     clearLaborList() {
         if (this.taskList && this.taskList.length > 0) {
             for (let task of this.taskList) {
@@ -2042,83 +2677,104 @@ setTimeout(() => {
             }
         }
     }
-    refreshLabor(value){
+    refreshLabor(value) {
         this.getWorkFlowLaborList();
     }
+    islaborCreated: boolean = false;
     getWorkFlowLaborList() {
         this.clearLaborList();
         if ((this.workFlowWorkOrderId !== 0 || this.workFlowWorkOrderId !== undefined) && this.workOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
-                this.data = {};
-                this.data = res;
-                if (res) {
-                    this.workOrderLaborList = {
-                        ...this.data,
-                        workFlowWorkOrderId: getObjectById('value', this.data.workFlowWorkOrderId, this.workOrderWorkFlowOriginalData),
-                        employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
-                        dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
-                    };
-                    this.labor.hoursorClockorScan = res.hoursorClockorScan;
-                    this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
-                    this.labor.totalWorkHours = res.totalWorkHours;
-                    this.labor.expertiseId = res.expertiseId;
-                    this.labor['labourMemo'] = res.labourMemo;
-                    this.labor['workOrderHoursType'] = res['workOrderHoursType'];
-                    if (this.isSubWorkOrder == true) {
-                        this.labor['subWorkOrderLaborHeaderId'] = res['subWorkOrderLaborHeaderId'];
+                if (res && res.response == 'Record not Exist with these details. !') {
+                    this.getMarkup();
+                    this.islaborCreated = false;
+                } else {
+                    this.islaborCreated = true;
+                    this.data = {};
+                    this.data = res;
+                    if (res) {
+                        this.workOrderLaborList = {
+                            ...this.data,
+                            workFlowWorkOrderId: getObjectById('value', this.data.workFlowWorkOrderId, this.workOrderWorkFlowOriginalData),
+                            employeeId: { employeeId: this.data.employeeId, name: this.data.employeeName, value: this.data.employeeId, label: this.data.employeeName },
+                            dataEnteredBy: { value: this.data.dataEnteredBy, label: this.data.dataEnteredByName },
+                        };
+                        this.getMarkup();
+                        this.labor.hoursorClockorScan = res.hoursorClockorScan;
+                        this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
+                        this.labor.totalWorkHours = res.totalWorkHours;
+                        this.labor.expertiseId = res.expertiseId;
+                        this.labor['labourMemo'] = res.labourMemo;
+                        this.labor['workOrderHoursType'] = res['workOrderHoursType'];
+                        if (this.isSubWorkOrder == true) {
+                            this.labor['subWorkOrderLaborHeaderId'] = res['subWorkOrderLaborHeaderId'];
+                        }
                     }
-                }
-                if (res) {
-                    for (let labList of this.data['laborList']) {
-                        if (this.taskList) {
-                            for (let task of this.taskList) {
-                                if (task.taskId == labList['taskId']) {
-                                    if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
-                                        this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
+                    if (res) {
+                        for (let labList of this.data['laborList']) {
+                            if (this.taskList) {
+                                for (let task of this.taskList) {
+                                    if (task.taskId == labList['taskId']) {
+                                        if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
+                                            this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
+                                        }
+                                        if (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0] && (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == undefined || this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == null)) {
+                                            this.labor.workOrderLaborList[0][task.description.toLowerCase()].splice(0, 1);
+                                        }
+                                        let taskData = new AllTasks()
+                                        taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
+                                        taskData['workOrderLaborId'] = labList['workOrderLaborId'];
+                                        taskData['expertiseId'] = labList['expertiseId'];
+                                        taskData['employeeId'] = { value: labList['employeeId'], label: labList['employeeName'] };
+                                        taskData['billableId'] = labList['billableId'];
+                                        taskData['startDate'] = labList['startDate'] ? new Date(labList['startDate']) : null;
+                                        taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;
+                                        taskData['hours'] = labList['hours'];
+                                        taskData['adjustments'] = labList['adjustments'];
+                                        taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
+                                        taskData['memo'] = labList['memo'];
+
+                                        taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
+                                        taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
+                                        taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';
+                                        taskData['totalCost'] = labList['totalCost'] ? formatNumberAsGlobalSettingsModule(labList['totalCost'], 2) : '0.00';
+                                        taskData['totalCostPerHour'] = labList['totalCostPerHour'] ? formatNumberAsGlobalSettingsModule(labList['totalCostPerHour'], 2) : '0.00';
+
+                                        if (taskData.hours) {
+                                            let hours = taskData.hours.toFixed(2);
+                                            taskData['totalHours'] = hours.toString().split('.')[0];
+                                            taskData['totalMinutes'] = hours.toString().split('.')[1];
+                                        }
+                                        if (taskData.adjustments) {
+                                            let adjustments = taskData.adjustments.toFixed(2);
+                                            taskData['adjtotalHours'] = adjustments.toString().split('.')[0];
+                                            taskData['ajdtotalMinutes'] = adjustments.toString().split('.')[1];
+                                        }
+                                        this.labor.workOrderLaborList[0][task.description.toLowerCase()].push(taskData);
+                                        break;
                                     }
-                                    if (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0] && (this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == undefined || this.labor.workOrderLaborList[0][task.description.toLowerCase()][0]['expertiseId'] == null)) {
-                                        this.labor.workOrderLaborList[0][task.description.toLowerCase()].splice(0, 1);
-                                    }
-                                    let taskData = new AllTasks()
-                                    taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
-                                    taskData['workOrderLaborId'] = labList['workOrderLaborId'];
-                                    taskData['expertiseId'] = labList['expertiseId'];
-                                    taskData['employeeId']={value:labList['employeeId'],label:labList['employeeName']};
-                                    taskData['billableId'] = labList['billableId'];
-                                    taskData['startDate'] = labList['startDate'] ? new Date(labList['startDate']) : null;
-                                    taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;
-                                    taskData['hours'] = labList['hours'];
-                                    taskData['adjustments'] = labList['adjustments'];
-                                    taskData['adjustedHours'] = labList['adjustedHours'];
-                                    taskData['memo'] = labList['memo'];
-                                    if (taskData.hours) {
-                                        let hours = taskData.hours.toFixed(2);
-                                        taskData['totalHours'] = hours.toString().split('.')[0];
-                                        taskData['totalMinutes'] = hours.toString().split('.')[1];
-                                    }
-                                    if (taskData.adjustments) {
-                                        let adjustments = taskData.adjustments.toFixed(2);
-                                        taskData['adjtotalHours'] = adjustments.toString().split('.')[0];
-                                        taskData['ajdtotalMinutes'] = adjustments.toString().split('.')[1];
-                                    }
-                                    this.labor.workOrderLaborList[0][task.description.toLowerCase()].push(taskData);
-                                    break;
                                 }
                             }
                         }
-                    }
-                    if (this.gridActiveTab === 'billorInvoice') {
-                        this.quoteChargesList = this.data['laborList'];
+                        if (this.gridActiveTab === 'billorInvoice') {
+                            this.quoteChargesList = this.data['laborList'];
+                        }
                     }
                 }
             },
                 err => {
-                    this.workOrderLaborList=[];
+                    this.workOrderLaborList = [];
+                    this.getMarkup();
                     this.handleError(err);
                 })
         }
+        // setTimeout(() => {
+        //    if(Object.keys(this.data).length == 0){
+        //     this.getMarkup();
+        //    }
+        // }, 500);
         if (!this.isSubWorkOrder) {
             if (this.workOrderGeneralInformation.isSinglePN == true) {
                 this.labor['employeeId'] = this.workOrderGeneralInformation.partNumbers[0]['technicianId'];
@@ -2132,7 +2788,26 @@ setTimeout(() => {
             }
         }
     }
+    markupList: any = [];
+    getMarkup(value?) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            // this.setEditArray.push(this.currentAsset.tangibleClassId ? this.currentAsset.tangibleClassId : 0);
 
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+            if (res && res.length != 0) {
+                this.markupList = res;
+                this.markupList.sort((n1, n2) => n1.label - n2.label);
+            }
+        }, err => {
+            this.errorHandling(err);
+        })
+    }
     otherOptionTabSelected(value) {
         this.subTabWorkFlow = '';
         this.subTabMainComponent = '';
@@ -2155,20 +2830,20 @@ setTimeout(() => {
     mainComponentTabSelected(value) {
         this.subTabMainComponent = value;
     }
-    chargesDeletedStatus:boolean=false;
-    getChargesDeletedStatus(event){
-        this.chargesDeletedStatus=event ? event :false;
+    chargesDeletedStatus: boolean = false;
+    getChargesDeletedStatus(event) {
+        this.chargesDeletedStatus = event ? event : false;
         this.getChargesListByWorkOrderId();
     }
- 
-    
+
+
     getChargesListByWorkOrderId() {
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getSubWorkOrderChargesList(this.subWOPartNoId,this.chargesDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getSubWorkOrderChargesList(this.subWOPartNoId, this.chargesDeletedStatus, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
 
-                for (let charge in res) { 
+                for (let charge in res) {
                     res[charge]['unitCost'] = res[charge]['unitCost'] ? formatNumberAsGlobalSettingsModule(res[charge]['unitCost'], 2) : '0.00';
                     res[charge]['extendedCost'] = res[charge]['extendedCost'] ? formatNumberAsGlobalSettingsModule(res[charge]['extendedCost'], 2) : '0.00';
                     res[charge]['unitPrice'] = res[charge]['unitPrice'] ? formatNumberAsGlobalSettingsModule(res[charge]['unitPrice'], 2) : '0.00';
@@ -2180,11 +2855,11 @@ setTimeout(() => {
                 err => {
                     this.handleError(err);
                 })
-        } else { 
+        } else {
 
             if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
                 this.isSpinnerVisible = true;
-                this.workOrderService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,this.chargesDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId, this.chargesDeletedStatus, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
 
                     for (let charge in res) {
@@ -2278,16 +2953,16 @@ setTimeout(() => {
                 this.errorHandling(err)
             })
     }
-    freightsDeletedStatus:boolean=false;
-    getFreightssDeletedStatus(event){
-        this.freightsDeletedStatus=event ? event :false;
+    freightsDeletedStatus: boolean = false;
+    getFreightssDeletedStatus(event) {
+        this.freightsDeletedStatus = event ? event : false;
         this.getFreightListByWorkOrderId();
     }
     getFreightListByWorkOrderId() {
-        this.workOrderFreightList=[];
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId !=0) {
+        this.workOrderFreightList = [];
+        if (this.workFlowWorkOrderId !== 0 && this.workOrderId != 0) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,this.freightsDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId, this.freightsDeletedStatus, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workOrderFreightList = res;
             },
@@ -2335,7 +3010,7 @@ setTimeout(() => {
             });
         }
         this.isSpinnerVisible = true;
-       this.workOrderService.createWorkOrderFreightList(this.freightsArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.createWorkOrderFreightList(this.freightsArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.freight = [];
             this.alertService.showMessage(
@@ -2413,25 +3088,24 @@ setTimeout(() => {
     }
 
     filterPartNumber(event) {
-        if(this.partNumberOriginalData !=undefined){
-        this.partNumberList = this.partNumberOriginalData;
-        if (event.query !== undefined && event.query !== null) {
-           
-            const partNumbers = [...this.partNumberOriginalData.filter(x => {
-                return x.partNumber.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.partNumberList = partNumbers;
-        }else{
-            this.partNumberList=[];
-        }
+        if (this.partNumberOriginalData != undefined) {
+            this.partNumberList = this.partNumberOriginalData;
+            if (event.query !== undefined && event.query !== null) {
+
+                const partNumbers = [...this.partNumberOriginalData.filter(x => {
+                    return x.partNumber.toLowerCase().includes(event.query.toLowerCase())
+                })]
+                this.partNumberList = partNumbers;
+            } else {
+                this.partNumberList = [];
+            }
         }
     }
 
     filterTechnician(event) {
         this.technicianList = this.technicianByExpertiseTypeList;
-        if(this.technicianByExpertiseTypeList != undefined && this.technicianByExpertiseTypeList != '')
-        {
-            if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
+        if (this.technicianByExpertiseTypeList != undefined && this.technicianByExpertiseTypeList != '') {
+            if (this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length != 0) {
                 if (event.query !== undefined && event.query !== null) {
                     const technician = [...this.technicianByExpertiseTypeList.filter(x => {
                         return x.name.toLowerCase().includes(event.query.toLowerCase())
@@ -2440,26 +3114,26 @@ setTimeout(() => {
                 }
             }
         }
-        else{
-            this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => { 
+        else {
+            this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
                 res.map(x => {
-                  if(x.empExpCode =='TECHNICIAN' || x.empExpCode=='Technician' || x.description =='TECHNICIAN' || x.description=='Technician'){
-                    this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId,this.currentUserMasterCompanyId).subscribe(res => {
-                        this.technicianByExpertiseTypeList = res;
-                        this.technicianList = this.technicianByExpertiseTypeList;
-                        if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
-                            if (event.query !== undefined && event.query !== null) {
-                                const technician = [...this.technicianByExpertiseTypeList.filter(x => {
-                                    return x.name.toLowerCase().includes(event.query.toLowerCase())
-                                })]
-                                this.technicianList = technician;
+                    if (x.empExpCode == 'TECHNICIAN' || x.empExpCode == 'Technician' || x.description == 'TECHNICIAN' || x.description == 'Technician') {
+                        this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId, this.currentUserMasterCompanyId).subscribe(res => {
+                            this.technicianByExpertiseTypeList = res;
+                            this.technicianList = this.technicianByExpertiseTypeList;
+                            if (this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length != 0) {
+                                if (event.query !== undefined && event.query !== null) {
+                                    const technician = [...this.technicianByExpertiseTypeList.filter(x => {
+                                        return x.name.toLowerCase().includes(event.query.toLowerCase())
+                                    })]
+                                    this.technicianList = technician;
+                                }
                             }
-                        }
                         })
-                  }
+                    }
                 });
-              })
-        }        
+            })
+        }
     }
 
     saveWorkOrderBilling(object) {
@@ -2545,7 +3219,7 @@ setTimeout(() => {
     getWorkOrderDetailsFromHeader() {
         this.isSpinnerVisible = true;
         this.workOrderId = this.isSubWorkOrder ? this.subWorkOrderDetails.workOrderId : this.workOrderId;
-        this.workOrderService.viewWorkOrderHeader(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.viewWorkOrderHeader(this.workOrderId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             const data = res;
             this.billing = new Billing();
@@ -2571,12 +3245,12 @@ setTimeout(() => {
     getQuoteIdByWfandWorkOrderId() {
         this.isSpinnerVisible = true;
         if (this.workFlowWorkOrderId && this.workOrderId) {
-            this.quoteService.getQuoteIdByWfandWorkOrderId(this.workFlowWorkOrderId, this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.quoteService.getQuoteIdByWfandWorkOrderId(this.workFlowWorkOrderId, this.workOrderId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     this.quoteData = res;
                     this.workOrderQuoteId = res.quoteDetailId;
-                    this.quoteService.getSavedQuoteDetails(this.workFlowWorkOrderId,this.currentUserMasterCompanyId)
+                    this.quoteService.getSavedQuoteDetails(this.workFlowWorkOrderId, this.currentUserMasterCompanyId)
                         .subscribe(
                             res => {
                                 if (this.quotestatusofCurrentPart == "Approved") {
@@ -2586,7 +3260,9 @@ setTimeout(() => {
                                 } else {
                                     // for billling details 
                                     this.quotestatusofCurrentPart = "NotApproved"
-                                    this.getMaterialListByWorkOrderId();
+                                    // this.getMaterialListByWorkOrderId();
+                                    //new one
+                                    this.getNewMaterialListByWorkOrderId();
                                     this.getChargesListByWorkOrderId();
                                     this.getWorkFlowLaborList();
                                 }
@@ -2595,7 +3271,7 @@ setTimeout(() => {
                 }
             },
                 err => {
-                    this.handleError(err); 
+                    this.handleError(err);
                 })
         }
     }
@@ -2609,40 +3285,40 @@ setTimeout(() => {
 
     async getQuoteMaterialListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteMaterialList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteMaterialList(this.workOrderQuoteId, buildMethodId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteMaterialList = res;
         },
             err => {
-                this.handleError(err); 
+                this.handleError(err);
             })
     }
 
     async getQuoteFreightsListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteFreightsList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteFreightsList(this.workOrderQuoteId, buildMethodId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteFreightsList = res;
         },
             err => {
-                this.handleError(err); 
+                this.handleError(err);
             })
     }
 
     async getQuoteChargesListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteChargesList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteChargesList(this.workOrderQuoteId, buildMethodId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteChargesList = res;
         },
             err => {
-                this.handleError(err); 
+                this.handleError(err);
             })
     }
 
     async getQuoteLaborListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteLaborList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteLaborList(this.workOrderQuoteId, buildMethodId, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             if (res) {
                 let wowfId = this.workFlowWorkOrderId;
@@ -2686,14 +3362,14 @@ setTimeout(() => {
 
         },
             err => {
-                this.handleError(err); 
+                this.handleError(err);
             })
     }
 
 
     getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId) {
         this.isSpinnerVisible = true;
-        this.quoteService.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,this.currentUserMasterCompanyId)
+        this.quoteService.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId, this.currentUserMasterCompanyId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
                     this.isSpinnerVisible = false;
@@ -2702,23 +3378,23 @@ setTimeout(() => {
                     }
                 },
                 err => {
-                    this.handleError(err); 
+                    this.handleError(err);
                 }
             )
     }
 
     async getPartNosByCustomer(customerId, workOrderId) {
-        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-           if(res && res.length!=0){
-               this.partNumberOriginalData = res;
-           }else{
-            this.partNumberOriginalData =[];
-           }
+        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            if (res && res.length != 0) {
+                this.partNumberOriginalData = res;
+            } else {
+                this.partNumberOriginalData = [];
+            }
             if (this.partNumberOriginalData.length > 0) {
                 for (let i = 0; i < this.partNumberOriginalData.length; i++) {
                     if (this.salesOrderReferenceData && this.partNumberOriginalData[i].itemMasterId == this.salesOrderReferenceData.itemMasterId) {
                         this.masterParterIdForSalesOrderReference = this.partNumberOriginalData[i];
-                        this.onSelectedPartNumber(this.masterParterIdForSalesOrderReference, this.workOrderGeneralInformation.partNumbers[0], 0,'onload')
+                        this.onSelectedPartNumber(this.masterParterIdForSalesOrderReference, this.workOrderGeneralInformation.partNumbers[0], 0, 'onload')
                     }
                 }
             }
@@ -2737,7 +3413,7 @@ setTimeout(() => {
     getWorkOrderDatesFoRTat() {
         this.workOrderId = this.workOrderGeneralInformation ? this.workOrderGeneralInformation.workOrderId : this.workOrderId;
         if (this.workOrderId) {
-            this.workOrderService.getWorkOrderDatesFoRTat(this.workOrderId,this.currentUserMasterCompanyId)
+            this.workOrderService.getWorkOrderDatesFoRTat(this.workOrderId, this.currentUserMasterCompanyId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
                     (res: any) => {
                         if (res) {
@@ -2776,14 +3452,14 @@ setTimeout(() => {
 
         if (event.query !== undefined && event.query !== null) {
             const customers = [...this.customerContactList.filter(x => {
-                return x.contactName.toLowerCase().includes(event.query.toLowerCase())
+                return x.customerContact.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.customerContactInfo = customers;
         }
     }
 
     getAllCustomerContact(id, type) {
-        this.commonService.getCustomerContactsById(id,this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.getCustomerContactsById(id, this.currentUserMasterCompanyId).subscribe(res => {
             this.customerContactList = res.map(x => {
                 return {
                     ...x,
@@ -2806,7 +3482,7 @@ setTimeout(() => {
                 }
             }
         },
-            err => { 
+            err => {
                 this.handleError(err);
             });
     }
@@ -2832,9 +3508,9 @@ setTimeout(() => {
     }
 
     getCustomerWarningsList(): void {
-   const strText=''
-        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-        // this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        const strText = ''
+        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', strText, true, 0, this.setEditArray.join(), 0).subscribe(res => {
+            // this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create WO for MPN') {
                     this.customerWarningListId = element.value;
@@ -2850,9 +3526,13 @@ setTimeout(() => {
                 if (this.workOrderGeneralInformation.customerDetails && this.workOrderGeneralInformation.customerDetails.customerId) {
                     this.customerWarnings(this.workOrderGeneralInformation.customerDetails.customerId);
                 }
+                if (!this.isEdit && this.workOrderGeneralInformation.customerId && this.workOrderGeneralInformation.customerId.customerId) {
+                    this.customerWarnings(this.workOrderGeneralInformation.customerId.customerId);
+                }
+
             }
         },
-            err => { 
+            err => {
                 this.handleError(err);
             })
     }
@@ -2887,21 +3567,21 @@ setTimeout(() => {
 
     validateWarnings(customerId, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
-        this.commonService.customerWarnings(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
+        this.commonService.customerWarnings(cusId, id, this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
-                this.currentWarningMessage=res.warningMessage;
+                this.currentWarningMessage = res.warningMessage;
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
                 if (this.isEditWorkordershowMsg == true && res.customerWarningId != 0) {
                     this.showAlertMessage();
-                } else { 
-                    if(!this.isView){
-                    this.customerResctrictions(customerId, this.warningMessage, id);
+                } else {
+                    if (!this.isView) {
+                        this.customerResctrictions(customerId, this.warningMessage, id);
                     }
                 }
             }
         },
-            err => { 
+            err => {
                 this.handleError(err);
             })
     }
@@ -2909,7 +3589,7 @@ setTimeout(() => {
     customerResctrictions(customerId, warningMessage, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.restrictMessage = '';
-        this.commonService.customerResctrictions(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
+        this.commonService.customerResctrictions(cusId, id, this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
@@ -2921,8 +3601,11 @@ setTimeout(() => {
                     this.showAlertMessage();
                 } else if (this.warningID == 0 && this.restrictID == 0) {
                     if (this.isQuoteAction == true) {
-                        window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                        // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
 
+                        this.router.navigateByUrl(
+                            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+                        );
                     }
                     if (this.isQuoteActionTab == true) {
                         this.onClickQuoteTab();
@@ -2936,13 +3619,15 @@ setTimeout(() => {
                 }
             }
         },
-            err => { 
+            err => {
                 this.handleError(err);
             })
     }
 
     showAlertMessage() {
-        $('#warnRestrictMesg').modal("show");
+        if (!this.isView && !this.workOrderQuoteId) {
+            $('#warnRestrictMesg').modal("show");
+        }
     }
     showAlertWarningMessage() {
         $('#warningMesg').modal("show");
@@ -2952,12 +3637,11 @@ setTimeout(() => {
         $('#warningMesg').modal("hide");
         $('#warnRestrictMesg').modal("show");
         this.router.navigateByUrl(
-          `/workordersmodule/workorderspages/app-work-order-list`
+            `/workordersmodule/workorderspages/app-work-order-list`
         );
-      }
+    }
 
-      yestocontinue() 
-      {
+    yestocontinue() {
         $('#warningMesg').modal("hide");
         $('#warnRestrictMesg').modal("show");
         this.isBillAction = false;
@@ -2966,11 +3650,15 @@ setTimeout(() => {
         this.isEditWorkordershowMsg = false;
         this.warningMessage = '';
         this.restrictMessage = '';
-      }
+    }
 
     WarnRescticModel() {
         if (this.isQuoteAction == true && this.restrictID == 0) {
-            window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+            this.router.navigateByUrl(
+                `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`
+            );
+
         }
         else if (this.isCustomerAction == true && this.restrictID != 0) {
             this.workOrderGeneralInformation.customerId = null;
@@ -2992,7 +3680,7 @@ setTimeout(() => {
         var userType = this.sourcePoApproval.shipToUserTypeId ? parseInt(this.sourcePoApproval.shipToUserTypeId) : 0;
         if (id != 0 && id != null) {
             this.isSpinnerVisible = true;
-            this.commonService.getShipViaDetailsById(id, userType,this.currentUserMasterCompanyId).subscribe(res => {
+            this.commonService.getShipViaDetailsById(id, userType, this.currentUserMasterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 const responseData = res;
                 this.sourcePoApproval.shippingAcctNum = responseData.shippingAccountInfo;
@@ -3000,7 +3688,7 @@ setTimeout(() => {
                 this.sourcePoApproval.shipViaId = responseData.shippingViaId;
             },
                 err => {
-                    this.handleError(err); 
+                    this.handleError(err);
                 })
         }
     }
@@ -3010,22 +3698,7 @@ setTimeout(() => {
     errorHandling(err) {
         this.handleError(err);
     }
-    getMaterialListByWorkOrderIdForSubWO() {
-        this.workOrderMaterialList = [];
-        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            if (res.length > 0) {
-                res.forEach(element => {
-                    this.getValues(element)
-                    element.isShowPlus = true;
-                });
-                this.workOrderMaterialList = res;
-                this.materialStatus = res[0].partStatusId;
-            }
-        },
-            err => {
-                this.handleError(err);
-            })
-    }
+
     handleError(err) {
         this.isSpinnerVisible = false;
     }
@@ -3088,10 +3761,10 @@ setTimeout(() => {
         this.setEditArray = [];
         if (this.isEdit == true) {
             this.setEditArray.push(this.workOrderGeneralInformation.employeeId ? this.workOrderGeneralInformation.employeeId.value : 0);
-            if(this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers.length !=0){
+            if (this.workOrderGeneralInformation.partNumbers && this.workOrderGeneralInformation.partNumbers.length != 0) {
                 this.msId = this.workOrderGeneralInformation.partNumbers[0].managementStructureId;
             }
- 
+
         } else {
             this.setEditArray.push(0);
             this.msId = this.authService.currentUser
@@ -3102,7 +3775,7 @@ setTimeout(() => {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId,this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId, this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.employeesOriginalData = res.map(x => {
                     return {
@@ -3130,7 +3803,7 @@ setTimeout(() => {
             this.setEditArray.push(0);
         }
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopesList = res;
         });
     }
@@ -3148,8 +3821,8 @@ setTimeout(() => {
         } else {
             this.setEditArray.push(0);
         }
-        const strText = ''; 
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.conditionList = res;
         })
     }
@@ -3168,7 +3841,7 @@ setTimeout(() => {
             this.setEditArray.push(0);
         }
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.techStationList = res.map(x => {
                 return {
                     ...x,
@@ -3193,29 +3866,29 @@ setTimeout(() => {
             this.setEditArray.push(0);
         }
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.priorityList = res;
         })
     }
 
-    getTaskList() {  
+    getTaskList() {
         if (this.labor == undefined) {
             this.labor = new WorkOrderLabor()
         }
         this.labor.workOrderLaborList = [];
         this.labor.workOrderLaborList.push({})
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-        // this.commonService.smartDropDownList('Task', 'TaskId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+            // this.commonService.smartDropDownList('Task', 'TaskId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.taskList = res.map(x => {
                 return {
                     id: x.value,
                     description: x.label.toLowerCase(),
                     taskId: x.value,
-                    label:x.label.toLowerCase(),
+                    label: x.label.toLowerCase(),
                 }
             });
-            this.taskList= this.taskList.sort((a, b) => a.description.localeCompare(b.description, 'es', {sensitivity: 'base'}))
+            this.taskList = this.taskList.sort((a, b) => a.description.localeCompare(b.description, 'es', { sensitivity: 'base' }))
             if (this.labor.workOrderLaborList && this.labor.workOrderLaborList.length != 0) {
                 this.labor.workOrderLaborList[0] = {}
             }
@@ -3234,33 +3907,188 @@ setTimeout(() => {
         this.disableForMemo = false;
     }
 
-    doSomething(currentDate,workOrderPart,index){
-        if(currentDate>workOrderPart.estimatedShipDate){
+    onWorkOrderPrintLoadEvent() {
+
+    }
+
+    doSomething(currentDate, workOrderPart, index) {
+        if (currentDate > workOrderPart.estimatedShipDate) {
             this.alertService.showMessage(
                 this.moduleName,
                 'Selected ESt. Completion Date is greater than ESt. Ship Date. So, ESt. Ship Date also reset.',
                 MessageSeverity.warn
             );
-            this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
+            this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate = currentDate;
         }
-    } 
+    }
     createNewRoWorkOrder(rowData) {
-        if(this.isSubWorkOrder==true){
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
-        }else{
-            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+        if (this.isSubWorkOrder == true) {
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`
+            );
+        } else {
+            // window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+
+            this.router.navigateByUrl(
+                `vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`
+            );
         }
     }
-    woPartId:any;
-    currentWorkflowId:any;
-    addToExitRoWorkOrder(rowData){
-this.woPartId=rowData.id;
+    woPartId: any;
+    currentWorkflowId: any;
+    addToExitRoWorkOrder(rowData) {
+        this.woPartId = rowData.id;
     }
-    viewWorkflow(workOrderPartNumber){
-        this.currentWorkflowId=workOrderPartNumber.workflowId;
+    viewWorkflow(workOrderPartNumber) {
+        this.currentWorkflowId = workOrderPartNumber.workflowId;
+    }
+    currentcmmId:any;
+    viewCmm(workOrderPartNumber){
+        //this.currentcmmId=undefined;
+        //this.currentcmmId=workOrderPartNumber.cMMId;
+    }     
+    workflowTransfer:any={};
+    currentRowIndex:any;
+    tranferCheckbox(ev,currentRecord,currentIndex){
+        this.currentRowIndex=currentIndex;
+        if (ev.target.checked) {
+            $('#workFlowTransfer').modal('show');
+        } else {
+            $('#workFlowTransfer').modal('show');
+        }
+        this.workFlowId = currentRecord.workflowId;
+        this.workOrderId = this.workOrderId ? this.workOrderId : currentRecord.workOrderId;
+
+        this.workOrderService.GetWorkflowtranserData(currentRecord.itemMasterId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workflowTransfer.Material = res.material
+            this.workflowTransfer.Labor = res.labor
+            this.workflowTransfer.Tools = res.tools
+            this.workflowTransfer.Charges = res.charges
+
+
+            //const workOrderData = res;
+
+        })
+
+    }
+    taskComletedByConfirmation(ev) {
+
     }
 
-    transferWorkflow(){
+    transferWorkflow() {
+        $('#workFlowTransfer').modal('hide');
+        const newArray: any = [];
+
+        if (this.workflowTransfer.Material) {
+            newArray.push('Materials')
+        } if (this.workflowTransfer.Labor) {
+            newArray.push('Labor')
+        } if (this.workflowTransfer.Tools) {
+            newArray.push('Tools')
+        } if (this.workflowTransfer.Charges) {
+            newArray.push('Charges')
+        }
+
+        const data: any = {};
+        data.list = newArray.toString()
+        data.workOrderId = this.workOrderId;
+        data.workflowId = this.workFlowId;
+        data.masterCompanyId = this.currentUserMasterCompanyId;
+        data.workOrderPartNumberId = this.workOrderPartNumberId;
+        data.createdBy = this.userName;
+        data.createdById = this.authService.currentEmployee.employeeId;
+        this.workOrderService.transferWorkflow(data).subscribe(res => {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
+            this.showWaringForWorkflow();
+
+            this.reloadPageForWorkflow();
+
+
+            this.alertService.showMessage(
+                this.moduleName,
+                'Transfered WorkflowData to Work Order',
+                MessageSeverity.success
+            );
+        });
+    }
+    reloadPageForWorkflow() {
+        this.transferWorkflowData = false;
+        if (this.gridActiveTab == 'materialList') {
+            this.getNewMaterialListByWorkOrderId();
+        } else if (this.gridActiveTab == 'labor') {
+            this.getWorkFlowLaborList();
+        }
+        else if (this.gridActiveTab == 'equipment') {
+
+            this.transferWorkflowData = true;
+            this.gridActiveTab = '';
+            this.isSubWorkOrder = true;
+            this.isSubWorkOrder = false;
+            this.gridActiveTab = 'equipment';
+        } else if (this.subTabOtherOptions && this.subTabOtherOptions == 'charges') {
+
+            this.getChargesListByWorkOrderId();
+        }
+    }
+    transferWorkflowData: boolean = false;
+    closeTranferFlow() {
+
+        if (this.workflowTransfer.Material || this.workflowTransfer.Labor || this.workflowTransfer.Tools || this.workflowTransfer.Charges) {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = true;
+        }
+        else {
+            this.workOrderGeneralInformation.partNumbers[this.currentRowIndex].isWorkflowTranfer = false;
+        }
+
         $('#workFlowTransfer').modal('hide');
     }
-}   
+    publicatonExpirationDate: any;
+    showWaringForWorkflow() {
+        if (!this.isView) {
+            setTimeout(() => {
+                this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+                    if (x.workflowExpirationDate) {
+                        //if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                        if ((new Date(x.workflowExpirationDate)) < (new Date())) {
+                            // this.removeWorkflow(x,index);
+                            x.disabledForWorkflow = true;
+                            setTimeout(() => {
+                                // x.workflowId=0;
+                                this.disableSaveForPart = false;
+                                this.workflowNumber = x.workFlowNo;
+                            }, 2000);
+                            $('#warningForCmmWorkflow').modal('show');
+                            // this.expriryarray.push(x);
+
+                        }
+                    }
+                });
+            }, 5000);
+        }
+    }
+    isShowSummary: boolean = false;
+    summaryShow() {
+        this.isShowSummary = true;
+    }
+    publicationNo: any;
+    workflowNumber: any;
+    showWaringForPublication() {
+        if (!this.isView) {
+            setTimeout(() => {
+                this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+                    if (x.publicatonExpirationDate) {
+                        if ((new Date(x.publicatonExpirationDate)) < (new Date())) {
+                            setTimeout(() => {
+                                this.disableSaveForPart = false;
+                            }, 2000);
+                            this.publicationNo = x.publicationNo;
+                            $('#warningForCmmPublication').modal('show');
+                        }
+                    }
+                });
+            }, 5000);
+        }
+    }
+}

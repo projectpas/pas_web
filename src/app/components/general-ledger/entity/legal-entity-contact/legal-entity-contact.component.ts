@@ -351,8 +351,7 @@ export class EntityContactComponent implements OnInit {
 		}, err => {
 			this.isEditButton = false;
 			this.isSpinnerVisible = false;
-			//const errorLog = err;
-			//this.errorMessageHandler(errorLog);
+			
 		})
 	}
 
@@ -368,9 +367,7 @@ export class EntityContactComponent implements OnInit {
 					...res[0]
 				}
 				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-			}, err => {
-				//const errorLog = err;
-				//this.errorMessageHandler(errorLog);
+			}, err => {				
 				this.isSpinnerVisible = false;
 			})
 		}
@@ -738,12 +735,7 @@ export class EntityContactComponent implements OnInit {
 			})
 		}
 	}
-
-	// omit_special_char(event){   
-	//     var k;  
-	//     k = event.charCode;  
-	//     return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57) || k == 45 || k == 95 ); 
-	//  }
+	
 	numberonly(event) {
 		var k;
 		k = event.charCode;  //         k = event.keyCode;  (Both can be used)
@@ -819,37 +811,7 @@ export class EntityContactComponent implements OnInit {
 			})
 		}
 	}
-
-	// checkfirstNameExist(value) {
-	// 	//this.disablesaveForFirstname = false;
-	// 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
-	// 		if (this.contactInformation.firstName == this.contactsListOriginal[i].firstName || value == this.contactsListOriginal[i].firstName) {
-	// 			//this.disablesaveForFirstname = true;
-	// 			return;
-	// 		}
-	// 	}
-	// }
-	// checkmiddleNameExist(value) {
-	// 	//this.disableSaveMiddleName = false;
-	// 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
-	// 		if (this.contactInformation.middleName == this.contactsListOriginal[i].middleName || value == this.contactsListOriginal[i].middleName) {
-	// 			//this.disableSaveMiddleName = true;
-	// 			return;
-	// 		}
-	// 	}
-	// 	if (value == "") {
-	// 		//this.disableSaveMiddleName = false;
-	// 	}
-	// }
-	// checklastNameExist(value) {
-	// 	//this.disableSaveLastName = false;
-	// 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
-	// 		if (this.contactInformation.lastName == this.contactsListOriginal[i].lastName || value == this.contactsListOriginal[i].lastName) {
-	// 			//	this.disableSaveLastName = true;
-	// 			return;
-	// 		}
-	// 	}
-	// }
+	
 	patternValidate(event: any) {
 		const pattern = /[0-9\+\-()\ ]/;
 		let inputChar = String.fromCharCode(event.charCode);

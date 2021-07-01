@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, EventEmitter } from "@angular/core";
+﻿import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { NavigationExtras } from "@angular/router";
 import { SalesOrderService } from "../../../../../../services/salesorder.service";
@@ -14,10 +14,12 @@ export class SalesOrderPrintInvoiceComponent implements OnInit {
     @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
     @Input() salesOrderId: number;
     @Input() salesOrderbillingInvoicingId: number;
+    @Output() onInvoiceLoad: EventEmitter<string> = new EventEmitter<string>();
     salesOrderInvoice: any = [];
     endPointURL: any;
     isSpinnerVisible: boolean = false;
     salesOrderCharges: any = [];
+    salesOrderFreights: any = [];
 
     constructor(private salesOrderService: SalesOrderService) {
     }
@@ -32,6 +34,8 @@ export class SalesOrderPrintInvoiceComponent implements OnInit {
         this.salesOrderService.getSalesOrderBillingInvoicingData(this.salesOrderbillingInvoicingId).subscribe(res => {
             this.salesOrderInvoice = res[0];
             this.getSalesOrderCharges();
+            this.getSalesOrderFreights();
+            this.onInvoiceLoad.emit(this.salesOrderInvoice.invoiceStatus);
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
@@ -42,6 +46,16 @@ export class SalesOrderPrintInvoiceComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.salesOrderService.getSalesOrderChargesById(this.salesOrderId, false).subscribe(res => {
             this.salesOrderCharges = res;
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        })
+    }
+
+    getSalesOrderFreights() {
+        this.isSpinnerVisible = true;
+        this.salesOrderService.getSalesOrderFreightsById(this.salesOrderId, false).subscribe(res => {
+            this.salesOrderFreights = res;
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;

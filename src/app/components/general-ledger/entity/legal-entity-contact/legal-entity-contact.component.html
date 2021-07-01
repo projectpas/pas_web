@@ -467,7 +467,8 @@ col.field == 'createdDate'?
 
                         <p><span class="label"><b>Fax: </b></span><span
                                 class="value">{{sourceViewforContact.fax}}</span></p>
-                        <p><span class="label"><b>Memo: </b></span><span class="value"
+                        <p><span class="label"><b>Memo: </b></span><span class="value p_textEditor p-0 m-0 truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(sourceViewforContact.notes)"
                                 [innerHTML]="sourceViewforContact.notes"></span></p>
                         <!-- <p><span class="label"><b>Active: </b></span><span class="value">{{sourceViewforContact.isActive}}</span></p> -->
 
@@ -513,7 +514,7 @@ col.field == 'createdDate'?
                 </div> -->
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
-                        <table class="table table-bordered header-table-width"
+                        <table class="table table-bordered"
                             *ngIf="auditHistory.length> 0 else noDatavailable">
                             <thead>
                                 <tr>
@@ -591,32 +592,42 @@ col.field == 'createdDate'?
                                         {{audit.websiteURL}}</td>
 
                                     <td [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }"
-                                        [innerHTML]="audit.notes"></td>
+                                   >
+                                        <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(audit.notes)" [innerHTML]=audit.notes></p></td>
                                     <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td> -->
                                     <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isDefaultContact', audit.isDefaultContact)  ? 'black' : 'red'  }">{{audit.isDefaultContact}}</td> -->
 
-                                    <td class="text-center">
-                                        <p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto">
                                             <!-- {{viewData.isActive === true ? 'Yes' : 'No'}} -->
                                             <input type="checkbox" disabled [checked]="audit.isActive === true" />
-                                        </p>
+                                        </label>
+                                    </span>
                                     </td>
 
-                                    <td class="text-center">
-                                        <p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto">
                                             <input type="checkbox" disabled
-                                                [checked]="audit.isDefaultContact === true" /></p>
-                                    </td>
+                                                [checked]="audit.isDefaultContact === true" />
+                                            
+                                            </label>
+                                        </span>
+                                            </td>
                                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                     <td>{{audit.createdBy}}</td>
                                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                     <td>{{audit.updatedBy}}</td>
-                                    <td class="text-center">
-                                        <p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto">
                                             <input type="checkbox" disabled [checked]="audit.isDeleted === true" />
-                                        </p>
+                                        </label>
+                                    </span>
                                     </td>
                                 </tr>
                             </tbody>

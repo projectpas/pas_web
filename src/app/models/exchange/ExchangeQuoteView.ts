@@ -13,5 +13,5 @@ export class ExchangeQuoteView implements IExchangeQuoteView {
     parts: IExchangeQuotePart[];
     // creditTerms: ICreditTerm[];
     // status: IStatus[];
-    // verificationResult;
+    verificationResult;
 }

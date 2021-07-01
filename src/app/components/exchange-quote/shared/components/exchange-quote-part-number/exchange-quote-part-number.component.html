@@ -14,6 +14,9 @@
                       <th>Ser Num</th>
                       <th>Cond</th>
                       <th colspan="2">Stk Line Num</th>
+                      <th colspan="2">Cust Req Date<span class="clr-red">*</span></th>
+                      <th colspan="2">Cust Prmsd Date<span class="clr-red">*</span></th>
+                      <th colspan="2">Est Ship Date<span class="clr-red">*</span></th>
                       <th *ngIf="isViewMode == false"
                             style="min-width: 120px; position: sticky !important">Actions</th>
                     </tr>
@@ -38,8 +41,68 @@
                                     <td colspan="2">
                                       {{ part.stockLineNumber }}
                                     </td>
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(exchangeQuote, part)">
+                                        {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(exchangeQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body"
+                                            name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
+                                            yearRange="1900:2100" [(ngModel)]="part.customerRequestDate"
+                                            (ngModelChange)="onCustomerDateChange(stockIndex, rowIndex)"
+                                            #customerRequestDate="ngModel" [minDate]="exchangeQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="customerRequestDate.errors.required">
+                                                <small>Customer Request Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(exchangeQuote, part)">
+                                        {{  part.promisedDate | date: "MM/dd/yyyy"}}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(exchangeQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body" name="promisedDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="part.promisedDate" (ngModelChange)="onEditPartDetails()"
+                                            #promisedDate="ngModel" [minDate]="exchangeQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="promisedDate.invalid && (promisedDate.dirty || promisedDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="promisedDate.errors.required">
+                                                <small>Promised Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(exchangeQuote, part)">
+                                        {{  part.estimatedShipDate | date: "MM/dd/yyyy" }}
+                                    </td>
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(exchangeQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body" name="estimatedShipDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="part.estimatedShipDate" (ngModelChange)="onEditPartDetails()"
+                                            #estimatedShipDate="ngModel" [minDate]="exchangeQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="estimatedShipDate.invalid && (estimatedShipDate.dirty || estimatedShipDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="estimatedShipDate.errors.required">
+                                                <small>Estimated Ship Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td class="width-120"
                                         *ngIf="isViewMode == false">
+                                        <span *ngIf="!isEditDisabled(exchangeQuote, part)">
+                                            <a [class.disabled]="isEditDisabled(exchangeQuote, part)"
+                                                [ngClass]="{'btn_disabled': isEditDisabled(exchangeQuote, part)}"
+                                                class="btn nobg view-part-eye" (click)="openPartToEdit(part)" matTooltip="Edit Price"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>

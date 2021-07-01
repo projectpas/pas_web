@@ -41,13 +41,15 @@
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Notes: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.notes">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(poHeaderAdd.notes)" [innerHTML]="poHeaderAdd.notes">
                   </p>
                 </span></p>
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Memo: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.poMemo">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(poHeaderAdd.poMemo)" [innerHTML]="poHeaderAdd.poMemo">
                   </p>
                 </span></p>
               <p class="view-text-editor">
@@ -147,13 +149,15 @@
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Notes: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.notes">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(roHeaderAdd.notes)" [innerHTML]="roHeaderAdd.notes">
                   </p>
                 </span></p>
               <p class="view-text-editor">
                 <span class="label view-text-editor"><b>Memo: </b></span>
                 <span class="value">
-                  <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.roMemo">
+                  <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                  [matTooltip]="parsedText(roHeaderAdd.roMemo)" [innerHTML]="roHeaderAdd.roMemo">
                   </p>
                 </span></p>
               <p class="view-text-editor">
@@ -253,7 +257,7 @@
               </thead>
               <tbody>
                 <ng-container *ngFor="let partList of poPartsList">
-                  <tr class="parent-data">
+                  <tr class="parent-data purchase-td-back">
                     <td>{{partList?.partNumber}}</td>
                     <td>{{partList?.altEquiPartNumber}}</td>
                     <td>{{partList?.partDescription}}</td>												
@@ -264,7 +268,7 @@
                     <td>{{partList?.condition}}</td>
                     <td class="text-right">{{partList?.quantityOrdered}}</td>
                     <td class="text-right">{{partList?.vendorListPrice}}</td>
-                    <td class="text-right">{{partList?.discountPercent}}</td>
+                    <td class="text-right">{{partList?.discountPercentValue}}</td>
                     <td class="text-right">{{partList?.discountPerUnit}}</td>
                     <td class="text-right">{{partList?.discountAmount}}</td>
                     <td class="text-right">{{partList?.unitCost}}</td>
@@ -280,7 +284,8 @@
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
-                      <div [innerHTML]="partList?.memo" ></div>
+                      <div class=" p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(partList?.memo)" [innerHTML]="partList?.memo" ></div>
                     </td>
                   </tr>
                   <tr class="child-header splitship-head child-header-back"  *ngIf="partList.purchaseOrderSplitParts.length > 0">
@@ -373,7 +378,8 @@
               <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.shipToCountry ? poHeaderAdd.shipToCountry : '-'}}</span></p>              
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{poHeaderAdd.shipToContact ? poHeaderAdd.shipToContact : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
-              <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.shipToMemo"></p></span></p>              
+              <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+              [matTooltip]="parsedText(poHeaderAdd.shipToMemo)" [innerHTML]="poHeaderAdd.shipToMemo"></p></span></p>              
               <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{poHeaderAdd.shipVia ? poHeaderAdd.shipVia : '-'}}</span></p>             
               <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{poHeaderAdd.shippingCost ? poHeaderAdd.shippingCost : '-'}}</span></p>
               <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{poHeaderAdd.handlingCost ? poHeaderAdd.handlingCost : '-'}}</span></p>
@@ -391,12 +397,13 @@
               <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.billToCountry ? poHeaderAdd.billToCountry : '-'}}</span></p>              
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{poHeaderAdd.billToContactName ? poHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">              
-              <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.billToMemo"></p></span></p>
+              <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+              [matTooltip]="parsedText(poHeaderAdd.billToMemo)" [innerHTML]="poHeaderAdd.billToMemo"></p></span></p>
             </div>
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel header="Internal Approvers" *ngIf="!poHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -424,7 +431,8 @@
                       {{approver.rule}}
                     </td>
                     <td>
-                      <p class="m-0 p-0 p_textEditor approver-memo" [innerHTML]="approver['memo']"></p>
+                      <p class="m-0 p-0 p_textEditor approver-memo truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                     </td>
                     <td [ngClass]="{red : approver.isExceeded == true}" >{{approver.message}}</td>
                   </tr>
@@ -439,7 +447,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process">
+        <p-tabPanel header="Approver Process" *ngIf="!poHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">
@@ -496,7 +504,8 @@
                                   </select>
                               </td>
                               <td *ngIf="field.field == 'memo'" class="memo-td-width">
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                   <!-- </div> -->
                                   <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                      
@@ -594,14 +603,17 @@
                 <tr class="header-table-width">
                   <th>PN <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>ALT/Equiv PN</th>
-                  <th>PN Description</th>												
+                  <th>PN Description</th>
+                  <th>Revised PN</th>	
                   <th>Stock Type</th>
                   <th>Mfr</th>												
-                  <th class="min-width-70">Priority<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Priority <span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Need By <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Est. Rec'd Date <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Work to Perform <span _ngcontent-c22="" class="clr-red">*</span></th>                  
                   <th class="min-width-70">Order Qty <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th class="min-width-70">Vend List Price<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Vend List Price <span _ngcontent-c22="" class="clr-red">*</span></th>												
                   <th class="min-width-70">Disc Percent</th>
                   <th class="min-width-70">Disc./unit</th>
                   <th class="min-width-70">Disc. Amount</th>
@@ -619,6 +631,7 @@
                   <th class="min-width-80">SO Num</th>
                   <th>Item Type</th>
                   <th>GL Account</th>
+                  <th>AC Tail Num</th>                  
                   <th>UOM</th>
                   <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Notes</th>
@@ -626,15 +639,18 @@
               </thead>
               <tbody>
                 <ng-container *ngFor="let partList of roPartsList">
-                  <tr class="parent-data">
+                  <tr class="parent-data purchase-td-back">
                     <td>{{partList?.partNumber}}</td>
                     <td>{{partList?.altEquiPartNumber}}</td>
-                    <td>{{partList?.partDescription}}</td>												
+                    <td>{{partList?.partDescription}}</td>	
+                    <td>{{partList?.revisedPartNumber}}</td>
                     <td>{{partList?.stockType}}</td>
                     <td>{{partList?.manufacturer}}</td>													
                     <td>{{partList?.priority}}</td>
                     <td>{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
+                    <td>{{partList?.estRecordDate | date: 'MM/dd/yyyy' }}</td>
                     <td>{{partList?.condition}}</td>
+                    <td>{{partList?.workPerformed}}</td>
                     <td class="text-right">{{partList?.quantityOrdered}}</td>
                     <td class="text-right">{{partList?.vendorListPrice}}</td>
                     <td class="text-right">{{partList?.discountPercent}}</td>
@@ -655,10 +671,12 @@
                     <td>{{partList?.salesOrderNo}}</td>
                     <td>{{partList?.itemType}}</td>
                     <td>{{partList?.glAccount}}</td>
+                    <td>{{partList?.acTailNum}}</td>
                     <td>{{partList?.unitOfMeasure}}</td>
                     <td colspan="4">{{partList?.level1}}, {{partList?.level2}}, {{partList?.level3}}, {{partList?.level4}}</td>
                     <td>
-                      <div [innerHTML]="partList?.memo" ></div>
+                      <div class="m-0 p-0 p_textEditor approver-memo truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(partList?.memo)" [innerHTML]="partList?.memo" ></div>
                     </td>
                   </tr>
                   <tr class="child-header splitship-head child-header-back"  *ngIf="partList.repairOrderSplitParts.length > 0">
@@ -760,7 +778,8 @@
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.shipToMemo"></p>
+                <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                [matTooltip]="parsedText(roHeaderAdd.shipToMemo)" [innerHTML]="roHeaderAdd.shipToMemo"></p>
 
               </span></p>
               <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
@@ -785,14 +804,15 @@
               <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>
+                <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                [matTooltip]="parsedText(roHeaderAdd.billToMemo)" [innerHTML]="roHeaderAdd.billToMemo"></p>
 
               </span></p>
             </div>
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel header="Internal Approvers" *ngIf="!roHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -820,7 +840,8 @@
                       {{approver.rule}}
                     </td>
                     <td>
-                      <p class="m-0 p-0 p_textEditor approver-memo" [innerHTML]="approver['memo']"></p>
+                      <p class="m-0 p-0 p_textEditor approver-memo truncate-text" matTooltipPosition="above"
+                      [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                     </td>
                     <td [ngClass]="{red : approver.isExceeded == true}" >{{approver.message}}</td>
                   </tr>
@@ -835,7 +856,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process">
+        <p-tabPanel header="Approver Process"  *ngIf="!roHeaderAdd.isEnforce">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">
@@ -892,7 +913,8 @@
                                   </select>
                               </td>
                               <td *ngIf="field.field == 'memo'" class="memo-td-width">
-                                    <p class="m-0 p-0 p_textEditor" class="memo-left" [innerHTML]="approver['memo']"></p>
+                                    <p class="p_textEditor p-0 m-0 text-capital truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(approver['memo'])" [innerHTML]="approver['memo']"></p>
                                   <!-- </div> -->
                                   <div class="approver-memo-div" *ngIf="approver['actionId'] == 2 || approver['actionId'] == 3">
                                      
@@ -972,10 +994,11 @@
 
         <p-tabPanel header="Receiving Draft" *ngIf="this.isReceivingro">
           <app-ro-view-draftlist *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData"></app-ro-view-draftlist>
+          
         </p-tabPanel>
 
         <p-tabPanel header="Receiving" *ngIf="this.isReceivingro">
-          <app-ro-view-list  *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData" ></app-ro-view-list>
+          <app-ro-view-list *ngIf="showreceived" [repairOrderId]="selectedRepairOrderId"></app-ro-view-list>
         </p-tabPanel>
 
       </p-tabView>

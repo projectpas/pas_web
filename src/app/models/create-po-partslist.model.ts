@@ -11,6 +11,7 @@ export class CreatePOPartsList {
     glAccountId: number;
     UOMId: number;
     needByDate: Date;
+    estRecordDate:Date;
     priorityId: number;
     conditionId: number;
     quantityOrdered: number;
@@ -21,9 +22,10 @@ export class CreatePOPartsList {
     functionalCurrencyId: number;
     foreignExchangeRate: number;
     reportCurrencyId: number;
-    workOrderId: number;
-    repairOrderId: number;
-    salesOrderId: number;
+    workOrderId: any;
+    subWorkOrderId:any;
+    repairOrderId: any;
+    salesOrderId: any;
     managementStructureId: number;
     memo: string;
     masterCompanyId: number;
@@ -55,6 +57,7 @@ export class CreatePOPartsList {
         this.glAccountId = null;
         this.UOMId = null;
         this.needByDate = null;
+        this.estRecordDate = null;
         this.priorityId = null;
         this.conditionId = null;
         this.quantityOrdered = null;
@@ -66,6 +69,7 @@ export class CreatePOPartsList {
         this.foreignExchangeRate = null;
         this.reportCurrencyId = null;
         this.workOrderId = null;
+        this.subWorkOrderId=null;
         this.repairOrderId = null;
         this.salesOrderId = null;
         this.managementStructureId = null;
@@ -101,6 +105,7 @@ export class PartDetails {
         priorityId: number;
         quantityOrdered: number;
         needByDate: Date;
+        estRecordDate: Date;
         managementStructureId: number;
         masterCompanyId: number;
         childBulist: any[];
@@ -126,6 +131,7 @@ export class PartDetails {
             this.priorityId = null;
             this.quantityOrdered = null;
             this.needByDate = null;
+            this.estRecordDate = null;
             this.managementStructureId = null;
             this.masterCompanyId = 1;
             this.childBulist = [];

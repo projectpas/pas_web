@@ -16,6 +16,7 @@ import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstra
 import { MenuItem } from 'primeng/api';
 import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
+import { StatusEnum } from '../../../../enum/status.enum';
 
 
 @Component({
@@ -145,6 +146,13 @@ export class RoListComponent implements OnInit {
     approvalProcessList: any = [];  
     currentStatusPO: any;
     filterSearchText: any;
+    openStatusId: number  = 0
+    pendingStatusId: number  = 0
+    fulfillingStatusId: number  = 0
+    closedStatusId: number  = 0
+    canceledStatusId: number  = 0
+    descriptionStatusId: number  = 0
+    closingStatusId: number  = 0
 
     constructor(private _route: Router,
         private authService: AuthService,
@@ -155,8 +163,14 @@ export class RoListComponent implements OnInit {
         private commonService: CommonService,
         private modalService: NgbModal,
         private datePipe: DatePipe) {
-        this.vendorService.ShowPtab = false;     
-
+        this.vendorService.ShowPtab = false; 
+        this.openStatusId = StatusEnum.Open;    
+        this.pendingStatusId = StatusEnum.Pending;    
+        this.fulfillingStatusId = StatusEnum.Fulfilling;    
+        this.closedStatusId = StatusEnum.Closed;    
+        this.canceledStatusId = StatusEnum.Canceled;    
+        this.descriptionStatusId = StatusEnum.Description;    
+        this.closingStatusId = StatusEnum.Closing;    
     }
 
     ngOnInit() {
@@ -242,7 +256,6 @@ export class RoListComponent implements OnInit {
         },err => {this.isSpinnerVisible = false;});
     }
 
-
     loadApprovalProcessStatus() {		
         this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name').subscribe(response => { 		        
 		     response.forEach(x => {
@@ -251,18 +264,7 @@ export class RoListComponent implements OnInit {
 				}
             });
 		});
-	}
-
-   
-    
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-		this.alertService.showMessage(
-			'Error',
-			log.error,
-			MessageSeverity.error
-		);
-	}
+	}   
    
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -407,9 +409,11 @@ export class RoListComponent implements OnInit {
         const { repairOrderId } = rowData;
         this._route.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/edit/${repairOrderId}`);
     }
+
     delete(rowData) {
         this.rowDataToDelete = rowData;
     }
+
     exportCSV(tt) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
@@ -504,10 +508,12 @@ export class RoListComponent implements OnInit {
             this.isSpinnerVisible = false;
          });
     }
+
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });      
     }
+    
     dismissModel() {
         this.modal.close();
     }
@@ -549,13 +555,14 @@ export class RoListComponent implements OnInit {
     exportSelectedBtn(tt){ 
         this.selectedOnly = true;
         this.totalExportRow = tt.selection.length;  
-     }
+    }
+
     public getSelectedRow(rowData) {       
-        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receiving-ro?repairOrderId=${rowData.repairOrderId}`);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receiving-ro?repairorderid=${rowData.repairOrderId}`);
     }
 
     public editStockLine(rowData) {      
-        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${rowData.repairOrderId}`);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairorderid=${rowData.repairOrderId}`);
     }
 
     public viewSummary(rowData) {

@@ -28,10 +28,14 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() allConditionInfo: any;
   @Input() parts: any = [];
   @Input() isStockLineViewMode = false;
+  @Input() clearData = false;
   @Input() selectedParts: any = [];
   @Input() selectedSummaryRow: SummaryPart;
   @Input() type: string;
+  @Input() isEdit = false;
+  @Input() isQtyAdjust = false;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onSave: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
   @ViewChild("searchMultiPart", { static: false }) searchMultiPart: ElementRef;
   query: ItemMasterSearchQuery;
@@ -101,7 +105,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
         this.query = data;
         this.calculate();
       });
-
+      
     if (this.selectedSummaryRow) {
       this.onPartNumberSelect(this.selectedSummaryRow);
       this.openSalesMarginWithSummaryRow(this.selectedSummaryRow);
@@ -111,6 +115,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       this.partEditDisable = true;
     } else {
       this.partEditDisable = false;
+    }
+
+    if (this.clearData) {
+      this.query = new ItemMasterSearchQuery;
     }
 
     this.bindPartsDroppdown('');
@@ -138,6 +146,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   resetActionButtons() {
     this.searchDisabled = true;
     this.historicalDisabled = true;
+  }
+
+  save($event) {
+    this.onSave.emit(this.query);
   }
 
   search($event, programaticSearch = false) {
@@ -194,7 +206,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
           break;
       }
     }
-  }
+  } 
 
   calculate() {
     if (this.query.partSearchParamters.conditionIds.length > 0
@@ -213,7 +225,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     }
     if (this.query.partSearchParamters.quantityToQuote < 0) {
       this.searchDisabled = true;
-      this.alertService.showStickyMessage('', 'Qty To Quote can not be negative', MessageSeverity.error);
+      this.alertService.showStickyMessage('', 'You cannot reduce the requested qty.', MessageSeverity.error);
     } else {
       this.alertService.resetStickyMessage();
     }

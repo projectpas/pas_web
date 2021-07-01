@@ -103,6 +103,8 @@ export class AssetListingComponent implements OnInit {
     allAssetInfo: any[] = [];
     allAssetInfoNew: any[] = [];
     selectedColumns: { field: string; header: string; }[];
+    isSpinnerVisibleHistory:boolean=false;
+    showhistorylist:boolean=false
     selectedCol: { field: string; header: string; }[];
     cols = [
         { field: 'name', header: 'Asset Name', colspan: '1' },
@@ -247,6 +249,7 @@ export class AssetListingComponent implements OnInit {
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
         data.filters['status'] = this.status ? this.status : 'Active';
+        data.filters.masterCompanyId= this.authService.currentUser.masterCompanyId;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.isSpinnerVisible = true;
         this.assetService.getAssetNewList(PagingData).subscribe(
@@ -266,23 +269,23 @@ export class AssetListingComponent implements OnInit {
         ];
     }
     globalFilterValue: any;
-    filterGlobal(value, type) {
-        this.globalFilterValue = value;
-        this.isSpinnerVisible = true;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
-        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        const isdelete = this.currentDeletedstatus ? true : false;
-        PagingData.filters.isDeleted = isdelete
-        PagingData.filters['status'] = this.status ? this.status : 'Active';
-        PagingData.filters['global'] = value;
-        PagingData.globalFilter = value;
-        this.assetService.getAssetListGlobalFilter(PagingData).subscribe(
-            results => {
-                this.onDataLoadSuccessful(results);
-            },
-            error => this.onDataLoadFailed(error)
-        );
-    }
+    // filterGlobal(value, type) {
+    //     this.globalFilterValue = value;
+    //     this.isSpinnerVisible = true;
+    //     this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
+    //     const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+    //     const isdelete = this.currentDeletedstatus ? true : false;
+    //     PagingData.filters.isDeleted = isdelete
+    //     PagingData.filters['status'] = this.status ? this.status : 'Active';
+    //     PagingData.filters['global'] = value;
+    //     PagingData.globalFilter = value;
+    //     this.assetService.getAssetListGlobalFilter(PagingData).subscribe(
+    //         results => {
+    //             this.onDataLoadSuccessful(results);
+    //         },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
     private onDataLoadSuccessful(allWorkFlows) {
         this.isSpinnerVisible = false;
         this.allAssetInfo = [];
@@ -424,21 +427,64 @@ export class AssetListingComponent implements OnInit {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 
     }
-    openHistory(content, row) {
+    // openHistory(content, row) {
 
-        this.assetService.listCollection = row;
-        this.selectedAsset = row.assetId;
-        this.historyData = [
-            { overview: 'Asset Description, Manufacturer', updatedBy: 'Shabbir', updatedTime: '02-01-2019 10:20:50' },
-            { overview: 'UOM, Asset Location', updatedBy: 'Roger A', updatedTime: '02-01-2019 10:20:50' },
-        ];
-        this.historyModal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        this.historyModal.result.then(() => {
+    //     this.assetService.listCollection = row;
+    //     this.selectedAsset = row.assetId;
+    //     this.historyData = [
+    //         { overview: 'Asset Description, Manufacturer', updatedBy: 'Shabbir', updatedTime: '02-01-2019 10:20:50' },
+    //         { overview: 'UOM, Asset Location', updatedBy: 'Roger A', updatedTime: '02-01-2019 10:20:50' },
+    //     ];
+    //     this.historyModal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    //     this.historyModal.result.then(() => {
 
-        }, () => { })
-    }
+    //     }, () => { })
+    // }
+
+    openHistory(row) {
+        this.auditHistory = [];
+          if(row && row.assetRecordId !=undefined){
+              this.isSpinnerVisibleHistory=true;
+          this.assetService.GetAuditDataByAssetList(row.assetRecordId).subscribe(res => {
+    
+          if(res && res.length !=0){
+              this.showhistorylist=true;
+              this.auditHistory = res;
+            //   this.auditHistory = res.map(x => {
+            //       return {
+            //           ...x,
+            //        //unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
+            //     //   residualPercentage: x.residualPercentage ? formatNumberAsGlobalSettingsModule(x.residualPercentage, 2) : '',
+            //     //   installationCost: x.installationCost ? formatNumberAsGlobalSettingsModule(x.installationCost, 2) : '',
+            //     //   freight: x.freight ? formatNumberAsGlobalSettingsModule(x.freight, 2) : '',
+            //     //   insurance: x.insurance ? formatNumberAsGlobalSettingsModule(x.insurance, 2) : '',
+            //     //   taxes: x.taxes ? formatNumberAsGlobalSettingsModule(x.taxes, 2) : '',
+            //     //   totalCost: x.totalCost ? formatNumberAsGlobalSettingsModule(x.totalCost, 2) : '',
+            //     //   calibrationDefaultCost: x.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(x.calibrationDefaultCost, 2) : '',
+            //     //   certificationDefaultCost: x.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.certificationDefaultCost, 2) : '',
+            //     //   inspectionDefaultCost: x.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(x.inspectionDefaultCost, 2) : '',
+            //     //   verificationDefaultCost: x.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(x.verificationDefaultCost, 2) : '',
+            //       }
+            //   });
+              //this.isIntangible = this.auditHistory[0].isIntangible;
+          }else{
+              this.showhistorylist=false;
+          }
+           
+              this.isSpinnerVisibleHistory=false;
+          },err=>{
+              this.isSpinnerVisibleHistory=false;
+              this.isSpinnerVisible = false;
+              this.showhistorylist=false;
+              const errorLog = err;
+               this.errorMessageHandler(errorLog);
+          })
+      }
+      }
     dismissHistoryModel() {
-        this.historyModal.close();
+
+        $("#assetInvAudit").modal("hide");
+        //this.historyModal.close();
     }
 
     loadDepricationMethod() {
@@ -568,7 +614,7 @@ export class AssetListingComponent implements OnInit {
         $('#step4').collapse('hide');
     }
     getAssetAcquisitionTypeList() {
-        this.commonservice.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId','Name' ,'','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.assetAcquisitionTypeList = res;
         }, err => {
             const errorLog = err;
@@ -576,7 +622,7 @@ export class AssetListingComponent implements OnInit {
         })
     }
     getDepreciationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId','Name' ,'','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.depreciationFrequencyList = res;
         }, err => {
             const errorLog = err;

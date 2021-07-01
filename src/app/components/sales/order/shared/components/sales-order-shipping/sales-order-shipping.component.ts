@@ -16,6 +16,8 @@ import { CustomerShippingModel } from '../../../../../../models/customer-shippin
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SalesShippingLabelComponent } from '../../../sales-order-shipping-label/sales-order-shipping-label.component'
 import { SalesOrderPackagingLabelComponent } from '../../../sales-order-Packaging-Label/sales-order-packaging-label.component';
+import { SalesMultiShippingLabelComponent } from '../../../sales-order-multi-shipping-label/sales-order-multi-shipping-label.component';
+import { SalesOrderMultiPackagingLabelComponent } from '../../../sales-order-multi-Packaging-Label/sales-order-multi-packaging-label.component';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -87,6 +89,7 @@ export class SalesOrderShippingComponent {
     isMultipleSelected: boolean = false;
     addCustomerInfo: boolean = false;
     disableGeneratePackagingBtn: boolean = true;
+    isViewShipping: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -124,8 +127,18 @@ export class SalesOrderShippingComponent {
 
     refresh(parts) {
         this.partSelected = false;
-        this.initColumns();
-        this.bindData();
+        this.disableGeneratePackagingBtn = true;
+        this.disableCreateShippingBtn = true;
+        this.commonService.getAddressById(this.salesOrderId, AddressTypeEnum.SalesOrder, AppModuleEnum.SalesOrder).subscribe(res => {
+            if (res[0].ShipToSiteId == 0 && res[0].BillToSiteId == 0) {
+                this.alertService.resetStickyMessage();
+                this.alertService.showMessage('Sales Order Shipping', "Please Save 'Bill To' and 'Ship To' address from address tab", MessageSeverity.default);
+            }
+            else {
+                this.initColumns();
+                this.bindData();
+            }
+        });
     }
 
     bindData() {
@@ -157,7 +170,7 @@ export class SalesOrderShippingComponent {
         this.salesOrderPartId = rowData.salesOrderPartId;
         this.partSelected = true;
         this.isMultipleSelected = false;
-        this.isView = false;
+        this.isViewShipping = false;
         this.clearData();
         this.bindData();
     }
@@ -556,39 +569,26 @@ export class SalesOrderShippingComponent {
     generatePackagingSlip() {
         let packagingSlipItems: PackagingSlipItems[] = [];
 
-        //if (this.isMultipleSelected) {
         this.shippingList.filter(a => {
             for (let i = 0; i < a.soshippingchildviewlist.length; i++) {
                 if (a.soshippingchildviewlist[i].selectedToGeneratePackaging == true) {
-                    var p = new PackagingSlipItems;
-                    p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
-                    p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
-                    p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
-                    p.salesOrderId = this.salesOrderId;
-                    p.masterCompanyId = this.currentUserMasterCompanyId;
-                    p.createdBy = this.userName;
-                    p.updatedBy = this.userName;
-                    p.createdDate = new Date().toDateString();
-                    p.updatedDate = new Date().toDateString();
+                    if (a.soshippingchildviewlist[i].packagingSlipId === undefined || a.soshippingchildviewlist[i].packagingSlipId == 0) {
+                        var p = new PackagingSlipItems;
+                        p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
+                        p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
+                        p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
+                        p.salesOrderId = this.salesOrderId;
+                        p.masterCompanyId = this.currentUserMasterCompanyId;
+                        p.createdBy = this.userName;
+                        p.updatedBy = this.userName;
+                        p.createdDate = new Date().toDateString();
+                        p.updatedDate = new Date().toDateString();
 
-                    packagingSlipItems.push(p);
+                        packagingSlipItems.push(p);
+                    }
                 }
             }
         });
-        // }
-        // else {
-        //     var p = new PackagingSlipItems;
-        //     p.SOPickTicketId = this.currSOPickTicketId;
-        //     p.currQtyToShip = this.currQtyToShip;
-        //     p.salesOrderPartId = this.salesOrderPartId;
-        //     p.salesOrderId = this.salesOrderId;
-        //     p.masterCompanyId = this.currentUserMasterCompanyId;
-        //     p.createdBy = this.userName;
-        //     p.updatedBy = this.userName;
-        //     p.createdDate = new Date().toDateString();
-        //     p.updatedDate = new Date().toDateString();
-        //     packagingSlipItems.push(p);
-        // }
         this.isSpinnerVisible = true;
 
         this.salesOrderService.generatePackagingSlip(packagingSlipItems)
@@ -647,29 +647,40 @@ export class SalesOrderShippingComponent {
 
     disableCreateShippingBtn: boolean = true;
     checkIsChecked() {
+        //var keepGoing = true;
         this.shippingList.forEach(a => {
-            a.soshippingchildviewlist.forEach(ele => {
-                if (ele.selected)
-                    this.disableCreateShippingBtn = false;
-                else
-                    this.disableCreateShippingBtn = true;
-            });
+            if (a.soshippingchildviewlist.findIndex((item) => item.selected === true) >= 0) {
+                this.disableCreateShippingBtn = false;
+            }
+            else {
+                this.disableCreateShippingBtn = true;
+            }
+            // if (keepGoing) {
+            //     a.soshippingchildviewlist.forEach(ele => {
+            //         if (ele.selected) {
+            //             this.disableCreateShippingBtn = false;
+            //             keepGoing = false;
+            //         }
+            //         else
+            //             this.disableCreateShippingBtn = true;
+            //     });
+            // }
         });
     }
 
     checkIsCheckedToGenerate() {
         var keepGoing = true;
         this.shippingList.forEach(a => {
-            if (keepGoing) {
-                a.soshippingchildviewlist.forEach(ele => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (keepGoing) {
                     if (ele.selectedToGeneratePackaging) {
                         this.disableGeneratePackagingBtn = false;
                         keepGoing = false;
                     }
                     else
                         this.disableGeneratePackagingBtn = true;
-                });
-            }
+                }
+            });
         });
     }
 
@@ -1310,7 +1321,7 @@ export class SalesOrderShippingComponent {
 
     viewShipping(ship) {
         this.isSpinnerVisible = true;
-        this.isView = true;
+        this.isViewShipping = true;
         this.salesOrderPartId = ship.salesOrderPartId;
         this.partSelected = true;
         this.salesOrderService
@@ -1335,7 +1346,7 @@ export class SalesOrderShippingComponent {
 
     PerformShipping() {
         this.clearData();
-        this.isView = false;
+        this.isViewShipping = false;
         this.isMultipleSelected = true;
         this.partSelected = true;
         this.bindData();
@@ -1370,7 +1381,7 @@ export class SalesOrderShippingComponent {
     }
 
     AddCustomInfo() {
-        this.addCustomerInfo = true;
+        this.addCustomerInfo = !this.addCustomerInfo;
     }
 
     printPackagingLabel(rowData: any) {
@@ -1387,6 +1398,71 @@ export class SalesOrderShippingComponent {
         instance.salesOrderPartId = rowData.salesOrderPartId;
         instance.soPickTicketId = rowData.soPickTicketId;
         instance.packagingSlipId = rowData.packagingSlipId;
+    }
+
+    printSelectedPackagingSlip() {
+        let packagingSlipsToPrint: MultiPackagingSlips[] = [];
+        this.shippingList.forEach(a => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (ele.selectedToGeneratePackaging && ele.packagingSlipId > 0) {
+                    var items = new MultiPackagingSlips;
+                    items.SalesOrderId = ele.salesOrderId;
+                    items.SalesOrderPartId = ele.salesOrderPartId;
+                    items.SOPickTicketId = ele.soPickTicketId;
+                    items.PackagingSlipId = ele.packagingSlipId;
+
+                    packagingSlipsToPrint.push(items);
+                }
+            });
+        });
+
+        let packagingSlips: any = {};
+
+        packagingSlips['packagingSlips'] = packagingSlipsToPrint;
+
+        this.modal = this.modalService.open(SalesOrderMultiPackagingLabelComponent, { size: "lg" });
+        let instance: SalesOrderMultiPackagingLabelComponent = (<SalesOrderMultiPackagingLabelComponent>this.modal.componentInstance)
+        instance.modalReference = this.modal;
+
+        instance.onConfirm.subscribe($event => {
+            if (this.modal) {
+                this.modal.close();
+            }
+        });
+
+        instance.packagingSlips = packagingSlips;
+    }
+
+    printSelectedShippingLabel() {
+        let shippingItemsToPrint: MultiShippingLabels[] = [];
+        this.shippingList.forEach(a => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (ele.selectedToGeneratePackaging) {
+                    var items = new MultiShippingLabels;
+                    items.SalesOrderId = ele.salesOrderId;
+                    items.SalesOrderPartId = ele.salesOrderPartId;
+                    items.SOShippingId = ele.salesOrderShippingId;
+
+                    shippingItemsToPrint.push(items);
+                }
+            });
+        });
+
+        let shippingLabels: any = {};
+
+        shippingLabels['shippingLabels'] = shippingItemsToPrint;
+
+        this.modal = this.modalService.open(SalesMultiShippingLabelComponent, { size: "lg" });
+        let instance: SalesMultiShippingLabelComponent = (<SalesMultiShippingLabelComponent>this.modal.componentInstance)
+        instance.modalReference = this.modal;
+
+        instance.onConfirm.subscribe($event => {
+            if (this.modal) {
+                this.modal.close();
+            }
+        });
+
+        instance.salesshippingLabels = shippingLabels;
     }
 }
 
@@ -1406,4 +1482,17 @@ export class PackagingSlipItems {
     updatedBy: string;
     createdDate: string;
     updatedDate: string;
+}
+
+export class MultiShippingLabels {
+    SalesOrderId: number;
+    SalesOrderPartId: number;
+    SOShippingId: number;
+}
+
+export class MultiPackagingSlips {
+    SalesOrderId: number;
+    SalesOrderPartId: number;
+    SOPickTicketId: number;
+    PackagingSlipId: number;
 }

@@ -1,7 +1,8 @@
 import { IExchangeQuotePart } from "./IExchangeQuotePart";
 import { ExchangeQuoteScheduleBilling } from "../../components/exchange-quote/shared/components/models/ExchangeQuoteScheduleBilling";
 export class ExchangeQuotePart implements IExchangeQuotePart {
-    exchangeQuotepartPartId: number;
+    //exchangeQuotepartPartId: number;
+    exchangeQuotePartId: number;
     exchangeQuoteId: number;
     itemMasterId: number;
     stockLineId: number;
@@ -54,6 +55,9 @@ export class ExchangeQuotePart implements IExchangeQuotePart {
     qtyAvailable: number;
     customerReference: string;
     itemNo: number;
+    customerRequestDate?: Date;
+    promisedDate?: Date;
+    estimatedShipDate?: Date;
 
     exchangeCurrencyId: number;
     loanCurrencyId: number;
@@ -66,6 +70,7 @@ export class ExchangeQuotePart implements IExchangeQuotePart {
     exchangeOutrightPrice: number;
     daysForCoreReturn: number;
     billingIntervalDays: string;
+    exchangeOverhaulCost:number;
     currencyId: number;
     currency: string;
     depositeAmount: number;

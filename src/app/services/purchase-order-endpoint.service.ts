@@ -202,8 +202,6 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
     }); 
   }
 
-
-
   purchaseOrderGlobalSearch(filterText, pageNumber, pageSize, vendorId) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&vendorId=${vendorId}`)
     .catch(error => {
@@ -249,9 +247,9 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOApproverList(purchaseOrderId) );
     });
-    }
+  }
 
-    savePurchaseOrderSettingMasterDate<T>(param: any): Observable<any> {
+  savePurchaseOrderSettingMasterDate<T>(param: any): Observable<any> {
         let body = JSON.stringify(param);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })        
         return this.http.post(this.configurations.baseUrl + '/api/purchaseorder/savepurchaseordersettingmaster', body, this.getRequestHeaders())
@@ -260,14 +258,21 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
             }).catch(error => {
                 return this.handleErrorCommon(error, () => this.savePurchaseOrderSettingMasterDate<T>(param));
             });
-    }
+  }
 
-    getPurchaseOrderSettingMasterData(currentUserMasterCompanyId) {
+  getPurchaseOrderSettingMasterData(currentUserMasterCompanyId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting?masterCompanyId=${currentUserMasterCompanyId}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId));
             });
-    }
+  }
+
+  getPrintPurchaseOrderData(purchaseOrderId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPrintPurchaseOrderData?purchaseOrderId=${purchaseOrderId}`)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getPrintPurchaseOrderData(purchaseOrderId) );
+    });    
+  }
 
 
 

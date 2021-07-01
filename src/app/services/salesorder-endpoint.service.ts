@@ -27,6 +27,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getholdreservepartUrl: string = environment.baseUrl + "/api/salesorder/getholdstocklinereservedparts"
   private readonly getrelesereservepartUrl: string = environment.baseUrl + "/api/salesorder/releasestocklinereservedparts"
   private readonly getSalesOrderViewDetails: string = environment.baseUrl + "/api/SalesOrder/getview";
+  private readonly getSalesOrderPrintViewDetails: string = environment.baseUrl + "/api/SalesOrder/getprintview";
   private readonly getSalesOrdePickTicketDetails: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticket";
   private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketapprovelist";
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
@@ -62,10 +63,11 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly _geSaleQuoteDocumentHistory: string = environment.baseUrl + "/api/SalesOrder/getSaleOrderDocumentAudit";
   private readonly _getSaveFreights: string = environment.baseUrl + "/api/SalesOrder/createsalesorderfreight";
   private readonly _getFreights: string = environment.baseUrl + "/api/SalesOrder/salesorderfreightlist";
-  private readonly _getDeleteFreight: string = environment.baseUrl + "/api/SalesOrder/deletesalesorderfreight/";
+  private readonly _getDeleteFreight: string = environment.baseUrl + "/api/SalesOrder/deletesalesorderfreight";
   private readonly _getSaveCharges: string = environment.baseUrl + "/api/SalesOrder/createsalesordercharges";
   private readonly _getCharges: string = environment.baseUrl + "/api/SalesOrder/gesalesorderchargeslist";
   private readonly _getChargesById: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderChargesBySOId";
+  private readonly _getFreightsById: string = environment.baseUrl + "/api/SalesOrder/getSalesOrderFreightsBySOId";
   private readonly _getDeleteCharge: string = environment.baseUrl + "/api/SalesOrder/deletesalesordercharge";
   private readonly _getSoMarginSummary: string = environment.baseUrl + "/api/SalesOrder/create-so-margin-data";
   private readonly _getMarginSummary: string = environment.baseUrl + "/api/SalesOrder/get-sales-margin-data";
@@ -90,6 +92,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/salesorder/getpickticketedit"
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
+  private readonly getMultiShipingLabelForPrint: string = environment.baseUrl + "/api/SalesOrder/getMultiShipingLabelForPrint";
+  private readonly getMultiPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printMultiplePackagingSlip";
+  private readonly getMultiPickTicketForPrint: string = environment.baseUrl + "/api/SalesOrder/getMultiSalesOrderPickTicketForPrint";
   private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/SalesOrder/printPackagingSlip";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
@@ -97,6 +102,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly GetSalesOrderBillingInvoicingByIdURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingById";
   private readonly updateSalesOrderBillingInvoicingURL: string = environment.baseUrl + "/api/SalesOrder/updateSalesOrderBillingInvoicing";
   //**End  savesarvice end point creation implementation --nitin
+  private readonly _geSalesOrderParts: string = environment.baseUrl + "/api/SalesOrder/gesalesorderpartslist";
 
   constructor(
     http: HttpClient,
@@ -413,6 +419,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
+  getPrintview(salesOrderId: number): Observable<any> {
+    const URL = `${this.getSalesOrderPrintViewDetails}/${salesOrderId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getPrintview(salesOrderId));
+      });
+  }
+
   getPickTicket(salesOrderId: number): Observable<any> {
     const URL = `${this.getSalesOrdePickTicketDetails}/${salesOrderId}`;
     return this.http
@@ -574,6 +589,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
+  getSalesOrderFreightsById(id, isDeleted) {
+    const URL = `${this._getFreightsById}?SalesOrderId=${id}&isDeleted=${isDeleted}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderFreightsById(id, isDeleted));
+      });
+  }
+
   deleteFrieght(frieghtId, userName): Observable<boolean> {
     let endpointUrl = `${this._getDeleteFreight}/${frieghtId}?updatedBy=${userName}`;
     return this.http
@@ -731,6 +755,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
+  getMultiPickTicketPrint(multiPickTicket: any): Observable<any> {
+    const URL = `${this.getMultiPickTicketForPrint}`;
+    return this.http
+      .post<any>(URL, JSON.stringify(multiPickTicket), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getMultiPickTicketPrint(multiPickTicket));
+      });
+  }
+
   getPickTicketEdit(soPickTicketId: number, salesOrderId: number, salesOrderPartId: number): Observable<PartAction> {
     const URL = `${this.getPickTicketforEdit}?soPickTicketId=${soPickTicketId}&salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}`;
     return this.http
@@ -764,6 +797,24 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId));
+      });
+  }
+
+  getMultiShippingLabelPrint(multiShippingLabel: any): Observable<any> {
+    const URL = `${this.getMultiShipingLabelForPrint}`;
+    return this.http
+      .post<any>(URL, JSON.stringify(multiShippingLabel), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiShippingLabel));
+      });
+  }
+
+  getMultiPackagingSlipPrint(multiPackagingSlip: any): Observable<any> {
+    const URL = `${this.getMultiPackagingSlipForPrint}`;
+    return this.http
+      .post<any>(URL, JSON.stringify(multiPackagingSlip), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getMultiPackagingSlipPrint(multiPackagingSlip));
       });
   }
 
@@ -829,4 +880,11 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
   //end nitin
+
+  getSalesOrderParts(id, isDeleted) {
+    return this.http.get<any>(`${this._geSalesOrderParts}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderParts(id, isDeleted));
+      });
+  }
 }

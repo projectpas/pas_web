@@ -102,8 +102,8 @@ export class SalesOrderAnalysisComponent implements OnInit {
       { field: "uomName", header: "UOM", width: "100px" },
       { field: "currency", header: "Curr", width: "100px" },
       { field: "qty", header: "Qty", width: "85px" },
-      { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
-      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "unitSalePrice", header: "Per Unit", width: "120px" },
+      { field: "salesPriceExtended", header: "Ext. Price", width: "120px" },
       { field: "misc", header: "Misc Charges", width: "120px" },
       { field: "totalSales", header: "Total Revenue", width: "130px" },
       { field: "unitCost", header: "Unit Cost", width: "130px" },
@@ -144,8 +144,8 @@ export class SalesOrderAnalysisComponent implements OnInit {
       { field: "status", header: "Status", width: "80px" },
       { field: "currency", header: "Curr", width: "80px" },
       { field: "qty", header: "Qty", width: "80px" },
-      { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
-      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "unitSalePrice", header: "Per Unit", width: "120px" },
+      { field: "salesPriceExtended", header: "Ext. Price", width: "120px" },
       { field: "misc", header: "Misc Charges", width: "120px" },
       { field: "totalSales", header: "Total Revenue", width: "130px" },
       { field: "unitCost", header: "Unit Cost", width: "130px" },
@@ -218,6 +218,8 @@ export class SalesOrderAnalysisComponent implements OnInit {
           this.sales.forEach((sale, i) => {
             this.sales[i]['totalRevenue'] = this.calculateProductRevenue(sale, i);
             this.sales[i]['totalSales'] = this.calculateTotalRevenue(sale, i);
+            this.sales[i]['marginAmountExtended'] = this.calculateMarginAmount(sale, i);
+            this.sales[i]['marginPercentage'] = this.calculateMarginPercentage(sale, i);
           })
         }
         this.totalRecords = response.length;
@@ -274,12 +276,23 @@ export class SalesOrderAnalysisComponent implements OnInit {
     return data['partNumberType'] === 'Multiple' ? 'green' : 'black';
   }
 
+  calculateMarginPercentage(part: PartDetail, i) {
+    return ((this.sales[i].marginAmountExtended / (this.sales[i]['totalRevenue'])) * 100).toFixed(2);
+  }
+
+  calculateMarginAmount(part: PartDetail, i) {
+    //return (this.sales[i].marginAmountExtended + this.sales[i].misc).toFixed(2);
+    return (this.sales[i]['totalRevenue'] - this.sales[i].unitCostExtended).toFixed(2);
+  }
+
   calculateTotalRevenue(part: PartDetail, i) {
-    return this.sales[i].netSales + this.sales[i].misc;
+    //return (this.sales[i].netSales + this.sales[i].misc).toFixed(2);
+    return (this.sales[i].salesPriceExtended + this.sales[i].misc).toFixed(2);
   }
 
   calculateProductRevenue(part, i) {
-    return this.sales[i].netSales + this.sales[i].misc + this.sales[i].freight + this.sales[i].taxAmount;
+    //return this.sales[i].netSales + this.sales[i].misc; // + this.sales[i].freight + this.sales[i].taxAmount;
+    return this.sales[i].salesPriceExtended + this.sales[i].misc;
   }
 
   getPercentage(key) {
@@ -387,5 +400,24 @@ export class SalesOrderAnalysisComponent implements OnInit {
       return acc;
     }, []);
     return uniqueParts;
+  }
+
+  getUnFormattedTotalAmount(key) {
+    let total = 0;
+    if (this.sales && this.sales.length > 0) {
+      this.sales.forEach(
+        (part) => {
+          total += Number(this.sumAmount(part, key));
+        }
+      )
+    }
+    return total;
+  }
+
+  getTotalMarginPercentage() {
+    let totalRevenue = this.getUnFormattedTotalAmount('totalSales');
+    let totalMarginAmt = this.getUnFormattedTotalAmount('marginAmountExtended');
+
+    return ((totalMarginAmt / totalRevenue) * 100).toFixed(2);
   }
 }

@@ -17,6 +17,10 @@
     border: 1px solid #c8c8c8;
     font-size: 11px !important;
 }
+.margin-tb{
+    margin-top:-10px;
+    margin-bottom: -10px;
+}
 
 .workflow-table-material{
     padding-bottom: 50%;
@@ -34,18 +38,21 @@ input[type=number], input[type=text], input[type=email], select {
     height: 24px!important;
     border-radius: 5px!important;
 }
-.modal-body p {
-    overflow: auto !important;
-}
+// .modal-body p {
+//     overflow: auto !important;
+// }
 .form-horizontal b {
     top: auto !important;
 }
 .email-content{
     max-height: 300px;
-    overflow: scroll;
-    span p{
-        overflow: scroll;
-    }
+    // overflow: scroll;
+    // span p{
+    //     overflow: scroll;
+    // }
+}
+.width-100{
+    width:100px;
 }
 .downld{
     background: transparent !important;

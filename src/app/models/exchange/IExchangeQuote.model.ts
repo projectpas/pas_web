@@ -35,9 +35,22 @@ export interface IExchangeQuote {
 	masterCompanyId:number;
 	managementStructureId:number;
 	customerServiceRepId: number;
+	customerServiceRepName: string;
 	restrictPMA: boolean;
 	restrictDER: boolean;
 	cogs:number;
 	daysForCoreReturn:number;
-	employeeId:number;
+	employeeId:any;
+	isApproved: boolean;
+	validForDays:number;
+	probabilityId: number;
+	leadSourceId: number;
+	warningId: number;
+	warningName: string;
+	companyId: number;
+	buId: number;
+	divisionId: number;
+	departmentId: number;
+	memo: string;
+	notes: string;
 }

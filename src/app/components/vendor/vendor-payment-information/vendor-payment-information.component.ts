@@ -649,21 +649,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.geListByStatus(this.status ? this.status :this.currentstatus)
 		this.isSpinnerVisible = false;
 	}
-
-	// getVendorBasicData(vendorId) {
-	// 	this.isSpinnerVisible = true;
-	// 	this.vendorService.getVendorDataById(vendorId).subscribe(res => {
-	// 		this.vendorData = res;
-	// 		this.isSpinnerVisible = false;
-	// 	}, error => this.onDataLoadFailed(error));
-	// }
-
-	// private onBencustomerLoad(allWorkFlows: any) {
-	// 	this.dataSource.data = allWorkFlows;
-	// 	this.alldata = allWorkFlows;
-	// 	this.isSpinnerVisible = false;
-	// }
-
+	
 	private onDomestciLoad(allWorkFlows: any) {
 		this.dataSource.data = allWorkFlows;
 		this.domesticWithVedor = allWorkFlows;		
@@ -743,7 +729,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
 		this.auditHisory = auditHistory;
 		this.isSpinnerVisible = false;
-		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+		this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
 	}
 
 	private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
@@ -1294,7 +1280,6 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.disablesaveforCountry = true;
 				}
 			}
-
 		}
 	}
 
@@ -1439,97 +1424,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
             this.disableSaveSiteName = false;
         }
     }
-
-	//Not In Use
-	// private getgeneralInnfo() {
-	// 	this.alertService.startLoadingMessage();
-	// 	this.loadingIndicator = true;
-
-	// 	this.vendorService.getWorkFlows().subscribe(
-	// 		results => this.ongeneralDataLoadSuccessful(results[0]),
-	// 		error => this.onDataLoadFailed(error)
-	// 	);
-	// }
-
-	// restoreRecord(){  
-	// 	this.isSpinnerVisible = true;
-    //     this.commonService.updatedeletedrecords('CheckPayment','CheckPaymentId',this.restorerecord.checkPaymentId ).subscribe(res => {
-    //         this.currentDeletedstatus=true;
-    //         this.modal.close();
-    //         this.loadData();
-	// 		this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-	// 		this.isSpinnerVisible = false;
-	// 	}, error => this.saveFailedHelper(error))
-	// }
-
-	// private ongeneralDataLoadSuccessful(allWorkFlows: any[]) {
-	// 	this.alertService.stopLoadingMessage();
-	// 	this.loadingIndicator = false;
-	// 	this.dataSource.data = allWorkFlows;
-	// 	this.allgeneralInfo = allWorkFlows;
-	// 	this.vendorname = this.allgeneralInfo[0].vendorName;
-	// 	this.vendorCode = this.allgeneralInfo[0].vendorCode;
-	// }
-
-	// private loadAddressDara() {
-	// 	this.alertService.startLoadingMessage();
-	// 	this.loadingIndicator = true;
-	// 	this.vendorService.getAddressDtails().subscribe(
-	// 		results => this.onAddressDataLoadSuccessful(results[0]),
-	// 		error => this.onDataLoadFailed(error)
-	// 	);
-	// }
-
-	// private onAddressDataLoadSuccessful(alladdress: any[]) {
-	// 	this.dataSource.data = alladdress;
-	// 	this.allAddresses = alladdress;
-	// 	this.addressId = this.allAddresses[0].addressId;
-	// }
-
-	// private refresh() {
-	// 	this.applyFilter(this.dataSource.filter);
-	// }
 	
-	// private loadPaymentObject() {
-	// 	this.alertService.startLoadingMessage();
-	// 	this.loadingIndicator = true;
-	// 	this.vendorService.getPaymentObj().subscribe(
-	// 		results => this.onPaymentObjUrl(results[0]),
-	// 		error => this.onDataLoadFailed(error)
-	// 	);
-	// }
-
-	// private onPaymentObjUrl(allWorkFlows: any) {
-	// 	this.alertService.stopLoadingMessage();
-	// 	this.loadingIndicator = false;
-	// 	this.dataSource.data = allWorkFlows;
-	// 	this.sourceVendor = allWorkFlows;
-	// }
-
-	// private saveSuccessHelper(role?: any) {
-	// 	this.isSaving = false;
-	// 	this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
-	// 	this.loadData();
-	// }
-
-	// private getDismissReason(reason: any): string {
-	// 	if (reason === ModalDismissReasons.ESC) {
-	// 		return 'by pressing ESC';
-	// 	} else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-	// 		return 'by clicking on a backdrop';
-	// 	} else {
-	// 		return `with: ${reason}`;
-	// 	}
-	// }
-
-	// public getbencus() {
-	// 	this.isSpinnerVisible = true;
-	// 	this.vendorService.getBeneficiaryCustomer().subscribe(
-	// 		results => this.onBencustomerLoad(results[0]),
-	// 		error => this.onDataLoadFailed(error)
-	// 	);
-	// }
-
 	filterTagNames(event) {
         if (event.query !== undefined && event.query !== null) {
             this.getAllTagNameSmartDropDown(event.query); }

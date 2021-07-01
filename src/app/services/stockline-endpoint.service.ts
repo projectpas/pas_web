@@ -36,6 +36,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _stockLineAdjustmentBinBeforeChange: string = "/api/StockLine/GetBinByShelfIdAdjustmentBeforeChange"; // for Stockline Adjustemnet Show Data before Select Site
 	private readonly _adjustmentReasonUrlNew: string = "/api/StockLine/stockLineAdjustmentReasonpost";//which will be specified in the Controller
 	private readonly _adjustmentReasonUrl: string = "/api/StockLine/GetAdjustmentReason";
+	private readonly _GetAllStocklineByPartAndCondtionUrl: string = "/api/StockLine/GetAllStocklineByPartAndCondtion";
 	private readonly _stockLineAdjustmentUpdate: string = "/api/StockLine/stockLineAdjustmentReasonPut";
 	private readonly _stockLinePOUnitCost: string = "/api/StockLine/stockLinePOUnitCostGet";
 	private readonly _POUnitCost: string = this.baseUrl + "/api/StockLine/PurchaseOrderUnitCost";
@@ -43,17 +44,18 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _stockLineROUnitCost: string = "/api/StockLine/stockLineROUnitCostGet";
 	private readonly _stockLineAdjustmentDelete: string = "/api/StockLine/stockLineAdjustmentReasonDelete";
 	private readonly _searchStockLine: string = "/api/StockLine/search";
-	private readonly _searchStockLinefromSoqpop: string = "/api/StockLine/searchstocklinefromsoqpop";	
+	private readonly _searchStockLinefromSoqpop: string = "/api/StockLine/searchstocklinefromsoqpop";
 	private readonly _multiSearchStockLineUrl: string = "/api/stockline/multisearch";
 	private readonly _stocklineGlobalSearch: string = '/api/StockLine/ListGlobalSearch'
 	private readonly _tagTypeUrl: string = '/api/StockLine/tagType';
 	private readonly _stockListingUrl: string = '/api/StockLine/searchstockline';
 	private readonly _stockListGlobalUrl: string = '/api/StockLine/stocklineglobalsearch';
 	private readonly _stockSalesListingUrl: string = '/api/StockLine/searchstocklinesales';
-	private readonly _searchStockLinefromExchangequotepop: string = "/api/StockLine/searchstocklinefromExchangeQuotepop";	
+	private readonly _searchStockLinefromExchangequotepop: string = "/api/StockLine/searchstocklinefromExchangeQuotepop";
 
 	get tagTypeUrl() { return this.configurations.baseUrl + this._tagTypeUrl; }
 	get adjustmentReasonUrl() { return this.configurations.baseUrl + this._adjustmentReasonUrl; }
+	get GetAllStocklineByPartAndCondtionUrl() { return this.configurations.baseUrl + this._GetAllStocklineByPartAndCondtionUrl; }
 	get stocklineUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 	get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 	get updateActiveInactive() { return this.configurations.baseUrl + this._updateActionsUrl; }
@@ -62,12 +64,12 @@ export class StocklineEndpoint extends EndpointFactory {
 	get companyUrl() { return this.configurations.baseUrl + this._actionsCompanyUrl; }
 	get legalEntityUrl() { return this.configurations.baseUrl + this._actionsLegalEntityUrl; }
 	get getSearchUrl() { return this.configurations.baseUrl + this._searchStockLine };
-	get getsearchstocklinefromsoqpopUrl() { return this.configurations.baseUrl + this._searchStockLinefromSoqpop };	
+	get getsearchstocklinefromsoqpopUrl() { return this.configurations.baseUrl + this._searchStockLinefromSoqpop };
 	get getMultiSearchUrl() { return this.configurations.baseUrl + this._multiSearchStockLineUrl };
 	get stockListingUrl() { return this.configurations.baseUrl + this._stockListingUrl };
 	get stockListGlobalUrl() { return this.configurations.baseUrl + this._stockListGlobalUrl };
 	get stockSalesListingUrl() { return this.configurations.baseUrl + this._stockSalesListingUrl; };
-	get getsearchstocklinefromExchangequotepopUrl() { return this.configurations.baseUrl + this._searchStockLinefromExchangequotepop };	
+	get getsearchstocklinefromExchangequotepopUrl() { return this.configurations.baseUrl + this._searchStockLinefromExchangequotepop };
 
 	constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 		super(http, configurations, injector);
@@ -139,7 +141,7 @@ export class StocklineEndpoint extends EndpointFactory {
 				return this.handleErrorCommon(error, () => this.getManagemtentLengalEntityEndpoint());
 			});
 	}
-	
+
 	//for getting new stockline Adjustment Datatype
 	getNewstockLineEndpoint<T>(userObject: any): Observable<T> {
 
@@ -402,39 +404,47 @@ export class StocklineEndpoint extends EndpointFactory {
 	}
 
 
+	GetAllStocklineByPartAndCondtion(itemMasterId, condtionids,includeAlternatePartNumber,includeEquivalentPartNumber,includeRevicePartNumber,mastecompanyId) {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/GetAllStocklineByPartAndCondtion?itemMasterId=${itemMasterId}&condtionids=${condtionids}&includeAlternatePartNumber=${includeAlternatePartNumber}&includeEquivalentPartNumber=${includeEquivalentPartNumber}&includeRevicePartNumber=${includeRevicePartNumber}&mastecompanyId=${mastecompanyId}`, this.getRequestHeaders())
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.GetAllStocklineByPartAndCondtion(itemMasterId, condtionids, includeAlternatePartNumber,includeEquivalentPartNumber,includeRevicePartNumber, mastecompanyId));
+			})
+	}
+
+
 	getStockLineDetailsByStockLineId(stockLineId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/stocklinedetails?stockLineId=${stockLineId}`, this.getRequestHeaders())
-		.catch(err => {
-			return this.handleErrorCommon(err, () => this.getStockLineDetailsByStockLineId(stockLineId));
-		})
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.getStockLineDetailsByStockLineId(stockLineId));
+			})
 	}
 
 	getWareHouseDataBySiteId(SiteId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/warehousedata?siteId=${SiteId}`, this.getRequestHeaders())
-		.catch(err => {
-			return this.handleErrorCommon(err, () => this.getWareHouseDataBySiteId(SiteId));
-		})
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.getWareHouseDataBySiteId(SiteId));
+			})
 	}
 
 	getLocationDataByWarehouseId(warehouseId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/locationdata?warehouseId=${warehouseId}`, this.getRequestHeaders())
-		.catch(err => {
-			return this.handleErrorCommon(err, () => this.getLocationDataByWarehouseId(warehouseId));
-		})
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.getLocationDataByWarehouseId(warehouseId));
+			})
 	}
 
 	getShelfDataByLocationId(locationId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/shelfdata?locationId=${locationId}`, this.getRequestHeaders())
-		.catch(err => {
-			return this.handleErrorCommon(err, () => this.getShelfDataByLocationId(locationId));
-		})
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.getShelfDataByLocationId(locationId));
+			})
 	}
 
 	getBinDataByShelfId(shelfId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/bindata?shelfId=${shelfId}`, this.getRequestHeaders())
-		.catch(err => {
-			return this.handleErrorCommon(err, () => this.getBinDataByShelfId(shelfId));
-		})
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.getBinDataByShelfId(shelfId));
+			})
 	}
 
 	getStockLineReportViewList(payload) {
@@ -449,9 +459,9 @@ export class StocklineEndpoint extends EndpointFactory {
 
 	getStockLineDetailsById(stockLineId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/StockLine/StocklineDataById/${stockLineId}`, this.getRequestHeaders())
-		.catch(err => {
-			return this.handleErrorCommon(err, () => this.getStockLineDetailsById(stockLineId));
-		})
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.getStockLineDetailsById(stockLineId));
+			})
 	}
 
 	getStockLineListingEndpoint(data) {
@@ -470,30 +480,30 @@ export class StocklineEndpoint extends EndpointFactory {
 
 	getDataForPOROByStocklineId(id) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/StockLine/getdataforporobystocklineid/${id}`, this.getRequestHeaders())
-		.catch(error => {
-			return this.handleErrorCommon(error, () => this.getDataForPOROByStocklineId(id));
-		});
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getDataForPOROByStocklineId(id));
+			});
 	}
 
 	getStocklineAudit(id) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/StockLine/stocklineaudit/${id}`, this.getRequestHeaders())
-		.catch(error => {
-			return this.handleErrorCommon(error, () => this.getStocklineAudit(id));
-		});
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getStocklineAudit(id));
+			});
 	}
 
 	getStocklineAdjList(id) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/StockLine/getstocklineadjustmnetdatabystocklineid/${id}`, this.getRequestHeaders())
-		.catch(error => {
-			return this.handleErrorCommon(error, () => this.getStocklineAdjList(id));
-		});
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getStocklineAdjList(id));
+			});
 	}
 
 	getStocklineAdjData(id, dataTypeId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/StockLine/getadjustmentauditdata/${id}?adjustmentDataTypeId=${dataTypeId}`, this.getRequestHeaders())
-		.catch(error => {
-			return this.handleErrorCommon(error, () => this.getStocklineAdjData(id, dataTypeId));
-		});
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getStocklineAdjData(id, dataTypeId));
+			});
 	}
 
 	getStockLineSalesListingEndpoint(data: CustomPaginate<StocklineListSalesFilter>): Observable<CustomPaginate<StocklineListSalesFilter>> {
@@ -516,6 +526,13 @@ export class StocklineEndpoint extends EndpointFactory {
 			.catch(err => {
 				return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
 			})
+	}
+
+	GetAllStocklineByPartCondtionAndStockline(stocklineId,mastecompanyId) {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/stockline/GetAllStocklineByPartCondtionAndStockline?stocklineId=${stocklineId}&&mastecompanyId=${mastecompanyId}`, this.getRequestHeaders())
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.GetAllStocklineByPartCondtionAndStockline(stocklineId, mastecompanyId));
+		})
 	}
 
 }

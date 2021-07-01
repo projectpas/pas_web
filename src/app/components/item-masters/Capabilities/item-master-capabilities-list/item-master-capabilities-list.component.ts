@@ -27,7 +27,7 @@ import { AtaMainService } from '../../../../services/atamain.service';
 import { AtaSubChapter1Service } from '../../../../services/atasubchapter1.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { CommonService } from '../../../../services/common.service';
-declare var $ : any;
+declare var $: any;
 import { ItemMasterCreateCapabilitiesComponent } from '../item-master-create-capabilities/item-master-create-capabilities.component';
 import { DBkeys } from '../../../../services/db-Keys';
 import { DatePipe } from '@angular/common';
@@ -54,7 +54,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     loadingIndicator: boolean;
     auditHisory: any[];
     selectedOnly: boolean = false;
-	targetData: any;
+    targetData: any;
     selectedreason: any;
     disableSave: boolean = true;
     allComapnies: MasterCompany[];
@@ -122,7 +122,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     departmentData: any;
     @Input() isEnableItemMaster: boolean = false;
     @Input() isEnableItemMasterView: boolean = false;
-    @ViewChild("addCapabilityButton",{static:false}) addCapabilityButton: ElementRef;
+    @ViewChild("addCapabilityButton", { static: false }) addCapabilityButton: ElementRef;
     selectedCapabilityType: any;
     isCapViewMode: boolean = false;
     itemMasterCapesPageSize: Number = 10;
@@ -134,8 +134,8 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     textAreaLabel: string;
     textAreaInfo: string;
     currentDeleteStatus: boolean = false;
-    arraylistCapabilityTypeId:any[] = [];
-    arrayEmplsit:any[] = [];
+    arraylistCapabilityTypeId: any[] = [];
+    arrayEmplsit: any[] = [];
     disableIsVerified: boolean = false;
     disableMagmtStruct: boolean = true;
     allItemMasterCapsListOriginal: any[];
@@ -146,7 +146,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         private datePipe: DatePipe,
         private modalService: NgbModal, private authService: AuthService, private _route: Router, private alertService: AlertService, private dashnumberservices: DashNumberService, private formBuilder: FormBuilder, public workFlowtService: LegalEntityService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, public inteService: IntegrationService, private workOrderService: WorkOrderService, private commonservice: CommonService, private activatedRoute: ActivatedRoute) {
         this.dataSource = new MatTableDataSource();
-               
+
     }
 
     capabilityForm: any = {
@@ -159,7 +159,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     };
 
     ngOnInit() {
-        if(!this.isEnableItemMaster && !this.isEnableItemMasterView) {
+        if (!this.isEnableItemMaster && !this.isEnableItemMasterView) {
             this.itemMasterService.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list';
             this.itemMasterService.bredcrumbObj.next(this.itemMasterService.currentUrl);//Bread Crumb
         }
@@ -174,7 +174,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.getCapabilityTypesList();
         this.getLegalEntity();
     }
-    
+
     get mfgFormArray(): FormArray {
         return this.capabilitiesForm.get('mfgForm') as FormArray;
     }
@@ -193,11 +193,11 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     private loadData() {
         this.isSpinnerVisible = true;
         let iMid = this.activatedRoute.snapshot.paramMap.get('id');
-        
+
         if (!iMid) {
             iMid = "0"
         }
-        if(this.itemMasterId){
+        if (this.itemMasterId) {
             iMid = this.itemMasterId
         }
 
@@ -221,16 +221,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.pnCols = [
             { field: 'capabilityType', header: 'Cap Type' },
             { field: 'partNo', header: 'PN' },
-            { field: 'pnDiscription', header: 'PN Description' },
+            { field: 'pnDiscription', header: 'PN Description', width: "200px" },
             { field: 'level1', header: 'Management Structure' },
-            { field: 'level2'},
-            { field: 'level3'},
-            { field: 'level4'},
+            { field: 'level2' },
+            { field: 'level3' },
+            { field: 'level4' },
             { field: 'addedDate', header: 'Added Date' },
-            { field: 'isVerified', header: 'Verified' },
+            { field: 'isVerified', header: 'Verified', width: "80px" },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
-            { field: 'memo', header: 'Memo' },
+            { field: 'memo', header: 'Memo', width: "200px" },
             { field: 'createdDate', header: 'Created Date' },
             { field: 'createdBy', header: 'Created By' },
             { field: 'updatedDate', header: 'Updated Date' },
@@ -239,23 +239,23 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.nonPnCols = [
             { field: 'capabilityType', header: 'Cap Type' },
             { field: 'partNo', header: 'PN' },
-            { field: 'pnDiscription', header: 'PN Description' },
+            { field: 'pnDiscription', header: 'PN Description', width: "200px" },
             { field: 'level1', header: 'Level 01' },
             { field: 'level2', header: 'Level 02' },
             { field: 'level3', header: 'Level 03' },
             { field: 'level4', header: 'Level 04' },
             { field: 'addedDate', header: 'Added Date' },
-            { field: 'isVerified', header: 'Verified' },
+            { field: 'isVerified', header: 'Verified', width: "80px" },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
-            { field: 'memo', header: 'Memo' },
+            { field: 'memo', header: 'Memo', width: "200px" },
             { field: 'createdDate', header: 'Created Date' },
             { field: 'createdBy', header: 'Created By' },
             { field: 'updatedDate', header: 'Updated Date' },
             { field: 'updatedBy', header: 'Updated By' },
         ];
 
-        if(this.itemMasterId == undefined){
+        if (this.itemMasterId == undefined) {
             this.cols = this.nonPnCols
         } else {
             this.cols = this.pnCols
@@ -272,10 +272,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
                     return x;
                 }
-                else if (moment(x.addedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'addedDate'){
+                else if (moment(x.addedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'addedDate') {
                     return x;
                 }
-                else if(moment(x.verifiedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'verifiedDate'){
+                else if (moment(x.verifiedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'verifiedDate') {
                     return x;
                 }
             })]
@@ -295,18 +295,18 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 ...x,
                 isVerified: x.isVerified == 1 ? true : false,
                 memo: x.memo.replace(/<[^>]*>/g, ''),
-                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MM/dd/yyyy hh:mm a'): '',
-                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MM/dd/yyyy hh:mm a'): '',
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                addedDate: x.addedDate ? this.datePipe.transform(x.addedDate, 'MM/dd/yyyy hh:mm a') : '',
+                verifiedDate: x.verifiedDate ? this.datePipe.transform(x.verifiedDate, 'MM/dd/yyyy hh:mm a') : '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
             }
         });
-        this.allItemMasterCapsListOriginal=this.allItemMasterCapsList;
+        this.allItemMasterCapsListOriginal = this.allItemMasterCapsList;
         this.employeeList.filter(x => {
 
-            for(let i = 0; i< this.employeeList.length; i++){
-                for(let j=0; j < this.allItemMasterCapsList.length; j++){
-                    if(this.allItemMasterCapsList[j].verifiedById == this.employeeList[i].value){
+            for (let i = 0; i < this.employeeList.length; i++) {
+                for (let j = 0; j < this.allItemMasterCapsList.length; j++) {
+                    if (this.allItemMasterCapsList[j].verifiedById == this.employeeList[i].value) {
                         this.allItemMasterCapsList[j].verifiedBy = this.employeeList[i].label
                     }
                 }
@@ -317,7 +317,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        if(this.activatedRoute.snapshot.url[0].path == "app-item-master-create-capabilities"){
+        if (this.activatedRoute.snapshot.url[0].path == "app-item-master-create-capabilities") {
             this.ptnumberlistdata();
             this.showCapes = true;
             let el: HTMLElement = this.addCapabilityButton.nativeElement;
@@ -337,9 +337,9 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     dismissModel() {
         this.isDeleteMode = false;
         this.isEditMode = false;
-        if(this.modal){
+        if (this.modal) {
             this.modal.close();
-        }        
+        }
         this.isDeleteCapabilityPopupOpened = false;
         this.loadData();
     }
@@ -354,9 +354,9 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     get currentUserManagementStructureId(): number {
         return this.authService.currentUser
-          ? this.authService.currentUser.managementStructureId
-          : null;
-      }
+            ? this.authService.currentUser.managementStructureId
+            : null;
+    }
 
     openDelete(content, row) {
         this.isEditMode = false;
@@ -420,8 +420,8 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     get employeeId() {
-		return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-	}
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+    }
 
     parsedText(text) {
         if (text) {
@@ -446,10 +446,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
         this.getItemMasterDetailsById(row.itemMasterId);
 
-        if(this.selectedItemMasterCapData.verifiedDate){
+        if (this.selectedItemMasterCapData.verifiedDate) {
             this.selectedItemMasterCapData.verifiedDate = new Date(this.selectedItemMasterCapData.verifiedDate);
-        } 
-        if(this.selectedItemMasterCapData.addedDate){
+        }
+        if (this.selectedItemMasterCapData.addedDate) {
             this.selectedItemMasterCapData.addedDate = new Date(this.selectedItemMasterCapData.addedDate);
         }
     }
@@ -458,118 +458,118 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.disableSaveMemo = false;
     }
 
-    getManagementStructureDetails(id,empployid=0,editMSID=0) {
-		empployid = empployid == 0 ? this.employeeId : empployid ;
-		editMSID = this.isEditMode ? editMSID = id : 0;
-		this.commonservice.getManagmentStrctureData(id,empployid,editMSID).subscribe(response => {
-			if(response) {
-				const result = response;
-				if(result[0] && result[0].level == 'Level1') {
-                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
-						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
-							this.selectedItemMasterCapData.levelId1 = result[0].lstManagmentStrcture[i].label;
-						}
+    getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
+        empployid = empployid == 0 ? this.employeeId : empployid;
+        editMSID = this.isEditMode ? editMSID = id : 0;
+        this.commonservice.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
+            if (response) {
+                const result = response;
+                if (result[0] && result[0].level == 'Level1') {
+                    for (let i = 0; i < result[0].lstManagmentStrcture.length; i++) {
+                        if (result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+                            this.selectedItemMasterCapData.levelId1 = result[0].lstManagmentStrcture[i].label;
+                        }
                     }
-					this.maincompanylist =  result[0].lstManagmentStrcture;	
-					this.selectedItemMasterCapData.companyId = result[0].managementStructureId;
-					this.selectedItemMasterCapData.managementStructureId = result[0].managementStructureId;				
-					this.selectedItemMasterCapData.buId = 0;
-					this.selectedItemMasterCapData.divisionId = 0;
-					this.selectedItemMasterCapData.departmentId = 0;	
+                    this.maincompanylist = result[0].lstManagmentStrcture;
+                    this.selectedItemMasterCapData.companyId = result[0].managementStructureId;
+                    this.selectedItemMasterCapData.managementStructureId = result[0].managementStructureId;
+                    this.selectedItemMasterCapData.buId = 0;
+                    this.selectedItemMasterCapData.divisionId = 0;
+                    this.selectedItemMasterCapData.departmentId = 0;
                     this.businessUnitList = [];
-					this.divisionlist = [];
+                    this.divisionlist = [];
                     this.departmentList = [];
-				} else {
-					this.selectedItemMasterCapData.companyId = 0;
-					this.selectedItemMasterCapData.buId = 0;
-					this.selectedItemMasterCapData.divisionId = 0;
-					this.selectedItemMasterCapData.departmentId = 0;	
-					this.maincompanylist = [];
-					this.businessUnitList = [];
-					this.divisionlist = [];
-					this.departmentList = [];
-				}
-				
-				if(result[1] && result[1].level == 'Level2') {	
+                } else {
+                    this.selectedItemMasterCapData.companyId = 0;
+                    this.selectedItemMasterCapData.buId = 0;
+                    this.selectedItemMasterCapData.divisionId = 0;
+                    this.selectedItemMasterCapData.departmentId = 0;
+                    this.maincompanylist = [];
+                    this.businessUnitList = [];
+                    this.divisionlist = [];
+                    this.departmentList = [];
+                }
+
+                if (result[1] && result[1].level == 'Level2') {
                     this.businessUnitList = result[1].lstManagmentStrcture;
-                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
-						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
-							this.selectedItemMasterCapData.levelId2 = result[0].lstManagmentStrcture[i].label;
-						}
+                    for (let i = 0; i < result[0].lstManagmentStrcture.length; i++) {
+                        if (result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+                            this.selectedItemMasterCapData.levelId2 = result[0].lstManagmentStrcture[i].label;
+                        }
                     }
-					this.selectedItemMasterCapData.buId = result[1].managementStructureId;
-					this.selectedItemMasterCapData.managementStructureId = result[1].managementStructureId;
-					this.selectedItemMasterCapData.divisionId = 0;
-					this.selectedItemMasterCapData.departmentId = 0;
-					this.divisionlist = [];
-					this.departmentList = [];
-				} else {
-					if(result[1] && result[1].level == 'NEXT') {
+                    this.selectedItemMasterCapData.buId = result[1].managementStructureId;
+                    this.selectedItemMasterCapData.managementStructureId = result[1].managementStructureId;
+                    this.selectedItemMasterCapData.divisionId = 0;
+                    this.selectedItemMasterCapData.departmentId = 0;
+                    this.divisionlist = [];
+                    this.departmentList = [];
+                } else {
+                    if (result[1] && result[1].level == 'NEXT') {
                         this.businessUnitList = result[1].lstManagmentStrcture;
-					}
-					this.selectedItemMasterCapData.buId = 0;
-					this.selectedItemMasterCapData.divisionId = 0;
-					this.selectedItemMasterCapData.departmentId = 0;					
-					this.divisionlist = [];
-					this.departmentList = []; 
-				}
-
-				if(result[2] && result[2].level == 'Level3') {		
-                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
-						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
-							this.selectedItemMasterCapData.levelId3 = result[0].lstManagmentStrcture[i].label;
-						}
                     }
-					this.divisionlist =  result[2].lstManagmentStrcture;		
-					this.selectedItemMasterCapData.divisionId = result[2].managementStructureId;		
-					this.selectedItemMasterCapData.managementStructureId = result[2].managementStructureId;			
-					this.selectedItemMasterCapData.departmentId = 0;						
-					this.departmentList = [];			
-				} else {
-					if(result[2] && result[2].level == 'NEXT') {
-						this.divisionlist = result[2].lstManagmentStrcture;						
-					}
-					this.selectedItemMasterCapData.divisionId = 0; 
-					this.selectedItemMasterCapData.departmentId = 0;	
-					this.departmentList = [];}
+                    this.selectedItemMasterCapData.buId = 0;
+                    this.selectedItemMasterCapData.divisionId = 0;
+                    this.selectedItemMasterCapData.departmentId = 0;
+                    this.divisionlist = [];
+                    this.departmentList = [];
+                }
 
-				if(result[3] && result[3].level == 'Level4') {		
-                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
-						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
-							this.selectedItemMasterCapData.levelId4 = result[0].lstManagmentStrcture[i].label;
-						}
+                if (result[2] && result[2].level == 'Level3') {
+                    for (let i = 0; i < result[0].lstManagmentStrcture.length; i++) {
+                        if (result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+                            this.selectedItemMasterCapData.levelId3 = result[0].lstManagmentStrcture[i].label;
+                        }
                     }
-					this.departmentList = result[3].lstManagmentStrcture;;			
-					this.selectedItemMasterCapData.departmentId = result[3].managementStructureId;	
-					this.selectedItemMasterCapData.managementStructureId = result[3].managementStructureId;				
-				} else {
-					this.selectedItemMasterCapData.departmentId = 0; 
-					if(result[3] && result[3].level == 'NEXT') {
-						this.departmentList = result[3].lstManagmentStrcture;						
-					}
-				}	
-				//this.employeedata('',this.headerInfo.managementStructureId);	
-				this.onSelectManagementStruc();
-				this.isSpinnerVisible = false;
-			}
-			else
-			{
-				this.isSpinnerVisible = false;
-			}			
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
+                    this.divisionlist = result[2].lstManagmentStrcture;
+                    this.selectedItemMasterCapData.divisionId = result[2].managementStructureId;
+                    this.selectedItemMasterCapData.managementStructureId = result[2].managementStructureId;
+                    this.selectedItemMasterCapData.departmentId = 0;
+                    this.departmentList = [];
+                } else {
+                    if (result[2] && result[2].level == 'NEXT') {
+                        this.divisionlist = result[2].lstManagmentStrcture;
+                    }
+                    this.selectedItemMasterCapData.divisionId = 0;
+                    this.selectedItemMasterCapData.departmentId = 0;
+                    this.departmentList = [];
+                }
+
+                if (result[3] && result[3].level == 'Level4') {
+                    for (let i = 0; i < result[0].lstManagmentStrcture.length; i++) {
+                        if (result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+                            this.selectedItemMasterCapData.levelId4 = result[0].lstManagmentStrcture[i].label;
+                        }
+                    }
+                    this.departmentList = result[3].lstManagmentStrcture;;
+                    this.selectedItemMasterCapData.departmentId = result[3].managementStructureId;
+                    this.selectedItemMasterCapData.managementStructureId = result[3].managementStructureId;
+                } else {
+                    this.selectedItemMasterCapData.departmentId = 0;
+                    if (result[3] && result[3].level == 'NEXT') {
+                        this.departmentList = result[3].lstManagmentStrcture;
+                    }
+                }
+                //this.employeedata('',this.headerInfo.managementStructureId);	
+                this.onSelectManagementStruc();
+                this.isSpinnerVisible = false;
+            }
+            else {
+                this.isSpinnerVisible = false;
+            }
+        }, err => {
+            this.isSpinnerVisible = false;
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        });
     }
-    
+
     onSelectManagementStruc() {
-		if (this.selectedItemMasterCapData.companyId != 0) {            
-			this.disableMagmtStruct = false;
-		} else {
-			this.disableMagmtStruct = true;
-		}
-	}
+        if (this.selectedItemMasterCapData.companyId != 0) {
+            this.disableMagmtStruct = false;
+        } else {
+            this.disableMagmtStruct = true;
+        }
+    }
 
     getDynamicVariableData(variable, index) {
         return this[variable + index]
@@ -611,15 +611,15 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     resetVerified(rowData, value) {
-            if (value === false) {
-                rowData.verifiedById = null;
-                rowData.verifiedDate = null;
-            }
-             if(value == true){
-                rowData.verifiedDate = new Date();
-                const employee=this.authService.currentEmployee;
-                rowData.verifiedById = employee.value;
-            }
+        if (value === false) {
+            rowData.verifiedById = null;
+            rowData.verifiedDate = null;
+        }
+        if (value == true) {
+            rowData.verifiedDate = new Date();
+            const employee = this.authService.currentEmployee;
+            rowData.verifiedById = employee.value;
+        }
 
     }
 
@@ -757,15 +757,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.allDashnumberInfo = allWorkFlows;
     }
 
-    getCapabilityTypesList() {   
-        if(this.arraylistCapabilityTypeId.length == 0) {
-			this.arraylistCapabilityTypeId.push(0); }
-        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 0, this.arraylistCapabilityTypeId.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+    getCapabilityTypesList() {
+        if (this.arraylistCapabilityTypeId.length == 0) {
+            this.arraylistCapabilityTypeId.push(0);
+        }
+        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 0, this.arraylistCapabilityTypeId.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.capabalityTypeList = res;
-        },err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
-		});
+        }, err => {
+            const errorLog = err;
+            this.saveFailedHelper(errorLog);
+        });
     }
 
     partPNentHandler(event) {
@@ -866,7 +867,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             }
         }
     }
-    
+
     onCmmselection(event) {
         if (this.cmmList) {
             for (let i = 0; i < this.cmmList.length; i++) {
@@ -909,69 +910,69 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     getBUList(legalEntityId) {
-		this.selectedItemMasterCapData.buId = 0;
-		this.selectedItemMasterCapData.divisionId = 0;
-		this.selectedItemMasterCapData.departmentId = 0;	
-		this.businessUnitList = [];
-		this.divisionlist = [];
-		this.departmentList = [];
+        this.selectedItemMasterCapData.buId = 0;
+        this.selectedItemMasterCapData.divisionId = 0;
+        this.selectedItemMasterCapData.departmentId = 0;
+        this.businessUnitList = [];
+        this.divisionlist = [];
+        this.departmentList = [];
         if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
-			this.selectedItemMasterCapData.managementStructureId = legalEntityId;	
-			this.selectedItemMasterCapData.companyId = legalEntityId;		
-			this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId,this.employeeId ).subscribe(res => {
+            this.selectedItemMasterCapData.managementStructureId = legalEntityId;
+            this.selectedItemMasterCapData.companyId = legalEntityId;
+            this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
                 this.businessUnitList = res;
-			});
-		}
-	    else {
-			 this.selectedItemMasterCapData.managementStructureId  = 0;
-			 this.selectedItemMasterCapData.companyId = 0;
-		 }		
-	}
+            });
+        }
+        else {
+            this.selectedItemMasterCapData.managementStructureId = 0;
+            this.selectedItemMasterCapData.companyId = 0;
+        }
+    }
 
     getDivisionlist(buId) {
-		this.divisionlist = [];
-		this.departmentList = [];
-		this.selectedItemMasterCapData.divisionId = 0;		
-		this.selectedItemMasterCapData.departmentId = 0;		
+        this.divisionlist = [];
+        this.departmentList = [];
+        this.selectedItemMasterCapData.divisionId = 0;
+        this.selectedItemMasterCapData.departmentId = 0;
 
-		if (buId != 0 && buId != null && buId != undefined) {			
-			this.selectedItemMasterCapData.managementStructureId = buId;
-			this.selectedItemMasterCapData.buId = buId;
-			this.commonservice.getManagementStructurelevelWithEmployee(buId,this.employeeId ).subscribe(res => {
+        if (buId != 0 && buId != null && buId != undefined) {
+            this.selectedItemMasterCapData.managementStructureId = buId;
+            this.selectedItemMasterCapData.buId = buId;
+            this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
                 this.divisionlist = res;
-			});
-		 }  else {
-			 this.selectedItemMasterCapData.managementStructureId  = this.selectedItemMasterCapData.companyId;		
-		 }
+            });
+        } else {
+            this.selectedItemMasterCapData.managementStructureId = this.selectedItemMasterCapData.companyId;
+        }
     }
-    
+
     getDepartmentlist(divisionId) {
-		this.selectedItemMasterCapData.departmentId = 0;
-		this.departmentList = [];
-		if (divisionId != 0 && divisionId != null && divisionId != undefined) {
-		   this.selectedItemMasterCapData.divisionId = divisionId;
-		   this.selectedItemMasterCapData.managementStructureId = divisionId;
-		   this.commonservice.getManagementStructurelevelWithEmployee(divisionId,this.employeeId ).subscribe(res => {
-			this.departmentList = res;
-		});
-		}
-		 else {
-			 this.selectedItemMasterCapData.managementStructureId  = this.selectedItemMasterCapData.buId;
-			 this.selectedItemMasterCapData.divisionId = 0;
-		 }
-	}
+        this.selectedItemMasterCapData.departmentId = 0;
+        this.departmentList = [];
+        if (divisionId != 0 && divisionId != null && divisionId != undefined) {
+            this.selectedItemMasterCapData.divisionId = divisionId;
+            this.selectedItemMasterCapData.managementStructureId = divisionId;
+            this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
+                this.departmentList = res;
+            });
+        }
+        else {
+            this.selectedItemMasterCapData.managementStructureId = this.selectedItemMasterCapData.buId;
+            this.selectedItemMasterCapData.divisionId = 0;
+        }
+    }
 
     getDepartmentId(departmentId) {
-		if (departmentId != 0 && departmentId != null && departmentId != undefined) {
-			this.selectedItemMasterCapData.managementStructureId = departmentId;
-			this.selectedItemMasterCapData.departmentId = departmentId;			
-		}
-		 else {
-			 this.selectedItemMasterCapData.managementStructureId  = this.selectedItemMasterCapData.divisionId;
-			 this.selectedItemMasterCapData.departmentId = 0;
-		 }		
+        if (departmentId != 0 && departmentId != null && departmentId != undefined) {
+            this.selectedItemMasterCapData.managementStructureId = departmentId;
+            this.selectedItemMasterCapData.departmentId = departmentId;
+        }
+        else {
+            this.selectedItemMasterCapData.managementStructureId = this.selectedItemMasterCapData.divisionId;
+            this.selectedItemMasterCapData.departmentId = 0;
+        }
     }
-    
+
     getParentBUList(partList) {
         partList.managementStructureId = partList.parentCompanyId;
         partList.parentBulist = []
@@ -1047,7 +1048,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     async getPartPublicationByItemMasterId(itemMasterId) {
-        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId, this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.cmmList = res.map(x => {
                 return {
                     value: x.publicationRecordId,
@@ -1058,12 +1059,13 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     async getAllEmployeesByManagmentStructureID() {
-		if(this.arrayEmplsit.length == 0) {			
-		this.arrayEmplsit.push(0,this.authService.currentEmployee.value); }	
-        await this.commonservice.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
-            this.employeeList = res;            
+        if (this.arrayEmplsit.length == 0) {
+            this.arrayEmplsit.push(0, this.authService.currentEmployee.value);
+        }
+        await this.commonservice.autoCompleteDropdownsCertifyEmployeeByMS('', true, 200, this.arrayEmplsit.join(), this.currentUserManagementStructureId, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.employeeList = res;
         }, error => error => this.saveFailedHelper(error))
-	}
+    }
 
     addModels(capData) {
         let capbilitiesObj = new ItemMasterCapabilitiesModel;
@@ -1179,18 +1181,18 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         return itemExisted;
     }
 
-    saveCapability() {     
-        this.selectedItemMasterCapData["updatedBy"]="admin";  
-        this.selectedItemMasterCapData["createdBy"]="admin";  
+    saveCapability() {
+        this.selectedItemMasterCapData["updatedBy"] = this.userName;
+        this.selectedItemMasterCapData["createdBy"] = this.userName;
         this.selectedItemMasterCapData["isVerified"] = (this.selectedItemMasterCapData.isVerified == true || this.selectedItemMasterCapData.isVerified == 'check') ? true : false,
-        this.selectedItemMasterCapData["companyId"]=this.selectedItemMasterCapData.levelId1;  
-        this.selectedItemMasterCapData["buId"]=this.selectedItemMasterCapData.levelId2;  
-        this.selectedItemMasterCapData["divisionId"]=this.selectedItemMasterCapData.levelId3;  
-        this.selectedItemMasterCapData["departmentId"]=this.selectedItemMasterCapData.levelId4;  
-        this.selectedItemMasterCapData["masterCompanyId"]=DBkeys.MASTER_COMPANY_ID;
+            this.selectedItemMasterCapData["companyId"] = this.selectedItemMasterCapData.levelId1;
+        this.selectedItemMasterCapData["buId"] = this.selectedItemMasterCapData.levelId2;
+        this.selectedItemMasterCapData["divisionId"] = this.selectedItemMasterCapData.levelId3;
+        this.selectedItemMasterCapData["departmentId"] = this.selectedItemMasterCapData.levelId4;
+        this.selectedItemMasterCapData["masterCompanyId"] = this.authService.currentUser.masterCompanyId // DBkeys.MASTER_COMPANY_ID;
         this.selectedItemMasterCapData["verifiedDate"] = this.datePipe.transform(this.selectedItemMasterCapData["verifiedDate"], DBkeys.GLOBAL_DATE_FORMAT);
         this.selectedItemMasterCapData["addedDate"] = this.datePipe.transform(this.selectedItemMasterCapData["addedDate"], DBkeys.GLOBAL_DATE_FORMAT);
-        
+
         this.itemMasterService.updateItemMasterCapes(this.selectedItemMasterCapData.itemMasterCapesId, this.selectedItemMasterCapData).subscribe(res => {
             this.selectedItemMasterCapData = {};
 
@@ -1199,7 +1201,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 'Capes',
                 'Saved Capes Details Successfully',
                 MessageSeverity.success
-            );            
+            );
         })
     }
 
@@ -1207,7 +1209,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.showCapes = true;
     }
 
-    onViewCapes(rowData){
+    onViewCapes(rowData) {
         this.showCapes = true;
         this.selectedItemMasterCapData = rowData;
         //this.getItemMasterDetailsById(rowData.itemMasterId)
@@ -1216,7 +1218,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     closeCapes() {
         this.showCapes = false;
         this.isCapViewMode = false;
-        
+
         $('#capes1').modal('hide');
     }
 
@@ -1227,8 +1229,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     deleteCapability(content, capabilityId, capabilityType) {
         this.selectedForDeleteCapabilityId = capabilityId;
         this.selectedForDeleteContent = content;
-        if(capabilityType != '' && capabilityType != undefined)
-        {
+        if (capabilityType != '' && capabilityType != undefined) {
             this.selectedCapabilityType = capabilityType;
         }
         if (this.isDeleteCapabilityPopupOpened == true) {
@@ -1253,8 +1254,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     restoreCapability() {
-        if(this.capabilityId > 0)
-        {
+        if (this.capabilityId > 0) {
             this.itemMasterService.restoreCapabilityById(this.capabilityId, "admin").subscribe(res => {
                 this.dismissModel()
                 this.selectedCapabilityType = "";
@@ -1264,14 +1264,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     enableSave() {
-		this.disableSave = false;
+        this.disableSave = false;
     }
-    
+
     loadCapesList(data) {
         this.loadData();
     }
 
-    searchCaps(){
+    searchCaps() {
     }
 
     restoreCapabilityRow(capabilityId) {
@@ -1279,7 +1279,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             this.alertService.showMessage("Success", `Action was Restore successfully`, MessageSeverity.success);
             this.loadData();
         },
-        error => error => this.saveFailedHelper(error));        
+            error => error => this.saveFailedHelper(error));
     }
 
     getPageCount(totalNoofRecords, pageSize) {
@@ -1287,17 +1287,17 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     pageIndexChange(event) {
-		this.itemMasterCapesPageSize = event.rows;
-	}
+        this.itemMasterCapesPageSize = event.rows;
+    }
 
-    getAuditHistory(row){
+    getAuditHistory(row) {
         this.getItemMasterDetailsById(row.itemMasterId)
-            this.isSaving = true;
-            this.itemMasterService.getItemMasterCapabilityAuditHistory(row.itemMasterCapesId).subscribe(
-                results => {
-                    this.capabilityauditHisory = results
-                },
-                error => this.saveFailedHelper(error));
+        this.isSaving = true;
+        this.itemMasterService.getItemMasterCapabilityAuditHistory(row.itemMasterCapesId).subscribe(
+            results => {
+                this.capabilityauditHisory = results
+            },
+            error => this.saveFailedHelper(error));
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -1318,46 +1318,46 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 if (changes[property].currentValue == "Capes") {
                     this.loadData();
                     this.ptnumberlistdata();
-				}                
+                }
             }
-          }
-      }
+        }
+    }
 
     dismissCapesViewModal() {
-          $('#viewCap').modal('hide');
+        $('#viewCap').modal('hide');
     }
 
     dismissCapesHistoryModal() {
         $('#viewHistory').modal('hide');
     }
 
-    getItemMasterDetailsById(itemmasterid){
+    getItemMasterDetailsById(itemmasterid) {
         this.isSpinnerVisible = true;
         this.itemMasterService.getItemMasterDetailById(itemmasterid).subscribe(res => {
             this.partData = res[0];
-            
+
             this.isSpinnerVisible = false;
         }, error => {
             this.onDataLoadFailed(error)
         })
     }
 
-    onAddTextAreaInfo(value , content) {
+    onAddTextAreaInfo(value, content) {
         this.textAreaInfo = this.selectedItemMasterCapData.memo;
-        this.disableSaveMemo=true;
-        $('#capes-memo').modal('show');
-        
+        this.disableSaveMemo = true;
+        $('#edit-capes-memo').modal('show');
+
         //this.modal = this.modalService.open(content, { size: 'sm' });
-		// if(value == 'memo') {
-		// 	//this.textAreaLabel = 'Memo';
-		// 	this.textAreaInfo = this.selectedItemMasterCapData.memo;
-		// }
+        // if(value == 'memo') {
+        // 	//this.textAreaLabel = 'Memo';
+        // 	this.textAreaInfo = this.selectedItemMasterCapData.memo;
+        // }
     }
-    
+
     onSaveTextAreaInfo() {
         this.selectedItemMasterCapData.memo = this.textAreaInfo;
-		// if(this.textAreaLabel == 'Memo') {
-		// 	this.selectedItemMasterCapData.memo = this.textAreaInfo;
+        // if(this.textAreaLabel == 'Memo') {
+        // 	this.selectedItemMasterCapData.memo = this.textAreaInfo;
         // }
     }
 
@@ -1370,43 +1370,72 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
 
-    exportCSV(dt){
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
                 isVerified: x.isVerified == 1 ? 'check' : 'unchecked',
                 memo: x.memo.replace(/<[^>]*>/g, ''),
-                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
-                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                addedDate: x.addedDate ? this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                verifiedDate: x.verifiedDate ? this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy') : '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
     }
 
     errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if(errorLog.message) {
-		  if (errorLog.error && errorLog.error.errors.length > 0) {
-					for (let i = 0; i < errorLog.error.errors.length; i++){
-						msg = msg + errorLog.error.errors[i].message + '<br/>'
-					}
-				}
-				this.alertService.showMessage(
-                    errorLog.error.message,
-					msg,
-					MessageSeverity.error
-				);
-		   }
-		   else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			); }
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
     }
-    
-    columnsChanges() {}
+
+    isverified : boolean;    
+    checkChange(e) {                
+        if(e!==''){
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+            if(e=='y' || e=='ye' || e== 'yes' || e=='1' || e=='true' ||  e=='Y' || e=='YE' || e== 'YES' || e=='Ye' || e== 'Yes' ){
+                this.isverified = true;
+            }
+            else  if(e=='n' || e=='no' || e=='0' || e=='false' || e=='N' || e=='NO' || e=='No'){
+                this.isverified = false;                
+            }
+            else{
+                this.isverified = null;    
+            }
+            if(this.isverified!=null){
+                const data = [...this.allItemMasterCapsList.filter(x => {
+                    if (x.isVerified ==  this.isverified) {
+                        return x;
+                    }
+                })]
+                this.allItemMasterCapsList = data;
+            } else {
+                this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+            }            
+        } else {
+            this.allItemMasterCapsList = this.allItemMasterCapsListOriginal;
+        }
+    }
+
+    columnsChanges() { }
 }

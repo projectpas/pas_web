@@ -18,10 +18,13 @@ import { AuthService } from "../services/auth.service";
 import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { MenuItem } from 'primeng/api';
+import { DatePipe } from '@angular/common';
+
 @Component({
     selector: 'wf-create',
     templateUrl: './workflow-Create.component.html',
-    styleUrls: ['./workflow-Create.component.css']
+    styleUrls: ['./workflow-Create.component.css'],
+    providers: [DatePipe]
 })
 export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     @Input() isWorkOrder = false;
@@ -134,7 +137,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         { visible: false, selected: false, label: "Publications" },
         { visible: false, selected: false, label: "Measurements" }
     ];
-    totalPercent: Percent[];
+    totalPercent:any=[];
     currentPanelId: any;
     todaydate = new Date();
     toggle_wf_header: boolean = true;
@@ -165,9 +168,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     ];
     isOnload: any;
     percentBERTh: any;
-    currentActiveTab: string;
+    currentActiveTab: string; 
     isheadUpdate: any;
     originalworkFLow: any = {};
+    materialPercentValue:any;
+    expertisePercentValue:any;
+    chargesPercentValue:any;
+    othersPercentValue:any;
     constructor(private actionService: ActionService,
         private authService: AuthService,
         private router: ActivatedRoute,
@@ -179,6 +186,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         private _workflowService: WorkFlowtService,
         private itemser: ItemMasterService,
         private alertService: AlertService,
+        private datePipe: DatePipe,
         private commonService: CommonService) {
     }
     public ngOnDestroy() {
@@ -188,6 +196,41 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this._workflowService.enableUpdateMode = false;
             this._workflowService.currentWorkFlowId = null;
         }
+    }
+    setCurrentPanel(itemName, id): void {
+        this.currentPanelId = id;
+        itemName = itemName.replace(" ", "_");
+        this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
+        var list = document.getElementsByClassName('pan');
+        for (var i = 0; i < list.length; i++) {
+            list[i].classList.remove('active');
+            list[i].classList.remove('in');
+        }
+        var elem = document.getElementById('tab_' + itemName);
+        if (elem != null) {
+            document.getElementById('tab_' + itemName).classList.remove('fade');
+            document.getElementById('tab_' + itemName).classList.add('in');
+            document.getElementById('tab_' + itemName).classList.add('active');
+        }
+    }
+    SetCurrectTab(taskId, index?): void {
+        this.currenttaskId = taskId;
+        if (index !== undefined || index !== null) {
+            this.selectedSideTabIndex = index;
+        }
+        this.workFlow = this.workFlowList.filter(x => x.taskId == this.currenttaskId)[0];
+        var list = document.getElementsByClassName('actrmv');
+        for (var i = 0; i < list.length; i++) {
+            list[i].classList.add('active');
+        }
+        for (var i = 0; i < this.workFlowList.length; i++) {
+            document.getElementById('tab_' + this.workFlowList[i].taskId).classList.remove('active');
+        }
+        document.getElementById('tab_' + taskId).classList.add('active');
+        // if (this.workFlow.selectedItems != undefined || this.workFlow.selectedItems.length > 0) {
+            this.setSelectedItems(this.workFlow);
+        // }
+        this.selectedItems = this.workFlow.selectedItems;
     }
     setSelectedItems(workFlow: any): void {
         this.selectedItems = [];
@@ -237,10 +280,18 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                         this.setCurrentPanel(this.selectedItems[i].Name, this.selectedItems[i].Id);
                     } else {
                         this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
-                        return;
+                        // return;
                     }
                 }
             }
+            this.isSpinnerVisible=true;
+            setTimeout(() => {
+                this.isSpinnerVisible=false;
+          if(this.selectedItems && this.selectedItems.length !=0){
+            this.currentPanelId = this.selectedItems[0].Id;
+            this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id)
+          }
+            }, 500);
     }
     ngOnInit(): void {
         if (this._workflowService.enableUpdateMode) {
@@ -283,22 +334,23 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             let workFlowId: any = this.isWorkOrder ? this.workFlowId : this._workflowService.currentWorkFlowId;
             this.isSpinnerVisible = true;
             this.actionService.getWorkFlow(workFlowId).subscribe(workFlow => {
-                this.sourceWorkFlow = workFlow[0];
+                this.sourceWorkFlow = {...workFlow[0]};
                 if (workFlow && workFlow[0]) {
                     this.sourceWorkFlow.part = {
                         partId: workFlow[0].itemMasterId,
                         partName: workFlow[0].partNumber
                     }
                 }
+              
                 this.masterItemMasterId = workFlow[0].itemMasterId,
-                    this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : -1;
-                this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : -1;
-                this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : -1;
-                this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers > 0 ? this.sourceWorkFlow.percentageOfOthers : -1;
-                this.sourceWorkFlow.percentageOfTotal = this.sourceWorkFlow.percentageOfTotal > 0 ? this.sourceWorkFlow.percentageOfTotal : -1;
+                    this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : 0;
+                this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : 0;
+                this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : 0;
+                this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers > 0 ? this.sourceWorkFlow.percentageOfOthers : 0;
+                this.sourceWorkFlow.percentageOfTotal = this.sourceWorkFlow.percentageOfTotal > 0 ? this.sourceWorkFlow.percentageOfTotal : 0;
                 this.isSpinnerVisible = false;
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate);
-                this.sourceWorkFlow.workflowExpirationDate = new Date(this.sourceWorkFlow.workflowExpirationDate);
+                this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null ? new Date(this.sourceWorkFlow.workflowExpirationDate) : null;
                 this.itemMasterId = this.sourceWorkFlow.itemMasterId;
 
                 if (this.sourceWorkFlow.isFixedAmount == true) {
@@ -318,7 +370,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                     this.sourceWorkFlow.customerName = "";
                     this.sourceWorkFlow.customerCode = "";
                 }
-                if (this.sourceWorkFlow.costOfNew && this.sourceWorkFlow.percentageOfNew) {
+                this.sourceWorkFlow.customerName={'customerId': workFlow[0].customerId,'customerName':workFlow[0].customerName};
+               if (this.sourceWorkFlow.costOfNew && this.sourceWorkFlow.percentageOfNew) {
                     this.onPercentOfNew(this.sourceWorkFlow.costOfNew, this.sourceWorkFlow.percentageOfNew);
                 }
                 if (this.sourceWorkFlow.costOfReplacement && this.sourceWorkFlow.percentageOfReplacement) {
@@ -342,11 +395,11 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         } else {
             this.sourceWorkFlow.workScopeId = 0;
             this.sourceWorkFlow.currencyId = 0;
-            this.sourceWorkFlow.percentageOfMaterial = -1;
-            this.sourceWorkFlow.percentageOfExpertise = -1;
-            this.sourceWorkFlow.percentageOfCharges = -1;
-            this.sourceWorkFlow.percentageOfOthers = -1;
-            this.sourceWorkFlow.percentageOfTotal = -1;
+            this.sourceWorkFlow.percentageOfMaterial = 0;
+            this.sourceWorkFlow.percentageOfExpertise = 0;
+            this.sourceWorkFlow.percentageOfCharges = 0;
+            this.sourceWorkFlow.percentageOfOthers = 0;
+            this.sourceWorkFlow.percentageOfTotal = 0;
             this.currenttaskId = "0";
             this.loadCurrencyData();
             this.loadWorkScopedata();
@@ -518,12 +571,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 wf.publication = publication;
                 for (let pub of wf.publication) {
 
-                    this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
-                        model => {
-                            pub["publicationModels"] = model;
-                        },
-                        error => this.errorMessage = <any>error
-                    );
+                    // this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
+                    //     model => {
+                    //         pub["publicationModels"] = model;
+                    //     },
+                    //     error => this.errorMessage = <any>error
+                    // );
                     for (let dn of pub.workflowPublicationDashNumbers) {
                         dn.dashNumberId = dn.aircraftDashNumberId;
                     }
@@ -559,7 +612,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, 0,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
-                this.totalPercent = res.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
+                this.totalPercent = res.sort((n1,n2) => n1.label - n2.label);
             });
     }
     berDetermination(value, from): any {
@@ -785,8 +838,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (event == 'percentage') {
             this.ispercent = true;
             this.sourceWorkFlow.isPercentageofNew = true;
+               this.sourceWorkFlow.percentageOfNew = this.sourceWorkFlow.percentageOfNew ? this.sourceWorkFlow.percentageOfNew :-1;
         }
         if (event == 'percentreplace') {
+            this.sourceWorkFlow.percentageOfReplacement= this.sourceWorkFlow.percentageOfReplacement? this.sourceWorkFlow.percentageOfReplacement:-1;
             this.percentreplcae = true;
             this.sourceWorkFlow.isPercentageOfReplacement = true;
         }
@@ -804,7 +859,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.ispercent = false;
             this.sourceWorkFlow.isPercentageofNew = false;
              this.sourceWorkFlow.percentOfNew = undefined
-            this.sourceWorkFlow.percentageOfNew = '';
+            this.sourceWorkFlow.percentageOfNew = this.sourceWorkFlow.percentageOfNew ? this.sourceWorkFlow.percentageOfNew :-1;
             this.sourceWorkFlow.costOfNew = '';
         }
     }
@@ -814,7 +869,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.sourceWorkFlow.percentreplcae = false;
             this.sourceWorkFlow.percentOfReplacement = '';
             this.sourceWorkFlow.costOfReplacement = '';
-            this.sourceWorkFlow.percentageOfReplacement = '';
+            this.sourceWorkFlow.percentageOfReplacement = -1;
         }
     }
     private loadWorkScopedata() {
@@ -860,7 +915,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.disableUpdateButton = false;
         }
         for (let i = 0; i < this.customerNamecoll.length; i++) {
-            if (event == this.customerNamecoll[i][0].name) {
+            if (event.customerName == this.customerNamecoll[i][0].name) {
 
                 this.sourceWorkFlow.customerId = this.customerNamecoll[i][0].customerId;
                 this.sourceWorkFlow.customerCode = this.customerNamecoll[i][0].customerCode;
@@ -889,12 +944,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', query, true, 20, this.arrayCustomerIdlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.customerNames = res.map(x => {
                 this.isSpinnerVisible = false;
-                if (this.sourceWorkFlow.customerId == x.value) {
-                    this.sourceWorkFlow.customerName = {
-                        customerId: x.value,
-                        customerName: x.label
-                    }
-                }
+                // if (this.sourceWorkFlow.customerId == x.value) {
+                //     this.sourceWorkFlow.customerName = {
+                //         customerId: x.value,
+                //         customerName: x.label
+                //     }
+                // }
                 return {
                     customerId: x.value,
                     customerName: x.label
@@ -904,6 +959,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             });
 
         })
+    }
+    clearautoCompleteInput(data){
+        data.customerName='';
+        data.customerId=0;
     }
     getSelectedWorkflowActions() {
         if (this.isWorkFlowEdit) {
@@ -985,60 +1044,100 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.displaySelectedAction(selAction);
         }
     }
-    onMaterialCostChange(percentValue, from) {
+ 
+    onMaterialCostChange(value, from) {
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+        this.totalPercent.forEach(element => {
+            if(element.value ==value){
+                return this.materialPercentValue=Number(element.label);
+            }   
+        });
+    }
+    this.materialPercentValue =this.materialPercentValue ? this.materialPercentValue :0;
         if (from == 'html') {
             this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.MaterialCost) {
-            percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
+            // this.materialPercentValue == -1 || this.materialPercentValue == "-1" ? 0 :
+            this.materialPercentValue = this.materialPercentValue;
             const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
-            const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
+            const val = ((MaterialCost / 100) * this.materialPercentValue) + MaterialCost;
             this.EstMaterialCost = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
             this.EstMaterialCost = '0.00';
         }
     }
-    onExpertiseCostChange(percentValue, from) {
+
+    onExpertiseCostChange(value, from) {
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+            this.totalPercent.forEach(element => {
+                if(element.value ==value){
+                    return this.expertisePercentValue=Number(element.label);
+                }   
+            });
+        }
+        this.expertisePercentValue =this.expertisePercentValue ? this.expertisePercentValue :0;
         if (from == 'html') {
             this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.TotalExpertiseCost) {
-            percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
+            // this.expertisePercentValue == -1 || this.expertisePercentValue == "-1" ? 0 :
+            this.expertisePercentValue =  this.expertisePercentValue;
             const TotalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
-            const val = ((TotalExpertiseCost / 100) * percentValue) + TotalExpertiseCost;
+            const val = ((TotalExpertiseCost / 100) * this.expertisePercentValue) + TotalExpertiseCost;
             this.EstTotalExpertiseCost = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
             this.EstTotalExpertiseCost = '0.00';
         }
     }
-    onChargesChange(percentValue, from) {
+
+    onChargesChange(value, from) {
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+            this.totalPercent.forEach(element => {
+                if(element.value ==value){
+                    return this.chargesPercentValue=Number(element.label);
+                }   
+            });
+        }
+        this.chargesPercentValue =this.chargesPercentValue ? this.chargesPercentValue :0;
         if (from == 'html') {
             this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.TotalCharges) {
-            percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
+            // this.chargesPercentValue == -1 || this.chargesPercentValue == "-1" ? 0 :
+            this.chargesPercentValue =  this.chargesPercentValue;
             const TotalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
-            const val = ((TotalCharges / 100) * percentValue) + TotalCharges;
+            const val = ((TotalCharges / 100) * this.chargesPercentValue) + TotalCharges;
             this.EstTotalCharges = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
             this.EstTotalCharges = '0.00';
         }
     }
-    onOtherChange(percentValue, from) {
+ 
+    onOtherChange(value, from) {
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+            this.totalPercent.forEach(element => {
+                if(element.value ==value){
+                    return this.othersPercentValue=Number(element.label);
+                }   
+            });
+        }
+        this.othersPercentValue =this.othersPercentValue ? this.othersPercentValue :0;
         if (from == 'html') {
             this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.sourceWorkFlow.otherCost) {
-            percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
+            // this.othersPercentValue == -1 || this.othersPercentValue == "-1" ? 0 : 
+            this.othersPercentValue = this.othersPercentValue;
             const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
-            const val = ((otherCost / 100) * percentValue) + otherCost;
+            const val = ((otherCost / 100) * this.othersPercentValue) + otherCost;
             this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
@@ -1047,7 +1146,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     }
     onChangeOtherCost() {
         if (this.sourceWorkFlow.otherCost <= 0) {
-            this.sourceWorkFlow.percentageOfOthers = -1;
+            this.sourceWorkFlow.percentageOfOthers =0;
+            //  -1;
         }
         if (this.UpdateMode) {
             this.disableUpdateButton = false;
@@ -1085,15 +1185,20 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         const EstTotalOthers = parseFloat(this.EstTotalOthers.toString().replace(/\,/g, ''));
         const total = EstMaterialCost + EstTotalExpertiseCost + EstTotalCharges + EstTotalOthers;
         this.TotalEst = formatNumberAsGlobalSettingsModule(total, 2);
-        const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
-        const totlapercent = ((this.TotalEst - this.Total) / this.Total) * 100
+
+    setTimeout(() => {
+        const totlapercentOriginal = ((parseFloat(this.TotalEst.toString().replace(/\,/g, '')) - parseFloat(this.Total.toString().replace(/\,/g, ''))) / parseFloat(this.Total.toString().replace(/\,/g, ''))) * 100;
+
+        const totlapercent=totlapercentOriginal ? totlapercentOriginal :0;
         this.sourceWorkFlow.percentageOfTotal = totlapercent;
         this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
-        setTimeout(() => {
-            let percentageofBerThreshold: any = (this.TotalEst / berThAmt) * 100;
-            this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
-            this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+   if(this.sourceWorkFlow.berThresholdAmount){
+    const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
+    let percentageofBerThreshold: any = (parseFloat(this.TotalEst.toString().replace(/\,/g, '')) / berThAmt) * 100;
+    this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
+    this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
 
+   }
         }, 1000);
     }
     calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
@@ -1115,23 +1220,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
-   
-//    if( this.MaterialCost <=0){
-// this.sourceWorkFlow.percentageOfMaterial=-1;
-//    }
-      
-//    if( this.TotalCharges <=0){
-//        this.sourceWorkFlow.percentageOfCharges=-1;
-// }
-   
-// if( this.TotalExpertiseCost <=0){
-//        this.sourceWorkFlow.percentageOfExpertise=-1;
-// }
-   
-// if( this.sourceWorkFlow.otherCost <=0){
-//        this.sourceWorkFlow.percentageOfOthers=-1;
-// }
-   
         const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
@@ -1139,10 +1227,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
         this.Total = formatNumberAsGlobalSettingsModule(total, 2);
         if (this.isOnload == true) {
-            const percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 ? 0 : this.sourceWorkFlow.percentageOfMaterial;
-            const percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise == -1 ? 0 : this.sourceWorkFlow.percentageOfExpertise;
-            const percentageOfCharges = this.sourceWorkFlow.percentageOfCharges == -1 ? 0 : this.sourceWorkFlow.percentageOfCharges;
-            const percentageOfOthers = this.sourceWorkFlow.percentageOfOthers == -1 ? 0 : this.sourceWorkFlow.percentageOfOthers
+            this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == 0 ? 0 : this.sourceWorkFlow.percentageOfMaterial;
+            this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise == 0 ? 0 : this.sourceWorkFlow.percentageOfExpertise;
+            this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges == 0 ? 0 : this.sourceWorkFlow.percentageOfCharges;
+            this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers == 0 ? 0 : this.sourceWorkFlow.percentageOfOthers
             this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
             this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise, 'onload');
             this.onChargesChange(this.sourceWorkFlow.percentageOfCharges, 'onload');
@@ -1153,7 +1241,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
         let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
         this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
-        this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+        // this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
         if (!this.isOnload) {
             if (this.Total > berThAmt && isDisplayErrorMesage && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
                 this.alertService.showMessage(this.title, 'Work Flow total cost is exceeding the BER Threshold Amount', MessageSeverity.info);
@@ -1165,24 +1253,48 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             return true;
         }
     }
-    onPercentOfNew(myValue, percentValue = 0) {
+    newCostPercentValue:any;
+    onPercentOfNew(myValue, pValue = 0) {
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+      if(pValue >0){
+        this.totalPercent.forEach(element => {
+            if(element.value ==pValue){
+               this.newCostPercentValue=Number(element.label);
+               return ;
+            }   
+        });
+      }
+        }
+        this.newCostPercentValue= this.newCostPercentValue  ? this.newCostPercentValue : 0
         this.sourceWorkFlow.costOfNew = this.sourceWorkFlow.costOfNew ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfNew, 2) : null;
         this.sourceWorkFlow.percentOfNew = '';
         if (myValue) {
             myValue = parseFloat(myValue.toString().replace(/\,/g, ''));
-            const val = (myValue / 100) * percentValue;
+            const val = ((myValue / 100) * this.newCostPercentValue)
             this.sourceWorkFlow.percentOfNew = formatNumberAsGlobalSettingsModule(val, 2);
         } else {
             this.sourceWorkFlow.percentOfNew = 0;
         }
         this.berDetermination(0, 'onload');
     }
-    onPercentOfReplcaement(myValue, percentValue = 0) {
+    replacePercentValue:any;
+    onPercentOfReplcaement(myValue, pValue = 0) {
+        if( this.totalPercent &&  this.totalPercent.length !=0){
+            if(pValue >0){
+            this.totalPercent.forEach(element => {
+                if(element.value ==pValue){
+                   this.replacePercentValue=Number(element.label);
+                   return;
+                }   
+            });
+        }
+        }
+        this.replacePercentValue= this.replacePercentValue ? this.replacePercentValue :0
         this.sourceWorkFlow.costOfReplacement = this.sourceWorkFlow.costOfReplacement ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfReplacement, 2) : null;
         this.sourceWorkFlow.percentOfReplacement = '';
         if (myValue) {
             myValue = parseFloat(myValue.toString().replace(/\,/g, ''));
-            let afterpercent = (myValue / 100) * percentValue;
+            let afterpercent = ((myValue / 100) * this.replacePercentValue)
             this.sourceWorkFlow.percentOfReplacement = formatNumberAsGlobalSettingsModule(afterpercent, 2);
 
         } else {
@@ -1229,64 +1341,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.isSpinnerVisible = false;
         });
     }
-    onDataLoadFailed(log) {
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
-    setCurrentPanel(itemName, id): void {
-        this.currentPanelId = id;
-        itemName = itemName.replace(" ", "_");
-        this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
-        var list = document.getElementsByClassName('pan');
-        for (var i = 0; i < list.length; i++) {
-            list[i].classList.remove('active');
-            list[i].classList.remove('in');
-        }
-        var elem = document.getElementById('tab_' + itemName);
-        if (elem != null) {
-            document.getElementById('tab_' + itemName).classList.remove('fade');
-            document.getElementById('tab_' + itemName).classList.add('in');
-            document.getElementById('tab_' + itemName).classList.add('active');
-        }
-    }
-    SetCurrectTab(taskId, index?): void {
-        this.currenttaskId = taskId;
-        if (index !== undefined || index !== null) {
-            this.selectedSideTabIndex = index;
-        }
-        this.workFlow = this.workFlowList.filter(x => x.taskId == this.currenttaskId)[0];
-        var list = document.getElementsByClassName('actrmv');
-        for (var i = 0; i < list.length; i++) {
-            list[i].classList.add('active');
-        }
-        for (var i = 0; i < this.workFlowList.length; i++) {
-            document.getElementById('tab_' + this.workFlowList[i].taskId).classList.remove('active');
-        }
-        document.getElementById('tab_' + taskId).classList.add('active');
-        if (this.workFlow.selectedItems != undefined || this.workFlow.selectedItems.length > 0) {
-            this.setSelectedItems(this.workFlow);
-        }
-        this.selectedItems = this.workFlow.selectedItems;
-    }
+
     AddPage() {
         this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
     }
@@ -2038,9 +2093,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (!this.calculateTotalWorkFlowCost(false)) {
             $('#confir').modal("show");
         }
-        if (this.finalCost == 0) {
+        // if (this.finalCost == 0) {
             this.confirmation();
-        }
+        // }
     }
     updateWorkFlow(): void {
         this.originalworkFLow = this.workFlow
@@ -2070,145 +2125,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     dataCancel() {
         $('#confir').modal("hide");
     }
-    confirmation() {
-        this.modifyForSaveUpdateApis();
-        if (this.isheadUpdate) {
-            this.sourceWorkFlow.charges = [];
-            this.sourceWorkFlow.directions = [];
-            this.sourceWorkFlow.equipments = [];
-            this.sourceWorkFlow.exclusions = [];
-            this.sourceWorkFlow.expertise = [];
-            this.sourceWorkFlow.materialList = [];
-            this.sourceWorkFlow.measurements = [];
-            this.sourceWorkFlow.publication = [];
-            this.isSpinnerVisible = true;
-            this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
-            this.sourceWorkFlow.createdBy = this.userName;
-            this.sourceWorkFlow.updatedBy = this.userName;
-            if (this.sourceWorkFlow.customerName) {
-                this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
-            }else{
-                this.sourceWorkFlow.customerId=null;
-            }
-            const createDataset = { ...this.sourceWorkFlow }
-            delete createDataset.customerName;
-            this.isSpinnerVisible = true;
-            this.actionService.addWorkFlowHeader(createDataset).subscribe(result => {
-                this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.title, "Work Flow header added successfully.", MessageSeverity.success);
-                this.isUpdateAfterCreate = true;
-                this._workflowService.enableUpdateMode = true;
-                this._workflowService.currentWorkFlowId = result.workflowId;
-                this.disableUpdateButton = true;
-                this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this._workflowService.currentWorkFlowId}`);
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-
-            return;
-        }
-        this.isSpinnerVisible = true;
-        this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
-        this.sourceWorkFlow.createdBy = this.userName;
-        this.sourceWorkFlow.updatedBy = this.userName;
-        const dataSet = { ...this.sourceWorkFlow }
-        delete dataSet.customerName;
-        this.actionService.getNewWorkFlow(dataSet).subscribe(
-            data => {
-                this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.title, "Work Flow added successfully.", MessageSeverity.success);
-                this.route.navigateByUrl('/workflowmodule/workflowpages/app-workflow-list');
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
-    upDateDataCancel() {
-        $('#UpdateConfirm').modal("hide");
-    }
-    updateConfirmation() {
-        this.modifyForSaveUpdateApis();
-        if (this.isHeaderUpdate) {
-            this.sourceWorkFlow.charges = [];
-            this.sourceWorkFlow.directions = [];
-            this.sourceWorkFlow.equipments = [];
-            this.sourceWorkFlow.exclusions = [];
-            this.sourceWorkFlow.expertise = [];
-            this.sourceWorkFlow.materialList = [];
-            this.sourceWorkFlow.measurements = [];
-            this.sourceWorkFlow.publication = [];
-            this.isSpinnerVisible = true;
-
-            this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
-            this.sourceWorkFlow.createdBy = this.userName;
-            this.sourceWorkFlow.updatedBy = this.userName;
-            if (this.sourceWorkFlow.customerName) {
-                this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
-            }else{
-                this.sourceWorkFlow.customerId=null;
-            }
-            const workflowData={...this.sourceWorkFlow}
-            delete    workflowData.customerName
-            this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {
-                this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
-                this.sourceWorkFlow.workflowId = result.workflowId;
-                this.UpdateMode = true;
-                this.disableUpdateButton = true;
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-
-            return;
-        }
-        if (this.workFlowList.length == 0) {
-            this.alertService.showMessage(this.title, "Atleast one task is required.", MessageSeverity.error);
-        }
-        this.isSpinnerVisible = true;
-        const originalData = { ...this.sourceWorkFlow };
-        const souceData = { ...this.sourceWorkFlow };
-        if (souceData.exclusions && souceData.exclusions.length != 0) {
-            souceData.exclusions.forEach(element => {
-                if (element.partName) {
-                    element.partNumber = element.partName.partNumber;
-                }
-                delete element.partName
-            });
-        }
-        if (souceData.measurements && souceData.measurements.length != 0) {
-            souceData.measurements.forEach(element => {
-                delete element.partName
-            });
-        }
-        if (souceData.publication && souceData.publication.length != 0) {
-            souceData.publication.forEach(element => {
-                delete element.allDashNumbers;
-                delete element.aircraft;
-                if (element.workflowPublicationDashNumbers && element.workflowPublicationDashNumbers.length != 0) {
-                    var i;
-                    for (i = 0; i < element.workflowPublicationDashNumbers.length; i++) {
-                        element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
-                        element.workflowPublicationDashNumbers[i].workflowId = souceData.workflowId
-                        delete element.workflowPublicationDashNumbers[i].dashNumberId;
-                    }
-                }
-            });
-        }
-        if (souceData.equipments && souceData.equipments.length != 0) {
-            souceData.equipments.forEach(element => {
-                element.partNumber = element.partNumber.name
-            });
-        }
-        delete souceData.customerName
-        this.actionService.getNewWorkFlow(souceData).subscribe(
-            result => {
-                this.isSpinnerVisible = false;
-                this.alertService.showMessage(this.title, "Work Flow updated successfully.", MessageSeverity.success);
-                this.route.navigateByUrl('/workflowmodule/workflowpages/app-workflow-list');
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
-    modifyForSaveUpdateApis(): void {
+    modifyForSaveUpdateApis(): void { 
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
@@ -2420,6 +2337,213 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             }
         }
     }
+    validateMethod(){ 
+        this.errorValidate=[];
+        for (let workflow of this.workFlowList) {
+            if (workflow.charges != undefined) {
+                for (let charge of workflow.charges) {
+                    if(charge.workflowChargeTypeId =='' || charge.workflowChargeTypeId ==0 || charge.workflowChargeTypeId ==undefined){
+                        this.errorValidate.push({'error':'Charge Type Not Added','task':workflow.ActionName,'attribute':'Charges'})
+                      }else if(charge.unitCost == '' || charge.unitCost == undefined || charge.unitCost <=0){
+                                this.errorValidate.push({'error':'Unit Cost Not Added','task':workflow.ActionName,'attribute':'Charges'})
+                        }else if(charge.quantity==0 ||charge.quantity==''){
+                                this.errorValidate.push({'error':'Quantity Not Added','task':workflow.ActionName,'attribute':'Charges'})
+                            }else if(charge.extendedCost <=0){
+                                this.errorValidate.push({'error':'Extended Cost Not Added','task':workflow.ActionName,'attribute':'Charges'})
+                            }
+            }
+        }
+            if (workflow.directions != undefined) {
+                for (let direction of workflow.directions) {
+                    if(direction.action ==''){
+                        this.errorValidate.push({'error':'Action Type Not Added','task':workflow.ActionName,'attribute':'Directions'})
+                      }
+                }
+            }
+            if (workflow.equipments != undefined) {
+                for (let equipment of workflow.equipments) {
+                    if(equipment.assetId =='' || equipment.assetId ==0||  equipment.assetId ==undefined){
+                        this.errorValidate.push({'error':'Tool Name Not Added','task':workflow.ActionName,'attribute':'Tools'})
+                      }else if(equipment.quantity == '' || equipment.quantity == undefined || equipment.quantity <=0){
+                                this.errorValidate.push({'error':'Quantity Not Added','task':workflow.ActionName,'attribute':'Tools'})
+                        }
+                }
+            }
+            if (workflow.exclusions != undefined) {
+                for (let exclusion of workflow.exclusions) {
+                    if(exclusion.itemMasterId ==0 || exclusion.itemMasterId =='' || exclusion.itemMasterId ==undefined){
+                        this.errorValidate.push({'error':'Tool Name Not Added','task':workflow.ActionName,'attribute':'Exclusions'})
+                      }
+                    //   else if(exclusion.quantity == '' || exclusion.quantity == undefined || exclusion.quantity <=0){
+                    //             this.errorValidate.push({'error':'Quantity Not Added','task':workflow.ActionName,'attribute':'Exclusions'})
+                    //     }
+                    //     else if(exclusion.unitCost == '' || exclusion.unitCost == undefined || exclusion.unitCost <=0){
+                    //         this.errorValidate.push({'error':'Unit Cost Not Added','task':workflow.ActionName,'attribute':'Charges'})
+                    // }
+                }
+            }
+            if (workflow.expertise != undefined) {
+                for (let expert of workflow.expertise) {
+                    if(expert.expertiseTypeId ==0 || expert.expertiseTypeId=='' || expert.expertiseTypeId==undefined){
+                        this.errorValidate.push({'error':'Expertise Type Not Added','task':workflow.ActionName,'attribute':'Expertise'})
+                      } 
+                }
+            }
+            if (workflow.materialList != undefined) {
+                for (let material of workflow.materialList) {
+                    if(material.itemMasterId =='' || material.itemMasterId ==undefined || material.itemMasterId ==0){
+                        this.errorValidate.push({'error':'PN Not Added','task':workflow.ActionName,'attribute':'Material list'})
+                      }else  if(material.conditionCodeId ==0 || material.conditionCodeId ==undefined){
+                        this.errorValidate.push({'error':'Cond Not Added','task':workflow.ActionName,'attribute':'Material list'})
+                      }else if(material.unitCost == '' || material.unitCost == undefined || material.unitCost <=0){
+                                this.errorValidate.push({'error':'Unit Cost Not Added','task':workflow.ActionName,'attribute':'Material list'})
+                        }else if(material.quantity=='0' || material.quantity==''){
+                                this.errorValidate.push({'error':'Qty Not Added','task':workflow.ActionName,'attribute':'Material list'})
+                            }else if(material.extendedCost <=0){
+                                this.errorValidate.push({'error':'Extended Cost Not Added','task':workflow.ActionName,'attribute':'Material list'})
+                            }
+                }
+            }
+            if (workflow.measurements != undefined) {
+                for (let measurement of workflow.measurements) {
+                    if(measurement.itemMasterId =='' || measurement.itemMasterId ==undefined || measurement.itemMasterId ==0){
+                        this.errorValidate.push({'error':'PN Not Added','task':workflow.ActionName,'attribute':'Measurements'})
+                      }
+                }
+            }
+            if (workflow.publication != undefined) {
+                for (let publication of workflow.publication) {
+                    if(publication.publicationId =='' || publication.publicationId ==undefined || publication.publicationId ==0){
+                        this.errorValidate.push({'error':'Pub ID Not Added','task':workflow.ActionName,'attribute':'Publications'})
+                      }
+                }
+            }
+        }
+        if(this.errorValidate && this.errorValidate.length !=0){
+            var msg = '';
+            this.errorValidate.forEach((error) => {
+                if (error.error != undefined) {
+                    msg +=error.task+ '-'+ error.attribute+ ':' + error.error  + '<br/>';
+                }
+            }); 
+
+
+            this.validateTask=false;
+            this.alertService.showMessage("Workflow", msg, MessageSeverity.error);
+            return;
+        }else{ 
+            this.validateTask=true;
+            this.modifyForSaveUpdateApis();
+        }
+    }
+
+    errorValidate:any=[];
+    validateTask:boolean=false;
+    upDateDataCancel() {
+        $('#UpdateConfirm').modal("hide");
+    }
+    updateConfirmation() { 
+        if (this.isHeaderUpdate) {
+            this.sourceWorkFlow.charges = [];
+            this.sourceWorkFlow.directions = [];
+            this.sourceWorkFlow.equipments = [];
+            this.sourceWorkFlow.exclusions = [];
+            this.sourceWorkFlow.expertise = [];
+            this.sourceWorkFlow.materialList = [];
+            this.sourceWorkFlow.measurements = [];
+            this.sourceWorkFlow.publication = [];
+            this.isSpinnerVisible = true;
+
+            this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
+            this.sourceWorkFlow.createdBy = this.userName;
+            this.sourceWorkFlow.updatedBy = this.userName;
+            if (this.sourceWorkFlow.customerName) {
+                this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
+            }else{
+                this.sourceWorkFlow.customerId=null;
+            }
+            if(this.sourceWorkFlow.workflowExpirationDate){
+                
+                this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate ? this.datePipe.transform(this.sourceWorkFlow.workflowExpirationDate, 'MMM-dd-yyyy') : null;
+            }
+            if(this.sourceWorkFlow.workflowCreateDate){
+                this.sourceWorkFlow.workflowCreateDate = this.sourceWorkFlow.workflowCreateDate ? this.datePipe.transform(this.sourceWorkFlow.workflowCreateDate, 'MMM-dd-yyyy') : null;
+            }
+
+            const workflowData={...this.sourceWorkFlow}
+            delete    workflowData.customerName
+            this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {
+                this.isSpinnerVisible = false;
+                this.sourceWorkFlow.version=result.version;
+                this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
+                this.sourceWorkFlow.workflowId = result.workflowId;
+                this.UpdateMode = true;
+                this.disableUpdateButton = true;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+
+            return;
+        }
+        // this.modifyForSaveUpdateApis();
+        this.validateMethod();
+        if (this.workFlowList.length == 0) {
+            this.alertService.showMessage(this.title, "Atleast one task is required.", MessageSeverity.error);
+        }
+if(this.validateTask==true){
+    this.isSpinnerVisible = true;
+    const originalData = { ...this.sourceWorkFlow };
+    const souceData = { ...this.sourceWorkFlow };
+    if (souceData.exclusions && souceData.exclusions.length != 0) {
+        souceData.exclusions.forEach(element => {
+            if (element.partName) {
+                element.partNumber = element.partName.partNumber;
+            }
+            delete element.partName
+        });
+    }
+    if (souceData.measurements && souceData.measurements.length != 0) {
+        souceData.measurements.forEach(element => {
+            delete element.partName
+        });
+    }
+    if (souceData.publication && souceData.publication.length != 0) {
+        souceData.publication.forEach(element => {
+            delete element.allDashNumbers;
+            delete element.aircraft;
+            if (element.workflowPublicationDashNumbers && element.workflowPublicationDashNumbers.length != 0) {
+                var i;
+                for (i = 0; i < element.workflowPublicationDashNumbers.length; i++) {
+                    element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
+                    element.workflowPublicationDashNumbers[i].workflowId = souceData.workflowId
+                    delete element.workflowPublicationDashNumbers[i].dashNumberId;
+                }
+            }
+        });
+    }
+    if (souceData.equipments && souceData.equipments.length != 0) {
+        souceData.equipments.forEach(element => {
+            element.partNumber = element.partNumber.name
+        });
+    }
+    delete souceData.customerName 
+    souceData.percentageOfNew= souceData.percentageOfNew==-1?0 :souceData.percentageOfNew;
+    souceData.percentageOfReplacement = souceData.percentageOfReplacement==-1?0 :souceData.percentageOfReplacement
+    this.actionService.getNewWorkFlow(souceData).subscribe(
+        result => {
+            this.isSpinnerVisible = false;
+            this.validateTask=false;
+            this.alertService.showMessage(this.title, "Work Flow updated successfully.", MessageSeverity.success);
+            // this.route.navigateByUrl('/workflowmodule/workflowpages/app-workflow-list');
+            this._workflowService.enableUpdateMode = true;
+            this.UpdateMode=false;
+            this.loadWorkFlow()
+        }, error => {
+            this.isSpinnerVisible = false;
+            this.validateTask=false;
+        });
+}
+    } 
     saveWorkFlowWorkOrder(isSaveToWorkFlow) {
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             this.sourceWorkFlow.charges = [];
@@ -2559,4 +2683,66 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             }
         }
     }
+
+//currently not using this method
+    confirmation() { 
+        //  this.validateMethod();
+    // this.modifyForSaveUpdateApis();
+
+        if (this.isheadUpdate) {
+            this.sourceWorkFlow.charges = [];
+            this.sourceWorkFlow.directions = [];
+            this.sourceWorkFlow.equipments = [];
+            this.sourceWorkFlow.exclusions = [];
+            this.sourceWorkFlow.expertise = [];
+            this.sourceWorkFlow.materialList = [];
+            this.sourceWorkFlow.measurements = [];
+            this.sourceWorkFlow.publication = [];
+            this.isSpinnerVisible = true;
+            this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
+            this.sourceWorkFlow.createdBy = this.userName;
+            this.sourceWorkFlow.updatedBy = this.userName;
+            if (this.sourceWorkFlow.customerName) {
+                this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
+            }else{
+                this.sourceWorkFlow.customerId=null;
+            }
+            const createDataset = { ...this.sourceWorkFlow }
+            delete createDataset.customerName;
+            this.isSpinnerVisible = true;
+            this.actionService.addWorkFlowHeader(createDataset).subscribe(result => {
+                this.isSpinnerVisible = false;
+                this.sourceWorkFlow.version=result.version;
+                this.alertService.showMessage(this.title, "Work Flow header added successfully.", MessageSeverity.success);
+                this.isUpdateAfterCreate = true;
+                this._workflowService.enableUpdateMode = true;
+                this._workflowService.currentWorkFlowId = result.workflowId;
+                this.disableUpdateButton = true;
+                this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this._workflowService.currentWorkFlowId}`);
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+
+            return;
+        }
+       
+        this.isSpinnerVisible = true;
+        this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
+        this.sourceWorkFlow.createdBy = this.userName;
+        this.sourceWorkFlow.updatedBy = this.userName;
+        const dataSet = { ...this.sourceWorkFlow }
+        delete dataSet.customerName;
+        dataSet.percentageOfNew= dataSet.percentageOfNew==-1?0 :dataSet.percentageOfNew;
+        dataSet.percentageOfReplacement = dataSet.percentageOfReplacement==-1?0 :dataSet.percentageOfReplacement
+        this.actionService.getNewWorkFlow(dataSet).subscribe(
+            data => {
+                this.isSpinnerVisible = false;
+                this.alertService.showMessage(this.title, "Work Flow added successfully.", MessageSeverity.success);
+                this.route.navigateByUrl('/workflowmodule/workflowpages/app-workflow-list');
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
+
+
 }

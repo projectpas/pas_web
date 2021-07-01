@@ -71,7 +71,7 @@ a.fa.fa-plus-circle {
 //     }
 // }
 td {
-    padding: 5px !important;
+    // padding: 5px !important;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -102,4 +102,8 @@ td {
 }
 .memo-margin-bottom{
     margin-bottom:3px !important;
+}
+.test_ct{
+    width: 100%;
+    text-align: center;
 }

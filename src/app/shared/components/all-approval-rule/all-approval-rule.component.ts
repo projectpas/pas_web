@@ -55,13 +55,13 @@ export class AllApprovalRuleComponent implements OnInit {
     auditHistory: any = [];
     modal; any;
     emplColumns = [
-        { field: 'employee', header: 'Employee' },
-        { field: 'seqNo', header: 'Seq No' }
+        { field: 'employee', header: 'Employee' }//,
+        // { field: 'seqNo', header: 'Seq No' }
     ]
     newDataObject = {
         "approvalRuleId": 0,
         "approvalTaskId": null,
-        "ruleNumberId": 0,
+        //"ruleNumberId": 0,
         "amountId": null,
         "value": null,
         "lowerValue": null,
@@ -86,15 +86,15 @@ export class AllApprovalRuleComponent implements OnInit {
     creatingData: any;
     headers = [
         { field: 'taskName', header: 'Task Name' },
-        { field: 'ruleNo', header: 'Rule No', width: "60px" },
-        { field: 'amount', header: 'Amount', width: "60px" },
-        { field: 'value', header: 'Value', width: "60px" },
-        { field: 'lowerValue', header: 'Lower Value', width: "60px" },
-        { field: 'upperValue', header: 'Upper Value', width: "60px" },
+        // { field: 'ruleNo', header: 'Rule No', width: "100px" },
+        { field: 'amount', header: 'Amount', width: "100px" },
+        { field: 'value', header: 'Value', width: "100px" },
+        { field: 'lowerValue', header: 'Lower Value', width: "100px" },
+        { field: 'upperValue', header: 'Upper Value', width: "100px" },
         { field: 'companyName', header: 'Level 01' },
         { field: 'buName', header: 'Level 02' },
-        { field: 'deptName', header: 'Level 03' },
-        { field: 'divName', header: 'Level 04' },
+        { field: 'divName', header: 'Level 03' },
+        { field: 'deptName', header: 'Level 04' },
         { field: 'approver', header: 'Approver' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
@@ -117,43 +117,57 @@ export class AllApprovalRuleComponent implements OnInit {
         this.enableSaveBtn = true;
     }
 
-  ngOnInit(){   
+    onSavecleardata() {
+        //this.creatingData.ruleNumberId = 0;
+        this.creatingData.amountId = null;
+        this.creatingData.upperValue = 0
+        this.creatingData.lowerValue = 0
+        this.creatingData.value = 0
+        this.employeelist = null
+        // if (this.employeelist && this.employeelist.value && this.employeelist.value > 0) 
+        // {
+        //     this.employeelist.value =0;
+        //     this.employeelist.label ='';
+        // }
+    }
 
-    this.dropdownSettings = {
-          singleSelection: false,
-          idField: 'value',
-          textField: 'label',
-          selectAllText: 'Select All',
-          unSelectAllText: 'UnSelect All',
-          itemsShowLimit: 1,
-          allowSearchFilter: false
-      };          
-      this.getRuleNumber();    
-      this.getPoAmountList();      
-      this.creatingData = Object.assign({}, this.newDataObject);
-      if(this.moduleType  == 'PO') {
-        this.moduleName = 'Purchase Order';       
-      }
-      else if(this.moduleType  == 'SOQ') {
-        this.moduleName = 'Sales Order Quote';       
-      }
-      else if(this.moduleType  == 'SO') {
-        this.moduleName = 'Sales Order';       
-      }
-      else if(this.moduleType  == 'RO') {
-        this.moduleName = 'Repair Order';       
-      }
-      else if(this.moduleType  == 'WO') {
-        this.moduleName = 'Work Order';       
-      }
-      else if(this.moduleType  == 'WOQ') {
-        this.moduleName = 'Work Order Quote';       
-      }
-      else if(this.moduleType  == 'ExchangeQuote') {
-        this.moduleName = 'Exchange Quote';       
-      }
-      this.getTaskNames();    	
-  }
+    ngOnInit() {
+
+        this.dropdownSettings = {
+            singleSelection: false,
+            idField: 'value',
+            textField: 'label',
+            selectAllText: 'Select All',
+            unSelectAllText: 'UnSelect All',
+            itemsShowLimit: 1,
+            allowSearchFilter: false
+        };
+        this.getRuleNumber();
+        this.getPoAmountList();
+        this.creatingData = Object.assign({}, this.newDataObject);
+        if (this.moduleType == 'PO') {
+            this.moduleName = 'Purchase Order';
+        }
+        else if (this.moduleType == 'SOQ') {
+            this.moduleName = 'Sales Order Quote';
+        }
+        else if (this.moduleType == 'SO') {
+            this.moduleName = 'Sales Order';
+        }
+        else if (this.moduleType == 'RO') {
+            this.moduleName = 'Repair Order';
+        }
+        else if (this.moduleType == 'WO') {
+            this.moduleName = 'Work Order';
+        }
+        else if (this.moduleType == 'WOQ') {
+            this.moduleName = 'Work Order Quote';
+        }
+        else if (this.moduleType == 'ExchangeQuote') {
+            this.moduleName = 'Exchange Quote';
+        }
+        this.getTaskNames();
+    }
 
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser
@@ -282,6 +296,8 @@ export class AllApprovalRuleComponent implements OnInit {
                 MessageSeverity.success
             );
             this.onSaveChange();
+            // Do not Comment This Method
+            //this.onSavecleardata();
         }
     }
 
@@ -341,7 +357,7 @@ export class AllApprovalRuleComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEdit ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -504,93 +520,93 @@ export class AllApprovalRuleComponent implements OnInit {
         this.onSaveChange();
     }
 
-errorMessageHandler(log) {
-    this.alertService.showMessage(
+    errorMessageHandler(log) {
+        this.alertService.showMessage(
             'Error',
             log.error,
             MessageSeverity.error
-    ); 
-}
+        );
+    }
 
-addNewApproval(){
-      this.creatingData = Object.assign({}, this.newDataObject);
-      if(this.moduleType  == 'PO') {
-        this.moduleName = 'Purchase Order';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      if(this.moduleType  == 'SOQ') {
-        this.moduleName = 'Sales Order Quote';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      if(this.moduleType  == 'RO') {
-        this.moduleName = 'Repair Order';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      if(this.moduleType  == 'SO') {
-        this.moduleName = 'Sales Order';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      if(this.moduleType  == 'WO') {
-        this.moduleName = 'Work Order';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      if(this.moduleType  == 'WOQ') {
-        this.moduleName = 'Work Order Quote';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      if(this.moduleType  == 'ExchangeQuote') {
-        this.moduleName = 'Exchange Quote';
-        this.creatingData.approvalTaskId = this.taskID;
-      }
-      this.getManagementStructureDetails(this.currentUserManagementStructureId,this.employeeId);
-      this.creatingData.managementStructureId = this.currentUserManagementStructureId;	
-      this.arrayEmplsit = [];
-      this.employeedata('',this.currentUserManagementStructureId);
-      this.employeeNames = [];     
-      
-  }
-  
- 
-
-  async getTaskNames(){
-    this.isSpinnerVisible = true;
-      await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name')
-      .subscribe(
-          (res)=>{
-              this.taskNameList = res;
-              res.forEach(element => {                  
-                if(element.label == 'PO Approval' && this.moduleType == 'PO') {
-                    this.taskID = element.value;
-                }
-                else if(element.label == 'Sales Quote Approval' && this.moduleType == 'SOQ') {
-                    this.taskID = element.value;
-                }
-                else if(element.label == 'RO Approval' && this.moduleType == 'RO') {
-                    this.taskID = element.value;
-                }
-                else if(element.label == 'SO Approval' && this.moduleType == 'SO') {
-                    this.taskID = element.value;
-                }
-                else if(element.label == 'WO Approval' && this.moduleType == 'WO') {
-                    this.taskID = element.value;
-                }
-                else if(element.label == 'WO Quote Approval' && this.moduleType == 'WOQ') {
-                    this.taskID = element.value;
-                }
-                else if(element.label == 'Exchange Quote Approval' && this.moduleType == 'ExchangeQuote') {
-                    this.taskID = element.value;
-                }
-            });
-                
+    addNewApproval() {
+        this.creatingData = Object.assign({}, this.newDataObject);
+        if (this.moduleType == 'PO') {
+            this.moduleName = 'Purchase Order';
             this.creatingData.approvalTaskId = this.taskID;
-            this.getPoApprovalList(this.taskID);
-            
-             this.isSpinnerVisible = false;
-          }, err => {
-              this.isSpinnerVisible = false;
-          }
-      );
-  }
+        }
+        if (this.moduleType == 'SOQ') {
+            this.moduleName = 'Sales Order Quote';
+            this.creatingData.approvalTaskId = this.taskID;
+        }
+        if (this.moduleType == 'RO') {
+            this.moduleName = 'Repair Order';
+            this.creatingData.approvalTaskId = this.taskID;
+        }
+        if (this.moduleType == 'SO') {
+            this.moduleName = 'Sales Order';
+            this.creatingData.approvalTaskId = this.taskID;
+        }
+        if (this.moduleType == 'WO') {
+            this.moduleName = 'Work Order';
+            this.creatingData.approvalTaskId = this.taskID;
+        }
+        if (this.moduleType == 'WOQ') {
+            this.moduleName = 'Work Order Quote';
+            this.creatingData.approvalTaskId = this.taskID;
+        }
+        if (this.moduleType == 'ExchangeQuote') {
+            this.moduleName = 'Exchange Quote';
+            this.creatingData.approvalTaskId = this.taskID;
+        }
+        this.getManagementStructureDetails(this.currentUserManagementStructureId, this.employeeId);
+        this.creatingData.managementStructureId = this.currentUserManagementStructureId;
+        this.arrayEmplsit = [];
+        this.employeedata('', this.currentUserManagementStructureId);
+        this.employeeNames = [];
+
+    }
+
+
+
+    async getTaskNames() {
+        this.isSpinnerVisible = true;
+        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name')
+            .subscribe(
+                (res) => {
+                    this.taskNameList = res;
+                    res.forEach(element => {
+                        if (element.label == 'PO Approval' && this.moduleType == 'PO') {
+                            this.taskID = element.value;
+                        }
+                        else if (element.label == 'Sales Quote Approval' && this.moduleType == 'SOQ') {
+                            this.taskID = element.value;
+                        }
+                        else if (element.label == 'RO Approval' && this.moduleType == 'RO') {
+                            this.taskID = element.value;
+                        }
+                        else if (element.label == 'SO Approval' && this.moduleType == 'SO') {
+                            this.taskID = element.value;
+                        }
+                        else if (element.label == 'WO Approval' && this.moduleType == 'WO') {
+                            this.taskID = element.value;
+                        }
+                        else if (element.label == 'WO Quote Approval' && this.moduleType == 'WOQ') {
+                            this.taskID = element.value;
+                        }
+                        else if (element.label == 'Exchange Quote Approval' && this.moduleType == 'ExchangeQuote') {
+                            this.taskID = element.value;
+                        }
+                    });
+
+                    this.creatingData.approvalTaskId = this.taskID;
+                    this.getPoApprovalList(this.taskID);
+
+                    this.isSpinnerVisible = false;
+                }, err => {
+                    this.isSpinnerVisible = false;
+                }
+            );
+    }
 
     async getRuleNumber() {
         await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo')
@@ -748,7 +764,7 @@ addNewApproval(){
                 this.creatingData = res;
                 this.employeeNames = this.creatingData.approver;
                 this.ApprovalRuleName = getValueFromArrayOfObjectById('label', 'value', this.creatingData.approvalTaskId, this.taskNameList);
-                this.ApprovalNumber = getValueFromArrayOfObjectById('label', 'value', this.creatingData.ruleNumberId, this.ruleNumList);
+                //this.ApprovalNumber = getValueFromArrayOfObjectById('label', 'value', this.creatingData.ruleNumberId, this.ruleNumList);
                 this.AmountName = getValueFromArrayOfObjectById('label', 'value', this.creatingData.amountId, this.approvalAmountList);
 
                 this.arrayEmplsit = [];

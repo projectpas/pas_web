@@ -62,8 +62,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
     //post
     private readonly _itemPNMappingUrlNew: string = "/api/ItemMaster/PNIMMappingPost";
     private readonly _ItemMasterAircraftPostUrlNew: string = environment.baseUrl + "/api/ItemMaster/ItemMasterAircraftPost";
-    private readonly _ItemMasterATAPostUrlNew: string = environment.baseUrl +"/api/ItemMaster/ItemMasterATAPost";
-    private readonly _ItemMasterATAUpdateUrlNew: string = environment.baseUrl +"/api/ItemMaster/ItemMasterATAUpdate";
+    private readonly _ItemMasterATAPostUrlNew: string = environment.baseUrl + "/api/ItemMaster/ItemMasterATAPost";
+    private readonly _ItemMasterATAUpdateUrlNew: string = environment.baseUrl + "/api/ItemMaster/ItemMasterATAUpdate";
     private readonly _ItemMasterPurcSaleUrlNew: string = "/api/ItemMaster/ItemMasterPurcSalePost";
     //get
     private readonly _getAircraftMapped: string = environment.baseUrl + "/api/ItemMaster/getAircraftMapped";
@@ -98,6 +98,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     private readonly _searchMulitPartNumberUrl: string = "/api/ItemMaster/searchmultipleparts";
     private readonly _multiSearchItemMasterUrl: string = "/api/ItemMaster/multisearch";
     private readonly _searchItemMasterfromExchangequotepop: string = "/api/ItemMaster/searchItemMasterfromExchangequotepop";
+    private readonly _searchItemMasterfromSpeedQuotepop: string = "/api/ItemMaster/searchItemMasterfromspeedquotepop";
 
     //Vendor Caps Air Craft
     private readonly _VendorMasterAircraftPostUrlNew: string = "/api/Vendor/VendorAircraftPost";
@@ -174,6 +175,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
     get advancedSearchstockListUrl() { return this.configurations.baseUrl + this._advanceSearchstockListUrl; }
     get advancedSearchNonStockListUrl() { return this.configurations.baseUrl + this._advanceSearchNonstockListUrl; }
     get getSearchItemMasterfromExchangeQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromExchangequotepop };
+    get getAuditHistoryurl() { return this.configurations.baseUrl + this.getAuditHistoryById }
+    get getSearchItemMasterfromSpeedQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromSpeedQuotepop };
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
@@ -242,7 +245,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getAircraftmodels<T>(id?): Observable<T> {
-        let url = `${this.getAircraftUrl}/${id!==undefined ? id : 1}`;
+        let url = `${this.getAircraftUrl}/${id !== undefined ? id : 1}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAircraftmodels(id));
@@ -265,11 +268,11 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getitemListEndpoint<T>(value): Observable<T> {
-        let url = `${this.listUrl}/${value}`;
+    getitemListEndpoint<T>(value, masterCompanyId): Observable<T> {
+        let url = `${this.listUrl}/${value}/${masterCompanyId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getitemListEndpoint(value));
+                return this.handleErrorCommon(error, () => this.getitemListEndpoint(value, masterCompanyId));
             });
     }
     getItemStockListEndPoint<T>(data): Observable<T> {
@@ -832,7 +835,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getAuditHistory<T>(ItemMasterId: number): Observable<T> {
-        let endpointUrl = `${this.getAuditHistoryById}/${ItemMasterId}`;
+        let endpointUrl = `${this.getAuditHistoryurl}/${ItemMasterId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAuditHistory(ItemMasterId));
@@ -1089,7 +1092,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
                 return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
             })
     }
-    
+
     searchMultiPartNumbers<T>(searchParameters: any): Observable<T> {
         return this.http.post<T>(this.getSearchMulitPartNumberUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
             .catch(err => {
@@ -1119,8 +1122,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getalterqquparts<T>(itemMasterId: number,masterCompanyId?): Observable<T> {
-        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}&&masterCompanyId=${masterCompanyId!==undefined ? masterCompanyId : 1}`;
+    getalterqquparts<T>(itemMasterId: number, masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}&&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`;
         return this.http
             .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -1256,7 +1259,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getItemMasterAircraftMappedAudit?itemMasterAircraftMappingId=${id}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterAircraftAuditHistory(id));
-            });            
+            });
     }
 
     getATAMappedAudit(id) {
@@ -1341,15 +1344,15 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getActivePartListByItemType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+    getActivePartListByItemType(type, masterCompanyId?) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId == undefined ? 1 : masterCompanyId}`)
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type,masterCompanyId));
+                return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type, masterCompanyId));
             });
     }
 
-    getItemMasterClassificationByType(type,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
+    getItemMasterClassificationByType(type, masterCompanyId?) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId == undefined ? 1 : masterCompanyId}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterClassificationByType(type));
             });
@@ -1372,6 +1375,12 @@ export class ItemMasterEndpoint extends EndpointFactory {
         return this.http.post<T>(this.getSearchItemMasterfromExchangeQuotepopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
             .catch(err => {
                 return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
+            })
+    }
+    searchitemmasterfromSpeedQuotepop<T>(searchParameters: any): Observable<T> {
+        return this.http.post<T>(this.getSearchItemMasterfromSpeedQuotepopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.searchitemmasterfromSpeedQuotepop(searchParameters));
             })
     }
 }

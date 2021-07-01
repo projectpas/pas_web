@@ -226,7 +226,7 @@ export class VendorsListComponent implements OnInit {
             { field: 'vendorName', header: 'Vendor Name' },
             { field: 'vendorCode', header: 'Vendor Code' },
             { field: 'description', header: 'Vendor Type' },
-            { field: 'classificationName', header: 'Vendor Classification' },
+            { field: 'classificationName', header: 'Vendor Classification' ,width:"180px"},
             { field: 'vendorEmail', header: 'Email' },
             { field: 'city', header: 'Vendor City' },
             { field: 'stateOrProvince', header: 'Vendor State' },
@@ -397,7 +397,7 @@ export class VendorsListComponent implements OnInit {
     private onHistoryLoadSuccessful(auditHistory: any, content) {
         this.isSpinnerVisible = false;
         //TO Items to Add Aftre All testinng
-        this.auditHisory = []; //auditHistory;
+        this.auditHisory = auditHistory;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
@@ -583,7 +583,7 @@ export class VendorsListComponent implements OnInit {
 
         this.isSpinnerVisible = false;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-        //$('#step1').collapse('show');  
+        $('#step1').collapse('show');  
        
     }
 

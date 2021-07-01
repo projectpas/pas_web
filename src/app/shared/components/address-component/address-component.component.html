@@ -363,6 +363,11 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <button class="btn btn-primary pull-right" (click)="savePurchaseOrderAddress()"
+                [disabled]="!enableAddSaveBtn">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
+        </div>
       
     </form>
 </ng-container>
@@ -592,13 +597,15 @@
                     (click)="resetAddressShipViaForm()">&times;</button>
                 <h4 class="modal-title"> {{ ShipViaHeader }} </h4>
             </div>
+             <form #addShipViaForm="ngForm" class="form-horizontal">
             <div class="modal-body">
                 <div class="form-row">
-                    <form #addShipViaForm="ngForm" class="form-horizontal">
+                   
                         <div class="form-group col-md-12">
                             <label class="col-md-6">Ship Via: <span class="clr-red">*</span></label>
                             <select class="form-control col-md-6" title="Ship Via" name="shipVia"
                                 [(ngModel)]="addShipViaFormForShipping.shipViaId" (change)="shipViaChange()" required>
+                                <option value="0">-- Select --</option>
                                 <option *ngFor="let object of allShipViaInfo" [ngValue]="object.value">{{object.label}}
                                 </option>
                             </select>
@@ -613,7 +620,9 @@
                             <label class="col-md-6" style="vertical-align: top;">Memo:</label>
                             <div class="col-md-6">
                                 <div class="form-group memo-popup-cstm">
-                                    <div [innerHTML]="addShipViaFormForShipping.memo" class="form-control"
+                                    <div [innerHTML]="addShipViaFormForShipping.memo"
+                                            [matTooltip]="parsedText(addShipViaFormForShipping.memo)"
+                                            matTooltipPosition="above" class="form-control"
                                         class="text_editor_box"
                                         style="width:100%;padding:0px !important;line-height:1.6">
                                     </div>
@@ -636,9 +645,10 @@
                                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="display: none;" [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this PO</button>
                             </div> -->
 
-                    </form>
+                    
                 </div>
             </div>
+        </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" style="display: none;"
                     [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this

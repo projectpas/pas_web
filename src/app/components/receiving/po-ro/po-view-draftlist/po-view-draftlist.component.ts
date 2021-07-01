@@ -26,9 +26,9 @@ export class POViewStockDraftListComponent implements OnInit {
         private alertService: AlertService) {
     }
     
-    ngOnInit() {  
-                   
-       this.isSpinnerVisible = true; 
+    ngOnInit() {            
+       //this.isSpinnerVisible = true; 
+       this.purchaseOrderPart = [];       
        this.purchaseOrderData.purchaseOderPart.map(x => {
        const data = {
                 ...x,

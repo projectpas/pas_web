@@ -1,7 +1,24 @@
 <div class="card new-card">
   <div class="card-body header-body">
+    <div class="row" *ngIf="!isView">
+      <div class="col-md-6 shipping-div float-left">
+        <label class="input-width-100-percent"></label>
+        <div class="form-group print-pick-ticket-div-left" *ngIf="isView == false">
+          <fieldset data-role="controlgroup">
+            <input type="checkbox" name="checkboxselectall" (click)="selectAllPT($event)"
+              [(ngModel)]="selectall" /><label for="checkboxselectall" class="chkbox">Select All</label></fieldset>
+        </div>
+      </div>
+      <div class="col-md-6 shipping-div float-right">
+        <label class="input-width-100-percent"></label>
+        <div class="form-group print-pick-ticket-div" *ngIf="isView == false">
+          <button type="submit" class="btn submit-btn btn btn-primary" [disabled]="disableBtn"
+            (click)="printPickTickets()">Print Pick Ticket</button>
+        </div>
+      </div>
+    </div>
     <div
-      [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+      [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex':'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
       style="min-height: 130px !important;">
       <div class="tableFixHead">
         <table class="table table-bordered" id="so-table">
@@ -11,7 +28,7 @@
                 {{ summaryColumn.header }}
               </span>
             </th>
-            <th>Actions</th>
+            <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
           </tr>
           <ng-container *ngIf="pickTickes.length > 0">
             <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
@@ -23,12 +40,12 @@
                       {{summaryPart[summaryColumn.field]}}
                     </span>
                   </td>
-                  <td style="position:sticky; width:80px">
+                  <td *ngIf="isView == false" style="min-width: 120px; position: sticky !important">
                     <span>
                       <button class="btn nobg" mat-icon-button
-                        (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
-                        matTooltipPosition="above" style="font-weight: bold;"
-                        [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
+                        (click)="pickticketItemInterface(summaryPart,pickticketieminterface)"
+                        matTooltip="Create Pick Ticket" matTooltipPosition="above" style="font-weight: bold;"
+                        [disabled]="!(summaryPart.readyToPick > 0)">
                         <i class="fa fa-plus"></i>
                       </button>
                     </span>
@@ -47,11 +64,14 @@
                   <th>Ctrl Num</th>
                   <th>ID Num</th>
                   <th colspan="2"></th>
-                  <th style="min-width: 120px; position: sticky !important">Actions</th>
+                  <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">Actions</th>
                 </tr>
                 <tr class="child-data splitship-child child-data-back"
                   *ngFor="let part of summaryPart.sopickticketchild; let stockIndex = index">
-                  <td></td>
+                  <td>
+                    <input id="{{stockIndex}}" name="part.selected{{stockIndex}}" type="checkbox"
+                      (change)="checkedToPrint($event, part);" [(ngModel)]="part.selected" />
+                  </td>
                   <td>
                     {{ part.soPickTicketNumber }}
                   </td>
@@ -83,7 +103,7 @@
                     {{ part.idNumber }}
                   </td>
                   <td colspan="2"></td>
-                  <td class="zui-sticky-col" style="width:107px !important">
+                  <td class="zui-sticky-col" style="width:107px !important" *ngIf="isView == false">
                     <span>
                       <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
                         (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
@@ -103,8 +123,9 @@
                     </span>
                     <span>
                       <button class="btn nobg" mat-icon-button
-                        (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
-                        matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
+                        (click)="pickticketItemInterfaceedit(part,pickticketieminterface, summaryPart.qtyToShip)"
+                        matTooltip="Edit" matTooltipPosition="above" style="font-weight: bold;"
+                        [disabled]="part.isConfirmed">
                         <i class="fa fa-pencil"></i>
                       </button>
                     </span>
@@ -238,75 +259,79 @@
   </div>
 </div>
 <ng-template #pickticketieminterface let-c="close" let-d="dismiss">
-      <div class="modal-header">
-        <button type="button" class="close font_chck" (click)="dismissModel()">
-          &times;
+  <div class="modal-header">
+    <button type="button" class="close font_chck" (click)="dismissModel()">
+      &times;
+    </button>
+    <h4 class="modal-title">Pick Item</h4>
+  </div>
+  <div class="modal-body">
+    <form #ptiteminterface="ngForm" class="form-horizontal">
+      <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom pickticket"
+        [columns]="pickTicketItemInterfaceheader" [scrollable]="true" [resizableColumns]="true" selectionMode="single"
+        [responsive]="true" [metaKeySelection]="true" [style]="{ width: '100%' }">
+        <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+            <col [ngStyle]="{'width': '50px'}" />
+            <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th class="text-left">
+            </th>
+            <th *ngFor="let col of pickTicketItemInterfaceheader">
+              {{col.header}}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
+          <tr pReorderableRowHandle>
+            <td>
+              <span>
+                <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
+                  (onChange)="onChangeOfPartSelection($event, part)" binary="true">
+                </p-checkbox>
+              </span>
+            </td>
+            <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+              <ng-container *ngIf="col.field != 'qtyToShip'">
+                {{part[col.field]}}
+              </ng-container>
+              <!--qtyToShip-->
+              <ng-container *ngIf="col.field =='qtyToShip'">
+                <!-- <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
+                  required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
+                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
+                  required="col.field =='qtyToShip'" /> -->
+                <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
+                  required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToShip}}"
+                  [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
+                  required="col.field =='qtyToShip'" />
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
+          <tr>
+            <td [attr.colspan]="18" class="no-records-cstm" style="text-align: left;">
+              No records found
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div class="modal-footer">
+        <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
+          [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
+          {{ isEdit ? 'Update' : 'Save' }}
         </button>
-        <h4 class="modal-title">Pick Item</h4>
+        <button type="button" (click)="dismissModel()" class="btn btn-danger">
+          Close
+        </button>
       </div>
-      <div class="modal-body">
-        <form #ptiteminterface="ngForm" class="form-horizontal">
-          <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom pickticket" [columns]="pickTicketItemInterfaceheader"
-            [scrollable]="true" [resizableColumns]="true" selectionMode="single" [responsive]="true"
-            [metaKeySelection]="true" [style]="{ width: '100%' }">
-            <ng-template pTemplate="colgroup" let-columns>
-              <colgroup>
-                <col [ngStyle]="{'width': '50px'}" />
-                <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
-              </colgroup>
-            </ng-template>
-            <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th class="text-left">
-                </th>
-                <th *ngFor="let col of pickTicketItemInterfaceheader">
-                  {{col.header}}
-                </th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
-              <tr pReorderableRowHandle>
-                <td>
-                  <span>
-                    <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
-                      (onChange)="onChangeOfPartSelection($event)" binary="true">
-                    </p-checkbox>
-                  </span>
-                </td>
-                <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
-                  <ng-container *ngIf="col.field != 'qtyToShip'">
-                    {{part[col.field]}}
-                  </ng-container>
-                  <!--qtyToShip-->
-                  <ng-container *ngIf="col.field =='qtyToShip'">
-                    <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
-                      required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
-                      [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false"
-                      required="col.field =='qtyToShip'" />
-                  </ng-container>
-                </td>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
-              <tr>
-                <td [attr.colspan]="18" class="no-records-cstm" style="text-align: left;">
-                  No records found
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-          <div class="modal-footer">
-            <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
-              [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
-              {{ isEdit ? 'Update' : 'Save' }}
-            </button>
-            <button type="button" (click)="dismissModel()" class="btn btn-danger">
-              Close
-            </button>
-          </div>
-        </form>
-      </div>
-    <!-- </div>
+    </form>
+  </div>
+  <!-- </div>
   </div> -->
 </ng-template>
 <!-- </div> -->

@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-declare var $ : any;
+declare var $: any;
 import { Params, ActivatedRoute } from '@angular/router';
 import { Router, NavigationExtras } from '@angular/router';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -68,8 +68,8 @@ export class CustomerContactsComponent implements OnInit {
 	selectedRowforDelete: any;
 	selectedAtappedRowforDelete: any;
 	selectedFirstName: any;
-	selectedLastName:any;
-	selectedMiddleName:any;
+	selectedLastName: any;
+	selectedMiddleName: any;
 	disablesaveForFirstname: boolean;
 	disableSaveMiddleName: boolean;
 	disableSaveLastName: boolean;
@@ -83,9 +83,9 @@ export class CustomerContactsComponent implements OnInit {
 		{ field: 'lastName', header: 'Last Name' },
 		{ field: 'contactTitle', header: 'Contact Title' },
 		{ field: 'email', header: 'Email' },
-		{ field: 'workPhone', header: 'Work Phone',width:"100px" },
-		{ field: 'mobilePhone', header: 'Mobile Phone',width:"100px" },
-		{ field: 'notes', header: 'Memo' },
+		{ field: 'workPhone', header: 'Work Phone', width: "130px" },
+		{ field: 'mobilePhone', header: 'Mobile Phone', width: "130px" },
+		{ field: 'notes', header: 'Memo', width: "250px" },
 		{ field: 'fax', header: 'Fax' },
 		{ field: 'createdDate', header: 'Created Date' },
 		{ field: 'createdBy', header: 'Created By' },
@@ -178,15 +178,15 @@ export class CustomerContactsComponent implements OnInit {
 		private masterComapnyService: MasterComapnyService,
 		private configurations: ConfigurationService,
 		private commonService: CommonService,
-		private atamain: AtaMainService,		
+		private atamain: AtaMainService,
 		private datePipe: DatePipe
 	) {
 		this.stopmulticlicks = false;
 		this.id = this.router.snapshot.params['id'];
 	}
 
-	ngOnInit() {		
-		
+	ngOnInit() {
+
 		if (this.editMode) {
 			//this.id = this.editGeneralInformationData.customerId;
 			this.customerCode = this.editGeneralInformationData.customerCode;
@@ -350,25 +350,25 @@ export class CustomerContactsComponent implements OnInit {
 				this.customerContacts = newarry;
 			}
 		}
-		this.customerContactsOriginal=this.customerContacts
+		this.customerContactsOriginal = this.customerContacts
 		this.totalRecords = this.customerContacts.length;
 		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 	}
 	dateFilterForTable(date, field) {
-        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
-            this.customerContacts = this.customerContactsOriginal;
-            const data = [...this.customerContacts.filter(x => {
-                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
-                    return x;
-                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
-                    return x;
-                }
-            })]
-            this.customerContacts = data;
-        } else {
-            this.customerContacts = this.customerContactsOriginal;
-        }
-    }
+		if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+			this.customerContacts = this.customerContactsOriginal;
+			const data = [...this.customerContacts.filter(x => {
+				if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+					return x;
+				} else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+					return x;
+				}
+			})]
+			this.customerContacts = data;
+		} else {
+			this.customerContacts = this.customerContactsOriginal;
+		}
+	}
 
 	restore(content, rowData) {
 		this.restorerecord = rowData;
@@ -383,7 +383,7 @@ export class CustomerContactsComponent implements OnInit {
 			this.getAllCustomerContact();
 			this.alertService.showMessage("Success", `Updated Successfully`, MessageSeverity.success);
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false})
+		}, error => { this.isSpinnerVisible = false })
 	}
 
 	restoreATA(content, rowData) {
@@ -404,7 +404,7 @@ export class CustomerContactsComponent implements OnInit {
 					this.isSpinnerVisible = false;
 					this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
 				},
-				error => {this.isSpinnerVisible = false})
+				error => { this.isSpinnerVisible = false })
 		}
 
 		this.modal.close();
@@ -450,7 +450,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownSelfContactList('firstName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('firstName', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId, this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -476,7 +476,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false})
+		}, error => { this.isSpinnerVisible = false })
 	}
 
 	getAllContactMiddleNameSmartDropDown(strText = '', contactName = '') {
@@ -484,7 +484,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownSelfContactList('middleName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('middleName', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId, this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -510,7 +510,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false})
+		}, error => { this.isSpinnerVisible = false })
 	}
 
 	getAllContactLastNameSmartDropDown(strText = '', contactName = '') {
@@ -518,7 +518,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownSelfContactList('lastName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('lastName', strText, true, this.arrayContactlist.join(), this.currentUserMasterCompanyId, this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -544,7 +544,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false})
+		}, error => { this.isSpinnerVisible = false })
 	}
 
 	filterFirstNames(event) {
@@ -581,7 +581,7 @@ export class CustomerContactsComponent implements OnInit {
 			...this.contactInformation, createdBy: this.userName, updatedBy: this.userName, isActive: true,
 			masterCompanyId: this.currentUserMasterCompanyId,
 			customerId: this.id,
-			tag:editValueAssignByCondition('tagName', this.contactInformation.tag),
+			tag: editValueAssignByCondition('tagName', this.contactInformation.tag),
 			contactTagId: editValueAssignByCondition('contactTagId', this.contactInformation.tag),
 			firstName: editValueAssignByCondition('firstName', this.contactInformation.firstName),
 			middleName: editValueAssignByCondition('middleName', this.contactInformation.middleName),
@@ -590,7 +590,7 @@ export class CustomerContactsComponent implements OnInit {
 		}
 		if (this.customerContacts && this.customerContacts == 0) {
 			data.isDefaultContact = true;
-		}		
+		}
 		await this.customerService.newAddContactInfo(data).subscribe(res => {
 			const responseForCustomerCreate = {
 				...data, ...res
@@ -644,22 +644,22 @@ export class CustomerContactsComponent implements OnInit {
 		this.getAllContactMiddleNameSmartDropDown('', rowData.middleName)
 		this.getAllContactLastNameSmartDropDown('', rowData.lastName)
 		setTimeout(() => {
-			if(rowData.contactTagId > 0){
+			if (rowData.contactTagId > 0) {
 				this.arrayTagNamelist.push(rowData.contactTagId);
 				this.getAllTagNameSmartDropDown('', rowData.contactTagId);
 			}
-		}, 300);		
+		}, 300);
 		this.isPrimatyContactData = rowData.isDefaultContact;
 		this.selectedFirstName = rowData.firstName
 		this.selectedMiddleName = rowData.middleName
 		this.selectedLastName = rowData.lastName
 		this.ediData = { ...rowData };
-		this.isEditButton = true;		
+		this.isEditButton = true;
 		this.sourceViewforContact = '';
 	}
 
 	updateCustomerContact() {
-		if(this.contactInformation.workPhone==undefined || this.contactInformation.workPhone==null || this.contactInformation.workPhone==""){		
+		if (this.contactInformation.workPhone == undefined || this.contactInformation.workPhone == null || this.contactInformation.workPhone == "") {
 			this.alertService.showMessage(
 				'Phone',
 				'Please Enter Work Phone...',
@@ -674,7 +674,7 @@ export class CustomerContactsComponent implements OnInit {
 			firstName: editValueAssignByCondition('firstName', this.contactInformation.firstName),
 			middleName: editValueAssignByCondition('middleName', this.contactInformation.middleName),
 			lastName: editValueAssignByCondition('lastName', this.contactInformation.lastName),
-			tag:editValueAssignByCondition('tagName', this.contactInformation.tag),			
+			tag: editValueAssignByCondition('tagName', this.contactInformation.tag),
 			contactTagId: this.contactInformation.tag == "NA" ? null : editValueAssignByCondition('contactTagId', this.contactInformation.tag)
 		}
 		if (String(data.isDefaultContact) == "Yes") {
@@ -683,7 +683,7 @@ export class CustomerContactsComponent implements OnInit {
 		}
 		else if (String(data.isDefaultContact) == "") {
 			data.isDefaultContact = false;
-		}		
+		}
 		this.customerService.updateContactinfo(data).subscribe(res => {
 			//this.getAllContacts();
 			this.customerContacts = [];
@@ -719,7 +719,8 @@ export class CustomerContactsComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			}, error => {
 				this.loaderForContacts = false;
-				this.isSpinnerVisible = false;})
+				this.isSpinnerVisible = false;
+			})
 		}
 	}
 
@@ -738,7 +739,7 @@ export class CustomerContactsComponent implements OnInit {
 				MessageSeverity.success
 			);
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;});
+		}, error => { this.isSpinnerVisible = false; });
 	}
 
 	resetfileds() {
@@ -777,7 +778,7 @@ export class CustomerContactsComponent implements OnInit {
 					this.refreshCustomerContactMapped.emit(this.id);
 					this.isSpinnerVisible = false;
 				},
-				error => {this.isSpinnerVisible = false;});
+				error => { this.isSpinnerVisible = false; });
 		}
 
 		this.modal.close();
@@ -824,7 +825,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	// get subchapter by Id in the add ATA Mapping
@@ -841,7 +842,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	// post the ata Mapping 
@@ -912,7 +913,7 @@ export class CustomerContactsComponent implements OnInit {
 			const responseData = res[0];
 			this.originalATASubchapterData = responseData;
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false})
+		}, error => { this.isSpinnerVisible = false })
 	}
 
 	async getATACustomerContactMapped() {
@@ -930,7 +931,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	deleteATAMapped(content, rowData) {
@@ -960,7 +961,7 @@ export class CustomerContactsComponent implements OnInit {
 						this.isDeleteMode = false;
 					}
 				},
-				error => {this.isSpinnerVisible = false;});
+				error => { this.isSpinnerVisible = false; });
 		}
 
 		this.modal.close();
@@ -971,7 +972,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.customerService.getCustomerContactAuditDetails(rowData.customerContactId, rowData.customerId).subscribe(res => {
 			this.auditHistory = res;
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	getColorCodeForHistory(i, field, value) {
@@ -988,7 +989,8 @@ export class CustomerContactsComponent implements OnInit {
 
 	nextClick() {
 		this.stopmulticlicks = true;
-		this.tab.emit('AircraftInfo');
+		//this.tab.emit('AircraftInfo');
+		this.tab.emit('Atachapter');
 		setTimeout(() => {
 			this.stopmulticlicks = false;
 		}, 500)
@@ -1031,106 +1033,106 @@ export class CustomerContactsComponent implements OnInit {
 
 	isfirstNameAlreadyExists: boolean = false;
 	checkfirstNameExist(value) {
-       // this.changeName = true;
-        this.isfirstNameAlreadyExists = false;
-        this.disablesaveForFirstname = false;
-        if (value != this.selectedFirstName) {
-            if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
-                for (let i = 0; i < this.firstNamesList.length; i++) {
-                    if (this.contactInformation.firstName == this.firstNamesList[i].firstName || value == this.firstNamesList[i].firstName) {
-                        this.isfirstNameAlreadyExists = true;
-                        this.disablesaveForFirstname = true;
-                        return;
-                    }
-                }
-            }
-        }
+		// this.changeName = true;
+		this.isfirstNameAlreadyExists = false;
+		this.disablesaveForFirstname = false;
+		if (value != this.selectedFirstName) {
+			if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
+				for (let i = 0; i < this.firstNamesList.length; i++) {
+					if (this.contactInformation.firstName == this.firstNamesList[i].firstName || value == this.firstNamesList[i].firstName) {
+						this.isfirstNameAlreadyExists = true;
+						this.disablesaveForFirstname = true;
+						return;
+					}
+				}
+			}
+		}
 	}
 
-	selectedFirstnameName() {		
-		const firstName = editValueAssignByCondition('firstName', this.contactInformation.firstName);		
-        if (firstName == this.selectedFirstName){
+	selectedFirstnameName() {
+		const firstName = editValueAssignByCondition('firstName', this.contactInformation.firstName);
+		if (firstName == this.selectedFirstName) {
 			this.isfirstNameAlreadyExists = false;
-			if(this.isEditButton)
-			this.disablesaveForFirstname = false;
+			if (this.isEditButton)
+				this.disablesaveForFirstname = false;
 		}
-        else{
+		else {
 			this.isfirstNameAlreadyExists = true;
-			if(this.isEditButton)
-			this.disablesaveForFirstname = true;
-		}			
+			if (this.isEditButton)
+				this.disablesaveForFirstname = true;
+		}
 	}
 
 	ismiddleNameAlreadyExists: boolean = false;
 	checkmiddleNameExist(value) {
-       // this.changeName = true;
-        this.ismiddleNameAlreadyExists = false;
-        this.disableSaveMiddleName = false;
-        if (value != this.selectedMiddleName) {
-            if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
-                for (let i = 0; i < this.middleNamesList.length; i++) {
-                    if (this.contactInformation.middleName == this.middleNamesList[i].middleName || value == this.middleNamesList[i].middleName) {
-                        this.ismiddleNameAlreadyExists = true;
-                        this.disableSaveMiddleName = true;
-                        return;
-                    }
-                }
-            }
-        }
-	}
-
-	selectedmiddleNameName() {				
-		const middleName = editValueAssignByCondition('middleName', this.contactInformation.middleName);		
-        if (middleName == this.selectedFirstName){
-			this.ismiddleNameAlreadyExists = false;
-			if(this.isEditButton)
-			this.disableSaveMiddleName = false;
+		// this.changeName = true;
+		this.ismiddleNameAlreadyExists = false;
+		this.disableSaveMiddleName = false;
+		if (value != this.selectedMiddleName) {
+			if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
+				for (let i = 0; i < this.middleNamesList.length; i++) {
+					if (this.contactInformation.middleName == this.middleNamesList[i].middleName || value == this.middleNamesList[i].middleName) {
+						this.ismiddleNameAlreadyExists = true;
+						this.disableSaveMiddleName = true;
+						return;
+					}
+				}
+			}
 		}
-        else{
+	}
+
+	selectedmiddleNameName() {
+		const middleName = editValueAssignByCondition('middleName', this.contactInformation.middleName);
+		if (middleName == this.selectedFirstName) {
+			this.ismiddleNameAlreadyExists = false;
+			if (this.isEditButton)
+				this.disableSaveMiddleName = false;
+		}
+		else {
 			this.ismiddleNameAlreadyExists = true;
-			if(this.isEditButton)
-			this.disableSaveMiddleName = true;
-		}			
+			if (this.isEditButton)
+				this.disableSaveMiddleName = true;
+		}
 	}
 
 
 
 
-	
+
 	islastNameAlreadyExists: boolean = false;
 	checklastNameExist(value) {
-       // this.changeName = true;
-        this.islastNameAlreadyExists = false;
-        this.disableSaveLastName = false;
-        if (value != this.selectedLastName) {
-            if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
-                for (let i = 0; i < this.lastNamesList.length; i++) {
-                    if (this.contactInformation.lastName == this.lastNamesList[i].lastName || value == this.lastNamesList[i].lastName) {
-                        this.islastNameAlreadyExists = true;
-                        this.disableSaveLastName = true;
-                        return;
-                    }
-                }
-            }
-        }
+		// this.changeName = true;
+		this.islastNameAlreadyExists = false;
+		this.disableSaveLastName = false;
+		if (value != this.selectedLastName) {
+			if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
+				for (let i = 0; i < this.lastNamesList.length; i++) {
+					if (this.contactInformation.lastName == this.lastNamesList[i].lastName || value == this.lastNamesList[i].lastName) {
+						this.islastNameAlreadyExists = true;
+						this.disableSaveLastName = true;
+						return;
+					}
+				}
+			}
+		}
 	}
 
-	selectedlastNameName() {				
-		const lastName = editValueAssignByCondition('lastName', this.contactInformation.lastName);		
-        if (lastName == this.selectedLastName){
+	selectedlastNameName() {
+		const lastName = editValueAssignByCondition('lastName', this.contactInformation.lastName);
+		if (lastName == this.selectedLastName) {
 			this.islastNameAlreadyExists = false;
-			if(this.isEditButton)
-			this.disableSaveLastName = false;
+			if (this.isEditButton)
+				this.disableSaveLastName = false;
 		}
-        else{
+		else {
 			this.islastNameAlreadyExists = true;
-			if(this.isEditButton)
-			this.disableSaveLastName = true;
-		}			
-    }
+			if (this.isEditButton)
+				this.disableSaveLastName = true;
+		}
+	}
 
-	
-	
+
+
 	//not in Use Need to be confirm
 	checkfirstNameExist2(value) {
 
@@ -1211,7 +1213,7 @@ export class CustomerContactsComponent implements OnInit {
 					MessageSeverity.success
 				);
 				this.isSpinnerVisible = false;
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => { this.isSpinnerVisible = false; })
 		}
 	}
 
@@ -1229,7 +1231,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.customerService.getCustomerContactATAAuditDetails(rowData.customerContactATAMappingId).subscribe(res => {
 			this.auditHistory1 = res;
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	getColorCodeForHistoryATA(i, field, value) {
@@ -1287,7 +1289,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 		this.add_SelectedModels = undefined;
 	}
 
@@ -1318,25 +1320,26 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;});
+		}, error => { this.isSpinnerVisible = false; });
 	}
 
-	arrayTagNamelist:any[] = [];  
-    tagNamesList: any;
+	arrayTagNamelist: any[] = [];
+	tagNamesList: any;
 
 	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
-		if(this.arrayTagNamelist.length == 0) {			
-			this.arrayTagNamelist.push(0); }
-			this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+		if (this.arrayTagNamelist.length == 0) {
+			this.arrayTagNamelist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName', strText, true, 0, this.arrayTagNamelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
 			this.tagNamesList = res.map(x => {
 				return {
-					tagName: x.label, contactTagId: x.value 
+					tagName: x.label, contactTagId: x.value
 				}
 			})
-			if(contactTagId > 0){
+			if (contactTagId > 0) {
 				this.contactInformation = {
 					...this.contactInformation,
-					tag : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+					tag: getObjectById('contactTagId', contactTagId, this.tagNamesList)
 				}
 			}
 		})
@@ -1344,8 +1347,9 @@ export class CustomerContactsComponent implements OnInit {
 
 	filterTagNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.getAllTagNameSmartDropDown(event.query); }
+			this.getAllTagNameSmartDropDown(event.query);
+		}
 	}
 
-	clearValue() {}
+	clearValue() { }
 }

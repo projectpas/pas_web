@@ -38,7 +38,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     }
 
     getExpertiseData() {
-        let expertiseIds = [];
+        let expertiseIds = []; 
        this.workFlow.expertise.forEach(acc => {
           expertiseIds.push(acc.expertiseTypeId);
         })
@@ -46,8 +46,15 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             expertiseIds.push(0)
         // }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', '', true, 100, expertiseIds)
-            .subscribe(res => {
+       // http://localhost:5050//api/Common/autoCompleteDropdownsExpertiseTypes?searchText=&startWith=true&count=20&idList=14&masterCompanyId=1
+
+
+        // this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', '', true, 100, expertiseIds)
+
+
+        //     .subscribe(res => {
+            const strText = '';
+            this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 0, expertiseIds.join()).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.expertiseTypes = res.map(x => {
                     return {
@@ -264,7 +271,35 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         this.dismissModel();
     }
 
-    setIsUpdate(value,index){
+    setIsUpdate(value,index,currentRecord){
+
+// var anyMeasurement=undefined;
+//              this.workFlow.expertise.forEach(x => {
+//                 if(x.isDeleted==false && x.expertiseTypeId  && x.expertiseTypeId == value && x.taskId == this.workFlow.taskId){
+//                     anyMeasurement =  x;
+//                      return;
+//                 }
+//             });
+var anyMeasurement = this.workFlow.expertise.filter(x =>x.isDeleted==false &&  x.expertiseTypeId == currentRecord.expertiseTypeId && x.taskId == this.workFlow.taskId);
+if (anyMeasurement.length > 1) {
+        // if ( anyMeasurement!= undefined) {
+            currentRecord.expetiseTypeName="";
+            currentRecord.expertiseTypeId = "";
+            currentRecord.estimatedHours = "";
+             currentRecord.laborDirectRate="";
+             currentRecord.overheadBurden="";
+             currentRecord.overheadCost="";
+             currentRecord.laborOverheadCost="";
+             currentRecord.memo="";
+             currentRecord.directLaborRate="";
+             currentRecord.expertiseTypeId=undefined;
+            this.alertService.showMessage("Workflow", "Expertise Type in Expertise is already in use", MessageSeverity.error);
+            this.calculateEstimatedHoursSummation();
+            this.calculateLabourDirectCost();
+            this.calculateOHCostSummation();
+            this.calculateLabourOHCostSummation();
+            return;
+        }
 if(value){
         this.wflwService.getemployeeExpertiseById(value).subscribe(res => {
      if(res){

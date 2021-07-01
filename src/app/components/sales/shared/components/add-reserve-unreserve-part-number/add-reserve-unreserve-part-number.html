@@ -29,7 +29,8 @@
             </div>
         </div> -->
         <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom" [columns]="columns" [scrollable]="true"
-            [resizableColumns]="true" selectionMode="single" [responsive]="true" [metaKeySelection]="true"
+            [resizableColumns]="true" selectionMode="single"
+            scrollHeight="450px" [responsive]="true" [metaKeySelection]="true"
             [style]="{ width: '100%' }">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
@@ -39,7 +40,7 @@
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
-                <tr>
+                <!-- <tr>
                     <th>
                     </th>
                     <th colspan="9">
@@ -50,7 +51,7 @@
                     </th>
                     <th colspan="4">
                     </th>
-                </tr>
+                </tr> -->
                 <tr>
                     <th class="text-left">
                         <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
@@ -65,21 +66,20 @@
             </ng-template>
             <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
                 <tr pReorderableRowHandle>
-                    <td>
-                        <span>
-                            <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
-                                (onChange)="onChangeOfPartSelection($event)" binary="true">
+                    <td class="text-left">                      
+                            <p-checkbox [(ngModel)]="rowData.isSelected" class="margin-left-3" name="isSelected{{i}}"
+                                (onChange)="onChangeOfPartSelection($event, rowData)" binary="true">
                             </p-checkbox>
-                        </span>
+                      
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
                         <ng-container
-                            *ngIf="col.field !='quantityOnOrder' && col.field !='quantityAvailable' && col.field !='quantityOnHand' && col.field !='quantityIssued' && col.field!='quantityReserved' && col.field!='quantity' && col.field!='qtyToReserve' && col.field != 'reservedDate' && col.field != 'reservedById' && col.field != 'issuedDate' && col.field != 'issuedById' && col.field != 'qtyToIssued' && col.field != 'qtyToReserveAndIssue' && col.field != 'qtyToUnReserve' && col.header != 'Qty To UnIssue'">
+                            *ngIf="col.field !='quantityOnOrder' && col.field !='quantityAvailable' && col.field !='quantityOnHand' && col.field !='quantityIssued' && col.field != 'quantityReserved' && col.field != 'quantity' && col.field != 'qtyToReserve' && col.field != 'reservedDate' && col.field != 'reservedById' && col.field != 'issuedDate' && col.field != 'issuedById' && col.field != 'qtyToIssued' && col.field != 'qtyToReserveAndIssue' && col.field != 'qtyToUnReserve' && col.header != 'Qty To UnIssue' && col.field !='qtyToBeReserved'">
                             <!-- {{rowData[col.field]}}  -->
                             {{part[col.field]}}
                         </ng-container>
                         <span
-                            *ngIf="col.field =='quantityOnOrder' || col.field =='quantityAvailable' || col.field =='quantityOnHand' || col.field =='quantityIssued' || col.field =='quantityReserved' || col.field =='quantity'"
+                            *ngIf="col.field =='quantityOnOrder' || col.field =='quantityAvailable' || col.field =='quantityOnHand' || col.field =='quantityIssued' || col.field =='quantityReserved' || col.field =='quantity' || col.field =='qtyToBeReserved'"
                             class="float-right" style="text-align: right;">
                             <!-- {{rowData[col.field]}}  -->
                             {{part[col.field]}}
@@ -87,7 +87,7 @@
                         <!--qtyToReserve-->
                         <ng-container *ngIf="col.field =='qtyToReserve' && selectedPartActionType == 'Reserve'">
                             <input type="number" class="form-control quantityTextBox text-right" pInputText
-                                pKeyFilter="num"
+                                pKeyFilter="num" (keyup)="validatePartsQuantity($event, part)"
                                 required="col.field =='qtyToReserve' && selectedPartActionType == 'Reserve'"
                                 name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}" [(ngModel)]="part.qtyToReserve"
                                 [disabled]="rowData.isSelected == false" />
@@ -113,7 +113,7 @@
                         <!-- qtyToUnReserve -->
                         <ng-container *ngIf="col.field =='qtyToUnReserve' && selectedPartActionType == 'Unreserve'">
                             <input type="number" class="form-control quantityTextBox text-right" pInputText
-                                pKeyFilter="num"
+                                pKeyFilter="num" (keyup)="validatePartsQuantity($event, part)"
                                 required="col.field =='qtyToUnReserve' && selectedPartActionType == 'Unreserve'"
                                 name="qtyToUnReserve{{i}}" value="{{part.qtyToUnReserve}}"
                                 [(ngModel)]="part.qtyToUnReserve" [disabled]="rowData.isSelected == false" />
@@ -131,8 +131,8 @@
                                 name="reservedById" title="Reserved By" appendTo='body' [baseZIndex]="9999"
                                 field="label"
                                 required="selectedPartActionType == 'Reserve' || selectedPartActionType == 'Reserve & Issue' || selectedPartActionType == 'Unreserve'"
-                                [suggestions]="employees" disabled="true"
-                                (completeMethod)="filterReservedBy($event)" [dropdown]="true">
+                                [suggestions]="employees" disabled="true" (completeMethod)="filterReservedBy($event)"
+                                [dropdown]="true">
                             </p-autoComplete>
                             <!-- [disabled]="rowData.isSelected == false" -->
                         </ng-container>

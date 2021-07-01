@@ -416,7 +416,7 @@ export class EmployeesListComponent implements OnInit {
 
     //}
 
-    // Not in use
+    // Not in use  <----------------------------------------
     private loadData() {
         this.empService.getEmployeeList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
@@ -429,6 +429,15 @@ export class EmployeesListComponent implements OnInit {
             this.filterText = true;
         } else {
             this.filterText = false;
+        }
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
         }
     }
     loadEmployeePages(event) {
@@ -1129,13 +1138,4 @@ export class EmployeesListComponent implements OnInit {
     }
 
     changeStatus(rowData) {}
-
-
-
-
-
-
-
-
-
 }

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="!isStockLineViewMode && !isEdit && !isQtyAdjust">
   <div>
     <label>Stock Type</label>
   </div>
@@ -29,7 +29,7 @@
     </label>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="!isStockLineViewMode && !isEdit">
   <div class="col-2 column">
     <div class="form-group">
       <label>PN<span class="clr-red">*</span></label>
@@ -63,11 +63,11 @@
     <div class="col-2 column">
       <div class="form-group">
         <label *ngIf="type == 'SOQ'">Qty Req<span class="clr-red">*</span></label>
-        <label *ngIf="type == 'SO'">Qty Ord<span class="clr-red">*</span></label>
+        <label *ngIf="type == 'SO'">{{ isQtyAdjust ? 'Qty Req' : 'Qty Ord'  }}<span class="clr-red">*</span></label>
         <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required
           [ngModel]="query.partSearchParamters.quantityRequested  | globalNmberFormat"
           (ngModelChange)="query.partSearchParamters.quantityRequested=formatStringToNumberGlobal($event)"
-          (keyup)="calculate()" name="quantityRequested" autocomplete="off" />
+          (keyup)="calculate()" name="quantityRequested" [disabled]="isStockLineViewMode" autocomplete="off" />
       </div>
     </div>
     <div *ngIf="type == 'SOQ'" class="col-2 column">
@@ -77,13 +77,13 @@
           [ngModel]="query.partSearchParamters.quantityToQuote  | globalNmberFormat"
           [ngModelOptions]="{updateOn:'blur'}"
           (ngModelChange)="query.partSearchParamters.quantityToQuote=formatStringToNumberGlobal($event)"
-          autocomplete="off" />
+          autocomplete="off" [disabled]="isQtyAdjust" />
       </div>
     </div>
     <div class="col-6 column">
       <div *ngIf="type == 'SOQ'" class="col-5 column">
         <div class="form-group">
-          <label>Qty AlreadyQuoted</label>
+          <label>Qty Already Quoted</label>
           <input type="text" class="form-control text-right" name="qtyAlreadyQuoted"
             [ngModel]="query.partSearchParamters.quantityAlreadyQuoted | globalNmberFormat"
             (ngModelChange)="query.partSearchParamters.quantityAlreadyQuoted=$event" disabled="true" />
@@ -108,12 +108,20 @@
     </div>
   </div>
 </div>
-<div class="row justify-content-start">
-  <div class="col-1 column" style="margin-right: 8px;">
+<div class="row justify-content-start" *ngIf="!isStockLineViewMode">
+  <div class="col-1 column" style="margin-right: 8px;" *ngIf="!isEdit && !isStockLineViewMode && !isQtyAdjust">
     <div class="form-group">
       <button class="btn btn-primary" (click)="search($event)"
         [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
         Search PN
+      </button>
+    </div>
+  </div>
+  <div class="col-1 column" style="margin-right: 8px;" *ngIf="isQtyAdjust">
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="save($event)"
+        [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
+        Save
       </button>
     </div>
   </div>

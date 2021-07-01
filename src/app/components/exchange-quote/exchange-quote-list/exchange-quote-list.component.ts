@@ -47,6 +47,11 @@ export class ExchangeQuoteListComponent implements OnInit {
   exchanges: any[] = [];
   @ViewChild("filterStatusInput", { static: false }) public filterText: ElementRef;
   exchangeQuoteId: any;
+  selected: any;
+  selectedQuoteToDelete: any;
+  modal: NgbModalRef;
+  auditHistory: AuditHistory[];
+  exchangeQuoteView: IExchangeQuoteView;
   constructor(private exchangequoteService: ExchangequoteService,
     private alertService: AlertService,
     private modalService: NgbModal,
@@ -259,4 +264,131 @@ export class ExchangeQuoteListComponent implements OnInit {
     );
   }
 
+  openDelete(content, rowData) {
+    this.selected = rowData.exchangeQuoteId;
+    this.selectedQuoteToDelete = rowData.exchangeQuoteNumber;
+    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+
+  deleteQuote(): void {
+    this.isSpinnerVisible = true;
+    this.exchangequoteService.delete(this.selected).subscribe(response => {
+        this.isSpinnerVisible = false;
+        this.modal.close();
+        this.alertService.showMessage(
+            "Success",
+            `Quote removed successfully.`,
+            MessageSeverity.success
+        );
+        this.onSearch();
+    }, error => {
+        this.isSpinnerVisible = false;
+    });
+  }
+
+  getDeleteListByStatus(value) {
+    this.currentDeletedstatus = value;
+    this.pageIndex = this.searchParameters.rows > 10 ? this.searchParameters.first / this.searchParameters.rows : 0;
+    this.pageSize = this.searchParameters.rows;
+    this.searchParameters.first = this.pageIndex;
+
+    if (this.currentDeletedstatus == true) {
+        this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
+        this.isSpinnerVisible = true;
+        this.onSearch();
+    } else {
+        this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
+        this.isSpinnerVisible = true;
+        this.onSearch();
+    }
+  }
+
+  restorerecord: any = {}
+
+    restoreRecord() {
+        this.commonservice.updatedeletedrecords('ExchangeQuote', 'ExchangeQuoteId', this.restorerecord.exchangeQuoteId).subscribe(res => {
+            this.getDeleteListByStatus(true)
+            this.modal.close();
+            this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+  exportCSV(dt) {
+    this.isSpinnerVisible = true;
+    const isdelete = this.currentDeletedstatus ? true : false;
+    let PagingData;
+    PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "StatusId": this.currentStatus, "isDeleted": isdelete, "ViewType": '', "masterCompanyId": this.currentUserMasterCompanyId }, "globalFilter": "" }
+    let filters = Object.keys(dt.filters);
+    filters.forEach(x => {
+        PagingData.filters[x] = dt.filters[x].value;
+    });
+
+    this.exchangequoteService
+        .search(PagingData).subscribe(res => {
+            const vList = res[0]['results'].map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                }
+            });
+
+            dt._value = vList;
+            dt.exportCSV();
+            dt.value = this.exchanges;
+            this.modal.close();
+            this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+  }
+
+  closeHistoryModal() {
+    this.modal.close();
+  }
+
+  getAuditHistoryById(rowData) {
+    this.isSpinnerVisible = true;
+    this.exchangequoteService.getExchangeQuoteHistory(rowData.exchangeQuoteId).subscribe(res => {
+        this.auditHistory = res;
+        this.isSpinnerVisible = false;
+    }, err => {
+        this.isSpinnerVisible = false;
+    });
+  }
+
+  openHistoryPopup(content) {
+    this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
+  }
+  getColorCodeForHistory(i, field, value) {
+    const data = this.auditHistory;
+    const dataLength = data.length;
+    if (i >= 0 && i <= dataLength) {
+        if ((i + 1) === dataLength) {
+            return true;
+        } else {
+            return data[i + 1][field] === value
+        }
+    }
+  }
+  dismissModel() {
+    this.modal.close();
+  }
+
+  viewSelectedRow(content, row) {
+    this.isSpinnerVisible = true;
+    this.exchangequoteService.getview(row.exchangeQuoteId).subscribe(res => {
+        this.exchangeQuoteView = res[0];
+        this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+        this.isSpinnerVisible = false;
+    }, error => {
+        this.isSpinnerVisible = false;
+    });
+}
 }

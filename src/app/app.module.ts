@@ -275,6 +275,15 @@ import { AuditComponentComponent } from './shared/components/audit-component/aud
 import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 import { InvoicePaymentService } from './services/invoice-payment-service';
 import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoint-service';
+import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { ForgotPassComponent } from './components/login/forgot-password-ui/forgotpassword.component';
+import { ResetPasswordComponent } from './components/login/reset-password/reset-password.component';
+import { ResetPassComponent } from './components/login/reset-password-ui/resetpassword.component';
+import { ExchangeSalesOrderPickTicketComponent } from './components/exchange-sales-order/shared/components/exchange-sales-order-pick-ticket/exchange-sales-order-pick-ticket.component';
+import { ExchangeSalesOrderEndpointService } from './services/exchangesalesorder-endpoint.service';
+import { ExchangeSalesOrderService } from './services/exchangesalesorder.service';
+import { ExchangeSalesOrderMultiPickTicketComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
+import { CommonPublicationViewModule } from './components/common-components/common-publicationView/common-publicationView.module';
 @NgModule({
   imports: [
     CardModule,
@@ -303,6 +312,7 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     NgbModule,
     TabViewModule,
     CommonDocumentsModule,
+    CommonPublicationViewModule,
     CalendarModule,
   ],
   declarations: [
@@ -338,7 +348,13 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     UpdatepasswordComponent,
     AssetInventoryViewComponent,
     SafePipe,
-    AuditComponentComponent
+    AuditComponentComponent,
+    ForgotPasswordComponent,
+    ForgotPassComponent,
+    ResetPasswordComponent,
+    ResetPassComponent,
+    ExchangeSalesOrderPickTicketComponent,
+    ExchangeSalesOrderMultiPickTicketComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -548,7 +564,9 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     StocklineReferenceStorage,
     CommunicationService,
     InvoicePaymentService,
-    InvoicePaymentEndpointService
+    InvoicePaymentEndpointService,
+    ExchangeSalesOrderEndpointService,
+    ExchangeSalesOrderService
   ],
   entryComponents: [
     LoginDialogComponent,
@@ -558,7 +576,9 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     StocklineHistoryComponent,
     EntityViewComponent,
     AssetInventoryViewComponent,
-    AuditComponentComponent
+    AuditComponentComponent,
+    ExchangeSalesOrderPickTicketComponent,
+    ExchangeSalesOrderMultiPickTicketComponent
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],

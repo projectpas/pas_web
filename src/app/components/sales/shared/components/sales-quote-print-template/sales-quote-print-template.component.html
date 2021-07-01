@@ -13,7 +13,7 @@ border-spacing: 0 1em;">
                     <td><strong>Address:</strong></td>
                 </tr>
                 <tr>
-                    <td><strong>{{customerAddress.address1}}, {{customerAddress.address1}}</strong></td>
+                    <td><strong>{{customerAddress.address1}}, {{customerAddress.address2}}</strong></td>
                 </tr>
                 <tr>
                     <td>{{customerAddress.city}}, {{customerAddress.stateOrProvince}}</td>
@@ -30,7 +30,7 @@ border-spacing: 0 1em;">
                 </tr>
                 <tr>
                     <td>Quote Date</td>
-                    <td class="td2">{{salesQuote.createdOn  | date: 'MM/dd/yyyy'}}</td>
+                    <td class="td2">{{salesQuote.createdDate  | date: 'MM/dd/yyyy'}}</td>
                 </tr>
                 <tr>
                     <td>Quotation ID</td>
@@ -83,28 +83,36 @@ border-spacing: 0 1em;">
         <td class="tr2 td24">{{salesQuote.customerReference}}</td>
     </tr>
     <tr>
-        <td class="tr2 td1"><strong>Cust Request Date</strong></td>
-        <td class="tr2 td2">{{salesQuote.customerRequestDate | date: 'MM/dd/yyyy'}}</td>
-        <td class="tr2 td3"><strong>Priority</strong></td>
-        <td class="tr2 td24">{{salesQuote.priorityName}}</td>
-    </tr>
-    <tr>
-        <td class="tr2 td1"><strong>Promised Date</strong></td>
-        <td class="tr2 td2">{{salesQuote.promisedDate | date: 'MM/dd/yyyy'}}</td>
+        <!-- <td class="tr2 td1"><strong>Cust Request Date</strong></td>
+        <td class="tr2 td2">{{salesQuote.customerRequestDate | date: 'MM/dd/yyyy'}}</td> -->
+        <td class="tr2 td1"><strong>Employee</strong></td>
+        <td class="tr2 td2">{{salesQuote.employeeName}}</td>
+        <!-- <td class="tr2 td3"><strong>Priority</strong></td>
+        <td class="tr2 td24">{{salesQuote.priorityName}}</td> -->
         <td class="tr2 td3"><strong>Sales Person</strong></td>
         <td class="tr2 td24">{{salesQuote.salesPersonName}}</td>
     </tr>
     <tr>
-        <td class="tr2 td1"><strong>Estimated Ship Date</strong></td>
-        <td class="tr2 td2">{{salesQuote.estimatedShipDate | date: 'MM/dd/yyyy'}}</td>
+        <!-- <td class="tr2 td1"><strong>Promised Date</strong></td>
+        <td class="tr2 td2">{{salesQuote.promisedDate | date: 'MM/dd/yyyy'}}</td> -->
+        <td class="tr2 td1"></td>
+        <td class="tr2 td2"></td>
         <td class="tr2 td3"><strong>Customer Service Rep</strong></td>
         <td class="tr2 td24">{{salesQuote.customerSeviceRepName}}</td>
     </tr>
     <tr>
-        <td class="tr2 td1"><strong>Employee</strong></td>
-        <td class="tr2 td2">{{salesQuote.employeeName}}</td>
+        <!-- <td class="tr2 td1"><strong>Estimated Ship Date</strong></td>
+        <td class="tr2 td2">{{salesQuote.estimatedShipDate | date: 'MM/dd/yyyy'}}</td> -->
+        <td class="tr2 td1"></td>
+        <td class="tr2 td2"></td>
         <td class="tr2 td3"><strong>Status</strong></td>
         <td class="tr2 td24">{{salesQuote.status}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"></td>
+        <td class="tr2 td2"></td>
+        <td class="tr2 td3"></td>
+        <td class="tr2 td24"></td>
     </tr>
 </table>
 <table cellpadding=2 cellspacing=0 class="t4" style="font-family: Arial; font-size: 14px;   ">
@@ -153,7 +161,7 @@ border-spacing: 0 1em;">
             <td class="td14" style="text-align: right;">{{part.qtyQuoted}}</td>
             <td class="td48" style="text-align: right;">{{part.unitSalePrice | twoDecimalGlobalNumberFormatPipe}}</td>
             <td class="td16" style="text-align: right;">{{part.discountAmount | twoDecimalGlobalNumberFormatPipe}}</td>
-            <td class="td17" style="text-align: right;">{{part.totalSales | twoDecimalGlobalNumberFormatPipe}}</td>
+            <td class="td17" style="text-align: right;">{{(part.qtyQuoted * part.unitSalePrice) | twoDecimalGlobalNumberFormatPipe}}</td>
         </tr>
         <tr>
             <td></td>
@@ -183,36 +191,36 @@ border-spacing: 0 1em;">
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Tax Rate</td>
-            <td class="total-value">
-                <div id="total"></div>
+            <td class="total-value" style="text-align: right;">
+                <div id="total">{{salesQuote.taxRate | number : '1.2-2'}} %</div>
             </td>
         </tr>
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Sales Tax</td>
-            <td class="total-value">
-                <div id="total"></div>
+            <td class="total-value" style="text-align: right;">
+                <div id="total">{{salesTax | number : '1.2-2'}} </div>
             </td>
         </tr>
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Other Tax(es)</td>
-            <td class="total-value">
+            <td class="total-value" style="text-align: right;">
                 <div id="total"></div>
             </td>
         </tr>
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line">Misc Charges</td>
-            <td class="total-value">
-                <div id="total"></div>
+            <td class="total-value" style="text-align: right;">
+                <div id="miscCharges">{{miscCharges | twoDecimalGlobalNumberFormatPipe}}</div>
             </td>
         </tr>
         <tr>
             <td colspan="5" class="blank"> </td>
             <td colspan="1" class="total-line"><strong>Total</strong></td>
             <td class="total-value" style="text-align: right;">
-                <strong>{{totalAmount | twoDecimalGlobalNumberFormatPipe}}</strong></td>
+                <strong>{{totalAmount | number : '1.2-2'}}</strong></td>
         </tr>
     </tbody>
 </table>

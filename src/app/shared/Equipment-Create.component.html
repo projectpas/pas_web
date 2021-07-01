@@ -15,7 +15,7 @@
         <th><label>{{moduleName}} Description</label></th>
         <th><label>Tool Class</label></th>
         <th style="width:60px !important"><label>Qty<span class="clr-red">*</span></label></th>
-        <th style="z-index: 1;" style="width: 200px;"  *ngIf="isWorkFlow"><label>Memo</label></th>
+        <th style="width: 200px;z-index:1"  *ngIf="isWorkFlow"><label>Memo</label></th>
         <th *ngIf="!isEdit"><label>Actions </label></th>
       </tr>
     </thead>
@@ -46,7 +46,7 @@
           {{ eqp.assetTypeName }}
         </td>
         <td class="text-center">
-          <input type="text" (ngModelChange)="getActive()" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
+          <input type="text" (ngModelChange)="getActive()" (keypress)="allowNumberOnly($event)" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
         <td *ngIf="isWorkFlow">
@@ -94,7 +94,7 @@
       [disabled]="!toolsCreateForm.valid|| checkQuantityAvailability()">
       Save
     </button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal"
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()"
      >
       Close
     </button>

@@ -31,18 +31,18 @@ input[type=number], input[type=text], input[type=email], select {
     height: 24px!important;
     border-radius: 5px!important;
 }
-.modal-body p {
-    overflow: auto !important;
-}
+// .modal-body p {
+//     overflow: auto;
+// }
 .form-horizontal b {
     top: auto !important;
 }
 .email-content{
     max-height: 300px;
-    overflow: scroll;
-    span p{
-        overflow: scroll;
-    }
+    // overflow: scroll;
+    // span p{
+    //     overflow: scroll;
+    // }
 }
 .communication-buttons-align{
     margin-bottom: 12px !important;

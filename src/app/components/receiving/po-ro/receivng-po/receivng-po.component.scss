@@ -14,6 +14,9 @@ table {
     background-color: transparent;
     color: #295d92;
 }
+.receiving-margin-left{
+    margin-left:-6%;
+}
 textarea {
     border-radius: 5px !important;
 }
@@ -75,7 +78,11 @@ input[type="text"], input[type="number"], select, textarea {
     float: left;
 }
 .time-remaining tr td input:first-child {
-    width: 50px;
+    width: 40px;
+}
+.parent-td-background td{
+    width: auto !important;
+    background-color: #EAF2C5 !important;
 }
 .time-remaining span {
     float: left;

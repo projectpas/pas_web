@@ -1,0 +1,119 @@
+<div class="modal-content pdf-block " style="width:90%">
+  <div class="modal-body">
+    <div class="clear"></div>
+<form id="" name="" action="#" method="post" onsubmit="return false;">
+<div class="image">
+<div style="padding: 0; margin: 0;">
+      <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+          <div class="col-sm-12 invoice-border">
+              <div class="col-sm-8 very-first-block">
+                <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                  <div class="col-sm-6" style="width:50%"><img class="logo"
+                      src="{{this.endPointURL + this.management.logo}}" /></div>
+                  <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Tagline :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.companyName}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Address-1 :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.address1}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Address-2 :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.address2}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>City :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.city}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>State :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.stateOrProvince}}</label>
+                    </div>
+                    <div class="col-sm-12 first-block-name">
+                      <!-- <label class="col-sm-3 first-block-label"><b>Postal Code :</b></label> -->
+                      <label class="col-sm-12 first-block-label" disabled>{{this.management.postalCode}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="second-block col-sm-4">
+                  <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">EXCLUSIONS</h3>
+                  <div class="second-block-div">
+                      <label class="col-sm-6 second-block-label" style="width:100%">Speed Qte Num</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.speedQuote.speedQuoteNumber}}</label>
+                  </div>
+                  <div class="second-block-div">
+                      <label class="col-sm-6 second-block-label" style="width:100%"> Quote Date</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.speedQuote.createdDate  | date: 'MM/dd/yyyy'}}</label>
+                  </div>
+                  <div class="second-block-div">
+                      <label class="col-sm-6 second-block-label" style="width:100%">Valid Until</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.speedQuote.validForDays}} Days</label>
+                  </div>
+                  <div class="second-block-div">
+                      <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.speedQuote.createdBy}}</label>
+                  </div>
+                  <div class="second-block-div">
+                      <label class="col-sm-6 second-block-label" style="width:100%">Date Printed</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{todayDate | date: 'MM/dd/yyyy'}}</label>
+                  </div>
+                  <!-- <div class="second-block-div">
+                      <label class="col-sm-6 second-block-label" style="width:100%">Page</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled></label>
+                  </div> -->
+                   <div class="second-block-div" style="margin-top:30px">
+                      <label class="col-sm-6 second-block-label" style="width:100%">Customer</label>
+                      <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.speedQuote.customerName}}</label>
+                  </div>
+              </div>
+          </div>
+          <div class="clear"></div>
+          <div class="col-sm-12" style="margin-top:-3px">
+              <table rules=none class="parttable print-table print-friendly table-margins" *ngFor="let part of this.parts let i=index">
+                  <thead>
+                      <tr>
+                          <th>Item Num</th>
+                          <th>PN</th>
+                          <th>PN</th>
+                          <th>PN Description</th>
+                          <th>Qty</th>
+                          <th>Unit Price</th>
+                          <th>Ext Price</th>
+                          <th>% Occurance</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <ng-container *ngFor="let printdata of part.exclusionPrintData let i=index">
+                          <tr>
+                              <td>{{printdata.itemNo}}</td>
+                              <td>{{printdata.pn}}</td>
+                              <td>{{printdata.exPartNumber}}</td>
+                              <td>{{printdata.exPartDescription}}</td>
+                              <td>{{printdata.exQuantity}}</td>
+                              <td>{{printdata.exUnitPrice}}</td>
+                              <td>{{printdata.exExtPrice}}</td>
+                              <td>{{printdata.exOccurance}}%</td>
+                          </tr>
+                          <tr>
+                              <td colspan="8" rowspan="3" style="border:1px solid black">Notes: {{printdata.exNotes}}</td>
+                          </tr>
+                          <tr></tr>
+                          <tr> </tr>
+                      </ng-container>
+                      <tr></tr>
+                  </tbody>
+              </table>
+          </div>
+          <div class="clear"></div>
+          <!-- <hr /> -->
+          <div class="clear"></div>
+      </form>
+  </div>
+</div>
+</form>
+    </div>
+ <div style="height:100px"> &nbsp;</div>
+</div>

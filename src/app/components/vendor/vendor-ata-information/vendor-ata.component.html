@@ -164,7 +164,7 @@
                 </ng-template>
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
-                        <col *ngFor="let col of columns" class="table-column-width" />
+                        <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
@@ -172,7 +172,7 @@
                         <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="table-actions-column">Actions</th>
+                        <th class="table-actions-column width-60">Actions</th>
                     </tr>
                     <tr>
                         <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -184,7 +184,7 @@
             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
               name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                         </th>
-                        <th class="table-actions-column" ></th>
+                        <th class="table-actions-column width-60"  ></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
@@ -198,7 +198,7 @@
                                 : rowData[col.field]
                               }}
                         </td>
-                        <td class="action-icons-cstm table-column-width">
+                        <td class="action-icons-cstm table-column-width width-60">
                             <span data-toggle="modal">
                                 <a class="btn nobg"
                                    (click)="getATAAuditHistoryById(contentATAChapterHist,rowData)" matTooltip="History" matTooltipPosition="above"><i
@@ -238,31 +238,7 @@
             </div>
         </div>
         <br />
-    </div>
-
-    <!-- <ng-template #deleteContent let-c="close" let-d="dismiss">
-        <div class="modal-header">
-            <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <strong>
-                Contact Name:
-                <span class="new-label">{{ selectedRowForDelete.firstName }}</span>
-            </strong>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
-                Yes
-            </button>
-            <button type="button" class="btn btn-danger" (click)="dismissModel()">
-                No
-            </button>
-        </div>
-    </ng-template> -->
-   
+    </div> 
     <!-- Modal content-->
     <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-sm">
@@ -316,7 +292,7 @@
             <div class="modal-body" *ngIf="auditHistoryATA">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
+					<table class="table table-bordered" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
                         <thead>
                             <tr>
                                 <th>ATA Chapter Code</th>
@@ -327,7 +303,7 @@
                                 <th>Created By</th>
                                 <th>Updated Date</th>
                                 <th>Updated By</th>      
-                                <th>Is Deleted</th>                           
+                                <th style="width:70px">Is Deleted</th>                           
                             </tr>
                         </thead>
                         <tbody *ngIf="auditHistoryATA.length > 0">
@@ -397,7 +373,14 @@
                                     ? 'black'
                                     : 'red'
                                 }">{{audit.updatedBy}}</td>
-                                <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"> 
+                                     <input type="checkbox" name="isDeleted" 
+                                     [(ngModel)]="audit.isDeleted" disabled>
+                                    </label>
+                                </span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

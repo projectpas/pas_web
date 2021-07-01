@@ -7,12 +7,13 @@ export class PartDetail {
   conditionDescription: string;
   classification: string;
   itemClassification: any;
+  itemGroup: any;
   quantityRequested: number;
   quantityAlreadyQuoted: number;
   quantityToBeQuoted: number;
   quantityFromThis: number;
   quantityAvailableForThis: number;
-  uom: string;
+  uomName: string;
   currency: any;
   currencyId: string;
   currencyDescription: string;
@@ -20,7 +21,6 @@ export class PartDetail {
   partType: string;
   markUpPercentage: number;
   salesDiscount: number;
-
   itemMasterId: number;
   partId: number;
   stockLineId: number;
@@ -30,7 +30,6 @@ export class PartDetail {
   serialNumber: string;
   pmaStatus: string;
   idNumber: string;
-
   salesPricePerUnit: number;
   markupPerUnit: number;
   salesDiscountPerUnit: number;
@@ -38,7 +37,6 @@ export class PartDetail {
   unitCostPerUnit: number;
   marginAmountPerUnit: number;
   marginPercentagePerUnit: number;
-
   salesPriceExtended: number;
   markupExtended: number;
   salesDiscountExtended: number;
@@ -46,6 +44,7 @@ export class PartDetail {
   unitCostExtended: number;
   marginAmountExtended: number;
   marginPercentageExtended: number;
+  marginPercentage: number;
   taxCode: string;
   taxType: string;
   taxAmount: number;
@@ -60,6 +59,11 @@ export class PartDetail {
   qtyReserved: number;
   qtyAvailable: number;
   qtyToShip: number;
+  qtyShipped: number;
+  qtyInvoiced: number;
+  invoiceDate: Date;
+  invoiceNumber: string;
+  shipReference: string;
   salesQuoteNumber: string;
   customerRef: string;
   priority: string;
@@ -82,7 +86,9 @@ export class PartDetail {
   quantityOnHand: number;
   notes: string;
   createdBy: string;
-  itemNo:number;
+  itemNo: number;
+  qty: number;
+
   constructor() { }
 
   get QuantityToBeQuoted(): number {

@@ -54,24 +54,27 @@ export class WorkOrderListComponent implements OnInit {
     lazyLoadEventData: any;
     workFlowWorkOrderId: any
     headers = [
-        { field: 'workOrderNum', header: 'WO NO', width: "130px"},
-        { field: 'partNoType', header: 'MPN',width:"200px" },
-        { field: 'pnDescriptionType', header: 'MPN Description',width:"200px " },
-        { field: 'workScopeType', header: 'Work Scope',  width: "130px"},
-        { field: 'priorityType', header: 'Priority', width: "130px" },
+        { field: 'workOrderNum', header: 'WO NO', width: "100px"},
+        { field: 'partNoType', header: 'MPN',width:"160px" },
+        { field: 'pnDescriptionType', header: 'MPN Description',width:"250px " },
         { field: 'customerName', header: 'Customer Name',width:"200px" },
-        { field: 'customerType', header: 'Customer Type', width: "130px" },
-        { field: 'openDate', header: 'Open Date', width: "130px" },
-        { field: 'customerRequestDateType', header: 'Cust Req Date', width: "130px" },
-        { field: 'promisedDateType', header: 'Promise Date' , width: "130px"},
-        { field: 'estimatedShipDateType', header: 'Est. Ship Date',  width: "130px"},
-        { field: 'estimatedCompletionDateType', header: 'Shipped Date',  width: "130px"},
-        { field: 'stageType', header: 'Stage Code', width: "200px" },
-        { field: 'workOrderStatusType', header: 'Status', width: "130px" },
-        { field: "createdDate", header: "Created Date", width: "130px" },
-        { field: "createdBy", header: "CreatedBy", width: "130px" },
-        { field: "updatedDate", header: "Updated Date", width: "130px" },
-        { field: "updatedBy", header: "UpdatedBy", width: "130px" }
+        { field: 'workOrderType', header: 'WO Type', width: "90px" },
+        { field: 'customerType', header: 'Cust. Type', width: "90px" },
+        { field: 'workScopeType', header: 'Work Scope',  width: "100px"},
+        { field: 'priorityType', header: 'Priority', width: "90px" },
+        { field: 'openDate', header: 'Open Date', width: "125px" },
+        { field: 'customerRequestDateType', header: 'Cust Req Date', width: "125px" },
+        { field: 'promisedDateType', header: 'Promise Date' , width: "125px"},
+        { field: 'estimatedShipDateType', header: 'Est. Ship Date',  width: "125px"},
+        { field: 'estimatedCompletionDateType', header: 'Shipped Date',  width: "125px"},
+        { field: 'stageType', header: 'Stage Code', width: "180px" },
+        { field: 'workOrderStatusType', header: 'Status', width: "110px" },
+        { field: 'techName', header: 'Tech Name', width: "125px" },
+        { field: 'techStation', header: 'Station ID', width: "110px" },
+        // { field: "createdDate", header: "Created Date", width: "130px" },
+        // { field: "createdBy", header: "CreatedBy", width: "130px" },
+        { field: "updatedDate", header: "Updated Date", width: "125px" },
+        { field: "updatedBy", header: "UpdatedBy", width: "120px" }
     ]
     selectedColumns = this.headers;
     workFlowId: any;
@@ -139,6 +142,7 @@ export class WorkOrderListComponent implements OnInit {
         if (this.isWorkOrderMainView) {
             this.view({ workOrderId: this.workOrderId })
         }
+        this.isSpinnerVisible = true;
     }
     ngOnDestroy(): void {
         this.onDestroy$.next();

@@ -1,0 +1,39 @@
+<div class="row">
+  <div *ngIf="customer != undefined" class="col-md-12 col-sm-12 col-12">
+    <div class="col-2 column">
+      <div class="form-group">
+        <label style="width: 90px;" >Customer Name</label>
+        <input type="text" class="form-control" name="name" [ngModel]="customer.name"
+          disabled="true" />
+      </div>
+    </div>
+    <div class="col-2 column">
+      <div class="form-group">
+        <label style="width: 90px;">Customer Code</label>
+        <input type="text" class="form-control" name="customerCode" [ngModel]="customer.customerCode"
+          disabled="true" />
+      </div>
+    </div>
+    <div class="col-6 column" style="padding: 18px 0px 10px; padding-left:12px">
+      <div class="form-group">
+        <label></label>
+        <!-- class="col-md-3" -->
+        <div >
+          <label style="width: 90px;">
+            <input type="checkbox" [(ngModel)]="customer.restrictPMA" name="restrictPMA" id="restrictPMA"
+              [disabled]="true" />
+            Restrict PMA
+          </label>
+        </div>
+        <div>
+          <!-- class="col-md-6" -->
+          <label style="width: 90px;">
+            <input type="checkbox" [(ngModel)]="customer.restrictDER" name="restrictDER" id="restrictDER"
+              [disabled]="true" />
+            Restrict DER
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,13 +1,8 @@
-<!-- <div class="col-md-12" style="margin-bottom: 15px;">
-    <h4 class="po-head-sm">
-        Labour Analysis Overview
-    </h4>
-</div> -->
 <div class="card new-card">
-    <div class="card-header header" >
+    <div class="card-header header" *ngIf="!isSummarizedView">
       <div class="row">
         <div class="col">
-          <h4 class="header-name"> Labour Analysis Overview</h4>
+          <h4 class="header-name"> Labor Analysis Overview</h4>
         </div>
       </div>
     </div>
@@ -29,7 +24,7 @@
     [totalRecords]="totalRecords"
     [scrollable]="true" scrollHeight="450px">
 
-        <ng-template pTemplate="caption">
+        <ng-template pTemplate="caption" *ngIf="!isSummarizedView">
             <div class="row">
                 <div class="col">
                 <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
@@ -58,6 +53,29 @@
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                 (click)="dt.exportCSV({ selectionOnly: true })"></button>
                </div>
+               <div class="pull-right buttons-div-align">
+                <div class="col">
+                  <div class="col buttons-top-padding">
+                    <div class="form-group">
+                      <div class="pull-left radio-buttons-align">
+                        <label class="radio-cstm wauto">
+                            <input type="radio" name="viewType" class="form-control" value="summaryview" [(ngModel)]="viewType"
+                              (click)="changeOfStatus('','summaryview')">
+                            <span class="checkmark"></span>Summary view
+                          </label>
+                      </div>
+                      <div class="pull-left radio-buttons-align">
+                        <label class="radio-cstm wauto">
+                            <input type="radio" name="viewType" class="form-control" value="detailedview"
+                              [(ngModel)]="viewType" (click)="changeOfStatus('','detailedview')">
+                            <span class="checkmark"></span>Detailed View
+                          </label>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
                </div>
                
                 <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -81,9 +99,6 @@
                         </div>
                     </div>
                 </div>
-          
-          
-            
         </ng-template>
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
@@ -92,7 +107,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th class="table-column-width"
+                <th class="table-column-width" [ngStyle]="{'width': col.width}"
                     *ngFor="let col of columns"
                     pResizableColumn
                     pReorderableColumn
@@ -101,7 +116,7 @@
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
             </tr>
-            <tr>
+            <tr  *ngIf="!isSummarizedView">
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input class="table-header-input-width" pInputText type="text" (input)="
                         dt.filter($event.target.value, col.field, 'contains')
@@ -109,19 +124,67 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex"  let-expanded="expanded" let-rowData let-columns="columns">
+                <tr [pSelectableRowDblClick]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
                     <td class="table-column-width"
                     *ngFor="let col of columns"
                     class="ui-resizable-column"
                     pReorderableRowHandle>
-                    <ng-container *ngIf="col.field!='hours'">
+                    <ng-container *ngIf="col.field !='hours' && col.field != 'varPercentage' && col.field !='adjustedHours' && col.field !='adjustments' && col.field !='burdenRateAmount'">
                         {{rowData[col.field]}}
                     </ng-container>
-                    <ng-container *ngIf="col.field=='hours'">
-                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                    <ng-container *ngIf="col.field=='hours' || col.field == 'varPercentage' ||col.field=='adjustedHours' || col.field=='adjustments' || col.field=='burdenRateAmount'">
+                        <p class="m-0 p-0 text-right">{{ [col.field] =='varPercentage' ? rowData[col.field] + '%' : rowData[col.field]}}</p>
+                        
                     </ng-container> 
                     </td>                    
+                </tr>
+
+                <tr *ngIf="isDetailView && rowIndex == (data.length-1)" class="footer">
+                    <td class="table-column-width" colspan="8">&nbsp;
+                    </td>
+                    <td class="table-column-width"><label>Total</label>
+                    </td>
+                    <td class="content-to-end table-column-width">  
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('hours')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustedHours')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustments')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('varPercentage')}} %</p>
+                    </td>
+                    <td class="content-to-end table-column-width">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('burdenRateAmount')}}</p>
+                    </td>   
+                    <td class="content-to-end table-column-width" colspan="4">
+                    </td>
+                </tr>
+                <tr *ngIf="!isDetailView && rowIndex == (data.length-1)" class="footer">
+                    <td class="table-column-width" colspan="5">&nbsp;
+                    </td>
+                    <td class="table-column-width"><label>Total</label>
+                    </td>
+                    <td class="content-to-end table-column-width">  
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('hours')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustedHours')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalHours('adjustments')}}</p>
+                    </td>
+                    <td class="table-column-width content-to-end">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('varPercentage')}} %</p>
+                    </td>
+                    <td class="content-to-end table-column-width">
+                        <p class="m-0 p-0 text-right" style="color: #222; font-weight: bold;">{{getTotalAmount('burdenRateAmount')}}</p>
+                    </td>
+                    <td class="content-to-end table-column-width" colspan="4">
+                    </td>
                 </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>

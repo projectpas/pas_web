@@ -14,13 +14,33 @@ textarea {
 .form-control[readonly] {
   background-color: #e9ecef !important;
 }
+.min-width-80{
+min-width:80px !important;
+}
+.min-width-100{
+  min-width:100px !important;
+}
+.approval-memo{
+  width:92% !important;
+}
+.min-width-180{
+  min-width:180px !important;
+}
+.min-width-130{
+  min-width:130px;
+}
+
+.tabs-padding-5{
+  padding-left:5px;
+  padding-right:5px;
+}
 .pad_workflo th , .pad_workflo td{
   padding: 4px !important;
 }
 .list_caps{
   background: #f1f1f1;
   margin-top: -10px;
-  padding: 10px;
+  padding: 5px;
   // margin-bottom: 10px;
 }
 .set_align{
@@ -84,7 +104,7 @@ body .ui-radiobutton .ui-radiobutton-box{
 }
 
 .footer{
-  background-color: #eaf2fd
+  // background-color: #eaf2fd
 }
 .table-header-col1 {
   border-top: 1px solid #fff !important;
@@ -129,7 +149,7 @@ table thead tr th {
   margin-bottom: 16px;
 }
 .dis_bt{
-  width: 170px !important;
+  width: 100px !important;
   font-size: 11px !important;
   margin-left: 6px !important;
   padding: 3px !important;
@@ -140,6 +160,15 @@ table thead tr th {
 }
 .mr_o{
   margin: 0px;
+}
+.woq-actions-width{
+  min-width:222px;
+}
+.m-t-5{
+  margin-top:5px !important
+}
+.m-b-5{
+  margin-bottom:5px !important;
 }
 .freight-isview-th{
   background: #fff !important; border: 1px solid #e7ecf1 !important;padding: 0 !important;
@@ -156,10 +185,16 @@ table thead tr th {
 .width-150{
   width:150px !important;
 }
+.content-to-end{
+  text-align: right !important;
+}
 .width-200{
   width:200px !important;
 }
 .width-130{
+  width:130px !important;
+}
+.width-100{
   width:130px !important;
 }
 .wo-details{
@@ -185,4 +220,7 @@ table thead tr th {
 }
 .wo-quote-btn-margin{
   margin-top:-30px
+}
+.text_start{
+  text-align: start !important;
 }

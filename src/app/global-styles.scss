@@ -11,6 +11,12 @@
     font-weight: 600;
     margin:0px !important;
   }
+  .memo-width{
+min-width:250px !important;
+  }
+  .width-50{
+    width:50px;
+  }
   .header-button {
     color: #fff;
     background-color: #337ab7;
@@ -65,6 +71,16 @@
 .woAdd .ui-calendar.ui-calendar-w-btn input {
   width: 72% !important;
 }
+.text_tranform{
+  text-transform: capitalize;
+}
+.mat_condition .ui-dropdown{
+  min-width: 80% !important;
+}
+.p-dropdown-1001 .ui-dropdown {
+  min-width: 80% !important;
+  width: 108px !important;
+}
 .woAdd .ui-calendar {
   display: flex;
   max-width: 67px !important;
@@ -97,6 +113,24 @@
   }
    .adj_width2{
     width: 190px !important;
+  }
+  a.disabled {
+    color: gray;
+    cursor: not-allowed;
+    text-decoration: underline;
+}
+.wosettingLabel  .ui-radiobutton-label {
+  min-width: 120px !important;
+}
+  .custom_Tdth{
+    min-width: 83px;
+    color: #333333 !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: 0.3px;
+    padding: 2px 4px !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    text-transform: capitalize !important;
   }
   .global-search-field input {
     padding: 2px 2px 2px 6px !important;
@@ -160,7 +194,7 @@
   width:130px;
 }
 .table-actions-column{
-  width:130px !important;
+  width:129px !important;
   position:sticky !important;
   text-align:center !important;
 }
@@ -169,7 +203,9 @@ table thead {
   background-color: #f4f4f4 !important;
   color: black !important;
 }
- 
+ .text-center{
+   text-align: center !important;
+ }
   
 table.table-bordered thead tr th {
   color: #fff;
@@ -259,7 +295,9 @@ table.table-bordered {
 .autocomplete-po-cstm .ui-autocomplete {
   padding-right: 8px;
 }
-
+.setCaps .multiselect-dropdown .dropdown-btn .selected-item {
+  text-transform: capitalize !important;
+}
   .autocomplete-validate.ng-untouched.ng-invalid .ui-autocomplete input,
 .autocomplete-validate.ng-touched.ng-invalid .ui-autocomplete input,
 .calendar-validate.ng-untouched:not(.ui-inputwrapper-filled) .ui-calendar input,
@@ -405,6 +443,9 @@ margin-bottom: 10px !important;
   font-size: 12px !important;
 
 }
+.history-memo-width{
+  width:200px;
+}
 .view-structure-card-body{
 padding: 8px 12px 6px !important;
 }
@@ -468,7 +509,7 @@ margin-top: 10px;
 
 // for fix Table head
 .tableFixHead-multiple-pn {
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 .tableFixHead-multiple-pn thead th {
   position: sticky;
@@ -525,6 +566,9 @@ margin-top: 10px;
   position: sticky;
   top: 0;
 }
+.text-capital{
+  text-transform: capitalize !important;
+}
 table {
   border-collapse: collapse;
   width: 100%;
@@ -553,7 +597,12 @@ th {
 .child-header-back td{
   background: #eaf2fd !important;
 }
-
+.width_100per{
+  width: 100%;
+}
+.text_start{
+  text-align: start;
+}
 .child-data-back{
   background: #fafafa !important;
 }
@@ -711,4 +760,7 @@ width:60px !important;
 }
 .min-width-60{
   min-width:60px !important;
+}
+.setRequiredSelect{
+  border: 1px solid red !important;
 }

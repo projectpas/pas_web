@@ -97,7 +97,7 @@
                                     label="Export Selected Data"
                                     (click)="dt.exportCSV({selectionOnly:true})"
                                   ></button>
-                                  <button class="btn btn-primary exports-button" (click)="toggleShowOpenAdvancedSearch(dt)">
+                                  <button  type="button" class="btn btn-primary exports-button advanced-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
                                   </button>
                                 
@@ -155,7 +155,7 @@
                               </div>
                               <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width">
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                                 </colgroup>
                             </ng-template>
             <ng-template pTemplate="header" let-columns>
@@ -271,7 +271,7 @@
                                 <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
                                     <div class="col-md-12 ">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14 item-master-search">Search :</h4>
+                                            <label class=" item-master-search">Search :</label>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
@@ -322,11 +322,11 @@
                                         <div >
                                             <div class="form-group adv-search-icons">
                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"
-                                                 class="btn btn-primary  height40 black-search-button btmargin search-clar-button">
+                                                 class="btn btn-primary m-t-10 height40 black-search-button btmargin search-clar-button">
                                                     Search 
                                                  </button> 
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
-                                                  class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                  class="btn btn-danger m-t-10 height40 black-search-button btmargin sarch-clear-button">
                                                     Clear
                                                  </button> 
                                             </div>
@@ -341,7 +341,7 @@
 
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" class="table-column-width">
+                                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                             </colgroup>
                         </ng-template>
 
@@ -405,7 +405,8 @@
                                         </span>
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                        <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                        <span data-toggle="modal" data-target="#stockHistory">
+                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                         <span *ngIf="currentDeletedstatus" data-toggle="modal" (click)="restoreStockItem(rowData)" data-target="#itemRestore"><a class="btn nobg btn-users-cstm" 
                                              matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
@@ -566,7 +567,7 @@
                                 <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
                                     <div class="col-md-12 ">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14 item-master-search">Search :</h4>
+                                            <label class="item-master-search">Search :</label>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
@@ -618,11 +619,11 @@
                                             <div class="form-group adv-search-icons">
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" 
                                                  (click)="advancedSearchData(searchData)"
-                                                  class="btn btn-primary  height40 black-search-button btmargin search-clar-button">
+                                                  class="btn btn-primary m-t-10 height40 black-search-button btmargin search-clar-button">
                                                     Search
                                                  </button> 
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" 
-                                                 class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                 class="btn btn-danger height40 m-t-10 black-search-button btmargin sarch-clear-button">
                                                     Clear
                                                  </button> 
                                             </div>
@@ -634,7 +635,7 @@
                         </ng-template>
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" class="table-column-width">
+                                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
                             </colgroup>
                         </ng-template>
                         <ng-template pTemplate="header" let-columns>
@@ -678,8 +679,8 @@
                                     <td class="table-column-width" *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{rowData[col.field]}}
                                     </td>
-                                    <td  class="table-column-width text-left" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
-                                        <p class="m-0 p-0 text-left">{{rowData[col.field]}}</p>
+                                    <td  class="table-column-width text-right" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
+                                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                                     </td>                                        
                                     <td class="table-column-width" *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}</p>
@@ -1175,7 +1176,7 @@
     </div>
 </div>
 
-
+<!-- 
 <div id="stockHistory" class="modal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -1198,6 +1199,128 @@
             </div>
         </div>
     </div>
+</div> -->
+
+<div id="stockHistory" class="modal" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-xl">		
+		<div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">History of Item Master Stock</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+			<div class="modal-body" *ngIf="auditHistory">
+				<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered"
+							*ngIf="auditHistory.length> 0 else noDatavailable">
+							<thead>
+								<tr>
+									<th>PN</th>
+									<th>PN Description</th>
+									<th>Manufacturer</th>
+									<th>Item Type</th>
+									<!-- <th>Stock Type</th> -->
+									<th>Classification</th>
+									<th>Group Name</th>
+									<th>Serialized</th>
+                                    <th>Time Life </th>
+                                    <th>NSN </th>
+									<th style="width:60px">IsActive</th>
+									<th>Created Date</th>
+									<th>Created By</th>
+									<th>Updated Date</th>
+									<th>Updated By</th>
+									<th style="width:60px">Is Deleted</th>
+								</tr>
+							</thead>
+							<tbody class="audithistory-cstm">								
+								<tr *ngFor="let audit of auditHistory; let i = index;">									
+									<td
+										[ngStyle]="{'color':  getColorCodeForHistoryItemMaster(i, 'partNumber', audit.partNumber    )  ? 'black' : 'red'  }">
+										{{audit.partNumber}}</td>
+									<td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+										{{audit.partDescription}}</td>
+									<td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'manufacturerName', audit.manufacturerName)  ? 'black' : 'red'  }">
+                                        {{audit.manufacturerName}}</td>
+                                    <td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'itemTypeId', audit.itemTypeId)  ? 'black' : 'red'  }">
+                                        {{audit.itemTypeId == 1 ? 'Stock' : 'Non-Stock'}}</td>
+                                    <td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'itemClassificationName', audit.itemClassificationName)  ? 'black' : 'red'  }">
+                                        {{audit.itemClassificationName}}</td>
+                                    <td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'itemGroup', audit.itemGroup)  ? 'black' : 'red'  }">
+                                        {{audit.itemGroup}}</td>
+                                    <td>
+                                            <p style="background-color: #fff !important;"> <input type="checkbox"
+                                                    name="isSerialized" [(ngModel)]=" audit.isSerialized" disabled></p>
+                                    </td>
+                                    <td>
+                                        <p style="background-color: #fff !important;"> <input type="checkbox"
+                                                name="isTimeLife" [(ngModel)]=" audit.isTimeLife" disabled></p>
+                                    </td>
+                                    <td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'nationalStockNumber', audit.nationalStockNumber)  ? 'black' : 'red'  }">
+                                        {{audit.nationalStockNumber}}
+                                    </td>
+									<td>
+										<p style="background-color: #fff !important;"> <input type="checkbox"
+												name="isActive" [(ngModel)]=" audit.isActive" disabled></p>
+									</td>
+									<td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+										{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+									<td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+										{{audit.createdBy}}</td>
+									<td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+										{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+									<td
+										[ngStyle]="{'color': getColorCodeForHistoryItemMaster(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+										{{audit.updatedBy}}</td>
+									<td>
+										<p style="background-color: #fff !important;"> <input type="checkbox"
+												name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<ng-template #noDatavailable>
+						<div class="text-center">
+							<img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+							<h4 class="no-history-found-msg">No History Found </h4>
+						</div>
+					</ng-template>
+				</div>
+			</div>
+			<div class="preloader modal-header-index" *ngIf="isSpinnerVisible">
+				<div class="loading">
+					<div class="lds-roller">
+						<div>
+						</div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+			</div>
+			<app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 <div id="nonStockHistory" class="modal" data-backdrop="static" data-keyboard="false">

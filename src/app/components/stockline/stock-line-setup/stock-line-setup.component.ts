@@ -25,6 +25,8 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { masterCompanyId } from '../../../common-masterData/mastercompany-details';
 import { timePattern } from '../../../validations/validation-pattern';
+import { any } from 'underscore';
+import { TimeLifeDraftData } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 
 
 @Component({
@@ -36,8 +38,8 @@ import { timePattern } from '../../../validations/validation-pattern';
 })
 /** stock-line-setup component*/
 export class StockLineSetupComponent implements OnInit {
+	uploadDocs: Subject<boolean> = new Subject();
 	isEditMode: boolean = false;
-	moduleName: any = 'StockLine';
 	businessUnitList: any;
 	disableSaveMemo: boolean = true;
 	divisionList: any;
@@ -50,11 +52,14 @@ export class StockLineSetupComponent implements OnInit {
 	allCompanyList: any = [];
 	allPartnumbersList: any = [];
 	allEmployeeList: any = [];
+	alltagEmployeeList: any = [];
 	partNumbersCollection: any = [];
 	oempnList: any[];
+	RevicepnList: any[];
 	allConditionInfo: Condition[] = [];
 	minDateValue: Date = new Date();
 	currentDate: Date = new Date();
+	itemMasterId:number=0;
 	private onDestroy$: Subject<void> = new Subject<void>();
 	managementStructure = {
 		companyId: 0,
@@ -72,6 +77,7 @@ export class StockLineSetupComponent implements OnInit {
 	vendorNames: any[];
 	companyNames: any[];
 	certifyByNames: any[];
+	TagByNames: any[];
 	allManufacturerInfo: any = [];
 	allTagTypes: any = [];
 	allPolistInfo: any = [];
@@ -88,6 +94,7 @@ export class StockLineSetupComponent implements OnInit {
 	disableCondition: boolean = true;
 	disableManufacturer: boolean = true;
 	disableSiteName: boolean = true;
+	disableCustomer: boolean = true;
 	stockLineId: number;
 	timeLifeCyclesId: number;
 	allNHAInfo: any = [];
@@ -95,6 +102,8 @@ export class StockLineSetupComponent implements OnInit {
 	assetAcquisitionTypeList: any = [];
 	allWorkOrderInfo: any = [];
 	allWorkOrderDetails: any = [];
+	allPODetails: any = [];
+	allRODetails: any = [];
 	disableQtyOnHand: boolean = false;
 	defaultDate: Date = new Date('Fri Sep 1 2009 00:00:00');
 	moduleListDropdown: any = [];
@@ -126,10 +135,8 @@ export class StockLineSetupComponent implements OnInit {
 		{ field: 'fileName', header: 'File Name' },
 		{ field: 'fileSize', header: 'File Size' },
 		{ field: 'createdDate', header: 'Created Date' },
-
 		{ field: 'createdBy', header: 'Created By' },
 		{ field: 'updatedDate', header: 'Updated Date' },
-
 		{ field: 'updatedBy', header: 'Updated By' },
 	];
 	selectedColumnsCertified = this.attachDocumentsColumns;
@@ -149,8 +156,12 @@ export class StockLineSetupComponent implements OnInit {
 	arrayVendorlist: any[] = [];
 	arrayCompanylist: any[] = [];
 	arrayItemMasterlist: any[] = [];
+	arrayReviceItemMasterlist: any[] = [];
 	arrayWOlist: any[] = [];
+	arrayPOlist: any[] = [];
+	arrayROlist: any[] = [];
 	arrayEmployeelist: any[] = [];
+	arrayTagEmployeelist: any[] = [];
 	arrayModulelist: any[] = [];
 	arrayConditionlist: any[] = [];
 	headerInfo: any = {};
@@ -161,7 +172,7 @@ export class StockLineSetupComponent implements OnInit {
 	managementValidCheck: boolean;
 	selectedPartNumber: any;
 	receiverNumber: any;
-
+	moduleName:any='StockLine';
 	constructor(private alertService: AlertService, private stocklineser: StocklineService, private commonService: CommonService, private conditionService: ConditionService, private binService: BinService, private siteService: SiteService, private vendorService: VendorService, private manufacturerService: ManufacturerService, private integrationService: IntegrationService, private itemMasterService: ItemMasterService, private glAccountService: GlAccountService, private router: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe, private authService: AuthService, private configurations: ConfigurationService, private modalService: NgbModal) {
 		this.stockLineForm.siteId = 0;
 		this.stockLineForm.acquistionTypeId = 0;
@@ -183,6 +194,10 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.quantityOnHand = null;
 		this.stockLineForm.oem = 'true';
 		this.stockLineForm.isCustomerStock = false;
+		this.stockLineForm.isCustomerstockType = false;
+		this.stockLineForm.unitCost='0.00';
+		
+		this.stockLineForm.customerId = 0;
 		this.stockLineForm.tagType = [];
 		this.stockLineForm.stockLineNumber = 'Creating';
 		this.stockLineForm.controlNumber = 'Creating';
@@ -208,6 +223,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadModuleTypes();
 		this.loadModulesNamesForObtainOwnerTraceable();
 		this.loadAssetAcquisitionTypeList();
+	
 
 		this.stockLineId = this._actRoute.snapshot.params['id'];
 		if (this.stockLineId) {
@@ -219,8 +235,10 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadVendorData();
 			this.loadCompanyData();
 			this.loadPartNumData();
+			this.loadRevicePnPartNumData('',0);
 			this.loadEmployeeData();
 			this.loadWorkOrderList();
+			//this.loadTagByEmployeeData('',0)
 		}
 	}
 
@@ -311,6 +329,32 @@ export class StockLineSetupComponent implements OnInit {
 			this.partNumbersCollection = this.allPartnumbersList;
 		}, error => this.saveFailedHelper(error));
 	}
+	loadRevicePnPartNumData(strText = '',revicedPNId) {
+		if (this.arrayReviceItemMasterlist.length == 0) {
+			this.arrayReviceItemMasterlist.push(0);
+		}
+		if (revicedPNId > 0) 
+		{
+			this.arrayReviceItemMasterlist.push(revicedPNId);
+		}
+		if (this.arrayReviceItemMasterlist.length == 0) {
+			this.arrayReviceItemMasterlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayReviceItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+			this.allPartnumbersList = response.map(x => {
+				return {
+					partnumber: x.label, itemMasterId: x.value
+				}
+			})
+
+			this.RevicepnList = this.allPartnumbersList;
+			if(revicedPNId >0)
+			{
+				this.stockLineForm.revicedPNId = getObjectById('itemMasterId', revicedPNId, this.RevicepnList);
+			}
+
+		}, error => this.saveFailedHelper(error));
+	}
 
 	loadOemPnPartNumData(strText = '') {
 		if (this.arrayItemMasterlist.length == 0) {
@@ -338,6 +382,15 @@ export class StockLineSetupComponent implements OnInit {
 
 		}, error => this.saveFailedHelper(error));
 	}
+
+	
+    getStockStatus(value) {
+        if (value == 1) {
+            this.stockLineForm.isCustomerstockType = true;
+        } else {
+            this.stockLineForm.isCustomerstockType = false;
+        }
+    }
 
 	private loadConditionData() {
 		if (this.arrayConditionlist.length == 0) {
@@ -380,6 +433,27 @@ export class StockLineSetupComponent implements OnInit {
 			.subscribe(response => {
 				this.allEmployeeList = response;
 				this.certifyByNames = this.allEmployeeList;
+			}, error => this.saveFailedHelper(error));
+	}
+	loadTagByEmployeeData(strText = '',taggedBy) {
+		if(taggedBy >0)
+		{
+			this.arrayTagEmployeelist.push(taggedBy);
+		}
+		if (this.arrayTagEmployeelist.length == 0) {
+			this.arrayTagEmployeelist.push(0);
+		}
+
+	
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayTagEmployeelist.join(), this.currentUserManagementStructureId)
+			.subscribe(response => {
+				this.alltagEmployeeList = response;
+				this.TagByNames = this.alltagEmployeeList;
+				if(taggedBy >0)
+				{
+					this.stockLineForm.taggedBy = getObjectById('value', taggedBy, this.alltagEmployeeList);
+				}
+				
 			}, error => this.saveFailedHelper(error));
 	}
 
@@ -429,6 +503,77 @@ export class StockLineSetupComponent implements OnInit {
 		this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
 			this.moduleListDropdown = res;
 		})
+	}
+	loadPODataList(strText = '') {
+		if (this.arrayPOlist.length == 0) {
+			this.arrayPOlist.push(0);
+		}
+		this.commonService.AutoCompleteDropdownsPOByItemMaster(strText,this.itemMasterId, 20, this.arrayPOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+			this.allPODetails = [
+				{ value: 0, label: 'Select' }
+			];
+			this.allPolistInfo = [...this.allPolistInfo, ...response];
+			this.allPODetails = [...this.allPODetails, ...response];
+		  })
+	}
+
+	loadRODataList(strText = '') {
+		if (this.arrayROlist.length == 0) {
+			this.arrayROlist.push(0);
+		}
+		this.commonService.AutoCompleteDropdownsROByItemMaster(strText,this.itemMasterId, 20, this.arrayPOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+			this.allPODetails = [
+				{ value: 0, label: 'Select' }
+			];
+			this.allRolistInfo = [...this.allRolistInfo, ...response];
+			this.allRODetails = [...this.allRODetails, ...response];
+		  })
+	}
+
+	getPOSelecionOnEdit(strText = '',purchaseOrderId) {
+
+
+		if (purchaseOrderId > 0) 
+		{
+			this.arrayPOlist.push(purchaseOrderId);
+		}
+
+		if (this.arrayPOlist.length == 0) {
+			this.arrayPOlist.push(0);
+		}
+			
+			this.commonService.AutoCompleteDropdownsPOByItemMaster(strText,this.itemMasterId, 20, this.arrayPOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+				this.allPODetails = [
+					{ value: 0, label: 'Select' }
+				];
+				this.allPolistInfo = [...this.allPolistInfo, ...response];
+				this.allPODetails = [...this.allPODetails, ...response];
+
+				this.stockLineForm.purchaseOrderId = getObjectById('value', purchaseOrderId == null ? 0 : purchaseOrderId, this.allPolistInfo);
+			  })
+	
+	}
+
+	getROSelecionOnEdit(strText = '',repairOrderId) {
+
+
+		if (repairOrderId > 0) 
+		{
+			this.arrayROlist.push(repairOrderId);
+		}
+		if (this.arrayROlist.length == 0) {
+			this.arrayROlist.push(0);
+		}
+			this.commonService.AutoCompleteDropdownsROByItemMaster(strText,this.itemMasterId, 20, this.arrayROlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+				this.allRODetails = [
+					{ value: 0, label: 'Select' }
+				];
+				this.allRolistInfo = [...this.allRolistInfo, ...response];
+				this.allRODetails = [...this.allRODetails, ...response];
+				
+				this.stockLineForm.repairOrderId = getObjectById('value', repairOrderId == null ? 0 : repairOrderId, this.allRolistInfo);
+			  })
+	
 	}
 
 	loadPOData(itemMasterId) {
@@ -551,8 +696,7 @@ export class StockLineSetupComponent implements OnInit {
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			const errorLog = err;			
 		});
 	}
 
@@ -622,12 +766,16 @@ export class StockLineSetupComponent implements OnInit {
 
 	getStockLineDetailsById(stockLineId) {
 		this.isDocumentsToShow=true;
-		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {			
-			this.loadPOData(res.itemMasterId);
-			this.loadROData(res.itemMasterId);
-			this.loadNHAData(res.itemMasterId);
-			this.loadTLAData(res.itemMasterId);
-			this.GetManufacturerByitemMasterId(res.itemMasterId);
+		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {
+
+			this.itemMasterId= res.itemMasterId;
+				//this.loadPOData(res.itemMasterId);
+				//this.loadROData(res.itemMasterId);
+				this.loadNHAData(res.itemMasterId);
+				this.loadTLAData(res.itemMasterId);
+				this.GetManufacturerByitemMasterId(res.itemMasterId);
+			
+		
 			this.arrayItemMasterlist.push(res.itemMasterId);
 			if (res.revisedPartId > 0) {
 				this.arrayItemMasterlist.push(res.revisedPartId);
@@ -668,22 +816,23 @@ export class StockLineSetupComponent implements OnInit {
 					quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '0',
 					purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '0.00',
 					repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '0.00',
-					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',					
+					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',	
+					unitCost : res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
 					coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '0.00',
 					lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '0.00',
 					purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
 					conditionId: this.getInactiveObjectOnEdit('value', res.conditionId, this.allConditionInfo, 'Condition', 'ConditionId', 'Description'),
 					manufacturerId: this.getInactiveObjectOnEdit('value', res.manufacturerId, this.allManufacturerInfo, 'Manufacturer', 'ManufacturerId', 'Name'),
 					acquistionTypeId: this.getInactiveObjectOnEdit('value', res.acquistionTypeId, this.assetAcquisitionTypeList, 'AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name'),
-					purchaseOrderId: this.getInactiveObjectOnEdit('value', res.purchaseOrderId, this.allPolistInfo, 'PurchaseOrder', 'PurchaseOrderId', 'PurchaseOrderNumber'),
-					repairOrderId: this.getInactiveObjectOnEdit('value', res.repairOrderId, this.allRolistInfo, 'RepairOrder', 'RepairOrderId', 'RepairOrderNumber'),
+					//purchaseOrderId: this.getInactiveObjectOnEdit('purchaseOrderId', res.purchaseOrderId, this.allPolistInfo, 'PurchaseOrder', 'PurchaseOrderId', 'PurchaseOrderNumber'),
+					//repairOrderId: this.getInactiveObjectOnEdit('repairOrderId', res.repairOrderId, this.allRolistInfo, 'RepairOrder', 'RepairOrderId', 'RepairOrderNumber'),
 					nhaItemMasterId: this.getInactiveObjectNHATLAOnEdit('nhaItemMasterId', res.nhaItemMasterId, this.allNHAInfo),
 					tlaItemMasterId: this.getInactiveObjectNHATLAOnEdit('tlaItemMasterId', res.tlaItemMasterId, this.allTLAInfo),
 					receiverNumber : res.receiver,					
-				};
-				
+				};								
 				this.receiverNumber = res.receiver;
-
+				//this.stockLineForm.purchaseOrderId = getObjectById('purchaseOrderId',  res.purchaseOrderId == null ? 0 :  res.purchaseOrderId, this.allPolistInfo);
+				//this.stockLineForm.purchaseOrderId = getObjectById('repairOrderId',  res.repairOrderId == null ? 0 :  res.repairOrderId, this.allRolistInfo);
 				this.loadModuleTypes();
 				this.getSiteDetailsOnEdit(res);
 				this.onPartNumberSelectedOnEdit(res.itemMasterId);
@@ -695,18 +844,19 @@ export class StockLineSetupComponent implements OnInit {
 				this.toGetDocumentsListNew(this.stockLineId);
 				this.getDeletedList(this.stockLineId);
 				this.getVendorSelecionOnEdit(res.vendorId);
+				this.getCustomerSelecionOnEdit(res.customerId);
 				this.getWOSelecionOnEdit(res.workOrderId);
-				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);
-
-				if (res.isSerialized == true) {
-					this.hideSerialNumber = false;
-				}
-				else {
-					this.hideSerialNumber = true;
-				}
-				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {
-					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;
-					this.sourceTimeLife = res.timelIfeData;
+				this.getPOSelecionOnEdit('',res.purchaseOrderId);
+				this.getROSelecionOnEdit('',res.repairOrderId);
+				this.loadRevicePnPartNumData('',res.revicedPNId);
+				//this.loadTagByEmployeeData('',res.taggedBy);
+				
+				this.getEmployeeSelecionOnEdit(res.requestorId, res.inspectionBy);												
+				if (res.timelIfeData != undefined && res.timelIfeData != null && res.timelIfeData != 0) {					
+					this.timeLifeCyclesId = res.timelIfeData.timeLifeCyclesId;					
+					//this.sourceTimeLife = res.timelIfeData;										
+					this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
+					this.sourceTimeLife.timeLife = true;
 				}
 				if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
 					this.stockLineForm.tagType = this.stockLineForm.tagType.split(',');
@@ -720,6 +870,25 @@ export class StockLineSetupComponent implements OnInit {
 					this.disableVendor = true;
 				}
 				this.getSiteDetailsInactive(res);
+				setTimeout(() => {
+					if (res.isSerialized == true) {
+						this.stockLineForm.isSerialized = res.isSerialized;
+						this.hideSerialNumber = false;
+					}
+					else {
+						this.stockLineForm.isSerialized = res.isSerialized;
+						this.hideSerialNumber = true;
+					}
+					if(res.expirationDate){
+						this.stockLineForm.manufacturingDays = this.onChangeMfgDateonEdit(res.expirationDate);
+					}
+					if(res.tagDate){
+						this.stockLineForm.tagDays = this.onChangeTagDateonEdit(res.tagDate);
+					}
+					if(res.receivedDate){
+						this.stockLineForm.daysReceived = this.onChangeReceivedDateonEdit(res.receivedDate);
+					}
+				},1000);
 			});
 		});
 	}
@@ -768,10 +937,10 @@ export class StockLineSetupComponent implements OnInit {
 					this.assetAcquisitionTypeList = [...originalData, obj];
 				}
 				else if (tableName == 'PurchaseOrder') {
-					this.allPolistInfo = [...originalData, { purchaseOrderId: obj.value, purchaseOrderNumber: obj.label }];
+					this.allPolistInfo = [...originalData, { value: obj.value, label: obj.label }];
 				}
 				else if (tableName == 'RepairOrder') {
-					this.allRolistInfo = [...originalData, { repairOrderId: obj.value, repairOrderNumber: obj.label }];
+					this.allRolistInfo = [...originalData, { value: obj.value, label: obj.label }];
 				}
 				else if (tableName == 'Site') {
 					this.allSites = [...originalData, obj];
@@ -844,6 +1013,23 @@ export class StockLineSetupComponent implements OnInit {
 			}, error => this.saveFailedHelper(error));
 		}
 	}
+	prevent(event)
+	{
+		event.preventDefault();
+	}
+
+	getCustomerSelecionOnEdit(customerId) {
+		this.arrayCustlist.push(customerId);
+		if (customerId > 0) 
+		{
+
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.customerId = getObjectById('value', customerId, this.allCustomersList);
+			}, error => this.saveFailedHelper(error));
+		}
+	}
 
 	getWOSelecionOnEdit(WorkOrderId) {
 		this.arrayWOlist.push(WorkOrderId);
@@ -863,8 +1049,8 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	getEmployeeSelecionOnEdit(requestorId, inspectionBy) {
-		this.arrayWOlist.push(requestorId);
-		this.arrayWOlist.push(inspectionBy);
+		this.arrayEmployeelist.push(requestorId);
+		this.arrayEmployeelist.push(inspectionBy);
 		this.commonService.autoSuggestionSmartDropDownList('Employee', 'employeeId', 'firstName', '', true, 20, this.arrayEmployeelist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allEmployeeList = response;
 			this.certifyByNames = this.allEmployeeList;
@@ -879,17 +1065,22 @@ export class StockLineSetupComponent implements OnInit {
 		if (res.obtainFrom != null) { this.arrayCustlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCustlist.push(res.owner); }
 		if (res.traceableTo != null) this.arrayCustlist.push(res.traceableTo);
+		if (res.taggedBy != null) this.arrayCustlist.push(res.taggedBy);
+		if (res.certifiedById != null) this.arrayCustlist.push(res.certifiedById);
 
 		//Add Vendor Id to Array list
 		if (res.obtainFrom != null) { this.arrayVendorlist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayVendorlist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayVendorlist.push(res.traceableTo); }
+		if (res.taggedBy != null) { this.arrayVendorlist.push(res.taggedBy); }
+		if (res.certifiedById != null) { this.arrayVendorlist.push(res.certifiedById); }
 
 		//Add Company Id to Array list
 		if (res.obtainFrom != null) { this.arrayCompanylist.push(res.obtainFrom); }
 		if (res.owner != null) { this.arrayCompanylist.push(res.owner); }
 		if (res.traceableTo != null) { this.arrayCompanylist.push(res.traceableTo); }
-
+		if (res.taggedBy != null) { this.arrayCompanylist.push(res.taggedBy); }
+		if (res.certifiedById != null) { this.arrayCompanylist.push(res.certifiedById); }
 
 		//obtain from
 		if (res.obtainFromType == this.customerModuleId) {
@@ -968,6 +1159,58 @@ export class StockLineSetupComponent implements OnInit {
 		else if (res.traceableToType == this.otherModuleId) {
 			this.stockLineForm.traceableTo = res.tracableToName;
 		}
+
+		//Tagged by
+		if (res.taggedByType == this.customerModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allCustomersList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.vendorModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allVendorsList = response;
+				this.vendorNames = this.allVendorsList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allVendorsList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.companyModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCompanyList = response;
+				this.companyNames = this.allCompanyList;
+				this.stockLineForm.taggedBy = getObjectById('value', res.taggedBy, this.allCompanyList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.taggedByType == this.otherModuleId) {
+			this.stockLineForm.taggedByName = res.taggedByName;
+		}
+
+		// Certified Type
+		if (res.certifiedTypeId == this.customerModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCustomersList = response;
+				this.customerNames = this.allCustomersList;
+				this.stockLineForm.certifiedById = getObjectById('value', res.certifiedById, this.allCustomersList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.certifiedTypeId == this.vendorModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allVendorsList = response;
+				this.vendorNames = this.allVendorsList;
+				this.stockLineForm.certifiedById = getObjectById('value', res.certifiedById, this.allVendorsList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.certifiedTypeId == this.companyModuleId) {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayCompanylist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				this.allCompanyList = response;
+				this.companyNames = this.allCompanyList;
+				this.stockLineForm.certifiedById = getObjectById('value', res.certifiedById, this.allCompanyList);
+			}, error => this.saveFailedHelper(error));
+		}
+		else if (res.certifiedTypeId == this.otherModuleId) {
+			this.stockLineForm.certifiedBy = res.certifiedBy;
+		}
 	}
 
 	filterPartNumbers(event) {
@@ -976,12 +1219,18 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadPartNumData(event.query);
 		}
 	}
+	filterRevicePartNumbers(event) {
+		this.partNumbersCollection = this.allPartnumbersList;
+		if (event.query !== undefined && event.query !== null) {
+			this.loadRevicePnPartNumData(event.query,0);
+		}
+	}
 
 	filterPoNumber(event) {
 		this.polistInfo = this.allPolistInfo;
 		const polistData = [
 			...this.allPolistInfo.filter(x => {
-				return x.purchaseOrderNumber.toLowerCase().includes(event.query.toLowerCase());
+				return x.label.toLowerCase().includes(event.query.toLowerCase());
 			})
 		];
 		this.polistInfo = polistData;
@@ -991,11 +1240,11 @@ export class StockLineSetupComponent implements OnInit {
 	filterReceiverNumber(event) {
 		const polistData = [
 			...this.allPolistInfo.filter(x => {
-				return x.purchaseOrderNumber.toLowerCase().includes(event.query.toLowerCase());
+				return x.label.toLowerCase().includes(event.query.toLowerCase());
 			})
 		];
 		const receverlist = polistData.map(function(item) {
-			return item['purchaseOrderNumber'];
+			return item['label'];
 		  });
 
 		  this.receicerlistInfo = receverlist;
@@ -1041,19 +1290,38 @@ export class StockLineSetupComponent implements OnInit {
 		}
 	}
 
+	filterTagEmployees(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadTagByEmployeeData(event.query,0);
+		}
+	}
+
 	filterWorkOrderList(event) {
 		if (event.query !== undefined && event.query !== null) {
 			this.loadWorkOrderList(event.query);
 		}
 	}
+	filterPOList(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadPODataList(event.query);
+		}
+	}
+	filterROList(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadRODataList(event.query);
+		}
+	}
 
 	onPartNumberSelected(itemMasterId) {
-		this.loadPOData(itemMasterId);
-		this.loadROData(itemMasterId);
+
+		this.itemMasterId=itemMasterId;
+		this.getROSelecionOnEdit('',0);
+		this.getPOSelecionOnEdit('',0);
 		this.loadNHAData(itemMasterId);
 		this.loadTLAData(itemMasterId);
 		this.GetManufacturerByitemMasterId(itemMasterId);
 		this.getUnitCostSalePrice();
+		
 		this.sourceTimeLife = {};
 		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
 			const partDetails = res;
@@ -1069,7 +1337,7 @@ export class StockLineSetupComponent implements OnInit {
 					this.stockLineForm.isOemPNId = getObjectById('itemMasterId', res.isOemPNId, this.allPartnumbersList);
 				}, error => this.saveFailedHelper(error));
 			}
-
+			this.stockLineForm.expirationDate=partDetails.expirationDate ? new Date(partDetails.expirationDate) :null;
 			this.stockLineForm.partDescription = partDetails.partDescription;
 			this.stockLineForm.revisedPart = partDetails.revisedPart;
 			this.stockLineForm.itemGroup = partDetails.itemGroup;
@@ -1085,13 +1353,15 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
 			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
 			this.stockLineForm.purchaseUnitOfMeasureId =  this.getInactiveObjectOnEdit('value', partDetails.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname');
-			this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
+			this.stockLineForm.unitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
 		    this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice ? formatNumberAsGlobalSettingsModule(partDetails.unitSalesPrice, 2) : '0.00';
 			this.stockLineForm.conditionId = partDetails.conditionId;
-			this.stockLineForm.tagDays = partDetails.tagDays;
+			this.stockLineForm.tagDays = partDetails.tagDays; 
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
 			this.stockLineForm.openDays = partDetails.openDays;
+			this.loadRevicePnPartNumData('',partDetails.revisedPartId)
+			//this.stockLineForm.isDER = partDetails.isDER;
 			this.stockLineForm.siteId = this.getInactiveObjectOnEdit('value', partDetails.siteId, this.allSites, 'Site', 'SiteId', 'Name');
 			this.getWareHouseList(partDetails.siteId);
 			this.getLocationList(partDetails.warehouseId);
@@ -1117,8 +1387,8 @@ export class StockLineSetupComponent implements OnInit {
 				this.stockLineForm.quantityAvailable = null;
 				this.disableQtyOnHand = false;
 			}
-			this.stockLineForm.isDER = partDetails.der;
-			this.stockLineForm.oem = partDetails.isOEM.toString();
+			this.stockLineForm.isDER = partDetails.isDER;
+			this.stockLineForm.oem = partDetails.isOEM.toString();			
 			this.sourceTimeLife.timeLife = partDetails.isTimeLife;
 			this.disableManufacturer = false;
 			this.stockLineForm.locationId = this.getInactiveObjectOnEdit('value', partDetails.locationId, this.allLocations, 'Location', 'LocationId', 'Name');
@@ -1153,7 +1423,8 @@ export class StockLineSetupComponent implements OnInit {
 
 	getUnitCostSalePrice() {
 		if (this.stockLineForm.itemMasterId && this.stockLineForm.conditionId != '0') {
-			const itemMasterId = getValueFromObjectByKey('value', this.stockLineForm.itemMasterId);
+			//const itemMasterId = getValueFromObjectByKey('value', this.stockLineForm.itemMasterId);
+			const itemMasterId = getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId)
 			const conditionId = this.stockLineForm.conditionId;
 			this.commonService.getPriceDetailsByCondId(itemMasterId, conditionId).subscribe(res => {
 				if (res) {					
@@ -1317,36 +1588,48 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.traceableTo = undefined;
 	}
 
+	onSelectTaggedType() {
+		this.stockLineForm.taggedBy = undefined;
+	}
+
+	onSelectCertype() {
+		this.stockLineForm.certifiedById = undefined;
+	}
+
+
+
 	onChangePONum(selected) {
-		this.stocklineser.getPurchaseOrderUnitCost(selected.purchaseOrderId).subscribe(res => {
+		this.stocklineser.getPurchaseOrderUnitCost(selected.value).subscribe(res => {
 			const resp: any = res;
 			if (resp.length > 0) {
-				this.stockLineForm.repairOrderUnitCost = null;
+				//this.stockLineForm.repairOrderUnitCost = null;
 				this.stockLineForm.purchaseOrderUnitCost = resp[0].unitCost ? formatNumberAsGlobalSettingsModule(resp[0].unitCost, 2) : '0.00';
-				this.arrayVendorlist.push(resp[0].vendorId);
-				this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
-					this.allVendorsList = response;
-					this.vendorNames = this.allVendorsList;
-					this.stockLineForm.vendorId = getObjectById('value', resp[0].vendorId, this.allVendorsList);
-					this.disableVendor = true;
-				}, error => this.saveFailedHelper(error));
+				this.changeUnitPrice();
+				// this.arrayVendorlist.push(resp[0].vendorId);
+				// this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', '', true, 20, this.arrayVendorlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+				// 	this.allVendorsList = response;
+				// 	this.vendorNames = this.allVendorsList;
+				// 	this.stockLineForm.vendorId = getObjectById('value', resp[0].vendorId, this.allVendorsList);
+				// 	this.disableVendor = true;
+				// }, error => this.saveFailedHelper(error));
 			} else {
 				this.disableVendor = false;
 			}
 		});
 
-		this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-			if (res.length > 0) {
-				const empId = res[0].label;
-				this.stockLineForm.requestorId = getObjectById('value', empId, this.allEmployeeList);
-			}
-		});
+		// this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		// 	if (res.length > 0) {
+		// 		const empId = res[0].label;
+		// 		this.stockLineForm.requestorId = getObjectById('value', empId, this.allEmployeeList);
+		// 	}
+		// });
 	}
 
 	onChangeRONum(selected) {
-		this.stocklineser.getRepairOrderUnitCost(selected.repairOrderId).subscribe(res => {
-			this.stockLineForm.purchaseOrderUnitCost = null;
+		this.stocklineser.getRepairOrderUnitCost(selected.value).subscribe(res => {
+			//this.stockLineForm.purchaseOrderUnitCost = null;
 			this.stockLineForm.repairOrderUnitCost = res[0].unitCost ? formatNumberAsGlobalSettingsModule(res[0].unitCost, 2) : '0.00';
+			this.changeUnitPrice();
 		});
 	}
 	
@@ -1388,8 +1671,10 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.accidentReason = this.textAreaInfo;
 		}
 		else if (this.textAreaLabel == 'Memo') {
-			this.enableSaveDocument();
+	
 			this.stockLineForm.memo = this.textAreaInfo;
+			this.enableSaveDocument();
+
 		}
 	}
 
@@ -1409,25 +1694,49 @@ export class StockLineSetupComponent implements OnInit {
 		}
 	}
 
-	onSaveStockLine() {
-		this.isSpinnerVisible = true;
-
-		const timeLife = {
-			timeLifeCyclesId: this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
-			cyclesRemaining: typeof (this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
-			timeRemaining: typeof (this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
-			cyclesSinceNew: typeof (this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
-			timeSinceNew: typeof (this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
-			lastSinceNew: typeof (this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
-			cyclesSinceOVH: typeof (this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
-			timeSinceOVH: typeof (this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
-			lastSinceOVH: typeof (this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
-			cyclesSinceInspection: typeof (this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
-			timeSinceInspection: typeof (this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
-			lastSinceInspection: typeof (this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
-			cyclesSinceRepair: typeof (this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
-			timeSinceRepair: typeof (this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
+	onSelectCustomer() {
+		if(this.stockLineForm.isCustomerStock)
+		{
+			if (this.stockLineForm.customerId != 0 && this.stockLineForm.customerId != null) 
+			{
+				this.disableCustomer = false;
+			} 
+			else {
+				this.disableCustomer = true;
+			}
 		}
+		else {
+			this.disableCustomer = false;
+		}
+	
+	}
+	ChekisCustomerStock(isCustomerStock)
+	{
+		if(!isCustomerStock)
+		{
+			this.stockLineForm.customerId= null;
+		}
+	}
+
+	onSaveStockLine() {
+		this.isSpinnerVisible = true;		
+		const timeLife = this.getTimeLife(this.sourceTimeLife);
+		// const timeLife = {
+		// 	timeLifeCyclesId: this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
+		// 	cyclesRemaining: typeof (this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
+		// 	timeRemaining: typeof (this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
+		// 	cyclesSinceNew: typeof (this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
+		// 	timeSinceNew: typeof (this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
+		// 	lastSinceNew: typeof (this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
+		// 	cyclesSinceOVH: typeof (this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
+		// 	timeSinceOVH: typeof (this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
+		// 	lastSinceOVH: typeof (this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
+		// 	cyclesSinceInspection: typeof (this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
+		// 	timeSinceInspection: typeof (this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
+		// 	lastSinceInspection: typeof (this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
+		// 	cyclesSinceRepair: typeof (this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
+		// 	timeSinceRepair: typeof (this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
+		// }
 		this.saveStockLineForm = {
 			...this.stockLineForm,
 			purchaseUnitOfMeasureId: this.stockLineForm.purchaseUnitOfMeasureId > 0 ? this.stockLineForm.purchaseUnitOfMeasureId : null,
@@ -1445,15 +1754,29 @@ export class StockLineSetupComponent implements OnInit {
 			//receiverNumber: this.stockLineForm.receiverNumber != undefined && this.stockLineForm.receiverNumber.purchaseOrderNumber != undefined? this.stockLineForm.receiverNumber.purchaseOrderNumber : this.stockLineForm.receiverNumber,
 			partNumber: this.stockLineForm.itemMasterId != undefined ? this.stockLineForm.itemMasterId.partnumber : '',
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
+			revicedPNId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.revicedPNId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
+			customerId: this.stockLineForm.customerId ? editValueAssignByCondition('value', this.stockLineForm.customerId) : '',			
 			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
 			obtainFrom: this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
-			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,
+			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,			
+			taggedBy : this.stockLineForm.taggedByType == 4 ? null : (this.stockLineForm.taggedBy ? editValueAssignByCondition('value', this.stockLineForm.taggedBy) : ''),
+			taggedByName: this.stockLineForm.taggedByType == 4 ? this.stockLineForm.taggedByName : (this.stockLineForm.taggedBy ? getValueFromObjectByKey('label', this.stockLineForm.taggedBy) : ''),
+			taggedByType: this.stockLineForm.taggedByType > 0 ? this.stockLineForm.taggedByType : null,
+			
+			certifiedById : this.stockLineForm.certifiedTypeId == 4 ? null : (this.stockLineForm.certifiedById ? editValueAssignByCondition('value', this.stockLineForm.certifiedById) : ''),
+			certifiedBy: this.stockLineForm.certifiedTypeId == 4 ? this.stockLineForm.certifiedBy : (this.stockLineForm.certifiedById ? getValueFromObjectByKey('label', this.stockLineForm.certifiedById) : ''),
+			certifiedTypeId: this.stockLineForm.certifiedTypeId > 0 ? this.stockLineForm.certifiedTypeId : null,
+
 			ownerType: this.stockLineForm.ownerType > 0 ? this.stockLineForm.ownerType : null,
 			traceableToType: this.stockLineForm.traceableToType > 0 ? this.stockLineForm.traceableToType : null,
 			manufacturerId: this.stockLineForm.manufacturerId > 0 ? this.stockLineForm.manufacturerId : null,
-			purchaseOrderId: this.stockLineForm.purchaseOrderId > 0 ? this.stockLineForm.purchaseOrderId : null,
-			repairOrderId: this.stockLineForm.repairOrderId > 0 ? this.stockLineForm.repairOrderId : null,
+			//purchaseOrderId: this.stockLineForm.purchaseOrderId && getValueFromObjectByKey('purchaseOrderId',this.stockLineForm.purchaseOrderId) != 0 ? this.stockLineForm.purchaseOrderId.purchaseOrderId : null,
+			//repairOrderId: this.stockLineForm.repairOrderId && getValueFromObjectByKey('repairOrderId',this.stockLineForm.repairOrderId) != 0 ? getValueFromObjectByKey('repairOrderId',this.stockLineForm.repairOrderId) : null,
+			//purchaseOrderId: this.stockLineForm.purchaseOrderId != null  ?this.stockLineForm.purchaseOrderId.purchaseOrderId : null,
+			//repairOrderId: this.stockLineForm.repairOrderId != null  ? this.stockLineForm.repairOrderId.repairOrderId : null,
+			purchaseOrderId: this.stockLineForm.purchaseOrderId && this.getValueFromObj(this.stockLineForm.purchaseOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.purchaseOrderId) : null,
+			repairOrderId: this.stockLineForm.repairOrderId && this.getValueFromObj(this.stockLineForm.repairOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.repairOrderId) : null,
 			owneconditionIdrType: this.stockLineForm.conditionId > 0 ? this.stockLineForm.conditionId : null,
 			nha: this.stockLineForm.nha > 0 ? this.stockLineForm.nha : null,
 			tla: this.stockLineForm.tla > 0 ? this.stockLineForm.tla : null,
@@ -1461,13 +1784,13 @@ export class StockLineSetupComponent implements OnInit {
 			locationId: this.stockLineForm.locationId > 0 ? this.stockLineForm.locationId : null,
 			shelfId: this.stockLineForm.shelfId > 0 ? this.stockLineForm.shelfId : null,
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
-
+			isCustomerStock: this.stockLineForm.isCustomerStock,
+			isCustomerstockType: this.stockLineForm.isCustomerstockType,
 			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
 			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
-
 			traceableToName: this.stockLineForm.traceableToType == 4 ? this.stockLineForm.traceableTo : (this.stockLineForm.traceableTo ? getValueFromObjectByKey('label', this.stockLineForm.traceableTo) : ''),
 			traceableTo: this.stockLineForm.traceableToType == 4 ? null : (this.stockLineForm.traceableTo ? editValueAssignByCondition('value', this.stockLineForm.traceableTo) : ''),
-
+			//taggedBy: this.stockLineForm.taggedBy ? getValueFromObjectByKey('value', this.stockLineForm.taggedBy) : '',
 			requestorId: this.stockLineForm.requestorId ? getValueFromObjectByKey('value', this.stockLineForm.requestorId) : '',
 			inspectionBy: this.stockLineForm.inspectionBy ? getValueFromObjectByKey('value', this.stockLineForm.inspectionBy) : '',
 			workOrderId: this.stockLineForm.workOrderId && this.getValueFromObj(this.stockLineForm.workOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.workOrderId) : null,
@@ -1478,8 +1801,10 @@ export class StockLineSetupComponent implements OnInit {
 			purchaseOrderUnitCost: this.stockLineForm.purchaseOrderUnitCost ? parseFloat(this.stockLineForm.purchaseOrderUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			repairOrderUnitCost: this.stockLineForm.repairOrderUnitCost ? parseFloat(this.stockLineForm.repairOrderUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			unitSalesPrice: this.stockLineForm.unitSalesPrice ? parseFloat(this.stockLineForm.unitSalesPrice.toString().replace(/\,/g, '')) : '0.00',
+			unitCost: this.stockLineForm.unitCost ? parseFloat(this.stockLineForm.unitCost.toString().replace(/\,/g, '')) : '0.00',
 			coreUnitCost: this.stockLineForm.coreUnitCost ? parseFloat(this.stockLineForm.coreUnitCost.toString().replace(/\,/g, '')) : '0.00',
 			lotCost: this.stockLineForm.lotCost ? parseFloat(this.stockLineForm.lotCost.toString().replace(/\,/g, '')) : '0.00',
+			//timeLifes: { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
 			timeLifes: { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
 			masterCompanyId: this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null,
 			createdby: this.authService.currentUser ? this.authService.currentUser.userName : "",
@@ -1528,17 +1853,17 @@ export class StockLineSetupComponent implements OnInit {
 					}
 				}
 			}
-			if (this.saveStockLineForm.receivedDate != "" && moment(this.saveStockLineForm.receivedDate, 'MM/DD/YYYY', true).isValid()) {
-				if (this.saveStockLineForm.receivedDate <= this.saveStockLineForm.manufacturingDate) {
-					this.isSpinnerVisible = false;
-					if (errmessage != '') {
-						errmessage = errmessage + '<br />' + "Received Date must be greater than Manufacturing Date."
-					}
-					else {
-						errmessage = errmessage + "Received Date must be greater than Manufacturing Date."
-					}
-				}
-			}
+			// if (this.saveStockLineForm.receivedDate != "" && moment(this.saveStockLineForm.receivedDate, 'MM/DD/YYYY', true).isValid()) {
+			// 	if (this.saveStockLineForm.receivedDate <= this.saveStockLineForm.manufacturingDate) {
+			// 		this.isSpinnerVisible = false;
+			// 		if (errmessage != '') {
+			// 			errmessage = errmessage + '<br />' + "Received Date must be greater than Manufacturing Date."
+			// 		}
+			// 		else {
+			// 			errmessage = errmessage + "Received Date must be greater than Manufacturing Date."
+			// 		}
+			// 	}
+			// }
 			if (this.saveStockLineForm.entryDate != "" && moment(this.saveStockLineForm.entryDate, 'MM/DD/YYYY', true).isValid()) {
 				if (this.saveStockLineForm.entryDate <= this.saveStockLineForm.manufacturingDate) {
 					this.isSpinnerVisible = false;
@@ -1556,7 +1881,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.isSpinnerVisible = false;
 			this.stockLineForm = {
 				...this.stockLineForm,
-				itemMasterId: getObjectById('itemMasterId', this.saveStockLineForm.itemMasterId, this.allPartnumbersList),
+				//itemMasterId: getObjectById('itemMasterId', this.saveStockLineForm.itemMasterId, this.allPartnumbersList),
 			}
 
 			this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
@@ -1566,8 +1891,10 @@ export class StockLineSetupComponent implements OnInit {
 		this.saveStockLineForm.receiverNumber = this.receiverNumber;
 		this.stocklineser.newStockLine(this.saveStockLineForm).subscribe(res => {
 			this.isSpinnerVisible = false;
-			this.stockLineId = res.stockLineId;
-			this.onUploadDocumentListNew();
+			this.stockLineId = res.stockLineId; 
+			localStorage.setItem('commonId',this.stockLineId.toString())
+			this.uploadDocs.next(true);
+			// this.onUploadDocumentListNew();
 
 			this.alertService.showMessage(
 				'Success',
@@ -1584,13 +1911,41 @@ export class StockLineSetupComponent implements OnInit {
 			return null;
 		}
 	}
+	POValue : number = 0;
+	ROValue : number = 0;
+	UnitPrice : number = 0;
+	changeUnitPrice()
+	{
+		var ROValue = 0
+		if (this.stockLineForm.purchaseOrderUnitCost != "" && this.stockLineForm.purchaseOrderUnitCost != null && this.stockLineForm.purchaseOrderUnitCost != undefined) {
+			this.POValue = this.stockLineForm.purchaseOrderUnitCost.replace(/,/g, '');
+		}
+		else {
+			this.POValue = 0
+		}
 
-	onChangePOUnitCost() {
-		this.stockLineForm.purchaseOrderUnitCost = this.stockLineForm.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(this.stockLineForm.purchaseOrderUnitCost, 2) : '0.00';
+		if (this.stockLineForm.repairOrderUnitCost != "" && this.stockLineForm.repairOrderUnitCost != null && this.stockLineForm.repairOrderUnitCost != undefined) {
+			this.ROValue = this.stockLineForm.repairOrderUnitCost.replace(/,/g, '');
+		}
+		else {
+			ROValue = 0
+		}
+
+		 this.UnitPrice = Number(this.POValue)+ Number(this.ROValue);
+
+		this.stockLineForm.unitCost = this.UnitPrice ? formatNumberAsGlobalSettingsModule(this.UnitPrice, 2) : '0.00';
 	}
 
-	onChangeROUnitCost() {
+	onChangePOUnitCost() 
+	{
+		this.stockLineForm.purchaseOrderUnitCost = this.stockLineForm.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(this.stockLineForm.purchaseOrderUnitCost, 2) : '0.00';
+		this.changeUnitPrice();
+	}
+
+	onChangeROUnitCost() 
+	{
 		this.stockLineForm.repairOrderUnitCost = this.stockLineForm.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(this.stockLineForm.repairOrderUnitCost, 2) : '0.00';
+		this.changeUnitPrice();
 	}
 
 	onChangeUnitSalesPrice() {
@@ -1912,15 +2267,45 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	enableSave() {
-		this.disableSaveForEdit = false;
+
+		if(this.stockLineForm.memo != "" && this.stockLineForm.memo != null)
+		{
+			this.disableSaveForEdit = false;
+		}else
+		{
+			this.disableSaveForEdit = true;
+		}
+
+		if(this.stockLineForm.isCustomerStock)
+		{
+			if (this.stockLineForm.customerId != 0 && this.stockLineForm.customerId != null) 
+			{
+				this.disableCustomer = false;
+			} 
+			else {
+				this.disableCustomer = true;
+			}
+		}
+		else {
+			this.disableCustomer = false;
+		}
+
 		if (!this.stockLineForm.inspectionBy) {
 			this.stockLineForm.inspectionDate = null;
 		}
 	}
 
 	enableSaveDocument() {
-		this.disableSaveForEditDocument = false;
-		this.disableSaveForEdit = false;
+
+		if(this.stockLineForm.memo != "" && this.stockLineForm.memo != null)
+		{
+			this.disableSaveForEdit = false;
+		}else
+		{
+			this.disableSaveForEditDocument = true;
+			this.disableSaveForEdit = true;
+		}
+		
 	}
 
 	onCheckOem() {
@@ -1944,36 +2329,9 @@ export class StockLineSetupComponent implements OnInit {
 			const mfgdate = new Date(value);
 			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
 			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-			console.log(diffTime + " milliseconds");
-			console.log(diffDays + " days");
-
 			this.stockLineForm.manufacturingDays = diffDays;
 		}
-	}
-
-	errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if (errorLog.message) {
-			if (errorLog.error && errorLog.error.errors.length > 0) {
-				for (let i = 0; i < errorLog.error.errors.length; i++) {
-					msg = msg + errorLog.error.errors[i].message + '<br/>'
-				}
-			}
-			this.alertService.showMessage(
-				errorLog.error.message,
-				msg,
-				MessageSeverity.error
-			);
-		}
-		else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			);
-		}
-	}
+	}	
 
 	onChangeInspectedDate() {
 		if (this.stockLineForm.inspectionBy) {
@@ -1982,4 +2340,141 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.inspectionDate = null;
 		}
 	}
+
+	getTimeLifeDetails(x) {		
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();                      
+		timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
+        timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
+        timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
+		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
+        timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
+		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
+        timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
+		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
+        timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
+		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
+        timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
+		timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
+        timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
+		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
+        timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
+		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
+        timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
+		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
+        timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
+		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
+        timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
+		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
+        timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
+		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
+        timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
+        timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
+        return timeLife;
+	}
+
+	getTimeLife(x) {
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData(); 
+		timeLife.timeLifeCyclesId = this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null;   
+		timeLife.cyclesRemaining = ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00'));
+		timeLife.timeRemaining = ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00'));
+		timeLife.cyclesSinceNew = ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00'));
+		timeLife.timeSinceNew = ((x.timeSinceNewHrs ? x.timeSinceNewHrs : '00') + ':' + (x.timeSinceNewMin ? x.timeSinceNewMin : '00'));
+		timeLife.lastSinceNew = ((x.lastSinceNewHrs ? x.lastSinceNewHrs : '00') + ':' + (x.lastSinceNewMin ? x.lastSinceNewMin : '00'));
+		timeLife.cyclesSinceOVH = ((x.cyclesSinceOVHHrs ? x.cyclesSinceOVHHrs : '00') + ':' + (x.cyclesSinceOVHMin ? x.cyclesSinceOVHMin : '00'));
+		timeLife.timeSinceOVH = ((x.timeSinceOVHHrs ? x.timeSinceOVHHrs : '00') + ':' + (x.timeSinceOVHMin ? x.timeSinceOVHMin : '00'));
+		timeLife.lastSinceOVH = ((x.lastSinceOVHHrs ? x.lastSinceOVHHrs : '00') + ':' + (x.lastSinceOVHMin ? x.lastSinceOVHMin : '00'));
+		timeLife.cyclesSinceInspection = ((x.cyclesSinceInspectionHrs ? x.cyclesSinceInspectionHrs : '00') + ':' + (x.cyclesSinceInspectionMin ? x.cyclesSinceInspectionMin : '00'));
+		timeLife.timeSinceInspection = ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00'));
+		timeLife.lastSinceInspection = ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00'));
+		timeLife.cyclesSinceRepair = ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00'));
+		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
+        return timeLife;
+	}
+
+	onChangeMfgDateonEdit(value) {
+		if (value) {
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return this.stockLineForm.manufacturingDays = diffDays;
+		}else{
+			return 0
+		}		
+	}
+
+	onChangeTagDateonEdit(value) {
+		if (value) {
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return this.stockLineForm.tagDays = diffDays;
+		}else{
+			return 0
+		}		
+	}
+
+	onChangeReceivedDateonEdit(value) {
+		if (value) {
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return this.stockLineForm.daysReceived = diffDays;
+		}else{
+			return 0
+		}		
+	}
+
+	onChangeTimeLifeMin(name,value) {  	
+        if (value > 59) {           
+			this.alertService.showMessage('Error','Minutes can\'t be greater than 59', MessageSeverity.error);
+			this.timeLifeMinNames(name);
+        }       
+	}
+	
+	timeLifeMinNames(name){
+		if(name == 'cyclesRemainingMin'){
+			this.sourceTimeLife.cyclesRemainingMin = '00';
+		}
+		else if (name == 'timeRemainingMin'){
+			this.sourceTimeLife.timeRemainingMin = '00';
+		}
+		else if (name == 'lastSinceNewMin'){
+			this.sourceTimeLife.lastSinceNewMin = '00';
+		}
+		else if (name == 'cyclesSinceNewMin'){
+			this.sourceTimeLife.cyclesSinceNewMin = '00';
+		}
+		else if (name == 'timeSinceNewMin'){
+			this.sourceTimeLife.timeSinceNewMin = '00';
+		}
+		else if (name == 'lastSinceOVHMin'){
+			this.sourceTimeLife.lastSinceOVHMin = '00';
+		}
+		else if (name == 'cyclesSinceOVHMin'){
+			this.sourceTimeLife.cyclesSinceOVHMin = '00';
+		}
+		else if (name == 'timeSinceOVHMin'){
+			this.sourceTimeLife.timeSinceOVHMin = '00';
+		}
+		else if (name == 'lastSinceInspectionMin'){
+			this.sourceTimeLife.lastSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceInspectionMin'){
+			this.sourceTimeLife.cyclesSinceInspectionMin = '00';
+		}
+		else if (name == 'timeSinceInspectionMin'){
+			this.sourceTimeLife.timeSinceInspectionMin = '00';
+		}
+		else if (name == 'cyclesSinceRepairMin'){
+			this.sourceTimeLife.cyclesSinceRepairMin = '00';
+		}
+		else if (name == 'timeSinceRepairMin'){
+			this.sourceTimeLife.timeSinceRepairMin = '00';
+		}
+	}
+	
 }

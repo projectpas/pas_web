@@ -204,7 +204,7 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 	totalRecordsNonStock: any;
 	totalPagesNonStock: number;
 	nonStockPageSize: number = 10;
-
+	moduleName: any = 'ItemMaster';
 	searchData = {
 		partNo: '',
 		description: '',
@@ -609,7 +609,15 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 			this.displayName = this.exchangeCurrencies[0].displayName;
 		});
 	}
-
+	parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
 	getNtaeData(itemMasterId) {
 		this.filterManufacturerData = [];
 		this.filterDiscriptionData = [];

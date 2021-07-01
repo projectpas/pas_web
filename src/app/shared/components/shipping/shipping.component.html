@@ -1,14 +1,32 @@
 ﻿
 <div class="card">
     <div class="card-body p-t-0">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12" style="padding-left:25px; padding-top:5px">
                 <label style="width: 100%;"></label>
                 <div class="form-group" style="float: right; margin-right: 10px;">
                     <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Perform Shipping</button>
                 </div>
             </div>
+        </div> -->
+
+        
+  <div class="row" *ngIf="!isView">
+    <div class="col-md-12 shipping-div">
+        <label class="input-width-100-percent"></label>
+        <div class="form-group perform-shipping-div" *ngIf="isView == false">
+            <button type="submit" class="btn  submit-btn btn btn-primary"
+                [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
+                Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
+            (click)="PerformShipping()">Perform Shipping</button>
+            <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="isgeneratelable" (click)="printSelectedShippingLabel()">Print Shipping
+                Label</button>&nbsp;
+          
         </div>
+    </div>
+</div>
 
         <div [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
             style="min-height: 130px !important;">
@@ -34,7 +52,16 @@
                                         <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
                                             Item {{summaryPart[summaryColumn.field] }}
                                         </span> -->
-                                        <span *ngIf="summaryColumn.field != 'itemNo'">
+                                        <span class="float-left"  *ngIf="summaryColumn.field != 'itemNo' &&  summaryColumn.field != 'qtyToShip' &&  summaryColumn.field != 'qtyShipped' &&  summaryColumn.field != 'qtyRemaining'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span  class="float-right" *ngIf="summaryColumn.field == 'qtyToShip'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span  class="float-right" *ngIf="summaryColumn.field == 'qtyShipped'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span  class="float-right" *ngIf="summaryColumn.field == 'qtyRemaining'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                     </td>
@@ -70,7 +97,12 @@
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let ship of summaryPart.woshippingchildviewlist; let poIndex = index">
-                                    <td></td>
+                                    <td>
+                                        <!-- *ngIf="ship.packagingSlipNo === undefined || ship.packagingSlipNo == ''" -->
+                                        <input id="{{poIndex}}" name="ship.selectedToGeneratePackaging{{poIndex}}"
+                                            type="checkbox" (change)="checkedToGenerate($event, ship);"
+                                            [(ngModel)]="ship.selectedToGeneratePackaging" />
+                                    </td>
                                     <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
                                         <label style="color: #0F9D58">Shipped</label>
                                     </td>
@@ -105,23 +137,51 @@
                                     <td>
                                         {{ ship.serialNumber }}
                                     </td>
-                                    <td>
+                                    <td  class="number-text-align">
                                         {{ ship.qtyToShip}}
                                     </td>
-                                    <td>
+                                    <td  class="number-text-align">
                                         {{ ship.customsValue }}
                                     </td>
-                                    <td>
+                                    <td >
                                         {{ ship.commodityCode }}
                                     </td>
-                                    <!-- <td colspan="2"></td> -->
-                                    <td class="zui-sticky-col" style="width:107px !important">
+
+                                    <td  class="zui-sticky-col" style="width:107px !important">
+                                        <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
+                                            <a class="btn nobg" matTooltip="Print Packaging Slip"
+                                                matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
+                                                    class="fa fa-print"></i></a>
+                                        </span>
+                                        <span *ngIf="ship.qtyShipped > 0">
+                                            <a class="btn nobg" matTooltip="Print Shipping Label"
+                                                matTooltipPosition="above" (click)="printShippingLabel(ship);"><i
+                                                    class="fa fa-print"></i></a>
+                                        </span>
                                         <!-- <span>
-                                            <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
-                                                (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
-                                                <i class="fa fa-plus"></i></button>
+                                            <button *ngIf="ship.qtyShipped > 0" class="btn nobg font-bold"
+                                                mat-icon-button (click)="viewShippingData(ship)" matTooltip="View Shipping"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
                                         </span> -->
+                                        <span *ngIf="isView == false">
+                                            <button class="btn nobg font-bold" *ngIf="ship.qtyShipped == 0"
+                                                type="submit" (click)="onSelectPartNumber(ship)"
+                                                matTooltip="Perform Shipping" matTooltipPosition="above"
+                                                [disabled]="!ship.selected">
+                                                <i class="fa fa-plus"></i></button>
+                                        </span>
+                                        <!-- <span>
+                                            <button [hidden]="true" class="btn nobg font-bold" mat-icon-button
+                                                (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                        </span> -->
+                                    </td>
+                                    <!-- <td colspan="2"></td> -->
+                                    <!-- <td class="zui-sticky-col" style="width:107px !important">
                                         <span>
                                             <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
                                                 (click)="viewShippingData(ship)" matTooltip="View"
@@ -129,7 +189,7 @@
                                                 <i class="fa fa-pencil"></i>
                                             </button>
                                         </span> 
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </ng-container>
@@ -138,7 +198,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="48"
-                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    style="color: red; font-weight: bold; text-align: center; text-transform: uppercase">
                                     No records found
                                 </td>
                             </tr>
@@ -151,7 +211,7 @@
     </div>
 </div>
 
-<div class="card align-center" >
+<div class="card align-center" *ngIf="partSelected">
     <div class="card-body">
         <form #shippingForm="ngForm">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 0px;">
@@ -268,18 +328,18 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label class="work-order-shipping-lable">House Airway Bill<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">House Airway Bill</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.houseAirwayBill" name="houseAirwayBill" [disabled]="isView" required />
+                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.houseAirwayBill" name="houseAirwayBill" [disabled]="isView" />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label class="work-order-shipping-lable">Tracking #<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">Tracking #</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.trackingNum" name="trackingNum" [disabled]="isView" required />
+                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.trackingNum" name="trackingNum" [disabled]="isView" />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -291,8 +351,8 @@
                                         maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
                                         id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
                                 </div>
-                                <div class="col-md-2">
-                                    <label class="work-order-shipping-lable" style="margin-left: 40px;">UOM <span style="color: red;"
+                                <div class="col-md-2" style="width: 50px;">
+                                    <label class="work-order-shipping-lable" style="margin-left: 10px;">UOM <span style="color: red;"
                                             *ngIf="shippingHeader.shipWeight">*</span>
                                     </label>
                                 </div>
@@ -323,8 +383,8 @@
                                             [(ngModel)]="shippingHeader.shipSizeHeight" />
                                     </span>
                                 </div>
-                                <div class="col-md-2">
-                                    <label class="work-order-shipping-lable" style="margin-left: 40px;">
+                                <div class="col-md-2" style="width: 50px;">
+                                    <label class="work-order-shipping-lable" style="margin-left: 10px;">
                                         UOM <span style="color: red;"
                                             *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
                                     </label>
@@ -336,6 +396,19 @@
                                         placeholder="Select" [showClear]="true"
                                         [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
                                         (onChange)="btnChange()"></p-dropdown>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-4">
+                                    <label class="sale-order-shipping-lable">No of Containers</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="display-flex inline-block">
+                                        <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                            maxlength="10" [(ngModel)]="shippingHeader.noOfContainer"
+                                            name="noOfContainer" id="noOfContainer" title="No Of Container"
+                                            (keyup)="btnChange()" [disabled]="isViewShipping" required />
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -461,7 +534,22 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Site <span class="clr-red">*</span></label>
+                                    <label>Site <span class="clr-red">*</span>
+                                        <span
+                                        *ngIf="isViewShipping ? false : (shippingHeader.soldToName ? true : false) "
+                                        class="label-span"><a class="fa fa-plus-circle fa-lg"
+                                            matTooltip="Add Site Name" matTooltipPosition="above"
+                                            data-toggle="modal" data-target="#createBillingSiteName1"
+                                            (click)="onClickBillSiteName('Add')"></a></span>
+
+                                            <span class="pencil-span"><a class="btn nobg" matTooltipPosition="above"
+                                                matTooltip="Edit Site Name"
+                                                *ngIf="this.CustomerId && this.CustomerId > 0"
+                                                data-toggle="modal" data-target="#createBillingSiteName1"
+                                                (click)="onClickBillSiteName('Edit', shippingHeader)"><i class="fa fa-pencil"></i></a>
+                                        </span>
+                                    </label>
+                                   
                                 </div>
                                 <div class="col-md-8">
                                     <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
@@ -529,7 +617,15 @@
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToCountryName" name="soldToCountryName" [disabled]="isView" required disabled />
                                 </div>
                             </div>
-                            <div class="checkbox-cstm sipto-ceck-div">
+                            <div class="form-group col-md-12">
+                                <div class="col-md-4">
+                                    <label>Attention<span class="clr-red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldAttention" name="soldAttention" [disabled]="isView" disabled />
+                                </div>
+                            </div>
+                            <div *ngIf="ishidesame"  class="checkbox-cstm sipto-ceck-div">
                                 <label class="shipto-ceck-label">
                                   <!--  -->
                                   <input type="checkbox" [(ngModel)]="shippingHeader.isSameForShipTo" name="cparent" id="cparent"  (click)="assignDetails($event.target.checked)"
@@ -578,7 +674,22 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Site <span class="clr-red">*</span></label>
+                                    <label>Site <span class="clr-red">*</span>
+                                        <span
+                                        *ngIf="isViewShipping ? false : (shippingHeader.shipToCustomerId ? true : false) "
+                                        class="label-span"><a class="fa fa-plus-circle fa-lg"
+                                            matTooltip="Add Site Name" matTooltipPosition="above"
+                                            data-toggle="modal" data-target="#createPOSiteName1"
+                                            (click)="onClickShipSiteName('Add')"></a></span>
+
+                                            <span class="pencil-span"><a class="btn nobg"
+                                                *ngIf="shippingHeader.shipToCustomerId && shippingHeader.shipToSiteId > 0"
+                                                matTooltip="Edit Site Name" matTooltipPosition="above" data-toggle="modal"
+                                                data-target="#createPOSiteName1"
+                                                (click)="onClickShipSiteName('Edit',shippingHeader)"><i class="fa fa-pencil"></i></a>
+                                        </span>
+                                    </label>
+                             
                                 </div>
                                 <div class="col-md-8">
                                     <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
@@ -641,6 +752,14 @@
                                 </div>-->
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToCountryName" name="shipToCountryName" disabled required />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-4">
+                                    <label>Attention<span class="clr-red">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipAttention" name="shipAttention" [disabled]="isView" disabled />
                                 </div>
                             </div>
                         </div>
@@ -758,9 +877,202 @@
          </div>
         </form>
     </div>
-    <div class="row">
+    <div class="col-sm-12">
+    <div class="row float-right">
         <button *ngIf="!isView" class="btn btn-primary pull-right btn-width-100" (click)="save()" [disabled]="!shippingForm.valid">Save</button>
     </div>
+    </div>
+</div>
+<div class="modal fade" id="createBillingSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog partsList-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                    (click)="resetAddressBillingForm();">&times;</button>
+                <h4 class="modal-title">Add Bill To Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <form #addBillNameForm="ngForm" class="form-horizontal">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Is Primary </label>
+                            <input type="checkbox" name="isPrimary" class="form-control col-md-6"
+                                [(ngModel)]="addressFormForBilling.isPrimary" (ngModelChange)="billAddChange()">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Site Name <span class="clr-red">*</span></label>
+                            <p-autoComplete class="autocomp-customer-cstm" name="siteName"
+                                [(ngModel)]="addressFormForBilling.siteName" [suggestions]="lstfilterBillingSite"
+                                emptyMessage="No Match Found" field="siteName"
+                                (onKeyUp)="checkSiteNameExist($event.target.value)"
+                                (onChange)="checkSiteNameExist($event.target.value)" (onSelect)="checkSiteNameSelect()"
+                                (completeMethod)="filterBillingSite($event);" (ngModelChange)="billAddChange()"
+                                [size]="30" [minLength]="1" [dropdown]="true" required>
+                            </p-autoComplete>
+                            <div *ngIf="isSiteNameAlreadyExists" class="clr-red">
+                                Site Name Already Exists
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Attention <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="soldattention"
+                            (change)="billAddChange()" [(ngModel)]="addressFormForBilling.attention" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="address1" (change)="billAddChange()"
+                                [(ngModel)]="addressFormForBilling.address1" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 2 </label>
+                            <input type="text" class="form-control col-md-6" name="address2" (change)="billAddChange()"
+                                [(ngModel)]="addressFormForBilling.address2">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">City <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="city" (change)="billAddChange()"
+                                [(ngModel)]="addressFormForBilling.city" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">State <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="stateOrProvince"
+                                (change)="billAddChange()" [(ngModel)]="addressFormForBilling.stateOrProvince" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="postalCode"
+                                (change)="billAddChange()" [(ngModel)]="addressFormForBilling.postalCode" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                            <p-autoComplete field="label" class="pautocomp-cstm" (onSelect)="billAddChange()"
+                                (change)="billAddChange()" [(ngModel)]="addressFormForBilling.countryId" name="country"
+                                [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30"
+                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                [forceSelection]="true" required></p-autoComplete>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="saveBillingAddress();"
+                    *ngIf="(!isEditModeBilling) || isEditModeBilling"
+                    [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)"
+                    data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="resetAddressShippingForm();">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createPOSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog partsList-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                    (click)="resetAddressShippingForm();">&times;</button>
+                <h4 class="modal-title">Add Ship To Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <form #addSiteNameForm="ngForm" class="form-horizontal">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Is Primary </label>
+                            <input type="checkbox" name="isPrimary" class="form-control col-md-6"
+                                [(ngModel)]="addressFormForShipping.isPrimary" (ngModelChange)="shipAddChange()">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Site Name <span class="clr-red">*</span> :</label>
+                            <p-autoComplete class="autocomp-customer-cstm" name="siteName"
+                                [(ngModel)]="addressFormForShipping.siteName" [suggestions]="lstfilterShippingSite"
+                                emptyMessage="No Match Found" field="siteName"
+                                (onKeyUp)="checkShippingSiteNameExist($event.target.value)"
+                                (onChange)="checkShippingSiteNameExist($event.target.value)"
+                                (onSelect)="checkShippingSiteNameSelect()"
+                                (completeMethod)="filterShippingSite($event);" (ngModelChange)="shipAddChange()"
+                                [size]="30" [minLength]="1" [dropdown]="true" required>
+                            </p-autoComplete>
+                            <div *ngIf="isShippingSiteNameAlreadyExists" class="clr-red">
+                                Site Name Already Exists
+                            </div>
+                            <!-- <input type="text" class="form-control col-md-6" name="siteName" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.siteName" required>-->
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Attention <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="shipattention"
+                            (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.attention" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="address1" (change)="shipAddChange()"
+                                [(ngModel)]="addressFormForShipping.address1" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 2:</label>
+                            <input type="text" class="form-control col-md-6" name="address2" (change)="shipAddChange()"
+                                [(ngModel)]="addressFormForShipping.address2">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">City <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="city" (change)="shipAddChange()"
+                                [(ngModel)]="addressFormForShipping.city" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">State <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="stateOrProvince"
+                                (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.stateOrProvince"
+                                required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="postalCode"
+                                (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.postalCode" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                            <p-autoComplete field="label" class="pautocomp-cstm" (onSelect)="shipAddChange()"
+                                (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.countryId" name="country"
+                                [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30"
+                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                [forceSelection]="true" required></p-autoComplete>
+                        </div>
+                     
+                        <!-- <div class="form-group col-md-12" style="margin-top: 8px;">
+                            <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
+                        <!-- <button type="button" class="btn btn-primary" *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly" [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists) || addressFormForShipping.isPrimary" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+                        </div> -->
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping"
+                    (click)="saveShippingAddress();"
+                    [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"
+                    data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button>
+                <!--resetAddressShippingForm();-->
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="resetAddressShippingForm();">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="workorderpackage">
+    <app-wo-order-multi-Packaging-Label (Updateshippingpopup)="hideShippingPopup()"  [packagingSlips]="packagingSlips"></app-wo-order-multi-Packaging-Label>
+</div>
+
+
+<div *ngIf="workordershipping">
+    <app-work-order-multi-shipping-label (Updateshippingpopup)="hideShippingPopup()" [shippingLabels]="shippingLabels" ></app-work-order-multi-shipping-label>
+</div>
+
+<div *ngIf="workordersinglepacking">
+    <app-work-order-packaging-label (Updateshippingpopup)="hideShippingPopup()" [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woPickTicketId]="woPickTicketId"  [packagingSlipId]="packagingSlipId"></app-work-order-packaging-label>
+</div>
+<div *ngIf="workordersingleshipping">
+    <app-work-order-shipping-label  (Updateshippingpopup)="hideShippingPopup()" [workOrderId]="workOrderId" [workOrderPartId]="workOrderPartId" [woShippingId]="woShippingId"></app-work-order-shipping-label>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

@@ -1,0 +1,622 @@
+﻿ <div class="modal-body">
+              <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
+                  <div class="panel-group" id="accordion">
+                      <div class="panel panel-default">
+                        <div>
+                          <button type="button" class="btn btn-primary" data-toggle="collapse" (click)="openAllCollapse()">
+                            Open All
+                          </button>
+                          <button type="button" class="btn btn-primary collapsed" data-toggle="collapse"
+                            (click)="closeAllCollapse()">
+                            Close All
+                          </button>
+                          <!-- <button type="button" [ngClass]="isActive ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'"
+                            style="margin: 2px 27px;">
+                            <span class="value">{{isActive ? 'Active' : 'In-Active'}}</span>
+                          </button> -->
+                          <hr />
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a data-toggle="collapse" href="#step1">General Info</a>
+                            </h4>
+                          </div>
+                          <div id="step1" class="panel-collapse collapse in show" *ngIf="generalInfo">
+                            <div class="panel-body">
+                              <div class="card">
+                                <div class="card-body">
+                                  <div>
+                                    <div class="table-responsive default-bg clear">
+                                      <div class="col-sm-4">
+                                        <p>
+                                          <span class="label"><b>Entry Date: </b></span><span class="value">{{
+                                            generalInfo.entryDate | date: 'MM/dd/yyyy'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Publication ID: </b> <span class="clr-red">*</span></span><span
+                                            class="value">{{
+                                            generalInfo.publicationId
+                                            ? generalInfo.publicationId
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Publication Description: </b></span><span class="value">{{
+                                            generalInfo.description
+                                            ? generalInfo.description
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Publication Type: </b> <span class="clr-red">*</span></span><span
+                                            class="value">{{
+                                            generalInfo.publicationType
+                                            ? generalInfo.publicationType
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Author / Source / Directive: </b></span><span class="value">{{
+                                            generalInfo.asd ? generalInfo.asd : '-'
+                                            }}</span>
+                                        </p>
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <p>
+                                          <span class="label"><b>Sequence: </b></span><span class="value">{{
+                                            generalInfo.sequence
+                                            ? generalInfo.sequence
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Published By: </b> <span class="clr-red">*</span></span><span
+                                            class="value">{{
+                                            generalInfo.publishby
+                                            }}</span>
+                                        </p>
+                                       <p *ngIf="generalInfo.publishby == 'Others'">
+                                          <span class="label"><b>Published Others: </b></span><span class="value">{{
+                                            generalInfo.publishedByOthers
+                                            ? generalInfo.publishedByOthers
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Location: </b><span class="clr-red">*</span></span><span
+                                            class="value">{{
+                                            generalInfo.location
+                                            ? generalInfo.location
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Revision Date: </b></span><span class="value">{{
+                                            generalInfo.revisionDate | date: 'MM/dd/yyyy'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Revision Number: </b></span><span class="value">{{
+                                            generalInfo.revisionNum
+                                            ? generalInfo.revisionNum
+                                            : '-'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Expiration Date: </b></span><span class="value">{{
+                                            generalInfo.expirationDate | date: 'MM/dd/yyyy'
+                                            }}</span>
+                                        </p>
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <p>
+                                          <span class="label"><b>Next Review Date: </b></span><span class="value">{{
+                                            generalInfo.nextReviewDate | date: 'MM/dd/yyyy'
+                                            }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Verified By: </b> <span class="clr-red">*</span></span><span
+                                            class="value">{{
+                                            generalInfo.verifiedByName
+                                            ? generalInfo.verifiedByName
+                                            : '-'
+                                            }}</span>
+                                        </p>
+          
+                                        <p>
+                                          <span class="label"><b>Verified Date: </b> <span class="clr-red">*</span></span><span
+                                            class="value">{{
+                                            generalInfo.verifiedDate | date: 'MM/dd/yyyy'
+                                            }}</span>
+                                        </p>
+                                      </div>
+                                      <div class="form-row col-row width_100" style="width: 100%;" *ngIf="publicationId">
+                                        <div class="col-md-12">
+                                            <app-common-documents [moduleName]="WmoduleName" [referenceId]="publicationId"
+                                                [isViewMode]="true" [offLineUpload]="true">
+                                            </app-common-documents>
+                                        </div>
+                                    </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="collapsed" data-toggle="collapse" href="#step2">PN Mapping</a>
+                            </h4>
+                          </div>
+                          <div id="step2" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="col-sm-12">
+                                <div class="shadow-Box">
+                                  <p-table #pnTable class="rpo-table-cstm" [columns]="headersforPNMapping" [value]="pnMappingList"
+                                    [paginator]="true" [rows]="pnMappingPageSize" [first]="first"
+                                    [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                    <ng-template pTemplate="caption">
+          
+                                      <div class="row">
+                                        <div class="col">
+                                          <div class="checkbox-cstm pull-right" style="margin-right: 20px;">
+                                            <label class="checkbox-label-align">
+                                              <input type="checkbox" [(ngModel)]="currentPnMappingDeletedstatus" name="cparent"
+                                                id="cparent" (click)="getPnMappingDeleteListByStatus()" />
+                                              <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                              Show Deleted List
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                      <tr>
+                                        <th style="padding: 8px 5px !important;" class="table-column-width" *ngFor="let col of columns"
+                                          [pSortableColumn]="col.field">
+                                          {{ col.header }}
+                                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                      </tr>
+                                      <tr>
+                                        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                          <input class="table-header-input-width" pInputText type="text" (input)="
+                                              pnTable.filter(
+                                                $event.target.value,
+                                                col.field,'contains')" />
+                                        </th>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                      <tr>
+                                        <td class="table-column-width" *ngFor="let col of columns">
+                                          {{ rowData[col.field] }}
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns *ngIf="pnMappingList.length == 0">
+                                      <tr>
+                                        <td [attr.colspan]="4" class="no-records-cstm no-records-msg">
+                                          No records found
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                      <label id="footer" class="footer">Total:</label>
+                                      <input class="footer-input-width" [(ngModel)]="pnTable._totalRecords" [disabled]="true" pInputText
+                                        type="text" />
+                                      &nbsp;&nbsp;
+                                      <label id="footer" class="footer1">Pages Count:</label>
+                                      <input class="footer-input-width" [ngModel]="
+                                          getPageCount(
+                                            pnTable._totalRecords,
+                                            pnMappingPageSize)" [disabled]="true" pInputText type="text" />
+                                    </ng-template>
+                                  </p-table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
+                            </h4>
+                          </div>
+                          <div id="step3" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="col-sm-12">
+                                <div class="shadow-Box">
+                                  <p-table #aircraftTable class="rpo-table-cstm" [columns]="aircraftInformationCols"
+                                    [value]="aircraftList" [paginator]="true" [rows]="aircraftPageSize" [first]="first"
+                                    [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                    <ng-template pTemplate="header" let-columns>
+                                      <tr>
+                                        <th style="padding: 8px 5px !important;"  class="table-column-width" *ngFor="let col of columns"
+                                          [pSortableColumn]="col.field">
+                                          {{ col.header }}
+                                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                        <th class="table-actions-column">Actions</th>
+                                      </tr>
+                                      <tr>
+                                        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                          <input class="table-header-input-width" pInputText type="text" (input)="
+                                              aircraftTable.filter(
+                                                $event.target.value,
+                                                col.field,
+                                                'contains'
+                                              )
+                                            " />
+                                        </th>
+                                        <th class="table-actions-column">&nbsp;</th>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                      <tr>
+                                        <td class="table-column-width" *ngFor="let col of columns">
+                                          <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
+                                            {{
+                                            rowData[col.field] }}
+                                          </span>
+                                          <span *ngIf="col.field == 'dashNumber'">
+                                            <span *ngIf="rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                              }}</span>
+                                          </span>
+                                          <span *ngIf=" col.field == 'model'">
+                                            <span *ngIf=" rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                              }}</span>
+                                          </span>
+                                        </td>
+                                        <td class="table-actions-column">
+                                          <span data-toggle="modal" data-target="#airCraftView">
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                              (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
+                                              matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns *ngIf="aircraftList.length == 0">
+                                      <tr>
+                                        <td [attr.colspan]="3" class="no-records-msg no-records-cstm">
+                                          No records found
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                      <label id="footer" class="footer">Total:</label>
+                                      <input class="footer-input-width" [(ngModel)]="aircraftTable._totalRecords" [disabled]="true"
+                                        pInputText type="text" />
+                                      &nbsp;&nbsp;
+                                      <label id="footer" class="footer1">Pages Count:</label>
+          
+                                      <input class="footer-input-width" [ngModel]="
+                                          getPageCount(
+                                            aircraftTable._totalRecords,
+                                            aircraftPageSize
+                                          )
+                                        " [disabled]="true" pInputText type="text" />
+                                    </ng-template>
+                                  </p-table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="collapsed" data-toggle="collapse" href="#step4">ATA Chapter</a>
+                            </h4>
+                          </div>
+                          <div id="step4" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="col-sm-12">
+                                <div class="shadow-Box">
+                                  <p-table #ataTable class="rpo-table-cstm" [columns]="atacols" [value]="ataList"
+                                    [paginator]="true" [rows]="ataPageSize" [first]="first"
+                                    [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                    <ng-template pTemplate="header" let-columns>
+                                      <tr>
+                                        <th style="padding: 8px 5px !important;" class="table-column-width" *ngFor="let col of columns"
+                                          [pSortableColumn]="col.field">
+                                          {{ col.header }}
+                                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                        <th class="table-actions-column">Actions</th>
+                                      </tr>
+                                      <tr>
+                                        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                          <input class="table-header-input-width" pInputText type="text" (input)="
+                                              ataTable.filter(
+                                                $event.target.value,
+                                                col.field,
+                                                'contains'
+                                              )
+                                            " />
+                                        </th>
+                                        <th class="table-actions-column">&nbsp;</th>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                      <tr>
+                                        <td class="table-column-width" *ngFor="let col of columns">
+                                          {{ rowData[col.field] }}
+                                        </td>
+                                        <td class="table-actions-column">
+                                          <span data-toggle="modal" data-target="#ataView">
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                              (click)="openAtaView(rowData, ataView)" matTooltip="View"
+                                              matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns *ngIf="ataList.length == 0">
+                                      <tr>
+                                        <td [attr.colspan]="2" class="no-records-cstm no-records-msg">
+                                          No records found
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                      <label id="footer" class="footer">Total:</label>
+                                      <input class="footer-input-width" [(ngModel)]="ataTable._totalRecords" [disabled]="true" pInputText
+                                        type="text" />
+                                      &nbsp;&nbsp;
+                                      <label id="footer" class="footer1">Pages Count:</label>
+          
+                                      <input class="footer-input-width" [ngModel]="
+                                          getPageCount(
+                                            ataTable._totalRecords,
+                                            ataPageSize
+                                          )
+                                        " [disabled]="true" pInputText type="text" />
+                                    </ng-template>
+                                  </p-table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal popup-blur" id="contentAuditHistDoc" data-backdrop="static">
+                          <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title">History of Documents</h4>
+                                <button type="button" class="close" (click)="
+                                    dismissDocumentPopupModel('#contentAuditHistDoc')
+                                  ">
+                                  &times;
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                  <div class="tableFixHead">  
+                                  <table class="table table-bordered header-table-width">
+                                    <thead>
+                                      <tr>
+                                        <th>Tag Type</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Memo</th>
+                                        <th>File Name</th>
+                                        <th>File Size</th>
+                                        <th>Updated By</th>
+                                        <th>Last Updated Time</th>
+                                        <th>Created By</th>
+                                        <th>Created Time</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                                      <tr *ngFor="
+                                          let audit of sourceViewforDocumentAudit;
+                                          let i = index
+                                        ">
+                                        <td [ngStyle]="{
+                                            color: getColorCodeForHistoryDoc(
+                                              i,
+                                              'tagType',
+                                              audit.tagType
+                                            )
+                                              ? 'black'
+                                              : 'red'
+                                          }">
+                                          {{ audit.tagType }}
+                                        </td>
+                                        <td [ngStyle]="{
+                                            color: getColorCodeForHistoryDoc(
+                                              i,
+                                              'docName',
+                                              audit.docName
+                                            )
+                                              ? 'black'
+                                              : 'red'
+                                          }">
+                                          {{ audit.docName }}
+                                        </td>
+          
+                                        <td [ngStyle]="{
+                                            color: getColorCodeForHistoryDoc(
+                                              i,
+                                              'docDescription',
+                                              audit.docDescription
+                                            )
+                                              ? 'black'
+                                              : 'red'
+                                          }">
+                                          {{ audit.docDescription }}
+                                        </td>
+                                        <td [ngStyle]="{
+                                            color: getColorCodeForHistoryDoc(
+                                              i,
+                                              'docMemo',
+                                              audit.docMemo
+                                            )
+                                              ? 'black'
+                                              : 'red'
+                                          }">
+                                          <p class="p-0 m-0 p_textEditor" [innerHTML]="audit.docMemo">
+                                          </p>
+                                        </td>
+                                        <td [ngStyle]="{
+                                            color: getColorCodeForHistoryDoc(
+                                              i,
+                                              'fileName',
+                                              audit.fileName
+                                            )
+                                              ? 'black'
+                                              : 'red'
+                                          }">
+                                          {{ audit.fileName }}
+                                        </td>
+                                        <td>{{ audit.fileSize }}</td>
+          
+                                        <td>{{ audit.updatedBy }}</td>
+                                        <td>
+                                          {{
+                                          audit.updatedDate | date: 'MM/dd/yyyy h:mm a '
+                                          }}
+                                        </td>
+                                        <td>{{ audit.createdBy }}</td>
+                                        <td>
+                                          {{
+                                          audit.createdDate | date: 'MM/dd/yyyy h:mm a '
+                                          }}
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" (click)="
+                                    dismissDocumentPopupModel('#contentAuditHistDoc')">
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+          </div>
+<ng-template #airCraftView let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+      <button type="button" class="close" (click)="closeModal()">&times;</button>
+      <h4 class="modal-title">Aircraft Information</h4>
+  </div>
+  <div class="modal-body">
+      <div class="col-sm-12">
+          <p>
+              <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAircraftData.partNumber
+                  }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Part Description: </b></span><span class="value">{{
+                  viewAircraftData.partDescription }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAircraftData.manufacturerName
+                  }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAircraftData.itemGroup
+                  }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType
+                  }}</span>
+          </p>
+
+          <p>
+              <span class="label"><b>Model: </b></span><span class="value"
+                  *ngIf="viewAircraftData.aircraftModel != 'Unknown'">{{ viewAircraftData.aircraftModel }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Dash Numbers: </b></span><span class="value"
+                  *ngIf="viewAircraftData.dashNumber != 'Unknown'">{{ viewAircraftData.dashNumber
+                  }}</span>
+          </p>
+
+
+
+          <div class="clear"></div>
+      </div>
+
+      <!-- <strong>PN Mapping:
+          <span class="new-label">{{selectedRowforDelete.partNumber}}</span>
+      </strong> -->
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+
+  </div>
+
+</ng-template>
+<ng-template #ataView let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+      <button type="button" class="close" (click)="closeModal()">&times;</button>
+      <h4 class="modal-title">ATA Information</h4>
+  </div>
+  <div class="modal-body">
+      <div class="col-sm-12">
+          <p>
+              <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAtaData.partNumber }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Part Description: </b></span><span class="value">{{ viewAtaData.partDescription
+                  }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAtaData.manufacturerName
+                  }}</span>
+          </p>
+          <p>
+              <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAtaData.itemGroup }}</span>
+          </p>
+          <p>
+              <span class="label"><b>ATA Chapter: </b></span><span class="value">{{ viewAtaData.ataChapterName
+                  }}</span>
+          </p>
+
+          <p>
+              <span class="label"><b>ATA SubChapter: </b></span><span class="value">{{
+                  viewAtaData.ataSubChapterDescription }}</span>
+          </p>
+
+
+
+          <div class="clear"></div>
+      </div>
+
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+
+  </div>
+
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>

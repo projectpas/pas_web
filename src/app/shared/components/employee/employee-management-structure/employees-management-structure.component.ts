@@ -49,12 +49,10 @@ export class EmployeesManagementStructureComponent implements OnInit, AfterViewI
     isEditContent: boolean = false;
     memoPopupContent: any;
 
-
     constructor(private router: Router, private route: ActivatedRoute,
         private modalService: NgbModal,
         public authService: AuthService,
         public employeeService: EmployeeService, private legalEntityService: LegalEntityService, private alertService: AlertService) {
-
 
         if (this.employeeService.generalCollection) {
             this.local = this.employeeService.generalCollection;
@@ -238,40 +236,7 @@ export class EmployeesManagementStructureComponent implements OnInit, AfterViewI
                 //this.errorMessageHandler(errorLog);		
             }
         )
-    }
-
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-        const errorLog = log;
-        if (errorLog.error) {
-            this.alertService.showMessage(
-                "Validation Failed",
-                errorLog.error,
-                MessageSeverity.error
-            );
-            return;
-        }
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
+    }   
 
     private onManagemtntdataLoad(getAtaMainList: any[]) {
         this.isSpinnerVisible = true;

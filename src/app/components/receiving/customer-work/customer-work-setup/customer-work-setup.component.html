@@ -78,7 +78,7 @@
                                         <input type="radio" value="1" name="assetRadio" class="form-check-inline"
                                             [checked]="receivingForm.isCustomerStock == true"
                                             (change)="getStockStatus(0)">
-                                        Rotable Customer Stock
+                                        Rotable
                                     </label>
                                 </div>
                                 <div class="pull-left radio-buttons-align">
@@ -184,6 +184,14 @@
                                     [(ngModel)]="receivingForm.manufacturer" disabled>
                             </div>
                             <div class="form-group">
+                                <label>UOM <strong class="clr-red">*</strong></label>
+                                <p-dropdown class="p-dropdown-100"
+                                    [options]="allPurchaseUnitOfMeasureinfo" filter="true"
+                                    [(ngModel)]="receivingForm.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId"
+                                    [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" disabled>
+                                </p-dropdown>
+                            </div>
+                            <div class="form-group">
                                 <label>QTY</label>
                                 <input class="form-control" type="number" name="quantity"
                                     [(ngModel)]="receivingForm.quantity" disabled>
@@ -249,6 +257,11 @@
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let site of allBins" [ngValue]="site.binId">{{site.name}}</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label>AC Tail Num </label>
+                                <input class="form-control" type="text" name="acTailNum" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.acTailNum" #actailnum="ngModel">
                             </div>
                         </div>
                     </div>
@@ -382,7 +395,7 @@
                                                 <tr>
                                                     <td>Remaining</td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text" 
+                                                        <!-- <input class="form-control width-input" matInput type="text" 
                                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="cyclesRemaining"
                                                             [(ngModel)]="sourceTimeLife.cyclesRemaining" />
@@ -393,10 +406,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #cyclesRemainingHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesRemainingHrs"
+                                                            [(ngModel)]="sourceTimeLife.cyclesRemainingHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #cyclesRemainingMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesRemainingMin"
+                                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesRemainingMin',sourceTimeLife.cyclesRemainingMin)">
                                                     </td>     
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="timeRemaining"
                                                             [(ngModel)]="sourceTimeLife.timeRemaining" />
@@ -407,14 +433,42 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #timeRemainingHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeRemainingHrs"
+                                                            [(ngModel)]="sourceTimeLife.timeRemainingHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #timeRemainingMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeRemainingMin"
+                                                            [(ngModel)]="sourceTimeLife.timeRemainingMin"
+                                                            (change)="onChangeTimeLifeMin('timeRemainingMin',sourceTimeLife.timeRemainingMin)">
                                                     </td>                                               
-                                                    <td></td>
+                                                    <td>
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #lastSinceNewHrs="ngModel"  
+                                                            (ngModelChange)="getActive()"                                                            
+                                                            type="number" 
+                                                            name="lastSinceNewHrs"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceNewHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #lastSinceNewMin="ngModel" 
+                                                            (ngModelChange)="getActive()"                                                           
+                                                            type="number" 
+                                                            name="lastSinceNewMin"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin"
+                                                            (change)="onChangeTimeLifeMin('lastSinceNewMin',sourceTimeLife.lastSinceNewMin)">
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since New</td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="cyclesSinceNew"
                                                             [(ngModel)]="sourceTimeLife.cyclesSinceNew" />
@@ -425,10 +479,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #cyclesSinceNewHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceNewHrs"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #cyclesSinceNewMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceNewMin"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceNewMin',sourceTimeLife.cyclesSinceNewMin)">
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="timeSinceNew"
                                                             [(ngModel)]="sourceTimeLife.timeSinceNew" />
@@ -439,10 +506,24 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #timeSinceNewHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceNewHrs"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceNewHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #timeSinceNewMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceNewMin"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceNewMin',sourceTimeLife.timeSinceNewMin)">
+
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="lastSinceNew"
                                                             [(ngModel)]="sourceTimeLife.lastSinceNew" />
@@ -453,13 +534,26 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #lastSinceOVHHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="lastSinceOVHHrs"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceOVHHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #lastSinceOVHMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="lastSinceOVHMin"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin"
+                                                            (change)="onChangeTimeLifeMin('lastSinceOVHMin',sourceTimeLife.lastSinceOVHMin)">
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Ovh</td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="cyclesSinceOVH"
                                                             [(ngModel)]="sourceTimeLife.cyclesSinceOVH" />
@@ -470,10 +564,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #cyclesSinceOVHHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceOVHHrs"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #cyclesSinceOVHMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceOVHMin"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceOVHMin',sourceTimeLife.cyclesSinceOVHMin)">
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="timeSinceOVH"
                                                             [(ngModel)]="sourceTimeLife.timeSinceOVH" />
@@ -484,10 +591,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #timeSinceOVHHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceOVHHrs"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceOVHHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #timeSinceOVHMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceOVHMin"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceOVHMin',sourceTimeLife.timeSinceOVHMin)">
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="lastSinceOVH"
                                                             [(ngModel)]="sourceTimeLife.lastSinceOVH" />
@@ -498,16 +618,29 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #lastSinceInspectionHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="lastSinceInspectionHrs"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #lastSinceInspectionMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="lastSinceInspectionMin"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin"
+                                                            (change)="onChangeTimeLifeMin('lastSinceInspectionMin',sourceTimeLife.lastSinceInspectionMin)">
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Insp</td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern"
                                                             #cyclesSinceInspection="ngModel" mask="000:00"
-                                                            (ngModelChange)="enableSave()" name="cyclesSinceInspection"
+                                                            (ngModelChange)="getActive()" name="cyclesSinceInspection"
                                                             [(ngModel)]="sourceTimeLife.cyclesSinceInspection" />
                                                         <div *ngIf="cyclesSinceInspection.errors">
                                                             <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
@@ -516,10 +649,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #cyclesSinceInspectionHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceInspectionHrs"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #cyclesSinceInspectionMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceInspectionMin"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceInspectionMin',sourceTimeLife.cyclesSinceInspectionMin)">
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="timeSinceInspection"
                                                             [(ngModel)]="sourceTimeLife.timeSinceInspection" />
@@ -530,10 +676,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #timeSinceInspectionHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceInspectionHrs"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #timeSinceInspectionMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceInspectionMin"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceInspectionMin',sourceTimeLife.timeSinceInspectionMin)">
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="lastSinceInspection"
                                                             [(ngModel)]="sourceTimeLife.lastSinceInspection" />
@@ -544,13 +703,13 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Repair</td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="cyclesSinceRepair"
                                                             [(ngModel)]="sourceTimeLife.cyclesSinceRepair" />
@@ -561,10 +720,23 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #cyclesSinceRepairHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceRepairHrs"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #cyclesSinceRepairMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="cyclesSinceRepairMin"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin"
+                                                            (change)="onChangeTimeLifeMin('cyclesSinceRepairMin',sourceTimeLife.cyclesSinceRepairMin)">
                                                     </td>
                                                     <td class="clr2">
-                                                        <input class="form-control width-input" matInput type="text"
+                                                        <!-- <input class="form-control width-input" matInput type="text"
                                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel"
                                                             mask="000:00" (ngModelChange)="getActive()" name="timeSinceRepair"
                                                             [(ngModel)]="sourceTimeLife.timeSinceRepair" />
@@ -575,7 +747,20 @@
                                                                         (hhh:mm)</span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                                            #timeSinceRepairHrs="ngModel" 
+                                                            (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceRepairHrs"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceRepairHrs">
+                                                        <span> : </span>
+                                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                                            #timeSinceRepairMin="ngModel" (ngModelChange)="getActive()"
+                                                            type="number" 
+                                                            name="timeSinceRepairMin"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin"
+                                                            (change)="onChangeTimeLifeMin('timeSinceRepairMin',sourceTimeLife.timeSinceRepairMin)">
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -591,10 +776,96 @@
                     <div class="form-row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Parts Cert Num</label>
+                                <label>Cert Num</label>
                                 <input class="form-control" type="text" name="partCertificationNumber"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.partCertificationNumber">
                             </div>
+                            <!-- <div class="form-group">
+                                <label>
+                                    Cert By
+                                </label>
+                                <input class="form-control" type="text" name="certifiedBy"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.certifiedBy">                                
+                            </div>      -->
+
+                            <div class="form-group">
+                                <label>Cert Type</label>
+                                <select [(ngModel)]="receivingForm.certifiedTypeId" name="certifiedTypeId"
+                                    (change)="onSelectCertType(receivingForm.certifiedTypeId)" (ngModelChange)="getActive()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
+                                    <div class="col-sm-12">  
+                                        <p-autoComplete field="name" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                            
+                                            (keyup)="getCustomers($event.target.value, 2)"
+                                            [(ngModel)]="receivingForm.certifiedById" name="certifiedByCustomer"
+                                            [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == vendorModuleId">
+                                    <div class="col-sm-12">                                        
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                           
+                                            [(ngModel)]="receivingForm.certifiedById" name="certifiedByVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == companyModuleId">
+                                    <div class="col-sm-12">                                        
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()" 
+                                            [(ngModel)]="receivingForm.certifiedById"
+                                            name="certifiedByCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found"
+                                             [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.certifiedTypeId == otherModuleId">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="certifiedBy"
+                                            [(ngModel)]="receivingForm.certifiedBy" (ngModelChange)="getActive()">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div class="form-group">
+                                <label> Cert Date</label>
+                                <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
+                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [(ngModel)]="receivingForm.certifiedDate"></p-calendar>
+                            </div>  
                             <div class="form-group">
                                 <label>
                                     Inspected By
@@ -602,70 +873,113 @@
                                 <p-dropdown class="p-dropdown-100" [showClear]="true"
                                     [options]="certifiedEmployeeList"
                                     placeholder="Select" filter="true"                                                
-                                    name="certifiedById" [resetFilterOnHide]="true"
-                                    [(ngModel)]="receivingForm.certifiedById"
+                                    name="inspectedById" [resetFilterOnHide]="true"
+                                    [(ngModel)]="receivingForm.inspectedById"
                                     (ngModelChange)="getActive()">             
                                 </p-dropdown>
                             </div>     
                             <div class="form-group">
                                 <label> Inspected Date</label>
-                                <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
+                                <p-calendar class="workflow-clder" [showIcon]="true" name="inspectedDate"
                                     (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
-                                    yearRange="1900:2100" [(ngModel)]="receivingForm.certifiedDate"></p-calendar>
-                            </div>                       
-                            <div class="form-group">
-                                <label>Tag Date</label>
-                                <p-calendar class="workflow-clder" [showIcon]="true" name="tagDate"
-                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
-                                    yearRange="1900:2100" [(ngModel)]="receivingForm.tagDate"></p-calendar>
+                                    yearRange="1900:2100" [(ngModel)]="receivingForm.inspectedDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
                                 <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
                                 </p-multiSelect>
+                            </div>                             
+                            <div class="form-group">
+                                <label>Tag By</label>
+                                <select [(ngModel)]="receivingForm.taggedByType" name="taggedByType"
+                                    (change)="onSelectTaggedType(receivingForm.taggedByType)" (ngModelChange)="getActive()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>MFG Trace</label>
-                                <input class="form-control" type="text" name="MFGTrace" (ngModelChange)="getActive()"
-                                    [(ngModel)]="receivingForm.mfgTrace">
-                            </div>
-                            <div class="form-group">
-                                <label>MFG Lot</label>
-                                <input class="form-control" type="text" name="MFGLotNo" (ngModelChange)="getActive()"
-                                    [(ngModel)]="receivingForm.mfgLotNo">
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox-cstm m-t-20">
-                                    <label>
-                                        <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate"
-                                            (ngModelChange)="getActive()">
-                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        MFG Date <span class="text-danger" *ngIf="receivingForm.isMFGDate">*</span>
-                                    </label>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == customerModuleId">
+                                    <div class="col-sm-12">
+                                        <!-- <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByCustomer"
+                                            [suggestions]="customerNames" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="getActive()"
+                                            [forceSelection]="true"></p-autoComplete> -->
+
+                                        <p-autoComplete field="name" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                            
+                                            (keyup)="getCustomers($event.target.value, 2)"
+                                            [(ngModel)]="receivingForm.taggedById" name="taggedByCustomer"
+                                            [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == vendorModuleId">
+                                    <div class="col-sm-12">
+                                        <!-- <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByVendor"
+                                            [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="getActive()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete> -->
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()"                                           
+                                            [(ngModel)]="receivingForm.taggedById" name="taggedByVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == companyModuleId">
+                                    <div class="col-sm-12">
+                                        <!-- <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="receivingForm.taggedBy" name="taggedByCompany"
+                                            [suggestions]="companyNames" (completeMethod)="filterCompanyNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="getActive()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete> -->
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            (ngModelChange)="getActive()" 
+                                            [(ngModel)]="receivingForm.taggedById"
+                                            name="taggedByCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found"
+                                             [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="receivingForm.taggedByType == otherModuleId">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="taggedByOther"
+                                            [(ngModel)]="receivingForm.taggedBy" (ngModelChange)="getActive()">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group" *ngIf="receivingForm.isMFGDate">
-                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100" (ngModelChange)="getActive()"
-                                    [required]="receivingForm.isMFGDate" [maxDate]="currentDate"
-                                    name="manufacturingDate" [(ngModel)]="receivingForm.mfgDate"></p-calendar>
-                            </div>
+                            <!-- <div class="form-group">
+                                <label>
+                                    Tagged By
+                                </label>
+                                <p-dropdown class="p-dropdown-100" [showClear]="true"
+                                    [options]="certifiedEmployeeList"
+                                    placeholder="Select" filter="true"                                                
+                                    name="taggedById" [resetFilterOnHide]="true"
+                                    [(ngModel)]="receivingForm.taggedById"
+                                    (ngModelChange)="getActive()">             
+                                </p-dropdown>
+                            </div>       -->                                            
                             <div class="form-group">
-                                <div class="checkbox-cstm m-t-10">
-                                    <label>
-                                        <input type="checkbox" name="isExpDate" [(ngModel)]="receivingForm.isExpDate"
-                                            (ngModelChange)="getActive()">
-                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        Exp Date <span class="text-danger" *ngIf="receivingForm.isExpDate">*</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group" *ngIf="receivingForm.isExpDate">
-                                <p-calendar class="workflow-clder" [showIcon]="true" (ngModelChange)="getActive()"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [required]="receivingForm.isExpDate" [minDate]="currentDate" name="expDate"
-                                    [(ngModel)]="receivingForm.expDate"></p-calendar>
+                                <label>Tag Date</label>
+                                <p-calendar class="workflow-clder" [showIcon]="true" name="tagDate"
+                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [(ngModel)]="receivingForm.tagDate"></p-calendar>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -803,7 +1117,7 @@
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == customerModuleId">
                                     <div class="col-sm-12">
                                         <label>
-                                            Add Customer 
+                                            Customer 
                                         </label>
                                         <p-autoComplete field="name" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                            
@@ -817,7 +1131,7 @@
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == vendorModuleId">
                                     <div class="col-sm-12">
                                         <label>
-                                            Add Vendor 
+                                            Vendor 
                                         </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()"                                            
@@ -830,7 +1144,7 @@
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == companyModuleId">
                                     <div class="col-sm-12">
-                                        <label> Add Company </label>
+                                        <label> Company </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.traceableTo"
                                             name="traceableToCompany" [suggestions]="companyList"
@@ -841,14 +1155,55 @@
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == otherModuleId">
                                     <div class="col-sm-12">
-                                        <label> Add Other </label>
+                                        <label> Other </label>
                                         <input class="form-control" type="text" name="traceableToOther"
                                             (ngModelChange)="getActive()"
-                                            [(ngModel)]="receivingForm.tracableToName">
+                                            [(ngModel)]="receivingForm.traceableToName">
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div class="form-group">
+                                <label>MFG Trace</label>
+                                <input class="form-control" type="text" name="MFGTrace" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.mfgTrace">
+                            </div>
+                            <div class="form-group">
+                                <label>MFG Lot</label>
+                                <input class="form-control" type="text" name="MFGLotNo" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.mfgLotNo">
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm m-t-20">
+                                    <label>
+                                        <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate"
+                                            (ngModelChange)="getActive()">
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        MFG Date <span class="text-danger" *ngIf="receivingForm.isMFGDate">*</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="receivingForm.isMFGDate">
+                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" (ngModelChange)="getActive()"
+                                    [required]="receivingForm.isMFGDate" [maxDate]="currentDate"
+                                    name="manufacturingDate" [(ngModel)]="receivingForm.mfgDate"></p-calendar>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm m-t-10">
+                                    <label>
+                                        <input type="checkbox" name="isExpDate" [(ngModel)]="receivingForm.isExpDate"
+                                            (ngModelChange)="getActive()">
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Exp Date <span class="text-danger" *ngIf="receivingForm.isExpDate">*</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="receivingForm.isExpDate">
+                                <p-calendar class="workflow-clder" [showIcon]="true" (ngModelChange)="getActive()"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [required]="receivingForm.isExpDate" [minDate]="currentDate" name="expDate"
+                                    [(ngModel)]="receivingForm.expDate"></p-calendar>
+                            </div>
                         </div>
                         <div class="col-md-4 main_facture">
                             <div class="card mgmt-card">
@@ -915,11 +1270,11 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="col-md-12">
+                    <!-- <div class="col-md-12">
                         <div class="form-group">
                             <div class="checkbox-cstm m-t-15">
                                 <label>
-                                    <input type="checkbox" name="isTimeLife1" [(ngModel)]="isDocumentsToShow"
+                                    <input type="checkbox" [disabled]="isEditMode" name="isTimeLife1" [(ngModel)]="isDocumentsToShow"
                                         [value]="isDocumentsToShow==true">
                                     <span class="cr disabled_color1">
                                         <i class="cr-icon pi pi-check"></i>
@@ -928,10 +1283,11 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12" *ngIf="isDocumentsToShow">
+                    </div> -->
+                    <!-- <div class="col-md-12" *ngIf="isDocumentsToShow"> -->
+                    <div class="col-md-12">
                         <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="receivingCustomerWorkId"
-                            [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
+                            [isViewMode]="false" [offLineUpload]="true"></app-common-documents> 
                     </div>
                 </div>
             </div>

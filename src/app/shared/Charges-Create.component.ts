@@ -129,7 +129,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                         unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
                         extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
                         unitPrice: x.unitPrice ? formatNumberAsGlobalSettingsModule(x.unitPrice, 2) : '0.00',
-                        extendedPrice: x.extendedPrice ? formatNumberAsGlobalSettingsModule(x.extendedPrice, 2) : '0.00'
+                        extendedPrice: x.extendedPrice ? formatNumberAsGlobalSettingsModule(x.extendedPrice, 2) : '0.00',
+                        vendor : {
+                            vendorId: x.vendorId,
+                            vendorName: x.vendorName
+                        }
+                    
                     }
                 })
             }
@@ -187,7 +192,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
 
     onChargeTypeChange(event, charge): void {
         this.isSpinnerVisible = true;
-        var isTypeExist = this.workFlow.charges.filter(x => x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
+        var isTypeExist = this.workFlow.charges.filter(x =>x.isDeleted==false &&  x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
         this.chargesTypes.forEach((ct) => {
             if (ct.chargeId == charge.workflowChargeTypeId) {
                 charge.chargeType = ct.chargeType;
@@ -198,6 +203,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                             this.isSpinnerVisible = false;
                             if (res) {
                                 charge.memo = res.memo;
+                                charge.description = res.description;
                                 charge.glAccountName = res.glAccountName;
                             }
                         }, error => {
@@ -217,10 +223,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     private loadAllVendors(strText = '') {
         this.isSpinnerVisible = true;
         let arrayVendlsit = []
-        if (this.UpdateMode) {
-            arrayVendlsit = this.workFlow.charges.reduce((acc, x) => {
-                return arrayVendlsit.push(acc.vendorId);
-            }, 0)
+        if (this.UpdateMode && this.isWorkOrder) {
+          this.workFlow.charges.forEach(element => {
+                arrayVendlsit.push(element.vendorId); 
+            }) 
+        }else{
+            arrayVendlsit.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, arrayVendlsit, this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -264,16 +272,22 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     addRow(): void {
         var newRow = Object.assign({}, this.row);
         newRow.workflowChargesListId = "0";
+        // newRow.taskId = "";
         newRow.vendor = {};
-        if (this.taskList) {
-            this.taskList.forEach(
-                task => {
-                    if (task.description == "Assemble") {
-                        newRow.taskId = task.taskId;
+        if (this.workFlow) {
+            if (this.taskList) {
+                this.taskList.forEach(
+                    task => {
+                        if (task.description == "Assemble") {
+                            newRow.taskId = task.taskId;
+                        }
                     }
-                }
-            )
+                )
+            }
+        }else{
+            newRow.taskId = "";  
         }
+
         newRow.currencyId = "0";
         newRow.description = "";
         newRow.extendedCost = "0.00";
@@ -338,7 +352,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
     // calculate row wise extended cost
     calculateExtendedCost(charge): void {
-        charge.unitCost = charge.unitCost ? formatNumberAsGlobalSettingsModule(charge.unitCost, 2) : '';
+        charge.unitCost = charge.unitCost ? formatNumberAsGlobalSettingsModule(charge.unitCost, 2) : '0.00';
         var value = (parseFloat(charge.quantity.toString().replace(/\,/g, '')) * parseFloat(charge.unitCost.toString().replace(/\,/g, '')));
         if (value > 0) {
             charge.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);

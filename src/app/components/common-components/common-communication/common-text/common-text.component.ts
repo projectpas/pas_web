@@ -19,6 +19,7 @@ import * as moment from 'moment';
 export class TextCommonComponent implements OnInit, OnChanges {
     @Input() moduleId;
     @Input() referenceId;
+    @Input() isSummarizedView: any = false;
     @Input() workOrderId: any;
     @Input() isView: boolean = false;
     @Input() savedWorkOrderData: any = [];
@@ -46,20 +47,20 @@ export class TextCommonComponent implements OnInit, OnChanges {
     headers = [
         { field: 'mobile', header: 'Mobile' },
         { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notes', header: 'Notes' },
+        { field: 'notesData', header: 'Notes' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'Updated By' },
     ]
     selectedColumns = [
-        { field: 'mobile', header: 'Mobile' },
-        { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notesData', header: 'Notes' },
-        { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'mobile', header: 'Mobile',width:"70px" },
+        { field: 'contactBy', header: 'Contacted By',width:"90px" },
+        { field: 'notesData', header: 'Notes' ,width:"200px"},
+        { field: 'createdDate', header: 'Created Date',width:"90px" },
+        { field: 'createdBy', header: 'Created By',width:"70px" },
+        { field: 'updatedDate', header: 'Updated Date',width:"90px" },
+        { field: 'updatedBy', header: 'Updated By',width:"90px"},
     ];
     addList: any = [];
     moduleName: any = "Communication";
@@ -92,8 +93,8 @@ export class TextCommonComponent implements OnInit, OnChanges {
         // }
         // this.getAllEmployees('');
         // this.getAllTextList();
-        this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
-        this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' })
+         this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
+         this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' ,width:"100px"}) 
     }
 
     ngOnChanges(): void {
@@ -182,6 +183,9 @@ export class TextCommonComponent implements OnInit, OnChanges {
     dismissModel() {
         this.modal.close();
     }
+    closePopupmodel(divid) {
+		$("#"+divid+"").modal("hide");
+	}
 
     loadData(event) {
 
@@ -323,6 +327,11 @@ export class TextCommonComponent implements OnInit, OnChanges {
                     (res) => {
                         this.updateDisabledText = true;
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Text Updated Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllTextList();
                         this.isEdit = false;
                     }, err => {
@@ -337,6 +346,11 @@ export class TextCommonComponent implements OnInit, OnChanges {
                 .subscribe(
                     (res) => {
                         this.isSpinnerVisible = false;
+                        this.alertService.showMessage(
+                            this.moduleName,
+                            ' Text Created Succesfully',
+                            MessageSeverity.success
+                        );
                         this.getAllTextList();
                     }, err => {
                         this.errorMessageHandler();

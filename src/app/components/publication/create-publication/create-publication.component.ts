@@ -30,7 +30,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
-
+import { AppModuleEnum } from './../../../enum/appmodule.enum';
 declare var $: any;
 
 @Component({
@@ -41,6 +41,7 @@ declare var $: any;
 /** Create-publication component*/
 export class CreatePublicationComponent implements OnInit {
   publicationType: any;
+  
   @ViewChild('tagsFileUploadInput', { static: false }) tagsFileUploadInput: any;
   @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
   activeMenuItem: number = 1;
@@ -103,7 +104,7 @@ export class CreatePublicationComponent implements OnInit {
   currentDeletedstatus = false;
   headersforPNMapping = [
     { field: 'partNumber', header: 'PN' },
-    { field: 'partDescription', header: 'PN Description' },
+    { field: 'partDescription', header: 'PN Description',width:"200px" },
     { field: 'manufacturer', header: 'Manufacturer' },
     { field: 'itemClassification', header: 'Item Classification' },
     { field: 'itemGroup', header: 'Item Group' }
@@ -136,10 +137,10 @@ export class CreatePublicationComponent implements OnInit {
 
   atacols = [
     { field: 'partNumber', header: 'PN Number' },
-    { field: 'partDescription', header: 'PN Description' },
+    { field: 'partDescription', header: 'PN Description',width:"200px" },
     { field: 'manufacturerName', header: 'Manufacturer' },
     { field: 'itemGroup', header: 'Item Group' },
-    { field: 'ataChapter', header: 'ATA Chapter' },
+    { field: 'ataChapter', header: 'ATA Chapter',width:"200px" },
     { field: 'ataSubChapter', header: 'ATA SubChapter' },
   ];
   selectedatacols = this.atacols;
@@ -150,6 +151,7 @@ export class CreatePublicationComponent implements OnInit {
   ];
   isEnableNext: any = false;
   formData = new FormData();
+  currentDate=new Date();
   selectedRowforDelete: any;
   active: boolean = false;
   inactive: boolean = false;
@@ -180,12 +182,12 @@ export class CreatePublicationComponent implements OnInit {
 
   aircraftInformationCols: any[] = [
     { field: 'partNumber', header: 'PN Number' },
-    { field: 'partDescription', header: 'PN Description' },
+    { field: 'partDescription', header: 'PN Description',width:"200px" },
     { field: 'manufacturerName', header: 'Manufacturer' },
     { field: 'itemGroup', header: 'Item Group' },
     { field: 'aircraft', header: 'Aircraft' },
-    { field: 'model', header: 'Model' },
-    { field: 'dashNumber', header: 'Dash Numbers' },
+    { field: 'model', header: 'Model',width:"100px" },
+    { field: 'dashNumber', header: 'Dash Numbers',width:"100px" },
   ];
   selectedaircraftInformationCols = this.aircraftInformationCols;
   headersforAttachment = [
@@ -226,7 +228,12 @@ export class CreatePublicationComponent implements OnInit {
   rowIndex: number;
   disabledPartNumber: boolean = true;
   disableGeneralInfoSave: boolean = true;
-
+  customerModuleId: number = 0;
+  companyModuleId: number = 0;
+  vendorModuleId: number = 0;
+  otherModuleId: number = 0;
+  manufacturermoduleid : number = 0;
+  alternateData: any = {};
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -246,9 +253,14 @@ export class CreatePublicationComponent implements OnInit {
     private commonService: CommonService,
     private configurations: ConfigurationService,
     private localStorage: LocalStoreManager,
-    private modalService: NgbModal
-  ) { }
-
+    private modalService: NgbModal    
+  ) { 
+    this.companyModuleId = AppModuleEnum.Company;
+    this.vendorModuleId = AppModuleEnum.Vendor;
+    this.customerModuleId = AppModuleEnum.Customer;
+    this.otherModuleId = AppModuleEnum.Others;
+    this.manufacturermoduleid = AppModuleEnum.Manufacturer;
+  }
 
   ngOnInit() {
     this.getGlobalDateFormat();
@@ -256,6 +268,7 @@ export class CreatePublicationComponent implements OnInit {
     this.sourcePublication.sequence = 1;
     if (!this.isEditMode) {
       this.sourcePublication.revisionNum = 1;
+      this,this.sourcePublication.verifiedDate=new Date();
     }
 
     if (this.publicationRecordId) {
@@ -284,6 +297,7 @@ export class CreatePublicationComponent implements OnInit {
       this.changeOfTab('General');
     }
   }
+   
 
   getPnMapping() {
     this.isSpinnerVisible = true;
@@ -434,6 +448,8 @@ export class CreatePublicationComponent implements OnInit {
   }
   closeModal() {
     this.viewAircraftData = {};
+    this.alternateData={};
+    this.selectedPartNumbers=[];
     if (this.modal) {
       this.modal.close()
     }
@@ -531,11 +547,11 @@ export class CreatePublicationComponent implements OnInit {
 
   saveGeneralInfo() {
     this.data = this.sourcePublication;
-    this.data.employeeId = this.data.employeeId ? this.data.employeeId : 0;
+    this.data.employeeId = this.data.employeeId ? this.data.employeeId : null;
     this.publicationType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.publicationTypeId.toString(), this.publicationTypes);
 
     if (this.data.publishedById == null || this.data.publishedById == "null") {
-      this.data.publishedById = 0;
+      this.data.publishedById = null;
     }
     this.formData.append('entryDate', moment(this.data.entryDate).format('DD/MM/YYYY'));
     this.formData.append('publicationId', this.data.publicationId);
@@ -544,7 +560,7 @@ export class CreatePublicationComponent implements OnInit {
     this.formData.append('asd', this.data.asd);
     this.formData.append('sequence', this.data.sequence);
     this.formData.append('publishedById', this.data.publishedById);
-    if (this.data.publishedById == 2 || this.data.publishedById == 3) {
+    if (this.data.publishedById == this.vendorModuleId || this.data.publishedById == this.manufacturermoduleid) {
       this.formData.append('publishedByRefId', this.data.publishedByRefId.value);
     } else {
       this.formData.append('publishedByRefId', null);
@@ -723,6 +739,11 @@ export class CreatePublicationComponent implements OnInit {
     } else {
       this.disabledPartNumber = false;
     }
+  }
+  bindPartDataInPopup(){
+    let selectedPart: any = this.selectedPartNumbers;
+    this.alternateData.Description = selectedPart.partDetails.partDescription;
+    this.alternateData.manufacturer = selectedPart.partDetails.manufacturer;
   }
 
   enablePnMappingSave() {
@@ -1008,8 +1029,8 @@ export class CreatePublicationComponent implements OnInit {
           })
           return {
             ...x,
-            ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
-            ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
+            ataChapter: `${x.ataChapterName}`,
+            ataSubChapter: ` ${x.ataSubChapterDescription}`,
           };
 
         });
@@ -1075,9 +1096,7 @@ export class CreatePublicationComponent implements OnInit {
     this.searchByFieldUrlCreateforATA();
 
     if (this.ataChapterIdUrl !== '') {
-      this.ataMainSer
-        .getMultiATASubDesc(this.ataChapterIdUrl)
-        .subscribe(atasubchapter => {
+      this.ataMainSer.getMultiATASubDesc(this.ataChapterIdUrl).subscribe(atasubchapter => {
 
           const responseData = atasubchapter;
 
@@ -1577,7 +1596,7 @@ export class CreatePublicationComponent implements OnInit {
   getPublishedByModulesList() {
     let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
     this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
-      this.publishedByModulesList = res;
+      this.publishedByModulesList = res;      
     });
   }
   getPublishedByReferencesList(event, id) {

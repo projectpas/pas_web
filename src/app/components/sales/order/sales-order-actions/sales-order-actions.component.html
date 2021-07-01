@@ -5,14 +5,19 @@
     </button>
     <!-- <p-splitButton label="Payment" styleClass="btn btn-primary" [model]="paymentItems">
     </p-splitButton> -->
-    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.NewSalesOrder)">New
+    <!-- <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.NewSalesOrder)">New
+        SO</button> -->
+    <!-- <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Print"
+        styleClass="btn btn-primary" [model]="printItems"> 
+    </p-splitButton>-->
+    <button type="button" class="btn btn-primary btnAction"
+        (click)="onClick(salesOrderActionType.PrintSalesOrder)">Print
         SO</button>
-    <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Print"
-        styleClass="btn btn-primary" [model]="printItems">
-    </p-splitButton>
-    <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Actions"
+    <!-- <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Actions"
         styleClass="btn btn-primary" [model]="actionItems">
-    </p-splitButton>
+    </p-splitButton> -->
+    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.MakeDuplicate)">Make
+        Duplicate</button>
     <!-- <p-splitButton label="Communication" styleClass="btn btn-primary" [model]="communicationItems">
     </p-splitButton> -->
     <button type="button" class="btn btn-primary btnAction"
@@ -22,6 +27,3 @@
         SO
     </button>
 </div>
-<ng-template #payment let-c="close" let-d="dismiss" tabindex="-1" style="z-index: 1050;">
-    <app-invoice-payment (close)="dismissModel()" [customerId]="customerId"></app-invoice-payment>
-</ng-template>

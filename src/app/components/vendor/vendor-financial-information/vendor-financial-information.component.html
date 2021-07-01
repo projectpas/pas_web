@@ -54,19 +54,20 @@
                                     <select class="form-control" name="currencyId" [(ngModel)]="sourceVendor.currencyId"
                                         (change)="validateCurrency(sourceVendor.currencyId)" (ngModelChange)="enableSave()" required>
                                         <option value="0">--Select--</option>
-                                        <ng-container *ngFor="let currencyName of allCurrencyInfo">
+                                        <ng-container class="form-control" *ngFor="let currencyName of allCurrencyInfo">
                                             <option [ngValue]="currencyName.currencyId">
                                                 {{currencyName.code}}</option>
                                         </ng-container>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Discount %
+                                    <label>
+                                        <span class="pull-left">Discount %</span>
                                     </label>
-                                    <select class="form-control" name="discountId"
+                                    <select class="form-control select-right" name="discountId"
                                         [(ngModel)]="sourceVendor.discountId" (ngModelChange)="enableSave()">
-                                        <option value="0">--Select--</option>
-                                        <option *ngFor="let discontValue of discountList"
+                                        <!-- <option value="0">--Select--</option> -->
+                                        <option class="text-right" *ngFor="let discontValue of discountList"
                                             [ngValue]="discontValue.value">{{discontValue.label}}</option>
                                     </select>
                                 </div>

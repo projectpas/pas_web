@@ -349,7 +349,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         SP_FSP_CurrencyId: null,
         SP_FSP_FXRatePerc: 0,
         SP_FSP_FlatPriceAmount: null,
-        SP_FSP_LastFlatPriceDate: null,//new Date(),
+        SP_FSP_LastFlatPriceDate: null,//new Date(),        
         SP_CalSPByPP_MarkUpPercOnListPrice: null,
         SP_CalSPByPP_MarkUpAmount: null,
         SP_CalSPByPP_LastMarkUpDate: null,// new Date(),
@@ -668,8 +668,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
         this.atasub = [
             { field: 'partNumber', header: 'Part Number' },
-            { field: 'partDescription', header: 'Part Description' },
-            { field: 'ataChapterName', header: 'ATA Chapter' },
+            { field: 'partDescription', header: 'Part Description',width:"200px" },
+            { field: 'ataChapterName', header: 'ATA Chapter',width:"200px" },
             { field: 'ataSubChapterDescription', header: 'ATA Sub-Chapter' },
 
             { field: 'createdDate', header: 'Created Date' },
@@ -889,7 +889,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getItemMasterPurchaseSaleMaster() {
         this.isSpinnerVisible = true;
         //this.commonService.smartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name').subscribe(response => {
-          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(response => {
+          this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',0).subscribe(response => {
             this.allPurchaseAndSaleMasterList = response;
             this.allPurchaseAndSaleMasterList = this.allPurchaseAndSaleMasterList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
             if(!this.isEdit) {
@@ -1819,11 +1819,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
-    eventHandler(event) {
-       
-        if (event.target.value != "") {
+    eventHandler(event) {           
+        if (event.target.value.trim() != "") {
             for(let i=0; i<this.allPartnumbersInfo.length; i++){
-                if(event.target.value == this.allPartnumbersInfo[i].partNumber && event.target.value != this.selectedPartNumber){
+                if(event.target.value.trim().toLowerCase() == this.allPartnumbersInfo[i].partNumber.toLowerCase() && event.target.value.trim() != this.selectedPartNumber){
                     this.disableSavepartNumber = true;
                     break;
                 }
@@ -1870,12 +1869,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if (event.target.value != "") {
             let rqValue = Number(event.target.value);
             let mqValue = this.sourceItemMaster.minimumOrderQuantity;
-            if(rqValue < mqValue)
+            //if(rqValue < mqValue)
+            if(this.sourceItemMaster.reorderQuantiy < this.sourceItemMaster.minimumOrderQuantity )
             {
-                this.disableReorderQuantiy = true;    
+                this.disableReorderQuantiy = true;                
             }
             else{
-                this.disableReorderQuantiy = false;    
+                this.disableReorderQuantiy = false;                 
             }
         }
     }
@@ -3585,6 +3585,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         const id = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
         this.itemser.getMappedAirCraftDetails(id).subscribe(data => {
             const responseData = data;
+            this.selectedAircraftLDColumns=this.colsaircraftLD
             this.aircraftListDataValues = responseData.map(x => { //aircraftListData
                 return {
                     ...x,
@@ -4117,12 +4118,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     onChangeSalePriceSelectId(field) {
         if(field.SalePriceSelectId == 1) {
             field.SP_CalSPByPP_MarkUpPercOnListPrice = '0.00';
-            field.SP_CalSPByPP_MarkUpAmount = '0.00';
-            field.SP_CalSPByPP_LastMarkUpDate = '';// new Date();
+            field.SP_CalSPByPP_MarkUpAmount = '0.00';            
             field.SP_CalSPByPP_BaseSalePrice = '0.00';
             field.SP_CalSPByPP_SaleDiscPerc = '0.00';
-            field.SP_CalSPByPP_SaleDiscAmount = '0.00';
-            field.SP_CalSPByPP_LastSalesDiscDate = ''; //new Date();
+            field.SP_CalSPByPP_SaleDiscAmount = '0.00';            
+            field.SP_FSP_LastFlatPriceDate = new Date();
+            field.SP_CalSPByPP_LastSalesDiscDate = ''; 
+            field.SP_CalSPByPP_LastMarkUpDate =  ''; 
             field.SP_CalSPByPP_UnitSalePrice = '0.00';
             field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
             field.SP_CalSPByPP_UnitSalePrice = field.SP_FSP_FXRatePerc ? formatNumberAsGlobalSettingsModule(field.SP_FSP_FXRatePerc, 2) : '0.00';            
@@ -4132,7 +4134,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
             field.SP_FSP_FXRatePerc = 1;
             field.SP_FSP_FlatPriceAmount = '0.00';
-            field.SP_FSP_LastFlatPriceDate = '' //new Date();
+            field.SP_CalSPByPP_LastSalesDiscDate = new Date(); 
+            field.SP_CalSPByPP_LastMarkUpDate = new Date(); 
+            field.SP_FSP_LastFlatPriceDate = '';
             this.getPercentValueSPUsingPP(field);
         } 
         else {
@@ -4247,7 +4251,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             itemMasterId: parseInt(ItemMasterID), 
             exportValue: this.exportInfo.exportValue ? parseFloat(this.exportInfo.exportValue.toString().replace(/\,/g,'')) : 0 }
 
-            console.log(data)
+            
         this.itemser.newItemMasterExportInformation(data).subscribe(datas => {
             this.tempExportCountryId = null;
             this.alertService.showMessage(
@@ -5776,6 +5780,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     enableSaveMemo() {
         this.disableSaveMemo = false;
+        this.disableSaveForEdit=false;
     }
 
     addDocumentInformation(type, documentInformation) {
@@ -6036,7 +6041,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
     redirectToTab(addItemMasterStockForm){
         this.dismissModel();
-        debugger
+        
         if (!this.disableSaveForEdit) {   
             if(this.activeMenuItem == 1) {       
                 this.saveItemMasterGeneralInformation(addItemMasterStockForm)
@@ -6057,9 +6062,25 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.isOemPNId = undefined;
         }
     }
+    leadtime(){        
+        this.sourceItemMaster.leadTimeDays = this.sourceItemMaster.leadTimeDays ? formatNumberAsGlobalSettingsModule(this.sourceItemMaster.leadTimeDays, 2) : '0'; 
+        this.disableSaveForEdit=false;
+    }
 
     onChangeExportVal() {
         this.exportInfo.exportValue = this.exportInfo.exportValue ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportValue, 2) : '0.00';
+    }
+    onChangeWeight() {
+        this.exportInfo.exportWeight = this.exportInfo.exportWeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportWeight, 2) : '0';
+    }
+    onChangeExportSizeLength(){
+        this.exportInfo.exportSizeLength = this.exportInfo.exportSizeLength ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeLength, 2) : '0';
+    }
+    onChangeExportSizeWidth(){
+        this.exportInfo.exportSizeWidth = this.exportInfo.exportSizeWidth ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeWidth, 2) : '0';
+    }
+    onChangeExportSizeHeight(){
+        this.exportInfo.exportSizeHeight = this.exportInfo.exportSizeHeight ? formatNumberAsGlobalSettingsModule(this.exportInfo.exportSizeHeight, 2) : '0';
     }
     getItemMasterExportInfoById(id) {
         this.isSpinnerVisible = true;    
@@ -6114,4 +6135,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         field.PP_LastListPriceDate = new Date();       
         field.PP_LastPurchaseDiscDate = new Date();
     }
+
+    SetSalesCurrency() {
+        this.sourceItemMaster.salesCurrencyId = this.sourceItemMaster.purchaseCurrencyId;
+    }
+    
 }

@@ -104,7 +104,7 @@
 
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
-                <col *ngFor="let col of columns" class="table-column-width">
+                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
             </colgroup>
         </ng-template>
 
@@ -138,8 +138,9 @@
                             name="createdDate" (change)="addeddateFilterForTable($event.target.value, col.field)" />
                           <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
                             name="updatedDate" (change)="addeddateFilterForTable($event.target.value,col.field)" />
-                        </ng-container>
+                    </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
+                        <input  class="table-header-input-width" pInputText type="text" name="isVerified" (input)="checkChange($event.target.value)"/>
                     </ng-container>
                 </th>
                 <th class="table-actions-column"></th>
@@ -161,7 +162,7 @@
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                         <input type="checkbox" [checked]="rowData[col.field] == true"
-                               class="input-check" />
+                               class="input-check" disabled/>
                                <!-- <div class="form-group">
                                 <div class="checkbox-cstm">
                                   <label> 
@@ -184,7 +185,8 @@
                         {{rowData[col.field] }}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'memo'">
-                        <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="rowData[col.field]"></p>
+                        <p class="m-0 p-0 p_textEditor memo-align-left truncate-text" matTooltipPosition="above"
+                         [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
                     </ng-container>
                 </td>
                 <td class="action-icons-cstm table-column-width">
@@ -247,7 +249,7 @@
     <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" (click)="closeCapes()">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" (click)="closeCapes()">&times;</button>
                 <h4 class="modal-title">Add Capes</h4>
             </div>
             <div class="modal-body show-capes-height">
@@ -308,7 +310,8 @@
                         <p>
                             <span class="label"><strong>Memo</strong> : </span>
                                 <span class="value">
-                                    <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="selectedItemMasterCapData.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor memo-align-left truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(selectedItemMasterCapData.memo)" [innerHTML]="selectedItemMasterCapData.memo"></p>
                                 </span>
                         </p>
                     </div>
@@ -365,20 +368,20 @@
                             <tr>
                                 <th>Caps Type <strong class="clr-red">*</strong></th>
                                 <th>PN<strong class="clr-red">*</strong></th>
-                                <th>PN Description<strong class="clr-red">*</strong></th>
+                                <th class="pn-desc-width">PN Description<strong class="clr-red">*</strong></th>
                                 <th class="mgmt-table-header" colspan="4">Management Structure <strong class="clr-red">*</strong></th>
                                 <th>Added Date</th>
-                                <th>Is Verified</th>
+                                <th style="min-width:60px !important">Verified</th>
                                 <th>Verified By</th>
                                 <th>Verified Date</th>
-                                <th>Memo</th>
+                                <th style="min-width:250px !important">Memo</th>
                                
                                 <th>Created Date</th>
                                 <th>Created By</th>
                                 
                                 <th>Updated Date</th>
                                 <th>Updated By</th>
-                                <th>Is Deleted</th>
+                                <th class="is-deleted-width">Is Deleted</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="capabilityauditHisory.length> 0">
@@ -390,21 +393,31 @@
                                 <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
                                 <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
                                 <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
-                                <td><p >{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
-                                <td class="text-center"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
+                                <td>{{audit.addedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                           <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified"
+                                            disabled></label></span></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
                                 
-                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }">{{audit.verifiedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
-                                    <p [innerHTML]="audit.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                    [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
                                 </td>
-                                <td><p >{{audit.createdDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+                                <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                 <td >{{audit.createdBy}}</td>
-                                <td><p >{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+                                <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                 <td >{{audit.updatedBy}}</td>
-                                <td class="text-center"><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                           <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                        </label>
+                                    </span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -425,7 +438,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="capes-memo" style="z-index: 15000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="edit-capes-memo" style="z-index: 10000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -487,7 +500,7 @@
                                         <th class="mgmt-width" colspan="4">Managment Structure
                                             <span class="clr-red">*</span></th>
                                         <th >Date Added</th>
-                                        <th>Verified</th>
+                                        <th style="min-width:70px !important">Verified</th>
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
                                         <th class="memo-header-width">Memo</th>
@@ -575,9 +588,9 @@
                                            
                                             data-toggle="modal"
                                             matTooltip="Memo"
-                                            data-target="#capes-memo"
+                                            data-target="#edit-capes-memo"
                                             matTooltipPosition="above"
-                                            (click)="onAddTextAreaInfo('memo', capes-memo)"></i>
+                                            (click)="onAddTextAreaInfo('memo', edit-capes-memo)"></i>
                                             <!-- data-target="#capes-memo" -->
                                         </td>
                                     </tr>

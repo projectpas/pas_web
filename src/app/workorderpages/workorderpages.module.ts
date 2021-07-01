@@ -1,7 +1,10 @@
-﻿import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
+﻿import { WoCustomerDetailComponent } from './../components/work-order/work-order-setup/work-order-materials-add/wo-customer-detail/wo-customer-detail.component';
+import { WorkOrderMaterialsAddComponent } from './../components/work-order/work-order-setup/work-order-materials-add/work-order-materials-add.component';
+import { WorkOrderPickticketComponent } from './../components/work-order/work-order-setup/work-order-pickticket/work-order-pickticket.component';
+import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
 import { CommonModulesModule } from './../common-modules/common-modules.module';
 import { WoApprovalRuleComponent } from './../components/work-order/work-order-setup/wo-approval-rule/wo-approval-rule.component';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
 import { WorkOrdersPagesRoutingModule } from './workorderpages-routing.module';
@@ -99,7 +102,31 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
 import { SplitButtonModule } from 'primeng/splitbutton';
-@NgModule({
+import { WorkOrderPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-pickticketprint/work-order-pickticketprint.component';
+import { WoPartNumberFilterComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-number-filter/wo-part-number-filter.component';
+import { WoPartDetailsComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-part-details/wo-part-details.component';
+import { WorkOrderPartPickticketComponent } from '../components/work-order/work-order-setup/work-order-part-pickticket/work-order-part-pickticket.component';
+import { WorkOrderPartPickticketprintComponent } from '../components/work-order/work-order-setup/work-order-part-pickticketprint/work-order-part-pickticketprint.component';
+import { WoMarginComponent } from '../components/work-order/work-order-setup/work-order-materials-add/wo-margin/wo-margin..component';
+import { WoReleaseFromComponent } from '../components/work-order/work-order-setup/wo-release-from/wo-release-from.component';
+import { WoReleaseEasaFromComponent } from '../components/work-order/work-order-setup/wo-release-easa-from/wo-release-easa-from.component';
+import { WorkOrderMultiPackagingLabelComponent } from '../components/work-order/work-order-setup/wo-order-multi-Packaging-Label/wo-order-multi-Packaging-Label.component';
+import { WorkOrderMultiShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-multi-shipping-label/work-order-multi-shipping-label.component';
+import { WorkOrderPackagingLabelComponent } from '../components/work-order/work-order-setup/work-order-packaging-label/work-order-packaging-label.component';
+import { WorkOrderShippingLabelComponent } from '../components/work-order/work-order-setup/work-order-shipping-label/work-order-shipping-label.component';
+import { WorkOrderReleaseFromListComponent } from '../components/work-order/work-order-setup/work-order-release-from-list/work-order-release-from-list.component';
+import { WorkOrderPrintInvoiceComponent } from '../components/work-order/work-order-setup/work-order-print-invoice/work-order-print-invoice.component';
+import { WoqFromComponent } from '../components/work-order/work-order-setup/woq-form/woq-form.component';
+import { WoPartlistFromComponent } from '../components/work-order/work-order-setup/wo-part-list-form/wo-part-list-form.component';
+import { WoPrintFromComponent } from '../components/work-order/work-order-setup/wo-print-form/wo-print-form.component';
+import { WorkOrderActualVsQuoteComponent } from '../components/work-order/work-order-setup/wo-actual-vs-quote/wo-actual-vs-quote.component';
+import { SubWoPrintFromComponent } from '../components/work-order/work-order-setup/sub-wo-print-form/sub-wo-print-form.component';
+import { WorkOrderWorkCompleteComponent } from '../components/work-order/work-order-setup/wo-workComplete/wo-workComplete.component'; 
+import { CommonPublicationViewModule } from '../components/common-components/common-publicationView/common-publicationView.module';
+import { WorkOrderAssignmentComponent } from '../components/work-order/work-order-setup/wo-assignment/wo-assignment.component';
+// import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
+
+@NgModule({ 
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -130,9 +157,10 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     TreeTableModule,
     BreadcrumbModule,
     CommonDocumentsModule,
+    CommonPublicationViewModule,
     CommonCommunicationModule,
     SplitButtonModule,
-    CommonModulesModule
+    CommonModulesModule,
   ],
   declarations: [
     WorkOrderPagesComponent,
@@ -192,10 +220,35 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     CommunicationComponent,
     AnalysisComponent,
     WoApprovalRuleComponent,
-    WoqApprovalRuleComponent
-
+    WoqApprovalRuleComponent,
+    WorkOrderPickticketComponent,
+    WorkOrderPickticketprintComponent,
+    WorkOrderMaterialsAddComponent,
+    WoCustomerDetailComponent,
+    WoPartNumberFilterComponent,
+    WoPartDetailsComponent,
+    WorkOrderPartPickticketComponent,
+    WorkOrderPartPickticketprintComponent,
+    WoMarginComponent,
+    WoReleaseFromComponent,
+    WoReleaseEasaFromComponent,
+    WorkOrderMultiPackagingLabelComponent,
+    WorkOrderMultiShippingLabelComponent,
+    WorkOrderShippingComponent,
+    WorkOrderPackagingLabelComponent,
+    WorkOrderShippingLabelComponent,
+    WorkOrderReleaseFromListComponent,
+    WorkOrderPrintInvoiceComponent,
+    WoqFromComponent,
+    WoPartlistFromComponent,
+    WoPrintFromComponent,
+    WorkOrderActualVsQuoteComponent,
+    SubWoPrintFromComponent,
+    WorkOrderWorkCompleteComponent,
+    WorkOrderAssignmentComponent
+    // TwoDecimalGlobalNumberFormatPipe
   ],
-  entryComponents: [],
+  entryComponents: [WorkOrderPickticketprintComponent, WorkOrderPartPickticketprintComponent],
   providers: [
     WorkFlowtService,
     WorkOrderService,
@@ -212,6 +265,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     SalesQuoteEndpointService,
     DatePipe
   ],
-  exports: [SubWorkOrderComponent, EmailComponent]
+  exports: [SubWorkOrderComponent, EmailComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WorkOrderPagesModule { }

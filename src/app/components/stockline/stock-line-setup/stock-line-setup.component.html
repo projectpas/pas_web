@@ -1,5 +1,4 @@
-﻿﻿﻿
-        <div class="card new-card">
+﻿﻿        <div class="card new-card">
             <div class="card-header header">
               <div class="row">
                 <div class="col">
@@ -25,14 +24,66 @@
                                 <h5>General</h5>
                             </div>
                             <div class="card-body">
-                                <div class="form-group" *ngIf="isEditMode">
-                                    <div class="checkbox-cstm checkbox-cstm-d m-t-10">
+                                <div class="form-group">
+                                    <div class="checkbox-cstm m-t-10 display-flex">
                                         <label>
-                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" disabled>
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Customer Stock - Rotable 
+                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" (ngModelChange)="enableSave()" [disabled]="isEditMode">
+                                            <span class="cr"><i class="cr-icon pi pi-check"(click)="ChekisCustomerStock(stockLineForm.isCustomerStock)"></i></span>
+                                            Customer Stock 
                                         </label>
+                                        <div class="display-flex m-l-10"  *ngIf="stockLineForm.isCustomerStock">
+                                            <div>
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                                    [checked]="stockLineForm.isCustomerstockType == true"
+                                                    (change)="getStockStatus(1)" [disabled]="isEditMode">
+                                                    <span class="checkmark"></span>  Rotable
+                                                    <!-- Rotable Customer Stock -->
+                                                </label>
+                                            </div> 
+                                            <div class="m-l-10">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" value="0" name="assetRadio" class="form-check-inline"
+                                                    [checked]="stockLineForm.isCustomerstockType == false"
+                                                    (change)="getStockStatus(0)"  [disabled]="isEditMode">
+                                                    <span class="checkmark"></span>  Piece Parts
+                                                </label>
+                                            </div> 
+                                        </div>
                                     </div>
+
+                                    
+                                </div>
+
+                                <!-- <div class="form-group m-t-10" *ngIf="stockLineForm.isCustomerStock">
+                                    <div>
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                            [checked]="stockLineForm.isCustomerstockType == true"
+                                            (change)="getStockStatus(1)" [disabled]="isEditMode">
+                                            <span class="checkmark"></span>  Rotable
+                                          
+                                        </label>
+                                    </div> 
+                                    <div>
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" value="0" name="assetRadio" class="form-check-inline"
+                                            [checked]="stockLineForm.isCustomerstockType == false"
+                                            (change)="getStockStatus(0)"  [disabled]="isEditMode">
+                                            <span class="checkmark"></span>  Piece Parts
+                                        </label>
+                                    </div> 
+                                </div> -->
+
+                                <div class="form-group" *ngIf="stockLineForm.isCustomerStock">
+                                    <label>Customer</label>
+                                    <p-autoComplete field="label" class="pautocomp-cstm"
+                                        [(ngModel)]="stockLineForm.customerId" name="vendorId" [suggestions]="customerNames"
+                                        (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1"
+                                        [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
+                                        (ngModelChange)="enableSave()"
+                                         required [disabled]="isEditMode" > 
+                                    </p-autoComplete>
                                 </div>
                                 <div class="form-group">
                                     <label>PN <span class="clr-red">*</span>
@@ -52,7 +103,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Revised PN</label>
-                                    <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled>
+                                    <div class="inner-addon right-addon inline-block">
+                                        <p-autoComplete field="partnumber" class="pautocomp-cstm" [(ngModel)]="stockLineForm.revicedPNId" name="revicedPNId" [suggestions]="RevicepnList" (completeMethod)="filterRevicePartNumbers($event)" [size]="30" [minLength]="1" [dropdown]="true"  #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()"></p-autoComplete>
+                                    </div>
+                                    <!-- <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled> -->
                                 </div>
                                 <div class="form-group m-t-10">
                                     <div>
@@ -95,7 +149,7 @@
                                 <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER"
-                                            (ngModelChange)="enableSave()" disabled>
+                                            (ngModelChange)="enableSave()"  disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         DER
                                     </label>
@@ -299,27 +353,39 @@
                                 <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
                                     [monthNavigator]="true" yearRange="1900:2100" name="entryDate"
                                     [maxDate]="minDateValue" [(ngModel)]="stockLineForm.entryDate"
-                                    (ngModelChange)="enableSave()"></p-calendar>
+                                    (ngModelChange)="enableSave()" disabled></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>PO Num</label>
-                                <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
+                                    [suggestions]="allPODetails" (completeMethod)="filterPOList($event)"
+                                    [size]="30" [minLength]="1" (onSelect)="onChangePONum(stockLineForm.purchaseOrderId)"  [dropdown]="true" errorMessage="Records not found"
+                                    (ngModelChange)="enableSave()" [forceSelection]="true">
+                                </p-autoComplete>
+                                <!-- <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId"
                                     [suggestions]="polistInfo" (completeMethod)="filterPoNumber($event)" [size]="30"
                                     [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                     (onSelect)="onChangePONum(stockLineForm.purchaseOrderId)" [forceSelection]="true"
                                     (ngModelChange)="enableSave()" [disabled]="stockLineForm.repairOrderId">
-                                </p-autoComplete>
+                                </p-autoComplete> -->
                             </div>
                             <div class="form-group">
                                 <label>RO Num</label>
-                                <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
+                                [suggestions]="allRODetails" (completeMethod)="filterROList($event)"
+                                [size]="30" [minLength]="1" (onSelect)="onChangeRONum(stockLineForm.repairOrderId)" [dropdown]="true" errorMessage="Records not found"
+                                (ngModelChange)="enableSave()" [forceSelection]="true">
+                            </p-autoComplete>
+                                <!-- <p-autoComplete field="repairOrderNumber" class="pautocomp-cstm"
                                     [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId"
                                     [suggestions]="rolistInfo" (completeMethod)="filterRoNumber($event)" [size]="30"
                                     [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                     (onSelect)="onChangeRONum(stockLineForm.repairOrderId)" [forceSelection]="true"
                                     (ngModelChange)="enableSave()" [disabled]="stockLineForm.purchaseOrderId">
-                                </p-autoComplete>
+                                </p-autoComplete> -->
                             </div>
                             <div class="form-group">
                                 <label>Vendor</label>
@@ -602,14 +668,20 @@
                             <div class="form-group">
                                 <label>PO Unit Cost</label> 
                                 <input class="form-control text-right" type="text" pInputText pKeyFilter="money" 
-                                    name="purchaseOrderUnitCost" (change)="onChangePOUnitCost()" [disabled]="stockLineForm.repairOrderUnitCost > 0"
+                                    name="purchaseOrderUnitCost" (change)="onChangePOUnitCost()"
                                     [(ngModel)]="stockLineForm.purchaseOrderUnitCost" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
                                 <label>RO Unit Cost</label>
                                 <input class="form-control text-right" type="text" pInputText pKeyFilter="money" 
-                                    name="repairOrderUnitCost" (change)="onChangeROUnitCost()" [disabled]="stockLineForm.purchaseOrderUnitCost > 0"
+                                    name="repairOrderUnitCost" (change)="onChangeROUnitCost()"
                                     [(ngModel)]="stockLineForm.repairOrderUnitCost" (ngModelChange)="enableSave()">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit Cost</label>
+                                <input class="form-control text-right" type="text" pInputText pKeyFilter="money" 
+                                    name="unitCost"
+                                    [(ngModel)]="stockLineForm.unitCost" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
                                 <label>Unit Sale Price</label>
@@ -728,7 +800,7 @@
                                     <span>
                                         <div [innerHTML]="stockLineForm.blackListedReason"
                                             [matTooltip]="parsedText(stockLineForm.blackListedReason)"
-                                            class="form-control " class="text_editor_box memo-width"></div>
+                                            class="form-control " class="text_editor_box stock-line-memo-width"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
@@ -754,7 +826,7 @@
                                         <div [innerHTML]="stockLineForm.accidentReason"
                                             [matTooltip]="parsedText(stockLineForm.accidentReason)"
                                              class="form-control"
-                                             class="text_editor_box memo-width"></div>
+                                             class="text_editor_box stock-line-memo-width"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
@@ -779,7 +851,7 @@
                                         <div [innerHTML]="stockLineForm.incidentReason" class="form-control"
                                             (ngModelChange)="enableSave()"
                                             [matTooltip]="parsedText(stockLineForm.incidentReason)"
-                                            matTooltipPosition="above" class="text_editor_box  memo-width">
+                                            matTooltipPosition="above" class="text_editor_box  stock-line-memo-width">
                                         </div>
                                     </span>
                                 </div>
@@ -852,12 +924,63 @@
                                 <input class="form-control" type="text" name="partCertificationNumber"
                                     [(ngModel)]="stockLineForm.partCertificationNumber" (ngModelChange)="enableSave()">
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Certify By
                                 </label>
                                 <input class="form-control" type="text" name="certifiedBy"
                                     [(ngModel)]="stockLineForm.certifiedBy" (ngModelChange)="enableSave()" />
+                            </div> -->
+                            <div class="form-group">
+                                <label>Cert Type</label>
+                                <select [(ngModel)]="stockLineForm.certifiedTypeId" name="certifiedTypeId"
+                                    (change)="onSelectCertype()" (ngModelChange)="enableSave()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
                             </div>
+
+                            <div class="form-group">
+                                <label *ngIf="stockLineForm.certifiedTypeId > 0">Cert By</label>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 1">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.certifiedById" name="certifiedByCustomer"
+                                            [suggestions]="customerNames" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true"></p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 2">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.certifiedById" name="certifiedByVendor"
+                                            [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 9">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.certifiedById" name="certifiedByCompany"
+                                            [suggestions]="companyNames" (completeMethod)="filterCompanyNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 4">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="certifiedByOther"
+                                            [(ngModel)]="stockLineForm.certifiedBy" (ngModelChange)="enableSave()">
+                                    </div>
+                                </div>
+                            </div> 
                             <div class="form-group">
                                 <label>Certified Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
@@ -870,24 +993,6 @@
                                 <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
                                     [monthNavigator]="true" yearRange="1900:2100" [minDate]="minDateValue"
                                     name="certifiedDueDate" [(ngModel)]="stockLineForm.certifiedDueDate"
-                                    (ngModelChange)="enableSave()"></p-calendar>
-                            </div>
-                            <div class="form-group">
-                                <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
-                                    name="tagType" (ngModelChange)="enableSave()">
-                                </p-multiSelect>
-                            </div>
-                            <div class="form-group">
-                                <label>Tag Num</label>
-                                <input class="form-control" type="text" name="tagNumber"
-                                    [(ngModel)]="stockLineForm.tagNumber" (ngModelChange)="enableSave()" />
-                            </div>
-                            <div class="form-group">
-                                <label>Tag Date</label>
-                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100" name="tagDate"
-                                    [maxDate]="minDateValue" [(ngModel)]="stockLineForm.tagDate"
                                     (ngModelChange)="enableSave()"></p-calendar>
                             </div>
                             <div class="form-group">
@@ -907,9 +1012,85 @@
                                     [(ngModel)]="stockLineForm.inspectionDate" (ngModelChange)="enableSave()">
                                 </p-calendar>
                             </div>
+                            <div class="form-group">
+                                <label>Tag Num</label>
+                                <input class="form-control" type="text" name="tagNumber"
+                                    [(ngModel)]="stockLineForm.tagNumber" (ngModelChange)="enableSave()" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tag Type</label>
+                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
+                                    name="tagType" (ngModelChange)="enableSave()">
+                                </p-multiSelect>
+                            </div>
+                            <div class="form-group">
+                                <label>Tag By</label>
+                                <select [(ngModel)]="stockLineForm.taggedByType" name="taggedByType"
+                                    (change)="onSelectTaggedType()" (ngModelChange)="enableSave()">
+                                    <option value="0">-- Select --</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 1">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.taggedBy" name="taggedByCustomer"
+                                            [suggestions]="customerNames" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true"></p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 2">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.taggedBy" name="taggedByVendor"
+                                            [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 9">
+                                    <div class="col-sm-12">
+                                        <p-autoComplete field="label" class="pautocomp-cstm"
+                                            [(ngModel)]="stockLineForm.taggedBy" name="taggedByCompany"
+                                            [suggestions]="companyNames" (completeMethod)="filterCompanyNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" (ngModelChange)="enableSave()"
+                                            [forceSelection]="true">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="stockLineForm.taggedByType == 4">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" name="taggedByOther"
+                                            [(ngModel)]="stockLineForm.taggedByName" (ngModelChange)="enableSave()">
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label>Tag Date</label>
+                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" name="tagDate"
+                                    [maxDate]="minDateValue" [(ngModel)]="stockLineForm.tagDate"
+                                    (ngModelChange)="enableSave()"></p-calendar>
+                            </div>                            
+                            <!-- <div class="form-group">
+                                <label>Tagged By</label>
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.taggedBy" name="taggedBy"
+                                    [suggestions]="TagByNames" (completeMethod)="filterTagEmployees($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (ngModelChange)="enableSave()" 
+                                    [forceSelection]="true">
+                                </p-autoComplete>
+                            </div> -->                            
                         </div>
                     </div>
-
                     <div class="card card-stock">
                         <div class="card-header">
                             <h5>Other</h5>
@@ -941,7 +1122,7 @@
                                     <span>
                                         <div [innerHTML]="stockLineForm.memo "
                                             [matTooltip]="parsedText(stockLineForm.memo)" class="form-control"
-                                            class="text_editor_box  memo-width"></div>
+                                            class="text_editor_box  stock-line-memo-width" [ngStyle]="{'border':'1px solid red'}"></div>
                                     </span>
                                 </div>
                                 <div class="col-sm-1 black-reason">
@@ -956,8 +1137,420 @@
                 </div>
             </div>
 
-            <div class="form-row">
+
+
+            <div class="form-row" *ngIf="sourceTimeLife.timeLife">
                 <div class="col-md-6">
+                    <div class="table-responsive form-group" style="padding: 0 5px;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="15" class="text-center"><strong>Time Life Info (Hours)</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center">Cycles</th>
+                                    <th colspan="2" class="text-center">Time</th>
+                                    <th colspan="2" class="text-center">Last</th>
+                                </tr>
+                                <tr>
+                                    <td>Remaining</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text" 
+                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesRemaining"
+                                            [(ngModel)]="sourceTimeLife.cyclesRemaining" />
+                                        <div *ngIf="cyclesRemaining.errors">
+                                            <div *ngIf="cyclesRemaining.errors" [ngClass]="'error'">
+                                                <div *ngIf="cyclesRemaining.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesRemainingHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesRemainingHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesRemainingHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesRemainingMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesRemainingMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesRemainingMin"
+                                            (change)="onChangeTimeLifeMin('cyclesRemainingMin',sourceTimeLife.cyclesRemainingMin)">
+                                    </td>
+                                    <td>Remaining</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="timeRemaining"
+                                            [(ngModel)]="sourceTimeLife.timeRemaining" />
+                                        <div *ngIf="timeRemaining.errors">
+                                            <div *ngIf="timeRemaining.errors" [ngClass]="'error'">
+                                                <div *ngIf="timeRemaining.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeRemainingHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeRemainingHrs"
+                                            [(ngModel)]="sourceTimeLife.timeRemainingHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeRemainingMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeRemainingMin"
+                                            [(ngModel)]="sourceTimeLife.timeRemainingMin"
+                                            (change)="onChangeTimeLifeMin('timeRemainingMin',sourceTimeLife.timeRemainingMin)">
+                                    </td>
+                                    <td style="width:70px!important">Since New</td>
+                                    <td class="clr2">
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #lastSinceNewHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceNewHrs"
+                                            [(ngModel)]="sourceTimeLife.lastSinceNewHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #lastSinceNewMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceNewMin"
+                                            [(ngModel)]="sourceTimeLife.lastSinceNewMin"
+                                            (change)="onChangeTimeLifeMin('lastSinceNewMin',sourceTimeLife.lastSinceNewMin)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Since New</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceNew"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceNew" />
+                                        <div *ngIf="cyclesSinceNew.errors">
+                                            <div *ngIf="cyclesSinceNew.errors" [ngClass]="'error'">
+                                                <div *ngIf="cyclesSinceNew.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceNewHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceNewHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceNewMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceNewMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceNewMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceNewMin',sourceTimeLife.cyclesSinceNewMin)">
+
+                                    </td>
+                                    <td>Since New</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceNew"
+                                            [(ngModel)]="sourceTimeLife.timeSinceNew" />
+                                        <div *ngIf="timeSinceNew.errors">
+                                            <div *ngIf="timeSinceNew.errors" [ngClass]="'error'">
+                                                <div *ngIf="timeSinceNew.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceNewHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceNewHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceNewHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceNewMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceNewMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceNewMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceNewMin',sourceTimeLife.timeSinceNewMin)">
+
+                                    </td>
+                                    <td style="width:70px!important">Since Ovh</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="lastSinceNew"
+                                            [(ngModel)]="sourceTimeLife.lastSinceNew" />
+                                        <div *ngIf="lastSinceNew.errors">
+                                            <div *ngIf="lastSinceNew.errors" [ngClass]="'error'">
+                                                <div *ngIf="lastSinceNew.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #lastSinceOVHHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceOVHHrs"
+                                            [(ngModel)]="sourceTimeLife.lastSinceOVHHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #lastSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceOVHMin"
+                                            [(ngModel)]="sourceTimeLife.lastSinceOVHMin"
+                                            (change)="onChangeTimeLifeMin('lastSinceOVHMin',sourceTimeLife.lastSinceOVHMin)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Since Ovh</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceOVH"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVH" />
+                                        <div *ngIf="cyclesSinceOVH.errors">
+                                            <div *ngIf="cyclesSinceOVH.errors" [ngClass]="'error'">
+                                                <div *ngIf="cyclesSinceOVH.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceOVHHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceOVHHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceOVHMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVHMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceOVHMin',sourceTimeLife.cyclesSinceOVHMin)">
+                                    </td>
+                                    <td>Since Ovh</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceOVH"
+                                            [(ngModel)]="sourceTimeLife.timeSinceOVH" />
+                                        <div *ngIf="timeSinceOVH.errors">
+                                            <div *ngIf="timeSinceOVH.errors" [ngClass]="'error'">
+                                                <div *ngIf="timeSinceOVH.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceOVHHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceOVHHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceOVHHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceOVHMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceOVHMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceOVHMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceOVHMin',sourceTimeLife.timeSinceOVHMin)">
+                                    </td>
+                                    <td>Since Insp</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="lastSinceOVH"
+                                            [(ngModel)]="sourceTimeLife.lastSinceOVH" />
+                                        <div *ngIf="lastSinceOVH.errors">
+                                            <div *ngIf="lastSinceOVH.errors" [ngClass]="'error'">
+                                                <div *ngIf="lastSinceOVH.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #lastSinceInspectionHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceInspectionHrs"
+                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #lastSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="lastSinceInspectionMin"
+                                            [(ngModel)]="sourceTimeLife.lastSinceInspectionMin"
+                                            (change)="onChangeTimeLifeMin('lastSinceInspectionMin',sourceTimeLife.lastSinceInspectionMin)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Since Insp</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern"
+                                            #cyclesSinceInspection="ngModel" mask="000:00"
+                                            (ngModelChange)="enableSave()" name="cyclesSinceInspection"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspection" />
+                                        <div *ngIf="cyclesSinceInspection.errors">
+                                            <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
+                                                <div *ngIf="cyclesSinceInspection.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceInspectionHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceInspectionHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceInspectionMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspectionMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceInspectionMin',sourceTimeLife.cyclesSinceInspectionMin)">
+                                    </td>
+                                    <td>Since Insp</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceInspection"
+                                            [(ngModel)]="sourceTimeLife.timeSinceInspection" />
+                                        <div *ngIf="timeSinceInspection.errors">
+                                            <div *ngIf="timeSinceInspection.errors" [ngClass]="'error'">
+                                                <div *ngIf="timeSinceInspection.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceInspectionHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceInspectionHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceInspectionMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceInspectionMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceInspectionMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceInspectionMin',sourceTimeLife.timeSinceInspectionMin)">
+                                    </td>
+                                    <td></td>
+                                    <td style="background-color: #fff !important;"></td>
+                                    <!-- <td class="clr2">
+                                        <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="lastSinceInspection"
+                                            [(ngModel)]="sourceTimeLife.lastSinceInspection" />
+                                        <div *ngIf="lastSinceInspection.errors">
+                                            <div *ngIf="lastSinceInspection.errors" [ngClass]="'error'">
+                                                <div *ngIf="lastSinceInspection.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td> -->
+                                </tr>
+                                <tr>
+                                    <td>Since Repair</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceRepair"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepair" />
+                                        <div *ngIf="cyclesSinceRepair.errors">
+                                            <div *ngIf="cyclesSinceRepair.errors" [ngClass]="'error'">
+                                                <div *ngIf="cyclesSinceRepair.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #cyclesSinceRepairHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceRepairHrs"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #cyclesSinceRepairMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="cyclesSinceRepairMin"
+                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepairMin"
+                                            (change)="onChangeTimeLifeMin('cyclesSinceRepairMin',sourceTimeLife.cyclesSinceRepairMin)">
+                                    </td>
+                                    <td>Since Repair</td>
+                                    <td class="clr2">
+                                        <!-- <input class="form-control width-input" matInput type="text"
+                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel"
+                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceRepair"
+                                            [(ngModel)]="sourceTimeLife.timeSinceRepair" />
+                                        <div *ngIf="timeSinceRepair.errors">
+                                            <div *ngIf="timeSinceRepair.errors" [ngClass]="'error'">
+                                                <div *ngIf="timeSinceRepair.errors.pattern">
+                                                    <span class="clr-red">Please enter valid time format
+                                                        (hhh:mm)</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <input class="form-control tl-input" matInput placeholder="HH"
+                                            #timeSinceRepairHrs="ngModel" 
+                                            (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceRepairHrs"
+                                            [(ngModel)]="sourceTimeLife.timeSinceRepairHrs">
+                                        <span> : </span>
+                                        <input class="form-control tl-input" matInput placeholder="MM"
+                                            #timeSinceRepairMin="ngModel" (ngModelChange)="enableSave()"
+                                            type="number" 
+                                            name="timeSinceRepairMin"
+                                            [(ngModel)]="sourceTimeLife.timeSinceRepairMin"
+                                            (change)="onChangeTimeLifeMin('timeSinceRepairMin',sourceTimeLife.timeSinceRepairMin)">
+                                    </td>
+                                    <td></td>
+                                    <td style="background-color: #fff !important;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12">
+                <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="stockLineId"
+                [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
+            </div>
+                <!-- <div class="col-md-6">
                     <div class="card card-stock">
                         <div class="card-header">
                             <h5>Attachments</h5>
@@ -1127,234 +1720,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
-
-            <div class="form-row" *ngIf="sourceTimeLife.timeLife">
-                <div class="col-md-6">
-                    <div class="table-responsive form-group" style="padding: 0 5px;">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th colspan="15" class="text-center"><strong>Time Life Info (Hours)</strong></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th></th>
-                                    <th class="text-center">Cycles</th>
-                                    <th class="text-center">Time</th>
-                                    <th class="text-center">Last</th>
-                                </tr>
-                                <tr>
-                                    <td>Remaining</td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text" 
-                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesRemaining"
-                                            [(ngModel)]="sourceTimeLife.cyclesRemaining" />
-                                        <div *ngIf="cyclesRemaining.errors">
-                                            <div *ngIf="cyclesRemaining.errors" [ngClass]="'error'">
-                                                <div *ngIf="cyclesRemaining.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="timeRemaining"
-                                            [(ngModel)]="sourceTimeLife.timeRemaining" />
-                                        <div *ngIf="timeRemaining.errors">
-                                            <div *ngIf="timeRemaining.errors" [ngClass]="'error'">
-                                                <div *ngIf="timeRemaining.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Since New</td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceNew"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceNew" />
-                                        <div *ngIf="cyclesSinceNew.errors">
-                                            <div *ngIf="cyclesSinceNew.errors" [ngClass]="'error'">
-                                                <div *ngIf="cyclesSinceNew.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceNew"
-                                            [(ngModel)]="sourceTimeLife.timeSinceNew" />
-                                        <div *ngIf="timeSinceNew.errors">
-                                            <div *ngIf="timeSinceNew.errors" [ngClass]="'error'">
-                                                <div *ngIf="timeSinceNew.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="lastSinceNew"
-                                            [(ngModel)]="sourceTimeLife.lastSinceNew" />
-                                        <div *ngIf="lastSinceNew.errors">
-                                            <div *ngIf="lastSinceNew.errors" [ngClass]="'error'">
-                                                <div *ngIf="lastSinceNew.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Since Ovh</td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceOVH"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVH" />
-                                        <div *ngIf="cyclesSinceOVH.errors">
-                                            <div *ngIf="cyclesSinceOVH.errors" [ngClass]="'error'">
-                                                <div *ngIf="cyclesSinceOVH.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceOVH"
-                                            [(ngModel)]="sourceTimeLife.timeSinceOVH" />
-                                        <div *ngIf="timeSinceOVH.errors">
-                                            <div *ngIf="timeSinceOVH.errors" [ngClass]="'error'">
-                                                <div *ngIf="timeSinceOVH.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="lastSinceOVH"
-                                            [(ngModel)]="sourceTimeLife.lastSinceOVH" />
-                                        <div *ngIf="lastSinceOVH.errors">
-                                            <div *ngIf="lastSinceOVH.errors" [ngClass]="'error'">
-                                                <div *ngIf="lastSinceOVH.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Since Insp</td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern"
-                                            #cyclesSinceInspection="ngModel" mask="000:00"
-                                            (ngModelChange)="enableSave()" name="cyclesSinceInspection"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspection" />
-                                        <div *ngIf="cyclesSinceInspection.errors">
-                                            <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
-                                                <div *ngIf="cyclesSinceInspection.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceInspection"
-                                            [(ngModel)]="sourceTimeLife.timeSinceInspection" />
-                                        <div *ngIf="timeSinceInspection.errors">
-                                            <div *ngIf="timeSinceInspection.errors" [ngClass]="'error'">
-                                                <div *ngIf="timeSinceInspection.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="lastSinceInspection"
-                                            [(ngModel)]="sourceTimeLife.lastSinceInspection" />
-                                        <div *ngIf="lastSinceInspection.errors">
-                                            <div *ngIf="lastSinceInspection.errors" [ngClass]="'error'">
-                                                <div *ngIf="lastSinceInspection.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Since Repair</td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceRepair"
-                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepair" />
-                                        <div *ngIf="cyclesSinceRepair.errors">
-                                            <div *ngIf="cyclesSinceRepair.errors" [ngClass]="'error'">
-                                                <div *ngIf="cyclesSinceRepair.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="clr2">
-                                        <input class="form-control width-input" matInput type="text"
-                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel"
-                                            mask="000:00" (ngModelChange)="enableSave()" name="timeSinceRepair"
-                                            [(ngModel)]="sourceTimeLife.timeSinceRepair" />
-                                        <div *ngIf="timeSinceRepair.errors">
-                                            <div *ngIf="timeSinceRepair.errors" [ngClass]="'error'">
-                                                <div *ngIf="timeSinceRepair.errors.pattern">
-                                                    <span class="clr-red">Please enter valid time format
-                                                        (hhh:mm)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-row pull-right">
-                <button type="submit" class="btn btn-primary" (click)="onSaveStockLine()"
-                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
+                <button type="button" class="btn btn-primary" (keydown.enter)="$event.preventDefault()" (click)="onSaveStockLine()"
+                    [disabled]="!stockLineSetupForm.valid || disableMagmtStruct || disableCustomer|| disableManufacturer || disableCondition || disableSiteName || disableSaveForEdit">{{isEditMode
                     ? 'Update' : 'Save'}} </button>
             </div>
         </form>

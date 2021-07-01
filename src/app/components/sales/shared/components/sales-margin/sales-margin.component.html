@@ -35,13 +35,18 @@
           <label style="width: auto;">Stk Line Number <span class="clr-red">:</span></label>
           {{ part.stockLineNumber  ? part.stockLineNumber : ''}}</p>
       </div>
+      <div *ngIf="!part.stockLineNumber" class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
+        <p class="fs10 wauto no-bg">
+          <label style="width: auto;">Item Group <span class="clr-red">:</span></label>
+          {{ part.itemGroup  ? part.itemGroup : ''}}</p>
+      </div>
     </div>
   </div>
   <div class="row margin-row">
     <div class="col-md-12 col-sm-12 col-12">
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity requested</label>
+          <label>Qty Requested</label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="quantityRequest" disabled="true" [ngModel]="part.quantityRequested  | globalNmberFormat"
             (ngModelChange)="part.quantityRequested=formatStringToNumberGlobal($event)" />
@@ -49,7 +54,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity already quoted</label>
+          <label>Qty already Quoted</label>
           <input type="text" class="form-control quantityTextBox text-right" name="quantityAlreadyQuoted"
             disabled="true" [ngModel]="part.quantityAlreadyQuoted  | globalNmberFormat"
             (ngModelChange)="part.quantityAlreadyQuoted=formatStringToNumberGlobal($event)" />
@@ -57,9 +62,9 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity from this <span *ngIf="part.method=='Item Master'">PN</span><span
+          <label>Qty from this <span *ngIf="part.method=='Item Master'">PN</span><span
               *ngIf="part.method=='Stock Line'">{{part.stockLineNumber}}</span></label>
-          <input type="text" (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)"
+          <input type="text" (keyup)="onChangeQuantityFromThis($event)" (blur)="calculate(); onChangeQuantityFromThis($event)"
             class="form-control quantityTextBox text-right" name="quantityFromThis"
             [ngModel]="part.quantityFromThis | globalNmberFormat" [ngModelOptions]="{updateOn:'blur'}"
             (ngModelChange)="part.quantityFromThis=formatStringToNumberGlobal($event)" (change)="calculate()"
@@ -71,7 +76,7 @@
       </div>
       <div class="col-3 column">
         <div class="form-group">
-          <label>Quantity to be quoted</label>
+          <label>Qty to be Quoted</label>
           <input type="text" class="form-control quantityTextBox text-right" name="quantityToBeQuoted" disabled="true"
             [ngModel]="part.quantityToBeQuoted  | globalNmberFormat"
             (ngModelChange)="part.quantityToBeQuoted=formatStringToNumberGlobal($event)" />
@@ -107,16 +112,19 @@
             <span>Markup (%)</span>
           </td>
           <td>
-            <select style="width:90%" [(ngModel)]="part.markUpPercentage" (change)="calculate()">
-              <option [ngValue]="0">Select</option>
-              <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
+            <select style="width:90%" [(ngModel)]="markUpPercentage" (change)="calculate()">
+              <option [value]="0">Select</option>
+              <option *ngFor="let p of percentage" [value]="p.label">{{ p.label }}</option>
             </select>
             <span style="padding-left: 5px;">%</span>
           </td>
-          <td><span><input type="text" class="form-control text-right"
+          <td><span>
+              <!-- <input type="text" class="form-control text-right"
                 [ngModel]="part.markupPerUnit | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}"
                 (ngModelChange)="part.markupPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
-                pKeyFilter="money" /></span>
+                pKeyFilter="money" /> -->
+              {{part.markupPerUnit | twoDecimalGlobalNumberFormatPipe}}
+            </span>
           </td>
           <td><span>{{part.markupExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
         </tr>
@@ -125,19 +133,20 @@
             <span>Sales Disc (%)</span>
           </td>
           <td>
-            <select style="width:90%" [(ngModel)]="part.salesDiscount" (change)="calculate()">
-              <option [ngValue]="0">Select</option>
-              <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
+            <select style="width:90%" [(ngModel)]="salesDiscount" (change)="calculate()">
+              <option [value]="0">Select</option>
+              <option *ngFor="let p of percentage" [value]="p.label">{{ p.label }}</option>
             </select>
             <span style="padding-left: 5px;">%</span>
 
           </td>
           <td>
-            <input type="text" class="form-control text-right"
+            <!-- <input type="text" class="form-control text-right"
               [ngModel]="part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe"
               [ngModelOptions]="{updateOn:'blur'}"
               (ngModelChange)="part.salesDiscountPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
-              pKeyFilter="money" />
+              pKeyFilter="money" /> -->
+            <span>{{part.salesDiscountPerUnit | twoDecimalGlobalNumberFormatPipe}}</span>
           </td>
           <td><span>{{part.salesDiscountExtended | twoDecimalGlobalNumberFormatPipe}}</span></td>
         </tr>
@@ -193,5 +202,9 @@
   </button>
   <button type="button" (click)="onClose($event)" class="btn btn-danger">
     Close
+  </button>
+  <button type="submit" *ngIf="!isEdit" class="btn btn-primary" [disabled]="invalidQuantityenteredForQuantityFromThis == true"
+    (click)="onSearchAnotherPN($event)">
+    Search Another PN
   </button>
 </div>

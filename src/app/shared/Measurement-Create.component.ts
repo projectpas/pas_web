@@ -9,11 +9,11 @@ import { ConditionService } from "../services/condition.service";
 import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { CommonService } from "../services/common.service";
-declare var $ : any;
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+declare var $: any;
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from "../services/auth.service";
 
-@Component({ 
+@Component({
     selector: 'grd-measurement',
     templateUrl: './Measurement-Create.component.html',
     styleUrls: ['./Measurement-Create.component.css']
@@ -23,7 +23,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     allPartnumbersInfo: any[] = [];
     itemclaColl: any[];
     partCollection: any[];
-    @Input() workFlow:any={};
+    @Input() workFlow: any = {};
     @Input() UpdateMode: boolean;
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
     row: any;
@@ -31,12 +31,12 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
     memoIndex;
-    textAreaInfo: any;    
+    textAreaInfo: any;
     modal: NgbModalRef;
-    deleteRowRecord:any={};
-    deletedRowIndex:any;
+    deleteRowRecord: any = {};
+    deletedRowIndex: any;
 
-    constructor(private commonService: CommonService, private authService: AuthService,   private modalService: NgbModal, private route: ActivatedRoute, private router: Router, private expertiseService: EmployeeExpertiseService, public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private itemser: ItemMasterService, private vendorService: VendorService, private alertService: AlertService) {
+    constructor(private commonService: CommonService, private authService: AuthService, private modalService: NgbModal, private route: ActivatedRoute, private router: Router, private expertiseService: EmployeeExpertiseService, public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private itemser: ItemMasterService, private vendorService: VendorService, private alertService: AlertService) {
     }
 
     ngOnInit(): void {
@@ -45,13 +45,13 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.row = {};
         }
         this.row.taskId = this.workFlow.taskId;
-     
+
     }
 
     ngOnChanges(): void {
-        if(this.workFlow.measurements && this.workFlow.measurements.length !=0){
+        if (this.workFlow.measurements && this.workFlow.measurements.length != 0) {
             this.workFlow.measurements.map((x, index) => {
-                    this.workFlow.measurements[index].partName=x; 
+                this.workFlow.measurements[index].partName = x;
             })
         }
     }
@@ -61,7 +61,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         newRow.workflowMeasurementId = "0";
         newRow.taskId = this.workFlow.taskId;
         newRow.partNumber = "";
-        newRow.partName="";
+        newRow.partName = "";
         newRow.partDescription = "";
         newRow.sequence = "";
         newRow.stage = "";
@@ -80,42 +80,40 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
     onPartSelect(event, measurement) {
-        var anyMeasurement = this.workFlow.measurements.filter(measurement =>
-            measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
-
-        if (anyMeasurement.length > 1) {
-  
+        var anyMeasurement = this.workFlow.measurements.find(x => x.isDeleted == false && x.itemMasterId == event.partId && x.taskId == this.workFlow.taskId);
+        if (anyMeasurement != undefined) {
+            measurement.partName = "";
             measurement.partNumber = "";
             measurement.partDescription = "";
             event = "";
+            measurement.min = "";
+            measurement.max = "";
+            measurement.sequence = "";
+            measurement.diagramURL = "";
+            measurement.expected = "";
+            measurement.memo = "";
+            measurement.partName = undefined;
             this.alertService.showMessage("Workflow", "PN in measurement is already in use", MessageSeverity.error);
+        console.log("IDG_989-HPE",measurement)
             return;
         }
         else {
-            // if (this.itemclaColl) {
-            //     for (let i = 0; i < this.itemclaColl.length; i++) {
-            //         if (event == this.itemclaColl[i].partName) {
-            //             measurement.partNumber = this.itemclaColl[i].partId;
-            //             measurement.partDescription = this.itemclaColl[i].partDescription;
-            //         }
-            //     };
-            // }
             measurement.itemMasterId = event.partId;
             measurement.partNumber = event.partNumber;
-                        measurement.partDescription = event.partDescription;
+            measurement.partDescription = event.partDescription;
         }
-    } 
+    }
 
     loapartItems(strvalue = '', initialCall = false) {
         this.isSpinnerVisible = true;
         let measurementIds = [];
         if (this.UpdateMode) {
-            measurementIds = this.workFlow.measurements.reduce((acc, x) => {
-                return measurementIds.push(acc.partId);
-            }, 0)
+            this.workFlow.measurements.forEach(element => {
+                measurementIds.push(element.itemMasterId);
+            });
         }
         this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, measurementIds)
             .subscribe(res => {
@@ -130,10 +128,10 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
                     }
                 });
                 this.partCollection.forEach(element => {
-             if(element.partId==this.workFlow.itemMasterId){
-                this.partCollection.splice(element, 1); 
-             }
-            });
+                    if (element.partId == this.workFlow.itemMasterId) {
+                        this.partCollection.splice(element, 1);
+                    }
+                });
                 this.itemclaColl = this.partCollection;
             }, error => {
                 this.isSpinnerVisible = false;
@@ -209,22 +207,22 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     onCloseTextAreaInfo() {
         $("#textareapopupMemo").modal("hide");
     }
-    validateMaxMin(event,measurement){
-       if(measurement && measurement.min && measurement.max){
-        if(measurement.min > measurement.max){
-            measurement.max="";
-            this.alertService.showMessage('Work Flow', 'Enter maximum Value.', MessageSeverity.error);
+    validateMaxMin(event, measurement) {
+        if (measurement && measurement.min && measurement.max) {
+            if (measurement.min > measurement.max) {
+                measurement.max = "";
+                this.alertService.showMessage('Work Flow', 'Enter maximum Value.', MessageSeverity.error);
+            }
         }
-       }
     }
 
     dismissModel() {
         this.modal.close();
     }
 
-    openDelete(content, row,index) {
-        this.deletedRowIndex=index;
-      this.deleteRowRecord = row;
+    openDelete(content, row, index) {
+        this.deletedRowIndex = index;
+        this.deleteRowRecord = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -237,5 +235,14 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.workFlow.measurements[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
     }
 }

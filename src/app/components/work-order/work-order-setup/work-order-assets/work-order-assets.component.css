@@ -12,7 +12,18 @@
 }
 .input-width-100-percent{
   width:100% !important;
+  margin: 0px;
 
+}
+.adK_f{
+  display: inline-flex;
+}
+.change_cd{
+  text-align: left;
+  width: 34px;
+}
+.cost_v{
+  width: 95px;
 }
 .width-36{
   width:36px !important;
@@ -58,4 +69,10 @@
       .cust_ma{
         background: #fff;
         margin-top: 30px;
+      }
+      .max_widthControl{
+        width:80px !important;
+      }
+      .text_center{
+        text-align: center;
       }

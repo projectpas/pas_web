@@ -29,7 +29,11 @@ export class TeardownOverviewComponent implements OnInit {
       isFinalInspection:false,
       isAdditionalComments:false
     }
-
+    moduleNameeRemoval:any='RemovalReasons';
+    moduleNameePrellinary:any='PreliinaryReview';
+    moduleNameePreAssesment:any='Pre-AssessmentResults';
+    moduleNameeTearDescovery:any='TeardownDiscovery';
+    moduleNameePreAssembly:any='PreAssemblyInspection';
     constructor(private workOrderService: WorkOrderService,) {}  
 
     ngOnInit() {

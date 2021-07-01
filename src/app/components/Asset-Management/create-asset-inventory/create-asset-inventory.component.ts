@@ -9,7 +9,7 @@ import { getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectBy
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ConfigurationService } from '../../../services/configuration.service';
-declare var $ : any;
+declare var $: any;
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -26,8 +26,8 @@ import { Location } from '@angular/common';
 /** create-asset component*/
 export class CreateAssetInventoryComponent implements OnInit {
     uploadDocs: Subject<boolean> = new Subject();
-    todaysDate= new Date();
-    disableSaveForEdit:boolean=false; 
+    todaysDate = new Date();
+    disableSaveForEdit: boolean = false;
     totalRecords: any;
     breadcrumbs: MenuItem[];
     currentAsset: any = {};
@@ -59,7 +59,7 @@ export class CreateAssetInventoryComponent implements OnInit {
         buId: 0,
         divisionId: 0,
         departmentId: 0,
-	}
+    }
     legalEntityList: any = [];
     businessUnitList: any = [];
     divisionList: any = [];
@@ -93,9 +93,9 @@ export class CreateAssetInventoryComponent implements OnInit {
     disableDocumentSave: boolean = false;
     disableFileAttachmentSubmit: boolean = true;
     selectedFileAttachment: any = [];
-    @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
-    @ViewChild('fileUploadInputWarranty',{static:false}) fileUploadInputWarranty: any;
-    @ViewChild('fileUploadInputInt',{static:false}) fileUploadInputInt: any;
+    @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
+    @ViewChild('fileUploadInputWarranty', { static: false }) fileUploadInputWarranty: any;
+    @ViewChild('fileUploadInputInt', { static: false }) fileUploadInputInt: any;
     formDataMain = new FormData();
     formDataWarr = new FormData();
     formDataInt = new FormData();
@@ -117,13 +117,13 @@ export class CreateAssetInventoryComponent implements OnInit {
     sourceViewforDocumentInt: any = [];
     selectedRowForDeleteInt: any;
     originalAsset: any;
-    home: any; 
-    maintanancemoduleName='AssetInventoryMaintenanceFile';
-    warrantymoduleName='AssetInventoryWarrantyFile';
-    intangiblemoduleName='AssetInventoryIntangibleFile';
+    home: any;
+    maintanancemoduleName = 'AssetInventoryMaintenanceFile';
+    warrantymoduleName = 'AssetInventoryWarrantyFile';
+    intangiblemoduleName = 'AssetInventoryIntangibleFile';
     modalIsMaintannce: NgbModalRef;
     modalWarrenty: NgbModalRef;
-    constructor(private commonService: CommonService,private location: Location,  private vendorService: VendorService, private assetService: AssetService, private assetLocationService: AssetLocationService, private alertService: AlertService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private route: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe) {
+    constructor(private commonService: CommonService, private location: Location, private vendorService: VendorService, private assetService: AssetService, private assetLocationService: AssetLocationService, private alertService: AlertService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private route: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe) {
         this.currentAsset.entryDate = this.currentDate;
         this.currentAsset.isTangible = 1;
         this.currentAsset.assetLocationId = 0;
@@ -131,40 +131,40 @@ export class CreateAssetInventoryComponent implements OnInit {
     }
 
     ngOnInit() {
-        if( this.assetService.isEditMode == false){
+        if (this.assetService.isEditMode == false) {
 
             this.breadcrumbs = [
                 { label: 'Asset Inventory' },
                 { label: 'Create Asset Inventory' },
             ];
-        }else{
+        } else {
 
             this.breadcrumbs = [
                 { label: 'Asset Inventory' },
                 { label: 'Edit Asset Inventory' },
             ];
         }
-        this.currentAsset.installationCost="0.00";
-     this.currentAsset.inventoryNumber="Generating"
+        this.currentAsset.installationCost = "0.00";
+        this.currentAsset.inventoryNumber = "Generating"
         this.getAssetList();
         this.loadCurrencyData('');
         this.getLocationList();
         this.getWarrantyStatusList();
-        
+
         this.assetInventoryId = this._actRoute.snapshot.params['id'];
-		if(this.assetInventoryId) {
-            this.disableSaveForEdit=true;
-			this.isEditMode = true;
-			setTimeout(() => {
+        if (this.assetInventoryId) {
+            this.disableSaveForEdit = true;
+            this.isEditMode = true;
+            setTimeout(() => {
                 this.getAssetInventoryDataOnEdit(this.assetInventoryId);
             }, 1000);
-        }else{ 
+        } else {
 
             this.getManagementStructureDetails(this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
-                : null,this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
-                this.getManagementStructureLevelIds(this.authService.currentUser
-                    ? this.authService.currentUser.managementStructureId:0)
+                : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
+            this.getManagementStructureLevelIds(this.authService.currentUser
+                ? this.authService.currentUser.managementStructureId : 0)
             this.getAssetStatusList('');
             this.getAssetInventoryStatusList();
             this.isSpinnerVisible = false;
@@ -177,83 +177,86 @@ export class CreateAssetInventoryComponent implements OnInit {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-	}
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
     getAssetList() {
- 
-         this.filterAssetIdInEdit(''); 
-    } 
-    filterAssetIdInEdit(value){
-        this.setEditArray=[];
-        if(this.currentAsset && this.currentAsset.assetId !=undefined && this.currentAsset.assetId !=null){
-            this.setEditArray.push(this.currentAsset.assetId); 
-        }else{
-            this.setEditArray.push(0); 
+
+        this.filterAssetIdInEdit('');
+    }
+    filterAssetIdInEdit(value) {
+        this.setEditArray = [];
+        if (this.currentAsset && this.currentAsset.assetId != undefined && this.currentAsset.assetId != null) {
+            this.setEditArray.push(this.currentAsset.assetId);
+        } else {
+            this.setEditArray.push(0);
         }
-        const strText=value;
-    
-        
-    this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId',strText,true,20,this.setEditArray.join()).subscribe(res => {
+        const strText = value;
 
-        this.allAssetList = res;
-        },err => {			
+
+        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+
+            this.allAssetList = res;
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+            this.errorMessageHandler(errorLog);
+        });
 
-    } 
+    }
 
-    arrayVendlsit:any=[];
+    arrayVendlsit: any = [];
     loadVendorData(value) {
-        this.arrayVendlsit=[];
+        this.arrayVendlsit = [];
         this.arrayVendlsit.push(this.orignEditData.calibrationDefaultVendorId,
             this.orignEditData.certificationDefaultVendorId,
             this.orignEditData.inspectionDefaultVendorId,
             this.orignEditData.verificationDefaultVendorId,
             this.orignEditData.maintenanceDefaultVendorId,
-            this.orignEditData.warrantyDefaultVendorId,); 
-    this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join()).subscribe(res => {
+            this.orignEditData.warrantyDefaultVendorId);
+        this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join()).subscribe(res => {
 
-        this.allVendorsList = res.map(x => {
-            return {
-                value: x.vendorId,
-                label: x.vendorName
-            }
-        }); 
-        this.vendorListFilter=this.allVendorsList;
-    },err => {			
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);})
+            this.allVendorsList = res.map(x => {
+                return {
+                    value: x.vendorId,
+                    label: x.vendorName
+                }
+            });
+            this.vendorListFilter = this.allVendorsList;
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        })
 
-}
+    }
 
 
-    onFilterAssetCurrency(value){
+    onFilterAssetCurrency(value) {
         this.loadCurrencyData(value);
     }
     loadCurrencyData(value) {
 
-        
-        if(this.isEditMode==true){
-            this.setEditArray=[];
-            this.setEditArray.push(this.currentAsset.certificationCurrencyId,this.currentAsset.inspectionCurrencyId,this.currentAsset.calibrationCurrencyId,this.currentAsset.verificationCurrencyId); 
-        }else{
-            this.setEditArray.push(0); 
+
+        if (this.isEditMode == true) {
+            this.setEditArray = [];
+            this.setEditArray.push(this.currentAsset.certificationCurrencyId, this.currentAsset.inspectionCurrencyId, this.currentAsset.calibrationCurrencyId, this.currentAsset.verificationCurrencyId);
+        } else {
+            this.setEditArray.push(0);
         }
-        const strText=value;
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
+        const strText = value;
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
             this.allCurrencyInfo = res;
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+            this.errorMessageHandler(errorLog);
+        });
 
     }
-    
 
-    setEditArray:any=[];
- getLocationList() {
+
+    setEditArray: any = [];
+    getLocationList() {
 
         this.commonService.smartDropDownGetNamaWithCode('AssetLocation', 'AssetLocationId', 'Name').subscribe(res => {
             this.allLocationList = res.map(x => {
@@ -264,110 +267,114 @@ export class CreateAssetInventoryComponent implements OnInit {
                 }
             });
 
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);})
+            this.errorMessageHandler(errorLog);
+        })
 
-}
+    }
     getWarrantyStatusList() {
-		this.commonService.smartDropDownList('AssetWarrantyStatus', 'AssetWarrantyStatusId', 'warrantyStatus').subscribe(response => {
-			this.allWarrantyStatusList = response;
-		},err => {			
+        this.commonService.smartDropDownList('AssetWarrantyStatus', 'AssetWarrantyStatusId', 'warrantyStatus').subscribe(response => {
+            this.allWarrantyStatusList = response;
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+            this.errorMessageHandler(errorLog);
+        });
     }
 
-	get employeeId() {
+    get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-        }
-    getManagementStructureDetails(id,empployid=0,editMSID=0) {
-		empployid = empployid == 0 ? this.employeeId : empployid ;
+    }
+    getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
+        empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-       
-		this.commonService.getManagmentStrctureData(id,empployid,editMSID).subscribe(response => {
 
-            if( this.isEditMode==true ){
-                if(this.whereItComesFrom=='fromHtml'){
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.currentUserMasterCompanyId).subscribe(response => {
+
+            if (this.isEditMode == true) {
+                if (this.whereItComesFrom == 'fromHtml') {
                     setTimeout(() => {
-                        this.isSpinnerVisible=false;
+                        this.isSpinnerVisible = false;
                     }, 1500);
-                }else{
-                    this.isSpinnerVisible=false;
+                } else {
+                    this.isSpinnerVisible = false;
                 }
-               
+
             }
-			if(response) {
-				const result = response;
-				if(result[0] && result[0].level == 'Level1') {
-					this.legalEntityList =  result[0].lstManagmentStrcture;	
-					this.currentAsset.companyId = result[0].managementStructureId;
-					this.currentAsset.managementStructureId = result[0].managementStructureId;				
-					this.currentAsset.buId = 0;
-					this.currentAsset.divisionId = 0;
-					this.currentAsset.departmentId = 0;	
-					this.businessUnitList = [];
-					this.divisionList = [];
-					this.departmentList = [];
-				} else {
-					this.currentAsset.companyId = 0;
-					this.currentAsset.buId = 0;
-					this.currentAsset.divisionId = 0;
-					this.currentAsset.departmentId = 0;	
-					this.legalEntityList = [];
-					this.businessUnitList = [];
-					this.divisionList = [];
-					this.departmentList = [];
-				}
-				
-				if(result[1] && result[1].level == 'Level2') {	
-					this.businessUnitList = result[1].lstManagmentStrcture;
-					this.currentAsset.buId = result[1].managementStructureId;
-					this.currentAsset.managementStructureId = result[1].managementStructureId;
-					this.currentAsset.divisionId = 0;
-					this.currentAsset.departmentId = 0;
-					this.divisionList = [];
-					this.departmentList = [];
-				} else {
-					if(result[1] && result[1].level == 'NEXT') {
-						this.businessUnitList = result[1].lstManagmentStrcture;
-					}
-					this.currentAsset.buId = 0;
-					this.currentAsset.divisionId = 0;
-					this.currentAsset.departmentId = 0;					
-					this.divisionList = [];
-					this.departmentList = []; 
-				}
+            if (response) {
+                const result = response;
+                if (result[0] && result[0].level == 'Level1') {
+                    this.legalEntityList = result[0].lstManagmentStrcture;
+                    this.currentAsset.companyId = result[0].managementStructureId;
+                    this.currentAsset.managementStructureId = result[0].managementStructureId;
+                    this.currentAsset.buId = 0;
+                    this.currentAsset.divisionId = 0;
+                    this.currentAsset.departmentId = 0;
+                    this.businessUnitList = [];
+                    this.divisionList = [];
+                    this.departmentList = [];
+                } else {
+                    this.currentAsset.companyId = 0;
+                    this.currentAsset.buId = 0;
+                    this.currentAsset.divisionId = 0;
+                    this.currentAsset.departmentId = 0;
+                    this.legalEntityList = [];
+                    this.businessUnitList = [];
+                    this.divisionList = [];
+                    this.departmentList = [];
+                }
 
-				if(result[2] && result[2].level == 'Level3') {		
-					this.divisionList =  result[2].lstManagmentStrcture;		
-					this.currentAsset.divisionId = result[2].managementStructureId;		
-					this.currentAsset.managementStructureId = result[2].managementStructureId;			
-					this.currentAsset.departmentId = 0;						
-					this.departmentList = [];			
-				} else {
-					if(result[2] && result[2].level == 'NEXT') {
-						this.divisionList = result[2].lstManagmentStrcture;						
-					}
-					this.currentAsset.divisionId = 0; 
-					this.currentAsset.departmentId = 0;	
-					this.departmentList = [];}
+                if (result[1] && result[1].level == 'Level2') {
+                    this.businessUnitList = result[1].lstManagmentStrcture;
+                    this.currentAsset.buId = result[1].managementStructureId;
+                    this.currentAsset.managementStructureId = result[1].managementStructureId;
+                    this.currentAsset.divisionId = 0;
+                    this.currentAsset.departmentId = 0;
+                    this.divisionList = [];
+                    this.departmentList = [];
+                } else {
+                    if (result[1] && result[1].level == 'NEXT') {
+                        this.businessUnitList = result[1].lstManagmentStrcture;
+                    }
+                    this.currentAsset.buId = 0;
+                    this.currentAsset.divisionId = 0;
+                    this.currentAsset.departmentId = 0;
+                    this.divisionList = [];
+                    this.departmentList = [];
+                }
 
-				if(result[3] && result[3].level == 'Level4') {		
-					this.departmentList = result[3].lstManagmentStrcture;;			
-					this.currentAsset.departmentId = result[3].managementStructureId;	
-					this.currentAsset.managementStructureId = result[3].managementStructureId;				
-				} else {
-					this.currentAsset.departmentId = 0; 
-					if(result[3] && result[3].level == 'NEXT') {
-						this.departmentList = result[3].lstManagmentStrcture;						
-					}
-				}	
-	
-			}
-		},err => {	
-            this.isSpinnerVisible=false;		
+                if (result[2] && result[2].level == 'Level3') {
+                    this.divisionList = result[2].lstManagmentStrcture;
+                    this.currentAsset.divisionId = result[2].managementStructureId;
+                    this.currentAsset.managementStructureId = result[2].managementStructureId;
+                    this.currentAsset.departmentId = 0;
+                    this.departmentList = [];
+                } else {
+                    if (result[2] && result[2].level == 'NEXT') {
+                        this.divisionList = result[2].lstManagmentStrcture;
+                    }
+                    this.currentAsset.divisionId = 0;
+                    this.currentAsset.departmentId = 0;
+                    this.departmentList = [];
+                }
+
+                if (result[3] && result[3].level == 'Level4') {
+                    this.departmentList = result[3].lstManagmentStrcture;;
+                    this.currentAsset.departmentId = result[3].managementStructureId;
+                    this.currentAsset.managementStructureId = result[3].managementStructureId;
+                } else {
+                    this.currentAsset.departmentId = 0;
+                    if (result[3] && result[3].level == 'NEXT') {
+                        this.departmentList = result[3].lstManagmentStrcture;
+                    }
+                }
+
+            }
+        }, err => {
+            this.isSpinnerVisible = false;
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+            this.errorMessageHandler(errorLog);
+        });
     }
     getManagementStructureLevelIds(id) {
         if (id) {
@@ -387,232 +394,235 @@ export class CreateAssetInventoryComponent implements OnInit {
                         this.managementStructure.departmentId = data.levelId4;
                     }
                 }
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
     }
-    orignEditData:any={}
-    assetRecordIdForCapes:any;
-    getAssetInventoryDataOnEdit(id) { 
-        if(id !=undefined){
-        this.assetService.getByInventoryId(id).subscribe(res => { 
-            this.orignEditData=res;
-this.assetRecordIdForCapes=res.assetRecordId;
- this.loadVendorData('')
-            this.onAssetIdselection({"value":res.assetRecordId},"fromOnload");
-            this.currentAsset = {
-                ...res,
-                memo:res.memo,
-                isTangible: !res.isIntangible,
-                assetRecordId: getObjectById('value', res.assetRecordId, this.allAssetList),
-                entryDate: res.entryDate ? new Date(res.entryDate) : null,
-                manufacturedDate: res.manufacturedDate ? new Date(res.manufacturedDate) : null,
-                expirationDate: res.expirationDate ? new Date(res.expirationDate) : null,
-                assetLocationId: res.assetLocationId ? parseInt(res.assetLocationId) : 0,
-                unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) :  '0.00',
-                installationCost: res.installationCost ? formatNumberAsGlobalSettingsModule(res.installationCost, 2) : '0.00',
-                freight: res.freight ? formatNumberAsGlobalSettingsModule(res.freight, 2) :  '0.00',
-                insurance: res.insurance ? formatNumberAsGlobalSettingsModule(res.insurance, 2) : '0.00',
-                taxes: res.taxes ? formatNumberAsGlobalSettingsModule(res.taxes, 2) : '0.00',
-                residualPercentage: res.residualPercentage ? formatNumberAsGlobalSettingsModule(res.residualPercentage, 2) : '0.00',
-                totalCost: res.totalCost ? formatNumberAsGlobalSettingsModule(res.totalCost, 2) : '0.00',
-              calibrationDefaultCost: res.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2) : '',
-                certificationDefaultCost: res.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2) : '',
-                inspectionDefaultCost: res.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2) : '',
-                verificationDefaultCost: res.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2) : '',
-                defaultVendorId: res.defaultVendorId ? getObjectById('value', res.defaultVendorId, this.allVendorsList) : null,
-                warrantyCompanyId: res.warrantyCompanyId ? getObjectById('value', res.warrantyCompanyId, this.allVendorsList) : null,
-                warrantyStartDate: res.warrantyStartDate ? new Date(res.warrantyStartDate) : null,
-                warrantyEndDate: res.warrantyEndDate ? new Date(res.warrantyEndDate) : null,
-            };
-            this.originalAsset=this.currentAsset;
-            this.getAssetStatusList('');
-            this.getAssetInventoryStatusList();
-        //   this.toGetDocumentsListNew(this.assetInventoryId);
-            // this.toGetDocumentsListWarranty(this.assetInventoryId);
-            // if(!this.currentAsset.isTangible){
+    orignEditData: any = {}
+    assetRecordIdForCapes: any;
+    getAssetInventoryDataOnEdit(id) {
+        if (id != undefined) {
+            this.assetService.getByInventoryId(id).subscribe(res => {
+                this.orignEditData = res;
+                this.assetRecordIdForCapes = res.assetRecordId;
+                this.loadVendorData('')
+                this.onAssetIdselection({ "value": res.assetRecordId }, "fromOnload");
+                this.currentAsset = {
+                    ...res,
+                    memo: res.memo,
+                    isTangible: !res.isIntangible,
+                    assetRecordId: getObjectById('value', res.assetRecordId, this.allAssetList),
+                    entryDate: res.entryDate ? new Date(res.entryDate) : null,
+                    manufacturedDate: res.manufacturedDate ? new Date(res.manufacturedDate) : null,
+                    expirationDate: res.expirationDate ? new Date(res.expirationDate) : null,
+                    assetLocationId: res.assetLocationId ? parseInt(res.assetLocationId) : 0,
+                    unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
+                    installationCost: res.installationCost ? formatNumberAsGlobalSettingsModule(res.installationCost, 2) : '0.00',
+                    freight: res.freight ? formatNumberAsGlobalSettingsModule(res.freight, 2) : '0.00',
+                    insurance: res.insurance ? formatNumberAsGlobalSettingsModule(res.insurance, 2) : '0.00',
+                    taxes: res.taxes ? formatNumberAsGlobalSettingsModule(res.taxes, 2) : '0.00',
+                    residualPercentage: res.residualPercentage ? formatNumberAsGlobalSettingsModule(res.residualPercentage, 2) : '0.00',
+                    totalCost: res.totalCost ? formatNumberAsGlobalSettingsModule(res.totalCost, 2) : '0.00',
+                    calibrationDefaultCost: res.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2) : '',
+                    certificationDefaultCost: res.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2) : '',
+                    inspectionDefaultCost: res.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2) : '',
+                    verificationDefaultCost: res.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2) : '',
+                    defaultVendorId: res.defaultVendorId ? getObjectById('value', res.defaultVendorId, this.allVendorsList) : null,
+                    warrantyCompanyId: res.warrantyCompanyId ? getObjectById('value', res.warrantyCompanyId, this.allVendorsList) : null,
+                    warrantyStartDate: res.warrantyStartDate ? new Date(res.warrantyStartDate) : null,
+                    warrantyEndDate: res.warrantyEndDate ? new Date(res.warrantyEndDate) : null,
+                };
+                this.originalAsset = this.currentAsset;
+                this.getAssetStatusList('');
+                this.getAssetInventoryStatusList();
+                //   this.toGetDocumentsListNew(this.assetInventoryId);
+                // this.toGetDocumentsListWarranty(this.assetInventoryId);
+                // if(!this.currentAsset.isTangible){
                 // this.toGetDocumentsListInt(this.assetInventoryId);
-            // }
-           const isIntangible = this.currentAsset.isIntangible ? 1 : 0;
-            // this.isSpinnerVisible = false;
-        },err => {	
-            this.isSpinnerVisible = false;		
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+                // }
+                const isIntangible = this.currentAsset.isIntangible ? 1 : 0;
+                // this.isSpinnerVisible = false;
+            }, err => {
+                this.isSpinnerVisible = false;
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
+        }
     }
-    }
-  
-    filterAssetList(event) { 
-        
-		this.assetListFilter = this.allAssetList;
-		if (event.query !== undefined && event.query !== null) {
+
+    filterAssetList(event) {
+
+        this.assetListFilter = this.allAssetList;
+        if (event.query !== undefined && event.query !== null) {
             this.filterAssetIdInEdit(event.query);
-			const assetFilter = [...this.allAssetList.filter(x => {
-				return x.label.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.assetListFilter = assetFilter;
-		}
+            const assetFilter = [...this.allAssetList.filter(x => {
+                return x.label.toLowerCase().includes(event.query.toLowerCase())
+            })]
+            this.assetListFilter = assetFilter;
+        }
     }
 
     filterVendorList(event) {
-		this.vendorListFilter = this.allVendorsList;
-		if (event.query !== undefined && event.query !== null) {
+        this.vendorListFilter = this.allVendorsList;
+        if (event.query !== undefined && event.query !== null) {
             this.loadVendorData(event.query);
-        }else{
+        } else {
             this.loadVendorData('');
         }
-			const vendors = [...this.allVendorsList.filter(x => {
-				return x.label.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.vendorListFilter = vendors;
-	
-	}
-    whereItComesFrom:any;
-    onAssetIdselection(event,type) {
-        if(event && event.value !=undefined){
-if(type=='fromHtml'){
-    this.whereItComesFrom=type;
-    this.isSpinnerVisible=true;
-}
+        const vendors = [...this.allVendorsList.filter(x => {
+            return x.label.toLowerCase().includes(event.query.toLowerCase())
+        })]
+        this.vendorListFilter = vendors;
 
-        
-        this.assetService.getAssetDataForInventoryById(event.value).subscribe(res => {
-          
-            if(type=='fromHtml'){
-                this.orignEditData=res;
-                this.loadVendorData('')
-            this.getManagementStructureDetails(res
-                ? res.managementStructureId
-                : null,this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
-                this.getManagementStructureLevelIds(res? res.managementStructureId:0)
-            }
-            this.assetRecordIdForCapes=this.assetRecordIdForCapes ? this.assetRecordIdForCapes :res.assetRecordId;
-         setTimeout(() => {
-            this.currentAsset = {
-                ...res,
-                isTangible: !res.isIntangible,
-                assetRecordId:{'value':res.assetRecordId,'label':res.assetId},
-                entryDate: res.entryDate ? new Date(res.entryDate) : this.currentDate,
-                manufacturedDate: res.manufacturedDate ? new Date(res.manufacturedDate) : null,
-                expirationDate: res.expirationDate ? new Date(res.expirationDate) : null,
-                unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
-                installationCost: res.installationCost ? formatNumberAsGlobalSettingsModule(res.installationCost, 2) : '0.00',
-                freight: res.freight ? formatNumberAsGlobalSettingsModule(res.freight, 2) : '0.00',
-                insurance: res.insurance ? formatNumberAsGlobalSettingsModule(res.insurance, 2) : '0.00',
-                taxes: res.taxes ? formatNumberAsGlobalSettingsModule(res.taxes, 2) : '0.00',
-                residualPercentage:res.residualPercentage  ? formatNumberAsGlobalSettingsModule(res.residualPercentage, 2) : '0.00',
-                calibrationDefaultCost: res.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2) : '',
-                certificationDefaultCost: res.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2) : '',
-                inspectionDefaultCost: res.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2) : '',
-                verificationDefaultCost: res.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2) : '',
-                calibrationDefaultVendorId: res.calibrationDefaultVendorId ? getObjectById('value', res.calibrationDefaultVendorId, this.allVendorsList) : null,
-                certificationDefaultVendorId: res.certificationDefaultVendorId ? getObjectById('value', res.certificationDefaultVendorId, this.allVendorsList) : null,
-                inspectionDefaultVendorId: res.inspectionDefaultVendorId ? getObjectById('value', res.inspectionDefaultVendorId, this.allVendorsList) : null,
-                verificationDefaultVendorId: res.verificationDefaultVendorId ? getObjectById('value', res.verificationDefaultVendorId, this.allVendorsList) : null,
-                maintenanceDefaultVendorId: res.maintenanceDefaultVendorId ? getObjectById('value', res.maintenanceDefaultVendorId, this.allVendorsList) : null,
-                warrantyDefaultVendorId: res.warrantyDefaultVendorId ? getObjectById('value', res.warrantyDefaultVendorId, this.allVendorsList) : null,
-             
-                assetType: res.assetTypeName,
-                isSerialized: res.isSerialized ? res.isSerialized : false,
-                calibrationRequired: res.calibrationRequired ? res.calibrationRequired : false,
-                certificationRequired: res.certificationRequired ? res.certificationRequired : false,
-                inspectionRequired: res.inspectionRequired ? res.inspectionRequired : false,
-                verificationRequired: res.verificationRequired ? res.verificationRequired : false,
-                assetIsMaintenanceReqd: res.assetIsMaintenanceReqd ? res.assetIsMaintenanceReqd : false,
-                isWarrantyRequired: res.isWarrantyRequired ? res.isWarrantyRequired : false,
-                inventoryStatusId:this.basicValue ? this.basicValue :1,
-              
-             
-            };
-            this.currentAsset.inventoryNumber=this.originalAsset ? this.originalAsset.inventoryNumber:"Generating";
-            
-            this.currentAsset.inventoryNumber=this.originalAsset ? this.originalAsset.inventoryNumber:"Generating";
-           
-            if(type=="fromOnload"){
-                this.currentAsset.entryDate= this.originalAsset.entryDate ? this.originalAsset.entryDate :new Date(res.entryDate);
-                    this.currentAsset.manufacturedDate= this.originalAsset.manufacturedDate ?  this.originalAsset.manufacturedDate :new Date(res.manufacturedDate);
-                    this.currentAsset.expirationDate= this.originalAsset.expirationDate ? this.originalAsset.expirationDate: new Date(res.expirationDate);
-                    this.currentAsset.unitCost= this.originalAsset.unitCost ?  this.originalAsset.unitCost : formatNumberAsGlobalSettingsModule(res.unitCost, 2);
-                    this.currentAsset.installationCost= this.originalAsset.installationCost ? this.originalAsset.installationCost  : formatNumberAsGlobalSettingsModule(res.installationCost, 2);
-                    this.currentAsset.freight= this.originalAsset.freight ? this.originalAsset.freight: formatNumberAsGlobalSettingsModule(res.freight, 2);
-                    this.currentAsset.insurance= this.originalAsset.insurance ? this.originalAsset.insurance: formatNumberAsGlobalSettingsModule(res.insurance, 2);
-                    this.currentAsset.taxes= this.originalAsset.taxes ?  this.originalAsset.taxes: formatNumberAsGlobalSettingsModule(res.taxes, 2);
-                    this.currentAsset.residualPercentage= this.originalAsset.residualPercentage ?  this.originalAsset.residualPercentage: formatNumberAsGlobalSettingsModule(res.residualPercentage, 2);
-                   this.currentAsset.calibrationDefaultCost= this.originalAsset.calibrationDefaultCost ? this.originalAsset.calibrationDefaultCost: formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2);
-                    this.currentAsset.certificationDefaultCost= this.originalAsset.certificationDefaultCost ? this.originalAsset.certificationDefaultCost: formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2);
-                    this.currentAsset.inspectionDefaultCost= this.originalAsset.inspectionDefaultCost ?  this.originalAsset.inspectionDefaultCost: formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2);
-                    this.currentAsset.verificationDefaultCost= this.originalAsset.verificationDefaultCost ? this.originalAsset.verificationDefaultCost: formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2);
-                    this.currentAsset.assetLocationId= this.originalAsset.assetLocationId ? this.originalAsset.assetLocationId: null;
-                    this.currentAsset.defaultVendorId= res.defaultVendorId ? getObjectById('value', res.defaultVendorId, this.allVendorsList) : null;
-                  
-                  
-                    this.currentAsset.calibrationDefaultVendorId= this.originalAsset.calibrationDefaultVendorId ? getObjectById('value', this.originalAsset.calibrationDefaultVendorId, this.allVendorsList) : null,
-                    this.currentAsset.certificationDefaultVendorId= this.originalAsset.certificationDefaultVendorId ? getObjectById('value', this.originalAsset.certificationDefaultVendorId, this.allVendorsList) : null,
-                    this.currentAsset.inspectionDefaultVendorId= this.originalAsset.inspectionDefaultVendorId ? getObjectById('value', this.originalAsset.inspectionDefaultVendorId, this.allVendorsList) : null,
-                    this.currentAsset.verificationDefaultVendorId= this.originalAsset.verificationDefaultVendorId ? getObjectById('value', this.originalAsset.verificationDefaultVendorId, this.allVendorsList) : null,
-                    this.currentAsset.maintenanceDefaultVendorId= this.originalAsset.maintenanceDefaultVendorId ? getObjectById('value', this.originalAsset.maintenanceDefaultVendorId, this.allVendorsList) : null,
-                    this.currentAsset.warrantyDefaultVendorId= this.originalAsset.warrantyDefaultVendorId ? getObjectById('value', this.originalAsset.warrantyDefaultVendorId, this.allVendorsList) : null,
-                  
-                  
-                    this.currentAsset.isSerialized= res.isSerialized ? res.isSerialized : false;
-                    this.currentAsset.calibrationRequired= res.calibrationRequired ? res.calibrationRequired : false;
-                    this.currentAsset.certificationRequired= res.certificationRequired ? res.certificationRequired : false;
-                    this.currentAsset.inspectionRequired= res.inspectionRequired ? res.inspectionRequired : false;
-                    this.currentAsset.verificationRequired= res.verificationRequired ? res.verificationRequired : false;
-                    this.currentAsset.assetIsMaintenanceReqd= res.assetIsMaintenanceReqd ? res.assetIsMaintenanceReqd : false;
-                    this.currentAsset.isWarrantyRequired= res.isWarrantyRequired ? res.isWarrantyRequired : false;
-                    this.currentAsset.warrantyStartDate= this.originalAsset.warrantyStartDate ? this.originalAsset.warrantyStartDate :null;
-                    this.currentAsset.warrantyEndDate=this.originalAsset.warrantyEndDate ? this.originalAsset.warrantyEndDate : null;
-                    this.currentAsset.maintenanceFrequencyMonths=this.originalAsset.maintenanceFrequencyMonths ? this.originalAsset.maintenanceFrequencyMonths : res.maintenanceFrequencyMonths;
-                    this.currentAsset.maintenanceFrequencyDays=this.originalAsset.maintenanceFrequencyDays ? this.originalAsset.maintenanceFrequencyDays : res.maintenanceFrequencyDays;
-                    this.currentAsset.assetLife=this.originalAsset.assetLife ? this.originalAsset.assetLife : res.assetLife;
-                   this.currentAsset.calibrationCurrencyId= this.originalAsset.calibrationCurrencyId ? this.originalAsset.calibrationCurrencyId : res.calibrationCurrencyId;
-                   this.currentAsset.certificationCurrencyId= this.originalAsset.certificationCurrencyId ? this.originalAsset.certificationCurrencyId : res.certificationCurrencyId;
-                   this.currentAsset.inspectionCurrencyId= this.originalAsset.inspectionCurrencyId ? this.originalAsset.inspectionCurrencyId : res.inspectionCurrencyId;
-                   this.currentAsset.verificationCurrencyId= this.originalAsset.verificationCurrencyId ? this.originalAsset.verificationCurrencyId : res.verificationCurrencyId;
-           this.currentAsset.inventoryNumber=this.originalAsset.inventoryNumber ? this.originalAsset.inventoryNumber :"Generating";
-         this.currentAsset.inventoryStatusId=this.originalAsset.inventoryStatusId ? this.originalAsset.inventoryStatusId :res.inventoryStatusId;
-           this.currentAsset.assetStatusId=this.originalAsset.assetStatusId ? this.originalAsset.assetStatusId :res.assetStatusId;
-           this.currentAsset.unitOfMeasureName=this.originalAsset.unitOfMeasureName ? this.originalAsset.unitOfMeasureName : res.unitOfMeasureName;
-              this.currentAsset.serialNo=this.originalAsset.serialNo;
-              this.currentAsset.memo=this.originalAsset.memo;
-              this.currentAsset.warrantyMemo=this.originalAsset.warrantyMemo ? this.originalAsset.warrantyMemo : res.warrantyMemo;
-              this.currentAsset.warrantyStatusId=this.originalAsset.warrantyStatusId ? this.originalAsset.warrantyStatusId : res.warrantyStatusId;
-this.currentAsset.calibrationMemo=this.originalAsset.calibrationMemo ? this.originalAsset.calibrationMemo : res.calibrationMemo;
-this.currentAsset.certificationMemo=this.originalAsset.certificationMemo ? this.originalAsset.certificationMemo : res.certificationMemo;
-this.currentAsset.inspectionMemo=this.originalAsset.inspectionMemo ? this.originalAsset.inspectionMemo : res.inspectionMemo;
-this.currentAsset.verificationMemo=this.originalAsset.verificationMemo ? this.originalAsset.verificationMemo : res.verificationMemo;
-this.currentAsset.assetCalibrationMemo=  this.originalAsset.assetCalibrationMemo ? this.originalAsset.assetCalibrationMemo : res.assetCalibrationMemo;
-// this.currentAsset.managementStructureId=  this.originalAsset.managementStructureId ? this.originalAsset.managementStructureId : res.managementStructureId;
-if(this.originalAsset.managementStructureId != res.managementStructureId){
-    this.currentAsset.managementStructureId=  this.originalAsset.managementStructureId;  
-}else{
-    this.currentAsset.managementStructureId= res.managementStructureId  
-}
-this.getManagementStructureDetails(this.currentAsset
-    ? this.currentAsset.managementStructureId
-    : null,this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
-    this.getManagementStructureLevelIds(this.currentAsset? this.currentAsset.managementStructureId:0)
-
-}
-this.getTotalCost();
-// this.openCapes();
-if(type=='fromHtml'){
-    setTimeout(() => {
-        this.isSpinnerVisible=false;
-    }, 1000);
-}else{
-    this.isSpinnerVisible=true;
-
-}
-},2000);
-        },err => {			
-            this.isSpinnerVisible=false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);});
     }
-}
+    whereItComesFrom: any;
+    onAssetIdselection(event, type) {
+        if (event && event.value != undefined) {
+            if (type == 'fromHtml') {
+                this.whereItComesFrom = type;
+                this.isSpinnerVisible = true;
+            }
+
+
+            this.assetService.getAssetDataForInventoryById(event.value).subscribe(res => {
+
+                if (type == 'fromHtml') {
+                    this.orignEditData = res;
+                    this.loadVendorData('')
+                    this.getManagementStructureDetails(res
+                        ? res.managementStructureId
+                        : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
+                    this.getManagementStructureLevelIds(res ? res.managementStructureId : 0)
+                }
+                this.assetRecordIdForCapes = this.assetRecordIdForCapes ? this.assetRecordIdForCapes : res.assetRecordId;
+                setTimeout(() => {
+                    this.currentAsset = {
+                        ...res,
+                        isTangible: !res.isIntangible,
+                        assetRecordId: { 'value': res.assetRecordId, 'label': res.assetId },
+                        entryDate: res.entryDate ? new Date(res.entryDate) : this.currentDate,
+                        manufacturedDate: res.manufacturedDate ? new Date(res.manufacturedDate) : null,
+                        expirationDate: res.expirationDate ? new Date(res.expirationDate) : null,
+                        unitCost: res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00',
+                        installationCost: res.installationCost ? formatNumberAsGlobalSettingsModule(res.installationCost, 2) : '0.00',
+                        freight: res.freight ? formatNumberAsGlobalSettingsModule(res.freight, 2) : '0.00',
+                        insurance: res.insurance ? formatNumberAsGlobalSettingsModule(res.insurance, 2) : '0.00',
+                        taxes: res.taxes ? formatNumberAsGlobalSettingsModule(res.taxes, 2) : '0.00',
+                        residualPercentage: res.residualPercentage ? formatNumberAsGlobalSettingsModule(res.residualPercentage, 2) : '0.00',
+                        calibrationDefaultCost: res.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2) : '',
+                        certificationDefaultCost: res.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2) : '',
+                        inspectionDefaultCost: res.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2) : '',
+                        verificationDefaultCost: res.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2) : '',
+                        calibrationDefaultVendorId: res.calibrationDefaultVendorId ? getObjectById('value', res.calibrationDefaultVendorId, this.allVendorsList) : null,
+                        certificationDefaultVendorId: res.certificationDefaultVendorId ? getObjectById('value', res.certificationDefaultVendorId, this.allVendorsList) : null,
+                        inspectionDefaultVendorId: res.inspectionDefaultVendorId ? getObjectById('value', res.inspectionDefaultVendorId, this.allVendorsList) : null,
+                        verificationDefaultVendorId: res.verificationDefaultVendorId ? getObjectById('value', res.verificationDefaultVendorId, this.allVendorsList) : null,
+                        maintenanceDefaultVendorId: res.maintenanceDefaultVendorId ? getObjectById('value', res.maintenanceDefaultVendorId, this.allVendorsList) : null,
+                        warrantyDefaultVendorId: res.warrantyDefaultVendorId ? getObjectById('value', res.warrantyDefaultVendorId, this.allVendorsList) : null,
+
+                        assetType: res.assetTypeName,
+                        isSerialized: res.isSerialized ? res.isSerialized : false,
+                        calibrationRequired: res.calibrationRequired ? res.calibrationRequired : false,
+                        certificationRequired: res.certificationRequired ? res.certificationRequired : false,
+                        inspectionRequired: res.inspectionRequired ? res.inspectionRequired : false,
+                        verificationRequired: res.verificationRequired ? res.verificationRequired : false,
+                        assetIsMaintenanceReqd: res.assetIsMaintenanceReqd ? res.assetIsMaintenanceReqd : false,
+                        isWarrantyRequired: res.isWarrantyRequired ? res.isWarrantyRequired : false,
+                        inventoryStatusId: this.basicValue ? this.basicValue : 1,
+
+
+                    };
+                    this.currentAsset.inventoryNumber = this.originalAsset ? this.originalAsset.inventoryNumber : "Generating";
+
+                    this.currentAsset.inventoryNumber = this.originalAsset ? this.originalAsset.inventoryNumber : "Generating";
+
+                    if (type == "fromOnload") {
+                        this.currentAsset.entryDate = this.originalAsset.entryDate ? this.originalAsset.entryDate : new Date(res.entryDate);
+                        this.currentAsset.manufacturedDate = this.originalAsset.manufacturedDate ? this.originalAsset.manufacturedDate : new Date(res.manufacturedDate);
+                        this.currentAsset.expirationDate = this.originalAsset.expirationDate ? this.originalAsset.expirationDate : new Date(res.expirationDate);
+                        this.currentAsset.unitCost = this.originalAsset.unitCost ? this.originalAsset.unitCost : formatNumberAsGlobalSettingsModule(res.unitCost, 2);
+                        this.currentAsset.installationCost = this.originalAsset.installationCost ? this.originalAsset.installationCost : formatNumberAsGlobalSettingsModule(res.installationCost, 2);
+                        this.currentAsset.freight = this.originalAsset.freight ? this.originalAsset.freight : formatNumberAsGlobalSettingsModule(res.freight, 2);
+                        this.currentAsset.insurance = this.originalAsset.insurance ? this.originalAsset.insurance : formatNumberAsGlobalSettingsModule(res.insurance, 2);
+                        this.currentAsset.taxes = this.originalAsset.taxes ? this.originalAsset.taxes : formatNumberAsGlobalSettingsModule(res.taxes, 2);
+                        this.currentAsset.residualPercentage = this.originalAsset.residualPercentage ? this.originalAsset.residualPercentage : formatNumberAsGlobalSettingsModule(res.residualPercentage, 2);
+                        this.currentAsset.calibrationDefaultCost = this.originalAsset.calibrationDefaultCost ? this.originalAsset.calibrationDefaultCost : formatNumberAsGlobalSettingsModule(res.calibrationDefaultCost, 2);
+                        this.currentAsset.certificationDefaultCost = this.originalAsset.certificationDefaultCost ? this.originalAsset.certificationDefaultCost : formatNumberAsGlobalSettingsModule(res.certificationDefaultCost, 2);
+                        this.currentAsset.inspectionDefaultCost = this.originalAsset.inspectionDefaultCost ? this.originalAsset.inspectionDefaultCost : formatNumberAsGlobalSettingsModule(res.inspectionDefaultCost, 2);
+                        this.currentAsset.verificationDefaultCost = this.originalAsset.verificationDefaultCost ? this.originalAsset.verificationDefaultCost : formatNumberAsGlobalSettingsModule(res.verificationDefaultCost, 2);
+                        this.currentAsset.assetLocationId = this.originalAsset.assetLocationId ? this.originalAsset.assetLocationId : null;
+                        this.currentAsset.defaultVendorId = res.defaultVendorId ? getObjectById('value', res.defaultVendorId, this.allVendorsList) : null;
+
+
+                        this.currentAsset.calibrationDefaultVendorId = this.originalAsset.calibrationDefaultVendorId ? getObjectById('value', this.originalAsset.calibrationDefaultVendorId, this.allVendorsList) : null,
+                            this.currentAsset.certificationDefaultVendorId = this.originalAsset.certificationDefaultVendorId ? getObjectById('value', this.originalAsset.certificationDefaultVendorId, this.allVendorsList) : null,
+                            this.currentAsset.inspectionDefaultVendorId = this.originalAsset.inspectionDefaultVendorId ? getObjectById('value', this.originalAsset.inspectionDefaultVendorId, this.allVendorsList) : null,
+                            this.currentAsset.verificationDefaultVendorId = this.originalAsset.verificationDefaultVendorId ? getObjectById('value', this.originalAsset.verificationDefaultVendorId, this.allVendorsList) : null,
+                            this.currentAsset.maintenanceDefaultVendorId = this.originalAsset.maintenanceDefaultVendorId ? getObjectById('value', this.originalAsset.maintenanceDefaultVendorId, this.allVendorsList) : null,
+                            this.currentAsset.warrantyDefaultVendorId = this.originalAsset.warrantyDefaultVendorId ? getObjectById('value', this.originalAsset.warrantyDefaultVendorId, this.allVendorsList) : null,
+
+
+                            this.currentAsset.isSerialized = res.isSerialized ? res.isSerialized : false;
+                        this.currentAsset.calibrationRequired = res.calibrationRequired ? res.calibrationRequired : false;
+                        this.currentAsset.certificationRequired = res.certificationRequired ? res.certificationRequired : false;
+                        this.currentAsset.inspectionRequired = res.inspectionRequired ? res.inspectionRequired : false;
+                        this.currentAsset.verificationRequired = res.verificationRequired ? res.verificationRequired : false;
+                        this.currentAsset.assetIsMaintenanceReqd = res.assetIsMaintenanceReqd ? res.assetIsMaintenanceReqd : false;
+                        this.currentAsset.isWarrantyRequired = res.isWarrantyRequired ? res.isWarrantyRequired : false;
+                        this.currentAsset.warrantyStartDate = this.originalAsset.warrantyStartDate ? this.originalAsset.warrantyStartDate : null;
+                        this.currentAsset.warrantyEndDate = this.originalAsset.warrantyEndDate ? this.originalAsset.warrantyEndDate : null;
+                        this.currentAsset.maintenanceFrequencyMonths = this.originalAsset.maintenanceFrequencyMonths ? this.originalAsset.maintenanceFrequencyMonths : res.maintenanceFrequencyMonths;
+                        this.currentAsset.maintenanceFrequencyDays = this.originalAsset.maintenanceFrequencyDays ? this.originalAsset.maintenanceFrequencyDays : res.maintenanceFrequencyDays;
+                        this.currentAsset.assetLife = this.originalAsset.assetLife ? this.originalAsset.assetLife : res.assetLife;
+                        this.currentAsset.calibrationCurrencyId = this.originalAsset.calibrationCurrencyId ? this.originalAsset.calibrationCurrencyId : res.calibrationCurrencyId;
+                        this.currentAsset.certificationCurrencyId = this.originalAsset.certificationCurrencyId ? this.originalAsset.certificationCurrencyId : res.certificationCurrencyId;
+                        this.currentAsset.inspectionCurrencyId = this.originalAsset.inspectionCurrencyId ? this.originalAsset.inspectionCurrencyId : res.inspectionCurrencyId;
+                        this.currentAsset.verificationCurrencyId = this.originalAsset.verificationCurrencyId ? this.originalAsset.verificationCurrencyId : res.verificationCurrencyId;
+                        this.currentAsset.inventoryNumber = this.originalAsset.inventoryNumber ? this.originalAsset.inventoryNumber : "Generating";
+                        this.currentAsset.inventoryStatusId = this.originalAsset.inventoryStatusId ? this.originalAsset.inventoryStatusId : res.inventoryStatusId;
+                        this.currentAsset.assetStatusId = this.originalAsset.assetStatusId ? this.originalAsset.assetStatusId : res.assetStatusId;
+                        this.currentAsset.unitOfMeasureName = this.originalAsset.unitOfMeasureName ? this.originalAsset.unitOfMeasureName : res.unitOfMeasureName;
+                        this.currentAsset.serialNo = this.originalAsset.serialNo;
+                        this.currentAsset.memo = this.originalAsset.memo;
+                        this.currentAsset.warrantyMemo = this.originalAsset.warrantyMemo ? this.originalAsset.warrantyMemo : res.warrantyMemo;
+                        this.currentAsset.warrantyStatusId = this.originalAsset.warrantyStatusId ? this.originalAsset.warrantyStatusId : res.warrantyStatusId;
+                        this.currentAsset.calibrationMemo = this.originalAsset.calibrationMemo ? this.originalAsset.calibrationMemo : res.calibrationMemo;
+                        this.currentAsset.certificationMemo = this.originalAsset.certificationMemo ? this.originalAsset.certificationMemo : res.certificationMemo;
+                        this.currentAsset.inspectionMemo = this.originalAsset.inspectionMemo ? this.originalAsset.inspectionMemo : res.inspectionMemo;
+                        this.currentAsset.verificationMemo = this.originalAsset.verificationMemo ? this.originalAsset.verificationMemo : res.verificationMemo;
+                        this.currentAsset.assetCalibrationMemo = this.originalAsset.assetCalibrationMemo ? this.originalAsset.assetCalibrationMemo : res.assetCalibrationMemo;
+                        // this.currentAsset.managementStructureId=  this.originalAsset.managementStructureId ? this.originalAsset.managementStructureId : res.managementStructureId;
+                        if (this.originalAsset.managementStructureId != res.managementStructureId) {
+                            this.currentAsset.managementStructureId = this.originalAsset.managementStructureId;
+                        } else {
+                            this.currentAsset.managementStructureId = res.managementStructureId
+                        }
+                        this.getManagementStructureDetails(this.currentAsset
+                            ? this.currentAsset.managementStructureId
+                            : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
+                        this.getManagementStructureLevelIds(this.currentAsset ? this.currentAsset.managementStructureId : 0)
+
+                    }
+                    this.getTotalCost();
+                    // this.openCapes();
+                    if (type == 'fromHtml') {
+                        setTimeout(() => {
+                            this.isSpinnerVisible = false;
+                        }, 1000);
+                    } else {
+                        this.isSpinnerVisible = true;
+
+                    }
+                }, 2000);
+            }, err => {
+                this.isSpinnerVisible = false;
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
+        }
+    }
 
 
     onChangeUnitCost() {
@@ -631,11 +641,11 @@ if(type=='fromHtml'){
         this.currentAsset.taxes = this.currentAsset.taxes ? formatNumberAsGlobalSettingsModule(this.currentAsset.taxes, 2) : '0.00';
     }
     getTotalCost() {
-        const unitCost = this.currentAsset.unitCost ? parseFloat(this.currentAsset.unitCost.toString().replace(/\,/g,'')) : 0;
-        const installationCost = this.currentAsset.installationCost ? parseFloat(this.currentAsset.installationCost.toString().replace(/\,/g,'')) : 0;
-        const freight = this.currentAsset.freight ? parseFloat(this.currentAsset.freight.toString().replace(/\,/g,'')) : 0;
-        const insurance = this.currentAsset.insurance ? parseFloat(this.currentAsset.insurance.toString().replace(/\,/g,'')) : 0;
-        const taxes = this.currentAsset.taxes ? parseFloat(this.currentAsset.taxes.toString().replace(/\,/g,'')) : 0;
+        const unitCost = this.currentAsset.unitCost ? parseFloat(this.currentAsset.unitCost.toString().replace(/\,/g, '')) : 0;
+        const installationCost = this.currentAsset.installationCost ? parseFloat(this.currentAsset.installationCost.toString().replace(/\,/g, '')) : 0;
+        const freight = this.currentAsset.freight ? parseFloat(this.currentAsset.freight.toString().replace(/\,/g, '')) : 0;
+        const insurance = this.currentAsset.insurance ? parseFloat(this.currentAsset.insurance.toString().replace(/\,/g, '')) : 0;
+        const taxes = this.currentAsset.taxes ? parseFloat(this.currentAsset.taxes.toString().replace(/\,/g, '')) : 0;
         const totalCost = unitCost + installationCost + freight + insurance + taxes;
         this.currentAsset.totalCost = formatNumberAsGlobalSettingsModule(totalCost, 2);
     }
@@ -654,165 +664,169 @@ if(type=='fromHtml'){
     }
 
     getPageCount(totalNoofRecords, pageSize) {
-		return Math.ceil(totalNoofRecords / pageSize)
-	}
-    openCapesModel:any=false;
+        return Math.ceil(totalNoofRecords / pageSize)
+    }
+    openCapesModel: any = false;
     openCapes() {
-        this.openCapesModel=true;
+        this.openCapesModel = true;
         if (this.currentAsset.assetRecordId) {
             const assetRecordId = getValueFromObjectByKey('value', this.currentAsset.assetRecordId);
             this.assetService.getcapabilityListData(assetRecordId).subscribe(res => {
                 this.allCapesInfo = res[0];
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});            
+                this.errorMessageHandler(errorLog);
+            });
         }
     }
-    closeCpes(){
-        this.openCapesModel=false; 
+    closeCpes() {
+        this.openCapesModel = false;
     }
     selectedLegalEntity(legalEntityId) {
-		this.businessUnitList = [];
-		this.divisionList = [];
-		this.departmentList = [];
-		this.managementStructure.buId = 0;
-		this.managementStructure.divisionId = 0;
-		this.managementStructure.departmentId = 0;
+        this.businessUnitList = [];
+        this.divisionList = [];
+        this.departmentList = [];
+        this.managementStructure.buId = 0;
+        this.managementStructure.divisionId = 0;
+        this.managementStructure.departmentId = 0;
 
         if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
             this.currentAsset.managementStructureId = legalEntityId;
-            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId,this.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.businessUnitList = res;
-			},err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});
-		}	
-	}
+                this.errorMessageHandler(errorLog);
+            });
+        }
+    }
 
 
 
     selectedBusinessUnit(businessUnitId) {
-		this.divisionList = [];
+        this.divisionList = [];
         this.departmentList = [];
         this.managementStructure.buId = businessUnitId;
-		this.managementStructure.divisionId = 0;
-		this.managementStructure.departmentId = 0;
+        this.managementStructure.divisionId = 0;
+        this.managementStructure.departmentId = 0;
 
         if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
             this.currentAsset.managementStructureId = businessUnitId;
-            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId,this.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.divisionList = res;
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
     }
     selectedDivision(divisionUnitId) {
         this.departmentList = [];
         this.managementStructure.divisionId = divisionUnitId;
-		this.managementStructure.departmentId = 0;
+        this.managementStructure.departmentId = 0;
 
         if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
             this.currentAsset.managementStructureId = divisionUnitId;
-            this.commonService.getManagementStructurelevelWithEmployee(divisionUnitId,this.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(divisionUnitId, this.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.departmentList = res;
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
     }
     selectedDepartment(departmentId) {
-        this.managementStructure.departmentId=departmentId;
+        this.managementStructure.departmentId = departmentId;
         if (departmentId != 0 && departmentId != null && departmentId != undefined) {
             this.currentAsset.managementStructureId = departmentId;
         }
     }
-    
+
     onAddMemo(label) {
-        this.disableEditor=true;
-        if(label == 'Memo') {
+        this.disableEditor = true;
+        if (label == 'Memo') {
             this.headerMemo = this.currentAsset.memo;
-            this.memoLabel = label;    
+            this.memoLabel = label;
         }
-        if(label == 'Tolerance Memo') {
-            this.headerMemo = this.currentAsset.assetCalibrationMemo;       
-            this.memoLabel = label;    
+        if (label == 'Tolerance Memo') {
+            this.headerMemo = this.currentAsset.assetCalibrationMemo;
+            this.memoLabel = label;
         }
-        if(label == 'Calibration Memo') {
-            this.headerMemo = this.currentAsset.calibrationMemo;       
-            this.memoLabel = label;    
+        if (label == 'Calibration Memo') {
+            this.headerMemo = this.currentAsset.calibrationMemo;
+            this.memoLabel = label;
         }
-        if(label == 'Certification Memo') {
-            this.headerMemo = this.currentAsset.certificationMemo;       
-            this.memoLabel = label;    
+        if (label == 'Certification Memo') {
+            this.headerMemo = this.currentAsset.certificationMemo;
+            this.memoLabel = label;
         }
-        if(label == 'Inspection Memo') {
-            this.headerMemo = this.currentAsset.inspectionMemo;       
-            this.memoLabel = label;    
+        if (label == 'Inspection Memo') {
+            this.headerMemo = this.currentAsset.inspectionMemo;
+            this.memoLabel = label;
         }
-        if(label == 'Verification Memo') {
-            this.headerMemo = this.currentAsset.verificationMemo;       
-            this.memoLabel = label;    
+        if (label == 'Verification Memo') {
+            this.headerMemo = this.currentAsset.verificationMemo;
+            this.memoLabel = label;
         }
-        if(label == 'Maintenance Memo') {
-            this.headerMemo = this.currentAsset.maintenanceMemo;       
-            this.memoLabel = label;    
+        if (label == 'Maintenance Memo') {
+            this.headerMemo = this.currentAsset.maintenanceMemo;
+            this.memoLabel = label;
         }
-        if(label == 'Warranty Memo') {
+        if (label == 'Warranty Memo') {
             this.headerMemo = this.currentAsset.warrantyMemo;
-            this.memoLabel = label;    
+            this.memoLabel = label;
         }
-        if(label == 'Document Memo') {
+        if (label == 'Document Memo') {
             this.headerMemo = this.documentInformation.docMemo;
-            this.memoLabel = label;    
+            this.memoLabel = label;
         }
-	}
-	onSaveMemo() {
-      
-        this.disleUpdate=false;
-        this.disableSaveForEdit=false;
-        if(this.memoLabel == 'Memo') {
+    }
+    onSaveMemo() {
+
+        this.disleUpdate = false;
+        this.disableSaveForEdit = false;
+        if (this.memoLabel == 'Memo') {
             this.currentAsset.memo = this.headerMemo;
         }
-        if(this.memoLabel == 'Calibration Memo') {
+        if (this.memoLabel == 'Calibration Memo') {
             this.currentAsset.calibrationMemo = this.headerMemo;
         }
-        if(this.memoLabel == 'Tolerance Memo') {
+        if (this.memoLabel == 'Tolerance Memo') {
             this.currentAsset.assetCalibrationMemo = this.headerMemo;
         }
-      
-        if(this.memoLabel == 'Certification Memo') {
+
+        if (this.memoLabel == 'Certification Memo') {
             this.currentAsset.certificationMemo = this.headerMemo;
         }
-        if(this.memoLabel == 'Inspection Memo') {
+        if (this.memoLabel == 'Inspection Memo') {
             this.currentAsset.inspectionMemo = this.headerMemo;
         }
-        if(this.memoLabel == 'Verification Memo') {
+        if (this.memoLabel == 'Verification Memo') {
             this.currentAsset.verificationMemo = this.headerMemo;
         }
-        if(this.memoLabel == 'Maintenance Memo') {
+        if (this.memoLabel == 'Maintenance Memo') {
             this.currentAsset.maintenanceMemo = this.headerMemo;
         }
-        if(this.memoLabel == 'Warranty Memo') {
+        if (this.memoLabel == 'Warranty Memo') {
             this.currentAsset.warrantyMemo = this.headerMemo;
         }
-        if(this.memoLabel == 'Document Memo') {
+        if (this.memoLabel == 'Document Memo') {
             this.documentInformation.docMemo = this.headerMemo;
         }
         // this.disableEditor=true;
-    }  
+    }
 
     onChangeWarrantyEndDate() {
-        if(this.currentAsset.warrantyEndDate) {
-            if(this.currentDate > this.currentAsset.warrantyEndDate) {
+        if (this.currentAsset.warrantyEndDate) {
+            if (this.currentDate > this.currentAsset.warrantyEndDate) {
                 this.currentAsset.warrantyStatusId = 2;
             } else {
                 this.currentAsset.warrantyStatusId = 3;
             }
         }
-        
+
     }
-    
+
     closeMyModel(type) {
         $(type).modal("hide");
         this.disableDocumentSave = true;
@@ -824,13 +838,13 @@ if(type=='fromHtml'){
         } else {
             this.disableFileAttachmentSubmit = true;
         }
-        
+
         const filesSelectedTemp = [];
         this.selectedFileAttachment = [];
         for (let file of event.files) {
             var flag = false;
             for (var i = 0; i < this.sourceViewforDocumentList.length; i++) {
-                if (this.sourceViewforDocumentList[i].fileName == file.name && this.sourceViewforDocumentList[i].typeId==1) {
+                if (this.sourceViewforDocumentList[i].fileName == file.name && this.sourceViewforDocumentList[i].typeId == 1) {
                     flag = true;
                     this.alertService.showMessage(
                         'Duplicate',
@@ -863,7 +877,7 @@ if(type=='fromHtml'){
                 link: filesSelectedTemp[i].link,
                 fileName: filesSelectedTemp[i].fileName,
                 fileSize: filesSelectedTemp[i].fileSize,
-                typeId:1,
+                typeId: 1,
                 isFileFromServer: false,
                 attachmentDetailId: 0,
             })
@@ -886,8 +900,8 @@ if(type=='fromHtml'){
     }
 
     addDocumentInformation(type, documentInformation) {
-        this.disleUpdate=true;
-        this.disableSaveForEdit=false;
+        this.disleUpdate = true;
+        this.disableSaveForEdit = false;
         if (this.selectedFileAttachment != []) {
             for (var i = 0; i < this.selectedFileAttachment.length; i++) {
                 this.sourceViewforDocumentList.push({
@@ -903,7 +917,7 @@ if(type=='fromHtml'){
                     updatedBy: this.userName,
                     createdDate: Date.now(),
                     updatedDate: Date.now(),
-                    typeId:1,
+                    typeId: 1,
                     fileSize: ((this.selectedFileAttachment[i].fileSize) / (1024 * 1024)).toFixed(2),
                 })
             }
@@ -950,17 +964,17 @@ if(type=='fromHtml'){
             this.fileUploadInput.clear()
         }
         // add 1
-        if(this.isEditMode){
-        this.onUploadDocumentListMain();
-        }else{
-            if(this.updateDocuments==true){
+        if (this.isEditMode) {
+            this.onUploadDocumentListMain();
+        } else {
+            if (this.updateDocuments == true) {
                 this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
-               }else{
+            } else {
                 this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-               }
+            }
         }
-// this.onUploadDocumentListWarranty();
-// this.onUploadDocumentListInt();
+        // this.onUploadDocumentListWarranty();
+        // this.onUploadDocumentListInt();
     }
 
     dismissDocumentPopupModelNew(type) {
@@ -986,8 +1000,8 @@ if(type=='fromHtml'){
     }
 
     editCustomerDocument(rowdata, index = 0) {
-        this.updateDocuments=true;
-        this.disleUpdate=true;
+        this.updateDocuments = true;
+        this.disleUpdate = true;
         this.selectedFileAttachment = [];
         this.isEditButton = true;
         this.index = index;
@@ -1002,11 +1016,11 @@ if(type=='fromHtml'){
 
     deleteAttachmentRow(rowdata, index, content) {
         this.selectedRowForDelete = rowdata;
-        
+
         this.rowIndex = index;
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
-        }, () => {})
+        }, () => { })
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
@@ -1014,15 +1028,16 @@ if(type=='fromHtml'){
         this.sourceViewforDocumentAudit = auditHistory;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
-   
+
     openHistory(content, rowData) {
         this.alertService.startLoadingMessage();
         this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
-            results =>{ this.onAuditHistoryLoadSuccessful(results, content)},err => {			
+            results => { this.onAuditHistoryLoadSuccessful(results, content) }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});
+                this.errorMessageHandler(errorLog);
+            });
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -1053,10 +1068,11 @@ if(type=='fromHtml'){
                     MessageSeverity.success
                 );
                 // })
-                this.disableSaveForEdit=false;
-            },err => {			
+                this.disableSaveForEdit = false;
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
         else {
             this.sourceViewforDocumentList.splice(this.rowIndex, 1)
@@ -1072,11 +1088,11 @@ if(type=='fromHtml'){
             this.sourceViewforDocument = res || [];
         })
     }
-   
+
     toGetDocumentsListNew(id) {
         var moduleId = 54;
 
-        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.maitananceeletedList).subscribe(res => { //GetDocumentsListWithType
+        this.commonService.GetDocumentsListNewAsset(id, moduleId, this.maitananceeletedList).subscribe(res => { //GetDocumentsListWithType
             this.sourceViewforDocumentList = res || [];
             this.allDocumentListOriginal = res;
 
@@ -1088,20 +1104,21 @@ if(type=='fromHtml'){
             // this.totalRecordNew = this.sourceViewforDocumentList.length;
             // this.totalPagesNew = Math.ceil(this.totalRecordNew / this.pageSizeNew);
 
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);})
+            this.errorMessageHandler(errorLog);
+        })
     }
 
     private saveFailedHelper() {
-        
+
     }
 
 
 
     addDocumentDetails() {
         // this.disleUpdate=true;
-        this.updateDocuments=false;
+        this.updateDocuments = false;
         this.selectedFileAttachment = [];
         this.selectedFileAttachmentWarranty = [];
         this.index = 0;
@@ -1115,7 +1132,7 @@ if(type=='fromHtml'){
             docDescription: '',
             attachmentDetailId: 0
         }
- 
+
     }
 
     dateFilterForTableWarranty(date, field) {
@@ -1132,10 +1149,10 @@ if(type=='fromHtml'){
             this.sourceViewforDocumentListWarranty = this.allDocumentListOriginalWarranty;
         }
     }
-    updateDocuments=false;
+    updateDocuments = false;
     editCustomerDocumentWarranty(rowdata, index = 0) {
-        this.updateDocuments=true;
-        this.disleUpdate=true;
+        this.updateDocuments = true;
+        this.disleUpdate = true;
         this.selectedFileAttachment = [];
         this.selectedFileAttachmentWarranty = [];
         this.isEditButton = true;
@@ -1154,7 +1171,7 @@ if(type=='fromHtml'){
         this.rowIndex = index;
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
-        }, () => {  })
+        }, () => { })
     }
 
     toGetDocumentViewWarranty(id) {
@@ -1174,10 +1191,11 @@ if(type=='fromHtml'){
                     MessageSeverity.success
                 );
                 // })
-                this.disableSaveForEdit=false;
-            },err => {			
+                this.disableSaveForEdit = false;
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
         else {
             this.sourceViewforDocumentListWarranty.splice(this.rowIndex, 1)
@@ -1192,7 +1210,7 @@ if(type=='fromHtml'){
 
     toGetDocumentsListWarranty(id) {
         var moduleId = 55;
-        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.warrentyDeletedList).subscribe(res => {
+        this.commonService.GetDocumentsListNewAsset(id, moduleId, this.warrentyDeletedList).subscribe(res => {
             this.sourceViewforDocumentListWarranty = res || [];
             this.allDocumentListOriginalWarranty = res;
 
@@ -1204,11 +1222,12 @@ if(type=='fromHtml'){
             }
             // this.totalRecordsWarranty = this.sourceViewforDocumentListWarranty.length;
             // this.totalPagesWarranty = Math.ceil(this.totalRecordsWarranty / this.pageSizeNew);
-            
 
-        },err => {			
+
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);})
+            this.errorMessageHandler(errorLog);
+        })
     }
     fileUploadWarranty(event) {
         if (event.files.length === 0) {
@@ -1222,7 +1241,7 @@ if(type=='fromHtml'){
         for (let file of event.files) {
             var flag = false;
             for (var i = 0; i < this.sourceViewforDocumentListWarranty.length; i++) {
-                if (this.sourceViewforDocumentListWarranty[i].fileName == file.name && this.sourceViewforDocumentListWarranty[i].typeId==2) {
+                if (this.sourceViewforDocumentListWarranty[i].fileName == file.name && this.sourceViewforDocumentListWarranty[i].typeId == 2) {
                     flag = true;
                     this.alertService.showMessage(
                         'Duplicate',
@@ -1264,7 +1283,7 @@ if(type=='fromHtml'){
     }
 
     addDocumentInformationWarranty(type, documentInformation) {
-        this.disableSaveForEdit=false;
+        this.disableSaveForEdit = false;
         if (this.selectedFileAttachmentWarranty != []) {
             for (var i = 0; i < this.selectedFileAttachmentWarranty.length; i++) {
                 this.sourceViewforDocumentListWarranty.push({
@@ -1316,8 +1335,8 @@ if(type=='fromHtml'){
         this.dismissDocumentPopupModelNew(type)
         this.sourceViewforDocumentListWarranty = [...this.sourceViewforDocumentListWarranty]
         // if (this.sourceViewforDocumentList.length > 0) {
-            // this.totalRecordNew = this.sourceViewforDocumentList.length;
-            // this.totalPagesNew = Math.ceil(this.totalRecordNew / this.pageSizeNew);
+        // this.totalRecordNew = this.sourceViewforDocumentList.length;
+        // this.totalPagesNew = Math.ceil(this.totalRecordNew / this.pageSizeNew);
         // }
         this.index = 0;
         this.isEditButton = false;
@@ -1326,14 +1345,14 @@ if(type=='fromHtml'){
         if (this.fileUploadInput) {
             this.fileUploadInput.clear()
         }
-        if(this.isEditMode){
-        this.onUploadDocumentListWarranty();
-        }else{
-           if(this.updateDocuments==true){
-            this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
-           }else{
-            this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-           }
+        if (this.isEditMode) {
+            this.onUploadDocumentListWarranty();
+        } else {
+            if (this.updateDocuments == true) {
+                this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
+            } else {
+                this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+            }
         }
     }
     fileUploadInt(event) {
@@ -1342,7 +1361,7 @@ if(type=='fromHtml'){
         } else {
             this.disableFileAttachmentSubmitInt = false;
         }
-        
+
         const filesSelectedTemp = [];
         this.selectedFileAttachmentInt = [];
         for (let file of event.files) {
@@ -1382,14 +1401,14 @@ if(type=='fromHtml'){
                 link: filesSelectedTemp[i].link,
                 fileName: filesSelectedTemp[i].fileName,
                 fileSize: filesSelectedTemp[i].fileSize,
-                typeId:1,
+                typeId: 1,
                 isFileFromServer: false,
                 attachmentDetailId: 0,
             })
         }
     }
     addDocumentInformationInt(type, documentInformation) {
-        this.disableSaveForEdit=false;
+        this.disableSaveForEdit = false;
         if (this.selectedFileAttachmentInt != []) {
             for (var i = 0; i < this.selectedFileAttachmentInt.length; i++) {
                 this.sourceViewforDocumentListInt.push({
@@ -1405,7 +1424,7 @@ if(type=='fromHtml'){
                     updatedBy: this.userName,
                     createdDate: Date.now(),
                     updatedDate: Date.now(),
-                    typeId:3,
+                    typeId: 3,
                     fileSize: ((this.selectedFileAttachmentInt[i].fileSize) / (1024 * 1024)).toFixed(2),
                 })
             }
@@ -1442,9 +1461,9 @@ if(type=='fromHtml'){
         this.sourceViewforDocumentListInt = [...this.sourceViewforDocumentListInt]
         // }
         this.index = 0;
-       setTimeout(()=>{
-        this.isEditButton = false;
-       },1000)
+        setTimeout(() => {
+            this.isEditButton = false;
+        }, 1000)
         this.disableFileAttachmentSubmitInt == false;
 
         if (this.fileUploadInputInt) {
@@ -1452,15 +1471,15 @@ if(type=='fromHtml'){
         }
         // this.onUploadDocumentListMain();
         // this.onUploadDocumentListWarranty();
-        if(this.isEditMode){
+        if (this.isEditMode) {
             this.onUploadDocumentListInt();
-            }else{
-                if(this.updateDocuments==true){
-                    this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
-                   }else{
-                    this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-                   }
+        } else {
+            if (this.updateDocuments == true) {
+                this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
+            } else {
+                this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
             }
+        }
     }
 
     deleteItemAndCloseModelInt() {
@@ -1474,10 +1493,11 @@ if(type=='fromHtml'){
                     MessageSeverity.success
                 );
                 // })
-                this.disableSaveForEdit=false;
-            },err => {			
+                this.disableSaveForEdit = false;
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
         else {
             this.sourceViewforDocumentListInt.splice(this.rowIndex, 1);
@@ -1489,7 +1509,7 @@ if(type=='fromHtml'){
     toGetDocumentsListInt(id) {
         var moduleId = 56;
 
-        this.commonService.GetDocumentsListNewAsset(id, moduleId,this.intangibleDeletedList).subscribe(res => {
+        this.commonService.GetDocumentsListNewAsset(id, moduleId, this.intangibleDeletedList).subscribe(res => {
             this.sourceViewforDocumentListInt = res || [];
             this.allDocumentListOriginal = res;
 
@@ -1499,13 +1519,14 @@ if(type=='fromHtml'){
                 })
             }
 
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);})
+            this.errorMessageHandler(errorLog);
+        })
     }
 
     dateFilterForTableInt(date, field) {
-        if (date !== '' && moment(date).format('MMMM DD YYYY')) { 
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
             const data = [...this.sourceViewforDocumentListInt.filter(x => {
 
                 if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
@@ -1521,8 +1542,8 @@ if(type=='fromHtml'){
     }
 
     editCustomerDocumentInt(rowdata, index = 0) {
-        this.updateDocuments=true;
-        this.disleUpdate=true;
+        this.updateDocuments = true;
+        this.disleUpdate = true;
         this.selectedFileAttachmentInt = [];
         this.isEditButton = true;
         this.index = index;
@@ -1583,20 +1604,21 @@ if(type=='fromHtml'){
                 })
             }
             this.formDataMain.append('attachmentdetais', JSON.stringify(docList));
-            
+
             this.commonService.uploadDocumentsEndpoint(this.formDataMain).subscribe(() => { //assetDocumentsEndpoint
-                if(this.isEditMode){
-                    if(this.updateDocuments==true){
+                if (this.isEditMode) {
+                    if (this.updateDocuments == true) {
                         this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
-                       }else{
+                    } else {
                         this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-                       }
+                    }
                 }
                 this.formDataMain = new FormData();
                 this.toGetDocumentsListNew(this.assetInventoryId);
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});
+                this.errorMessageHandler(errorLog);
+            });
         }
     }
 
@@ -1635,21 +1657,22 @@ if(type=='fromHtml'){
                 })
             }
             this.formDataWarr.append('attachmentdetais', JSON.stringify(docList));
-           
+
             this.commonService.uploadDocumentsEndpoint(this.formDataWarr).subscribe(() => {
-                if(this.isEditMode){
-                // this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-                if(this.updateDocuments==true){
-                    this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
-                   }else{
-                    this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-                   }
+                if (this.isEditMode) {
+                    // this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+                    if (this.updateDocuments == true) {
+                        this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
+                    } else {
+                        this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+                    }
                 }
                 this.formDataWarr = new FormData();
                 this.toGetDocumentsListWarranty(this.assetInventoryId);
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});
+                this.errorMessageHandler(errorLog);
+            });
         }
     }
 
@@ -1686,102 +1709,103 @@ if(type=='fromHtml'){
                 })
             }
             this.formDataInt.append('attachmentdetais', JSON.stringify(docList));
-      
+
             this.commonService.uploadDocumentsEndpoint(this.formDataInt).subscribe(() => {
-                if(this.isEditMode){
-                    if(this.updateDocuments==true){
+                if (this.isEditMode) {
+                    if (this.updateDocuments == true) {
                         this.alertService.showMessage("Success", `Updated Document Successfully.`, MessageSeverity.success);
-                       }else{
+                    } else {
                         this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
-                       }
+                    }
                 }
                 this.formDataInt = new FormData();
                 this.toGetDocumentsListInt(this.assetInventoryId);
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});
+                this.errorMessageHandler(errorLog);
+            });
         }
     }
-    disleUpdate:any=true;
-    disableEditor:any=true;
+    disleUpdate: any = true;
+    disableEditor: any = true;
     getmemo($event) {
-        this.disableSaveForEdit=false;
-            } 
-            getmemoInfo(eve){
-                this.disleUpdate=false;
-            }
-            editorgetmemo(ev){
-this.disableEditor=false;
-            }
-            postData:any={};
+        this.disableSaveForEdit = false;
+    }
+    getmemoInfo(eve) {
+        this.disleUpdate = false;
+    }
+    editorgetmemo(ev) {
+        this.disableEditor = false;
+    }
+    postData: any = {};
     onSaveAssetInventory() {
-this.postData={};
-if(this.currentAsset.isTangible==true){
+        this.postData = {};
+        if (this.currentAsset.isTangible == true) {
 
-    if (this.currentAsset.calibrationRequired == true && (this.currentAsset.calibrationFrequencyMonths==0 && this.currentAsset.calibrationFrequencyDays==0)){
-        this.alertService.showMessage("Warning",'Months & Days Cant be Zero', MessageSeverity.warn);
-    return;
-    }
-    if (this.currentAsset.certificationRequired == true && (this.currentAsset.certificationFrequencyMonths==0 && this.currentAsset.certificationFrequencyDays==0)){
-        this.alertService.showMessage("Warning",'Months & Days Cant be Zero', MessageSeverity.warn);
-        return;
-    }
-    if (this.currentAsset.inspectionRequired == true && (this.currentAsset.inspectionFrequencyMonths==0 && this.currentAsset.inspectionFrequencyDays==0)){
-        this.alertService.showMessage("Warning",'Months & Days Cant be Zero', MessageSeverity.warn);
-        return;
-    }
-    if (this.currentAsset.verificationRequired == true && (this.currentAsset.verificationFrequencyMonths==0 && this.currentAsset.verificationFrequencyDays==0)){
-        this.alertService.showMessage("Warning",'Months & Days Cant be Zero', MessageSeverity.warn);
-        return;
-    }
-    if (this.currentAsset.assetIsMaintenanceReqd == true && (this.currentAsset.maintenanceFrequencyMonths==0 && this.currentAsset.maintenanceFrequencyDays==0)){
-        this.alertService.showMessage("Warning",'Months & Days Cant be Zero', MessageSeverity.warn);
-        return;
-    }
-  
-        this.postData = {
-            ...this.currentAsset,
-            // isSerialized:true,
-            // serialNo:"444",
-   
-            assetInventoryId: this.assetInventoryId,
-            assetRecordId: getValueFromObjectByKey('value', this.currentAsset.assetRecordId),
-            entryDate: this.currentAsset.entryDate ? this.datePipe.transform(this.currentAsset.entryDate, "MM/dd/yyyy") : null,
-            manufacturedDate: this.currentAsset.manufacturedDate ? this.datePipe.transform(this.currentAsset.manufacturedDate, "MM/dd/yyyy") : null,
-            expirationDate: this.currentAsset.expirationDate ? this.datePipe.transform(this.currentAsset.expirationDate, "MM/dd/yyyy") : null,
-            unitCost: this.currentAsset.unitCost ? parseFloat(this.currentAsset.unitCost.toString().replace(/\,/g,'')) : '0.00',
-            installationCost: this.currentAsset.installationCost ? parseFloat(this.currentAsset.installationCost.toString().replace(/\,/g,'')) : '0.00',
-            freight: this.currentAsset.freight ? parseFloat(this.currentAsset.freight.toString().replace(/\,/g,'')) : '0.00',
-            insurance: this.currentAsset.insurance ? parseFloat(this.currentAsset.insurance.toString().replace(/\,/g,'')) : '0.00',
-            taxes: this.currentAsset.taxes ? parseFloat(this.currentAsset.taxes.toString().replace(/\,/g,'')) : '0.00',
-            totalCost: this.currentAsset.totalCost ? parseFloat(this.currentAsset.totalCost.toString().replace(/\,/g,'')) : '0.00',
-           
-            calibrationDefaultCost: this.currentAsset.calibrationDefaultCost ? this.currentAsset.calibrationDefaultCost.toString().replace(/\,/g,'') : '0.00',
-            certificationDefaultCost: this.currentAsset.certificationDefaultCost ? this.currentAsset.certificationDefaultCost.toString().replace(/\,/g,'') : '0.00',
-            inspectionDefaultCost: this.currentAsset.inspectionDefaultCost ? this.currentAsset.inspectionDefaultCost.toString().replace(/\,/g,'') : '0.00',
-            verificationDefaultCost: this.currentAsset.verificationDefaultCost ? this.currentAsset.verificationDefaultCost.toString().replace(/\,/g,'') : '0.00',
-            warrantyCompanyId: this.currentAsset.warrantyCompanyId ? getValueFromObjectByKey('value', this.currentAsset.warrantyCompanyId) : null,
-            warrantyStartDate: this.currentAsset.warrantyStartDate ? this.datePipe.transform(this.currentAsset.warrantyStartDate, "MM/dd/yyyy") : null,
-            warrantyEndDate: this.currentAsset.warrantyEndDate ? this.datePipe.transform(this.currentAsset.warrantyEndDate, "MM/dd/yyyy") : null,
-            calibrationDefaultVendorId: this.currentAsset.calibrationDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.calibrationDefaultVendorId) : null,
-            certificationDefaultVendorId: this.currentAsset.certificationDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.certificationDefaultVendorId) : null,
-            inspectionDefaultVendorId: this.currentAsset.inspectionDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.inspectionDefaultVendorId) : null,
-            verificationDefaultVendorId: this.currentAsset.verificationDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.verificationDefaultVendorId) : null,            
-            maintenanceDefaultVendorId: this.currentAsset.maintenanceDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.maintenanceDefaultVendorId) : null,
-            warrantyDefaultVendorId:this.currentAsset.warrantyDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.warrantyDefaultVendorId) : null,
-        } 
-    }else{
-        this.postData = {
-            ...this.currentAsset,
-            assetInventoryId: this.assetInventoryId,
-            assetRecordId: getValueFromObjectByKey('value', this.currentAsset.assetRecordId),
-            entryDate: this.currentAsset.entryDate ? this.datePipe.transform(this.currentAsset.entryDate, "MM/dd/yyyy") : null,
-     }   
-    }
+            if (this.currentAsset.calibrationRequired == true && (this.currentAsset.calibrationFrequencyMonths == 0 && this.currentAsset.calibrationFrequencyDays == 0)) {
+                this.alertService.showMessage("Warning", 'Months & Days Cant be Zero', MessageSeverity.warn);
+                return;
+            }
+            if (this.currentAsset.certificationRequired == true && (this.currentAsset.certificationFrequencyMonths == 0 && this.currentAsset.certificationFrequencyDays == 0)) {
+                this.alertService.showMessage("Warning", 'Months & Days Cant be Zero', MessageSeverity.warn);
+                return;
+            }
+            if (this.currentAsset.inspectionRequired == true && (this.currentAsset.inspectionFrequencyMonths == 0 && this.currentAsset.inspectionFrequencyDays == 0)) {
+                this.alertService.showMessage("Warning", 'Months & Days Cant be Zero', MessageSeverity.warn);
+                return;
+            }
+            if (this.currentAsset.verificationRequired == true && (this.currentAsset.verificationFrequencyMonths == 0 && this.currentAsset.verificationFrequencyDays == 0)) {
+                this.alertService.showMessage("Warning", 'Months & Days Cant be Zero', MessageSeverity.warn);
+                return;
+            }
+            if (this.currentAsset.assetIsMaintenanceReqd == true && (this.currentAsset.maintenanceFrequencyMonths == 0 && this.currentAsset.maintenanceFrequencyDays == 0)) {
+                this.alertService.showMessage("Warning", 'Months & Days Cant be Zero', MessageSeverity.warn);
+                return;
+            }
 
-        if(!this.isEditMode) {
+            this.postData = {
+                ...this.currentAsset,
+                // isSerialized:true,
+                // serialNo:"444",
+
+                assetInventoryId: this.assetInventoryId,
+                assetRecordId: getValueFromObjectByKey('value', this.currentAsset.assetRecordId),
+                entryDate: this.currentAsset.entryDate ? this.datePipe.transform(this.currentAsset.entryDate, "MM/dd/yyyy") : null,
+                manufacturedDate: this.currentAsset.manufacturedDate ? this.datePipe.transform(this.currentAsset.manufacturedDate, "MM/dd/yyyy") : null,
+                expirationDate: this.currentAsset.expirationDate ? this.datePipe.transform(this.currentAsset.expirationDate, "MM/dd/yyyy") : null,
+                unitCost: this.currentAsset.unitCost ? parseFloat(this.currentAsset.unitCost.toString().replace(/\,/g, '')) : '0.00',
+                installationCost: this.currentAsset.installationCost ? parseFloat(this.currentAsset.installationCost.toString().replace(/\,/g, '')) : '0.00',
+                freight: this.currentAsset.freight ? parseFloat(this.currentAsset.freight.toString().replace(/\,/g, '')) : '0.00',
+                insurance: this.currentAsset.insurance ? parseFloat(this.currentAsset.insurance.toString().replace(/\,/g, '')) : '0.00',
+                taxes: this.currentAsset.taxes ? parseFloat(this.currentAsset.taxes.toString().replace(/\,/g, '')) : '0.00',
+                totalCost: this.currentAsset.totalCost ? parseFloat(this.currentAsset.totalCost.toString().replace(/\,/g, '')) : '0.00',
+
+                calibrationDefaultCost: this.currentAsset.calibrationDefaultCost ? this.currentAsset.calibrationDefaultCost.toString().replace(/\,/g, '') : '0.00',
+                certificationDefaultCost: this.currentAsset.certificationDefaultCost ? this.currentAsset.certificationDefaultCost.toString().replace(/\,/g, '') : '0.00',
+                inspectionDefaultCost: this.currentAsset.inspectionDefaultCost ? this.currentAsset.inspectionDefaultCost.toString().replace(/\,/g, '') : '0.00',
+                verificationDefaultCost: this.currentAsset.verificationDefaultCost ? this.currentAsset.verificationDefaultCost.toString().replace(/\,/g, '') : '0.00',
+                warrantyCompanyId: this.currentAsset.warrantyCompanyId ? getValueFromObjectByKey('value', this.currentAsset.warrantyCompanyId) : null,
+                warrantyStartDate: this.currentAsset.warrantyStartDate ? this.datePipe.transform(this.currentAsset.warrantyStartDate, "MM/dd/yyyy") : null,
+                warrantyEndDate: this.currentAsset.warrantyEndDate ? this.datePipe.transform(this.currentAsset.warrantyEndDate, "MM/dd/yyyy") : null,
+                calibrationDefaultVendorId: this.currentAsset.calibrationDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.calibrationDefaultVendorId) : null,
+                certificationDefaultVendorId: this.currentAsset.certificationDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.certificationDefaultVendorId) : null,
+                inspectionDefaultVendorId: this.currentAsset.inspectionDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.inspectionDefaultVendorId) : null,
+                verificationDefaultVendorId: this.currentAsset.verificationDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.verificationDefaultVendorId) : null,
+                maintenanceDefaultVendorId: this.currentAsset.maintenanceDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.maintenanceDefaultVendorId) : null,
+                warrantyDefaultVendorId: this.currentAsset.warrantyDefaultVendorId ? getValueFromObjectByKey('value', this.currentAsset.warrantyDefaultVendorId) : null,
+            }
+        } else {
+            this.postData = {
+                ...this.currentAsset,
+                assetInventoryId: this.assetInventoryId,
+                assetRecordId: getValueFromObjectByKey('value', this.currentAsset.assetRecordId),
+                entryDate: this.currentAsset.entryDate ? this.datePipe.transform(this.currentAsset.entryDate, "MM/dd/yyyy") : null,
+            }
+        }
+
+        if (!this.isEditMode) {
             this.assetService.addAssetInventory(this.postData).subscribe(data => {
-                if(data){
+                if (data) {
                     this.uploadDocs.next(true);
                     this.currentAsset.updatedBy = this.userName;
                     this.assetInventoryId = data.assetInventoryId;
@@ -1791,184 +1815,190 @@ if(this.currentAsset.isTangible==true){
                     // this.onUploadDocumentListInt();
                     this.alertService.showMessage("Success", `Asset Inventory Created Successfully.`, MessageSeverity.success);
                     this.route.navigateByUrl(`/assetmodule/assetpages/app-asset-inventory-listing`);
-                   
+
                 }
-                else{
+                else {
                     this.alertService.showMessage("Failed", `Asset Inventory not created successfully.`, MessageSeverity.error);
                 }
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
         else {
             this.assetService.updateAssetInventory(this.postData).subscribe(data => {
-                if(data){
+                if (data) {
                     this.uploadDocs.next(true);
-                    this.disableSaveForEdit=true;
+                    this.disableSaveForEdit = true;
                     this.currentAsset.updatedBy = this.userName;
                     this.assetInventoryId = data.assetInventoryId;
-                   this.alertService.showMessage("Success", `Asset Inventory Updated Successfully.`, MessageSeverity.success);
+                    this.alertService.showMessage("Success", `Asset Inventory Updated Successfully.`, MessageSeverity.success);
                 }
                 else {
                     this.alertService.showMessage("Failed", `Asset Inventory not Updated Successfully.`, MessageSeverity.error);
                 }
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
     }
 
-    onFilterAssetStatus(eve){
+    onFilterAssetStatus(eve) {
         this.getAssetStatusList(eve);
     }
-    assetStatusList:any=[];
-    assetInventoryStatusList:any=[];
-    basicValue:any;
-  getAssetStatusList(value){
-    this.setEditArray=[];
-	if(this.isEditMode==true && this.currentAsset.assetStatusId){
- 
-        this.setEditArray.push(this.currentAsset.assetStatusId); 
-    }else{
-        this.setEditArray.push(0); 
-    }
-        const strText=value;
-    this.commonService.autoSuggestionSmartDropDownList('AssetStatus', 'AssetStatusId', 'Name',strText,true,20,this.setEditArray.join()).subscribe(res => {
-        this.assetStatusList = res.map(x => {
-            return {
-                ...x,
-                assetStatusId: x.value,
-                name: x.label
-            }
+    assetStatusList: any = [];
+    assetInventoryStatusList: any = [];
+    basicValue: any;
+    getAssetStatusList(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true && this.currentAsset.assetStatusId) {
+
+            this.setEditArray.push(this.currentAsset.assetStatusId);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value;
+        this.commonService.autoSuggestionSmartDropDownList('AssetStatus', 'AssetStatusId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.assetStatusList = res.map(x => {
+                return {
+                    ...x,
+                    assetStatusId: x.value,
+                    name: x.label
+                }
+            });
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
         });
-    },err => {			
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);});
 
-  }
-
-  getAssetInventoryStatusList(){
-    if(this.isEditMode==true){
-        this.setEditArray=[];
-        this.setEditArray.push(this.currentAsset.inventoryStatusId); 
-        const strText='';
-    this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status',strText,true,200,this.setEditArray.join()).subscribe(res => {
-        this.assetInventoryStatusList=res;
-    },err => {			
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);});
-    }else{
-    this.commonService.smartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status').subscribe(res => {
-this.assetInventoryStatusList=res;
-    },err => {			
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);});
-  }  
-  if(this.currentAsset.inventoryStatusId){
-    this.currentAsset.inventoryStatusId=this.currentAsset.inventoryStatusId
-}else{
-    
-this.assetInventoryStatusList.forEach(element => {
-    if(element.label=='Available'){
-        this.currentAsset.inventoryStatusId=element.value;
-        this.basicValue=element.value;
     }
-});
+
+    getAssetInventoryStatusList() {
+        if (this.isEditMode == true) {
+            this.setEditArray = [];
+            this.setEditArray.push(this.currentAsset.inventoryStatusId);
+            const strText = '';
+            this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join()).subscribe(res => {
+                this.assetInventoryStatusList = res;
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
+        } else {
+            this.commonService.smartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status').subscribe(res => {
+                this.assetInventoryStatusList = res;
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
+        }
+        if (this.currentAsset.inventoryStatusId) {
+            this.currentAsset.inventoryStatusId = this.currentAsset.inventoryStatusId
+        } else {
+
+            this.assetInventoryStatusList.forEach(element => {
+                if (element.label == 'Available') {
+                    this.currentAsset.inventoryStatusId = element.value;
+                    this.basicValue = element.value;
+                }
+            });
 
 
-}
+        }
 
 
 
-  } 
+    }
 
 
-  errorMessageHandler(log) {
-    this.isSpinnerVisible=false;
+    errorMessageHandler(log) {
+        this.isSpinnerVisible = false;
 
-}
+    }
 
-  parsedText(text) {
-    
-    if(text){
-        const dom = new DOMParser().parseFromString(
-            '<!doctype html><body>' + text,
-            'text/html');
+    parsedText(text) {
+
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
             const decodedString = dom.body.textContent;
             return decodedString;
+        }
     }
-      }
 
-      restorerecord:any={};
-      documentType:any;
-      restore(content, rowData,type) {
-          this.restorerecord = rowData;
-          this.documentType=type;
-          this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-          this.modal.result.then(() => {
-          }, () => {  })
-      }
-      restoreRecord(){
-          if(this.restorerecord && this.restorerecord.attachmentDetailId !=undefined){
-          this.commonService.updatedeletedrecords('AttachmentDetails','AttachmentDetailId',this.restorerecord.attachmentDetailId ).subscribe(res => {
-              this.getDeleteListByStatus(true,this.documentType)
-           this.disableSaveForEdit=false;
-              this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-              this.modal.close();
-          },err => {			
-              const errorLog = err;
-              this.errorMessageHandler(errorLog);})
-      }
-  }
-  dismissModel() {
-    this.modal.close();
-}
-  isDeletedDocumentlist:boolean=false;
-  warrentyDeletedList:boolean=false;
-  intangibleDeletedList:boolean=false;
-  maitananceeletedList:boolean=false;
-  getDeleteListByStatus(value,type){
-      this.isSpinnerVisible=true;
-if(type==1){
-    this.maitananceeletedList=value;
-    this.toGetDocumentsListNew(this.assetInventoryId);
-}else if(type==2){
-    this.warrentyDeletedList=value;
-    this.toGetDocumentsListWarranty(this.assetInventoryId);
-}else{
-    this.intangibleDeletedList=value;
-    this.toGetDocumentsListInt(this.assetInventoryId);
-}
-setTimeout(() => {
-    this.isSpinnerVisible=false;
-},1000);
-  }
-  addNew(){
-    this.route.navigateByUrl(`/assetmodule/assetpages/app-create-asset-inventory`);
-    this.assetService.listCollection={};
-    this.assetService.isEditMode = false;
-}
-changeOfStatus(){
-    this.disableSaveForEdit=false;
-}
-// modalIsMaintannce: NgbModalRef;
-// modalWarrenty: NgbModalRef;
+    restorerecord: any = {};
+    documentType: any;
+    restore(content, rowData, type) {
+        this.restorerecord = rowData;
+        this.documentType = type;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+        }, () => { })
+    }
+    restoreRecord() {
+        if (this.restorerecord && this.restorerecord.attachmentDetailId != undefined) {
+            this.commonService.updatedeletedrecords('AttachmentDetails', 'AttachmentDetailId', this.restorerecord.attachmentDetailId).subscribe(res => {
+                this.getDeleteListByStatus(true, this.documentType)
+                this.disableSaveForEdit = false;
+                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+                this.modal.close();
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            })
+        }
+    }
+    dismissModel() {
+        this.modal.close();
+    }
+    isDeletedDocumentlist: boolean = false;
+    warrentyDeletedList: boolean = false;
+    intangibleDeletedList: boolean = false;
+    maitananceeletedList: boolean = false;
+    getDeleteListByStatus(value, type) {
+        this.isSpinnerVisible = true;
+        if (type == 1) {
+            this.maitananceeletedList = value;
+            this.toGetDocumentsListNew(this.assetInventoryId);
+        } else if (type == 2) {
+            this.warrentyDeletedList = value;
+            this.toGetDocumentsListWarranty(this.assetInventoryId);
+        } else {
+            this.intangibleDeletedList = value;
+            this.toGetDocumentsListInt(this.assetInventoryId);
+        }
+        setTimeout(() => {
+            this.isSpinnerVisible = false;
+        }, 1000);
+    }
+    addNew() {
+        this.route.navigateByUrl(`/assetmodule/assetpages/app-create-asset-inventory`);
+        this.assetService.listCollection = {};
+        this.assetService.isEditMode = false;
+    }
+    changeOfStatus() {
+        this.disableSaveForEdit = false;
+    }
+    // modalIsMaintannce: NgbModalRef;
+    // modalWarrenty: NgbModalRef;
 
-viewIsCertifiedModal(content){
-    this.modalIsMaintannce = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-}
-closeIsCertifiedModal(){
-    this.modalIsMaintannce.close()
-}
-
-
-
-viewVendorAuditModal(content){
-    this.modalWarrenty = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-}
+    viewIsCertifiedModal(content) {
+        this.modalIsMaintannce = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+    }
+    closeIsCertifiedModal() {
+        this.modalIsMaintannce.close()
+    }
 
 
-closeVendorAuditModal(){
-    this.modalWarrenty.close()
-}
+
+    viewVendorAuditModal(content) {
+        this.modalWarrenty = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+    }
+
+
+    closeVendorAuditModal() {
+        this.modalWarrenty.close()
+    }
 }

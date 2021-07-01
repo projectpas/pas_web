@@ -44,9 +44,9 @@
                       <label>
                         <span class="pull-left">Mark Up %</span>
                       </label>
-                      <select class="text-left" name="markUpPercentageId" (ngModelChange)="enableSave()"
+                      <select class="text-left select-right" name="markUpPercentageId" (ngModelChange)="enableSave()"
                         [(ngModel)]="savedGeneralInformationData.markUpPercentageId">
-                        <!-- <option value="0">-- Select --</option> -->
+                        <option value="0">-- Select --</option>
                         <option *ngFor="let Percentlist of percentageList" [ngValue]="Percentlist.value">
                           {{ Percentlist.label }}
                         </option>
@@ -56,8 +56,8 @@
                       <label>
                         <span class="pull-left">Discount % </span>
                       </label>
-                      <select name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
-                        <!-- <option value="0">-- Select --</option> -->
+                      <select class="select-right" name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
+                        <option value="0">-- Select --</option>
                         <option class="text-right" *ngFor="let discontValue of discountList1"
                           [ngValue]="discontValue.value">
                           {{ discontValue.label }}
@@ -105,7 +105,7 @@
                     <div class="form-group">
                       <label>Currency <span class="clr-red">*</span></label>
                       <select name="currencyId" [(ngModel)]="savedGeneralInformationData.currencyId" (ngModelChange)="enableSave()" required>
-                        <!-- <option value="0">-- Select --</option> -->
+                        <option value="0">-- Select --</option>
                         <option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
                           [ngValue]="currencyName.currencyId">
                           {{ currencyName.code }}
@@ -414,7 +414,13 @@
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                           <tr align="center">
                             <td class="table-column-width" *ngFor="let col of columns">
-                              {{ rowData[col.field] }}
+                              <ng-container *ngIf="col.field!='taxRate'">
+                                {{ rowData[col.field] }}
+                            </ng-container> 
+
+                              <ng-container *ngIf="col.field=='taxRate'">
+                                <p class="m-0 p-0 text-right">{{ rowData[col.field] }}</p>
+                            </ng-container> 
                             </td>
 
                             <td class="action-icons-cstm table-column-width">
@@ -424,13 +430,14 @@
                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                 </span>
   
-                                <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
+                              <span data-toggle="modal">  <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
                                     matTooltip="Delete" matTooltipPosition="above" >
                                       <i class="fa fa-trash"></i>
                                     </a>
+                                  </span>
                                   
                                 <button [disabled]="rowData.isDisable"
-                                    class="btn-edit set_proper_align set_position" mat-icon-button (click)="
+                                    class="btn-edit" mat-icon-button (click)="
                                     getAuditHistoryById(contentAuditHist, rowData)
                                     " matTooltip="History" matTooltipPosition="above">
                                     <i class="fa fa-history" [ngClass]="{

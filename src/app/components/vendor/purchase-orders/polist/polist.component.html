@@ -164,11 +164,11 @@
 									matTooltipPosition="above"><i class="fa fa-eye"></i></a>
 							</span>
 							<span>
-								<a *ngIf="(rowData['statusId'] == 1 || rowData['statusId'] == 2) && isReceivingPolist == false"
+								<a *ngIf="(rowData['statusId'] == openStatusId || rowData['statusId'] == pendingStatusId) && isReceivingPolist == false"
 									class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
 									matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a>
 
-								<a *ngIf="rowData['statusId'] > 2 && isReceivingPolist == false"
+								<a *ngIf="rowData['statusId'] > pendingStatusId && isReceivingPolist == false"
 									class="btn nobg btn-edit-cstm" data-dismiss="modal"><i class="fa fa-pencil"
 										style="color:gray !important;"></i></a>
 							</span>
@@ -181,13 +181,13 @@
 									matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
 							</span>
 
-							<span *ngIf="rowData['statusId'] == 3 && isReceivingPolist == true"
+							<span *ngIf="rowData['statusId'] == fulfillingStatusId && isReceivingPolist == true"
 								(click)="getSelectedRow(rowData)">
 								<a matTooltip="Receive PO" matTooltipPosition="above" class="btn  nobg btn-users-cstm">
 									<i class=" fa fa-chevron-down"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData['statusId'] == 3  && isReceivingPolist == true"
+							<span *ngIf="rowData['statusId'] == fulfillingStatusId  && isReceivingPolist == true"
 								(click)="editStockLine(rowData)">
 								<a class="btn nobg" matTooltip="Edit Received Parts" matTooltip="Edit"
 									matTooltipPosition="above">
@@ -239,10 +239,13 @@
 		</button>
 	</div>
 	<div class="modal-body">
-		<h6 class="modal-body">PO Number : {{restorerecord.purchaseOrderNumber}}</h6>
+		<strong>PO Number :
+			<span class="new-label">	
+				 {{restorerecord.purchaseOrderNumber}}</span>
+			</strong>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+		<button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
 		<button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
 	</div>
 </ng-template>
@@ -263,8 +266,8 @@
 							*ngIf="auditHistory.length> 0 else noDatavailable">
 							<thead>
 								<tr>
-									<th>Purchase Order ID</th>
-									<th>Purchase Order Number</th>
+									<th style="width:105px">Purchase Order ID</th>
+									<th style="width:135px">Purchase Order Number</th>
 									<th>Open Date</th>
 									<th>Closed Date</th>
 									<th>Vendor Name</th>
@@ -311,9 +314,13 @@
 									<td
 										[ngStyle]="{'color': getColorCodeForHistory(i, 'approvedBy', audit.approvedBy)  ? 'black' : 'red'  }">
 										{{audit.approvedBy}}</td>
-									<td>
-										<p style="background-color: #fff !important;"> <input type="checkbox"
-												name="isActive" [(ngModel)]=" audit.isActive" disabled></p>
+										<td class="text-center width-60">
+											<span class="value">
+											  <label class="wauto"> 
+											<input type="checkbox"
+												name="isActive" [(ngModel)]=" audit.isActive" disabled>
+											</label>
+										</span>
 									</td>
 									<td
 										[ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
@@ -327,9 +334,13 @@
 									<td
 										[ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
 										{{audit.updatedBy}}</td>
-									<td>
-										<p style="background-color: #fff !important;"> <input type="checkbox"
-												name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
+										<td class="text-center width-60">
+											<span class="value">
+											  <label class="wauto">
+												   <input type="checkbox"
+												name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+											</label>
+										</span>
 									</td>
 								</tr>
 							</tbody>
@@ -375,7 +386,10 @@
 				<h4 class="modal-title">Are You Sure Want to Delete?</h4>
 			</div>
 			<div class="modal-body">
-				<h6 class="modal-body">PO Number : {{rowDataToDelete.purchaseOrderNumber}}</h6>
+				<strong>PO Number :
+					<span class="new-label">	 
+						{{rowDataToDelete.purchaseOrderNumber}}</span>
+						</strong>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" (click)="deletePO(); closeDeleteModal();">Yes</button>

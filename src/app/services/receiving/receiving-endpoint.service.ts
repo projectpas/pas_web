@@ -300,5 +300,20 @@ export class ReceivingEndpointService extends EndpointFactory {
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getAllRecevingROEditID(repairOrderId));  
         });
-      }
+    }
+
+    getReceivedPOPartsForView(purchaseOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivedPOPartsForView/${purchaseOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivedPOPartsForView(purchaseOrderId));
+        });        
+    }
+
+    getReceivedROPartsForView(repairOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceievedROPartsForView/${repairOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivedROPartsForView(repairOrderId));
+        });
+    }
+
 }

@@ -8,9 +8,16 @@
 .font {
   font-weight: 600;
 }
+.pencil-left{
+  margin-left:6px;
+}
 
 .add-color {
   border: 1px solid grey;
+}
+.tab-back-color{
+  background-color: #f4f4f4 !important;
+  border:#c5c5c5 !important;
 }
 .add-icon-new {
   border-radius: 14px !important;
@@ -169,13 +176,23 @@ textarea {
 .add1 {
   text-align: left;
 }
+.item-master-search{
+  // margin-top: 26px;
+  margin-top:22px;
+  margin-left:29px;
+  font-weight:bold;
+}
 .bg3 {
-  background: #1a7171 !important;
+  // background: #1a7171 !important;
+ background: #4eb1b1 !important
 }
 .bg4 {
-  background: #dc3545 !important;
+  // background: #dc3545 !important;
+ background: #ef5c6a !important;
 }
-
+.m-t-11{
+  margin-top:11px !important;
+}
 th {
   text-align: center;
 }
@@ -492,7 +509,9 @@ input[type='date']::-webkit-outer-spin-button {
 }
 .ntae-section .md-stepper-horizontal .md-step {
   cursor: pointer;
-  background: #bcceff;
+  // background: #bcceff;
+   background-color: #f4f4f4;
+  border:1px solid #c5c5c5;
 }
 .ntae-section .md-step .md-step-title{
   color: #333 !important;

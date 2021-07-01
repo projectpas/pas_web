@@ -1,0 +1,196 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive default-bg clear">
+      <div class="col-md-3">
+        <p><span class="label"><b>Quote Type <span class="clr-red">*</span> : </b></span>
+          <span class="value">
+            {{salesQuote.quoteTypeName ? salesQuote.quoteTypeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Speed Quote Num: </b></span>
+          <span class="value">
+            {{salesQuote.speedQuoteNumber ? salesQuote.speedQuoteNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Version Num: </b></span>
+          <span class="value">
+            {{salesQuote.versionNumber ? salesQuote.versionNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Open Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.openDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Ref <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesQuote.customerReference}}
+          </span>
+        </p>
+        <p><span class="label"><b>Valid For (Days) <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.validForDays ? salesQuote.validForDays : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Quote Exp Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.quoteExpireDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>SO Quote Status: </b></span>
+          <span class="value">{{salesQuote.status ? salesQuote.status :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Warning: </b></span>
+          <span class="value">
+            {{salesQuote.customerWarningMessage ? salesQuote.customerWarningMessage : '-'}}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p><span class="label"><b>Account Type <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.accountTypeName ? salesQuote.accountTypeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Name <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesQuote.customerName ? salesQuote.customerName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Contact <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesQuote.customerContactName ? salesQuote.customerContactName :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Cust Email: </b></span>
+          <span class="value">
+            {{salesQuote.customerContactEmail ? salesQuote.customerContactEmail : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Contract Ref: </b></span>
+          <span class="value">
+            {{salesQuote.contractReference ? salesQuote.contractReference :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Limit: </b></span>
+          <span class="value">
+            {{ salesQuote.creditLimit | twoDecimalGlobalNumberFormatPipe}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Terms: </b></span>
+          <span class="value">
+            {{salesQuote.creditTerms ? salesQuote.creditTerms : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Employee <span class="clr-red">*</span>:</b></span>
+          <span class="value">
+            {{salesQuote.employeeName ? salesQuote.employeeName : '-'}}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p><span class="label"><b>Restrict PMA: </b></span>
+          <span class="value">
+            <input type="checkbox" [(ngModel)]="salesQuote.restrictPMA" name="restrictPMA" id="restrictPMA"
+              [disabled]="true" />
+            <!-- {{salesQuote.restrictPMA == true ? 'Yes' : "No" }} -->
+          </span>
+        </p>
+        <p><span class="label"><b>Restrict DER: </b></span>
+          <span class="value">
+            <input type="checkbox" [(ngModel)]="salesQuote.restrictDER" name="restrictDER" id="restrictDER"
+              [disabled]="true" />
+            <!-- {{salesQuote.restrictDER == true ? 'Yes' : "No" }} -->
+          </span>
+        </p>
+        <p><span class="label"><b>Salesperson/Agent: </b></span>
+          <span class="value">{{salesQuote.salesPersonName ? salesQuote.salesPersonName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>CSR: </b></span>
+          <span class="value">
+            {{salesQuote.customerSeviceRepName ? salesQuote.customerSeviceRepName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Lead Source <span class="clr-red">*</span> : </b></span>
+          <span class="value">
+            {{salesQuote.leadSource ? salesQuote.leadSource : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Lead Source Ref <span class="clr-red">*</span> : </b></span>
+          <span class="value">
+            {{salesQuote.leadSourceReference ? salesQuote.leadSourceReference : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Probability (%) : </b></span>
+          <span class="value">
+            <!-- {{salesQuote.ProbabilityName ? (salesQuote.ProbabilityName | twoDecimalGlobalNumberFormatPipe) : '-'}} -->
+            {{salesQuote.probabilityName ? (salesQuote.probabilityName) : '-'}} 
+
+          </span>
+        </p>
+        <p><span class="label"><b>Memo: </b></span>
+          <span class="value">
+
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+            [matTooltip]="parsedText(salesQuote.memo)" [innerHTML]="salesQuote.memo"></p>
+          </span>
+        </p>
+        <p><span class="label"><b>Notes: </b></span>
+          <span class="value">
+
+            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+            [matTooltip]="parsedText(salesQuote.notes)" [innerHTML]="salesQuote.notes"></p>
+
+          </span>
+        </p>
+      </div>
+        <div style="padding-top: 10px"></div>
+        <div class="card">
+          <div class="card-header mgmt-card-header">
+            <h4 class="mgmt-label">Management Structure
+                <span class="clr-red">*</span></h4>
+        </div>
+          <!-- <div class="card-header">
+            <label style="text-align: center; width:100%">Management Structure <span class="clr-red">*</span></label>
+          </div> -->
+          <div style="padding:5px">
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="companyName" [(ngModel)]="managementStructure.level1"
+                disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="BUName" [(ngModel)]="managementStructure.level2" disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="divisionName" [(ngModel)]="managementStructure.level3"
+                disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="deptName" [(ngModel)]="managementStructure.level4" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+  <p-tabPanel header="Parts List">
+    <app-speed-quote-part-number [salesQuote]="salesQuote" [isViewMode]="true"></app-speed-quote-part-number>
+  </p-tabPanel>
+  <p-tabPanel header="Exclusions">
+    <app-speed-quote-exclusions [salesQuote]="salesQuote" [SQId]="id" [isViewMode]="true">
+    </app-speed-quote-exclusions>
+  </p-tabPanel>
+</p-tabView>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

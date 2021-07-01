@@ -98,9 +98,19 @@
   margin-left: 50px;
 }
 .item-master-search{
-  margin-top: 26px;
+  // margin-top: 26px;
+  margin-top:22px;
+  margin-left:29px;
+  font-weight:bold;
 }
-  
+.advanced-search-btn{
+  font-size: 12px;
+  padding-bottom: 6px !important;
+}  
+.margin-left-0{
+  margin-left:0px;
+}
+
   // @media (min-width: 768px) {
   //     .col-md-3 {
   //         max-width: 22%;

@@ -102,7 +102,7 @@
 
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" class="table-column-width" />
+          <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
         </colgroup>
       </ng-template>
 
@@ -146,7 +146,7 @@
                       " [ngModel]="inputValue" />
 
             <input type="text" *ngIf="col.field == 'verifiedBy'" name="verifiedBy" 
-            class="table-header-input-width" (change)="
+            class="table-header-input-width" (keyup)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
 
@@ -311,7 +311,7 @@
 
 
 <div id="publicationHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
@@ -322,7 +322,7 @@
       <div class="modal-body" *ngIf="auditHistory">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
           <div class="tableFixHead">
-            <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+            <table class="table table-bordered" style="white-space: nowrap;" *ngIf="auditHistory.length > 0; else noDatavailable">
               <!-- <div
               class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
               <div class="table-responsive">
@@ -331,7 +331,7 @@
               <thead>
                 <tr>
                   <th *ngFor="let x of auditCols">{{ x.header }}</th>
-                  <th>IsActive</th>
+                  <th>Is Active</th>
                   <th>Created Date</th>
                   <th>Created By</th>
                   <th>Updated Date</th>
@@ -446,7 +446,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                    {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
+                    {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
                   </td>
                   <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
@@ -457,9 +457,13 @@
                 </td>
                 <td>{{ audit.updatedBy }}</td>
                 <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td> -->
-                  <td>
-                    <p style="background-color: #fff !important;"> <input type="checkbox" name="isActive"
-                        [(ngModel)]=" audit.isActive" disabled></p>
+                <td class="text-center width-60">
+                  <span class="value">
+                    <label class="wauto"> 
+                      <input type="checkbox" name="isActive"
+                        [(ngModel)]=" audit.isActive" disabled>
+                      </label>
+                    </span>
                   </td>
                   <td
                     [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
@@ -473,9 +477,13 @@
                   <td
                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                     {{audit.updatedBy}}</td>
-                  <td>
-                    <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
-                        [(ngModel)]="audit.isDeleted" disabled></p>
+                    <td class="text-center width-60">
+                      <span class="value">
+                        <label class="wauto">
+                       <input type="checkbox" name="isDeleted"
+                        [(ngModel)]="audit.isDeleted" disabled>
+                      </label>
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -965,22 +973,35 @@
                 <div id="step3" class="panel-collapse collapse">
                   <div class="panel-body">
                     <div class="col-sm-12">
-                      <div class="shadow-Box">
-                        <p-table #aircraftTable class="rpo-table-cstm" [columns]="aircraftInformationCols"
-                          [value]="aircraftList" [paginator]="true" [rows]="aircraftPageSize" [first]="first"
-                          [rowsPerPageOptions]="[10, 20, 50, 100]">
+                      <!-- <div > -->
+                        <p-table #aircraftTable class="rpo-table-cstm rro-table-cstm"
+                         [columns]="aircraftInformationCols"
+                          [value]="aircraftList" [paginator]="true"
+                          selectionMode="multiple" [metaKeySelection]="true"
+                          [resizableColumns]="true"
+                         [reorderableColumns]="true" [scrollable]="true"
+                          scrollHeight="450px"
+                           [rows]="aircraftPageSize" [first]="first"
+                          [rowsPerPageOptions]="[10, 20, 50, 100]"
+                          (onPage)="aircraftPageIndexChange($event)">
+                          <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
+                            </colgroup>
+                        </ng-template>
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <!-- <th>ID</th> -->
-                              <th style="padding: 8px 5px !important;"  class="table-column-width" *ngFor="let col of columns"
+                              <th class="table-column-width" 
+                              pResizableColumn pReorderableColumn *ngFor="let col of columns"
                                 [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
-                              <th class="table-actions-column">Actions</th>
+                              <th class="table-actions-column" style="width:50px !important">Actions</th>
                             </tr>
                             <tr>
-                              <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                              <th *ngFor="let col of columns" class="table-column-width" [ngSwitch]="col.field">
                                 <input class="table-header-input-width" pInputText type="text" (input)="
                                     aircraftTable.filter(
                                       $event.target.value,
@@ -989,27 +1010,28 @@
                                     )
                                   " />
                               </th>
-                              <th class="table-actions-column">&nbsp;</th>
+                              <th class="table-actions-column" style="width:50px !important">&nbsp;</th>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-                            <tr>
+                            <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
-                              <td class="table-column-width" *ngFor="let col of columns">
+                              <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                 <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
                                   {{
                                   rowData[col.field] }}
-                                </span>
-                                <span *ngIf="col.field == 'dashNumber'">
+                              </span>
+                              <span *ngIf="col.field == 'dashNumber'">
                                   <span *ngIf="rowData[col.field] != 'Unknown'">{{ rowData[col.field]
-                                    }}</span>
-                                </span>
-                                <span *ngIf=" col.field == 'model'">
+                                      }}</span>
+                              </span>
+                              <span *ngIf=" col.field =='model'">
                                   <span *ngIf=" rowData[col.field] != 'Unknown'">{{ rowData[col.field]
-                                    }}</span>
-                                </span>
+                                      }}</span>
+                              </span>
+
                               </td>
-                              <td class="table-actions-column">
+                              <td class="table-actions-column" style="width:50px !important">
                                 <span data-toggle="modal" data-target="#airCraftView">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
@@ -1020,7 +1042,7 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="aircraftList.length == 0">
                             <tr>
-                              <td [attr.colspan]="3" class="no-records-msg no-records-cstm">
+                              <td [attr.colspan]="8" class="no-records-msg no-records-cstm">
                                 No records found
                               </td>
                             </tr>
@@ -1040,7 +1062,7 @@
                               " [disabled]="true" pInputText type="text" />
                           </ng-template>
                         </p-table>
-                      </div>
+                      <!-- </div> -->
                     </div>
                   </div>
                 </div>
@@ -1280,7 +1302,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRecord()">
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1407,7 +1429,7 @@
       </p>
 
       <p>
-        <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{
+        <span class="label"><b>ATA SubChapter: </b></span><span class="value">{{
           viewAtaData.ataSubChapterDescription }}</span>
       </p>
 

@@ -1,0 +1,418 @@
+<div class="clear"></div>
+<form id="" name="" action="#" method="post" onsubmit="return false;">
+    <div class="image">
+    <div style="padding: 0; margin: 0;">
+       
+            <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                <!-- <div class="logo-block">
+                    <img src="{{this.endPointURL + this.management.logo}}" width="130" /> </div>
+                <div class="clear"></div> -->
+                <!-- <hr /> -->
+                <div class="col-sm-12 invoice-border">
+                    <div class="very-first-block col-sm-8">
+                        <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                            <div class="col-sm-6" style="width:50%" *ngIf="this.salesOrderView.managementStructureHeaderData"><img class="logo"
+                                src="{{this.endPointURL + this.salesOrderView.managementStructureHeaderData.logo}}" /></div>
+                             <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                                <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label">Company :</label> -->
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.companyName : ''}}</label>
+                                </div>
+                            <!-- <br /> -->
+                            <!-- <div class="col-sm-12 first-block-name">
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Logo/Slogan :</label>
+                                <div *ngIf="this.salesOrderView.managementStructureHeaderData"
+                                    class="col-sm-4 first-block-label" style="width:30%; text-align: left"><img
+                                        class="logo"
+                                        src="{{this.endPointURL + this.salesOrderView.managementStructureHeaderData.logo}}"
+                                        height="30px" width="120px" />
+                                </div>
+                            </div> -->
+                            <!-- <br />
+                            <br /> -->
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Tagline :</label> -->
+                                <label class="col-sm-12 first-block-label"
+                                    disabled></label>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Address1 :</label> -->
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.address1 : ''}}</label>
+                            </div>
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Address2 :</label> -->
+                                <label class="col-sm-12 first-block-label" 
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.address2 : ''}}</label>
+                            </div>
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">City :</label> -->
+                                <label class="col-sm-12 first-block-label" 
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.city : ''}}</label>
+                            </div>
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">State/Prov :</label> -->
+                                <label class="col-sm-12 first-block-label" 
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.stateOrProvince : ''}}</label>
+                            </div>
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Zip :</label> -->
+                                <label class="col-sm-12 first-block-label" 
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.postalCode : ''}}</label>
+                            </div>
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Country :</label> -->
+                                <label class="col-sm-12 first-block-label" 
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.country : ''}}</label>
+                            </div>
+                            <div class="col-sm-12 first-block-name">
+                                <!-- <label class="col-sm-3 first-block-label" style="text-align: left">Phone :</label> -->
+                                <label class="col-sm-12 first-block-label" 
+                                    disabled>{{this.salesOrderView.managementStructureHeaderData ? this.salesOrderView.managementStructureHeaderData.phoneNumber : ''}}</label>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="second-block col-sm-4">
+                        <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">SALES ORDER FORM</h3>
+                        <div class="second-block-div">
+                            <label class="col-sm-6 second-block-label" style="width:100%">Sales Order Num</label>
+                            <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.salesOrder.salesOrderNumber}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-6 second-block-label" style="width:100%"> Sales Order Date</label>
+                            <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.salesOrder.openDate | date: 'MM/dd/yyyy'}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-6 second-block-label" style="width:100%">Quote Num</label>
+                            <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.salesOrder.salesOrderQuoteNumber}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-6 second-block-label" style="width:100%">Num of Items</label>
+                            <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{this.salesOrderView.noOfItems}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
+                            <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{userName}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-6 second-block-label" style="width:100%">Date Printed</label>
+                            <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{todayDate | date:'medium'}}</label>
+                        </div>
+                        <!-- <div class="second-block-div">
+                        <label class="col-sm-4 second-block-label">Page</label>
+                        <input type="text" placeholder="1 of 1" value="" disabled />
+                    </div> -->
+                    </div>
+                </div>
+                <div class="col-sm-12 first-block-sold-bottom">
+                    <div class="first-block-sold col-sm-6">
+                        <label class="label-margin"><b>Sold To:</b></label>
+                        <div class="first-block-sold-to">
+                           
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].name : ''}}</label>
+                            </div>
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].address1 : ''}}</label>
+                            </div>
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].address2 : ''}}</label>
+                            </div>
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].city : ''}}</label>
+                            </div>
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].stateOrProvince : ''}}</label>
+                            </div>
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].postalCode : ''}},{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].countryName : ''}}</label>
+                            </div>
+                            <!-- <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].countryName : ''}}</label>
+                            </div> -->
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrderView.soldToDetails ? this.salesOrderView.soldToDetails[0].email : ''}}</label>
+                            </div>
+                            <div class="sold-block-div">
+                                <label class="col-sm-12 first-block-label" disabled></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="first-block-ship col-sm-6">
+                        <label class="label-margin"><b> Ship To:</b></label>
+                        <div class="first-block-ship-to">
+                          
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToSiteName}}</label>
+                            </div>
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToAddress1}}</label>
+                            </div>
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToAddress2}}</label>
+                            </div>
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToAddress3}}</label>
+                            </div>
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToCity}}</label>
+                            </div>
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToState}}</label>
+                            </div>
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToPostalCode}},{{this.salesOrder.shipToCountry}}</label>
+                            </div>
+                            <!-- <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label"
+                                    disabled>{{this.salesOrder.shipToCountry}}</label>
+                            </div> -->
+                            <div class="ship-block-div">
+                                <label class="col-sm-12 first-block-label" disabled></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <!-- <hr /> -->
+                <div class="clear"></div>
+                <div class="col-sm-12">
+                    <table rules=none  class=" print-friendly parttable print-table table-margins">
+                        <thead>
+                            <tr>
+                                <th>PO/RO NUM</th>
+                                <th>Buyer</th>
+                                <th>Sales Person</th>
+                                <th>Credit Terms</th>
+                                <th>Cust VAT Num</th>
+                                <th>Shipping Terms</th>
+                                <th>Ship Via</th>
+                                <th>Ship Date</th>
+                                <th>AWB</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{this.salesOrderView.poroNum}}</td>
+                                <td>{{this.salesOrder.customerContactName}}</td>
+                                <td>{{this.salesOrderView.salesPerson}}</td>
+                                <td>{{this.salesOrderView.creditTerms}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{this.salesOrderView.shipVia}}</td>
+                                <td>{{this.salesOrderView.shipDate}}</td>
+                                <td>{{this.salesOrderView.awb}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <div class="clear"></div>
+                <hr /> -->
+                <div class="col-sm-12">
+                    <table rules=none class="parttable print-table print-friendly table-margins" style="margin-top:10px">
+                        <thead>
+                            <tr>
+                                <th>Item Num</th>
+                                <th colspan="3" rowspan="3">PN Information</th>
+                                <th>UOM</th>
+                                <th>Cond</th>
+                                <th>Back Ord</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container
+                                *ngFor="let child of this.salesOrderView.salesOrderListToPrint; let i = index;">
+                                <tr>
+                                    <td rowspan="3">{{i+1}}</td>
+                                    <td colspan="3" rowspan="3"> {{child.partNumber}} <br />
+                                        {{child.partDescription}}<br />
+                                        Serial Num: {{child.serialNumber}}</td>
+                                    <td> {{child.uom}}</td>
+                                    <td>{{child.conditionDescription}}</td>
+                                    <td> - </td>
+                                    <td style="text-align: right;">{{child.qtyRequested | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">{{child.grossSalePricePerUnit | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">
+                                        {{(child.qtyRequested * child.grossSalePricePerUnit) | number : '1.2-2'}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" rowspan="2" style="border:1px solid black">Notes: {{child.notes}}</td>
+                                </tr>
+                                <tr> </tr>
+                                <!-- <tr>
+                                    <td colspan="7"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr> -->
+                                <tr> </tr>
+                            </ng-container>
+                            <ng-container
+                                *ngFor="let child of this.salesOrderView.salesOrderMicsCharges; let i = index;">
+                                <tr>
+                                    <td>NA</td>
+                                    <td colspan="3"> MISC: {{child.chargeType}}
+                                    </td>
+                                    <td> - </td>
+                                    <td>{{child.cond}}</td>
+                                    <td> - </td>
+                                    <td style="text-align: right;">{{child.quantity | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">{{child.unitCost | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">{{child.billingAmount | number : '1.2-2'}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <td colspan="7">
+                                    </td>
+                                    <td style="border-bottom-color:white;border-right-color:white;" colspan="2">
+                                    </td>
+                                    <td style="border-right-color:white;"></td>
+                                </tr> -->
+                                <tr></tr>
+                            </ng-container>
+                            <tr>
+                                <td rowspan="7" colspan="7" style="border:1px solid black;">
+                                    Notes/Instructions: <span>{{getFormattedNotes(this.salesOrderView.soNotes)}}</span>
+                                </td>
+                                <td class="border-transparent" style="border-top:1px solid black !important" colspan="2">SUBTOTAL</td>
+                                <td style="text-align: right;border-top:1px solid black !important"> {{this.salesOrderView.subTotal | number : '1.2-2'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2">TAX RATE</td>
+                                <td style="text-align: right;"> {{this.salesOrderView.taxRate | number : '1.2-2'}}%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2">SALES TAX</td>
+                                <td style="text-align: right;"> {{this.salesOrderView.tax | number : '1.2-2'}} </td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2">OTHER TAX</td>
+                                <td style="text-align: right;"> 0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2">MISC CHARGES</td>
+                                <td style="text-align: right;">{{this.salesOrderView.miscCharges | number : '1.2-2'}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2">FREIGHT</td>
+                                <td style="text-align: right;"> {{this.salesOrderView.freight | number : '1.2-2'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2"><b>TOTAL</b></td>
+                                <td style="text-align: right;"> <b>{{this.salesOrderView.total | number : '1.2-2'}}</b>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2"></td>
+                                <td class="border-transparent" colspan="2">
+                                    <b>Payment by check Mail To:</b>
+                                </td>
+                                <td class="border-transparent" colspan="3">
+                                    <b>Payment by check Mail Wire:</b>
+                                </td>
+                                <td class="border-transparent" colspan="2">DEPOSIT</td>
+                                <td style="text-align: right;"> - </td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2"></td>
+                                <td colspan="2" rowspan="6">
+                                    <div style="width: 100%; height: 100%"
+                                        [innerHTML]="this.salesOrderView.mailToBankingInformation"></div>
+                                </td>
+                                <td colspan="3" rowspan="6">
+                                    <div style="width: 100%; height: 100%;"
+                                        [innerHTML]="this.salesOrderView.wireTransferBankingInformation"></div>
+                                </td>
+                                <td class="border-transparent" colspan="2">
+                                    <b>BALANCE DUE</b>
+                                </td>
+                                <td style="text-align: right;">
+                                    <b>{{this.salesOrderView.balanceDue | number : '1.2-2'}}</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border-transparent" colspan="2"></td>
+                                <!-- <td class="border-transparent" colspan="2">Box 145478</td> -->
+                                <!-- <td class="border-transparent" colspan="3">1454 New York Ave - Suites 1000
+                                </td> -->
+                                <td class="border-transparent" style="border-bottom:1px solid black" colspan="2">CURRENCY</td>
+                                <td style="text-align: right;">
+                                    <b>{{this.salesOrderView.currency}}</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <!-- <td class="border-transparent" colspan="2">Grapevine, TX 74584</td> -->
+                                <!-- <td class="border-transparent" colspan="3">New York, 12487, USA</td> -->
+                                <td class="border-transparent" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="3">Barcode
+                                    <br /><img src="{{this.salesOrderView.barcode}}" alt="barcode" />
+                                </td>
+                                <!-- <td class="border-transparent" colspan="2">USA</td>
+                                <td class="border-transparent" colspan="3">Account Name: PowerAeroSuites.com
+                                </td> -->
+                                <td class="border-transparent" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <!-- <td class="border-transparent" colspan="2"></td>
+                                <td class="border-transparent" colspan="3">Acct #: 1015487 ABA: 11187514
+                                </td> -->
+                                <td class="border-transparent" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <!-- <td colspan="2"></td>
+                                <td colspan="3">SWIFT: NYB45147</td> -->
+                                <td colspan="3"></td>
+                            </tr>
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
+               
+                <div class="clear"></div>
+                <!-- <hr /> -->
+                <div class="clear"></div>
+            </form>
+        </div>
+    </div>
+</form>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

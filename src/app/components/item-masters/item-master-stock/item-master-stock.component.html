@@ -149,7 +149,8 @@
                                         <p-autoComplete id="partNumber" 
                                                         title="Part Number"
                                                         [(ngModel)]="sourceItemMaster.partNumber"
-                                                        (onKeyUp)=eventHandler($event) 
+                                                        (onKeyUp)="eventHandler($event)"                                                        
+                                                        (onBlur)= "eventHandler($event)"
                                                         (onSelect)="partnmId($event)"
                                                         [suggestions]="partCollection" 
                                                         name="partNumber" required
@@ -484,7 +485,7 @@
                             <div class="col-md-9 general-info-columns-four">
                                 <div class="col-md-4" >
                                     <div class="form-group">
-                                        <div class="form-group m-t-10">
+                                        <div class="form-group m-t-10" style="margin-top:32px !important">
                                             <div class="checkbox-cstm">
                                                 <label>
                                                     <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -499,15 +500,15 @@
                                         </div>
                                         <div class="clear"></div>
 
-                                        <div class="inline-block display-flex spacing-label">
-                                            <label class="control-label">
+                                        
+                                            <label class="control-label spacing-label">
                                                 Manufacturer <strong class="clr-red">*</strong>
                                             </label>
-                                        </div>
+                                       
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allManufacturerInfo"  (ngModelChange)="getmemo()" filter="true" [(ngModel)]="sourceItemMaster.manufacturerId" name="manufacturerId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                         </div>
-                                        <div class="form-group m-t-10">
+                                        <div class="form-group m-t-10" style="margin-top:19px !important">
                                             <div class="checkbox-cstm">
                                                 <label>
                                                     <input type="checkbox"
@@ -520,53 +521,46 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label" style="margin-top:10px;">
                                                 Purchase UOM <strong class="clr-red">*</strong>
                                             </label>
 
-                                        </div>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="onChangeOfPurchaseUOM()" required></p-dropdown>
                                         </div>
                                         <!--/Purchase UOM-->
                                         <!--Stock UOM-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                      
+                                            <label class="control-label spacing-label">
                                                 Stock UOM
                                             </label>
-                                        </div>
+                                       
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allStockUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.stockUnitOfMeasureId" name="stockUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
                                         </div>
                                         <!--/Stock UOM-->
                                         <!--Consume UOM-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4" >
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label">
                                                 Consume UOM
                                             </label>
-                                        </div>
+                                        
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allConsumeUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.consumeUnitOfMeasureId" name="consumeUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
                                         </div>
                                         <!--/Consume UOM-->
                                         <!--Purchase Currency-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label">
                                                 Purchase Currency <strong class="clr-red">*</strong>
                                             </label>
-                                        </div>
                                         <div>
-                                            <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                            <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required (onChange)="SetSalesCurrency()"></p-dropdown>
                                         </div>
                                         <!--/Purchase Currency-->
                                         <div class="clear"></div>
                                         <!--Purchase Currency--> 
-                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
-                                            <label class="control-label">
+                                            <label class="control-label spacing-label">
                                                 Sales Currency <strong class="clr-red">*</strong>
                                             </label>
-                                        </div>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="salesCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.salesCurrencyId" name="salesCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                         </div>
@@ -587,22 +581,29 @@
 
                                         <label class="control-label">Lead Time (Days)</label>
                                         <div>
-                                            <input type="number" pKeyFilter="int"  (ngModelChange)="getmemo()" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;" class="form-control input-value"
+                                            <!-- <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15"
+                                             name="exportLength"  pInputText pKeyFilter="money" maxlength="10" (keyup)="btnChange()" 
+                                             (change)="onChangeExportSizeLength()" [(ngModel)]="exportInfo.exportSizeLength" />&nbsp; -->
+                                            <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getmemo()" 
+                                             onKeyPress="if(this.value.length==5) return false;" class="input-field-value text-right"
                                                    [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="sourceItemMaster.leadTimeDays">
                                         </div>
                                         <div class="clear"></div>
                                         <label class="control-label spacing-label">Stock Level</label>
                                         <div>
-                                            <input class="form-control input-value"  (ngModelChange)="getmemo()" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" type="number" pKeyFilter="int" [ngModelOptions]="{standalone: true}"
+                                            <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getmemo()" 
+                                            onKeyPress="if(this.value.length==5) return false;" class="input-field-value text-right"
+                                                  [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="sourceItemMaster.stockLevel">
                                         </div>
                                         <!--Reorder Point-->
                                         <label class="control-label spacing-label">Reorder Point</label>
                                         <div>
                                             <span data-toggle="tooltip" title="" data-original-title="calculation field">
-                                                <input class="form-control input-value"  (ngModelChange)="getmemo()" value="1245" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" type="number" pKeyFilter="int"
-                                                       [ngModelOptions]="{standalone: true}"
+                                                <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getmemo()" 
+                                             onKeyPress="if(this.value.length==10) return false;" class="input-field-value text-right"
+                                                   [ngModelOptions]="{standalone: true}"
                                                        [(ngModel)]="sourceItemMaster.reorderPoint">
                                             </span>
                                         </div>
@@ -613,12 +614,16 @@
                                         <!--Min Order Qty-->
                                         <label class="control-label spacing-label">Min Order Qty</label>
                                         <div>
-                                            <input class="form-control input-value"  (ngModelChange)="getmemo()" type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" [ngModelOptions]="{standalone: true}"
+                                            <input type="text" pInputText pKeyFilter="money"    (ngModelChange)="getmemo()" 
+                                             onKeyPress="if(this.value.length==10) return false;" class="input-field-value text-right"
+                                                   [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="sourceItemMaster.minimumOrderQuantity">
                                         </div>
                                         <label class="control-label spacing-label">Reorder Qty</label>
                                         <div>
-                                            <input class="form-control input-value"  (ngModelChange)="getmemo()" type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" [ngModelOptions]="{standalone: true}"
+                                            <input type="text" pInputText pKeyFilter="money"    (ngModelChange)="getmemo()" 
+                                             onKeyPress="if(this.value.length==10) return false;" class="input-field-value text-right"
+                                                   [ngModelOptions]="{standalone: true}"
                                             (keyup)=rqeventHandler($event)  [(ngModel)]="sourceItemMaster.reorderQuantiy">
                                         </div>
                                         <div *ngIf="disableReorderQuantiy" class="clr-red">Reorder Qty must be greater than Min Order Qty</div>
@@ -651,7 +656,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-right: 0px;" >
-                                    <span class="label">Memo </span>
+                                    <span class="label m-t-11">Memo </span>
                                     <div class="form-group">
                                    
                                     <div class="col-sm-11" style="margin-left:-4px !important">
@@ -661,12 +666,12 @@
                                             [matTooltip]="parsedText(sourceItemMaster.memo)"
                                             matTooltipPosition="above"  (ngModelChange)="getmemo()"
                                             class="form-control"
-                                            style="width:100%;line-height:1.5" 
+                                            style="width:106%;line-height:1.5" 
                                              class="text_editor_box" disabled></div>
                                             </div>
                                            
                                             </div>
-                                        <div class="col-sm-1" >
+                                        <div class="col-sm-1 pencil-left" >
                                           <span>
                                             <a class="btn nobg btn-edit-cstm"
                                             data-toggle="modal" data-target="#stock-memo"  
@@ -681,7 +686,7 @@
 
                                     <!-- Site-->
                                     <div class="inline-adjust inline-block display-flex">
-                                        <label class="control-label spacing-label">
+                                        <label class="control-label spacing-label m-t-11">
                                             Site <strong class="clr-red">*</strong>
                                         </label>
                                     </div>
@@ -770,29 +775,30 @@
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                   
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.overhaulHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.rpHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;" class="form-control w50 time control-bottom"
-                                                                           [ngModelOptions]="{standalone: true}" (ngModelChange)="getmemo()"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.testHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.mfgHours">
                                                                 </td>
             
@@ -823,29 +829,29 @@
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeOverhaulHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeRepairHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                    [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeBenchTest">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
-                                                                           [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
+                                                                    <input type="text" min="0" pKeyFilter="money" class="form-control w50 time control-bottom text-right" (ngModelChange)="getmemo()"
+                                                                           [ngModelOptions]="{standalone: true}"  onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeMfg">
                                                                 </td>
                                                             </tr>
@@ -1028,6 +1034,7 @@
                                         </div> -->
                                     </div>
                     </div>
+                   
                     <div class="next-button-align">
                         <button type="button" *ngIf="isItemMasterCreateGeneralInfoEditMode" class="btn btn-primary submit-btn pull-right" (click)="nextOrPreviousClick('Next')">
                             Next
@@ -1064,7 +1071,7 @@
                                  [value]="aircraftListDataValues"
                                  class="rpo-table-cstm rro-table-cstm lastcol-fix"
                                  [rows]="aircraftTablePageSize"
-                                 [columns]="colsaircraftLD"
+                                 [columns]="selectedAircraftLDColumns"
                                  [scrollable]="true"
                                  [paginator]="true"
                                  [pageLinks]="3"
@@ -1152,31 +1159,32 @@
                                                 </div>
                                         </div>                                        
                                     </div>
-                                    <div class="row advance-search-card"
+                                    <div class="row adv-row">
+                                    <div class="col-md-12"
                                     *ngIf="showAdvancedSearchCard == true">
-                                        <div class="col">
+                                        <div class="col-md-12">
                                                 <div class="col-md-1 col-md-1-cstm">
-                                                    <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                                    <label class="item-master-search">Search :</label>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group ">
-                                                        <label class="fs12">Aircraft </label>
+                                                        <label>Aircraft </label>
                                                         <p-multiSelect [options]="manufacturerData" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAircraftManfacturer" (onChange)="getAircraftModelByManfacturerType()"
                                                                         class="pub-multi"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <label class="fs12">
+                                                        <label>
                                                             Aircraft Model
                                                         </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel" [ngModelOptions]="{standalone: true}"
                                                                         class="pub-multi" (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <label class="fs12">DashNumber </label>
+                                                        <label>DashNumber </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="dashNumberList" [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{standalone: true}"
                                                                         class="pub-multi" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
@@ -1186,10 +1194,15 @@
                                                         <button style="margin-top:20%;" class="btn btn-primary mtop20" type="button" (click)="searchAircraftInformation()">
                                                             <i class="pi pi-search pi-search"></i>
                                                         </button>
+                                                        <button type="button" matTooltip="Search" style="margin-top:20%" matTooltipPosition="above" (click)="clearSerchData()"
+                                                        class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                          Clear
+                                                       </button>
                                                     </div>
                                                 </div>
                                                 <div class="clear"></div>
                                         </div>
+                                    </div>
                                     </div>
                             </ng-template>
 
@@ -1428,23 +1441,24 @@
                                     </div>
                                 </div>
                                 </div>
-                                <div class="row advance-search-card"
+                                <div class="row adv-row">
+                                <div class="col-md-12"
                                 *ngIf="showAdvancedSearchCardAtaChapter == true">
-                                    <div class="col">
+                                   <div class="col-md-12">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                            <label class="item-master-search">Search :</label>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-1">
                                             <div class="form-group ">
-                                                <label class="fs12">ATA Chapter</label>
+                                                <label>ATA Chapter</label>
                                                 <p-multiSelect [options]="LoadAtachapter"
                                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedATAchapter" (onChange)=" getSubChapterByATAChapter()"
                                                             [panelStyle]="{minWidth:'12em'}" class="pub-multi"></p-multiSelect>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-1">
                                             <div class="form-group">
-                                                <label class="fs12">
+                                                <label>
                                                     ATA Subchapter
                                                 </label>
                                                 <p-multiSelect [options]="atasubchapterValues" [ngModelOptions]="{standalone: true}"
@@ -1456,15 +1470,20 @@
                                                 <button type="button" class="btn btn-primary mtop20" (click)="searchATA()">
                                                     <i class="pi pi-search pi-search"></i>
                                                 </button>
+                                                <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
+                                                class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
+                                                  Clear
+                                               </button>
                                             </div>
                                         </div>
+                                    </div>
                                     </div>
                                 </div>  <!--/advance-search-card-->
                             </ng-template>
 
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width" />
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
@@ -1617,12 +1636,12 @@
                               </div>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 10px;">
+                        <div class="row">
                             <div class="col">
                             </div>
                             <div class="col-md-4" style="margin-right:15px">                              
                                 <div class="checkbox-cstm pull-right checkbox-align">
-                                    <label class="checkbox-label-align">
+                                    <label class="checkbox-label-align" style="margin-top:5px">
                                       <input type="checkbox" [(ngModel)]="currentDeleteStatus" name="cparent" (click)="getPSListOnDeleteStatus($event.target.checked)" />
                                       <span  class="cr"><i class="cr-icon pi pi-check"></i></span>
                                     Show Deleted List
@@ -1636,13 +1655,13 @@
                                 <div class="tableFixHead">  
                                 <table class="table table-bordered header-table-width" id="mpn-list-table">
                                     <thead>
-                                        <tr>
+                                        <tr class="tableFixHead">
                                             <th colspan="10">Unit Purchase Price</th>
                                             <th class="bg4"></th>
                                             <th colspan="13" class="bg1">Unit Sale Price</th>
                                             <th></th>
                                         </tr>
-                                        <tr>
+                                        <tr class="tableFixHead">
                                             <th colspan="10"></th>
                                             <th class="bg4"></th>
                                             <th colspan="5" class="bg2">Use Flat Sale Price</th>
@@ -1650,31 +1669,31 @@
                                             <th></th>
                                         </tr>
                                         <tr>
-                                            <th>Cond <span class="clr-red">*</span></th>
-                                            <th>UOM <span class="clr-red">*</span></th>
-                                            <th>Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">Cond <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">UOM <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">Currency <span class="clr-red">*</span></th>
                                             <th>FX Rate <span class="clr-red">*</span></th>
                                             <th>Vendor List Price</th>
                                             <th>Last List Price Date</th>
-                                            <th>Purchase Disc %</th>
+                                            <th style="z-index:1">Purchase Disc %</th>
                                             <th>Purchase Disc Amount</th>
                                             <th>Last Purchase Disc Date</th>
                                             <th>Unit Purchase Price</th>
-                                            <th class="bg4">Sale Price <span class="clr-red">*</span></th>
-                                            <th class="bg2">UOM <span class="clr-red">*</span></th>
-                                            <th class="bg2">Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg4">Sale Price <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg2">UOM <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg2">Currency <span class="clr-red">*</span></th>
                                             <th class="bg2">FX Rate <span class="clr-red">*</span></th>
                                             <th class="bg2">Flat Price Amount</th>
                                             <th class="bg2">Last Flat Price Date</th>
-                                            <th class="bg3">Mark % on List Price</th>
+                                            <th style="z-index:1" class="bg3">Mark % on List Price</th>
                                             <th class="bg3">Mark Up Amount</th>
                                             <th class="bg3">Last Mark Up Date</th>
                                             <th class="bg3">Base Sale Price</th>
-                                            <th class="bg3">Sale Disc %</th>
+                                            <th style="z-index:1" class="bg3">Sale Disc %</th>
                                             <th class="bg3">Sale Disc Amount</th>
                                             <th class="bg3">Last Sales Disc Date</th>
                                             <th class="bg3">Unit Sale Price</th>
-                                            <th>Actions</th>
+                                            <th style="z-index:1">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1715,11 +1734,11 @@
                                             </td>
                                             <!-- Purchase Disc % -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-50px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
+                                                <p-dropdown class="p-dropdown-50px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field);setcurrentdate('',field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
                                             </td>
                                             <!-- Purchase Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
+                                                <input type="text" style="background-color: #ccc ! important;" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
                                             </td>
                                             <!-- Last Purchase Disc Date -->
                                             <td>
@@ -1727,7 +1746,7 @@
                                             </td>
                                             <!-- Unit Purchase Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
+                                                <input type="text" style="background-color: #ccc ! important;" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
                                             </td>
                                             <!-- Sale Price -->
                                             <td>
@@ -1738,7 +1757,7 @@
                                                     name="SalePriceSelectId{{i}}" 
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
-                                                    (onChange)="onChangeSalePriceSelectId(field)" 
+                                                    (onChange)="onChangeSalePriceSelectId(field);setcurrentdate('',field)" 
                                                     appendTo="body" 
                                                     [disabled]="field.isEditable == false" 
                                                     required></p-dropdown>
@@ -1755,6 +1774,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == false" required>
                                                 </p-dropdown>
@@ -1768,6 +1788,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == true" required>
                                                 </p-dropdown>
@@ -1784,6 +1805,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == false" required>
                                                 </p-dropdown>
@@ -1797,6 +1819,7 @@
                                                     placeholder="-- Select --" 
                                                     [showClear]="true" 
                                                     appendTo="body" 
+                                                    (onChange)="setcurrentdate('',field)"
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     *ngIf="field.isNewItem == true" required>
                                                 </p-dropdown>
@@ -1809,7 +1832,7 @@
                                                         [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                         maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required 
                                                         [ngModel]="field.SP_FSP_FXRatePerc | fiveDecimalGlobalNumberFormatPipe"                                                                                                                 
-                                                        (ngModelChange)="onChangeFXRate(field.SP_FSP_FXRatePerc=$event,field)"
+                                                        (ngModelChange)="onChangeFXRate(field.SP_FSP_FXRatePerc=$event,field);setcurrentdate('',field)"
                                                         [ngModelOptions]="{updateOn:'blur'}" />
                                                         <!-- (ngModelChange)="field.SP_FSP_FXRatePerc=$event;" -->
                                             </td>
@@ -1821,7 +1844,7 @@
                                                         [disabled]="field.isEditable == false || field.SalePriceSelectId != 1"
                                                         name="SP_FSP_FlatPriceAmount{{i}}" 
                                                         [(ngModel)]="field.SP_FSP_FlatPriceAmount" 
-                                                        (change)="onChangeFlatPriceAmt(field)" />
+                                                        (change)="onChangeFlatPriceAmt(field);setcurrentdate('',field)" />
                                             </td>
                                             <!-- Last Flat Price Date -->
                                             <td>
@@ -1829,7 +1852,7 @@
                                                     class="input-field-value input-width-100-percent" 
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
                                                     [ngModel]="field.SP_FSP_LastFlatPriceDate | date:'yyyy-MM-dd'" 
-                                                    (ngModelChange)="field.SP_FSP_LastFlatPriceDate = $event" 
+                                                    (ngModelChange)="setcurrentdate(field.SP_FSP_LastFlatPriceDate = $event,field)" 
                                                     [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Mark % on List Price -->
@@ -1845,7 +1868,7 @@
                                                     [showClear]="true" 
                                                     appendTo="body" 
                                                     [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" 
-                                                    (onChange)="getPercentValueSPUsingPP(field);"></p-dropdown>
+                                                    (onChange)="getPercentValueSPUsingPP(field);setcurrentdate('',field)"></p-dropdown>
                                             </td>
                                             <!-- Mark Up Amount -->
                                             <td>
@@ -1857,7 +1880,7 @@
                                             <!-- Last Mark Up Date -->
                                             <td>
                                                 <input type="date" class="input-field-value input-width-100-percent" 
-                                                [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
+                                                [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="setcurrentdate(field.SP_CalSPByPP_LastMarkUpDate = $event,field)" [ngModelOptions]="{standalone: true}" />
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>
@@ -1867,19 +1890,19 @@
                                             </td>
                                             <!-- Sale Disc % -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.SP_CalSPByPP_SaleDiscPerc" name="SP_CalSPByPP_SaleDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" (onChange)="getPercentValueSPUsingPP(field);"></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.SP_CalSPByPP_SaleDiscPerc" name="SP_CalSPByPP_SaleDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" (onChange)="getPercentValueSPUsingPP(field);setcurrentdate('',field)"></p-dropdown>
                                             </td>
                                             <!-- Sale Disc Amount -->
                                             <td>
                                                 <input type="text" class="input-field-value text-right input-width-100-percent"
                                                 [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
-                                                 pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
+                                                 pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount"  disabled />
                                             </td>
                                             <!-- Last Sales Disc Date -->
                                             <td>
                                                 <input type="date" class="input-field-value input-width-100-percent"
-                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
-                                                 [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                 [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="setcurrentdate(field.SP_CalSPByPP_LastSalesDiscDate = $event,field)" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Sale Price -->
                                             <td>
@@ -1903,7 +1926,13 @@
                                             </td>
 
                                         </tr>
-
+                                        
+                                            <tr>
+                                                <td [attr.colspan]="11" *ngIf="fieldArray.length == 0" class="no-records-cstm no-records-msg">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                       
 
                                     </tbody>
                                 </table>
@@ -1921,7 +1950,7 @@
                 </div>
             </div>
             <!-- NHA, TLA, Alternate, Equivalency OPEN-->
-            <div class="ntae-section" [ngClass]="{hideTab : currentTab !== 'NhaTlaAlternateTab'}">
+            <div class="ntae-section tab-back-color" [ngClass]="{hideTab : currentTab !== 'NhaTlaAlternateTab'}">
                 <div class="clear"></div>
                 <div class="card" style="margin: 5px">
                     <div class="md-stepper-horizontal orange">
@@ -2001,7 +2030,7 @@
                                         </label>
 
                                         <input type="text" class="input-field-value" maxlength="5" required pInputText
-                                               [pattern]="'^[a-zA-Z0-9 \'\-]+$'" [(ngModel)]="exportInfo.exportECCN" name="ExportECCN" (keyup)="btnChange()" />
+                                               [(ngModel)]="exportInfo.exportECCN" name="ExportECCN" (keyup)="btnChange()" />
 
                                         <label class="control-label">
                                             ITAR Num
@@ -2052,10 +2081,11 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <div class="form-row m-t-10">
+                                        <div class="form-row">
                                             <div class="col-md-5">
                                                 <label>Weight</label>
-                                                <input type="number" class="input-field-value" pKeyFilter="num" pInputText maxlength="10" [(ngModel)]="exportInfo.exportWeight" name="exportWeight" id="exportWeight" title="Export Weight" (keyup)="btnChange()" />
+                                                
+                                                <input type="text" (change)="onChangeWeight()" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="10" [(ngModel)]="exportInfo.exportWeight" name="exportWeight" id="exportWeight" title="Export Weight" (keyup)="btnChange()" />
                                             </div>
                                             <div class="col-md-5">
                                                 <label>UOM <span class="clr-red" *ngIf="exportInfo.exportWeight">*</span>
@@ -2075,9 +2105,9 @@
                                             <div class="col-md-5">
                                                 <label class="control-label">Size (L,W,H) </label>
                                                 <span class="display-flex inline-block">
-                                                    <input type="number" name="exportLength" class="input-field-value" pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()" [(ngModel)]="exportInfo.exportSizeLength" />&nbsp;
-                                                    <input type="number" name="exportWidth" class="input-field-value" pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()" [(ngModel)]="exportInfo.exportSizeWidth" />&nbsp;
-                                                    <input type="number" name="exportHeight" class="input-field-value" pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()" [(ngModel)]="exportInfo.exportSizeHeight" />
+                                                    <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" name="exportLength"  pInputText pKeyFilter="money" maxlength="10" (keyup)="btnChange()" (change)="onChangeExportSizeLength()" [(ngModel)]="exportInfo.exportSizeLength" />&nbsp;
+                                                    <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" name="exportWidth"  pInputText pKeyFilter="money" maxlength="10" (keyup)="btnChange()" (change)="onChangeExportSizeWidth()" [(ngModel)]="exportInfo.exportSizeWidth" />&nbsp;
+                                                    <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" name="exportHeight"  pInputText pKeyFilter="money" maxlength="10" (keyup)="btnChange()" (change)="onChangeExportSizeHeight()" [(ngModel)]="exportInfo.exportSizeHeight" />
                                                 </span>
                                             </div>
                                             <div class="col-md-5">
@@ -2149,7 +2179,7 @@
                     <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
                     <form #aircraftAddForm="ngForm">
                         <div class="form-row mt-2">
-                            <div class="col-md-2">
+                            <div class="col-md-2" style="margin-top:2px">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm">Aircraft <span class="clr-red">*</span></label>
                                     <p-dropdown class="p-dropdown-100" name="selectedAircraftId" [options]="manufacturerData" filter="true"
@@ -3600,7 +3630,7 @@
                 <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width">
+					<table class="table table-bordered ">
                         <thead>
                             <tr>
                                 <th>Aircraft <span class="clr-red">*</span></th>
@@ -3612,10 +3642,10 @@
                                
                                 <th>Updated Date</th>
                                 <th>Updated By</th>
-                                <th>Is Deleted</th>
+                                <th>Is Delete</th>
                             </tr>
                         </thead>
-
+                      <tbody>
                         <tr *ngFor="let audit of aircraftauditHistory; let i = index">
                             <td [ngStyle]="{
                   color: getColorCodeForHistory(
@@ -3650,13 +3680,19 @@
                 }">
                                 <span *ngIf="audit.dashNumber != 'Unknown'">{{ audit.dashNumber }}</span>
                             </td>
-                            <td><p class="width-120 text-center">{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
+                            <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                             <td>{{ audit.createdBy }}</td>
-                            <td><p class="width-120 text-center">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
+                            <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                             <td>{{ audit.updatedBy }}</td>
                             
-                            <td class="background-white"><p class="width-100"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                            <td class="text-center width-60">
+                                <span class="value">
+                                  <label class="wauto">
+                                       <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                    </label>
+                                </span></td>
                         </tr>
+                        </tbody>
                     </table>
                     </div>
                 </div>
@@ -3689,7 +3725,7 @@
                 <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width"
+					<table class="table table-bordered"
                            *ngIf="ataChapterAuditHistory.length > 0; else noDatavailable">
                         <thead>
                         <tr>
@@ -3745,7 +3781,13 @@
                                 <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                                 <td>{{ audit.updatedBy }}</td>
                                
-                                <td class="background-white"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto">
+                                          <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                                        </label>
+                                    </span>
+                                        </td>
                             </tr>
                         </tbody>
                     </table>
@@ -4036,7 +4078,7 @@
                         <th colspan="1" class="bg4"> </th>
                         <th colspan="13" class="bg1">Unit Sale Price</th>
                         <th colspan="4"></th>
-                        <th colspan="1"></th>
+                        <th colspan="1" style="position:static"></th>
                     </tr>
                     <tr>
                         <th colspan="10"></th>
@@ -4044,7 +4086,7 @@
                         <th colspan="5" class="bg2">Use Flat Sale Price</th>
                         <th colspan="8" class="bg3">Calculate Unit Sale Price Using Puchase Price</th>
                         <th colspan="4"></th>
-                        <th colspan="1"></th>
+                        <th colspan="1" style="position:static"></th>
                     </tr>
                     <tr>
                         <th class="table-column-width">Cond <span class="clr-red">*</span></th>
@@ -4077,7 +4119,7 @@
                         <th class="table-column-width">Created By</th>
                         <th class="table-column-width">Updated Date</th>
                         <th class="table-column-width">Updated By</th>
-                        <th class="table-column-width">Is Deleted</th>
+                        <th class="table-column-width" style="position:static">Is Deleted</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -4263,7 +4305,13 @@
                         <td><p class="width-120"> {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                         <td><p class="width-100"> {{ audit.updatedBy }}</p></td>
 
-                        <td class="background-white"><p class="width-100"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        <td class="text-center width-60">
+                            <span class="value">
+                              <label class="wauto">
+                                   <input type="checkbox" name="isDeleted"
+                                    [(ngModel)]="audit.isDeleted" disabled>
+                                </label>
+                            </span></td>
                     </tr>
                 </tbody>
             </table>

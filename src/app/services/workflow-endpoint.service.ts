@@ -7,15 +7,12 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class WorkFlowEndpoint extends EndpointFactory {
-
-
 	private readonly _workflowActionsUrl: string =environment.baseUrl+ "/api/WorkflowAction/Get";
 	private readonly _workflowUrl: string =environment.baseUrl+ "/api/WorkflowAction/GetWorkFlows";
 	private readonly _workflowListUrl: string =environment.baseUrl+ "/api/WorkflowAction/GetAllWorkFlows";
@@ -171,6 +168,18 @@ export class WorkFlowEndpoint extends EndpointFactory {
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getemployeeExpertiseById(id));
 		});
+	}
+
+
+	workflowAuditHistoryList(id) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workflow/GetWorkFlowAuditList?wfwoId=${id}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.workflowAuditHistoryList(id));
+        });
+    }
+	getPublicationsByItemMasterIdDetails(id,idList,mcid){
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/Common/AutoCompleteDropdownsPublicationByItemMaster?searchText=&startWith=&ItemMasterId=${id}&count=0&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${mcid !== undefined ? mcid : 1}`, this.getRequestHeaders()).catch(error => {
+			return this.handleErrorCommon(error, () => this.getPublicationsByItemMasterIdDetails(id,idList,mcid));
+		  });
 	}
 
 }

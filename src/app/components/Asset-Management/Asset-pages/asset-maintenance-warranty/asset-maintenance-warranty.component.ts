@@ -274,7 +274,7 @@ export class AssetMaintenanceWarrantyComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonservice.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allGlInfo = res.map(x => {
                         return {
                             glAccountId:x.value,
@@ -290,7 +290,7 @@ export class AssetMaintenanceWarrantyComponent implements OnInit {
     arrayVendlsit:any=[];
     private vendorList(value) {
             this.arrayVendlsit.push(); 
-        this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join()).subscribe(res => {
+        this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             
             this.allVendorInfo = res.map(x => {
                 return {

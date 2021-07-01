@@ -1,0 +1,376 @@
+<div >
+    <!-- class="form-group" -->
+  <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" class="padding-bottom-8">
+      <button *ngIf="isViewMode == false" type="button" class="btn btn-primary" (click)="addPartNumber()"
+          [disabled]="salesQuote.isApproved">
+          Add PN
+      </button>
+      <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+            style="min-height: 10px !important;">
+            <div class="tableFixHead" style="overflow-x:scroll">
+                <table class="table table-bordered parts-list-header" id="soq-table" style="white-space: nowrap;">
+                    <!-- <tr class="header-table-width" style="font-size: 10px"> -->
+                        <thead>
+                    <tr class="font-size-10">
+                        <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'width': summaryColumn.width}">
+                            <!-- <ng-container *ngIf="summaryColumn.field == 'quantityToBeQuoted'
+                                     || summaryColumn.field == 'customerRef'
+                                     || summaryColumn.field == 'quantityRequested'">
+                                {{ summaryColumn.header }}
+                            </ng-container>
+                            <ng-container *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
+                                && summaryColumn.field != 'customerRef'
+                                    && summaryColumn.field != 'quantityRequested'">
+                                {{ summaryColumn.header }}
+                            </ng-container> -->
+                            <ng-container>
+                              {{ summaryColumn.header }}
+                            </ng-container>
+                           
+                        </th>
+                        <!-- <th colspan="11"></th> -->
+                        <th *ngIf="isViewMode == false" class="table-column-width sales-part-action-column">Actions
+                        </th>
+                    </tr>
+                    </thead>
+                    <ng-container *ngIf="summaryParts.length > 0">
+                        <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
+                            <tbody>
+                                <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                                    <td *ngFor="let summaryColumn of summaryColumns;let i=index;" class="summary-column"
+                                        pReorderableRowHandle>
+                                        <!-- <span *ngIf="summaryColumn.field == 'count'">
+                                            Item {{ rowIndex + 1 }}
+                                        </span> -->
+                                        <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
+                                            {{summaryPart[summaryColumn.field] }}
+                                        </span> -->
+                                        <!-- <span class="float-right" *ngIf="summaryColumn.field != 'partNumber' && summaryColumn.field != 'conditionDescription' && summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span> -->
+                                        <span *ngIf="summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes' && summaryColumn.field != 'quantityRequested' && summaryColumn.field != 'tat' && summaryColumn.field != 'salesPriceExtended' && summaryColumn.field != 'unitCost' && summaryColumn.field != 'unitCostExtended' && summaryColumn.field != 'marginAmountExtended' && summaryColumn.field != 'marginPercentageExtended' && summaryColumn.field != 'partNumber'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span class="float-right" *ngIf="summaryColumn.field == 'salesPriceExtended' || summaryColumn.field == 'unitCost' || summaryColumn.field == 'unitCostExtended' || summaryColumn.field == 'marginAmountExtended' || summaryColumn.field == 'marginPercentageExtended'">
+                                            {{summaryPart[summaryColumn.field]  | twoDecimalGlobalNumberFormatPipe}}
+                                        </span>
+                                        <span *ngIf="summaryColumn.field == 'partNumber'">
+                                            <span *ngIf="summaryPart['isPma'] == true">
+                                                {{summaryPart[summaryColumn.field]}}
+                                                <i class=""
+                                                matTooltip="{{summaryPart['oemPN']}}" matTooltipPosition="above"
+                                                >(*)</i>
+                                            </span>
+                                            <span *ngIf="summaryPart['isPma'] == false">
+                                                {{summaryPart[summaryColumn.field]}}
+                                            </span>
+                                        </span>
+                                        <!-- <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                        data-toggle="modal" data-target="#textarea-popupNotes"
+                                        matTooltip="Notes" matTooltipPosition="above"
+                                        (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i> -->
+                                        <ng-container *ngIf="summaryColumn.field == 'unitSalePrice'">
+                                        
+                                          <!-- <input class="table-header-input-width text-right" name="unitSalePricetext{{i}}"
+                                          [disabled]="summaryPart['isEditPart'] == true"
+                                          [ngModel]="summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe"
+                                          (blur)="onChangeUnitSalesPrice(rowIndex,$event)" 
+                                          pInputText type="text"/> -->
+
+                                          <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
+                                          (blur)="onChangeUnitSalesPrice(rowIndex,summaryPart[summaryColumn.field])" [ngModel]="summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe"
+                                          [disabled]="summaryPart['isEditPart'] == true" value="{{ summaryPart[summaryColumn.field] }}" name="unitSalePricetext{{i}}"
+                                          [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="summaryPart[summaryColumn.field]=formatStringToNumberGlobal($event); enablesave();" />
+                                        
+                                        </ng-container>
+                                        <ng-container style="width: 50px;" *ngIf="summaryColumn.field == 'quantityRequested'">
+                                            <input class="min-width text-right" name="quantityRequested{{i}}"
+                                            [disabled]="summaryPart['isEditPart'] == true"
+                                            [ngModel]="summaryPart[summaryColumn.field]"
+                                            (ngModelChange)="onChangeQuantity(rowIndex,$event)" pInputText type="text"/>
+                                        </ng-container>
+                                        <ng-container *ngIf="summaryColumn.field == 'tat'">
+                                            <input style="width: 50px;" class="table-header-input-width text-right" name="tat{{i}}"
+                                            (ngModelChange)="onChangetat(rowIndex,$event); enablesave();" [disabled]="summaryPart['isEditPart'] == true"
+                                            [ngModel]="summaryPart[summaryColumn.field]"
+                                            pInputText type="text"/>
+                                          </ng-container>
+                                        <ng-container *ngIf="summaryColumn.field == 'notes'">
+                                            <!-- <td class="width-120" *ngIf="isViewMode == false"> -->
+                                            <div  *ngIf="isViewMode == false"class="form-group notes-popup-cstm mat_emo"
+                                            style="margin-bottom: 0;min-width:200px !important">
+                                            <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box_exclusion"></div>
+                                            <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                                data-toggle="modal" data-target="#textarea-popupNotes"
+                                                matTooltip="Notes" matTooltipPosition="above"
+                                                (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i>
+                                            </div>
+
+                                            <div *ngIf="isViewMode == true" class="form-group notes-popup-cstm mat_emo"
+                                            style="width: 120px; margin-bottom: 0;">
+                                            <div [innerHTML]="summaryPart.notes" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(summaryPart.notes)" class="text_editor_box"></div>
+                                            <!-- <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                                data-toggle="modal" data-target="#textarea-popupNotes"
+                                                matTooltip="Notes" matTooltipPosition="above"
+                                                (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i> -->
+                                            </div>
+                                            <!-- </td> -->
+                                        </ng-container>
+                                    </td>
+                                    <!-- <td colspan="11"></td> -->
+                                    <td *ngIf="isViewMode == false" class="center speed-actions-width">
+                                        <span>
+                                            <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                                [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg btn-pluspo-cstm" (click)="createExclusionPN(summaryPart)"
+                                                matTooltip="Add Excls" matTooltipPosition="above">
+                                                <i class="fa fa-plus"> </i>
+                                            </a>
+                                        </span>
+                                        <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                            [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg view-part-eye" (click)="editPart(rowIndex)"
+                                            matTooltip="Edit PN" matTooltipPosition="above">
+                                            <i class="fa fa-pencil" style="color:#337ab7 !important"></i>
+                                        </a>
+                                        <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                            [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}" class="btn nobg"
+                                            (click)="openPartDelete(deleteContent,summaryPart)"
+                                            matTooltip="Remove" matTooltipPosition="above">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                        <span data-toggle="modal" data-target="#speedQuotePartHistory">
+                                            <a [class.disabled]="(!summaryPart['speedQuotePartId'] > 0)"
+                                                [ngClass]="{'btn_disabled': (!summaryPart['speedQuotePartId'] > 0)}"
+                                                class="btn nobg btn-hist-cstm view-part-eye"
+                                                (click)="getAuditHistoryById(summaryPart)" matTooltip="History"
+                                                matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                              </tbody>
+                            </ng-container>
+                          </ng-container>
+                          <ng-container *ngIf="summaryParts.length == 0">
+                            <tbody>
+                                <tr>
+                                    <td colspan="36" class="no-records-cstm no-records-msg" style="margin-left:-15%">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-container>
+                        </table>
+                      </div>
+                    </div>
+  </div>
+</div>
+<div *ngIf="isViewMode == false" class="view-mode-div">
+  <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary"
+      (click)="approve()">
+      <span>Update</span>
+  </button>
+  <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary"
+      (click)="approve()">
+      <span>Save</span>
+  </button>
+</div>
+<div class="modal fade" id="textarea-popupNotes" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Notes</h4>
+            </div>
+            <div class="modal-body">
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required>
+                </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+                        (click)="onSaveTextAreaInfo(textAreaInfo)">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>
+<ng-template #addPart let-c="close" let-d="dismiss">
+  <!-- <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
+        [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
+        (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
+  </app-add-sales-part-number> -->
+  <app-add-speed-quote-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
+      [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow" [clearData]="clearData"
+      (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SQ'">
+  </app-add-speed-quote-part-number>
+</ng-template>
+<ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
+  <app-speed-quote-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+      (close)="onCloseMargin($event)" (searchAnotherPN)="onSearchAnotherPN($event)"></app-speed-quote-margin>
+</ng-template>
+<!-- <ng-container tabindex="-1">
+  <app-speed-quote-exclusions></app-speed-quote-exclusions>
+</ng-container> -->
+<ng-template #deleteContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Remove?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onClosePartDelete()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <h6 class="modal-body">Part Number : {{part.partNumber}}</h6> -->
+        <strong>
+            Part Number :
+            <span class="new-label">{{part.partNumber}}</span>
+          </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deletePart()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="onClosePartDelete()">No</button>
+    </div>
+</ng-template>
+<div id="speedQuotePartHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
+                <h4 class="modal-title">History of Speed Quote Part</h4>
+            </div>
+            <div class="modal-body" *ngIf="auditHistory">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                    <div class="tableFixHead">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Cond</th>
+                                <th>Qty</th>
+                                <th>Manufacturer</th>
+                                <th>Item Type</th>
+                                <th>Unit Price</th>
+                                <th>Extended Cost</th>
+                                <th>Margin Amt</th>
+                                <th>Margin %</th>
+                                <th>Notes</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <!--*ngIf="auditHistory.length> 0"-->
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
+                                    {{audit.partNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+                                    {{audit.partDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'conditionDescription', audit.conditionDescription)  ? 'black' : 'red'  }">
+                                    {{audit.conditionDescription}}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'quantityRequested', audit.quantityRequested)  ? 'black' : 'red'  }">
+                                    {{audit.quantityRequested}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'manufacturer', audit.manufacturer)  ? 'black' : 'red'  }">
+                                    {{audit.manufacturer}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'type', audit.type)  ? 'black' : 'red'  }">
+                                    {{audit.type}}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'unitSalePrice', audit.unitSalePrice)  ? 'black' : 'red'  }">
+                                    {{audit.unitSalePrice | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'unitCostExtended', audit.unitCostExtended)  ? 'black' : 'red'  }">
+                                    {{audit.unitCostExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'marginAmount', audit.marginAmount)  ? 'black' : 'red'  }">
+                                    {{audit.marginAmount | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'marginPercentage', audit.marginPercentage)  ? 'black' : 'red'  }">
+                                    {{audit.marginPercentage}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">
+                                    <!-- {{audit.notes}} -->
+                                    <p style="margin:0px;padding:0px !important" class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                     [matTooltip]="parsedText(audit.notes)" [innerHTML]="audit.notes"></p></td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                    {{audit.createdBy}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                    {{audit.updatedBy}}</td>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                        <label class="wauto">
+                                     <input type="checkbox" name="isDeleted"
+                                            [(ngModel)]="audit.isDeleted" disabled>
+                                            </label>
+                                            </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <!-- <img src="../../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;"> -->
+                            <h4 class="no-history-found-msg">No History Found </h4>
+                        </div>
+                    </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

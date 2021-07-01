@@ -164,11 +164,11 @@
       <div class="table-responsive default-bg clear">
         <div class="col-sm-4">
           <h5 class="po-head">Ship To</h5>
-          <p><span class="label"><b>User Type: </b></span><span
+          <p><span class="label"><b>User Type: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.shipToUserType ? salesOrder.shipToUserType : '-'}}</span></p>
-          <p><span class="label"><b>User: </b></span><span
+          <p><span class="label"><b>User: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.shipToUser ? salesOrder.shipToUser : '-'}}</span></p>
-          <p><span class="label"><b>Site Name: </b></span><span
+          <p><span class="label"><b>Site Name: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.shipToSiteName ? salesOrder.shipToSiteName : '-'}}</span></p>
           <p><span class="label"><b>Address1: </b></span><span
               class="value">{{salesOrder.shipToAddress1 ? salesOrder.shipToAddress1 : '-'}}</span></p>
@@ -184,12 +184,12 @@
               class="value">{{salesOrder.shipToPostalCode ? salesOrder.shipToPostalCode : '-'}}</span></p>
           <p><span class="label"><b>Country: </b></span><span
               class="value">{{salesOrder.shipToCountry ? salesOrder.shipToCountry : '-'}}</span></p>
-          <p><span class="label"><b>Contact Name: </b></span><span
+          <p><span class="label"><b>Contact Name: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.shipToContactName ? salesOrder.shipToContactName : '-'}}</span></p>
           <p><span class="label"><b>Memo: </b></span><span class="value">
               <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.shipToMemo"></p>
             </span></p>
-          <p><span class="label"><b>Ship Via: </b></span><span
+          <p><span class="label"><b>Ship Via: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.shipViaName ? salesOrder.shipViaName : '-'}}</span></p>
           <p><span class="label"><b>Shipping Cost: </b></span><span
               class="value">{{salesOrder.shippingCost ? salesOrder.shippingCost : '-'}}</span></p>
@@ -201,11 +201,11 @@
         </div>
         <div class="col-sm-4">
           <h5 class="po-head">Bill To</h5>
-          <p><span class="label"><b>User Type: </b></span><span
+          <p><span class="label"><b>User Type: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.billToUserType ? salesOrder.billToUserType : '-'}}</span></p>
-          <p><span class="label"><b>User: </b></span><span
+          <p><span class="label"><b>User: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.billToUser ? salesOrder.billToUser : '-'}}</span></p>
-          <p><span class="label"><b>Site Name: </b></span><span
+          <p><span class="label"><b>Site Name: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.billToSiteName ? salesOrder.billToSiteName : '-'}}</span></p>
           <p><span class="label"><b>Address1: </b></span><span
               class="value">{{salesOrder.billToAddress1 ? salesOrder.billToAddress1 : '-'}}</span></p>
@@ -221,7 +221,7 @@
               class="value">{{salesOrder.billToPostalCode ? salesOrder.billToPostalCode : '-'}}</span></p>
           <p><span class="label"><b>Country: </b></span><span
               class="value">{{salesOrder.billToCountry ? salesOrder.billToCountry : '-'}}</span></p>
-          <p><span class="label"><b>Contact Name: </b></span><span
+          <p><span class="label"><b>Contact Name: </b><span class="clr-red">*</span></span><span
               class="value">{{salesOrder.billToContactName ? salesOrder.billToContactName : '-'}}</span></p>
           <p><span class="label"><b>Memo: </b></span><span class="value">
               <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.billToMemo"></p>
@@ -245,19 +245,25 @@
         [isQuote]="false">
       </app-sales-order-charges>
     </p-tabPanel>
+    <p-tabPanel header="Pick Ticket">
+      <app-sales-order-pick-tickets [isView]="true"></app-sales-order-pick-tickets>
+    </p-tabPanel>
     <p-tabPanel header="Shipping">
       <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
-        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [managementStructureId]="managementStructureId">
+        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [isView]="true"
+        [managementStructureId]="managementStructureId">
       </app-sales-order-shipping>
     </p-tabPanel>
     <p-tabPanel header="Billing/Invoicing">
-      <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId" [customerDetails]="customerDetails"
-        [salesOrder]="salesOrder">
+      <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
+        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [isView]="true">
       </app-sales-order-billing>
     </p-tabPanel>
     <p-tabPanel header="Document">
-      <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">
-      </app-sales-order-document>
+      <!-- <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">
+      </app-sales-order-document> -->
+      <app-common-documents [moduleName]="moduleName" [referenceId]="salesQuote.salesOrderId" [isViewMode]="true" [offLineUpload]="true">
+      </app-common-documents>
     </p-tabPanel>
     <p-tabPanel header="Analysis">
       <app-sales-order-analysis></app-sales-order-analysis>

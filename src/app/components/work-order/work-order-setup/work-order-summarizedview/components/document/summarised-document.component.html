@@ -3,8 +3,9 @@
         {{(isOpenedAll)?'Summary':'Detail View'}}
     </button>
 </div>
-<div style="margin-top: 15px;">
-<p-treeTable [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
+<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-top: 15px;">
+    <div class="tableFixHead">
+<p-treeTable class="table header-table-width" [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
     <ng-template pTemplate="header">
         <tr>
             <th class="document-detail-header">PartNumber</th>
@@ -36,6 +37,7 @@
         </tr>
     </ng-template>
 </p-treeTable>
+</div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

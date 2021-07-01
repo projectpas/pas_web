@@ -61,44 +61,38 @@ export class WorkOrderSettingsListComponent {
     responseDataForWorkFlow: Object;
     noDatavailable: any;
     breadcrumbs: MenuItem[];
+    public allWorkFlows: any[] = [];
+    publicationTypes: any[];
+    isSpinnerVisible: boolean = true;
+
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private receivingCustomerWorkOrderService: WorkOrderSettingsService,
         private authService: AuthService,
         private modalService: NgbModal,
         private alertService: AlertService,
- 
-       // private conditionService: ConditionService,
-       
     ) {
         this.workFlowGridSource = new MatTableDataSource();
         this.workOrderService = null;
-    
     }
 
     ngOnInit() {
         this.getAllWorkflows();
-      
-
             this.breadcrumbs = [
                 { label: 'Work Order Settings' },
                 { label: ' Work Order Settings List' },
             ];
-        
     }
-
-    public allWorkFlows: any[] = [];
+    
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
+
     private getAllWorkflows() {
-        this.alertService.startLoadingMessage();
+        this.isSpinnerVisible = true;
         this.receivingCustomerWorkOrderService.getAllWorkFlows(this.currentUserMasterCompanyId).subscribe(
-           
             results => this.onWorkflowLoadSuccessful(results[0]),
-           
-            error => { }
-           
+            error => {this.isSpinnerVisible = false; }
         );
 
         this.gridColumns = [
@@ -106,21 +100,12 @@ export class WorkOrderSettingsListComponent {
             { field: 'prefix', header: 'Prefix' },
             { field: 'sufix', header: 'Suffix' },
             { field: 'startCode', header: 'Start code' },
-            // { field: 'recivingListDefaultRB', header: 'RecivingListDefaultRB' },
             { field: 'woListDefault', header: 'WO List View' },
             { field: 'woListStatusDefault', header: 'WO List Status' },
-            // { field: 'defaultStatus', header: 'Status' },
             { field: 'defaultConditon', header: 'Default Condition' },
-            // { field: 'defaultSite', header: 'Default Site' },
-            // { field: 'defaultWarehouse', header: 'Default Wearhouse' },
-            // { field: 'defaultLocation', header: 'Default Location' },
-            // { field: 'defaultShelf', header: ' Default Shelf' },
             { field: 'defaultStageCode', header: 'Default Stage Code' },
             { field: 'defaultScope', header: 'Default Scope' },
-            // { field: 'woListDefaultRB', header: ' WOListDefaultRB' },
             { field: 'defaultPriority', header: 'Priority' },
-            { field: 'laborHoursMedthodId', header: 'Labor Hours Method' },
-            //
         ];
 
         this.selectedGridColumns = this.gridColumns;
@@ -130,13 +115,12 @@ export class WorkOrderSettingsListComponent {
         this.workFlowGridSource.filter = filterValue;
     }
 
-
     private refresh() {
         this.applyFilter(this.workFlowGridSource.filter);
     }
 
     private onWorkflowLoadSuccessful(allWorkFlows: any[]) {
-        this.alertService.stopLoadingMessage();
+        this.isSpinnerVisible = false;
         this.workFlowGridSource.data = allWorkFlows;
         const data=allWorkFlows
         // data.forEach(element => {
@@ -157,16 +141,16 @@ export class WorkOrderSettingsListComponent {
     }
 
     edit(rowData) {
-       // alert(JSON.stringify((rowData)));
         const {workOrderSettingId } = rowData;
         this.route.navigateByUrl(`workordersettingsmodule/workordersettings/app-create-work-order-settings/edit/${workOrderSettingId}`);
     }
+
     getAuditHistoryById(rowData) {
         this.receivingCustomerWorkOrderService.getAudit(rowData.workOrderSettingId).subscribe(res => {
-            console.log(res);
             this.auditHistory = res;
         })
     }
+
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
         const dataLength = data.length;
@@ -178,7 +162,6 @@ export class WorkOrderSettingsListComponent {
             }
         }
     }
-
 
     AddPage() {
         this.route.navigateByUrl('/workordersettingsmodule/workordersettings/app-create-work-order-settings');
@@ -209,6 +192,6 @@ export class WorkOrderSettingsListComponent {
             task.selected = false;
         }
     }
-    publicationTypes: any[];
+    
    
 }

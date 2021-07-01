@@ -1,0 +1,372 @@
+<div class="modal-header">
+  <!-- <h4 class="modal-title" id="modal-basic-title"></h4> -->
+  <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+</div>
+<div class="modal-body" *ngIf="objSalesOrderPickTickets" id="soPickTicket" >
+  <ng-container *ngFor="let pickTicket of objSalesOrderPickTickets; let i = index;">
+      <form id="" name="" action="#" method="post" onsubmit="return false;">
+          <div class="image">
+              <div style="padding: 0; margin: 0;">
+                  <div>
+                      <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                          <!-- <div class="pick-ticket-header" style="margin-bottom: 15px;">
+                              <h4>SALES ORDER PICK TICKET</h4>
+                          </div> -->
+                          <div class="col-sm-12 invoice-border">
+                              <div class="col-sm-8 very-first-block">
+                                  <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                                      <div class="col-sm-6" style="width:50%"><img class="logo"
+                                          src="{{this.endPointURL + pickTicket.managementStructureHeaderData.logo}}"/></div>
+                                          <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                                          <div class="col-sm-12 first-block-name">
+                                      <!-- <label class="col-sm-3 first-block-label"><b>Tagline :</b></label> -->
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{pickTicket.managementStructureHeaderData.companyName}}</label>
+                                  </div>
+                                
+                                  <div class="col-sm-12 first-block-name">
+                                      <!-- <label class="col-sm-3 first-block-label"><b>Address-1 :</b></label> -->
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{pickTicket.managementStructureHeaderData.address1}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <!-- <label class="col-sm-3 first-block-label"><b>Address-2 :</b></label> -->
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{pickTicket.managementStructureHeaderData.address2}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <!-- <label class="col-sm-3 first-block-label"><b>City :</b></label> -->
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{pickTicket.managementStructureHeaderData.city}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <!-- <label class="col-sm-3 first-block-label"><b>State :</b></label> -->
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{pickTicket.managementStructureHeaderData.stateOrProvince}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <!-- <label class="col-sm-3 first-block-label"><b>Postal Code :</b></label> -->
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{pickTicket.managementStructureHeaderData.postalCode}}</label>
+                                  </div>
+                              </div>
+                              </div>
+                          </div>
+                          <div class="col-sm-4 second-block border-height" >
+                              <img src="{{pickTicket.soPickTicketViewModel.soPickTicketBarcode}}" style="width: 100px;float:right;margin-top:8px" alt="barcode" width="98%" />
+                              <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">SO Pick Ticket</h3>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%" style="width:100%"><b>Pick Ticket Num</b></label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" 
+                                      disabled>{{pickTicket.soPickTicketViewModel.soPickTicketNumber}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%"> Date & time</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{pickTicket.soPickTicketViewModel.ptCreatedDate | date:'medium' }}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Exch SO Num</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" 
+                                      disabled>{{pickTicket.soPickTicketViewModel.exchangeSalesOrderNumber}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Ship Via</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" 
+                                      disabled>{{pickTicket.soPickTicketViewModel.shipViaName}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Date/Time Printed</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{todayDate| date:'medium' }}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Page</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" disabled>1 of
+                                      1</label>
+                              </div>
+                          </div>
+                          </div>
+                          <div class="col-sm-12 first-block-sold-bottom">
+                              <div class="first-block-sold col-sm-6">
+                                  <label class="label-margin"><b>Sold To:</b></label>
+                                  <div class="first-block-sold-to">
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.customerName}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Address 1 :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.custToAddress1}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Address 2 :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.custToAddress2}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>City :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.custToCity}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>State :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.custToState}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.custToState}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.custToCountry}}</label>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="first-block-ship col-sm-6">
+                                  <label class="label-margin"><b> Ship To:</b></label>
+                                  <div class="first-block-ship-to">
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Name :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToContactName}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Address 1 :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToAddress1}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Address 2 :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToAddress2}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>City :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToCity}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>State :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToState}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Postal Code :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToPostalCode}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-5 first-block-label"><b>Country :</b></label> -->
+                                          <label class="col-sm-12 first-block-label" disabled>
+                                              {{pickTicket.soPickTicketViewModel.shipToCountry}}</label>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="clear"></div>
+                          <!-- <hr /> -->
+                          <div class="clear"></div>
+                          <div class="col-sm-12">
+                              <table rules=none class="parttable table-margins">
+                                  <thead>
+                                      <tr>
+                                          <th>Line Num</th>
+                                          <th>PN Information</th>
+                                          <th style="text-align:left">Cust PO:</th>
+                                          <th style="text-align:left">Consign:</th>
+                                          <th style="text-align:left">Lot Num:</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <ng-container
+                                          *ngFor="let part of pickTicket.soPickTicketPartViewModel let i=index">
+                                          <tr>
+                                              <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                  <table class="border-none">
+                                                      <tr>
+                                                          <td>
+                                                              {{i+1}}
+                                                          </td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td>
+                                                              <img src="{{part.partBarcode}}" style="width: 100px;" alt="barcode" width="98%" />
+                                                          </td>
+                                                      </tr>
+                                                  </table>
+                                              </td>
+                                              <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                  <table class="border-none">
+                                                      <tr>
+                                                          <td>
+                                                              PN: {{part.partNumber}}
+                                                          </td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td>
+                                                          PN Description: {{part.partDescription}}
+                                                          </td>                                                         
+                                                      </tr>
+                                                      <tr>
+                                                          <td>
+                                                              Serial Num: {{part.serialNumber}}
+                                                          </td>                                                            
+                                                      </tr>
+                                                  </table>
+                                              </td>
+                                              <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                  <table class="border-none">
+                                                      <tr>
+                                                          <td>
+                                                              UOM: {{part.uom}}                                                              
+                                                          </td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td>
+                                                              Cond: {{part.conditionDescription}}
+                                                              </td>
+                                                          </tr>
+                                                      <tr>
+                                                           <td  >Site: {{part.siteName}}
+                                                                  </td>
+                                                      </tr>
+                                                      <tr>
+                                                                   <td>
+                                                                      SL Num: {{part.stockLineNumber}}
+                                                                     
+                                                                        
+                                                                      </td>
+                                                       </tr>
+                                                       <tr>
+                                                           <td>  Cntrl Num: {{part.controlNumber}}
+                                                               </td>
+                                                           </tr>
+                                                      </table>
+                                              </td>
+                                              <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                  <table class="border-none">
+                                                      <tr>
+                                                          <td>
+                                                              Priority: {{part.priorityName}}
+                                                          </td>
+                                                      </tr>
+                                                      <tr><td> Qty OH: {{part.quantityOnHand}}</td></tr>
+                                                      <tr><td>  Qty Avl: {{part.qtyAvailable}}</td></tr>
+                                                      <tr>
+                                                           <td  >Warehouse: {{part.warehouseName}}
+                                                              Location: {{part.locationName}}
+                                                                
+                                                           </td>
+                                                                    
+                                                      </tr>
+                                                   
+                                                      <tr>
+                                                        
+                                                          <td >
+                                                              Cntrl ID: {{part.idNumber}}
+                                                          </td>
+                                                            
+                                                      </tr>
+                                                      </table>
+                                              </td>
+                                               <td style="vertical-align: top;border-right:1px solid black;width:20%">
+                                                  <table class="border-none">
+                                                      <tr>
+                                                          <td>
+                                                              Qty to Pick: {{part.qtyToPick}}
+                                                        
+                                                            
+                                                          </td>
+                                                      </tr>
+                                                      <tr><td>  Qty Picked: {{part.qtyShipped}}</td></tr>
+                                                    
+                                                      <tr>
+                                                                  <td>
+                                                                      Shelf: {{part.shelfName}}
+                                                                     
+                                                                        
+                                                                          </td>
+                                                                  </tr>
+                                                                  <tr><td>  Bin: {{part.binName}}</td></tr>
+                                                                  <tr>
+                                                                      <td>
+                                                                             </td>
+                                                                 </tr>
+                                                      </table>
+                                              </td>
+                                              
+                                          </tr>
+                                   
+                                          <tr>
+                                              <td style="border:1px solid black" rowspan="2" colspan="5">
+                                                  <b>
+                                                      Notes: {{part.notes}}
+                                                  </b>
+                                              </td>
+                                          </tr>
+                                      </ng-container>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <!-- <br />
+                          <div class="clear"></div>
+                          <div class="clear"></div> -->
+                          <div class="col-sm-12">
+
+                              <div class="picked-by col-sm-6">
+                                  <p>
+                                      <span class="label">
+                                          <b>Picked By:</b>
+                                      </span><span class="value">
+                                          {{pickTicket.soPickTicketViewModel.pickedByName}}
+                                      </span>
+                                  </p>
+                                  <p>
+                                      <span class="label">
+                                          <b>Date: </b>
+                                      </span><span class="value">
+                                          {{pickTicket.soPickTicketViewModel.pickedDate | date : "MM/dd/yyyy"}}
+                                      </span>
+                                  </p>
+                              </div>
+                              <div class="confirmed-by col-sm-6">
+                                  <p>
+                                      <span class="label">
+                                          <b>Confirmed By: </b>
+                                      </span><span class="value">
+                                          {{pickTicket.soPickTicketViewModel.confirmedByName}}
+                                      </span>
+                                  </p>
+                                  <p>
+                                      <span class="label">
+                                          <b>Date: </b>
+                                      </span><span class="value">
+                                          {{pickTicket.soPickTicketViewModel.confirmedDate | date : "MM/dd/yyyy"}}
+                                      </span>
+                                  </p>
+                              </div>
+
+                          </div>
+                          <div class="clear"></div>
+                          <!-- <hr /> -->
+                          <div class="clear"></div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </ng-container>
+  <div style="height:100px"> &nbsp;</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Print</button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+</div>
+
+<div class="new-page"></div>

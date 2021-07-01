@@ -60,6 +60,7 @@ export class SubWorkOrderComponent implements OnInit {
     currentDate=new Date();
      subTabWorkFlow = "viewworkFlow";
      isWorkOrder:boolean=true;
+     woStatus:any;
     constructor(private router: Router,
         private commonService: CommonService,
         private datePipe: DatePipe,
@@ -94,6 +95,10 @@ export class SubWorkOrderComponent implements OnInit {
             this.showTabsGrid = true;
             this.showGridMenu = true;
         }
+      this.woStatus=  localStorage.getItem('woStatus');
+      if(this.woStatus && this.woStatus=='Closed'){
+          this.isView=true;
+      }
         this.getAllExpertiseType(); 
         this.getSubWorkOrderEditData();
         this.getSubWorOrderMpns();
@@ -247,7 +252,7 @@ export class SubWorkOrderComponent implements OnInit {
             this.isSpinnerVisible=false;
         })
     } 
-    saveSubWorkOrder() {
+    saveSubWorkOrder() { 
         const data = {
             workOrderMaterialsId: this.workOrderMaterialsId,
             workOrderNum: this.subWorkOrderGeneralInformation.workOrderNum,
@@ -474,6 +479,25 @@ export class SubWorkOrderComponent implements OnInit {
         }
         //need to change after functionality change
         this.getPartPublicationByItemMasterId(workOrderPart, workOrderPart.itemMasterId);
+        this.getNTEandSTDByItemMasterId(workOrderPart.itemMasterId, workOrderPart)
+    }
+    getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
+        if (currentRecord.subWorkOrderScopeId !== null && currentRecord.subWorkOrderScopeId !== '' && currentRecord.subWorkOrderScopeId > 0) {
+            // const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
+            if (itemMasterId !== undefined && currentRecord.subWorkOrderScopeId !== undefined) {
+                this.isSpinnerVisible = true
+                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.subWorkOrderScopeId,this.currentUserMasterCompanyId).subscribe(res => {
+                    this.isSpinnerVisible = false;
+                    if (res !== null) {
+                        currentRecord.nte = res.nteHours;
+                        currentRecord.tatDaysStandard = res.stdHours;
+                    }
+                },
+                    err => {
+                        // this.handleError(err);
+                    })
+            }
+        }
     }
     getConditionsList() {
         this.setEditArray = [];
