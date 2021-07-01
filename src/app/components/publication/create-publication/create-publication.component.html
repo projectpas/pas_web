@@ -293,7 +293,7 @@
                         <h4 class="header-name"> PN Mapping</h4>
                       </div>
                       <div>
-                        <button 
+                        <button *ngIf="isPNAdd"
                                 type="button"
                                 class="btn-sm header-button"  matTooltip="Add PN" 
                                  matTooltipPosition="above" data-toggle="modal" data-target="#alternateModalPopup"
@@ -333,7 +333,7 @@
                         </div>
                         <div class="clear"></div>
                     
-                </div> -->
+                </div>
                 <div class="col-md-12">
                     
                         <p-table #pnMappingTable class="rpo-table-cstm rro-table-cstm"
@@ -853,7 +853,7 @@
                   
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm" type="button" (click)="addNewRecord()">
+                    <button *ngIf="isGeneralInfoAdd" class="btn btn-primary pull-right button-save-cstm" type="button" (click)="addNewRecord()">
                         Add New
                     </button>
                     <button *ngIf="isATAPrev" class="btn btn-primary pull-right button-save-cstm" type="submit"
