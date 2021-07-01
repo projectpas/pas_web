@@ -169,6 +169,8 @@ export class SpeedQuoteService {
     partNumberObj.tat = selectedPart.tat;
     partNumberObj.isEditPart = true;
     partNumberObj.itemNo = selectedPart.itemNo;
+    partNumberObj.isPma = selectedPart.isPma;
+    partNumberObj.oemPN = selectedPart.oemPN;
     return partNumberObj;
   }
 
@@ -367,6 +369,12 @@ export class SpeedQuoteService {
   deleteExclusion(exclusionPartId: number): Observable<boolean[]> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.deleteExclusion(exclusionPartId)
+    );
+  }
+  //get PDF preview of Quote
+  getSQsendmailpdfpreview(speedQuoteId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getSQsendmailpdfpreview(speedQuoteId)
     );
   }
 }

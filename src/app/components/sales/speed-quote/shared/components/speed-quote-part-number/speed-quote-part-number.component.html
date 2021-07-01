@@ -48,13 +48,27 @@
                                         <!-- <span class="float-right" *ngIf="summaryColumn.field != 'partNumber' && summaryColumn.field != 'conditionDescription' && summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span> -->
-                                        <span *ngIf="summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes' && summaryColumn.field != 'quantityRequested' && summaryColumn.field != 'tat' && summaryColumn.field != 'salesPriceExtended' && summaryColumn.field != 'unitCost' && summaryColumn.field != 'unitCostExtended' && summaryColumn.field != 'marginAmountExtended' && summaryColumn.field != 'marginPercentageExtended'">
+                                        <span *ngIf="summaryColumn.field != 'unitSalePrice' && summaryColumn.field != 'notes' && summaryColumn.field != 'quantityRequested' && summaryColumn.field != 'tat' && summaryColumn.field != 'salesPriceExtended' && summaryColumn.field != 'unitCost' && summaryColumn.field != 'unitCostExtended' && summaryColumn.field != 'marginAmountExtended' && summaryColumn.field != 'marginPercentageExtended' && summaryColumn.field != 'partNumber'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'salesPriceExtended' || summaryColumn.field == 'unitCost' || summaryColumn.field == 'unitCostExtended' || summaryColumn.field == 'marginAmountExtended' || summaryColumn.field == 'marginPercentageExtended'">
                                             {{summaryPart[summaryColumn.field]  | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
-                                     
+                                        <span *ngIf="summaryColumn.field == 'partNumber'">
+                                            <span *ngIf="summaryPart['isPma'] == true">
+                                                {{summaryPart[summaryColumn.field]}}
+                                                <i class=""
+                                                matTooltip="{{summaryPart['oemPN']}}" matTooltipPosition="above"
+                                                >(*)</i>
+                                            </span>
+                                            <span *ngIf="summaryPart['isPma'] == false">
+                                                {{summaryPart[summaryColumn.field]}}
+                                            </span>
+                                        </span>
+                                        <!-- <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                        data-toggle="modal" data-target="#textarea-popupNotes"
+                                        matTooltip="Notes" matTooltipPosition="above"
+                                        (click)="onAddTextAreaInfo(summaryPart,i, rowIndex)"></i> -->
                                         <ng-container *ngIf="summaryColumn.field == 'unitSalePrice'">
                                         
                                           <!-- <input class="table-header-input-width text-right" name="unitSalePricetext{{i}}"

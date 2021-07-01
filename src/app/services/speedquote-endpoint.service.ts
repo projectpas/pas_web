@@ -30,6 +30,7 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly getSpeedQuoteExclusionPrintViewDetails: string = environment.baseUrl + "/api/speedquote/getexclusionprintview";
   private readonly sendSpeedQuoteEmailURL: string = environment.baseUrl + "/api/speedquote/sendspeedquoteemail"
   private readonly exclusionDeletePart: string = environment.baseUrl + "/api/speedquote/deleteexclusionpart";
+  private readonly getSQsendemailpdfpreview: string = environment.baseUrl + "/api/speedquote/sqsendmailpdfpreview";
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -235,6 +236,14 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       .delete<boolean>(endpointUrl, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.deleteExclusion(exclusionPartId));
+      });
+  }
+  getSQsendmailpdfpreview(speedQuoteId: number): Observable<any> {
+    const URL = `${this.getSQsendemailpdfpreview}/${speedQuoteId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getExclusionPrintview(speedQuoteId));
       });
   }
 }

@@ -52,5 +52,14 @@ export class SpeedQuotePrintingTemplateComponent implements OnInit {
       return notes.replace(/<[^>]*>/g, '');
     }
   }
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
 
 }

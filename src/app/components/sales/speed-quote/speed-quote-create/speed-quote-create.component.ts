@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole,OnChanges } from "@angular/core";
 import {
   NgForm,
   FormGroup
@@ -53,6 +53,7 @@ import { SpeedQuoteTypeEnum } from "../models/speed-auote-type-enum";
 import { SpeedQuoteExclusionsComponent } from "../shared/components/speed-quote-exclusions/speed-quote-exclusions.component";
 import { SpeedQuotePrintCritera } from "../models/speed-quote-print-criteria";
 declare var $: any;
+import { ConfigurationService } from '../../../../services/configuration.service';
 @Component({
   selector: "app-speed-quote-create",
   templateUrl: "./speed-quote-create.component.html",
@@ -134,6 +135,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
   @ViewChild("salesQuoteConvertPopup", { static: false }) public salesQuoteConvertPopup: ElementRef;
   @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
+  @ViewChild("emailSendQuotePopup", { static: false }) public emailSendQuotePopup: ElementRef;
   @ViewChild("salesQuotePrintPopup", { static: false }) public salesQuotePrintPopup: ElementRef;
   @ViewChild("speedQuoteExclusionePrintPopup", { static: false }) public speedQuoteExclusionePrintPopup: ElementRef;
   @ViewChild("speedQuotePrintCritariaPopup", { static: false }) public speedQuotePrintCritariaPopup: ElementRef;
@@ -195,7 +197,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private configurations: ConfigurationService,
   ) {
     this.salesQuote = new SpeedQuote();
     this.copyConsiderations = new CopyConsiderationsForSalesQuote();
@@ -207,6 +210,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadSOStatus();
     this.isSpinnerVisible = true;
     this.initCommunication();
     this.customerId = +this.route.snapshot.paramMap.get("customerId");
@@ -251,6 +255,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
         }, 1600);
       }
     });
+    this.getAllEmployees('');
+    this.getAllEmailType('');
+    this.customerContacts('');
     this.isSpinnerVisible = false;
   }
 
@@ -2076,5 +2083,173 @@ export class SpeedQuoteCreateComponent implements OnInit {
     );
 
     this.isSpinnerVisible = false;
+  }
+
+  arraySOStatuslist: any[] = [];
+  soStatusList: any = [];
+  loadSOStatus() {
+    if (this.arraySOStatuslist.length == 0) {
+      this.arraySOStatuslist.push(0);
+    }
+    this.isSpinnerVisible = true;
+    this.commonservice.autoSuggestionSmartDropDownList('MasterSpeedQuoteStatus', 'Id', 'Name', '', true, 20, this.arraySOStatuslist.join(), this.masterCompanyId).subscribe(res => {
+      this.soStatusList = res;
+      this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  emailTypes: any[];
+  formData = new FormData();
+  ContactList: any = [];
+  customerContact: any;
+  cusContactList: any;
+  customerDetailsList: any = {};
+  toEmail: any;
+  cc: any;
+  bcc: any;
+  subject: any;
+  emailBody: any;
+  file: any;
+  contactBy: any;
+  createdBy: any;
+  emailType: number;
+  employeeList: any = [];
+  employeesOriginalData: any = [];
+  @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+  addList: any = [];
+  pdfPath: any;
+  addMemo() {
+    this.closeModal();
+    this.closePrintModal();
+    //this.isEditMode = false;
+    this.formData = new FormData();
+    if (this.ContactList.length > 0) {
+        this.ContactList.forEach(
+            (cc) => {
+                this.customerContact = cc;
+                this.contactSelected(cc)
+                return;
+            }
+        )
+    }
+    this.bcc = "";
+    this.cc = '';
+    this.emailBody = '';
+    this.contactBy = this.authService.currentEmployee;
+    
+        this.speedQuoteService.getSpeedQuote(this.id).subscribe(data => {
+            if (data) {
+                let quote = data && data.length ? data[0] : null;
+                this.subject = quote.speedQuote.customerName + ', Speed Quote Number: ' + quote.speedQuote.speedQuoteNumber;
+            }
+        });
+    
+    
+    this.emailTypes.forEach(
+        (x) => {
+            if (x.label == 'Manual') {
+                this.emailType = x.value;
+            }
+        }
+    );
+    this.fileUploadInput.clear();
+    this.addList.push({ memoId: '', memo: '' })
+  }
+
+  contactSelected(event) {
+    this.toEmail = event.email ? event.email : '';
+  }
+
+  // ngOnChanges(): void {
+  //   //if (this.isView == false) {
+  //       this.getAllEmployees('');
+  //       this.getAllEmailType('');
+  //       this.customerContacts('');
+  //   //}
+  //   // this.getAllEmail();
+  //   // this.moduleId = this.moduleId;
+  //   // this.referenceId = this.referenceId;
+  // }
+  getAllEmailType(value) {
+    this.setEditArray = [];
+    this.setEditArray.push(0);
+    const strText = value ? value : '';
+    this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.emailTypes = res;
+    }, err => {
+    });
+  }
+  arrayContactlist: any = []
+    getAllEmployees(strText = '') {
+        this.arrayContactlist.push(0);
+        //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
+			true, 0, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+
+            this.employeeList = res.map(x => {
+                return {
+                    ...x,
+                    employeeId: x.value,
+                    name: x.label
+                }
+            });
+        }, err => {
+        })
+    }
+    filterEmployee(event): void {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllEmployees(event.query);
+        } else {
+            this.getAllEmployees('');
+        }
+    }
+    
+    customerContacts(value) {
+        this.setEditArray = [];
+        this.setEditArray.push(0);
+        const strText = value ? value : '';
+        this.commonService.autoDropListCustomerContacts(this.customerId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.ContactList = res.map(x => {
+                return {
+                    ...x,
+                    contactId: x.contactId,
+                    firstName: x.customerContactName
+                }
+            });
+            this.cusContactList = this.ContactList;
+        }, err => {
+        });
+    }
+    filterCustomerContact(event): void {
+          if (event.query !== undefined && event.query !== null) {
+              this.customerContacts(event.query);
+          } else {
+              this.customerContacts('');
+          }
+  }
+  send(isFormValid) {
+    if (isFormValid) {
+            let content = this.emailSendQuotePopup;
+            this.getQuotePDF();
+            this.modal = this.modalService.open(content, { size: "sm" });
+    }
+  }
+  getQuotePDF() {
+    this.isSpinnerVisible = true;
+    this.speedQuoteService.getSQsendmailpdfpreview(this.id)
+        .subscribe(
+            (res: any) => {
+                this.isSpinnerVisible = false;
+                this.pdfPath = res;
+            }, err => {
+            }
+        )
+  }
+  downloadFileUpload(link) {
+    const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${link}`;
+    window.location.assign(url);
   }
 }
