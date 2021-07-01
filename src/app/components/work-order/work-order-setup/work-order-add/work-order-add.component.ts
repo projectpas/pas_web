@@ -271,6 +271,7 @@ export class WorkOrderAddComponent implements OnInit {
     currentDate = new Date();
     taskName: any;
     isAllowLaberSave: boolean = false;
+
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -3944,8 +3945,8 @@ export class WorkOrderAddComponent implements OnInit {
         this.currentWorkflowId = workOrderPartNumber.workflowId;
     }
     viewCmm(workOrderPartNumber){
-        this.currentcmmId=undefined;
-        this.currentcmmId=workOrderPartNumber.cMMId;
+        //this.currentcmmId=undefined;
+        //this.currentcmmId=workOrderPartNumber.cMMId;
     }     
     workflowTransfer:any={};
     currentRowIndex:any;
