@@ -15,6 +15,8 @@ export class PublicationEndpointService extends EndpointFactory {
 
   private readonly _publicationUrlNew: string = this.configurations.baseUrl +
     '/api/Publication/publicationpost';
+    private readonly _publicationUrlupdate: string = this.configurations.baseUrl +
+    '/api/Publication/publicationpostupdate';
 
   private readonly _publicationRestoreUrlNew: string = this.configurations.baseUrl +
     '/api/Publication/restorepublication';
@@ -160,15 +162,19 @@ export class PublicationEndpointService extends EndpointFactory {
 
   getUpdateActionEndpoint<T>(file: any): Observable<T> {
     const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-    let endpointUrl = `${this._publicationUrlNew}`;
+  //  let endpointUrl = `${this._publicationUrlNew}`;
+    return this.http.post<T>(`${this._publicationUrlupdate}`, file,this.getFormReqHeaders())
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getNewpublicationEndpoint(file));
+    });
 
-    return this.http
-      .put<T>(endpointUrl, file)
-      .catch(error => {
-        return this.handleErrorCommon(error, () =>
-          this.getUpdateActionEndpoint(file)
-        );
-      });
+    // return this.http
+    //   .put<T>(endpointUrl, file)
+    //   .catch(error => {
+    //     return this.handleErrorCommon(error, () =>
+    //       this.getUpdateActionEndpoint(file)
+    //     );
+    //   });
   }
 
   getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
