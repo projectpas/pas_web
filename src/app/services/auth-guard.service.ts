@@ -31,7 +31,6 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     checkLogin(url: string): boolean {
 
         if (this.authService.isLoggedIn) {
-            debugger;
             if(this.authService.currentUser && this.authService.currentUser.roleName==null){
                 this.router.navigate(['/unauthorized-access']);
                 return false;
