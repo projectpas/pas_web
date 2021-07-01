@@ -3935,12 +3935,18 @@ if(res && res.response=='Record not Exist with these details. !' ){
     }
     woPartId:any;
     currentWorkflowId:any;
+    currentcmmId:any;
     addToExitRoWorkOrder(rowData){
 this.woPartId=rowData.id;
     }
     viewWorkflow(workOrderPartNumber){
         this.currentWorkflowId=workOrderPartNumber.workflowId;
     }
+    viewCmm(workOrderPartNumber){
+        this.currentcmmId=undefined;
+        this.currentcmmId=workOrderPartNumber.cMMId;
+    } 
+    
     workflowTransfer:any={};
     currentRowIndex:any;
     tranferCheckbox(ev,currentRecord,currentIndex){
