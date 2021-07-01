@@ -607,9 +607,17 @@ export class EntityAddComponent implements OnInit {
         //let content = this.tabRedirectConfirmationModal;
         //this.modal = this.modalService.open(content, { size: "sm" });
         this.nextOrPreviousTab = nextOrPrevious;
-        if (!this.disableSaveForEdit) {
-            let content = this.tabRedirectConfirmationModal;
-            this.modal = this.modalService.open(content, { size: "sm" });
+        if (!this.disableUpdatebutton) {
+            if(this.isEdit == true){
+                let content = this.tabRedirectConfirmationModal;
+                this.modal = this.modalService.open(content, { size: "sm" });
+            } else{
+                this.stopmulticlicks = true;
+                this.tab.emit('Contacts');
+                setTimeout(() => {
+                    this.stopmulticlicks = false;
+                }, 500)
+            }
         }
         else {
             this.stopmulticlicks = true;

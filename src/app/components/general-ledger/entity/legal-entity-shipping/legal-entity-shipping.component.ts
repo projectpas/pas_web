@@ -814,9 +814,9 @@ export class EntityShippingComponent implements OnInit {
     this.pageSizeForInternational = event.rows;
   }
 
-  async updateActiveorInActiveForIS(rowData) {
+  updateActiveorInActiveForIS(rowData) {
     rowData.status = rowData.isActive == true ? "Active" : "InActive";
-    await this.legalEntityService
+    this.legalEntityService
       .updateStatusForInternationalShippings(
         rowData.legalEntityInternationalShippingId,
         rowData.status,
@@ -1156,9 +1156,9 @@ export class EntityShippingComponent implements OnInit {
     this.tab.emit("Billing");
   }
 
-  async updateActiveorInActiveForShipping(rowData) {
+  updateActiveorInActiveForShipping(rowData) {
     rowData.status = rowData.isActive == true ? "Active" : "InActive";
-    await this.legalEntityService
+    this.legalEntityService
       .updateStatusForShippingDetails(
         rowData.legalEntityShippingAddressId,
         rowData.status,
