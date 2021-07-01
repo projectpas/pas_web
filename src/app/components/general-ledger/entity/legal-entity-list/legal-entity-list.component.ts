@@ -131,6 +131,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
   isEdit: boolean = true;
   isDelete: boolean = true;
   isDownload: boolean = true;
+  isGeneralInforView:boolean =true;
   isActive: boolean = true;
   isBankingView: boolean = true;
   isShippingView: boolean = true;
@@ -147,12 +148,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
       PermissionConstants.Add,
     ModuleConstants.LegalEntity_Contacts + "." + PermissionConstants.Add,
     ModuleConstants.LegalEntity_Documents + "." + PermissionConstants.Add,
-    ModuleConstants.LegalEntity_GeneralInformation +
-      "." +
-      PermissionConstants.Add,
-    ModuleConstants.LegalEntity_ShippingInformation +
-      "." +
-      PermissionConstants.Add,
+    ModuleConstants.LegalEntity_GeneralInformation + "." + PermissionConstants.Add,
+    ModuleConstants.LegalEntity_ShippingInformation + "." + PermissionConstants.Add,
   ];
 
   permissionUpdateCheck = [
@@ -165,12 +162,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
       PermissionConstants.Update,
     ModuleConstants.LegalEntity_Contacts + "." + PermissionConstants.Update,
     ModuleConstants.LegalEntity_Documents + "." + PermissionConstants.Update,
-    ModuleConstants.LegalEntity_GeneralInformation +
-      "." +
-      PermissionConstants.Update,
-    ModuleConstants.LegalEntity_ShippingInformation +
-      "." +
-      PermissionConstants.Update,
+    ModuleConstants.LegalEntity_GeneralInformation + "." + PermissionConstants.Update,
+    ModuleConstants.LegalEntity_ShippingInformation + "." + PermissionConstants.Update,
   ];
   constructor(
     private route: Router,
@@ -183,6 +176,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     private configurations: ConfigurationService,
     private datePipe: DatePipe
   ) {
+    
+    this.isGeneralInforView = this.authService.checkPermission([ModuleConstants.LegalEntity_GeneralInformation + '.' + PermissionConstants.View]);
     this.isAdd = this.authService.checkPermission(this.permissionAddCheck);
     this.isEdit = this.authService.checkPermission(this.permissionUpdateCheck);
     this.isActive = this.authService.checkPermission([
@@ -866,9 +861,11 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 
         this.legalEntityMainId = res.legalEntityId;
 
-			this.bankingAps(legalEntityId);
-			this.editlegalEntityLogo(res.attachmentId, legalEntityId);
-			this.getEntityLockBoxDataById(legalEntityId);
+			//this.bankingAps(legalEntityId);
+      this.editlegalEntityLogo(res.attachmentId, legalEntityId);
+      if(this.isBankingView){
+        this.getEntityLockBoxDataById(legalEntityId);
+      }
 			setTimeout(() => {
 				this.isSpinnerVisibleHistory = false;
 			}, 1500);

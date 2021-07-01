@@ -1050,7 +1050,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	// 		});
 	// }
 	getLegalEntityContactHistoryById(legalentitycontactId,legalentityId) {
-		return this.http.get<any>(`${this._legalEntityHistoryContact}?legalentitycontactId=${legalentitycontactId}&legalentityId=${legalentityId}`)
+		return this.http.get<any>(`${this._legalEntityHistoryContact}?legalentitycontactId=${legalentitycontactId}&legalentityId=${legalentityId}`,this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityContactHistoryById(legalentitycontactId,legalentityId));
 			});
