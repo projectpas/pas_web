@@ -16,7 +16,7 @@ import { ItemMasterService } from '../../../services/itemMaster.service';
 import { CommonService } from '../../../services/common.service';
 import { emailPattern, urlPattern, phonePattern } from '../../../validations/validation-pattern';
 import { Router, ActivatedRoute } from '@angular/router';
-declare var $ : any;
+declare var $: any;
 
 @Component({
     selector: 'app-customer-general-information',
@@ -200,7 +200,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.disableAccountType = true;
                 }
                 this.isSpinnerVisible = false;
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
 
             setTimeout(async () => {
                 await this.getCustomerRestrictedPMAByCustomerId();
@@ -249,7 +249,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.generalInformation.customerClassificationIds = res.map(x => x.customerClassificationId);
             this.arrayCustomerClassificationlist.push(this.generalInformation.customerClassificationIds);
             this.getAllCustomerClassification();
-        }, error => {this.isSpinnerVisible = false})
+        }, error => { this.isSpinnerVisible = false })
     }
 
     async getCustomerIntegrationTypesByCustomerId() {
@@ -258,7 +258,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 this.generalInformation.integrationPortalId = res.map(x => x.integrationPortalId);
                 this.arrayIntegrationlist.push(this.generalInformation.integrationPortalId);
                 this.getAllIntegrations();
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
     }
 
@@ -279,7 +279,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             else {
                 this.isSpinnerVisible = false;
             }
-        }, error => {this.isSpinnerVisible = false})
+        }, error => { this.isSpinnerVisible = false })
     }
 
     getPMAPartListByStatus(value) {
@@ -317,7 +317,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             else {
                 this.isSpinnerVisible = false;
             }
-        }, error => {this.isSpinnerVisible = false})
+        }, error => { this.isSpinnerVisible = false })
     }
 
     get userName(): string {
@@ -334,7 +334,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayItemMasterlist.length == 0) {
             this.arrayItemMasterlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.partListOriginal = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
@@ -395,13 +395,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayIntegrationlist.length == 0) {
             this.arrayIntegrationlist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description', '', true, 100, this.arrayIntegrationlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description', '', true, 0, this.arrayIntegrationlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.integrationOriginalList = res.map(x => {
                 return {
                     label: x.label, value: x.value
                 }
             })
-        }, error => {            
+        }, error => {
             this.isSpinnerVisible = false;
         });
     }
@@ -410,13 +410,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayCustomerTypelist.length == 0) {
             this.arrayCustomerTypelist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'CustomerTypeName', '', true, 50, this.arrayCustomerTypelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'CustomerTypeName', '', true, 0, this.arrayCustomerTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.customertypes = res.map(x => {
                 return {
                     description: x.label, customerTypeId: x.value
                 }
             })
-        }, error => {            
+        }, error => {
             this.isSpinnerVisible = false;
         });
     }
@@ -425,7 +425,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayCountrylist.length == 0) {
             this.arrayCountrylist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'countries_name', strText, true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value
@@ -457,7 +457,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.arrayCustlist.push(0);
         }
 
-        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
 
             this.customerListOriginal = response.map(x => {
                 return {
@@ -480,7 +480,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     name: getObjectById('value', this.id, this.customerallListOriginal),
                 };
             }
-        }, err => {            
+        }, err => {
             this.isSpinnerVisible = false;
         });
     }
@@ -492,7 +492,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.arrayCustlist.push(0);
         }
 
-        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
 
             this.customerListOriginal = response.map(x => {
                 return {
@@ -508,7 +508,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.customerNames = this.customerallListOriginal.reduce((acc, obj) => {
                 return acc.filter(x => x.value !== this.selectedParentId)
             }, this.customerallListOriginal)
-        }, err => {            
+        }, err => {
             this.isSpinnerVisible = false;
         });
     }
@@ -517,7 +517,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arayCustParentlist.length == 0) {
             this.arayCustParentlist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arayCustParentlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arayCustParentlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
 
             this.parentCustomerOriginal = response.map(x => {
                 return {
@@ -533,7 +533,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 ...this.generalInformation,
                 parentId: getObjectById('value', this.generalInformation.parentId, this.parentCustomerOriginal),
             };
-        }, err => {            
+        }, err => {
             this.isSpinnerVisible = false;
         });
     }
@@ -542,9 +542,9 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayCustomerClassificationlist.length == 0) {
             this.arrayCustomerClassificationlist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('CustomerClassification', 'CustomerClassificationId', 'Description', '', true, 200, this.arrayCustomerClassificationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('CustomerClassification', 'CustomerClassificationId', 'Description', '', true, 0, this.arrayCustomerClassificationlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.allcustomerclassificationInfo = response;
-        }, error =>{            
+        }, error => {
             this.isSpinnerVisible = false;
         });
     }
@@ -612,7 +612,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.isSpinnerVisible = false;
                 }
 
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
     }
 
@@ -626,7 +626,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
 
         this.partListForPMA = [{ label: this.selectedRowForDeleteRestrictPMA.partNumber, value: this.selectedRowForDeleteRestrictPMA }, ...this.partListForPMA];
@@ -731,7 +731,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.disableAddDER = false;
                     this.isSpinnerVisible = false;
                 }
-            }, error => { this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
     }
 
@@ -746,7 +746,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 );
                 this.getCustomerRestrictedPMAByCustomerId();
                 this.isSpinnerVisible = false;
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
         this.dismissModel()
     }
@@ -762,7 +762,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 );
                 this.getCustomerRestrictedDERByCustomerId();
                 this.isSpinnerVisible = false;
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
         this.dismissModel()
     }
@@ -777,7 +777,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            }, error => {this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
         this.dismissModel()
         this.partListForDER = [{ label: this.selectedRowForDeleteRestrictDER.partNumber, value: this.selectedRowForDeleteRestrictDER }, ...this.partListForDER];
@@ -953,13 +953,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     saveGeneralInformation() {
 
-        if (this.generalInformation.customerTypeId == 0 || this.generalInformation.customerTypeId == undefined) {            
-                this.alertService.showMessage(
-                    'Validation Error',
-                    `Please Select Customer Type.`,
-                    MessageSeverity.error)
-                return;                   
-        } 
+        if (this.generalInformation.customerTypeId == 0 || this.generalInformation.customerTypeId == undefined) {
+            this.alertService.showMessage(
+                'Validation Error',
+                `Please Select Customer Type.`,
+                MessageSeverity.error)
+            return;
+        }
         if (this.generalInformation.customerAffiliationId == "3" || this.generalInformation.customerAffiliationId == "1") {
             if (this.generalInformation.integrationPortalId == undefined || this.generalInformation.integrationPortalId.length <= 0) {
                 this.alertService.showMessage(
@@ -967,8 +967,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     `Integration with Selection is Required. When Customer Type is Internal Or Affliliate.`,
                     MessageSeverity.error)
                 return;
-            }            
-        }        
+            }
+        }
         if (this.disableAddPMA) {
             this.alertService.showMessage(
                 'Warning',
@@ -1086,7 +1086,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        }, error => {this.isSpinnerVisible = false})
+        }, error => { this.isSpinnerVisible = false })
     }
 
     resetClassificationPopUp() {
@@ -1128,7 +1128,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        }, error => {this.isSpinnerVisible = false})
+        }, error => { this.isSpinnerVisible = false })
 
     }
     resetIntegrationPopUp() {
@@ -1171,8 +1171,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
         }
     }
 
-    ngOnDestroy() {		
-		// if (!this.disableSaveForEdit) {
+    ngOnDestroy() {
+        // if (!this.disableSaveForEdit) {
         //     let content = this.tabRedirectConfirmationModal;
         //     this.modal = this.modalService.open(content, { size: "sm" });
         // }
@@ -1190,7 +1190,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         //         MessageSeverity.error)
         //     return;
         // }
-	}
+    }
 
     redirectToTabWithoutSave() {
         this.dismissModel();
@@ -1250,8 +1250,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
         }
     }
 
-    editItemIntegrationalCloseModel() {}
-    saveSelectedModel(col, i) {}
-    getSelectedItem(col, $event) {}
-    dismissAircraftModel() {}
+    editItemIntegrationalCloseModel() { }
+    saveSelectedModel(col, i) { }
+    getSelectedItem(col, $event) { }
+    dismissAircraftModel() { }
 }

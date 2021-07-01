@@ -8,7 +8,7 @@ import { CustomerInternationalShippingModel, CustomerInternationalShipVia } from
 import { getValueFromObjectByKey, getObjectById, formatNumberAsGlobalSettingsModule, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-declare var $ : any;
+declare var $: any;
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +24,7 @@ import { DatePipe } from '@angular/common';
 export class CustomerShippingInformationComponent implements OnInit {
 
     // [x: string]: any;
-    @ViewChild('tabRedirectConfirmationModal',{static:false})
+    @ViewChild('tabRedirectConfirmationModal', { static: false })
     public tabRedirectConfirmationModal: ElementRef;
     nextOrPreviousTab: string;
 
@@ -81,7 +81,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedBy', header: 'Updated By' },
         { field: 'expirationDate', header: 'Expiration Date' },
-        { field: 'amount', header: 'Amount',width:"80px" },
+        { field: 'amount', header: 'Amount', width: "80px" },
         { field: 'shipToCountry', header: 'Country' },
         { field: 'isPrimary', header: 'IsPrimary' }
     ]
@@ -115,10 +115,10 @@ export class CustomerShippingInformationComponent implements OnInit {
     totalPages: number;
     totalRecordsInter: any;
     totalPagesInter: number;
-    textDomesticMemo:any;
-    textInternationalMemo:any;
-    disableShipVia:boolean=false;
-    disableEditor:any=true;
+    textDomesticMemo: any;
+    textInternationalMemo: any;
+    disableShipVia: boolean = false;
+    disableEditor: any = true;
     totalRecordsShipVia: any;
     totalPagesShipVia: number;
     interTotalRecords: number = 0;
@@ -155,7 +155,7 @@ export class CustomerShippingInformationComponent implements OnInit {
     currentDate = new Date();
     shipViaDropdownList: any;
     isprimarydata: any;
-    selectedSitename:any;
+    selectedSitename: any;
     isprimarydomesticdata: any;
     isprimaryInternationaldata: any;
     isprimarydomesticshipdata: any;
@@ -164,26 +164,26 @@ export class CustomerShippingInformationComponent implements OnInit {
     currentstatus2: string = 'Active';
     domesticSieList: any[];
     domesticSieListOriginal: any[];
-    arrayDomesricShipIdlist:any[] = [];
+    arrayDomesricShipIdlist: any[] = [];
     changeName: boolean = false;
     isSiteNameAlreadyExists: boolean = false;
     disableSaveSiteName: boolean;
-    arrayCountrylist:any[] = [];
-    currentDeletedstatusShipVia:boolean=false;
-    currentDeletedstatusIntShipVia:boolean=false;
+    arrayCountrylist: any[] = [];
+    currentDeletedstatusShipVia: boolean = false;
+    currentDeletedstatusIntShipVia: boolean = false;
     shipviaInfo = [];
     constructor(private customerService: CustomerService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService,
         private router: ActivatedRoute,
         private datePipe: DatePipe
-    ) { 
+    ) {
         this.id = this.router.snapshot.params['id'];
     }
     ngOnInit() {
         if (this.editMode) {
             //this.id = this.editGeneralInformationData.customerId;
-             this.customerCode = this.editGeneralInformationData.customerCode;
+            this.customerCode = this.editGeneralInformationData.customerCode;
             this.customerName = this.editGeneralInformationData.name;
             this.isViewMode = false;
         } else {
@@ -233,10 +233,11 @@ export class CustomerShippingInformationComponent implements OnInit {
     }
 
     getAllCountries(strText = '') {
-        if(this.arrayCountrylist.length == 0) {
-            this.arrayCountrylist.push(0); }
+        if (this.arrayCountrylist.length == 0) {
+            this.arrayCountrylist.push(0);
+        }
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value
@@ -246,268 +247,268 @@ export class CustomerShippingInformationComponent implements OnInit {
             this.countrycollection = [...this.countryListOriginal.filter(x => {
                 return x.nice_name.toLowerCase().includes(strText.toLowerCase())
             })]
-		})
-	}
+        })
+    }
 
     parsedText(text) {
-    
-        if(text){
+
+        if (text) {
             const dom = new DOMParser().parseFromString(
                 '<!doctype html><body>' + text,
                 'text/html');
-                const decodedString = dom.body.textContent;
-                return decodedString;
+            const decodedString = dom.body.textContent;
+            return decodedString;
         }
-          }
+    }
     // memoType:any;
-    onSaveDomesticMemo(){
-        this.shipViaDomestic.memo=this.textDomesticMemo;
-        this.textDomesticMemo='';
-        this.disableShipVia=false;
+    onSaveDomesticMemo() {
+        this.shipViaDomestic.memo = this.textDomesticMemo;
+        this.textDomesticMemo = '';
+        this.disableShipVia = false;
         $("#textarea-popup1").modal("hide");
-    
+
     }
-    
-    onSaveInternationalMemo(){
-        this.shipViaInternational.memo=this.textInternationalMemo;
-        this.textInternationalMemo='';
+
+    onSaveInternationalMemo() {
+        this.shipViaInternational.memo = this.textInternationalMemo;
+        this.textInternationalMemo = '';
         $("#textarea-popup2").modal("hide");
-        this.disableShipVia=false;
+        this.disableShipVia = false;
     }
-    onAddDomesticMemo(){
-    this.textDomesticMemo=this.shipViaDomestic.memo;
-    this.disableEditor=true;
-    this.disableSaveShipViaDomestic = false;
+    onAddDomesticMemo() {
+        this.textDomesticMemo = this.shipViaDomestic.memo;
+        this.disableEditor = true;
+        this.disableSaveShipViaDomestic = false;
     }
-    onAddInternationalmemo(){
-        this.textInternationalMemo=this.shipViaInternational.memo;
-        this.disableEditor=true;
-    
+    onAddInternationalmemo() {
+        this.textInternationalMemo = this.shipViaInternational.memo;
+        this.disableEditor = true;
+
     }
-    
+
     onCloseTextAreaInfo(type) {
-        if(type==1){
+        if (type == 1) {
             $("#textarea-popup1").modal("hide");
-        }else if(type==2){
+        } else if (type == 2) {
             $("#textarea-popup2").modal("hide");
         }
     }
-    editorgetmemo(){
-        this.disableEditor=false;
-        this.disableShipVia=false;
+    editorgetmemo() {
+        this.disableEditor = false;
+        this.disableShipVia = false;
     }
-    
-    getshipvialistList(){
+
+    getshipvialistList() {
         this.isSpinnerVisible = true;
         //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
-         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name','',true,2000,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-             const data = res.map(x => {
-                  return {
-                      ...x,
-                      id: x.value,
-                      name: x.label
-                  }
-              });    
-              this.shipviaInfo = [
-				{ label: '-- Select --',value: 0, id: 0, name: '-- Select --'}
-              ];                            
-              this.shipViaDropdownList = [...this.shipviaInfo, ...data];             
-              this.isSpinnerVisible = false;
-          },error => {this.isSpinnerVisible = false;})
-      }
-      getDeleteListByStatusDomestic(value){
-        if(value){
-            this.currentDeletedstatus1=true;
-        }else{
-            this.currentDeletedstatus1=false;
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            const data = res.map(x => {
+                return {
+                    ...x,
+                    id: x.value,
+                    name: x.label
+                }
+            });
+            this.shipviaInfo = [
+                { label: '-- Select --', value: 0, id: 0, name: '-- Select --' }
+            ];
+            this.shipViaDropdownList = [...this.shipviaInfo, ...data];
+            this.isSpinnerVisible = false;
+        }, error => { this.isSpinnerVisible = false; })
+    }
+    getDeleteListByStatusDomestic(value) {
+        if (value) {
+            this.currentDeletedstatus1 = true;
+        } else {
+            this.currentDeletedstatus1 = false;
         }
         this.geListByStatusDomsetic(this.status1 ? this.status1 : this.currentstatus1)
-            }
-            getDeleteListByStatusIntern(value){
-                if(value){
-                    this.currentDeletedstatus2=true;
-                }else{
-                    this.currentDeletedstatus2=false;
-                }
-                this.geListByStatusInternational(this.status2 ? this.status2 : this.currentstatus2)
-                    }
-      originalTableDataDomestic:any=[];
-      originalTableDataInternanl:any=[]
-      currentDeletedstatus1:boolean=false;
-      currentDeletedstatus2:boolean=false;
-      status1:any="Active";
-      status2:any="Active";
-      geListByStatusDomsetic(status) {
-          const newarry=[];
-          if(status=='Active'){
-            this.status1=status;
-              if(this.currentDeletedstatus1==false){
-                 this.originalTableDataDomestic.forEach(element => {
-                  if(element.isActive ==true && element.isDeleted ==false){
-                  newarry.push(element);
-                  }
-                 });
-             }else{
-                  this.originalTableDataDomestic.forEach(element => {
-                  if(element.isActive ==true && element.isDeleted ==true){
-                   newarry.push(element);
-                  }
-                 });
-         }
-           this.domesticShippingData=newarry;
-          }else if(status=='InActive' ){
-            this.status1=status;
-              if(this.currentDeletedstatus1==false){
-                  this.originalTableDataDomestic.forEach(element => {
-                   if(element.isActive ==false && element.isDeleted ==false){
-                   newarry.push(element);
-                   }
-                  });
-              }else{
-                   this.originalTableDataDomestic.forEach(element => {
-                   if(element.isActive ==false && element.isDeleted ==true){
-                    newarry.push(element);
-                   }
-                  });
-          }
-                this.domesticShippingData = newarry;
-          }else if(status== 'ALL'){
-            this.status1=status;
-
-              if(this.currentDeletedstatus1==false){
-                this.originalTableDataDomestic.forEach(element=>{
-                    if(element.isDeleted==false){
+    }
+    getDeleteListByStatusIntern(value) {
+        if (value) {
+            this.currentDeletedstatus2 = true;
+        } else {
+            this.currentDeletedstatus2 = false;
+        }
+        this.geListByStatusInternational(this.status2 ? this.status2 : this.currentstatus2)
+    }
+    originalTableDataDomestic: any = [];
+    originalTableDataInternanl: any = []
+    currentDeletedstatus1: boolean = false;
+    currentDeletedstatus2: boolean = false;
+    status1: any = "Active";
+    status2: any = "Active";
+    geListByStatusDomsetic(status) {
+        const newarry = [];
+        if (status == 'Active') {
+            this.status1 = status;
+            if (this.currentDeletedstatus1 == false) {
+                this.originalTableDataDomestic.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
                         newarry.push(element);
                     }
                 });
-              }else{
-                  this.originalTableDataDomestic.forEach(element=>{
-                      if(element.isDeleted==true){
-                          newarry.push(element);
-                      }
-                  });
-              }
-              this.domesticShippingData= newarry;
-          }
-          this.totalRecords = this.domesticShippingData.length ;
-          this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-          }
-          geListByStatusInternational(status) {
-            const newarry=[];
-            if(status=='Active'){
-              this.status2=status;
-                if(this.currentDeletedstatus2==false){
-                   this.originalTableDataInternanl.forEach(element => {
-                    if(element.isActive ==true && element.isDeleted ==false){
-                        element.amount= element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
-                    newarry.push(element);
+            } else {
+                this.originalTableDataDomestic.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
                     }
-                   });
-               }else{
-                    this.originalTableDataInternanl.forEach(element => {
-                    if(element.isActive ==true && element.isDeleted ==true){
-                        element.amount= element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
-                     newarry.push(element);
-                    }
-                   });
-           }
-             this.internationalShippingData=newarry.map(x=>{
-                return {
-                 ...x,
-                 createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                 updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
-                startDate:x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
-                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): '',
-                }
-             });
-            }else if(status=='InActive' ){
-                this.status2=status;
-                if(this.currentDeletedstatus2==false){
-                    this.originalTableDataInternanl.forEach(element => {
-                     if(element.isActive ==false && element.isDeleted ==false){
-                        element.amount= element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
-                     newarry.push(element);
-                     }
-                    });
-                }else{
-                     this.originalTableDataInternanl.forEach(element => {
-                     if(element.isActive ==false && element.isDeleted ==true){
-                        element.amount= element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
-                      newarry.push(element);
-                     }
-                    });
+                });
             }
-            this.internationalShippingData=newarry.map(x=>{
-                return {
-                 ...x,
-                 createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                 updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
-                startDate:x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
-                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): '',
-                }
-             });
-            }else if(status== 'ALL'){
-                this.status2=status;
-                if(this.currentDeletedstatus2==false){
-                    this.originalTableDataInternanl.forEach(element=>{
-                        if(element.isDeleted==false){
-                            element.amount= element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
-                            newarry.push(element);
-                        }
-                    });
-                }else{
-                    this.originalTableDataInternanl.forEach(element=>{
-                        if(element.isDeleted==true){
-                            element.amount= element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
-                            newarry.push(element);
-                        }
-                    });
+            this.domesticShippingData = newarry;
+        } else if (status == 'InActive') {
+            this.status1 = status;
+            if (this.currentDeletedstatus1 == false) {
+                this.originalTableDataDomestic.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableDataDomestic.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.domesticShippingData = newarry;
+        } else if (status == 'ALL') {
+            this.status1 = status;
 
-                }
-                this.internationalShippingData=newarry.map(x=>{
-                    return {
-                     ...x,
-                    startDate:x.startDate ?  this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a'): '',
-                    expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a'): '',
-                    createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): ''
+            if (this.currentDeletedstatus1 == false) {
+                this.originalTableDataDomestic.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
                     }
-                 });
+                });
+            } else {
+                this.originalTableDataDomestic.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
             }
-            this.totalRecords = this.internationalShippingData.length ;
-            this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            this.domesticShippingData = newarry;
+        }
+        this.totalRecords = this.domesticShippingData.length;
+        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+    }
+    geListByStatusInternational(status) {
+        const newarry = [];
+        if (status == 'Active') {
+            this.status2 = status;
+            if (this.currentDeletedstatus2 == false) {
+                this.originalTableDataInternanl.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        element.amount = element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableDataInternanl.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        element.amount = element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
+                        newarry.push(element);
+                    }
+                });
             }
-      restore1(content, rowData) {
-          this.restorerecord1 = rowData;
-          this.selectedRowForDelete = rowData;
-          this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-      }
-      restore2(content, rowData) {
+            this.internationalShippingData = newarry.map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                    startDate: x.startDate ? this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a') : '',
+                    expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a') : '',
+                }
+            });
+        } else if (status == 'InActive') {
+            this.status2 = status;
+            if (this.currentDeletedstatus2 == false) {
+                this.originalTableDataInternanl.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        element.amount = element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableDataInternanl.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        element.amount = element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.internationalShippingData = newarry.map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                    startDate: x.startDate ? this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a') : '',
+                    expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a') : '',
+                }
+            });
+        } else if (status == 'ALL') {
+            this.status2 = status;
+            if (this.currentDeletedstatus2 == false) {
+                this.originalTableDataInternanl.forEach(element => {
+                    if (element.isDeleted == false) {
+                        element.amount = element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableDataInternanl.forEach(element => {
+                    if (element.isDeleted == true) {
+                        element.amount = element.amount ? formatNumberAsGlobalSettingsModule(element.amount, 2) : '';
+                        newarry.push(element);
+                    }
+                });
+
+            }
+            this.internationalShippingData = newarry.map(x => {
+                return {
+                    ...x,
+                    startDate: x.startDate ? this.datePipe.transform(x.startDate, 'MM/dd/yyyy hh:mm a') : '',
+                    expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a') : '',
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : ''
+                }
+            });
+        }
+        this.totalRecords = this.internationalShippingData.length;
+        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+    }
+    restore1(content, rowData) {
+        this.restorerecord1 = rowData;
+        this.selectedRowForDelete = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    restore2(content, rowData) {
         this.restorerecord2 = rowData;
         this.selectedRowForDeleteInter = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-      restorerecord1:any={};
-      restorerecord2:any={}
-      restoreRecordDomestic(){
+    restorerecord1: any = {};
+    restorerecord2: any = {}
+    restoreRecordDomestic() {
         this.isSpinnerVisible = true;
-          this.commonService.updatedeletedrecords('CustomerDomensticShipping','CustomerDomensticShippingId',this.restorerecord1.customerDomensticShippingId ).subscribe(res => {
-              this.currentDeletedstatus1=true;
-              this.modal.close();
-              this.getDomesticShippingByCustomerId()
-              this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-              this.isSpinnerVisible = false;
-          },error => {this.isSpinnerVisible = false;})
-      }
-      restoreRecordIntern(){
-        this.isSpinnerVisible = true;
-        this.commonService.updatedeletedrecords('CustomerInternationalShipping','CustomerInternationalShippingId',this.restorerecord2.customerInternationalShippingId).subscribe(res => {
-            this.currentDeletedstatus1=true;
-          this.modal.close();
-          this.getInternationalShippingByCustomerId();
+        this.commonService.updatedeletedrecords('CustomerDomensticShipping', 'CustomerDomensticShippingId', this.restorerecord1.customerDomensticShippingId).subscribe(res => {
+            this.currentDeletedstatus1 = true;
+            this.modal.close();
+            this.getDomesticShippingByCustomerId()
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             this.isSpinnerVisible = false;
-        },error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
+    }
+    restoreRecordIntern() {
+        this.isSpinnerVisible = true;
+        this.commonService.updatedeletedrecords('CustomerInternationalShipping', 'CustomerInternationalShippingId', this.restorerecord2.customerInternationalShippingId).subscribe(res => {
+            this.currentDeletedstatus1 = true;
+            this.modal.close();
+            this.getInternationalShippingByCustomerId();
+            this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+            this.isSpinnerVisible = false;
+        }, error => { this.isSpinnerVisible = false; })
     }
 
 
@@ -515,10 +516,10 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.disableSave = false;
     }
 
-    enableSaveShipViaDomestic(){
+    enableSaveShipViaDomestic() {
         this.disableSaveShipViaDomestic = false;
     }
-    enableSaveShipViaInternational(){
+    enableSaveShipViaInternational() {
         this.disableSaveShipViaInternational = false;
     }
     closeMyModel(type) {
@@ -529,9 +530,9 @@ export class CustomerShippingInformationComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
     //Need to Delete After Confirm
     // filterCountriesold(event) {
@@ -543,13 +544,14 @@ export class CustomerShippingInformationComponent implements OnInit {
 
     filterCountries(event) {
         if (event.query !== undefined && event.query !== null) {
-			this.getAllCountries(event.query); }
+            this.getAllCountries(event.query);
+        }
     }
 
     // save Domestic Shipping
     saveDomesticShipping() {
-        if(this.domesticShippingData && this.domesticShippingData.length ==0){
-            this.domesticShippingInfo.isPrimary=true;
+        if (this.domesticShippingData && this.domesticShippingData.length == 0) {
+            this.domesticShippingInfo.isPrimary = true;
         }
         const data = {
             ...this.domesticShippingInfo,
@@ -559,8 +561,8 @@ export class CustomerShippingInformationComponent implements OnInit {
             countryId: getValueFromObjectByKey('countries_id', this.domesticShippingInfo.countryId),
             masterCompanyId: this.currentUserMasterCompanyId,
             customerId: this.id,
-            tagName:editValueAssignByCondition('tagName', this.domesticShippingInfo.tagName),
-			contactTagId: editValueAssignByCondition('contactTagId', this.domesticShippingInfo.tagName),
+            tagName: editValueAssignByCondition('tagName', this.domesticShippingInfo.tagName),
+            contactTagId: editValueAssignByCondition('contactTagId', this.domesticShippingInfo.tagName),
         }
         // create shipping
         if (!this.isEditDomestic) {
@@ -574,7 +576,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 );
                 this.getDomesticShippingByCustomerId();
                 this.isSpinnerVisible = false;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         } else {
             // update shipping
             this.isSpinnerVisible = true;
@@ -587,7 +589,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 );
                 this.getDomesticShippingByCustomerId();
                 this.isSpinnerVisible = false;
-            },error =>{this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
         $("#addShippingInfo").modal("hide");
         this.disableSave = true;
@@ -599,7 +601,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.customerService.getCustomerShipAddressGet(this.id).subscribe(res => {
             this.originalTableDataDomestic = res[0];
             this.loaderForDomestic = false;
-            this.geListByStatusDomsetic(this.status1 ? this.status1: "Active")
+            this.geListByStatusDomsetic(this.status1 ? this.status1 : "Active")
             //this.geListByStatusDomsetic(this.status1 ? this.status1 : 'Active')
             this.isSpinnerVisible = false;
         }, err => {
@@ -616,57 +618,59 @@ export class CustomerShippingInformationComponent implements OnInit {
     openEditDomestic(rowData) {
         this.arrayDomesricShipIdlist = [];
 
-        this.isprimarydomesticdata=rowData.isPrimary
+        this.isprimarydomesticdata = rowData.isPrimary
         this.isEditDomestic = true;
         this.isSiteNameAlreadyExists = false;
         this.domesticShippingInfo = rowData;
-        this.selectedSitename = rowData.siteName;      
-		if(rowData.contactTagId > 0){
-			this.arrayTagNamelist.push(rowData.contactTagId);
-			this.getAllTagNameSmartDropDown('', rowData.contactTagId);
-		}
-        if(rowData.customerDomensticShippingId > 0) {
-            this.arrayDomesricShipIdlist.push(rowData.customerDomensticShippingId); }
+        this.selectedSitename = rowData.siteName;
+        if (rowData.contactTagId > 0) {
+            this.arrayTagNamelist.push(rowData.contactTagId);
+            this.getAllTagNameSmartDropDown('', rowData.contactTagId);
+        }
+        if (rowData.customerDomensticShippingId > 0) {
+            this.arrayDomesricShipIdlist.push(rowData.customerDomensticShippingId);
+        }
 
-        if(this.arrayDomesricShipIdlist.length == 0) {
-            this.arrayDomesricShipIdlist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName','', 'CustomerId', this.id, 20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
-          //this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName','',true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        if (this.arrayDomesricShipIdlist.length == 0) {
+            this.arrayDomesricShipIdlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName', '', 'CustomerId', this.id, 0, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+            //this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName','',true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
-                    return {
-                        siteName: x.label, value: x.value
-                    }
-                })              
-                this.domesticSieList = [...this.domesticSieListOriginal];
-                //this.arrayDomesricShipIdlist = [];
-                //this.isprimarydomesticdata=rowData.isPrimary
-                //this.isEditDomestic = true;
-                //this.domesticShippingInfo = rowData;
-                this.domesticShippingInfo = {
-                    ...this.domesticShippingInfo,
-                    //countryId: getObjectById('countries_id', rowData.countryId, this.countryListOriginal),
-                    siteName:  getObjectByValue('siteName', rowData.siteName, this.domesticSieListOriginal),
-                    //tagName:  getObjectByValue('tagName', rowData.tagName, this.tagNamesList)
-                };
-                this.domesticShippingOriginalInfo = this.domesticShippingInfo;
-            },err => {
-                this.isSpinnerVisible = false;
-            });
-
-            if(rowData.countryId > 0)
-                    this.arrayCountrylist.push(rowData.countryId);
-
-                this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-                    this.countryListOriginal = res.map(x => {
-                        return {
-                            nice_name: x.label, countries_id: x.value
-                        }
-                    })
-                    this.domesticShippingInfo = {
-                        ...this.domesticShippingInfo,
-                        countryId: getObjectById('countries_id', rowData.countryId, this.countryListOriginal),
-                    };
+                return {
+                    siteName: x.label, value: x.value
+                }
             })
+            this.domesticSieList = [...this.domesticSieListOriginal];
+            //this.arrayDomesricShipIdlist = [];
+            //this.isprimarydomesticdata=rowData.isPrimary
+            //this.isEditDomestic = true;
+            //this.domesticShippingInfo = rowData;
+            this.domesticShippingInfo = {
+                ...this.domesticShippingInfo,
+                //countryId: getObjectById('countries_id', rowData.countryId, this.countryListOriginal),
+                siteName: getObjectByValue('siteName', rowData.siteName, this.domesticSieListOriginal),
+                //tagName:  getObjectByValue('tagName', rowData.tagName, this.tagNamesList)
+            };
+            this.domesticShippingOriginalInfo = this.domesticShippingInfo;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+
+        if (rowData.countryId > 0)
+            this.arrayCountrylist.push(rowData.countryId);
+
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', '', true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.countryListOriginal = res.map(x => {
+                return {
+                    nice_name: x.label, countries_id: x.value
+                }
+            })
+            this.domesticShippingInfo = {
+                ...this.domesticShippingInfo,
+                countryId: getObjectById('countries_id', rowData.countryId, this.countryListOriginal),
+            };
+        })
     }
 
     addDomesticShipping() {
@@ -684,7 +688,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if (!rowData.isPrimary) {
 
             this.isDeleteMode = true;
-            this.currentstatus1 =  rowData.isActive;
+            this.currentstatus1 = rowData.isActive;
             this.selectedRowForDelete = rowData;
             this.customerShippingAddressId = rowData.customerDomensticShippingId
 
@@ -703,7 +707,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if (this.customerShippingAddressId > 0) {
             this.customerService.updateStatusHipping(obj).subscribe(
                 response => this.saveCompleted(this.sourceCustomer),
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
     }
@@ -741,7 +745,7 @@ export class CustomerShippingInformationComponent implements OnInit {
 
             this.customerService.deleteInternationalShipping(this.customerInternationalShippingId, this.userName).subscribe(
                 response => this.saveCompleted1(this.sourceCustomer),
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
     }
@@ -782,19 +786,19 @@ export class CustomerShippingInformationComponent implements OnInit {
         if (this.customerDomensticShippingShipViaId > 0) {
             this.customerService.deleteShipViaDetails(this.customerDomensticShippingShipViaId, this.userName).subscribe(
                 response => this.saveCompleted2(this.sourceCustomer),
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
     }
 
     restoreShipVia(content, rowData) {
 
-            this.selectedRowForRestoreShipVia = rowData.shipViaName;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.customerShippingAddressId = rowData.customerShippingAddressId;
-            this.customerShippingId = rowData.customerShippingId;
-            this.customerDomensticShippingShipViaId = rowData.customerDomensticShippingShipViaId;
-            this.customerDomensticShippingId = rowData.customerDomensticShippingId;
+        this.selectedRowForRestoreShipVia = rowData.shipViaName;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.customerShippingAddressId = rowData.customerShippingAddressId;
+        this.customerShippingId = rowData.customerShippingId;
+        this.customerDomensticShippingShipViaId = rowData.customerDomensticShippingShipViaId;
+        this.customerDomensticShippingId = rowData.customerDomensticShippingId;
     }
 
     restoreItemAndCloseModel() {
@@ -804,7 +808,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                     this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
                     this.getShipViaByDomesticShippingId(this.customerDomensticShippingId)
                 },
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
     }
@@ -824,10 +828,10 @@ export class CustomerShippingInformationComponent implements OnInit {
                     this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
                     this.getShipViaDataByInternationalShippingId();
                 },
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
-        
+
     }
 
     private saveCompleted2(user?: any) {
@@ -865,7 +869,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if (this.customerInternationalShippingShipViaId > 0) {
             this.customerService.deleteInternationalShipViaId(this.customerInternationalShippingShipViaId, this.userName).subscribe(
                 response => this.saveCompleted3(this.sourceCustomer),
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
     }
@@ -892,8 +896,8 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.modal.close();
     }
     saveInternationalShipping() {
-        if(this.internationalShippingData && this.internationalShippingData.length==0){
-            this.internationalShippingInfo.isPrimary=true;
+        if (this.internationalShippingData && this.internationalShippingData.length == 0) {
+            this.internationalShippingInfo.isPrimary = true;
         }
         const data = {
             ...this.internationalShippingInfo,
@@ -917,8 +921,8 @@ export class CustomerShippingInformationComponent implements OnInit {
                     `Saved International Shipping Information Sucessfully `,
                     MessageSeverity.success
                 );
-            this.isSpinnerVisible = false;
-            },error => {this.isSpinnerVisible = false;})
+                this.isSpinnerVisible = false;
+            }, error => { this.isSpinnerVisible = false; })
         } else {
             // update international
             this.isSpinnerVisible = true;
@@ -932,7 +936,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            },error =>  {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
         $("#addInternationalShippingInfo").modal("hide");
         this.disableSave = true;
@@ -948,10 +952,10 @@ export class CustomerShippingInformationComponent implements OnInit {
                 return {
                     ...x,
                     amount: x.amount ? formatNumberAsGlobalSettingsModule(x.amount, 2) : '0.00'
-                   
+
                 }
             });
-            this.geListByStatusInternational(this.status2 ? this.status2 :this.currentstatus2);
+            this.geListByStatusInternational(this.status2 ? this.status2 : this.currentstatus2);
             this.isSpinnerVisible = false;
         }, err => {
             this.loaderForDomestic = false;
@@ -990,7 +994,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
     updateActiveorInActiveShipViaForIS(rowData) {
         this.isSpinnerVisible = true;
@@ -1003,7 +1007,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
     updateActiveorInActiveForS(rowData) {
         this.isSpinnerVisible = true;
@@ -1015,7 +1019,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
     openInterShippingView(rowData) {
         this.sourceViewforInterShipping = rowData;
@@ -1066,9 +1070,9 @@ export class CustomerShippingInformationComponent implements OnInit {
 
     // edit International details data
     openEditIntenational(rowData) {
-        this.isprimaryInternationaldata=rowData.isPrimary
+        this.isprimaryInternationaldata = rowData.isPrimary
         this.isEditInternational = true;
-        
+
         this.internationalShippingInfo = {
             ...rowData,
             amount: rowData.amount ? formatNumberAsGlobalSettingsModule(rowData.amount, 2) : '',
@@ -1078,10 +1082,10 @@ export class CustomerShippingInformationComponent implements OnInit {
             updatedDate: new Date(rowData.updatedDate),
         };
 
-        if(rowData.shipToCountryId > 0)
+        if (rowData.shipToCountryId > 0)
             this.arrayCountrylist.push(rowData.shipToCountryId);
 
-        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', '', true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value
@@ -1114,14 +1118,14 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.isEditInternational = false;
         this.internationalShippingInfo = new CustomerInternationalShippingModel()
     }
-    formateNumber(obj){
+    formateNumber(obj) {
         obj.amount = obj.amount ? formatNumberAsGlobalSettingsModule(obj.amount, 2) : '';
     }
     async saveshipViaInternational() {
-        if(this.internationalShippingViaData && this.internationalShippingViaData.length==0){
-            this.shipViaInternational.isPrimary=true;
+        if (this.internationalShippingViaData && this.internationalShippingViaData.length == 0) {
+            this.shipViaInternational.isPrimary = true;
         }
-        if(!this.shipViaInternational.shipViaId && !this.shipViaInternational.shippingAccountInfo){
+        if (!this.shipViaInternational.shipViaId && !this.shipViaInternational.shippingAccountInfo) {
             this.alertService.showMessage(
                 'Error',
                 `Please Add Atleast one value Ship via or Shipping Account Info`,
@@ -1152,7 +1156,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 );
                 this.isSpinnerVisible = false;
                 this.disableSaveShipViaInternational = true;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         } else {
             this.isSpinnerVisible = true;
             await this.customerService.updateShipViaInternational(data).subscribe(res => {
@@ -1167,15 +1171,15 @@ export class CustomerShippingInformationComponent implements OnInit {
                 );
                 this.isSpinnerVisible = false;
                 this.disableSaveShipViaInternational = true;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
     }
     saveshipViaDomestic() {
         this.isSpinnerVisible = true;
-        if(this.demosticShippingViaData && this.demosticShippingViaData.length==0){
-            this.shipViaDomestic.isPrimary=true;                        
+        if (this.demosticShippingViaData && this.demosticShippingViaData.length == 0) {
+            this.shipViaDomestic.isPrimary = true;
         }
-        if(!this.shipViaDomestic.shipViaId && !this.shipViaDomestic.shippingAccountInfo){
+        if (!this.shipViaDomestic.shipViaId && !this.shipViaDomestic.shippingAccountInfo) {
             this.alertService.showMessage(
                 'Error',
                 `Please Add Atleast one value Ship via or Shipping Account Info`,
@@ -1183,7 +1187,7 @@ export class CustomerShippingInformationComponent implements OnInit {
             );
             this.isSpinnerVisible = false;
             return;
-        } 
+        }
         const data = {
             ...this.shipViaDomestic,
             customerShippingAddressId: this.selectedShipViaDomestic.customerShippingAddressId,
@@ -1194,7 +1198,7 @@ export class CustomerShippingInformationComponent implements OnInit {
             updatedBy: this.userName,
         }
         if (!this.isEditDomesticShipVia) {
-           
+
             this.customerService.newShippingViaAdd(data).subscribe(res => {
                 this.getShipViaByDomesticShippingId(this.selectedShipViaDomestic.customerDomensticShippingId)
                 this.shipViaDomestic = new CustomerInternationalShipVia()
@@ -1205,7 +1209,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 );
                 this.isSpinnerVisible = false;
                 this.disableSaveShipViaDomestic = true;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         } else {
             this.isSpinnerVisible = true;
             this.customerService.updateCustomershippingViainfo(data).subscribe(res => {
@@ -1219,7 +1223,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                 );
                 this.isSpinnerVisible = false;
                 this.disableSaveShipViaDomestic = true;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
     }
     getShipViaByDomesticShippingId(customerDomensticShippingId) {
@@ -1229,22 +1233,20 @@ export class CustomerShippingInformationComponent implements OnInit {
         })
     }
 
-    getDomesticShipViaListByStatus(value)
-    {
-        if(value){
-            this.currentDeletedstatusShipVia=true;
-        }else{
-            this.currentDeletedstatusShipVia=false;
+    getDomesticShipViaListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatusShipVia = true;
+        } else {
+            this.currentDeletedstatusShipVia = false;
         }
         this.getShipViaByDomesticShippingId(this.customerDomensticShippingIdForShipVia)
     }
 
-    getInternationalShipViaListByStatus(value)
-    {
-        if(value){
-            this.currentDeletedstatusIntShipVia=true;
-        }else{
-            this.currentDeletedstatusIntShipVia=false;
+    getInternationalShipViaListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatusIntShipVia = true;
+        } else {
+            this.currentDeletedstatusIntShipVia = false;
         }
         this.getShipViaDataByInternationalShippingId();
     }
@@ -1268,12 +1270,12 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.getShipViaDataByInternationalShippingId();
     }
     editInternationalShipVia(rowData) {
-        this.isprimaryIntShipiviadata=rowData.isPrimary
+        this.isprimaryIntShipiviadata = rowData.isPrimary
         this.isEditInternationalShipVia = true;
         this.shipViaInternational = { ...rowData };
     }
     editDomesticShipVia(rowData) {
-        this.isprimarydomesticshipdata=rowData.isPrimary;
+        this.isprimarydomesticshipdata = rowData.isPrimary;
         this.isEditDomesticShipVia = true;
         this.shipViaDomestic = { ...rowData };
     }
@@ -1281,7 +1283,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.shipViaInternational = new CustomerInternationalShipVia();
         this.isEditInternationalShipVia = false;
         this.disableSaveShipViaInternational = true;
-        this.currentDeletedstatusIntShipVia =  false;
+        this.currentDeletedstatusIntShipVia = false;
     }
     resetShipViaDomestic() {
         this.shipViaDomestic = new CustomerInternationalShipVia();
@@ -1321,13 +1323,13 @@ export class CustomerShippingInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
     openShipaddressHistory(content, row) {
         this.alertService.startLoadingMessage();
         this.customerService.getCustomerShippingHistory(this.id, row.customerDomensticShippingId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false;})
+            error => { this.isSpinnerVisible = false; })
     }
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -1335,7 +1337,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-        }, () => {})
+        }, () => { })
     }
     getColorCodeForHistory(i, field, value) {
         const data = this.shippingauditHisory;
@@ -1353,7 +1355,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.alertService.startLoadingMessage();
         this.customerService.getCustomerInterShippingHistory(this.id, row.customerInternationalShippingId).subscribe(
             results => this.onInterAuditHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false;})
+            error => { this.isSpinnerVisible = false; })
     }
     private onInterAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -1389,7 +1391,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.alertService.startLoadingMessage();
         this.customerService.getCustomerShipViaHistory(this.id, rowData.customerDomensticShippingId, rowData.customerDomensticShippingShipViaId).subscribe(
             results => this.onAuditShipViaHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false;})
+            error => { this.isSpinnerVisible = false; })
     }
     private onAuditShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -1402,7 +1404,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.alertService.startLoadingMessage();
         this.customerService.getCustomerInterShipViaHistory(this.id, rowData.customerInternationalShippingId, rowData.customerInternationalShippingShipViaId).subscribe(
             results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false;})
+            error => { this.isSpinnerVisible = false; })
     }
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -1440,7 +1442,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
     }
     sampleExcelDownloadForInternationalShipping() {
@@ -1462,22 +1464,24 @@ export class CustomerShippingInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
     }
 
     filterDomessticSite(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getAllDomesticSiteSmartDropDown(event.query); }
-      }
+            this.getAllDomesticSiteSmartDropDown(event.query);
+        }
+    }
 
     //selectedDomessticSite(event){}     
 
-    getAllDomesticSiteSmartDropDown(strText = ''){
-		if(this.arrayDomesricShipIdlist.length == 0) {
-            this.arrayDomesricShipIdlist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName',strText, 'CustomerId', this.id, 20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
-         // this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName',strText,true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+    getAllDomesticSiteSmartDropDown(strText = '') {
+        if (this.arrayDomesricShipIdlist.length == 0) {
+            this.arrayDomesricShipIdlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName', strText, 'CustomerId', this.id, 0, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+            // this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName',strText,true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -1485,9 +1489,9 @@ export class CustomerShippingInformationComponent implements OnInit {
             })
             this.domesticSieList = [...this.domesticSieListOriginal];
             this.arrayDomesricShipIdlist = [];
-		},err => {
-			this.isSpinnerVisible = false;
-		});
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     checkSiteNameExist(value) {
@@ -1505,44 +1509,46 @@ export class CustomerShippingInformationComponent implements OnInit {
         }
     }
 
-    selectedDomessticSite() {       			
-		const siteName = editValueAssignByCondition('siteName', this.domesticShippingInfo.siteName);		
-        if (siteName == this.selectedSitename){
-			this.isSiteNameAlreadyExists = false;
-			if(this.isEditDomestic)
-			this.disableSaveSiteName = false;
-		}
-        else{
-			this.isSiteNameAlreadyExists = true;
-			if(this.isEditDomestic)
-			this.disableSaveSiteName = true;
-		}			
-    } 
+    selectedDomessticSite() {
+        const siteName = editValueAssignByCondition('siteName', this.domesticShippingInfo.siteName);
+        if (siteName == this.selectedSitename) {
+            this.isSiteNameAlreadyExists = false;
+            if (this.isEditDomestic)
+                this.disableSaveSiteName = false;
+        }
+        else {
+            this.isSiteNameAlreadyExists = true;
+            if (this.isEditDomestic)
+                this.disableSaveSiteName = true;
+        }
+    }
 
-    arrayTagNamelist:any[] = [];  
+    arrayTagNamelist: any[] = [];
     tagNamesList: any;
 
-	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
-		if(this.arrayTagNamelist.length == 0) {			
-			this.arrayTagNamelist.push(0); }
-			this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-			this.tagNamesList = res.map(x => {
-				return {
-					tagName: x.label, contactTagId: x.value 
-				}
-			})
-			if(contactTagId > 0){
-				this.domesticShippingInfo = {
-					...this.domesticShippingInfo,
-					tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
-				}
-			}
-		})
-	}
+    getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+        if (this.arrayTagNamelist.length == 0) {
+            this.arrayTagNamelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName', strText, true, 0, this.arrayTagNamelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.tagNamesList = res.map(x => {
+                return {
+                    tagName: x.label, contactTagId: x.value
+                }
+            })
+            if (contactTagId > 0) {
+                this.domesticShippingInfo = {
+                    ...this.domesticShippingInfo,
+                    tagName: getObjectById('contactTagId', contactTagId, this.tagNamesList)
+                }
+            }
+        })
+    }
 
-	filterTagNames(event) {
-		if (event.query !== undefined && event.query !== null) {
-			this.getAllTagNameSmartDropDown(event.query); }
-	}
+    filterTagNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllTagNameSmartDropDown(event.query);
+        }
+    }
 
 }

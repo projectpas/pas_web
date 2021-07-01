@@ -19,7 +19,7 @@ export class CustomerWarningsComponent implements OnInit {
 	@Input() editMode;
 	@Input() selectedCustomerTab: string = '';
 	@Output() tab = new EventEmitter();
-    types : any[] = [];
+	types: any[] = [];
 	warningMessages: any[] = [];
 	isAllow: boolean = false;
 	isRestrict: boolean = false;
@@ -38,33 +38,33 @@ export class CustomerWarningsComponent implements OnInit {
 	nextOrPreviousTab: string;
 	modal: NgbModalRef;
 	isSpinnerVisible: Boolean = false;
-	@ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
-	@ViewChild("WarningsForm",{static:false}) formdata;
+	@ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
+	@ViewChild("WarningsForm", { static: false }) formdata;
 	stopmulticlicks: boolean;
 
-	constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, private router: Router, private commonService: CommonService, 
+	constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, private router: Router, private commonService: CommonService,
 		private modalService: NgbModal
-		) {
+	) {
 	}
 
 	ngOnInit() {
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-        for (let property in changes) {            
-            if (property == 'selectedCustomerTab') {
-                if (changes[property].currentValue != {} && changes.selectedCustomerTab.currentValue == "Warnings") {
+		for (let property in changes) {
+			if (property == 'selectedCustomerTab') {
+				if (changes[property].currentValue != {} && changes.selectedCustomerTab.currentValue == "Warnings") {
 					this.getTypesOfWarnings();
-                }
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 
-	getTypesOfWarnings(){
+	getTypesOfWarnings() {
 		this.isSpinnerVisible = true;
 		//this.commonService.smartDropDownList('CustomerWarningType','CustomerWarningTypeId', 'Name').subscribe(data => {
-		this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(data => {
-			this.types = data;			
+		this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, '', 0).subscribe(data => {
+			this.types = data;
 			if (!this.editMode) {
 				this.warningMessages = this.types.map(x => {
 					return {
@@ -77,72 +77,72 @@ export class CustomerWarningsComponent implements OnInit {
 						restrictMessage: '',
 						customerWarningTypeId: x.value
 					}
-				})				
+				})
 				this.allowAll(true);
 			}
-			else{
+			else {
 				this.initWarningData();
-			}	
+			}
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
-	onRestrictClick($event, i){
-		if($event.target.checked == true){
+	onRestrictClick($event, i) {
+		if ($event.target.checked == true) {
 			this.warningMessages[i].warning = false;
-			this.warningMessages[i].allow = false;			
-		}else {
+			this.warningMessages[i].allow = false;
+		} else {
 			this.warningMessages[i].allow = true;
 		}
 
-		if($event.target.checked == false){
+		if ($event.target.checked == false) {
 			this.isRestrict = false;
 		}
 
 		this.isCheckRestrict = true;
 		this.warningMessages.forEach((warning) => {
-			if(warning.restrict == false){
+			if (warning.restrict == false) {
 				this.isCheckRestrict = false;
-			} 
+			}
 		})
 
 		this.isRestrict = this.isCheckRestrict == true ? true : false;
 	}
 
-	onAllowClick($event){		
-		if($event.target.checked == false){
+	onAllowClick($event) {
+		if ($event.target.checked == false) {
 			this.isAllow = false;
 		}
 		this.isCheckAllow = true;
 		this.warningMessages.forEach((warning) => {
-			if(warning.allow == false){
+			if (warning.allow == false) {
 				this.isCheckAllow = false;
-			} 
+			}
 		})
 
 		this.isAllow = this.isCheckAllow == true ? true : false;
 	}
 
-	onWarningClick($event){		
-		if($event.target.checked == false){
+	onWarningClick($event) {
+		if ($event.target.checked == false) {
 			this.isWarning = false;
 		}
 		this.isCheckWarning = true;
 		this.warningMessages.forEach((warning) => {
-			if(warning.warning == false){
+			if (warning.warning == false) {
 				this.isCheckWarning = false;
-			} 
+			}
 		})
 
 		this.isWarning = this.isCheckWarning == true ? true : false;
 	}
 
-	initWarningData(){
+	initWarningData() {
 		this.isCheckAllow = true;
 		this.isCheckWarning = true;
 		this.isCheckRestrict = true;
 		this.isSpinnerVisible = true;
-		if (this.editMode) {		
+		if (this.editMode) {
 
 			this.disableSave = true;
 			this.id = this.editGeneralInformationData.customerId
@@ -151,73 +151,72 @@ export class CustomerWarningsComponent implements OnInit {
 			this.customerName = this.editGeneralInformationData.name;
 
 			this.customerService.getCustomerWarningsById(this.id).subscribe(res => {
-				if(res[0])
-				{
-				this.customerWarningData = res[0];
-				const warningsData = res[0].warningsData;
-		
-				if (warningsData.length > 0) {
-					this.warningsUpdateBoolean = true;
-					this.warningMessages = warningsData;
-					this.isAllow = this.customerWarningData.isAllow;
-					this.isRestrict = this.customerWarningData.isRestrict;
-					this.isWarning = this.customerWarningData.isWarning;
+				if (res[0]) {
+					this.customerWarningData = res[0];
+					const warningsData = res[0].warningsData;
 
-					this.warningMessages.forEach((warning) => {
-						this.types.forEach((type) => {
-							if(warning.customerWarningTypeId == type.value){
-								warning.sourceModule = type.label;
-							} 
+					if (warningsData.length > 0) {
+						this.warningsUpdateBoolean = true;
+						this.warningMessages = warningsData;
+						this.isAllow = this.customerWarningData.isAllow;
+						this.isRestrict = this.customerWarningData.isRestrict;
+						this.isWarning = this.customerWarningData.isWarning;
+
+						this.warningMessages.forEach((warning) => {
+							this.types.forEach((type) => {
+								if (warning.customerWarningTypeId == type.value) {
+									warning.sourceModule = type.label;
+								}
+							})
+							if (warning.allow == false) {
+								this.isCheckAllow = false;
+							}
+
+							if (warning.warning == false) {
+								this.isCheckWarning = false;
+							}
+
+							if (warning.restrict == false) {
+								this.isCheckRestrict = false;
+							}
 						})
-						if(warning.allow == false){
-							this.isCheckAllow = false;
-						} 
 
-						if(warning.warning == false){
-							this.isCheckWarning = false;
-						} 
+						this.isAllow = this.customerWarningData.isAllow == false && this.isCheckAllow == true ? true : this.customerWarningData.isAllow;
+						this.isWarning = this.customerWarningData.isWarning == false && this.isCheckWarning == true ? true : this.customerWarningData.isWarning;
+						this.isRestrict = this.customerWarningData.isRestrict == false && this.isCheckRestrict == true ? true : this.customerWarningData.isRestrict;
 
-						if(warning.restrict == false){
-							this.isCheckRestrict = false;
-						} 
-					})
+						this.types.forEach((type) => {
+							const index = this.warningMessages.findIndex((warning) => type.label == warning.sourceModule);
+							if (index === -1) {
+								this.warningMessages.push({
+									sourceModule: type.label,
+									sourseModuleId: type.value,
+									allow: false,
+									warning: false,
+									restrict: false,
+									warningMessage: '',
+									restrictMessage: '',
+									customerId: this.id,
+									customerWarningTypeId: type.value
+								});
+							}
+						})
 
-					this.isAllow = this.customerWarningData.isAllow == false && this.isCheckAllow == true ? true : this.customerWarningData.isAllow;
-					this.isWarning = this.customerWarningData.isWarning == false && this.isCheckWarning == true ? true : this.customerWarningData.isWarning;
-					this.isRestrict = this.customerWarningData.isRestrict == false && this.isCheckRestrict == true ? true : this.customerWarningData.isRestrict;
 
-					this.types.forEach((type) => {
-						const index = this.warningMessages.findIndex((warning) => type.label == warning.sourceModule);
-						if(index === -1) {
-						  this.warningMessages.push({
-							sourceModule: type.label,
-							sourseModuleId: type.value,
-							allow: false,
-							warning: false,
-							restrict: false,
-							warningMessage: '',
-							restrictMessage: '',
-							customerId: this.id,
-							customerWarningTypeId: type.value
-						});
-					  }
-					  })
-					 
-
-				} else {
-					this.warningMessages = this.types.map(x => {
-						return {
-							sourceModule: x.label,
-							sourseModuleId: x.value,
-							allow: false,
-							warning: false,
-							restrict: false,
-							warningMessage: '',
-							restrictMessage: '',
-							customerWarningTypeId: x.value
-						}
-					})
-				}
+					} else {
+						this.warningMessages = this.types.map(x => {
+							return {
+								sourceModule: x.label,
+								sourseModuleId: x.value,
+								allow: false,
+								warning: false,
+								restrict: false,
+								warningMessage: '',
+								restrictMessage: '',
+								customerWarningTypeId: x.value
+							}
+						})
+					}
 				}
 				else {
 					this.warningMessages = this.types.map(x => {
@@ -235,9 +234,9 @@ export class CustomerWarningsComponent implements OnInit {
 					this.allowAll(true);
 				}
 				this.isSpinnerVisible = false;
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => { this.isSpinnerVisible = false; })
 
-		} 
+		}
 		else {
 			this.id = this.savedGeneralInformationData.customerId;
 			this.customerCode = this.savedGeneralInformationData.customerCode;
@@ -251,7 +250,7 @@ export class CustomerWarningsComponent implements OnInit {
 					restrict: false,
 					warningMessage: '',
 					restrictMessage: '',
-					customerWarningTypeId : x.value
+					customerWarningTypeId: x.value
 				}
 			})
 			this.allowAll(true);
@@ -266,16 +265,16 @@ export class CustomerWarningsComponent implements OnInit {
 
 	get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-    }
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
 
 	async getCustomerWarningsData() {
 		this.isSpinnerVisible = true;
 		await this.customerService.getCustomerWarningsById(this.id).subscribe(res => {
 			this.customerWarningData = res;
 			this.isSpinnerVisible = false;
-		}, error => {this.isSpinnerVisible = false;})
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	allowAll(value) {
@@ -332,7 +331,7 @@ export class CustomerWarningsComponent implements OnInit {
 			})
 			this.isRestrict = value;
 			this.isWarning = false;
-			this.isAllow =false;
+			this.isAllow = false;
 
 		} else {
 			this.warningMessages = this.warningMessages.map(x => {
@@ -345,7 +344,7 @@ export class CustomerWarningsComponent implements OnInit {
 			})
 			this.isRestrict = value;
 			this.isWarning = false;
-			this.isAllow =false;
+			this.isAllow = false;
 		}
 	}
 
@@ -353,7 +352,7 @@ export class CustomerWarningsComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		const data = this.warningMessages.map(x => {
 			return {
-				...x,				
+				...x,
 				masterCompanyId: this.currentUserMasterCompanyId,
 				createdBy: this.userName,
 				updatedBy: this.userName,
@@ -362,7 +361,7 @@ export class CustomerWarningsComponent implements OnInit {
 				isActive: true,
 				customerWarningId: x.customerWarningId,
 				sourceModule: x.customerWarningTypeId,
-				customerWarningTypeId : x.customerWarningTypeId
+				customerWarningTypeId: x.customerWarningTypeId
 			}
 		})
 		const warningsData = {
@@ -375,30 +374,30 @@ export class CustomerWarningsComponent implements OnInit {
 			updatedBy: this.userName,
 		}
 
-			this.customerService.saveCustomerwarnings(warningsData).subscribe(res => {
-				this.customerWarningData = res;
-				this.warningMessages = res.warningsData;				
-				this.customerWarningsId = res.customerWarningsId;
-				if (!this.warningsUpdateBoolean) {
-					this.alertService.showMessage(
-						'Success',
-						`Saved Warning Messages Successfully `,
-						MessageSeverity.success
-					);
-				}
-				else{
-					this.alertService.showMessage(
-			 			'Success',
-						`Updated Warning Messages Successfully `,
-						MessageSeverity.success
-					);
-				}
-				this.initWarningData();
-				this.warningsUpdateBoolean = true;
-				this.isSpinnerVisible = false;
-				this.disableSave = true;				
-				//this.formdata.reset();
-			}, error => {this.isSpinnerVisible = false;})
+		this.customerService.saveCustomerwarnings(warningsData).subscribe(res => {
+			this.customerWarningData = res;
+			this.warningMessages = res.warningsData;
+			this.customerWarningsId = res.customerWarningsId;
+			if (!this.warningsUpdateBoolean) {
+				this.alertService.showMessage(
+					'Success',
+					`Saved Warning Messages Successfully `,
+					MessageSeverity.success
+				);
+			}
+			else {
+				this.alertService.showMessage(
+					'Success',
+					`Updated Warning Messages Successfully `,
+					MessageSeverity.success
+				);
+			}
+			this.initWarningData();
+			this.warningsUpdateBoolean = true;
+			this.isSpinnerVisible = false;
+			this.disableSave = true;
+			//this.formdata.reset();
+		}, error => { this.isSpinnerVisible = false; })
 	}
 
 	enableSave() {
@@ -406,7 +405,7 @@ export class CustomerWarningsComponent implements OnInit {
 	}
 
 	backClick() {
-        this.tab.emit('Sales');
+		this.tab.emit('Sales');
 	}
 
 	nextClick(nextOrPrevious) {
@@ -419,47 +418,46 @@ export class CustomerWarningsComponent implements OnInit {
 			this.stopmulticlicks = true;
 			this.formdata.reset();
 			if (this.nextOrPreviousTab == 'Next') {
-			  this.tab.emit('Documents');
+				this.tab.emit('Documents');
 			}
 			if (this.nextOrPreviousTab == 'Previous') {
-			  this.tab.emit('Sales');
+				this.tab.emit('Sales');
 			}
 			setTimeout(() => {
 				this.stopmulticlicks = false;
 			}, 500)
 		}
-	  }
-	
-    redirectToTab(){
-		if(!this.disableSave)
-        {
-        this.saveWarnings();
-        }    
+	}
+
+	redirectToTab() {
+		if (!this.disableSave) {
+			this.saveWarnings();
+		}
 		this.dismissModel();
 		this.formdata.reset();
-        if(this.nextOrPreviousTab == "Next"){
-            this.tab.emit('Documents');
-        }
-        if(this.nextOrPreviousTab == "Previous"){
-            this.tab.emit('Sales');
-        }
+		if (this.nextOrPreviousTab == "Next") {
+			this.tab.emit('Documents');
+		}
+		if (this.nextOrPreviousTab == "Previous") {
+			this.tab.emit('Sales');
+		}
 	}
-	
-    dismissModel() {
+
+	dismissModel() {
 		this.modal.close();
 		this.formdata.reset();
-		if(this.nextOrPreviousTab == "Next"){
-            this.tab.emit('Documents');
-        }
-        if(this.nextOrPreviousTab == "Previous"){
-            this.tab.emit('Sales');
-        }
+		if (this.nextOrPreviousTab == "Next") {
+			this.tab.emit('Documents');
+		}
+		if (this.nextOrPreviousTab == "Previous") {
+			this.tab.emit('Sales');
+		}
 	}
-	
+
 	private saveFailedHelper(error: any) {
-        this.isSpinnerVisible = false;
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-        setTimeout(() => this.alertService.stopLoadingMessage(), 5000);        
-    }
+		this.isSpinnerVisible = false;
+		this.alertService.stopLoadingMessage();
+		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+		setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
+	}
 }
