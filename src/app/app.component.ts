@@ -157,6 +157,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   dynamicMenu() {
     this.megaMenuItems = [];
     for (let module of this.menuArray) {
+      
       var menu: MenuItem = {};
       menu.label = module.Name;
       menu.icon = module.ModuleIcon;
@@ -168,24 +169,23 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
       else {
         var isDuplicate = this.megaMenuItems.filter(function (item) {
-          return item.label == menu.label
+          if(item.label == menu.label && item.id == menu.id)
+            return item.label == menu.label  
         })
         if (isDuplicate.length == 0) {
-          this.megaMenuItems.push(menu);
+           this.megaMenuItems.push(menu);
         }
-
       }
-
     }
 
     // console.log(this.getDataByParentId(this.megaMenuItems,null));
 
 
     //this.megaMenuItems= this.getDataByParentId(this.megaMenuItems,null);
-
-    var r = this.getDataByParentId(this.megaMenuItems, null);
-
-    this.megaMenuItems = r;
+      
+      var r = this.getDataByParentId(this.megaMenuItems, null);
+      
+      this.megaMenuItems = r;    
   }
 
 

@@ -98,6 +98,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
     isEdit:boolean=true;
     isDelete:boolean=true;
     isDownload:boolean=true;
+    isUpload:boolean=true;
 
     constructor(private vendorService: VendorService, private modalService: NgbModal, private authService: AuthService,
         private _route: Router, private alertService: AlertService,
@@ -108,6 +109,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
         this.isEdit=this.authService.checkPermission([ModuleConstants.VendorCap+"."+PermissionConstants.Update]);
         this.isDelete=this.authService.checkPermission([ModuleConstants.VendorCap+"."+PermissionConstants.Delete]);
         this.isDownload=this.authService.checkPermission([ModuleConstants.VendorCapList+"."+PermissionConstants.Download]);
+        this.isUpload = this.authService.checkPermission([ModuleConstants.VendorCapList+"."+PermissionConstants.Upload]);
     }
 
     ngOnInit() {
