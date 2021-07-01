@@ -3944,6 +3944,7 @@ export class WorkOrderAddComponent implements OnInit {
     viewWorkflow(workOrderPartNumber) {
         this.currentWorkflowId = workOrderPartNumber.workflowId;
     }
+    currentcmmId:any;
     viewCmm(workOrderPartNumber){
         //this.currentcmmId=undefined;
         //this.currentcmmId=workOrderPartNumber.cMMId;
