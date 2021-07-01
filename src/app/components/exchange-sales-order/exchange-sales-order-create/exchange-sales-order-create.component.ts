@@ -196,10 +196,10 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     private authService: AuthService,
     public router: Router,
     private modalService: NgbModal) {
-      this.salesOrderCopyParameters = null;
-      this.copyMode = false;
-      this.copy = null;
-    }
+    this.salesOrderCopyParameters = null;
+    this.copyMode = false;
+    this.copy = null;
+  }
 
   ngOnInit() {
     this.loadSOStatus();
@@ -288,7 +288,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
 
     forkJoin(this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
-      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, [warningTypeId].join(), 0),
       this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join(), this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
       this.exchangeSalesOrderService.getAllExchangeSalesOrderSettings(this.masterCompanyId)).subscribe(result => {

@@ -1,13 +1,13 @@
-﻿import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef  } from '@angular/core';
+﻿import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { CustomerService } from '../../../services/customer.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CustomerBillingAddressModel } from '../../../models/customer-billing-address.model';
 import { AuthService } from '../../../services/auth.service';
-import { getValueFromObjectByKey, getObjectByValue,getObjectById, editValueAssignByCondition } from '../../../generic/autocomplete';
+import { getValueFromObjectByKey, getObjectByValue, getObjectById, editValueAssignByCondition } from '../../../generic/autocomplete';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuditHistory } from '../../../models/audithistory.model';
-declare var $ : any;
+declare var $: any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
@@ -23,7 +23,7 @@ import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleCons
 
 /** anys component*/
 export class CustomerBillingInformationComponent {
-    @ViewChild('tabRedirectConfirmationModal',{static:false})
+    @ViewChild('tabRedirectConfirmationModal', { static: false })
     public tabRedirectConfirmationModal: ElementRef;
     nextOrPreviousTab: string;
     @Input() savedGeneralInformationData: any = {};
@@ -76,12 +76,12 @@ export class CustomerBillingInformationComponent {
     isprimaryData: any;
     currentstatus: string = 'Active';
     isSpinnerVisible: boolean = false;
-    restorerecord:any={}
-    originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
-    arrayShipingIdlist:any[] = [];
-    arrayCountrylist:any[] = [];
+    restorerecord: any = {}
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
+    arrayShipingIdlist: any[] = [];
+    arrayCountrylist: any[] = [];
     billingSieList: any[];
     billingSieListOriginal: any[];
     changeName: boolean = false;
@@ -102,7 +102,7 @@ export class CustomerBillingInformationComponent {
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal,
-        private datePipe: DatePipe, 
+        private datePipe: DatePipe,
         private commonService: CommonService,
         private router: ActivatedRoute ) 
         {
@@ -175,61 +175,57 @@ export class CustomerBillingInformationComponent {
         $("#downloadBilling").modal("hide");
     }
 
-    checkBillingSiteNameSelect() {    
-        if(this.isEditMode  != editValueAssignByCondition('siteName', this.billingInfo.siteName))
-        {
+    checkBillingSiteNameSelect() {
+        if (this.isEditMode != editValueAssignByCondition('siteName', this.billingInfo.siteName)) {
             this.isSiteNameAlreadyExists = true;
             this.disableSaveSiteName = true;
         }
-        else
-        {
+        else {
             this.isSiteNameAlreadyExists = false;
             this.disableSaveSiteName = false;
         }
-    }    
-    
-    exportCSV(dt){
+    }
+
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
     }
 
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
-        if(this.isViewMode == true)
-        {
+        if (this.isViewMode == true) {
             this.isSpinnerVisible = true;
             this.customerService.getCustomerBillViaDetails(this.id).subscribe(res => {
-            if(res)
-            {
-                const newarry=[];
-                this.originalTableData=res[0];
-                if(this.currentDeletedstatus==false){
-                    this.originalTableData.forEach(element => {
-                        if(element.isDeleted ==false){
-                            newarry.push(element);
-                        }
-                    });
-                }else{
-                    this.originalTableData.forEach(element => {
-                        if(element.isDeleted ==true){
-                        newarry.push(element);
-                        }
-                    });
+                if (res) {
+                    const newarry = [];
+                    this.originalTableData = res[0];
+                    if (this.currentDeletedstatus == false) {
+                        this.originalTableData.forEach(element => {
+                            if (element.isDeleted == false) {
+                                newarry.push(element);
+                            }
+                        });
+                    } else {
+                        this.originalTableData.forEach(element => {
+                            if (element.isDeleted == true) {
+                                newarry.push(element);
+                            }
+                        });
+                    }
+                    this.billingInfoList = newarry;
                 }
-                this.billingInfoList = newarry; 
-            }
-            //this.loader = false;
-            this.isSpinnerVisible = false;
+                //this.loader = false;
+                this.isSpinnerVisible = false;
             }, err => {
                 //this.loader = false;
                 this.isSpinnerVisible = false;
@@ -238,78 +234,78 @@ export class CustomerBillingInformationComponent {
         else
             this.geListByStatus(this.status ? this.status : this.currentstatus)
     }
-	
+
     geListByStatus(status) {
         this.currentstatus = status;
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.billingInfoList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.billingInfoList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.billingInfoList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.billingInfoList= newarry;
-			}
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.billingInfoList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.billingInfoList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.billingInfoList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.billingInfoList = newarry;
+            }
         }
-        this.totalRecords = this.billingInfoList.length ;
+        this.totalRecords = this.billingInfoList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        
+    }
+
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
-    restoreRecord(){
+    restoreRecord() {
         this.isSpinnerVisible = true;
-        this.commonService.updatedeletedrecords('CustomerBillingAddress','CustomerBillingAddressId',this.restorerecord.customerBillingAddressId, ).subscribe(res => {
-            this.currentDeletedstatus=true;
+        this.commonService.updatedeletedrecords('CustomerBillingAddress', 'CustomerBillingAddressId', this.restorerecord.customerBillingAddressId).subscribe(res => {
+            this.currentDeletedstatus = true;
             this.modal.close();
             this.getBillingDataById();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             this.isSpinnerVisible = false;
-        },error => { this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
 
     enableSave() {
@@ -326,9 +322,9 @@ export class CustomerBillingInformationComponent {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     //Need to Delete After Confirm   
@@ -343,13 +339,14 @@ export class CustomerBillingInformationComponent {
 
     filtercountry(event) {
         if (event.query !== undefined && event.query !== null) {
-			this.getAllCountries(event.query); }
+            this.getAllCountries(event.query);
+        }
     }
 
     saveBillingInformation() {
         this.isSpinnerVisible = true;
-       if(this.billingInfoList && this.billingInfoList.length==0){
-          this.billingInfo.isPrimary=true;
+        if (this.billingInfoList && this.billingInfoList.length == 0) {
+            this.billingInfo.isPrimary = true;
         }
         const data = {
             ...this.billingInfo,
@@ -357,8 +354,8 @@ export class CustomerBillingInformationComponent {
             updatedBy: this.userName,
             countryId: getValueFromObjectByKey('countries_id', this.billingInfo.countryId),
             siteName: editValueAssignByCondition('siteName', this.billingInfo.siteName),
-            tagName:editValueAssignByCondition('tagName', this.billingInfo.tagName),
-            contactTagId: editValueAssignByCondition('contactTagId', this.billingInfo.tagName),            
+            tagName: editValueAssignByCondition('tagName', this.billingInfo.tagName),
+            contactTagId: editValueAssignByCondition('contactTagId', this.billingInfo.tagName),
             masterCompanyId: this.currentUserMasterCompanyId,
             customerId: this.id
         }
@@ -373,7 +370,7 @@ export class CustomerBillingInformationComponent {
                     MessageSeverity.success
                 );
                 this.getBillingDataById();
-            },error =>  {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         } else {
             // update shipping 
             this.customerService.updateBillinginfo(data).subscribe(() => {
@@ -385,7 +382,7 @@ export class CustomerBillingInformationComponent {
                     MessageSeverity.success
                 );
                 this.getBillingDataById();
-            },error =>{this.isSpinnerVisible = false})
+            }, error => { this.isSpinnerVisible = false })
         }
         $("#addBillingInfo").modal("hide");
         this.disableSave = true;
@@ -404,9 +401,9 @@ export class CustomerBillingInformationComponent {
     getBillingDataById() {
         this.isSpinnerVisible = true;
         this.customerService.getCustomerBillViaDetails(this.id).subscribe(res => {
-            this.originalTableData=res[0];
+            this.originalTableData = res[0];
             //this.loader = false;
-            this.geListByStatus(this.status ? this.status :this.currentstatus)            
+            this.geListByStatus(this.status ? this.status : this.currentstatus)
             this.isSpinnerVisible = false;
         }, err => {
             //this.loader = false;
@@ -414,7 +411,7 @@ export class CustomerBillingInformationComponent {
         })
         //this.loader = false;
     }
-    
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
@@ -440,13 +437,14 @@ export class CustomerBillingInformationComponent {
     }
 
     getAllCountries(strText = '') {
-        if(this.arrayCountrylist.length == 0) {			
-            this.arrayCountrylist.push(0); }
+        if (this.arrayCountrylist.length == 0) {
+            this.arrayCountrylist.push(0);
+        }
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
-                    nice_name: x.label, countries_id: x.value 
+                    nice_name: x.label, countries_id: x.value
                 }
             })
             this.countryList = this.countryListOriginal;
@@ -456,8 +454,8 @@ export class CustomerBillingInformationComponent {
 
             this.arrayCountrylist = [];
         })
-        
-	}
+
+    }
 
 
     redirectToTab() {
@@ -474,32 +472,34 @@ export class CustomerBillingInformationComponent {
 
         this.isprimaryData = rowData.isPrimary
         this.isEditMode = true;
-        this.billingInfo = { 
+        this.billingInfo = {
             ...rowData
         };
         this.selectedSitename = rowData.siteName
         this.isSiteNameAlreadyExists = false;
-        if(rowData.contactTagId > 0){
-			this.arrayTagNamelist.push(rowData.contactTagId);
-			this.getAllTagNameSmartDropDown('', rowData.contactTagId);
-        }        
-        if(rowData.customerBillingAddressId > 0) {			
-            this.arrayShipingIdlist.push(rowData.customerBillingAddressId); }
+        if (rowData.contactTagId > 0) {
+            this.arrayTagNamelist.push(rowData.contactTagId);
+            this.getAllTagNameSmartDropDown('', rowData.contactTagId);
+        }
+        if (rowData.customerBillingAddressId > 0) {
+            this.arrayShipingIdlist.push(rowData.customerBillingAddressId);
+        }
 
-        if(this.arrayShipingIdlist.length == 0) {			
-            this.arrayShipingIdlist.push(0); }
+        if (this.arrayShipingIdlist.length == 0) {
+            this.arrayShipingIdlist.push(0);
+        }
 
-        if(rowData.countryId > 0)
+        if (rowData.countryId > 0)
             this.arrayCountrylist.push(rowData.countryId);
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', '', true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
-                    nice_name: x.label, countries_id: x.value 
+                    nice_name: x.label, countries_id: x.value
                 }
             })
-            this.billingInfo = { 
-                ...this.billingInfo, 
+            this.billingInfo = {
+                ...this.billingInfo,
                 countryId: getObjectByValue('countries_id', rowData.countryId, this.countryListOriginal)
             };
 
@@ -507,7 +507,7 @@ export class CustomerBillingInformationComponent {
             //this.arrayCountrylist = [];
         })
 
-        this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName','',true,20,this.arrayShipingIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName', '', true, 0, this.arrayShipingIdlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
             this.billingSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -516,14 +516,14 @@ export class CustomerBillingInformationComponent {
             //this.billingSieList = [...this.billingSieListOriginal];
             //this.isprimaryData = rowData.isPrimary
             //this.isEditMode = true;
-            this.billingInfo = { 
-                ...this.billingInfo, 
-                siteName:  getObjectByValue('siteName', rowData.siteName, this.billingSieListOriginal)        
+            this.billingInfo = {
+                ...this.billingInfo,
+                siteName: getObjectByValue('siteName', rowData.siteName, this.billingSieListOriginal)
             };
             this.billingInfoOriginal = this.billingInfo;
             //this.arrayShipingIdlist = [];
-            },err => {
-                this.isSpinnerVisible = false;           		
+        }, err => {
+            this.isSpinnerVisible = false;
         });
 
         //this.billingSieList = [...this.billingSieListOriginal];
@@ -538,13 +538,13 @@ export class CustomerBillingInformationComponent {
         //this.arrayShipingIdlist = [];
 
     }
-    
+
     getCustomerBillingHistory(content, row) {
         const { customerBillingAddressId } = row;
         this.alertService.startLoadingMessage();
         this.customerService.getCustomerBillingHistory(this.id, customerBillingAddressId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false;});
+            error => { this.isSpinnerVisible = false; });
     }
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -574,7 +574,7 @@ export class CustomerBillingInformationComponent {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => {this.isSpinnerVisible = false;})
+        }, error => { this.isSpinnerVisible = false; })
     }
 
     dismissModel() {
@@ -586,7 +586,7 @@ export class CustomerBillingInformationComponent {
             this.selectedRowForDelete = rowData;
             this.isDeleteMode = true;
             this.customerBillingAddressId = rowData.customerBillingAddressId
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });            
+            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         } else {
             $('#deleteoopsBilling').modal('show');
         }
@@ -598,11 +598,11 @@ export class CustomerBillingInformationComponent {
             updatedBy: this.userName,
             customerBillingAddressId: this.customerBillingAddressId,
             masterCompanyId: this.currentUserMasterCompanyId,
-        }        
+        }
         if (this.customerBillingAddressId > 0) {
             this.customerService.deleteBillinginfo(obj).subscribe(
                 response => this.saveCompleted(this.sourceCustomer),
-                error => {this.isSpinnerVisible = false;})
+                error => { this.isSpinnerVisible = false; })
         }
         this.modal.close();
     }
@@ -645,20 +645,22 @@ export class CustomerBillingInformationComponent {
                     `Successfully Uploaded  `,
                     MessageSeverity.success
                 );
-            },error => {this.isSpinnerVisible = false;})
+            }, error => { this.isSpinnerVisible = false; })
         }
     }
 
     filterBillingSite(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getAllBillingSiteSmartDropDown(event.query); }
-      }
+            this.getAllBillingSiteSmartDropDown(event.query);
+        }
+    }
 
-    getAllBillingSiteSmartDropDown(strText = ''){
-		if(this.arrayShipingIdlist.length == 0) {			
-			this.arrayShipingIdlist.push(0); }
+    getAllBillingSiteSmartDropDown(strText = '') {
+        if (this.arrayShipingIdlist.length == 0) {
+            this.arrayShipingIdlist.push(0);
+        }
         //this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName',strText,true,20,this.arrayShipingIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
-          this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName',strText, 'CustomerId', this.id, 20,this.arrayShipingIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName', strText, 'CustomerId', this.id, 20, this.arrayShipingIdlist.join()).subscribe(response => {
             this.billingSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -666,12 +668,12 @@ export class CustomerBillingInformationComponent {
             })
             this.billingSieList = [...this.billingSieListOriginal];
             this.arrayShipingIdlist = [];
-		},err => {
-            this.isSpinnerVisible = false;	
-		});
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
-    checkSiteNameExist(value) {       
+    checkSiteNameExist(value) {
         this.changeName = true;
         this.isSiteNameAlreadyExists = false;
         this.disableSaveSiteName = false;
@@ -686,44 +688,46 @@ export class CustomerBillingInformationComponent {
         }
     }
 
-    selectedsiteNameData() {       			
-		const siteName = editValueAssignByCondition('siteName', this.billingInfo.siteName);		
-        if (siteName == this.selectedSitename){
-			this.isSiteNameAlreadyExists = false;
-			if(this.isEditMode)
-			this.disableSaveSiteName = false;
-		}
-        else{
-			this.isSiteNameAlreadyExists = true;
-			if(this.isEditMode)
-			this.disableSaveSiteName = true;
-		}			
+    selectedsiteNameData() {
+        const siteName = editValueAssignByCondition('siteName', this.billingInfo.siteName);
+        if (siteName == this.selectedSitename) {
+            this.isSiteNameAlreadyExists = false;
+            if (this.isEditMode)
+                this.disableSaveSiteName = false;
+        }
+        else {
+            this.isSiteNameAlreadyExists = true;
+            if (this.isEditMode)
+                this.disableSaveSiteName = true;
+        }
     }
-    
-    arrayTagNamelist:any[] = [];  
+
+    arrayTagNamelist: any[] = [];
     tagNamesList: any;
 
-	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
-		if(this.arrayTagNamelist.length == 0) {			
-			this.arrayTagNamelist.push(0); }
-			this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-			this.tagNamesList = res.map(x => {
-				return {
-					tagName: x.label, contactTagId: x.value 
-				}
-			})
-			if(contactTagId > 0){
-				this.billingInfo = {
-					...this.billingInfo,
-					tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
-				}
-			}
-		})
-	}
-
-	filterTagNames(event) {
-		if (event.query !== undefined && event.query !== null) {
-			this.getAllTagNameSmartDropDown(event.query); }
+    getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+        if (this.arrayTagNamelist.length == 0) {
+            this.arrayTagNamelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName', strText, true, 0, this.arrayTagNamelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.tagNamesList = res.map(x => {
+                return {
+                    tagName: x.label, contactTagId: x.value
+                }
+            })
+            if (contactTagId > 0) {
+                this.billingInfo = {
+                    ...this.billingInfo,
+                    tagName: getObjectById('contactTagId', contactTagId, this.tagNamesList)
+                }
+            }
+        })
     }
-    
+
+    filterTagNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllTagNameSmartDropDown(event.query);
+        }
+    }
+
 }

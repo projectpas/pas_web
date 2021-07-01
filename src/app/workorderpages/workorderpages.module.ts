@@ -121,7 +121,8 @@ import { WoPartlistFromComponent } from '../components/work-order/work-order-set
 import { WoPrintFromComponent } from '../components/work-order/work-order-setup/wo-print-form/wo-print-form.component';
 import { WorkOrderActualVsQuoteComponent } from '../components/work-order/work-order-setup/wo-actual-vs-quote/wo-actual-vs-quote.component';
 import { SubWoPrintFromComponent } from '../components/work-order/work-order-setup/sub-wo-print-form/sub-wo-print-form.component';
-import { WorkOrderWorkCompleteComponent } from '../components/work-order/work-order-setup/wo-workComplete/wo-workComplete.component';
+import { WorkOrderWorkCompleteComponent } from '../components/work-order/work-order-setup/wo-workComplete/wo-workComplete.component'; 
+import { CommonPublicationViewModule } from '../components/common-components/common-publicationView/common-publicationView.module';
 import { WorkOrderAssignmentComponent } from '../components/work-order/work-order-setup/wo-assignment/wo-assignment.component';
 // import { TwoDecimalGlobalNumberFormatPipe } from '../pipes/two-decimal-global-number-format-pipe.pipe';
 
@@ -156,6 +157,7 @@ import { WorkOrderAssignmentComponent } from '../components/work-order/work-orde
     TreeTableModule,
     BreadcrumbModule,
     CommonDocumentsModule,
+    CommonPublicationViewModule,
     CommonCommunicationModule,
     SplitButtonModule,
     CommonModulesModule,

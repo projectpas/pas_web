@@ -283,6 +283,7 @@ import { ExchangeSalesOrderPickTicketComponent } from './components/exchange-sal
 import { ExchangeSalesOrderEndpointService } from './services/exchangesalesorder-endpoint.service';
 import { ExchangeSalesOrderService } from './services/exchangesalesorder.service';
 import { ExchangeSalesOrderMultiPickTicketComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
+import { CommonPublicationViewModule } from './components/common-components/common-publicationView/common-publicationView.module';
 @NgModule({
   imports: [
     CardModule,
@@ -311,6 +312,7 @@ import { ExchangeSalesOrderMultiPickTicketComponent } from "./components/exchang
     NgbModule,
     TabViewModule,
     CommonDocumentsModule,
+    CommonPublicationViewModule,
     CalendarModule,
   ],
   declarations: [

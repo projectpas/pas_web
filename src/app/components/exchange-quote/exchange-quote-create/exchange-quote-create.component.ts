@@ -35,10 +35,10 @@ import { forkJoin } from "rxjs/observable/forkJoin";
 import { ExchangeQuotePartNumberComponent } from "../shared/components/exchange-quote-part-number/exchange-quote-part-number.component";
 import { ExchangeQuoteApproveComponent } from "../shared/components/exchange-quote-approve/exchange-quote-approve.component";
 import { ExchangeQuoteCustomerApprovalComponent } from "../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
-import{ExchangeQUoteMarginSummary} from '../../../models/exchange/ExchangeQUoteMarginSummary';
-import{ExchangeQuoteAnalysisComponent} from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
-import {ExchangeQuoteChargesComponent} from "../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
-import {ExchangeQuoteFreightComponent} from "../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
+import { ExchangeQUoteMarginSummary } from '../../../models/exchange/ExchangeQUoteMarginSummary';
+import { ExchangeQuoteAnalysisComponent } from '../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
+import { ExchangeQuoteChargesComponent } from "../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
+import { ExchangeQuoteFreightComponent } from "../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
 import { VerifyExchangeQuoteModel } from "../models/verify-exchange-quote-model";
 import { ExchangeSalesOrderConversionCritera } from "../models/exchange-sales-order-conversion-criteria";
 import { ExchangeSalesOrderView } from "../../../models/exchange/ExchangeSalesOrderView";
@@ -62,11 +62,11 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   exchangOrdereQuote: IExchangeOrderQuote;
   modal: NgbModalRef;
   errorModal: NgbModalRef;
-  arrayPrioritylist:any[] = [];
+  arrayPrioritylist: any[] = [];
   allPriorityInfo: any = [];
   allPriorityDetails: any[];
   isSpinnerVisible: boolean = true;
-  arrayExchangestatuslist:any[] = [];
+  arrayExchangestatuslist: any[] = [];
   exchangeStatusList: any = [];
   creditTerms: any[];
   id: any;
@@ -96,16 +96,16 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   @ViewChild(ExchangeQuoteCustomerApprovalComponent, { static: false }) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
   marginSummary: ExchangeQUoteMarginSummary = new ExchangeQUoteMarginSummary();
   @ViewChild(ExchangeQuoteAnalysisComponent, { static: false }) public exchangeQuoteAnalysisComponent: ExchangeQuoteAnalysisComponent;
-  enforceApproval: boolean=true;
+  enforceApproval: boolean = true;
   @ViewChild(ExchangeQuoteChargesComponent, { static: false }) public exchangeQuoteChargesComponent: ExchangeQuoteChargesComponent;
   @ViewChild(ExchangeQuoteFreightComponent, { static: false }) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
   moduleName: any = "ExchangeQuote";
   totalCharges = 0;
   totalFreights = 0;
-  totalcost=0;
+  totalcost = 0;
   markupList = [];
   percents: any[];
-  disableprintagreement:boolean=true;
+  disableprintagreement: boolean = true;
   @ViewChild("exchangeQuotePrintPopup", { static: false }) public exchangeQuotePrintPopup: ElementRef;
   verifyExchangeSalesOrderQuoteObj: VerifyExchangeQuoteModel;
   exchangeSalesOrderConversionCriteriaObj: ExchangeSalesOrderConversionCritera;
@@ -138,10 +138,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     public router: Router,
     private modalService: NgbModal,
     private changeDetector: ChangeDetectorRef) {
-      this.exchangeQuote = new ExchangeQuote();
-      this.verifyExchangeSalesOrderQuoteObj = new VerifyExchangeQuoteModel();
-      this.exchangeSalesOrderConversionCriteriaObj = new ExchangeSalesOrderConversionCritera();
-     }
+    this.exchangeQuote = new ExchangeQuote();
+    this.verifyExchangeSalesOrderQuoteObj = new VerifyExchangeQuoteModel();
+    this.exchangeSalesOrderConversionCriteriaObj = new ExchangeSalesOrderConversionCritera();
+  }
 
   ngOnInit() {
     this.priorityData();
@@ -160,7 +160,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     });
     setTimeout(() => {
       this.getExchangeInstance(true);
-    },1200);
+    }, 1200);
 
     if (this.id) {
       this.getMarginSummary();
@@ -170,23 +170,23 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     }
   }
 
-  get userName(): string {	
-		return this.authService.currentUser ? this.authService.currentUser.userName : "";		
-	}
+  get userName(): string {
+    return this.authService.currentUser ? this.authService.currentUser.userName : "";
+  }
 
-	get currentUserManagementStructureId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.managementStructureId
-		  : null;
-	}
-	get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-	}
-	get employeeId() {
-	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-	}
+  get currentUserManagementStructureId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.managementStructureId
+      : null;
+  }
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : null;
+  }
+  get employeeId() {
+    return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+  }
 
   get masterCompanyId(): number {
     return this.authService.currentUser
@@ -213,55 +213,59 @@ export class ExchangeQuoteCreateComponent implements OnInit {
 
   private priorityData(strText = '') {
     if (this.arrayPrioritylist.length == 0) {
-        this.arrayPrioritylist.push(0); }
-        this.commonservice.autoSuggestionSmartDropDownList('Priority','PriorityId','Description',strText,true, 0,this.arrayPrioritylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-        this.allPriorityInfo = res;
-            this.allPriorityInfo.map(x => {
-                if (x.label == 'Routine') {
-                    this.exchangeQuote.priorityId = x;
-                }
-        })
-        //this.onSelectPriority();
-        },
-        err => {
-            this.isSpinnerVisible = false;	});                
+      this.arrayPrioritylist.push(0);
+    }
+    this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 0, this.arrayPrioritylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+      this.allPriorityInfo = res;
+      this.allPriorityInfo.map(x => {
+        if (x.label == 'Routine') {
+          this.exchangeQuote.priorityId = x;
+        }
+      })
+      //this.onSelectPriority();
+    },
+      err => {
+        this.isSpinnerVisible = false;
+      });
   }
 
   filterPriorityNames(event) {
-		this.allPriorityDetails = this.allPriorityInfo;
-		if (event.query !== undefined && event.query !== null) {
-			const priority = [...this.allPriorityInfo.filter(x => {
-				return x.label.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.allPriorityDetails = priority;
-		}
+    this.allPriorityDetails = this.allPriorityInfo;
+    if (event.query !== undefined && event.query !== null) {
+      const priority = [...this.allPriorityInfo.filter(x => {
+        return x.label.toLowerCase().includes(event.query.toLowerCase())
+      })]
+      this.allPriorityDetails = priority;
+    }
   }
-  
+
   onSelectPriority() {
   }
-  
+
   loadExchangeStatus() {
-		if (this.arrayExchangestatuslist.length == 0) {
-            this.arrayExchangestatuslist.push(0); }
-			this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus','ExchangeStatusId','Name','',
-								  true, 0,this.arrayExchangestatuslist.join(),this.currentUserMasterCompanyId)
-				.subscribe(res => {
-				this.exchangeStatusList = res;
-				this.exchangeStatusList = this.exchangeStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	
-				res.forEach(x => {
-					if (x.label.toUpperCase() == "OPEN") {
-						this.exchangeQuote.statusId = x.value;
-					}
+    if (this.arrayExchangestatuslist.length == 0) {
+      this.arrayExchangestatuslist.push(0);
+    }
+    this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus', 'ExchangeStatusId', 'Name', '',
+      true, 0, this.arrayExchangestatuslist.join(), this.currentUserMasterCompanyId)
+      .subscribe(res => {
+        this.exchangeStatusList = res;
+        this.exchangeStatusList = this.exchangeStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+        res.forEach(x => {
+          if (x.label.toUpperCase() == "OPEN") {
+            this.exchangeQuote.statusId = x.value;
+          }
         });
-       }
-			,err => {
-				this.isSpinnerVisible = false;	}
-			);
+      }
+        , err => {
+          this.isSpinnerVisible = false;
+        }
+      );
   }
-  
+
   getExchangeInstance(initialCall = false) {
-     if (this.id) {
-      this.getExchQuoteInstance(this.id, false,initialCall);
+    if (this.id) {
+      this.getExchQuoteInstance(this.id, false, initialCall);
       //this.getSOMarginSummary();
       this.isEdit = true;
       this.toggle_po_header = false;
@@ -307,11 +311,11 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.exchangeQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
-      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
-      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(), this.masterCompanyId),
       this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId),
-      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 100, [warningTypeId].join(), this.masterCompanyId),
-      this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(),this.masterCompanyId)).subscribe(result => {
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, [warningTypeId].join(), 0),
+      this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 0, [leadSourceId].join(), this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -516,12 +520,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         this.exchangeQuote.cogs = validDaysObject.cogs;
         this.exchangeQuote.daysForCoreReturn = validDaysObject.daysForCoreReturn;
         //this.defaultSettingPriority = validDaysObject.defaultPriorityId;
-      } 
+      }
       else {
         this.exchangeQuote.validForDays = 10;
         this.exchangeQuote.type = "1";
       }
-    } 
+    }
     else {
       this.exchangeQuote.validForDays = 10;
       this.exchangeQuote.type = "1";
@@ -644,17 +648,17 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       //this.exchangOrdereQuote.priorityId = this.exchangeQuote.priorityId;
       //this.exchangOrdereQuote.priorityId = getObjectById('value', this.exchangeQuote.priorityId, this.allPriorityInfo),
       this.exchangOrdereQuote.priorityId = this.exchangeQuote.priorityId ? this.getPriorityId(this.exchangeQuote.priorityId) : 0,
-      //this.exchangOrdereQuote.priorityId = 1,
-      //this.salesOrder.managementStructureId = this.salesQuote.managementStructureId;
-      this.exchangOrdereQuote.creditLimit = this.exchangeQuote.creditLimit;
+        //this.exchangOrdereQuote.priorityId = 1,
+        //this.salesOrder.managementStructureId = this.salesQuote.managementStructureId;
+        this.exchangOrdereQuote.creditLimit = this.exchangeQuote.creditLimit;
       this.exchangOrdereQuote.creditTermId = this.exchangeQuote.creditTermId;
 
       //this.exchangOrdereQuote.contractReference = this.salesQuote.contractReferenceName;
-      this.exchangOrdereQuote.employeeId= this.authService.currentEmployee.employeeId,
-      this.exchangOrdereQuote.salesPersonId = editValueAssignByCondition(
-        "employeeId",
-        this.exchangeQuote.salesPersonName
-      );
+      this.exchangOrdereQuote.employeeId = this.authService.currentEmployee.employeeId,
+        this.exchangOrdereQuote.salesPersonId = editValueAssignByCondition(
+          "employeeId",
+          this.exchangeQuote.salesPersonName
+        );
       this.exchangOrdereQuote.salesPersonName = editValueAssignByCondition(
         "name",
         this.exchangeQuote.salesPersonId
@@ -726,30 +730,30 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         //   this.alertService.resetStickyMessage();
         //   this.alertService.showStickyMessage('Sales Order', "Please select valid Dates for Sales Order PartsList!", MessageSeverity.error);
         // } else {
-          this.marginSummary.exchangeQuoteId = this.id;
-          this.exchangequoteService.createExchangeQuoteMarginSummary(this.marginSummary).subscribe(result => {
-            this.marginSummary.exchangeQuoteMarginSummaryId = result;
-           });
-          this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
-            this.isSpinnerVisible = false;
-            this.alertService.showMessage(
-              "Success",
-              `Sales Order updated successfully.`,
-              MessageSeverity.success
-            );
-            this.getExchQuoteInstance(this.id, true);
-            if (createNewVersion) {
-              this.router.navigateByUrl(`exchangemodule/exchangepages/exchange-quote-list`);
-            }
-            this.toggle_po_header = false;
-            if (this.isEdit) {
-              this.isCreateModeHeader = false;
-            }
-            this.enableUpdateButton = true;
-          }, error => {
-            this.isSpinnerVisible = false;
-            this.toggle_po_header = true;
-          });
+        this.marginSummary.exchangeQuoteId = this.id;
+        this.exchangequoteService.createExchangeQuoteMarginSummary(this.marginSummary).subscribe(result => {
+          this.marginSummary.exchangeQuoteMarginSummaryId = result;
+        });
+        this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
+          this.isSpinnerVisible = false;
+          this.alertService.showMessage(
+            "Success",
+            `Sales Order updated successfully.`,
+            MessageSeverity.success
+          );
+          this.getExchQuoteInstance(this.id, true);
+          if (createNewVersion) {
+            this.router.navigateByUrl(`exchangemodule/exchangepages/exchange-quote-list`);
+          }
+          this.toggle_po_header = false;
+          if (this.isEdit) {
+            this.isCreateModeHeader = false;
+          }
+          this.enableUpdateButton = true;
+        }, error => {
+          this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
+        });
         //}
       } else {
         this.exchangequoteService.create(this.exchangeQuoteView).subscribe(data => {
@@ -783,12 +787,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   }
 
   getPriorityId(obj) {
-		if (obj.value) {
-			return obj.value;
-		} else {
-			return 0;
-		}
-	}
+    if (obj.value) {
+      return obj.value;
+    } else {
+      return 0;
+    }
+  }
 
   closeErrorMessage() {
     this.errorModal.close();
@@ -882,7 +886,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     if (savedParts) {
       this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(savedParts, this.marginSummary);
       this.updateMarginSummary();
-      console.log("summarydata",this.marginSummary);
+      console.log("summarydata", this.marginSummary);
       this.getExchQuoteInstance(this.id, true);
     }
   }
@@ -948,12 +952,12 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   setExchangeQuoteMarginSummary(data) {
     if (data) {
       this.marginSummary = data;
-       this.totalCharges = this.marginSummary.otherCharges;
-       this.totalFreights = this.marginSummary.freightAmount;
-       this.totalcost = this.marginSummary.otherCost;
-       this.exchangequoteService.setTotalCharges(this.marginSummary.otherCharges);
-       this.exchangequoteService.setTotalFreights(this.marginSummary.freightAmount);
-       this.exchangequoteService.setTotalcost(this.marginSummary.otherCost);
+      this.totalCharges = this.marginSummary.otherCharges;
+      this.totalFreights = this.marginSummary.freightAmount;
+      this.totalcost = this.marginSummary.otherCost;
+      this.exchangequoteService.setTotalCharges(this.marginSummary.otherCharges);
+      this.exchangequoteService.setTotalFreights(this.marginSummary.freightAmount);
+      this.exchangequoteService.setTotalcost(this.marginSummary.otherCost);
     } else {
       this.marginSummary = new ExchangeQUoteMarginSummary;
     }

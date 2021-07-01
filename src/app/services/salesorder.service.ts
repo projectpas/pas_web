@@ -375,6 +375,10 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.getSalesOrderChargesById(id, isDeleted);
   }
 
+  getSalesOrderFreightsById(id, isDeleted) {
+    return this.salesOrderEndPointSevice.getSalesOrderFreightsById(id, isDeleted);
+  }
+
   createSOMarginSummary(marginSummary: MarginSummary) {
     return this.salesOrderEndPointSevice.createSOMarginSummary(marginSummary);
   }

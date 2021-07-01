@@ -12964,7 +12964,9 @@ p-dialog .ui-widget.ui-widget-content {
 .modal-body p .value {
   width: 70%;
   display: inline-block;
-  padding-top: 2px;
+  // padding-top: 2px;
+  padding:0px;
+  vertical-align: top;
 }
 
 .ui-autocomplete-dropdown.ui-button-icon-only {

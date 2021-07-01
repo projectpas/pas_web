@@ -106,7 +106,7 @@ export class CreatePublicationComponent implements OnInit {
   currentDeletedstatus = false;
   headersforPNMapping = [
     { field: 'partNumber', header: 'PN' },
-    { field: 'partDescription', header: 'PN Description' },
+    { field: 'partDescription', header: 'PN Description',width:"200px" },
     { field: 'manufacturer', header: 'Manufacturer' },
     { field: 'itemClassification', header: 'Item Classification' },
     { field: 'itemGroup', header: 'Item Group' }
@@ -139,10 +139,10 @@ export class CreatePublicationComponent implements OnInit {
 
   atacols = [
     { field: 'partNumber', header: 'PN Number' },
-    { field: 'partDescription', header: 'PN Description' },
+    { field: 'partDescription', header: 'PN Description',width:"200px" },
     { field: 'manufacturerName', header: 'Manufacturer' },
     { field: 'itemGroup', header: 'Item Group' },
-    { field: 'ataChapter', header: 'ATA Chapter' },
+    { field: 'ataChapter', header: 'ATA Chapter',width:"200px" },
     { field: 'ataSubChapter', header: 'ATA SubChapter' },
   ];
   selectedatacols = this.atacols;
@@ -184,12 +184,12 @@ export class CreatePublicationComponent implements OnInit {
 
   aircraftInformationCols: any[] = [
     { field: 'partNumber', header: 'PN Number' },
-    { field: 'partDescription', header: 'PN Description' },
+    { field: 'partDescription', header: 'PN Description',width:"200px" },
     { field: 'manufacturerName', header: 'Manufacturer' },
     { field: 'itemGroup', header: 'Item Group' },
     { field: 'aircraft', header: 'Aircraft' },
-    { field: 'model', header: 'Model' },
-    { field: 'dashNumber', header: 'Dash Numbers' },
+    { field: 'model', header: 'Model',width:"100px" },
+    { field: 'dashNumber', header: 'Dash Numbers',width:"100px" },
   ];
   selectedaircraftInformationCols = this.aircraftInformationCols;
   headersforAttachment = [

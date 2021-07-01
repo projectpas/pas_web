@@ -354,7 +354,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllCreditTerms() {
-    this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.creditTermsListOriginal = res;
     }, error => { this.isSpinnerVisible = false });
   }
@@ -388,7 +388,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getAllcreditTermList() {
     //this.commonservice.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').subscribe((res) => {
-    this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.creditTermsListOriginal = res;
     }, error => { this.isSpinnerVisible = false });
   }
