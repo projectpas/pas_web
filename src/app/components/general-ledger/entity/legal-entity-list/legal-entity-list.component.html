@@ -542,7 +542,7 @@
          </div>
         
             <div *ngIf="showViewForTabs" class="panel-group mt-2" id="accordion">
-                <div class="panel panel-default">
+                <div class="panel panel-default" *ngIf="isGeneralInforView">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <div></div>
@@ -827,10 +827,10 @@
                     </div>
                 </div>
         
-                <div class="panel panel-default">
+                <div class="panel panel-default" *ngIf="isContactView">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isContactView" class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
                         </h4>
                     </div>
                     <div id="step2" class="panel-collapse  collapse">
@@ -842,10 +842,10 @@
                 </div>
         
         
-                <div class="panel panel-default">
+                <div class="panel panel-default" *ngIf="isBankingView">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isBankingView" class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
                         </h4>
                     </div>
                     <div id="step3" class="panel-collapse  collapse">
@@ -987,10 +987,10 @@
                     </div>
                 </div>
         
-                <div class="panel panel-default"> 
+                <div class="panel panel-default" *ngIf="isBillingView"> 
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isBillingView" class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
                         </h4>
                     </div>
                     <div id="step6" class="panel-collapse  collapse">
@@ -1000,10 +1000,10 @@
                     </div>
                 </div>
         
-                <div class="panel panel-default">
+                <div class="panel panel-default" *ngIf="isShippingView">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isShippingView" class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
                         </h4>
                     </div>
                     <div id="step7" class="panel-collapse  collapse">
@@ -1015,17 +1015,17 @@
         
         
         
-                <div class="panel panel-default">
+                <div class="panel panel-default" *ngIf="isDocumentView">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a *ngIf="isDocumentView" class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
+                            <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
                         </h4>
                     </div>
                     <div id="step10" class="panel-collapse  collapse" >
                         <div class="panel-body m-lr-7" *ngIf="viewDataGeneralInformation">
           <!-- <app-legal-entity-documents  [legalEntityDataFromExternalComponents]="viewDataGeneralInformation">
         </app-legal-entity-documents> -->
-        <app-common-documents [generalInformtionData]="viewDataGeneralInformation" (tab)="changeOfTab($event)" [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                            <app-common-documents [generalInformtionData]="viewDataGeneralInformation" (tab)="changeOfTab($event)" [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
                         </div> 
                     </div>
                 </div>
