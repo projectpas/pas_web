@@ -370,12 +370,20 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
+    // updateDeleteStatus<T>(selectedvalues: any): Observable<T> {
+    //     let url = `${this._updateDeleteStatus}/${selectedvalues}`;
+    //     return this.http.put<T>(url, this.getRequestHeaders())
+    //         .catch(error => {
+    //             return this.handleErrorCommon(error, () => this.updateDeleteStatus(selectedvalues));
+    //         });
+    // }
     updateDeleteStatus<T>(selectedvalues: any): Observable<T> {
         let url = `${this._updateDeleteStatus}/${selectedvalues}`;
-        return this.http.put<T>(url, this.getRequestHeaders())
-            .catch(error => {
-                return this.handleErrorCommon(error, () => this.updateDeleteStatus(selectedvalues));
-            });
+
+        return this.http.post<T>(`${this._updateDeleteStatus}/${selectedvalues}`, JSON.stringify({}), this.getRequestHeaders())
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.updateDeleteStatus(selectedvalues));
+        });
     }
 
     updateDeleteStatusNonStock<T>(selectedvalues: any): Observable<T> {
@@ -1241,7 +1249,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     //getItemMasterCapabilityAuditHistory
     getItemMasterCapabilityAuditHistory(capabilityId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmastercapesAudit/${capabilityId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmastercapesAudit/${capabilityId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterCapabilityAuditHistory(capabilityId));
             });
@@ -1249,21 +1257,26 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
     //getnhatlaaltequparthistory
     getnhatlaaltequparthistory(itemMappingId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/nhatlaaltequparthistory?itemMappingId=${itemMappingId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/nhatlaaltequparthistory?itemMappingId=${itemMappingId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getnhatlaaltequparthistory(itemMappingId));
             });
     }
 
+    // getItemMasterAircraftAuditHistory(id) {
+    //     return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getItemMasterAircraftMappedAudit/${id}`)
+    //         .catch(error => {
+    //             return this.handleErrorCommon(error, () => this.getItemMasterAircraftAuditHistory(id));
+    //         });
+    // }
     getItemMasterAircraftAuditHistory(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getItemMasterAircraftMappedAudit?itemMasterAircraftMappingId=${id}`)
-            .catch(error => {
-                return this.handleErrorCommon(error, () => this.getItemMasterAircraftAuditHistory(id));
-            });
-    }
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getAuditHistoryItemMasterPurchSaleByID/${id}`, this.getRequestHeaders()).catch(error => {
+          return this.handleErrorCommon(error, () => this.getItemMasterAircraftAuditHistory(id));
+        });
+      }
 
     getATAMappedAudit(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getATAMappedAudit/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getATAMappedAudit/${id}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getATAMappedAudit(id));
             });
