@@ -960,6 +960,12 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(searchText, startWith, count?, idList?, masterCompanyId?,ispmaorIsder?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownItemMasterIsPmaOrIsDerList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}&ispmaorIsder=${ispmaorIsder}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(searchText, startWith, count, idList, masterCompanyId,ispmaorIsder));
+    });
+  }
+
   // getAllEditID(purchaseOrderId) {
   //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
   // }

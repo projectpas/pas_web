@@ -109,19 +109,20 @@
                                             <tbody>
                                                 <tr *ngFor="let proces of vendorProcess1099Data; let i = index;">
                                                     <td><input type="checkbox" class="form-control"
-                                                            [value]="proces.description"
+                                                            [value]="proces.name"
                                                             [ngModelOptions]="{standalone: true}"
                                                             [(ngModel)]="proces.isDefaultCheck"
                                                             (change)="changeCheck1099Required($event, i)" (ngModelChange)="enableSave()"></td>
 
-                                                    <td>{{proces.description}} </td>
+                                                    <td>{{proces.name}} </td>
                                                     <td><input type="radio" name="isDefaultRadio"
                                                             [attr.disabled]="proces.isDefaultCheck == false ||  null"
                                                             [ngModelOptions]="{standalone: true}"
-                                                            [value]="proces.description"
+                                                            [value]="proces.name"
                                                             [(ngModel)]="proces.isDefaultRadio"
                                                             (change)="changevalue($event, i)" class="radio-inline" (ngModelChange)="enableSave()"></td>
                                                 </tr>
+                                                <tr *ngIf="!vendorProcess1099Data">No data found</tr>
                                             </tbody>
                                         </table>
                                     </div>

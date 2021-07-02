@@ -839,7 +839,7 @@ export class VendorContactsComponent implements OnInit {
 
     getAllATAChapter() {
         this.isSpinnerVisible = true;
-        this.atamain.getAtaMainList().subscribe(res => {
+        this.atamain.getAtaMainList(this.currentUserMasterCompanyId).subscribe(res => {
             const responseData = res[0];
             this.isSpinnerVisible = false;
             // used to get the complete object in the value 
