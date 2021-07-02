@@ -106,6 +106,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     public isActive: boolean = false;
+    public isActiveView: boolean = false;
     viewCheck: boolean = true;
     generalInfo: any;
     pnMappingList = [];
@@ -205,6 +206,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     isPNMapping:boolean=true;
     isAirCraft:boolean=true;
     isATA:boolean=true;
+    isGeneralInformation:boolean=true;
     permissionAddCheck=[ModuleConstants.Publications+'.'+PermissionConstants.Add,
         ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Add,
         ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Add,
@@ -228,6 +230,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.isDelete=this.authService.checkPermission([ModuleConstants.Publications+'.'+PermissionConstants.Delete]);
         
         this.isDownload=this.authService.checkPermission([ModuleConstants.PublicationsList+'.'+PermissionConstants.Download])
+        this.isGeneralInformation=this.authService.checkPermission([ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.View]);
         this.isPNMapping=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.View]);
         this.isAirCraft=this.authService.checkPermission([ModuleConstants.Publications_ViewAircraftInformation+'.'+PermissionConstants.View]);
         this.isATA=this.authService.checkPermission([ModuleConstants.Publications_ViewATAChapter+'.'+PermissionConstants.View]);
@@ -477,7 +480,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.closeAllCollapse();
         this.generalInfo = true;
         $('#step1').collapse('show');
-        this.isActive = row.isActive;
+        this.isActiveView = row.isActive;
         this.isSpinnerVisible = true;
         this.loadMasterCompanies();
         this.getFilesByPublicationId(row.publicationRecordId);

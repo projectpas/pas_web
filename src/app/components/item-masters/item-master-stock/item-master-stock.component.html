@@ -1039,10 +1039,10 @@
                         <button type="button" *ngIf="isNextVisible && isItemMasterCreateGeneralInfoEditMode" class="btn btn-primary submit-btn pull-right" (click)="nextOrPreviousClick('Next')">
                             Next
                         </button>
-                        <button *ngIf="isGeneralInfoAdd" class="btn btn-primary pull-right"
+                        <button *ngIf="isGeneralInfoAdd && !isEdit" class="btn btn-primary pull-right"
                          [disabled]="!addItemMasterStockForm.valid || disableSavepartNumber || disableSaveForEdit"
                           type="submit">Save</button>
-                          <button *ngIf="isGeneralInfoEdit" class="btn btn-primary pull-right"
+                          <button *ngIf="isGeneralInfoEdit && isEdit " class="btn btn-primary pull-right"
                          [disabled]="!addItemMasterStockForm.valid || disableSavepartNumber || disableSaveForEdit"
                           type="submit">Update</button> <!--&& (sourceItemMaster.isOem != true || sourceItemMaster.isPma != true || sourceItemMaster.der != true)-->
                     </div>

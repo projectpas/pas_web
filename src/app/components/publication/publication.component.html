@@ -544,19 +544,19 @@
                   (click)="closeAllCollapse()">
                   Close All
                 </button>
-                <button type="button" [ngClass]="isActive ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'"
+                <button type="button" [ngClass]="isActiveView ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'"
                   style="margin: 2px 27px;">
-                  <span class="value">{{isActive ? 'Active' : 'In-Active'}}</span>
+                  <span class="value">{{isActiveView ? 'Active' : 'In-Active'}}</span>
                 </button>
                 <hr />
               </div>
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#step1">General Info</a>
+                    <a *ngIf="isGeneralInformation" data-toggle="collapse" href="#step1">General Info</a>
                   </h4>
                 </div>
-                <div id="step1" class="panel-collapse collapse in show" *ngIf="generalInfo">
+                <div  id="step1" class="panel-collapse collapse in show" *ngIf="generalInfo && isGeneralInformation">
                   <div class="panel-body">
                     <div class="card">
                       <div class="card-body">
