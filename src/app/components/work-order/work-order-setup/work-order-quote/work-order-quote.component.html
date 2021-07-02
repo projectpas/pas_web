@@ -307,7 +307,7 @@
                              <th rowspan="2" class="table-actions-column1">Actions</th>
                              </tr> 
                          </thead>
-                         <tbody>
+                         <tbody>  
                              <tr class="mpn-row" style="display: table-row;"
                                  *ngFor="let workOrderPart of workOrderPartsDetail; let i=index;">
                                  <td>
@@ -362,10 +362,33 @@
                                  <label class=" w60">{{workOrderPart['condition']}}</label>
                              </td>
                              <td>
-                                 <label>    {{workOrderPart['publicationId'] }}</label>
+                                 <label>    {{workOrderPart['publicationId'] }}
+                                    <!-- *ngIf="workOrderPartNumber.cmmId!=0 && workOrderPartNumber.cmmId!=null"
+                                    [ngClass]="{pointerEvents : workOrderPartNumber.cmmId==0 || workOrderPartNumber.cmmId==null}" -->
+                                    <span data-toggle="modal" data-target="#cmmView"
+                                    *ngIf="workOrderPart.cmmId!=0 && workOrderPart.cmmId!=null"
+                                    [ngClass]="{pointerEvents : workOrderPart.cmmId==0 || workOrderPart.cmmId==null}" >
+                                    <a class="btn nobg btn-view-cstm"
+                                        (click)="viewCmm(workOrderPart)"
+                                        matTooltip="View Publication" matTooltipPosition="above">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </span>
+                                 </label>
                              </td>
                              <td>
-                                 <label>   {{workOrderPart['workFlowNo'] }}</label>
+                                 <label>   {{workOrderPart['workFlowNo'] }}
+
+                                    <span data-toggle="modal" data-target="#workflowView" *ngIf="workOrderPart.workflowId!=0 && workOrderPart.workflowId!=null"
+                                    [ngClass]="{pointerEvents : workOrderPart.workflowId==0 || workOrderPart.workflowId==null}">
+                                    <a class="btn nobg btn-view-cstm"
+                                        (click)="viewWorkflow(workOrderPart)"
+                                        matTooltip="View Workflow" matTooltipPosition="above">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </span>
+
+                                 </label>
                              </td>
                             <td>
                                      <label>{{workOrderPart['itemGroup']}}</label>
@@ -441,7 +464,48 @@
                      </table>
                  </div>
              </div>
- 
+             <div id="cmmView" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog modal-xlg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                (click)="closeModel()">&times;</button>
+                            <h4 class="modal-title">Publication OverView</h4>
+
+                        </div>
+                        <div class="modal-body" *ngIf="currentcmmId !=undefined">
+                            <app-common-publicationView    
+                                [publicationId]="currentcmmId"></app-common-publicationView>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                (click)="closeModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="workflowView" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog modal-xlg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                (click)="closeModel()">&times;</button>
+                            <h4 class="modal-title">Workflow OverView</h4>
+
+                        </div>
+                        <div class="modal-body" *ngIf="currentWorkflowId !=undefined">
+                            <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
+                                [workFlowId]="currentWorkflowId"></app-workflow-list>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                (click)="closeModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
              <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'internalApprovers'">
                  <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                      <table class="table table-bordered header-table-width"

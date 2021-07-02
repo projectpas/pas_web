@@ -134,7 +134,7 @@
                                             Management Structure
                                         </th>
                                     </ng-container>
-                                    <th style="width:150px;position: sticky;" *ngIf="selectedColumns.length> 0">Actions</th>
+                                    <th style="width:164px;position: sticky;" *ngIf="selectedColumns.length> 0">Actions</th>
                                 </tr>
                                 <tr>
                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -145,7 +145,7 @@
 <input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
                      (change)="dateFilterForTable($event.target.value,col.field)" />
                                     </th>
-                                    <th style="width:150px;position: sticky;"></th>
+                                    <th style="width:164px;position: sticky;"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset let-rowIndex="rowIndex">
@@ -168,12 +168,17 @@
                                                    style="margin: 0px auto; display: block;" />
                                         </ng-container>
                                     </td>
-                                    <td class="action-icons-cstm" style="width:150px;position:sticky" *ngIf="selectedColumns.length> 0">
+                                    <td class="action-icons-cstm" style="width:164px;position:sticky" *ngIf="selectedColumns.length> 0">
                                         <div *ngIf="currentDeletedstatus==false">
                                         <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                                            <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                             <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                            <span><a class="btn nobg btn-edit-cstm" data-toggle="modal" data-target="#assetInventoryStatus" (click)="editInventoryStatus(rowData)" matTooltip="Asset Inventory Status" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                     
+                                          
+                                          
+                                          
                                             <span><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
                                             <span data-toggle="modal" data-target="#AssetAdjAudit"><a class="btn nobg btn-adjhist-cstm" (click)="openAssetInventoryAdj(rowData)" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                             <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
@@ -1363,7 +1368,54 @@
     </div>
 <!-- </ng-template> -->
 </div>
-
+<div class="modal fade" id="assetInventoryStatus" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeStatusModel()">&times;</button>
+				<h4 class="modal-title">Asset Inventory Status</h4>
+			</div>
+			<div class="modal-body" >
+                <div class="form-row m-t-10"> 
+                    <div class="col-md-3"> 
+                        <div class="form-group">
+                            <label>Inventory Num </label>
+                            <input type="text" class="form-control" required name="inventoryNumber" [(ngModel)]="currentAssetRecord.inventoryNumber" disabled>
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Asset Name <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="name" [(ngModel)]="currentAssetRecord.name" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Asset ID <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="name" [(ngModel)]="currentAssetRecord.assetId" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Alt Asset ID <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="name" [(ngModel)]="currentAssetRecord.alternateAssetId" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group" >
+                                <label>Asset Inventory Status</label>
+                                <p-dropdown  [showClear]="true" class="p-dropdown-100"    (ngModelChange)="getActiveStatus()"  [options]="assetInventoryStatusList" filter="true" [(ngModel)]="currentAssetRecord.inventoryStatusId" name="inventoryStatusId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                            </div>
+                        </div>
+                        </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" (click)="closeStatusModel()">Cancel</button>
+				<button type="button" class="btn btn-primary" [disabled]="disabledInventoryStatus" (click)="updateInventoryStatus(); closeStatusModel();">Update</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
@@ -1385,6 +1437,7 @@
 		</div>
 	</div>
 </div>
+
 <ng-template #contentAuditHist
              let-c="close"
              let-d="dismiss"
