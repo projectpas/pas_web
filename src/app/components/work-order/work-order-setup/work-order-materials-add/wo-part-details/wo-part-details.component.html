@@ -1,6 +1,6 @@
 <div class="row" *ngIf="!isEdit">
     <div>
-      <label>Stock Type</label>
+      <label>Stock Type:</label>
     </div>
     <div>
       <label style="width: 120px;">
@@ -38,14 +38,14 @@
         </p-autoComplete>
       </div>
     </div>
-    <div class="col-3 column">
+    <div class="col-2 column">
       <div class="form-group">
         <label class="width_100per">PN Description</label>
         <input type="text" class="form-control" name="partDescription" [(ngModel)]="formObject.partDescription"  [disabled]="true" />
       </div>
     </div>
     <div class="col-6 column">
-      <div class="col-3 column">
+      <div class="col-2 column">
         <label class="width_100per text_start"> Cond <span class="clr-red">*</span> </label>
         <div class="form-group">
           <p-multiSelect [options]="allConditionInfo" (ngModelChange)="getActive()" (onChange)="onConditionSelect()"
@@ -54,7 +54,7 @@
           </p-multiSelect>
         </div>
       </div>
-      <div class="col-2 column">
+      <div class="col-1 column">
         <div class="form-group">
           <label >Qty Req<span class="clr-red">*</span></label>
           <input class="form-control text-right" type="text"  (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          

@@ -517,4 +517,11 @@ if(type=='add'){
             return this.handleErrorCommon(error, () => this.UpdatecalibartionMgmt(CalibrationManagment));
         });
     }
+
+    updateAssetInventoryStatus(data) {
+        return this.http.post<any>(`${this.baseUrl}/api/AssetModule/updateAssetInventoryStatus`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.updateAssetInventoryStatus(data));
+        });
+    }
+    
 } 

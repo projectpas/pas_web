@@ -106,7 +106,7 @@
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width">
+                                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns >
@@ -928,7 +928,7 @@
                </div>
                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                 <div class="tableFixHead">
-                <table class="table table-bordered header-table-width">
+                <table class="table table-bordered " style="white-space: nowrap;">
                     <thead>
                         <tr>
                 
@@ -947,6 +947,7 @@
                             <th>Updated By</th>
                         </tr>
                     </thead>
+                    <tbody>
                     <tr *ngFor="let audit of auditHistory; let i = index;">
                         <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
                             {{audit.name}}
@@ -984,6 +985,7 @@
                             {{audit.updatedBy}}
                         </td>    
                     </tr>
+                    </tbody>
                 </table>
     
                 <ng-template *ngIf="!showhistorylist">
@@ -995,15 +997,6 @@
                 </div>
             </div>
             </div>
-            
-            <div class="modal-body">
-                <div class="text-center">
-                    <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
-                    <h4 class="no-history-found-msg">No History Found </h4>
-                </div>
-            </div>
-    
-    
             <div class="modal-footer">
     
                 <button type="button" class="btn btn-danger" (click)="dismissHistoryModel()">Close</button>

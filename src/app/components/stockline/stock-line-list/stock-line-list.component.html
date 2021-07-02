@@ -245,7 +245,7 @@
 
 <div id="stockAudit" class="modal fade" role="dialog" data-backdrop="static"
   data-keyboard="false">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -257,7 +257,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
           <div class="tableFixHead">
-          <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+          <table class="table table-bordered" style="white-space:nowrap" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
                 <tr>
                     <th colspan="16">General</th>
@@ -502,7 +502,8 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDate', audit.inspectionDate) ? 'black' : 'red'}">{{ audit.inspectionDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'integrationPortal', audit.integrationPortal) ? 'black' : 'red'}">{{ audit.integrationPortal }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                    <p [matTooltip]="parsedText(audit.memo)" matTooltipPosition="above" [innerHTML]="audit.memo"></p>
+                    <p class="m-0 p-0 p_textEditor truncate-text" 
+                    [matTooltip]="parsedText(audit.memo)" matTooltipPosition="above" [innerHTML]="audit.memo"></p>
                 </td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesRemaining', audit.cyclesRemaining) ? 'black' : 'red'}">{{ audit.cyclesRemaining }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesSinceNew', audit.cyclesSinceNew) ? 'black' : 'red'}">{{ audit.cyclesSinceNew }}</td>
@@ -547,7 +548,7 @@
 
 <div id="stockAdjAudit" class="modal fade" role="dialog" data-backdrop="static"
   data-keyboard="false">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -559,7 +560,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">
-						<table class="table table-bordered header-table-width" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
+						<table class="table table-bordered" style="white-space: nowrap;" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Adjustment Data Type</th>
@@ -581,7 +582,8 @@
                 <td [ngClass]="audit.auditRightAlign ? 'text-right' : ''" [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'changedFrom', audit.changedFrom) ? 'black' : 'red'}">{{ audit.changedFrom }}</td>
                 <td [ngClass]="audit.auditRightAlign ? 'text-right' : ''" [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'changedTo', audit.changedTo) ? 'black' : 'red'}">{{ audit.changedTo }}</td>
                 <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'adjustmentReason', audit.adjustmentReason) ? 'black' : 'red'}">{{ audit.adjustmentReason }}</td>
-                <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'adjustmentMemo', audit.adjustmentMemo) ? 'black' : 'red'}">{{ audit.adjustmentMemo }}</td>
+                <td class="m-0 p-0 p_textEditor truncate-text" [innerHTML]="audit.adjustmentMemo"
+                [matTooltip]="parsedText(audit.adjustmentMemo)" matTooltipPosition="above" [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'adjustmentMemo', audit.adjustmentMemo) ? 'black' : 'red'}">{{ audit.adjustmentMemo }}</td>
                 <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'currencyName', audit.currencyName) ? 'black' : 'red'}">{{ audit.currencyName }}</td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'createdBy', audit.createdBy) ? 'black' : 'red'}">{{ audit.createdBy }}</td>
