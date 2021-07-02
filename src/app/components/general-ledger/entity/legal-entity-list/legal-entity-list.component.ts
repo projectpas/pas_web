@@ -104,12 +104,12 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		{ field: 'name', header: 'Legal entity Name' },
 		{ field: 'companyName', header: 'Company Name' },
 		{ field: 'companyCode', header: 'Legal Entity Code' },
-		{ field: 'phoneNumber', header: 'Phone Number' },
+		{ field: 'phoneNumber', header: 'Phone Number' ,width:"120px"},
 		{ field: 'address1', header: 'Address1' },
 		{ field: 'address2', header: 'Address2' },
 		{ field: 'city', header: 'City' },
 		{ field: 'stateOrProvince', header: 'State/Province' },
-		{ field: 'postalCode', header: 'ZIP' },
+		{ field: 'postalCode', header: 'ZIP',width:"90px" },
 		{ field: 'country', header: 'Country' },
 		{ field: 'createdDate', header: 'Created Date' },
 		{ field: 'createdBy', header: 'Created By' },
@@ -219,7 +219,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	private onAuditHistoryLoadSuccessful(auditHistory, content) {
 		this.alertService.stopLoadingMessage();
 		this.customerauditHisory = auditHistory;
-		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+		this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
 	}
 
 	getColorCodeForHistory(i, field, value) {
@@ -851,7 +851,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		this.isSpinnerVisible = true;
 		this.entityService.getLeaglEntityHistoryById(rowData.legalEntityId).subscribe(res => {
 			this.auditHistory = res;
-			this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+			this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 			this.isSpinnerVisible = false;
 		}, err => {
 			this.isSpinnerVisible = false;			
@@ -940,7 +940,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	auditHistoryList: any = [];
 	// isSpinnerVisibleHistory: boolean = false;	
 	getAuditHistoryByIdbanking(content, type) {
-		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+		this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 		if (type == 1) {
 			this.auditHistoryHeaders = [];
 			this.isSpinnerVisibleHistory = true;

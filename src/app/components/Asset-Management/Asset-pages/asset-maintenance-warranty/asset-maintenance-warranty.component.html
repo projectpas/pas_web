@@ -61,20 +61,20 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="col-md-3">
-                                <label class="fs12">Asset ID : </label>
+                                <label class="control-label labels-font-header wauto" style="font-weight: normal !important;">Asset ID : </label>
                                 <span class="span-header-red"> {{assetService.listCollection?.assetId}}</span>
                             </div>
                             <div class="col-md-3">
-                                <label class="fs12">Asset Name : </label>
+                                <label class="control-label labels-font-header wauto" style="font-weight: normal !important;">Asset Name : </label>
                                 <span class="span-header-red"> {{assetService.listCollection?.name}}</span>
                             </div>
                             <div class="col-md-3">
-                                <label class="fs12">Alt Asset ID : </label>
+                                <label class="control-label labels-font-header wauto" style="font-weight: normal !important;">Alt Asset ID : </label>
                                 <span class="span-header-red">
                                     {{assetService.listCollection?.alternateAssetName}}</span>
                             </div>
                             <div class="col-md-3">
-                                <label class="fs12">Asset Class/Attribute : </label>
+                                <label class="control-label labels-font-header wauto" style="font-weight: normal !important;">Asset Class/Attribute : </label>
                                 <span class="span-header-red">
                                     {{assetService.listCollection?.assetAttributeType}}</span>
                             </div>
@@ -152,7 +152,7 @@
                                             </div>
                                             <div class="default-vendor-padding">
                                                 <label>GL Account <span
-                                                        *ngIf="currentMaintenance.assetIsMaintenanceReqd">*</span></label>
+                                                        *ngIf="currentMaintenance.assetIsMaintenanceReqd" class="clr-red">*</span></label>
                                                 <p-autoComplete class="p-autoComplete-ctsm"
                                                     (ngModelChange)="getmemo($event)" field="name" name="Inspector2"
                                                     [dropdown]="true" errorMessage="Records not found"
@@ -163,7 +163,7 @@
                                                     #prellRevInsp367="ngModel">
                                                 </p-autoComplete>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="default-vendor-padding">
                                                 <label>Maintenance Memo</label>
                                                 <div class="align_adh">
                                                     <div [innerHTML]="currentMaintenance.maintenanceMemo"
@@ -221,7 +221,7 @@
                                             </div>
                                             <div class="default-vendor-padding">
                                                 <label>GL Account <span
-                                                        *ngIf="currentMaintenance.isWarrantyRequired">*</span></label>
+                                                        *ngIf="currentMaintenance.isWarrantyRequired" class="clr-red">*</span></label>
                                                 <p-autoComplete class="p-autoComplete-ctsm"
                                                     (ngModelChange)="getmemo($event)" field="name" name="Inspector12"
                                                     [dropdown]="true" errorMessage="Records not found"
