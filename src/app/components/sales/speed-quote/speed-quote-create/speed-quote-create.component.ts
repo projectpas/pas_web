@@ -215,6 +215,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     this.initCommunication();
     this.customerId = +this.route.snapshot.paramMap.get("customerId");
     this.id = +this.route.snapshot.paramMap.get("id");
+    this.loadcustomerData();
     this.SpeedQuoteId = this.id;
     this.salesQuote.priorityId = DBkeys.DEFAULT_PRIORITY_ID;
     this.isCreateModeHeader = false;
@@ -253,6 +254,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
         setTimeout(() => {
           this.toggle_po_header = true;
         }, 1600);
+
+        this.loadcustomerData();
       }
     });
     this.getAllEmployees('');
@@ -482,8 +485,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
 
   getCustomerDetails() {
     if (this.customerDetails) {
-      this.salesQuote.customerName = this.customerDetails.name;
-      this.salesQuote.customerEmail = this.customerDetails.email;
+      this.salesQuote.customerName = getObjectById('value', this.customerId, this.splitcustomersList);
+      //this.salesQuote.customerName = this.customerDetails.name;
+      //this.salesQuote.customerEmail = this.customerDetails.email;
       this.salesQuote.customerCode = this.customerDetails.customerCode;
       this.customerInfoFromSalesQuote = {
         customerName: this.customerDetails.name,
@@ -611,6 +615,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
             this.salesQuote.customerContactId = this.customerContactList[
               i
             ].customerContactId;
+            this.salesQuote.customerEmail = this.customerContactList[i].email;
           } else if (!isDefaultContactFound) {
             this.salesQuote.customerContactId = 0;
           }
@@ -913,6 +918,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.versionNumber = this.salesOrderQuoteObj.versionNumber;
       this.salesQuote.accountTypeId = this.salesOrderQuoteObj.accountTypeId;
       this.salesQuote.customerId = this.salesOrderQuoteObj.customerId;
+      this.loadCustomerDataById(this.salesQuote.customerId);
+      //this.speedQuote.customerName = getValueFromArrayOfObjectById('label', 'value', this.salesQuote.customerId, this.allCustomers);
+      //this.salesQuote.customerName = getObjectById('value', this.salesOrderQuoteObj.customerId, this.allCustomers)
       this.salesQuote.customerContactId = this.salesOrderQuoteObj.customerContactId;
       this.salesQuote.customerReferenceName = this.salesOrderQuoteObj.customerReference;
       this.salesQuote.contractReferenceName = this.salesOrderQuoteObj.contractReference;
@@ -1274,7 +1282,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
           partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
-        if (!invalidParts && !invalidDate) {
+        else if (!invalidParts && !invalidDate) {
           partNumberObj = this.speedQuoteService.marshalSpeedQuotePartToSave(selectedPart, this.userName);
           partList.push(partNumberObj);
         }
@@ -1857,7 +1865,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
                   .aligntop{
                     margin-top:300px;
                   }
-            
+                  .printnotes{
+                    height: auto !important; width:100% !important
+                  }
                         </style>
         </head>
     <body onload="window.print();window.close()">${printContents}</body>
@@ -2252,4 +2262,93 @@ export class SpeedQuoteCreateComponent implements OnInit {
     const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${link}`;
     window.location.assign(url);
   }
+
+  arrayCustlist: any[] = [];
+  allCustomers: any = [];
+  splitcustomersList: any = [];
+  loadcustomerData(strText = '') {
+		if (this.arrayCustlist.length == 0) {
+			this.arrayCustlist.push(0);
+    }
+    this.arrayCustlist.push(this.customerId);
+		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.masterCompanyId).subscribe(response => {
+			this.allCustomers = response;
+			this.customerNames = response;
+			this.splitcustomersList = response;
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+  }
+  
+  filterCustomersSplit(event): void {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadcustomerData(event.query);
+		}
+  }
+  
+  selectedCustomerName(value) {
+		this.loadCustomerDataById(value.value);
+  }
+  
+  loadCustomerDataById(customerId) {
+		if (customerId) {
+			this.customerContactList = [];
+			// this.getVendorContactsListByID(vendorId);
+			// this.getVendorCreditTermsByID(vendorId);
+      // this.warningsandRestriction(vendorId);
+      this.salesQuote.customerId = customerId;
+      this.customerId = customerId;
+      this.getCustomerContactsListByID(customerId);
+			if (this.arrayCustlist.length == 0) {
+				this.arrayCustlist.push(0);
+			}
+			this.arrayCustlist.push(customerId);
+      this.isSpinnerVisible = true;
+      this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(), this.masterCompanyId).subscribe(response => {
+        this.allCustomers = response;
+        this.customerNames = response;
+        this.splitcustomersList = response;
+        
+        //this.speedQuote.customerId = getObjectById('value', customerId, this.allCustomers);
+        //this.speedQuote.customerName = getValueFromArrayOfObjectById('label', 'value', customerId, this.allCustomers);
+        this.salesQuote.customerName = getObjectById('value', customerId, this.splitcustomersList);
+        this.isSpinnerVisible = false;
+      }, err => {
+        this.isSpinnerVisible = false;
+      });
+		}
+  }
+  customerContactListdata = [];
+  async getCustomerContactsListByID(customerId) {
+		await this.customerService.getCustomerCommonDataWithContactsById(customerId, '').subscribe(data => {
+      this.customerDetails = data;
+      //this.getInitialDataForSOQ()
+      this.getCustomerDetails();
+      this.setAllCustomerContact(data);
+      this.getDefaultContact();
+      this.getSalesPersonAndCSR();
+      this.isSpinnerVisible = false;
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+  }
+  getSalesPersonAndCSR(){
+    this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId).subscribe(data => {
+      this.setCSRAndSalesPersonOrAgentList(data);
+      this.setCSR();
+      this.setSalesPerson();
+      this.isSpinnerVisible = false;
+		}, err => {
+			this.isSpinnerVisible = false;
+		});
+  }
+  onChangeCustomerContact(event)
+  {
+    for(let i=0;i<this.customerContactList.length;i++){
+      if(this.customerContactList[i].customerContactId == event){
+        this.salesQuote.customerEmail = this.customerContactList[i].email;
+      }
+    }
+  }
+  
 }

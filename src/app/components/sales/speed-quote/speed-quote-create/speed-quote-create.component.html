@@ -29,8 +29,20 @@
                                         matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                 </span>
                             </label>
-                            <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
-                                class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
+                            <!-- <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
+                                class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" /> -->
+                            <p-autoComplete
+                                field="label" class="autocomplete"
+                                [(ngModel)]="salesQuote.customerName"
+                                name="customerName" appendTo='body'
+                                [baseZIndex]="9999" [suggestions]="splitcustomersList"
+                                (completeMethod)="filterCustomersSplit($event)" [size]="30"
+                                [minLength]="1" [dropdown]="true"
+                                (onSelect)="selectedCustomerName($event);"
+                                #customerName="ngModel" errorMessage="Records not found"
+                                [forceSelection]="true" (change)="onChangeInput()"
+                                [disabled]="true"
+                                required></p-autoComplete>
                             <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                                 class="alert alert-danger alert-danger-cstm">
                                 <div *ngIf="customerName.errors.required">
@@ -195,7 +207,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group" *ngIf="isCopyMode == false">
                                             <label>Customer Name
                                                 <span class="clr-red">*</span>
                                                 <span style="color:blue" class="ng-star-inserted">
@@ -212,12 +224,39 @@
                                                     <small>Customer Name is required </small>
                                                 </div>
                                             </div>
+                                        </div> -->
+                                        <div class="form-group">
+                                            <label style="height: 15px;">Customer Name
+                                                <span class="clr-red">*</span>
+                                                <span style="color:blue" class="ng-star-inserted">
+                                                    <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
+                                                        matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                                </span>
+                                            </label>
+                                            <p-autoComplete
+                                                field="label" class="autocomplete"
+                                                [(ngModel)]="salesQuote.customerName"
+                                                name="customerName" appendTo='body'
+                                                [baseZIndex]="9999" [suggestions]="splitcustomersList"
+                                                (completeMethod)="filterCustomersSplit($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true"
+                                                (onSelect)="selectedCustomerName($event);"
+                                                #customerName="ngModel" errorMessage="Records not found"
+                                                [forceSelection]="true" (change)="onChangeInput()"
+                                                [disabled]="isCopyMode == false"
+                                                required></p-autoComplete>
+                                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="customerName.errors.required">
+                                                        <small> Customer Name is required </small>
+                                                    </div>
+                                                </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Customer Contact<span class="clr-red">*</span></label>
                                             <select [(ngModel)]="salesQuote.customerContactId" required
                                                 [ngModelOptions]="{standalone: true}" name="customerContactId"
-                                                (change)="onChangeInput()" id="customerContactId"
+                                                (change)="onChangeInput(); onChangeCustomerContact(salesQuote.customerContactId)" id="customerContactId"
                                                 #customerContactId="ngModel">
                                                 <option value='0' selected>--Select</option>
                                                 <option *ngFor="let contact of customerContactList"

@@ -300,11 +300,10 @@
           <tr><td>
             <div class="form-group memo-popup-cstm mat_emo">
               <div [innerHTML]="speedQuote.notes"
-                  [matTooltip]="parsedText(speedQuote.notes)" matTooltipPosition="above"
-                  class="form-control"
-                  style="height: 60px !important; width:100% !important"
-                  class="text_editor_box">
+                  matTooltipPosition="above"
+                  class="text_editor_box printnotes">
               </div>
+              <!-- <textarea [(ngModel)]="speedQuote.notes" name="notes" class="text_editor_box printnotes">{{getFormattedNotes(speedQuote.notes)}}</textarea> -->
           </div>
           </td></tr>
         </tbody>
