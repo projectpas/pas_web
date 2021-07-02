@@ -2174,7 +2174,7 @@ export class EntityShippingComponent implements OnInit {
   tableName: any;
   tableColumnId: any;
   restoreIdForGet;
-  restoreRecord() {
+  restoreRecord() {    
     if (this.restoreTypeId == 1) {
       this.tableName = "LegalEntityShippingAddress";
       this.tableColumnId = "LegalEntityShippingAddressId";

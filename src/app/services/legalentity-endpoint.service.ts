@@ -352,16 +352,15 @@ export class LegalEntityEndpontService extends EndpointFactory {
 		// 	});
 	}
 
-	deleteShipViaDetails<T>(id, updatedBy) {
-	
-			let endpointUrl = `${this._deleteShipVia}?${id}`;
+	deleteShipViaDetails<T>(id, updatedBy) {	
+			let endpointUrl = `${this._deleteShipVia}/${id}`;
 			var modelData={
 				updatedBy:updatedBy
 			};
 			return this.http.put<T>(endpointUrl,JSON.stringify(modelData),this.getRequestHeaders())
 				.catch(error => {
 					return this.handleErrorCommon(error, () => this.deleteShipViaDetails(id, updatedBy));
-				});
+			});
 	}
 
 	postInternationalShippingPost<T>(postData) {
@@ -434,14 +433,16 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	//}
 
 	deleteBillingAddress(legalEntityId, moduleId) {
-		var modelData={
-			updatedBy:moduleId
-		}
-		return this.http.put<any>(`${this._deleteBillingEntityDettilas}?${legalEntityId}`,JSON.stringify(modelData), this.getRequestHeaders())
+		// var modelData={
+		// 	updatedBy:moduleId
+		// }
+		let endpointUrl = `${this._deleteBillingEntityDettilas}?legalEntityId=${legalEntityId}&updatedBy=${moduleId}`;
+		//return this.http.get<any>(`${this._deleteBillingEntityDettilas}?${legalEntityId}`,JSON.stringify(modelData), this.getRequestHeaders())
+		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
 		.catch(error => {
-			return this.handleErrorCommon(error, () => this.updateBillingViainfo(legalEntityId, moduleId));
+			return this.handleErrorCommon(error, () => this.deleteBillingAddress(legalEntityId, moduleId));
 		});
-}
+	}
 
 	//deleteBillingAddress<T>(roleObject: any, legalEntityId: any): Observable<T> {
 	//	let endpointUrl = `${this._deleteBillingEntityDettilas}/${legalEntityId}`;
@@ -929,7 +930,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	
 	restorebillingRecord<T>(id: any,user): Observable<T> {
 		let endpointUrl = `${this.restoreBillingURl}?billingAddressId=${id}&updatedby=${user}`;
-		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.restorebillingRecord(id,user));
 			});
@@ -951,7 +952,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	
 	restoreDomesticShippingRecord<T>(id: any,user): Observable<T> {
 		let endpointUrl = `${this.restoreDomesticHipURl}?id=${id}&updatedby=${user}`;
-		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.restoreDomesticShippingRecord(id,user));
 			});
