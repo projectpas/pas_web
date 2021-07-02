@@ -113,7 +113,7 @@
                 </div>
               </div>
               <div class="first-block-ship col-sm-6">
-                <label class="label-margin-ship"><b> Ship To:</b></label>
+                <label class="label-margin-ship"><b>Ship To:</b></label>
                 <div class="first-block-ship-to">
 
                   <div class="ship-block-div">
@@ -401,7 +401,7 @@
                                     <td style="text-align: right;">{{printdata.exOccurance | twoDecimalGlobalNumberFormatPipe}}%</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" rowspan="3" style="border:1px solid black">Notes: {{printdata.exNotes}}</td>
+                                    <td colspan="8" rowspan="3" style="border:1px solid black">Notes: {{getFormattedNotes(printdata.exNotes)}}</td>
                                 </tr>
                                 <tr></tr>
                                 <tr> </tr>

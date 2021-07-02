@@ -1818,18 +1818,13 @@ export class SpeedQuoteCreateComponent implements OnInit {
             }
             
             .ship-block-div {
-              margin: 2px 0;
-              position: relative;
-              display: flex;
-              min-height: 1px;
-              width: 100%;
-            }
-            .first-block-sold-bottom{
-              border-bottom: 1px solid black;
-                  position:relative;
-                  min-height:1px;
-                  height:auto;
-                  width:100%;
+              m                  .aligntop{
+                    margin-top:300px;
+                  }
+                  .printnotes{
+                    height: auto !important; width:100% !important
+                  }
+                width:100%;
                   float:left;
                     // margin-top: -2px;
                    // min-height: 120px;
@@ -1882,6 +1877,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
                   }
                   .printnotes{
                     height: auto !important; width:100% !important
+
                   }
                         </style>
         </head>
