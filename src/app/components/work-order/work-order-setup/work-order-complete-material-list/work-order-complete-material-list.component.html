@@ -645,47 +645,48 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                    <div class="tableFixHead history_hg">
-                        <table class="table table-bordered">
+                    <div class="tableFixHead ">
+                        <!-- history_hg -->
+                        <table class="table table-bordered" style="white-space: nowrap;">
 
                             <!-- <span class="clr-red">*</span> -->
                             <ng-container>
                                 <thead>
                                     <tr>
                                         <th rowspan="2">Task</th>
-                                        <th rowspan="2" style="min-width:200px !important">PN </th>
+                                        <th rowspan="2" style="min-width:160px !important">PN </th>
                                         <th rowspan="2" style="min-width:200px !important">PN Description</th>
-                                        <th rowspan="2">Serial Num</th>
-                                        <th rowspan="2">Cond</th>
-                                        <th rowspan="2">Stk Line Num</th>
-                                        <th rowspan="2">Request Type</th>
+                                        <th rowspan="2" class="min-width-70">Serial Num</th>
+                                        <th rowspan="2" class="min-width-70">Cond</th>
+                                        <th rowspan="2" class="min-width-80">Stk Line Num</th>
+                                        <th rowspan="2" class="min-width-80">Request Type</th>
                                         <th rowspan="2">Provision</th>
                                         <!-- <th rowspan="2">PO Num </th> -->
-                                        <th rowspan="2" style="min-width:80px !important">Qty Req</th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty Res </th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty Iss</th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty Turned In</th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty OH</th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty Avail</th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty Rem</th>
-                                        <th rowspan="2">UOM</th>
-                                        <th rowspan="2">Stk Type</th>
+                                        <th rowspan="2" class="min-width-60">Qty Req</th>
+                                        <th rowspan="2" class="min-width-60">Qty Res </th>
+                                        <th rowspan="2" class="min-width-60">Qty Iss</th>
+                                        <th rowspan="2" class="min-width-70">Qty Turned In</th>
+                                        <th rowspan="2" class="min-width-60">Qty OH</th>
+                                        <th rowspan="2" class="min-width-60">Qty Avail</th>
+                                        <th rowspan="2" class="min-width-60">Qty Rem</th>
+                                        <th rowspan="2" class="min-width-60">UOM</th>
+                                        <th rowspan="2" class="min-width-70">Stk Type</th>
                                         <th rowspan="2">Classification</th>
-                                        <th rowspan="2" style="min-width:80px !important">Qty On Order</th>
+                                        <th rowspan="2" class="min-width-80">Qty On Order</th>
                                         <th rowspan="2" style="min-width:100px !important">Qty on BK Order</th>
                                         <th rowspan="2">Need Date</th>
-                                        <th rowspan="2">Cntl Num</th>
-                                        <th rowspan="2">Cntl ID</th>
+                                        <th rowspan="2" class="min-width-70">Cntl Num</th>
+                                        <th rowspan="2" class="min-width-70">Cntl ID</th>
                                         <th rowspan="2">Cur</th>
-                                        <th rowspan="2" style="min-width:100px !important">Unit Cost</th>
-                                        <th rowspan="2" style="min-width:100px !important">Extended Cost </th>
+                                        <th rowspan="2" class="min-width-70">Unit Cost</th>
+                                        <th rowspan="2" class="min-width-90">Extended Cost </th>
                                         <th rowspan="2">Cost Date</th>
-                                        <th rowspan="2">PO Num </th>
-                                        <th rowspan="2">RO Num</th>
-                                        <th rowspan="2">Rec Num </th>
-                                        <th rowspan="2">WO Num</th>
-                                        <th rowspan="2">Sub-WO Num</th>
-                                        <th rowspan="2">SO Num</th>
+                                        <th rowspan="2" class="min-width-80">PO Num </th>
+                                        <th rowspan="2" class="min-width-60">RO Num</th>
+                                        <th rowspan="2" class="min-width-60">Rec Num </th>
+                                        <th rowspan="2" class="min-width-60">WO Num</th>
+                                        <th rowspan="2" class="min-width-60">Sub-WO Num</th>
+                                        <th rowspan="2" class="min-width-60">SO Num</th>
                                         <th rowspan="2">Site</th>
                                         <th rowspan="2">Warehouse</th>
                                         <th rowspan="2">Location</th>
@@ -1054,7 +1055,7 @@
                                 matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></button>
                         </span>
                         <span data-toggle="modal" data-target="#materialAudit"><button
-                            [ngClass]="(isView == false) ? 'btn nobg btn-hist-cstm mr-top5' : 'btn nobg btn-hist-cstm'"
+                            [ngClass]="(isView == false) ? 'btn nobg btn-hist-cstm' : 'btn nobg btn-hist-cstm'"
                            
                                 (click)="openMaterialAudit(rowData)" matTooltip="Material List History"
                                 matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
@@ -1117,14 +1118,18 @@
                             class="p_textEditor truncate-text" matTooltipPosition="above"
                             [matTooltip]="parsedText(childRowData[childcol.field])"></span>
                     </td>
-                    <td  class="lastcol-fix" style="position: sticky !important; min-width: 145px !important; width:80px;text-align:center !important">
+                    <td  class="action-icons-cstm  lastcol-fix"
+                     style="position: sticky !important; min-width: 145px !important; width:80px;text-align:center !important">
   
-                        <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1" [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" ><i  class="fa fa-pencil"></i></button></span>
-                        <span>
-                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                        <span *ngIf="!isView"><button class="btn nobg btn-edit-cstm1"
+                             [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0" 
+                             (click)="editStockLine(childRowData,rowData)" matTooltip="Edit" matTooltipPosition="above" >
+                             <i  class="fa fa-pencil"></i></button></span>
+                        <span style="margin-left:-4px">
+                            <button class="btn nobg btn-view-cstm" data-toggle="tooltip"
                                 (click)="viewStockSelectedRow(childRowData)" matTooltip="View This StkLine">
                                 <i class="fa fa-eye"></i>
-                            </a>
+                        </button>
                         </span>
                         <span *ngIf="!isView"><button type="button" class="btn nobg btn-delete-cstm"
                                 [disabled]="childRowData.stocklineQtyIssued!=0 || childRowData.stocklineQtyReserved !=0"

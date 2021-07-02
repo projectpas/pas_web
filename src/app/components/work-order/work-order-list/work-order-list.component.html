@@ -340,8 +340,16 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">WO Number : {{restorerecord.workOrderNum}}</h6>
-    </div>
+    <strong>
+        WO Number : 
+        <span class="new-label">
+    <!-- <h6 class="modal-body">WO Number : -->
+             {{restorerecord.workOrderNum}}
+            <!-- </h6> -->
+   
+    </span>
+    </strong>
+</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
