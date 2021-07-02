@@ -13,6 +13,10 @@
             </div>
         </div>
     </div>
+    <p-tabView >
+        <p-tabPanel header="General Info" [selected]="true">
+        
+      
     <div class="card-body new-card-body">
         <form #customerWorkForm="ngForm">
             <div class="form-row">
@@ -72,7 +76,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group float-right">
+                            <div class="form-group float-right mrtop"  >
                                 <div class="pull-left radio-buttons-align">
                                     <label class="radio-inline">
                                         <input type="radio" value="1" name="assetRadio" class="form-check-inline"
@@ -1285,10 +1289,10 @@
                         </div>
                     </div> -->
                     <!-- <div class="col-md-12" *ngIf="isDocumentsToShow"> -->
-                    <div class="col-md-12">
+                    <!-- <div class="col-md-12">
                         <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="receivingCustomerWorkId"
                             [isViewMode]="false" [offLineUpload]="true"></app-common-documents> 
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="form-row pull-right m-t-10">
@@ -1304,6 +1308,14 @@
         </form> 
        
     </div>
+</p-tabPanel>
+<p-tabPanel header="Documents"   [disabled]="receivingCustomerWorkId ==0 || receivingCustomerWorkId ==null  || receivingCustomerWorkId ==undefined ">
+    <div>
+        <app-common-documents [moduleName]="moduleName"  [referenceId]="receivingCustomerWorkId"
+            [isViewMode]="false" [offLineUpload]="false"></app-common-documents> 
+    </div>
+</p-tabPanel>
+</p-tabView>
 </div>
 
 <div class="modal fade" id="textareapopup"  role="dialog" data-backdrop="static"

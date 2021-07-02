@@ -94,7 +94,7 @@ export class AssetCapesComponent implements OnInit {
     showLable: boolean;
     allCapesInfo: ItemMasterCapabilitiesModel[] = [];
     selectedColumns: any;
-    cols: { field: string; header: string; star: boolean }[];
+    cols: { field: string; header: string; star: boolean;width:string }[];
     isSaving: boolean;
     currentCapes: any = {};
     search_AircraftDashNumberList: any;
@@ -150,16 +150,16 @@ export class AssetCapesComponent implements OnInit {
         public assetServices: AssetService, private dashnumberservices: DashNumberService, private authService: AuthService, private formBuilder: FormBuilder, private commonservice: CommonService
         , private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private configurations: ConfigurationService, private datePipe: DatePipe) {
         this.cols = [
-            { field: 'partNumber', header: 'PN', star: true },
-            { field: 'partDescription', header: 'PN Description', star: false },
-            { field: 'captypedescription', header: 'Capability Type', star: true },
-            { field: 'manufacturer', header: 'Aircraft Manufacturer', star: true },
-            { field: 'modelname', header: 'Model', star: false },
-            { field: 'dashnumber', header: 'Dash Number', star: false },
-            { field: 'createdDate', header: 'Created Date', star: false },
-            { field: 'createdBy', header: 'Created By', star: false },
-            { field: 'updatedDate', header: 'Updated Date', star: false },
-            { field: 'updatedBy', header: 'Updated By', star: false },
+            { field: 'partNumber', header: 'PN', width:"130px",star: true },
+            { field: 'partDescription', header: 'PN Description',width:"160px", star: false },
+            { field: 'captypedescription', header: 'Capability Type', width:"130px",star: true },
+            { field: 'manufacturer', header: 'Aircraft Manufacturer', width:"160px",star: true },
+            { field: 'modelname', header: 'Model',width:"90px", star: false },
+            { field: 'dashnumber', header: 'Dash Number',width:"110px", star: false },
+            { field: 'createdDate', header: 'Created Date',width:"130px", star: false },
+            { field: 'createdBy', header: 'Created By',width:"130px", star: false },
+            { field: 'updatedDate', header: 'Updated Date',width:"130px", star: false },
+            { field: 'updatedBy', header: 'Updated By',width:"130px", star: false },
         ];
         this.selectedColumns = this.cols;
         this.AssetId = this.router.snapshot.params['id'];
@@ -260,7 +260,7 @@ export class AssetCapesComponent implements OnInit {
         { field: 'PartNumber', header: 'PN', star: true },
         { field: 'AircraftType', header: 'Aircraft Manufacturer', star: true },
         { field: 'AircraftModel', header: 'Model', star: false },
-        { field: 'DashNumber', header: 'Dash Number', star: false }
+        { field: 'DashNumber', header: 'Dash Number', star: false,width:"130px" }
     ];
     private GetAssetData(assetid) {
         this.assetServices.getByAssetId(assetid).subscribe(

@@ -1430,7 +1430,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'needDate', header: 'Need Date', align: 0 },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
             { field: 'unitCost', header: 'Unit Cost', align: 1, width: "64px" },
-            { field: 'extendedCost', header: 'Ext cost', align: 1, width: "64px" },
+            { field: 'extendedCost', header: 'Ext Cost', align: 1, width: "64px" },
             { field: 'workOrderNumber', header: 'WO Num', align: 0, width: "100px" },
             { field: 'subWorkOrderNo', header: 'Sub-WO Num', align: 0, width: "100px" },
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
@@ -1465,7 +1465,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             { field: 'needDate', header: 'Need Date', align: 0, width: "70px" },
             { field: 'currency', header: 'Cur', align: 1, width: "60px" },
             { field: 'stocklineUnitCost', header: 'Unit Cost', align: 1, width: "64px" },
-            { field: 'stocklineExtendedCost', header: 'Ext cost', align: 1, width: "64px" },
+            { field: 'stocklineExtendedCost', header: 'Ext Cost', align: 1, width: "64px" },
             { field: 'controlNo', header: 'Cntl Num', align: 0, width: "70px" },
             { field: 'controlId', header: 'Cntl ID', align: 0, width: "70px" },
             { field: 'employeename', header: 'Employee ', align: 0, width: "150px" },
@@ -1637,7 +1637,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             });
             dt._value=this.workOrderMaterialList;
         }else{
-            
+            this.uniqueParts=[];
             this.workOrderMaterialList.forEach(element => { 
                 if(element && element.childParts && element.childParts.length !=0){
                     element.childParts.forEach(child => {

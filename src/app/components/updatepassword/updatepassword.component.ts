@@ -66,9 +66,8 @@ export class UpdatepasswordComponent implements OnInit {
     },
       error => {
         this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage("Load Error", `Unable to update password.\r\nErrors: "${Utilities.getHttpResponseMessage(error)}"`,
-          MessageSeverity.error, error);
-
+        // this.alertService.showStickyMessage("Load Error", `Unable to update password.\r\nErrors: "${Utilities.getHttpResponseMessage(error)}"`,
+        //   MessageSeverity.error, error);
       });
   }
 

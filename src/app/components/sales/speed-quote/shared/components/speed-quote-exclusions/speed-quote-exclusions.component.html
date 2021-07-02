@@ -8,8 +8,8 @@
           <th></th>
           <th></th>
           <th></th>
-          <th></th>
-          <th colspan="6" class="font-size-12"><label class="excluded-items-label">Excluded Items</label></th>
+         
+          <th colspan="7" class="font-size-12"><label class="excluded-items-label">Excluded Items</label></th>
           <th></th>
           <th></th>
         </tr>
@@ -56,7 +56,7 @@
               <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"
                 (keyup)="calculateExtendedCost(partList)" [(ngModel)]="partList.exQuantity"
                 [disabled]="partList['isEditPart'] == true" value="{{ partList.exQuantity }}"
-                name="exQuantity_{{row_index}}" />
+                name="exQuantity_{{row_index}}" required />
             </td>
             <td style="width:80px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="money"

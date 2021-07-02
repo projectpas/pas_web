@@ -279,6 +279,8 @@ getIntangibleList(){
         return this.assetEndpoint.UpdatecalibartionMgmt(CalibrationManagment)
     }
 
-
-
+    updateAssetInventoryStatus(data) {
+        return this.assetEndpoint.updateAssetInventoryStatus(data)
+    }
+    
 }
