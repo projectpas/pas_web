@@ -322,15 +322,11 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     this.getList(this.lazyLoadEventDataInput);
   }
 
-  private onAuditHistoryLoadSuccessful(auditHistory, content) {
-    this.alertService.stopLoadingMessage();
-    this.customerauditHisory = auditHistory;
-    this.modal = this.modalService.open(content, {
-      size: "lg",
-      backdrop: "static",
-      keyboard: false,
-    });
-  }
+	private onAuditHistoryLoadSuccessful(auditHistory, content) {
+		this.alertService.stopLoadingMessage();
+		this.customerauditHisory = auditHistory;
+		this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
+	}
 
   getColorCodeForHistory(i, field, value) {
     const data = this.auditHistory;
@@ -1074,7 +1070,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		this.isSpinnerVisible = true;
 		this.entityService.getLeaglEntityHistoryById(rowData.legalEntityId).subscribe(res => {
 			this.auditHistory = res;
-			this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+			this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 			this.isSpinnerVisible = false;
 		}, err => {
 			this.isSpinnerVisible = false;			
@@ -1166,124 +1162,109 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
     // );
   }
 
-  auditHistoryHeaders: any = [];
-  auditHistoryList: any = [];
-  // isSpinnerVisibleHistory: boolean = false;
-  getAuditHistoryByIdbanking(content, type) {
-    this.modal = this.modalService.open(content, {
-      size: "lg",
-      backdrop: "static",
-      keyboard: false,
-      windowClass: "assetMange",
-    });
-    if (type == 1) {
-      this.auditHistoryHeaders = [];
-      this.isSpinnerVisibleHistory = true;
-      this.entityService.getLeaglLockBoxHistory(this.referenceId).subscribe(
-        (res) => {
-          this.auditHistoryList = res;
-          this.isSpinnerVisibleHistory = false;
-        },
-        (err) => {
-          this.isSpinnerVisibleHistory = false;
-          const errorLog = err;
-          this.errorMessageHandler(errorLog);
-        }
-      );
-      this.auditHistoryHeaders = [
-        { header: "Bank Name", field: "bankName" },
-        { header: "Bank Account Number", field: "bankAccountNumber" },
-        { header: "Payee Name", field: "payeeName" },
-        { header: "PO Box", field: "poBox" },
-        { header: "Street Address Line 1", field: "line1" },
-        { header: "Street Address Line 2", field: "line2" },
-        { header: "City", field: "city" },
-        { header: "Province/State", field: "stateOrProvince" },
-        { header: "Country", field: "countries_name" },
-        { header: "Postal Code", field: "postalCode" },
-        { header: "GL Account", field: "glAccount" },
-        { header: "Created Date", field: "createdDate" },
-        { header: "Created By", field: "createdBy" },
-        { header: "Updated Date", field: "updatedDate" },
-        { header: "Updated By", field: "updatedBy" },
-      ];
-    } else if (type == 2) {
-      this.auditHistoryHeaders = [];
-      this.isSpinnerVisibleHistory = true;
-      this.entityService.getLeaglDomesticHistory(this.referenceId).subscribe(
-        (res) => {
-          this.auditHistoryList = res;
-          this.isSpinnerVisibleHistory = false;
-        },
-        (err) => {
-          this.isSpinnerVisibleHistory = false;
-        }
-      );
-      this.auditHistoryHeaders = [
-        { header: "Bank Name", field: "bankName" },
-        { header: "Intermediate Bank", field: "intermediaryBankName" },
-        { header: "Benficiary Bank Name", field: "benificiaryBankName" },
-        { header: "Bank Account Number", field: "accountNumber" },
-        { header: "ABA Number", field: "aba" },
-        { header: "Created Date", field: "createdDate" },
-        { header: "Created By", field: "createdBy" },
-        { header: "Updated Date", field: "updatedDate" },
-        { header: "Updated By", field: "updatedBy" },
-      ];
-    } else if (type == 3) {
-      this.auditHistoryHeaders = [];
-      this.isSpinnerVisibleHistory = true;
-      this.entityService
-        .getLeaglInternationalHistory(this.referenceId)
-        .subscribe(
-          (res) => {
-            this.auditHistoryList = res;
-            this.isSpinnerVisibleHistory = false;
-          },
-          (err) => {
-            this.isSpinnerVisibleHistory = false;
-          }
-        );
-      this.auditHistoryHeaders = [
-        { header: "Payee Name", field: "bankName" },
-        { header: "Intermediate Bank", field: "intermediaryBank" },
-        { header: "Beneficiary Bank", field: "beneficiaryBank" },
-        { header: "Account Number", field: "beneficiaryBankAccount" },
-        { header: "ABA Number", field: "aba" },
-        { header: "SWIFT Code / IBAN Code", field: "swiftCode" },
-        { header: "GL Account", field: "glAccount" },
-        { header: "Created Date", field: "createdDate" },
-        { header: "Created By", field: "createdBy" },
-        { header: "Updated Date", field: "updatedDate" },
-        { header: "Updated By", field: "updatedBy" },
-      ];
-    } else if (type == 4) {
-      this.auditHistoryHeaders = [];
-      this.isSpinnerVisibleHistory = true;
-      this.entityService.getLeaglAchHistory(this.referenceId).subscribe(
-        (res) => {
-          this.auditHistoryList = res;
-          this.isSpinnerVisibleHistory = false;
-        },
-        (err) => {
-          this.isSpinnerVisibleHistory = false;
-        }
-      );
-      this.auditHistoryHeaders = [
-        { header: "Payee Name", field: "bankName" },
-        { header: "Intermediate Bank", field: "intermediateBankName" },
-        { header: "Beneficiary Bank Name", field: "beneficiaryBankName" },
-        { header: "Bank Account Number", field: "accountNumber" },
-        { header: "ABA Number", field: "aba" },
-        { header: "SWIFT Code / IBAN Code", field: "swiftCode" },
-        { header: "GL Account", field: "glAccount" },
-        { header: "Created Date", field: "createdDate" },
-        { header: "Created By", field: "createdBy" },
-        { header: "Updated Date", field: "updatedDate" },
-        { header: "Updated By", field: "updatedBy" },
-      ];
-    }
-  }
+	auditHistoryHeaders: any = [];
+	auditHistoryList: any = [];
+	// isSpinnerVisibleHistory: boolean = false;	
+	getAuditHistoryByIdbanking(content, type) {
+		this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+		if (type == 1) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglLockBoxHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					this.isSpinnerVisibleHistory = false;
+					const errorLog = err;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Bank Account Number', field: 'bankAccountNumber' },
+				{ header: 'Payee Name', field: 'payeeName' },
+				{ header: 'PO Box', field: 'poBox' },
+				{ header: 'Street Address Line 1', field: 'line1' },
+				{ header: 'Street Address Line 2', field: 'line2' },
+				{ header: 'City', field: 'city' },
+				{ header: 'Province/State', field: 'stateOrProvince' },
+				{ header: 'Country', field: 'countries_name' },
+				{ header: 'Postal Code', field: 'postalCode' },
+				{ header: 'GL Account', field: 'glAccount' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 2) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglDomesticHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {					
+					this.isSpinnerVisibleHistory = false;					
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediaryBankName' },
+				{ header: 'Benficiary Bank Name', field: 'benificiaryBankName' },
+				{ header: 'Bank Account Number', field: 'accountNumber' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 3) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglInternationalHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {					
+					this.isSpinnerVisibleHistory = false;					
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Payee Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
+				{ header: 'Beneficiary Bank', field: 'beneficiaryBank' },
+				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GL Account', field: 'glAccount' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 4) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglAchHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {					
+					this.isSpinnerVisibleHistory = false;					
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Payee Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
+				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
+				{ header: 'Bank Account Number', field: 'accountNumber' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GL Account', field: 'glAccount' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		}
+	}
 
   CloserCOnatcHistory() {
     // $("#contentHist").modal("hide");

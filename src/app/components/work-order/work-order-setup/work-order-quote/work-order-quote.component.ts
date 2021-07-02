@@ -1162,7 +1162,15 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
             )
     }
-
+    currentWorkflowId:any;
+    viewWorkflow(workOrderPartNumber) {
+        this.currentWorkflowId = workOrderPartNumber.workflowId;
+    }
+    currentcmmId:any;
+    viewCmm(workOrderPartNumber){
+        // this.currentcmmId=108;
+        this.currentcmmId=workOrderPartNumber.cmmId;
+    }   
     buildMethodSelected(buildType: string) {
         this.selectedBuildMethod = buildType;
         // this.gridActiveTab = '';

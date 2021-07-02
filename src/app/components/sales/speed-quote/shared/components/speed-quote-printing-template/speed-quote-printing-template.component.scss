@@ -78,7 +78,9 @@ table {
   .first-block-name {
    margin-right: 20px
   }
-  
+  .width-80{
+    width:80px;
+  }
   .first-block-sold-to {
    position: relative;
    min-height: 142px;
@@ -93,6 +95,20 @@ table {
   .table-bottom{
     margin-bottom:-3px;
   }
+  .width-80{
+    width:80px;
+  }
+  .width-90{
+    width:90px;
+  }
+  .excluded-items-label{
+    border: 1px solid;
+    width: 500px;
+    font-size:12px !important;
+    /* padding: 1px; */
+    background: #fff;
+    text-align: center;
+}
   
   .first-block-ship-to {
    position: relative;
@@ -338,7 +354,7 @@ table {
   }
   .table-margins{
     /* margin-top:20px; */
-   margin-top:-5px;
+   margin-top:-1px;
    margin-left:-3px;
   }
   .invoice-border{border-bottom: 1px solid;

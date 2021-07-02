@@ -1193,7 +1193,8 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     goToCustomerWorkList() {
-        this.router.navigateByUrl('/receivingmodule/receivingpages/app-customer-works-list');
+        // this.router.navigateByUrl('/receivingmodule/receivingpages/app-customer-works-list');
+        this.isSpinnerVisible=false
     }
     customerWOWaringListId: any;
     customerRcWaringListId: any;

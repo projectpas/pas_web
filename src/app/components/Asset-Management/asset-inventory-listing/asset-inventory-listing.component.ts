@@ -226,6 +226,7 @@ export class AssetInventoryListingComponent implements OnInit {
     closeDeleteModal() {
         $("#downloadConfirmation").modal("hide");
     }
+
     geListByStatus(status) {
         this.status = status;
         this.selectedRows=[];
@@ -803,5 +804,44 @@ if(type==1){
   this.toGetDocumentsListInt(this.assetInventoryId);
 }
 }
+currentAssetRecord:any={};
+editInventoryStatus(currentRecord){
+    console.log("current record", currentRecord)
+this.currentAssetRecord=currentRecord;
+this.disabledInventoryStatus=true;
+this.getAssetInventoryStatusList();
+}
+updateInventoryStatus(){
+    this.currentAssetRecord.updatedBy='admin';
+ this.assetService.updateAssetInventoryStatus(this.currentAssetRecord).subscribe(res =>{
+    this.alertService.showMessage("Success", `Asset Inventory Status updated successfully.`, MessageSeverity.success);
+    setTimeout(() => {
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
+        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+        this.loadData(PagingData);
+     }, 1000);
+     
+ });
 
+}
+getActiveStatus(){
+    this.disabledInventoryStatus=false;
+}
+closeStatusModel(){
+    $("#assetInventoryStatus").modal("hide");
+}
+disabledInventoryStatus:boolean=true;
+assetInventoryStatusList:any=[];
+setEditArray:any=[];
+getAssetInventoryStatusList() { 
+        this.setEditArray = [];
+        this.setEditArray.push(this.currentAsset.inventoryStatusId);
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join()).subscribe(res => {
+            this.assetInventoryStatusList = res;
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        });
+}
 }

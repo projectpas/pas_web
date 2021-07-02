@@ -764,3 +764,6 @@ width:60px !important;
 .setRequiredSelect{
   border: 1px solid red !important;
 }
+.ui-tabview.ui-tabview-top .ui-tabview-nav li a, body .ui-tabview.ui-tabview-bottom .ui-tabview-nav li a, body .ui-tabview.ui-tabview-left .ui-tabview-nav li a, body .ui-tabview.ui-tabview-right .ui-tabview-nav li a {
+  padding: 4px 10px !important; 
+}
