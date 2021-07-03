@@ -25,13 +25,13 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#step1" aria-expanded="false"
+                    <a *ngIf="isGeneralInformation" data-toggle="collapse" href="#step1" aria-expanded="false"
                        aria-controls="receive" class="collapsed">
                         General Info
                     </a>
                 </h4>
             </div>
-            <div id="step1" class="panel-collapse collapse" style="height: 0;" aria-expanded="false">
+            <div *ngIf="isGeneralInformation" id="step1" class="panel-collapse collapse" style="height: 0;" aria-expanded="false">
                 <div class="panel-body">
                     <div class="modal-content p-1">
                         <div class="table-responsive default-bg clear">

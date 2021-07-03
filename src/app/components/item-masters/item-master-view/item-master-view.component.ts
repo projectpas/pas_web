@@ -266,6 +266,7 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
   ataChapterAuditHistory: any = [];
 
   isView: boolean = true;
+  isGeneralInformation: boolean = true;
   isAircraftView: boolean = true;
   isATAView: boolean = true;
   isCaps: boolean = true;
@@ -288,6 +289,9 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
   ) {
     this.isView = this.authService.checkPermission([
       ModuleConstants.ItemList + "." + PermissionConstants.View,
+    ]);
+    this.isGeneralInformation = this.authService.checkPermission([
+      ModuleConstants.Item_GeneralInformation + "." + PermissionConstants.View,
     ]);
     this.isAircraftView = this.authService.checkPermission([
       ModuleConstants.Item_AircraftInformation + "." + PermissionConstants.View,
