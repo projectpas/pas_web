@@ -177,7 +177,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             //this.costPlusType = res[0].headerMarkupId;
             this.costPlusType = res.freightBuildMethod;
             //this.overAllMarkup = res[0].headerMarkupPercentageId;
-            if (res.salesOrderFreights.length > 0) {
+            if (res.salesOrderFreights && res.salesOrderFreights.length > 0) {
                 this.overAllMarkup = res.salesOrderFreights[0].headerMarkupPercentageId;
             }
             this.freightFlatBillingAmount = this.formateCurrency(res.freightFlatBillingAmount);
@@ -306,12 +306,14 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
         else {
             let temp = [];
-            this.salesOrderFreightList.forEach((x) => {
-                if (typeof x[Symbol.iterator] === 'function')
-                    temp = [...temp, ...x];
-                else
-                    temp = [...temp, x];
-            })
+            if (this.salesOrderFreightList != undefined) {
+                this.salesOrderFreightList.forEach((x) => {
+                    if (typeof x[Symbol.iterator] === 'function')
+                        temp = [...temp, ...x];
+                    else
+                        temp = [...temp, x];
+                });
+            }
             temp = [...temp, ...this.freightForm];
             this.salesOrderFreightLists = temp;
             this.salesOrderFreightList = [];
@@ -592,7 +594,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     }
 
     dismissModelAlettRestore() { }
-    
+
     formatStringToNumberGlobal(val) {
         let tempValue = Number(val.toString().replace(/\,/g, ''));
         return formatStringToNumber(tempValue);
