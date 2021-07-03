@@ -9,6 +9,7 @@ import { CommonService } from '../../../services/common.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DBkeys } from '../../../services/db-Keys';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-item-master-exch-loan',
     templateUrl: './item-master-exch-loan.component.html',
@@ -28,12 +29,18 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
     loanCurrencyInfo: any = [];
     isNextVisible: Boolean=true;
     isPrevVisible: Boolean=true;
+    isEdit: Boolean=false;
+    isExchangeLoanAdd: Boolean=true;
+    isExchangeLoanEdit: Boolean=true;
 
     constructor(private currencyService: CurrencyService, private authService: AuthService, private _actRoute: ActivatedRoute,
         private itemMasterService: ItemMasterService, private modalService: NgbModal, private alertService: AlertService, public commonService: CommonService,) {
 
             this.isNextVisible=this.authService.ShowTab('Create Item Master','Export Information');
             this.isPrevVisible=this.authService.ShowTab('Create Item Master','NHA,TLA,AlterNate,Equivalency');
+            this.isExchangeLoanAdd=this.authService.checkPermission([ModuleConstants.Item_ExchangeLoan+'.'+PermissionConstants.Add]);
+            this.isExchangeLoanEdit=this.authService.checkPermission([ModuleConstants.Item_ExchangeLoan+'.'+PermissionConstants.Update]);
+            
          }
     showExchange: boolean = false;
     showLoan: boolean = false;
@@ -101,6 +108,10 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
                                     exchangeCurrencyId: this.getInactiveObjectOnEdit('value', res.exchangeCurrencyId, this.exchCurrencyInfo, 'Currency', 'CurrencyId', 'Code', 'exch'),
                                     loanCurrencyId: this.getInactiveObjectOnEdit('value', res.loanCurrencyId, this.loanCurrencyInfo, 'Currency', 'CurrencyId', 'Code', 'loan'),
                                 };
+                                if (this.currentItem.itemMasterLoanExchId) 
+                                {
+                                    this.isEdit=true;
+                                }
                             }, error => this.saveFailedHelper(error));
                         this.showExchange = this.currentItem.isExchange;
                         this.showLoan = this.currentItem.isLoan;
@@ -195,6 +206,7 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
                 );
                 this.currentItem.itemMasterLoanExchId = data.itemMasterLoanExchId;
                 this.upateBTn = true;
+                this.isEdit=true;
             });
         }
     }
