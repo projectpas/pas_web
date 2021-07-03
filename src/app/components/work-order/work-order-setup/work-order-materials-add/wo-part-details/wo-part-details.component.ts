@@ -164,15 +164,15 @@ export class WoPartDetailsComponent implements OnChanges {
   initColumns() {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },
-      { field: 'partNumber', header: 'PN', width: '30px', textalign: 'left' },
+      { field: 'partNumber', header: 'PN', width: '40px', textalign: 'left' },
       { field: 'description', header: 'PN Description', width: '180px', textalign: 'left' },
-      { field: 'conditionDescription', header: 'Cond', width: '100px', textalign: 'left' },
+      { field: 'conditionDescription', header: 'Cond', width: '180px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
       { field: 'manufacturer', header: 'Manufacturer', width: '90px', textalign: 'left' },
       { field: 'itemClassification', header: 'Classification', width: '90px', textalign: 'left' },
       { field: 'oempmader', header: 'OEM/PMA/DER', width: '90px', textalign: 'left' },
       { field: 'alternateFor', header: 'Alt/Equiv For', width: '90px', textalign: 'left' },
-      { field: 'qtyToOrder', header: 'Qty Req', width: '80px', textalign: 'right' },
+      { field: 'qtyToOrder', header: 'Qty Req', width: '110px', textalign: 'right' },
       { field: 'qtyAvailable', header: 'Qty Avail', width: '90px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '90px', textalign: 'right' },
     ]

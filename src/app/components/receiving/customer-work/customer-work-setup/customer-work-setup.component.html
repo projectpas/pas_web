@@ -50,7 +50,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Customer Ref <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" name="referenceId" (ngModelChange)="getActive()"
+                                <input class="form-control" maxlength="250 " type="text" name="referenceId" (ngModelChange)="getActive()"
                                     [(ngModel)]="receivingForm.reference" #custRef="ngModel" required>
                                 <div *ngIf="custRef.invalid && (custRef.dirty || custRef.touched)"
                                     class="alert alert-danger alert-danger-cstm">
@@ -264,7 +264,7 @@
                             </div>
                             <div class="form-group">
                                 <label>AC Tail Num </label>
-                                <input class="form-control" type="text" name="acTailNum" (ngModelChange)="getActive()"
+                                <input class="form-control" type="text"  maxlength="250 "  name="acTailNum" (ngModelChange)="getActive()"
                                     [(ngModel)]="receivingForm.acTailNum" #actailnum="ngModel">
                             </div>
                         </div>
@@ -781,7 +781,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Cert Num</label>
-                                <input class="form-control" type="text" name="partCertificationNumber"
+                                <input class="form-control" type="text"  maxlength="250 "  name="partCertificationNumber"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.partCertificationNumber">
                             </div>
                             <!-- <div class="form-group">
@@ -1168,12 +1168,12 @@
                             </div>
                             <div class="form-group">
                                 <label>MFG Trace</label>
-                                <input class="form-control" type="text" name="MFGTrace" (ngModelChange)="getActive()"
+                                <input class="form-control" type="text" maxlength="100" name="MFGTrace" (ngModelChange)="getActive()"
                                     [(ngModel)]="receivingForm.mfgTrace">
                             </div>
                             <div class="form-group">
                                 <label>MFG Lot</label>
-                                <input class="form-control" type="text" name="MFGLotNo" (ngModelChange)="getActive()"
+                                <input class="form-control" type="text" maxlength="100" name="MFGLotNo" (ngModelChange)="getActive()"
                                     [(ngModel)]="receivingForm.mfgLotNo">
                             </div>
                             <div class="form-group">

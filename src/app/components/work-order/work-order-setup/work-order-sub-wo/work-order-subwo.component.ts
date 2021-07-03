@@ -128,6 +128,8 @@ export class SubWorkOrderComponent implements OnInit {
                     if (this.addToExisting == 1) {
                         this.disableUpdateMpn=false;
                         this.subWorkOrderGridData();
+                    }else{
+                        this.subWorkOrderGridData();
                     }
                 } else { 
                     this.activeGridUpdateButton = true; 
@@ -143,6 +145,7 @@ export class SubWorkOrderComponent implements OnInit {
                         x.partTechnicianId = {name:x.technicianName,employeeId:x.technicianId}
                         //   getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
                         // 
+                        this.getAllWorkScpoes('',x,index);
                         this.getWorkFlowByPNandScope(x, index);
                         
                     }) 
@@ -154,7 +157,7 @@ export class SubWorkOrderComponent implements OnInit {
                         this.handleExpiryDates();
                         if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
                             this.getAllWorkOrderStages();  
-                            this.getAllWorkScpoes('');
+                      
                             this.getAllPriority('');
                             this.workOrderStatus();
                             this.getConditionsList();
@@ -167,7 +170,7 @@ export class SubWorkOrderComponent implements OnInit {
             })
         }else{
             this.getAllWorkOrderStages();  
-            this.getAllWorkScpoes('');
+            // this.getAllWorkScpoes('');
             this.getAllPriority(''); 
             this.getConditionsList();
             this.getAllTecStations();
@@ -234,10 +237,13 @@ export class SubWorkOrderComponent implements OnInit {
                     obj.updatedDate = new Date(),
                     this.subWorkOrderPartNumbers.push({ ...subWoObj, ...obj });
             } 
+    
             this.handleExpiryDates();
             if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
+                this.subWorkOrderPartNumbers.map((x,index) => {
+                    this.getAllWorkScpoes('',x,index);
+                });
                 this.getAllWorkOrderStages();  
-                this.getAllWorkScpoes('');
                 this.getAllPriority(''); 
                 this.getConditionsList();
                 this.getAllTecStations();
@@ -430,7 +436,7 @@ export class SubWorkOrderComponent implements OnInit {
     updateURLParams() {
         window.history.replaceState({}, '', `/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${this.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}`);
     }
-    getAllWorkScpoes(value): void {
+    getAllWorkScpoes(value,currentRecord,index): void {
         this.setEditArray = []; 
         if (this.isEdit == true) {
             if(this.subWorkOrderPartNumbers   && this.subWorkOrderPartNumbers.length !=0){
@@ -447,9 +453,21 @@ export class SubWorkOrderComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        //     this.workScopesList = res;
+        // });
+        console.log("curret",currentRecord,index);
+        // debugger;
+        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.itemMasterId, currentRecord.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopesList = res;
+            this['workScopesList' + index] = []
+            this['workScopesList' + index] = this.workScopesList;
+
+            console.log(' this ', this['workScopesList' + index])
         });
+    }
+    getDynamicVariableData(variable, index) {
+        return this[variable + index]
     }
     selectedCondition1(value, currentRecord, index,) {
         this.conditionList.forEach(element => {

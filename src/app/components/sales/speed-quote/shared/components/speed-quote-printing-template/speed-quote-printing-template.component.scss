@@ -81,6 +81,9 @@ table {
   .width-80{
     width:80px;
   }
+  .width-50{
+    width:50px;
+  }
   .first-block-sold-to {
    position: relative;
    min-height: 142px;
@@ -302,7 +305,18 @@ table {
    margin-bottom: 0;
    text-align: left;
   }
-  
+  .width-65{
+    width:65px;
+  }
+  .width-50{
+    width:50px;
+  }
+  .width-130{
+    width:130px;
+  }
+  .width-250{
+    width:250px;
+  }
   .very-first-block {
    position: relative;
    min-height: 170px;
@@ -310,6 +324,7 @@ table {
    border-right:1px solid black;
    float: left;
    padding-right: 2px;
+   margin-top:-2px;
    padding-left: 2px;
    width: 70% !important;
   }

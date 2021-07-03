@@ -1877,8 +1877,23 @@ export class SpeedQuoteCreateComponent implements OnInit {
                   }
                   .printnotes{
                     height: auto !important; width:100% !important
-
                   }
+                  .width-65{
+                    width:65px;
+                  }
+                  .width-50{
+                    width:50px;
+                  }
+                  .width-130{
+                    width:130px;
+                  }
+                  .width-250{
+                    width:250px;
+                  }
+                  // .aligntop{
+                  //   margin-top:300px;
+                  // }
+
                         </style>
         </head>
     <body onload="window.print();window.close()">${printContents}</body>

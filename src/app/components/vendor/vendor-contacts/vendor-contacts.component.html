@@ -166,7 +166,7 @@
                       <ng-template pTemplate="colgroup" let-columns>
                           <colgroup>
                               <col *ngFor="let col of columns"
-                              class="table-column-width"   />
+                              class="table-column-width"  [ngStyle]="{'width': col.width}" />
                           </colgroup>
                       </ng-template>
                       <ng-template pTemplate="header" let-columns>
@@ -1357,9 +1357,9 @@
         <h4 class="modal-title">Edit Contact ATA Chapters</h4>
       </div>
       <div class="modal-body" *ngIf="ataChapterEditData">
-        <div class="card">
-          <div class="form-row">
-            <div class="col-md-4">
+        <!-- <div class="card">
+          <div class="form-row"> -->
+            <div class="col-md-6">
               <div class="form-group">
                 <label class="fs12">
                   ATA Chapter
@@ -1371,8 +1371,6 @@
                   </option>
                 </select>
               </div>
-            </div>
-            <div class="col-md-4">
               <div class="form-group">
                 <label label class="popup-plusicon-cstm" style="width: 170px !important;">
                   ATA Sub Chapters
@@ -1384,18 +1382,24 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-4">
+             
+            </div> -->
+            <!-- <div class="col-md-3">
               <div class="form-group">
                 <button class="btn btn-primary" (click)="updateATAChapters()" disabled = '' data-dismiss="modal" [disabled]="disableSaveATA"
                   style="margin-top:20px;">
                   Update
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
+            </div> -->
+          <!-- </div>
+        </div> -->
       </div>
       <div class="modal-footer">
+        <button class="btn btn-primary" (click)="updateATAChapters()" disabled = '' data-dismiss="modal" [disabled]="disableSaveATA">
+                  Update
+                </button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">
           Close
         </button>
@@ -1435,7 +1439,7 @@
   <div class="modal-body">
     <strong>
       ATA Chapter:
-      <span class="new-label">{{ selectedAtappedRowforDelete.ataChapterCode }} -
+      <span class="new-label">
         {{ selectedAtappedRowforDelete.ataChapterName }}</span>
     </strong>
   </div>
@@ -1496,7 +1500,7 @@
 
 <div id="contentATAChapterHist" #contentATAChapterHist class="modal fade" role="dialog" data-backdrop="static"
   data-keyboard="false">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -1528,7 +1532,7 @@
       <div class="modal-body" *ngIf="auditHistoryATA">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
+					<table class="table table-bordered" style="white-space: nowrap;" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <!-- <th>Contact</th> -->
@@ -1589,7 +1593,7 @@
                       ? 'black'
                       : 'red'
                   }">{{audit.ataSubChapterCode}}</td>
-                <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistoryATA(
                       i,
@@ -1600,7 +1604,7 @@
                       : 'red'
                     }">{{audit.createdBy}}</td>
                
-                <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistoryATA(
                       i,
@@ -1610,7 +1614,11 @@
                       ? 'black'
                       : 'red'
                     }">{{audit.updatedBy}}</td>
-                  <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                    <td class="text-center width-60">
+                      <span class="value">
+                        <label class="wauto">
+                           <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                          </label></span></td>
               </tr>
             </tbody>
           </table>

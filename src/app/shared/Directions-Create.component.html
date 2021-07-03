@@ -15,11 +15,11 @@
     <tbody>
     <tr [hidden]="direction.isDeleted" *ngFor="let direction of workFlow.directions; let i = index">
       <td>
-        <input type="text" value="{{ direction.action }}" [(ngModel)]="direction.action" class="form-control"
+        <input type="text" value="{{ direction.action }}" maxlength="50" [(ngModel)]="direction.action" class="form-control"
           required />
       </td>
       <td>
-        <input type="text" pInputText value="{{ direction.description }}" [(ngModel)]="direction.description"
+        <input type="text" pInputText value="{{ direction.description }}" maxlength="500" [(ngModel)]="direction.description"
           class="form-control" />
       </td>
       <td class="text-center td-width-100">
@@ -68,7 +68,7 @@
             </tr>
           </tbody>
         </table> -->
-        <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required>
+        <p-editor [(ngModel)]="textAreaInfo" maxlength="1000" [style]="{'height':'320px'}" name="textAreaInfo" required>
         </p-editor>
       </div>
         <div class="modal-footer">

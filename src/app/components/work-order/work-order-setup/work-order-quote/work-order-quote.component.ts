@@ -641,6 +641,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.workOrderService.getWorkOrderById(getWorkOrderInfo).subscribe(res => { 
                 if (res) {
                     this.savedWorkOrderData = res;
+                    this.memo = res.memo;
                     this.customerCode = res.customerDetails.customerCode;
                     this.customerName = res.customerDetails.customerName;
                     this.customerContact = res.customerDetails.customerContact;
