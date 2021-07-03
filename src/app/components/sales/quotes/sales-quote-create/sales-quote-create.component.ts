@@ -1314,7 +1314,16 @@ export class SalesQuoteCreateComponent implements OnInit {
         let partNumberObj;
         if (this.isCopyMode) {
           partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);
-          partList.push(partNumberObj);
+          debugger;
+          let isExists = partList.some(item => item.itemMasterId === partNumberObj.itemMasterId);
+          if (!isExists) {
+            partNumberObj.controlNumber = null;
+            partNumberObj.methodType = 'I';
+            partNumberObj.stockLineId = null;
+            partNumberObj.idNumber = null;
+
+            partList.push(partNumberObj);
+          }
         }
         else if (!invalidParts && !invalidDate) {
           partNumberObj = this.salesQuoteService.marshalSOQPartToSave(selectedPart, this.userName);

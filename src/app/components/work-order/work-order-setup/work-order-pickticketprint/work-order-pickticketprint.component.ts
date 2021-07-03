@@ -120,7 +120,7 @@ export class WorkOrderPickticketprintComponent implements OnInit {
               font-size: 12.5px !important;max-width:100%; letter-spacing: 0.1px;border:0}
             h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
             
-            .very-first-block {position: relative; height:auto;border-right:1px solid black; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
+            // .very-first-block {position: relative; height:auto;border-right:1px solid black; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
               width: 50%;}
             .first-block-name{margin-right: 20px} 
             .first-block-sold-to {
@@ -189,7 +189,7 @@ export class WorkOrderPickticketprintComponent implements OnInit {
             
             .second-block {
               position: relative;
-              min-height: 1px;
+              min-height: 120px;
               float: left;
               padding-right: 2px;
               width: 42%;
@@ -339,7 +339,7 @@ export class WorkOrderPickticketprintComponent implements OnInit {
             
             .very-first-block {
               position: relative;
-              min-height: 159px;
+              min-height: 121px;
               float: left;
               height:auto;
              border-right:1px solid black;

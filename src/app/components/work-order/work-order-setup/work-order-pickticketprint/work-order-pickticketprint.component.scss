@@ -347,7 +347,8 @@ hr {
 
 .second-block {
     position: relative;
-    min-height: 180px;
+    // min-height: 180px;
+    min-height:160px;
     float: left;
     padding-right: 2px;
     width: 35%;
@@ -526,4 +527,5 @@ hr {
     border-bottom: 1px solid;
     min-height: 159px;
     height: auto;
+    margin-top:-1px;
 }

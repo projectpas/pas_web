@@ -174,7 +174,6 @@ Scan:3
   laborTaskData: any;
   allTaskList: any = [];
   ngOnChanges() {
-    // console.log("management structure",this.selectedPartNumber)
     this.isLoadWoLabor=this.isLoadWoLabor;
     this.laborMethods=this.laborMethods;
     this.billingMethod=this.billingMethod;
@@ -443,7 +442,7 @@ setTimeout(() => {
           }
         }
       )
-      this.laborForm['totalWorkHours'] = this.laborForm['totalWorkHours'].toFixed(2);
+      this.laborForm['totalWorkHours'] = this.laborForm['totalWorkHours'].toFixed(0);
     }
   }
   getEmployeeData() {
@@ -1286,7 +1285,6 @@ if(this.enableToSave==false){
     return total.toFixed(2);
   }
   getTotalBillingAmount(taskList) {
-    debugger;
     let total = 0;
     for (let labor of taskList) {
       if (labor.billingAmount && !labor.isDeleted && labor.billableId==1) {
@@ -1306,168 +1304,7 @@ if(this.enableToSave==false){
     }
     return total.toFixed(2);
   }
-  getTotalHours(taskList) {
-    let total = 0;
-    for (let labor of taskList) {
-      if (labor.hours) {
-        total += Number(labor.hours);
-      }
-    }
-    return total.toFixed(2);
-  }
 
-  calculateTotalAdjustment() {
-    let total = 0;
-    for (let task of this.allTaskList) {
-      if (task['totalAdjustments'])
-        total += task['totalAdjustments'];
-    }
-    return total.toFixed(2);;
-  }
-  calculateTotalAdjustedHours() { 
-    // let total = 0;
-    // for (let task of this.allTaskList) {
-    //   if (task['totalAdjustedHours'])
-    //     total += task['totalAdjustedHours'];
-    // }
-    // return total.toFixed(2);;
-
-    // task.totalAdjustedHours = 0;
-    let total = 0;
-    for (let task of this.allTaskList) {
-      if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
-        for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-          if (taskData.adjustedHours && !taskData.isDeleted)
-            total += Number(taskData.adjustedHours);
-        }
-      }
-    }
-    return total.toFixed(2);
-
-  } 
-
-  calculateHoursDifference(obj) {
-    if (obj.hours != null && obj.adjustments != null) {
-      this.totalWorkHours = 0;
-      if (!obj.totalMinutes) {
-        obj.totalMinutes = 0;
-      }
-      if (!obj.adjtotalHours) {
-        obj.adjtotalHours = 0;
-      }
-      if (!obj.ajdtotalMinutes) {
-        obj.ajdtotalMinutes = 0;
-      }
-      if (!obj.totalHours) {
-        obj.totalHours = 0;
-      }
-      var totalhours = Number(obj.totalHours) + Number(obj.adjtotalHours);
-      var totalmin = Number(obj.totalMinutes) + Number(obj.ajdtotalMinutes);
-      var completeHours = (totalhours * 60) + totalmin;
-      var num = completeHours;
-      var hours = (num / 60);
-      var rhours = Math.floor(hours);
-      var minutes = (hours - rhours) * 60;
-      var rminutes = Math.round(minutes);
-      obj['adjustedHours'] = rhours + '.' + rminutes
-      obj.hours = obj.totalHours + '.' + obj.totalMinutes;
-      // obj.hours = obj.adjtotalHours + '.' + obj.ajdtotalMinutes;
-      var totalHours = 0;
-    }
-    this.calculateTotalWorkHours();
-  }
-  calculateTotalWorkHours() {
-    if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks' || this.laborForm.workFloworSpecificTaskorWorkOrder == 'workFlow') {
-      this.laborForm.totalWorkHours = 0;
-      if (this.laborForm.workOrderLaborList) {
-        for (let task in this.laborForm.workOrderLaborList[0]) {
-          if (this.laborForm.workOrderLaborList[0][task][0] && this.laborForm.workOrderLaborList[0][task][0]['hours'] != null) {
-            for (let taskList of this.laborForm.workOrderLaborList[0][task]) {
-              this.laborForm.totalWorkHours += Number(taskList['hours']); 
-            }
-          }
-        }
-        this.laborForm.totalWorkHours = this.laborForm.totalWorkHours.toFixed(2);
-      }
-    }
-  }
-  calculateTotalHours() {
-    if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks' || !this.laborForm.workFloworSpecificTaskorWorkOrder) {
-      this.laborForm.totalWorkHours = 0;
-      for (let task of this.allTaskList) {
-        if (task.totalWorkHours) {
-          this.laborForm.totalWorkHours += Number(task.totalWorkHours);
-        }
-      }
-      this.laborForm.totalWorkHours = this.laborForm.totalWorkHours.toFixed(2);
-    }
-  }
-  calculateTaskHours(task) {
-    task.totalWorkHours = 0;
-    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
-      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (!taskData.totalMinutes) {
-          taskData.totalMinutes = 0;
-        }
-        if (!taskData.totalHours) {
-          taskData.totalHours = 0;
-        }
-        if (!taskData.ajdtotalMinutes) {
-          taskData.ajdtotalMinutes = 0;
-        }
-        if (!taskData.adjtotalHours) {
-          taskData.adjtotalHours = 0;
-        }
-        taskData.hours = Number(`${taskData.totalHours}.${taskData.totalMinutes}`)
-        if (taskData.hours && !taskData.isDeleted)
-          task.totalWorkHours += Number(taskData.hours);
-
-        taskData.adjustments = Number(`${taskData.adjtotalHours}.${taskData.ajdtotalMinutes}`)
-        if (taskData.adjustments && !taskData.isDeleted)
-          task.totalWorkHours += Number(taskData.adjustments);
-      }
-
-
-      task.totalWorkHours = task.totalWorkHours.toFixed(2);
-    }
-    this.calculateTotalHours();
-    // if(this.basicLabourDetail){
-      // this.calculateBurderRate(task);
-      // }
-  }
-  calculateAdjustmentHours(task) {
-    task.totalAdjustments = 0;
-    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
-      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.adjustments && !taskData.isDeleted)
-          task.totalAdjustments += Number(taskData.adjustments);
-      }
-    }
-    this.calculateAdjustedHours(task);
-  }
-  calculateAdjustedHours(task) {
-    task.totalAdjustedHours = 0;
-    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
-      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.adjustedHours && !taskData.isDeleted)
-          task.totalAdjustedHours += Number(taskData.adjustedHours);
-      }
-    }
-  }
-
-  clearHours(task) {
-    task.totalWorkHours = 0;
-    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
-      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.hours && !taskData.isDeleted) {
-          taskData.hours = 0;
-        }
-        if (taskData.adjustments && !taskData.isDeleted) {
-          taskData.adjustments = 0;
-        }
-      }
-    }
-  }
   getOverAlltotal(type) {
     let htotal = 0;
     let loTotal = 0;
@@ -1566,7 +1403,6 @@ if(this.enableToSave==false){
       this.laborForm.workOrderLaborList[0][task].forEach(
   
         data => {
-                // console.log("data",data)
           // if (!data.isDeleted && this.isQuote) {
           //   if (!data.hours || !data.directLaborOHCost) {
           //     result = true;
@@ -1742,4 +1578,225 @@ if(this.isQuote){
       this.modal.componentInstance.auditHistory = [];
     }
   }
+
+  getTotalHours(taskList) {
+    let total = 0;
+    for (let labor of taskList) {
+      if (labor.hours) {
+        total += Number(labor.hours);
+      }
+    }
+    return total.toFixed(2);
+  }
+
+  calculateTotalAdjustment() {
+    let total = 0;
+    for (let task of this.allTaskList) {
+      if (task['totalAdjustments'])
+        total += task['totalAdjustments'];
+    }
+    return total.toFixed(2);;
+  }
+  calculateTotalAdjustedHours() { 
+    // let total = 0;
+    // for (let task of this.allTaskList) {
+    //   if (task['totalAdjustedHours'])
+    //     total += task['totalAdjustedHours'];
+    // }
+    // return total.toFixed(2);;
+
+    // task.totalAdjustedHours = 0;
+    let total = 0;
+    for (let task of this.allTaskList) {
+      if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
+        for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
+          if (taskData.adjustedHours && !taskData.isDeleted)
+            total += Number(taskData.adjustedHours);
+        }
+      }
+    }
+    return total.toFixed(2);
+
+  } 
+
+  calculateHoursDifference(obj) {
+    if (obj.hours != null && obj.adjustments != null) {
+      this.totalWorkHours = 0;
+      if (!obj.totalMinutes) {
+        obj.totalMinutes = 0;
+      }
+      if (!obj.adjtotalHours) {
+        obj.adjtotalHours = 0;
+      }
+      if (!obj.ajdtotalMinutes) {
+        obj.ajdtotalMinutes = 0;
+      }
+      if (!obj.totalHours) {
+        obj.totalHours = 0;
+      }
+      obj.totalMinutes=Math.round(obj.totalMinutes)
+      if (obj.totalMinutes<= 10) {
+        obj.totalMinutes = '0' + obj.totalMinutes; 
+      }else{
+        obj.totalMinutes =  obj.totalMinutes; 
+      }
+      var totalhours = Number(obj.totalHours) + Number(obj.adjtotalHours);
+      var totalmin = Number(obj.totalMinutes) + Number(obj.ajdtotalMinutes);
+      var completeHours = (totalhours * 60) + totalmin;
+      var num = completeHours;
+      var hours = (num / 60);
+      var rhours = Math.floor(hours);
+      var minutes = (hours - rhours) * 60;
+      var newminutes
+      if (minutes<= 10) {
+        newminutes = '0' + minutes; 
+      }else{
+        newminutes =  minutes; 
+      }
+      var rminutes = Math.round(newminutes);
+      obj['adjustedHours'] = rhours + '.' + rminutes
+      obj.hours = obj.totalHours + '.' + obj.totalMinutes;
+      // obj.hours = obj.adjtotalHours + '.' + obj.ajdtotalMinutes;
+      var totalHours = 0;
+    }
+    this.calculateTotalWorkHours();
+  }
+  calculateTotalWorkHours() {
+    if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks') {
+      this.laborForm.totalWorkHours = 0;
+      if (this.laborForm.workOrderLaborList) {
+        for (let task in this.laborForm.workOrderLaborList[0]) {
+          if (this.laborForm.workOrderLaborList[0][task][0] && this.laborForm.workOrderLaborList[0][task][0]['hours'] != null) {
+            for (let taskList of this.laborForm.workOrderLaborList[0][task]) {
+              this.laborForm.totalWorkHours += Number( taskList['hours'] ); 
+            }
+          }
+        }
+        this.laborForm.totalWorkHours = this.laborForm.totalWorkHours.toFixed(2);
+      }
+    }
+  }
+  calculateTotalHours() {
+    if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks' || !this.laborForm.workFloworSpecificTaskorWorkOrder) {
+      this.laborForm.totalWorkHours = 0;
+      for (let task of this.allTaskList) {
+        if (task.totalWorkHours) {
+          this.laborForm.totalWorkHours += Number( task.totalWorkHours );
+        }
+      }
+      this.laborForm.totalWorkHours = this.laborForm.totalWorkHours.toFixed(2);
+    }
+  }
+  calculateTaskHours(task) {
+    task.totalWorkHours = 0;
+    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
+      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
+        if (!taskData.totalMinutes) {
+          taskData.totalMinutes = 0;
+        }
+        if (!taskData.totalHours) {
+          taskData.totalHours = 0;
+        }
+        if (!taskData.ajdtotalMinutes) {
+          taskData.ajdtotalMinutes = 0;
+        }
+        if (!taskData.adjtotalHours) {
+          taskData.adjtotalHours = 0;
+        }
+        taskData.hours = Number(`${taskData.totalHours}.${taskData.totalMinutes}`)
+        if (taskData.hours && !taskData.isDeleted)
+          task.totalWorkHours += Number( taskData.hours );
+          
+        taskData.adjustments = Number(`${taskData.adjtotalHours}.${taskData.ajdtotalMinutes}`)
+        if (taskData.adjustments && !taskData.isDeleted)
+          task.totalWorkHours += Number(taskData.adjustments );
+      }
+
+
+      task.totalWorkHours = task.totalWorkHours;
+    }
+    this.calculateTotalHours();
+    // if(this.basicLabourDetail){
+      // this.calculateBurderRate(task);
+      // }
+  }
+  calculateAdjustmentHours(task) {
+    task.totalAdjustments = 0;
+    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
+      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
+        if (taskData.adjustments && !taskData.isDeleted)
+          task.totalAdjustments += Number(taskData.adjustments);
+      }
+    }
+    this.calculateAdjustedHours(task);
+  }
+  calculateAdjustedHours(task) {
+    task.totalAdjustedHours = 0;
+    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
+      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
+        if (taskData.adjustedHours && !taskData.isDeleted)
+          task.totalAdjustedHours += Number(taskData.adjustedHours);
+      }
+    }
+  }
+
+  clearHours(task) {
+    task.totalWorkHours = 0;
+    if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
+      for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
+        if (taskData.hours && !taskData.isDeleted) {
+          taskData.hours = 0;
+        }
+        if (taskData.adjustments && !taskData.isDeleted) {
+          taskData.adjustments = 0;
+        }
+      }
+    }
+  }
+
+
+  isInteger(x) { return typeof x === "number" && isFinite(x) && Math.floor(x) === x; }
+  isFloat(x) { return !!(x % 1); }
+  setTimeForMate(value){
+   return  this.convertFloatToTime(value)
+  }
+ hours:any;
+ mints:any;
+ decpart:any;
+convertFloatToTime(number) { 
+  this.hours="";
+  this.mints="";
+    // Separate the int from the decimal part
+
+   var mainValue= number.split(".")
+   this.hours =Number(mainValue[0]);
+   this.decpart=Number(mainValue[1]);
+    // this.hours = Math.round(number);
+
+    // this.decpart = Number(parseFloat(number)) - Number(this.hours);
+
+
+    var min = 1 ;
+    // Round to nearest minute
+    // this.decpart = min *  Math.round(this.decpart / min) *100;
+if(this.decpart>60){
+  this.hours= this.hours+1;
+     this.mints =  Number(this.decpart)-60;
+}else{
+    this.mints =  this.decpart; 
+}
+this.mints = Math.round(this.mints)
+    // Add padding if need
+    if (this.mints<= 10) {
+      this.mints = '0' + this.mints; 
+    }else{
+      this.mints =  this.mints; 
+    }
+    // Add Sign in final result
+    // Concate hours and minutes
+   var time =  this.hours +'.'+ this.mints ;
+    return time;
+}
+
+
 }

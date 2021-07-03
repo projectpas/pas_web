@@ -31,7 +31,7 @@
             <td><input class="form-control text-right" pInputText pKeyFilter="num" type="text" maxlength="5"
                     (focusout)="checkDuplicateSequence($event, measurement);" [(ngModel)]="measurement.sequence"
                     value="{{measurement.sequence}}"></td>
-            <td><input class="form-control" type="text" [(ngModel)]="measurement.stage" value="{{measurement.stage}}">
+            <td><input class="form-control" type="text" maxlength="50"[(ngModel)]="measurement.stage" value="{{measurement.stage}}">
             </td>
             <td><input class="form-control text-right" type="text" pInputText pKeyFilter="num"
                     [(ngModel)]="measurement.min" value="{{measurement.min}}"></td>

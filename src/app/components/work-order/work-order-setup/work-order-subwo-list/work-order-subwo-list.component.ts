@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output,EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
@@ -20,6 +20,7 @@ export class SubWorkOrderListComponent implements OnInit {
     @Input() forSubWorkOrder = false;
     @Input() workOrderMaterialsId: any;
     @Input() workOrderNumberStatus:any;
+    @Output() triggerModelData = new EventEmitter();
     subWorkOrderData: any = [];
     subWorkOrderCols = [
         { field: 'subWorkOrderNo', header: 'Sub WorkOrderNo' },
@@ -87,6 +88,8 @@ export class SubWorkOrderListComponent implements OnInit {
         return Math.ceil(totalNoofRecords / pageSize)
     }
     AddSubWo(rowData) {
+this.triggerModelData.emit(true)
+
         const subworkorderid = 0;
         // window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${rowData.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}&exist=${1}`);
    

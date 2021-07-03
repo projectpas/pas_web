@@ -75,11 +75,29 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     { field: 'netSales', header: 'Net Sales', width: "90px" },
     { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
     { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
-    { field: 'marginPercentage', header: 'Margin %', width: "60px" },
+    { field: 'marginPercentage', header: 'Margin %', width: "60px" }
   ];
   selectedColumns: any = this.columns;
+  custColumns: any = [
+    { field: 'actionStatus', header: 'Action', width: "100px" },
+    { field: 'customerSentDate', header: 'Customer Sent Date', width: "100px" },
+    { field: 'customerStatusId', header: 'Customer Status', width: "100px" },
+    { field: 'customerMemo', header: 'Customer Memo', width: "100px" },
+    { field: 'customerApprovedDate', header: 'Customer Approved Date', width: "100px" },
+    { field: 'customerApprovedBy', header: 'Customer Approved By', width: "100px" },
+    { field: 'partNumber', header: 'PN', width: "100px" },
+    { field: 'partDescription', header: 'PN Desc', width: "110px" },
+    { field: 'qty', header: 'Qty', width: "90px" },
+    { field: 'netSales', header: 'Net Sales', width: "90px" },
+    { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
+    { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
+    { field: 'marginPercentage', header: 'Margin %', width: "60px" }
+  ];
   isSpinnerVisible = false;
   statusListForApproval = [];
+  soqSettingsList: any;
+  todayDate: Date = new Date();
+  internalApprovaEnabled: boolean;
 
   constructor(private alertService: AlertService
     , private modalService: NgbModal
@@ -134,7 +152,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     }
     forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0),
       this.salesOrderService.approverslistbyTaskId(ApprovalTaskEnum.SOApproval, this.salesOrderId),
-      this.salesOrderService.getCustomerApprovalList(this.salesOrderId)
+      this.salesOrderService.getCustomerApprovalList(this.salesOrderId),
+      this.salesOrderService.getAllSalesOrderSettings(this.masterCompanyId)
     ).subscribe(response => {
       this.isSpinnerVisible = false;
       this.setAproverStatusList(response[0]);
@@ -142,9 +161,23 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       if (response[2] && response[2].length > 0) {
         this.loadApprovalListView(response[2][0]);
       }
+      this.soqSettingsList = response[3];
+      this.isInternalApprovaEnabled();
     }, error => {
       this.isSpinnerVisible = false;
     })
+  }
+
+  isInternalApprovaEnabled() {
+    if (this.soqSettingsList != null &&
+      (!this.soqSettingsList[0].isApprovalRule ||
+        (this.soqSettingsList[0].isApprovalRule
+          && new Date(this.soqSettingsList[0].effectiveDate) > new Date(this.todayDate)))) {
+      this.internalApprovaEnabled = false;
+    }
+    else {
+      this.internalApprovaEnabled = true;
+    }
   }
 
   ngOnChanges(changes) {
@@ -545,6 +578,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
             this.onPartsApprovedEvent.emit(true);
           }
           this.getCustomerApprovalList();
+          this.selectall = false;
         },
         err => {
           this.isSpinnerVisible = false;

@@ -10,7 +10,7 @@
       </div>
   </div>
 </div>
-<div class="clear"></div> 
+<div class="clear"></div>  
 <div class="card card-border">
   <div class="card-body" *ngIf="subWorkOrderHeader" style="padding-top:5px;padding-bottom:5px">
     <div class="row labels-ctsm-align">
@@ -210,7 +210,7 @@
                 </p-dropdown>
               </td> -->
               <td>
-                <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel" [options]="workScopesList" (ngModelChange)="getActiveMPN()"
+                <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel" [options]="workScopesList"  [options]="getDynamicVariableData('workScopesList',i)" (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.subWorkOrderScopeId"
                   (onChange)="getWorkFlowByPNandScope(workOrderPartNumber,i)" required appendTo="body">
                 </p-dropdown>

@@ -111,7 +111,7 @@ table, thead, th {
 
   h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: normal; width: 100%; margin: 0;}
   
-  .very-first-block {position: relative; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
+  // .very-first-block {position: relative; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;
     width: 50%;}
   .first-block-name{margin-right: 20px} 
   .first-block-sold-to {
@@ -318,7 +318,7 @@ table, thead, th {
   
   .very-first-block {
     position: relative;
-    min-height: 1px;
+    min-height: 159px;
     float: left;
     padding-right: 2px;
     padding-left: 2px;
