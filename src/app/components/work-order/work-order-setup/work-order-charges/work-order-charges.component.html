@@ -343,21 +343,21 @@
           </tr>
       </ng-container>
       
-      <tr *ngIf="rowData && rowData[0]" class="task-total">
+      <tr *ngIf="rowData && rowData[0]">
         <td><strong>Total ({{getTaskName(rowData[0].taskId)}})</strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td class="content-to-end"><strong>{{ getTotalTaskQuantity(rowData) }}</strong></td>
+        <td class="content-to-end" style="padding:2px 2px"><strong>{{ getTotalTaskQuantity(rowData) }}</strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td class="content-to-end"><strong>{{ getTotalTaskUnitCost1(rowData) }} </strong></td>
+        <td class="content-to-end" style="padding:2px 2px"><strong>{{ getTotalTaskUnitCost1(rowData) }} </strong></td>
         <td>&nbsp;</td>
         <!-- <td>&nbsp;</td> -->
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
+        <td *ngIf="isQuote" class="content-to-end" style="padding:2px 2px"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
         <td *ngIf=" !isEdit && !isQuote">&nbsp;</td>
         <td *ngIf=" !isEdit &&  isQuote && !isView">&nbsp;</td>
       </tr>
@@ -375,7 +375,7 @@
       </td>
       </tr>
   </ng-template>
-    <ng-template pTemplate="footer" *ngIf="isQuote">
+    <ng-template pTemplate="footer" *ngIf="isQuote" class="task-total">
       <tr class="footer">
         <td>Total</td>
         <td>&nbsp;</td>
