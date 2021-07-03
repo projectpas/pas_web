@@ -303,7 +303,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 });
                 for (let j = 0; j < this.vendorProcess1099Data.length; j++) {
                     if (this.vendorProcess1099Data[j].isDefaultRadio == true || this.vendorProcess1099Data[j].isDefaultRadio == "true") {
-                        this.vendorProcess1099Data[j].isDefaultRadio = this.vendorProcess1099Data[j].description
+                        this.vendorProcess1099Data[j].isDefaultRadio = this.vendorProcess1099Data[j].name
                     }
                     if (this.vendorProcess1099Data[j].isDefaultCheck == true) {
                         this.checkedCheckboxesList.push(j);
@@ -458,7 +458,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             if (this.checkedCheckboxesList.length >= 1) {
                 this.checkedCheckboxesList = this.checkedCheckboxesList.sort();
                 this.vendorProcess1099Data[this.checkedCheckboxesList[0]].isRadioDisabled = false;
-                this.vendorProcess1099Data[this.checkedCheckboxesList[0]].isDefaultRadio = this.vendorProcess1099Data[this.checkedCheckboxesList[0]].description;
+                this.vendorProcess1099Data[this.checkedCheckboxesList[0]].isDefaultRadio = this.vendorProcess1099Data[this.checkedCheckboxesList[0]].name;
             } else {
                 for (let i = 0; i < this.vendorProcess1099Data.length; i++) {
                     this.vendorProcess1099Data[i].isDefaultRadio = false;
@@ -471,7 +471,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         for (let i = 0; i < this.vendorProcess1099Data.length; i++) {
             this.vendorProcess1099Data[i].isDefaultRadio = false;
         }
-        this.vendorProcess1099Data[index].isDefaultRadio = this.vendorProcess1099Data[index].description;
+        this.vendorProcess1099Data[index].isDefaultRadio = this.vendorProcess1099Data[index].name;
     }
 
     editItemAndCloseModel(isGoNxt?: boolean) {
