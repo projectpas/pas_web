@@ -20,7 +20,7 @@ import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 // import { time } from 'console';
 import * as moment from 'moment';
-
+import { Location } from '@angular/common';
 @Component({
     selector: 'app-customer-work-setup',
     templateUrl: './customer-work-setup.component.html',
@@ -130,7 +130,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     customerTypeId: number = 1;
 
     constructor(private commonService: CommonService,
-        private datePipe: DatePipe,
+        private datePipe: DatePipe,private location: Location,
         private _actRoute: ActivatedRoute,
         private receivingCustomerWorkService: ReceivingCustomerWorkService,
         private authService: AuthService,
@@ -663,8 +663,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         }
         // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
         //     this.workScopeList = res;
-        // });
-        console.log('this.receivingForm',this.receivingForm);
+        // }); 
         
         this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, this.receivingForm.itemMasterId.value, this.receivingForm.managementStructureId, 20, this.arrayCustlist1.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopeList = res;
@@ -1104,6 +1103,8 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.customerId = res.customerId;
                 this.receivingCustomerWorkId = res.receivingCustomerWorkId;
+                this.isEditMode=true;
+                this.location.replaceState(`receivingpages/app-customer-work-setup/edit//${this.receivingCustomerWorkId}`);
                 this.uploadDocs.next(true);
                 $('#workorderpopup').modal('show');
                 this.alertService.showMessage(
