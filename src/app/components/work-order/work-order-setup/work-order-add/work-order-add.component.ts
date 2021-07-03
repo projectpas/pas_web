@@ -1165,9 +1165,6 @@ export class WorkOrderAddComponent implements OnInit {
             return
         }
         this.isValidationfailed = false;
- 
-    console.log("x",this.workOrderGeneralInformation.partNumbers)
- 
 
         const generalInfo = this.workOrderGeneralInformation;
         this.workOrderGeneralInformation.partNumbers.map(x => {
@@ -1280,15 +1277,8 @@ export class WorkOrderAddComponent implements OnInit {
                     }
                 );
             } else {
-
                 const newData=[...  this.newWorkOrder.partNumbers];
-                // newData.forEach(element => {
-                //     if(element.x.cMMId ===null){
-
-                //     }
-                // });
                 const arrayWithFilterObjects= newData.filter((x) => x.cMMId ===null);
-            debugger;
                 if((arrayWithFilterObjects && arrayWithFilterObjects.length !=0)){
                     $('#confirmCMMInfo').modal('show');
                 }else{
@@ -3820,8 +3810,6 @@ triggerSaveApi(){
         })
     }
     getAllWorkScpoes(value,currentRecord,index): void {
-
-        
         this.setEditArray = [];
         if (this.isEdit == true) {
             this.workOrderGeneralInformation.partNumbers.forEach(element => {
@@ -3836,11 +3824,6 @@ triggerSaveApi(){
             this.setEditArray.push(0);
         } 
         const strText = '';
-        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
-        //     this.workScopesList = res;
-        // });
-        console.log("curret",currentRecord.masterPartId);
-        // debugger;
         this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.masterPartId.itemMasterId, currentRecord.masterPartId.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopesList = res;
             this['dynamicworkScopesList'+index] = []
