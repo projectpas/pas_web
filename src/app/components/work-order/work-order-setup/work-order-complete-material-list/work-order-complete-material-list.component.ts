@@ -1338,7 +1338,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.viewSubWolist = false;
         }, 1000)
     }
-
+    updateModel(){
+        console.log("hello")
+        this.modal.close(); 
+            this.viewSubWolist = false;
+   
+    }
     subWoClick(currentRecord) {
         this.subWoRecord = {};
         this.subWoRecord = currentRecord;
@@ -1354,11 +1359,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         );
     }
 
-    addToExistingSubWo() {
-        this.viewSubWolist = true;
+    addToExistingSubWo(existingSubWo) {
         this.dismissModel();
-    }
-
+        this.viewSubWolist = true;
+        this.modal = this.modalService.open(existingSubWo, { size: 'xl', backdrop: 'static', keyboard: false });
+    } 
     clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
 
     auditHistoryList: any = []

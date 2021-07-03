@@ -386,7 +386,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
         setTimeout(() => {
             this.getAllEmployees('');
-            this.getAllWorkScpoes('');
+            // this.getAllWorkScpoes('');
             this.getConditionsList('');
             this.getAllTecStations('');
             this.getAllPriority('');
@@ -553,6 +553,7 @@ export class WorkOrderAddComponent implements OnInit {
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId, index);
                     this.getWorkFlowByPNandScope(null, x, 'onload', index);
+                    this.getAllWorkScpoes('',x,index);
                     if (this.workorderSettings) {
                         x.workOrderStageId = x.workOrderStageId ? x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
                         x.workOrderPriorityId = x.workOrderPriorityId ? x.workOrderPriorityId : this.workorderSettings.defaultPriorityId;
@@ -1145,24 +1146,36 @@ export class WorkOrderAddComponent implements OnInit {
         currentRecord.tatDaysStandard = 0;
     }
     isValidationfailed: boolean = false;
-
+    dismissCmm(){
+        $('#confirmCMMInfo').modal('hide');
+        this.router.navigate([`workordersmodule/workorderspages/app-work-order-list`]);
+    }
+    dismissCmmClose(){
+        $('#confirmCMMInfo').modal('hide');
+    }
+    allowtoSaveWO(){
+        this.triggerSaveApi();
+    }
+    newWorkOrder:any={};
     saveWorkOrder(): void {
         this.mpnPartNumbersList = [];
-        const generalInfo = this.workOrderGeneralInformation;
-        if (generalInfo.creditLimit <= 0) {
+        // const generalInfo = this.workOrderGeneralInformation;
+        if (this.workOrderGeneralInformation.creditLimit <= 0) {
             $('#confirmationSave').modal('show');
             return
         }
         this.isValidationfailed = false;
-        //  if (!this.validationForMpnParts()) {
-        //     return;
-        // }
-        this.workOrderGeneralInformation.partNumbers.map(x => {
+ 
+    console.log("x",this.workOrderGeneralInformation.partNumbers)
+ 
 
+        const generalInfo = this.workOrderGeneralInformation;
+        this.workOrderGeneralInformation.partNumbers.map(x => {
+    
             if (!x.workOrderStageId || x.workOrderStage == 0) {
                 this.alertService.showMessage('Work Order', 'Stage is required', MessageSeverity.error);
                 this.isValidationfailed = true;
-
+    
             }
             if (!x.workOrderPriorityId || x.workOrderPriorityId == 0) {
                 this.alertService.showMessage('Work Order', 'Priority is required', MessageSeverity.error);
@@ -1206,7 +1219,8 @@ export class WorkOrderAddComponent implements OnInit {
             }
         })
         if (this.isValidationfailed == false) {
-            const data1 = {
+            this.newWorkOrder = {}
+            this.newWorkOrder = {
                 ...generalInfo,
                 customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
                 woEmployee: { employeeId: this.authService.currentEmployee.employeeId, Name: this.userName },
@@ -1219,7 +1233,7 @@ export class WorkOrderAddComponent implements OnInit {
                 createdBy: generalInfo.createdBy ? generalInfo.createdBy : this.userName,
                 updatedBy: this.userName,
                 revisedPartId: this.revisedPartId == 0 ? null : this.revisedPartId,
-
+    
                 partNumbers: generalInfo.partNumbers.map(x => {
                     return {
                         ...x,
@@ -1238,13 +1252,13 @@ export class WorkOrderAddComponent implements OnInit {
                     }
                 })
             };
-
+    
             if (this.isEdit && this.isRecCustomer === false) {
                 this.isSpinnerVisible = true;
                 // if(this.workOrderNumberStatus=='Closed'){
                 //     data1.workOrderStatusId=this.statusId
                 // }
-                this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
+                this.workOrderService.updateNewWorkOrder(this.newWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
                     result => {
                         this.isValidationfailed = false
                         this.isSpinnerVisible = false;
@@ -1254,7 +1268,7 @@ export class WorkOrderAddComponent implements OnInit {
                         if (this.workOrderNumberStatus == 'Closed') {
                             this.isView = true;
                         }
-                        this.saveWorkOrderGridLogic(result, generalInfo);
+                        this.saveWorkOrderGridLogic(result);
                         this.alertService.showMessage(
                             this.moduleName,
                             'Work Order Updated Succesfully',
@@ -1266,31 +1280,48 @@ export class WorkOrderAddComponent implements OnInit {
                     }
                 );
             } else {
-                this.isSpinnerVisible = true;
-                this.workOrderService.createNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
-                    result => {
-                        this.isValidationfailed = false
-                        this.isSpinnerVisible = false;
-                        this.isEdit = true;
-                        this.disableSaveForPart = true;
-                        this.router.navigate([`workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`]);
-                        this.saveWorkOrderGridLogic(result, generalInfo)
-                        if (window.location.href.includes('app-work-order-receivingcustworkid')) {
-                            window.history.replaceState({}, '', `/workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`);
-                        }
-                        this.alertService.showMessage(
-                            this.moduleName,
-                            'Work Order Added Succesfully',
-                            MessageSeverity.success
-                        );
-                    },
-                    err => {
-                        this.handleError(err);
-                    }
-                );
+
+                const newData=[...  this.newWorkOrder.partNumbers];
+                // newData.forEach(element => {
+                //     if(element.x.cMMId ===null){
+
+                //     }
+                // });
+                const arrayWithFilterObjects= newData.filter((x) => x.cMMId ===null);
+            debugger;
+                if((arrayWithFilterObjects && arrayWithFilterObjects.length !=0)){
+                    $('#confirmCMMInfo').modal('show');
+                }else{
+                    this.triggerSaveApi();
+                }
             }
         }
     }
+triggerSaveApi(){
+    this.isSpinnerVisible = true;
+    this.workOrderService.createNewWorkOrder(this.newWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
+        result => {
+            this.isValidationfailed = false
+            this.isSpinnerVisible = false;
+            this.isEdit = true;
+            this.disableSaveForPart = true;
+            this.router.navigate([`workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`]);
+            this.saveWorkOrderGridLogic(result)
+            if (window.location.href.includes('app-work-order-receivingcustworkid')) {
+                window.history.replaceState({}, '', `/workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`);
+            }
+            this.alertService.showMessage(
+                this.moduleName,
+                'Work Order Added Succesfully',
+                MessageSeverity.success
+            );
+        },
+        err => {
+            this.handleError(err);
+        }
+    );
+}
+
 
     createQuote() {
         this.isQuoteAction = true;
@@ -1312,7 +1343,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    saveWorkOrderGridLogic(result, data) {
+    saveWorkOrderGridLogic(result) {
         this.savedWorkOrderData = result;
         this.getWorkFlowData();
         this.workOrderId = result.workOrderId;
@@ -1371,6 +1402,7 @@ export class WorkOrderAddComponent implements OnInit {
             if (this.workorderSettings) {
                 currentRecord.conditionId = (this.workorderSettings.defaultConditionId != 0 && this.workorderSettings.defaultConditionId != null) ? this.workorderSettings.defaultConditionId : object.conditionId;
             }
+            this.getAllWorkScpoes('',currentRecord,index);
         }
         currentRecord.workOrderScopeId = currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId : object.workOderScopeId;
         if (!this.workOrderGeneralInformation.isSinglePN) {
@@ -3787,7 +3819,9 @@ export class WorkOrderAddComponent implements OnInit {
             }
         })
     }
-    getAllWorkScpoes(value): void {
+    getAllWorkScpoes(value,currentRecord,index): void {
+
+        
         this.setEditArray = [];
         if (this.isEdit == true) {
             this.workOrderGeneralInformation.partNumbers.forEach(element => {
@@ -3800,10 +3834,18 @@ export class WorkOrderAddComponent implements OnInit {
             }
         } else {
             this.setEditArray.push(0);
-        }
+        } 
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //     this.workScopesList = res;
+        // });
+        console.log("curret",currentRecord.masterPartId);
+        // debugger;
+        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.masterPartId.itemMasterId, currentRecord.masterPartId.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopesList = res;
+            this['dynamicworkScopesList'+index] = []
+            this['dynamicworkScopesList'+index] = this.workScopesList;
+
         });
     }
     getConditionsList(value) {
@@ -3945,6 +3987,7 @@ export class WorkOrderAddComponent implements OnInit {
     }
     currentcmmId:any;
     viewCmm(workOrderPartNumber){
+        console.log("cmmId",workOrderPartNumber)
         this.currentcmmId=undefined;
         this.currentcmmId=workOrderPartNumber.cMMId;
     }     

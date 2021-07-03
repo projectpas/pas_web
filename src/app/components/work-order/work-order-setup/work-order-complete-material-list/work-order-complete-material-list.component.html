@@ -569,23 +569,24 @@
         </h6>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-target="#existingSubWo" data-toggle="modal"
-            data-dismiss="modal" (click)="addToExistingSubWo()">
+        <button type="button" class="btn btn-danger"  
+            data-dismiss="modal" (click)="addToExistingSubWo(existingSubWo)">
             Add to Existing Record
         </button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="createNewSubWo()">
             Create New </button>
     </div>
 </ng-template>
-<div id="existingSubWo" class="modal fade" role="dialog" data-backdrop="static">
+<!-- <div id="existingSubWo" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
-        <div class="modal-content">
+        <div class="modal-content"> -->
+            <ng-template #existingSubWo let-c="close" let-d="dismiss">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" (click)="dismissModel2()">&times;</button>
                 <h4 class="modal-title">Sub Work Order List</h4>
             </div>
             <div class="modal-body" *ngIf="subWoRecord && subWoRecord.workOrderMaterialsId !=0 && viewSubWolist==true">
-                <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="mpnId" [forSubWorkOrder]="true"
+                <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="mpnId" (triggerModelData)='updateModel($event)' [forSubWorkOrder]="true"
                     [workOrderMaterialsId]="subWoRecord.workOrderMaterialsId">
                 </app-sub-work-orderlist>
             </div>
@@ -593,9 +594,10 @@
                 <button type="button" class="btn btn-danger btn-height" data-dismiss="modal"
                     (click)="dismissModel2()">Close</button>
             </div>
-        </div>
+        </ng-template>
+        <!-- </div>
     </div>
-</div>
+</div> -->
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
 
