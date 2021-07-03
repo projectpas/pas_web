@@ -470,7 +470,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
-                                (click)="closeModel()">&times;</button>
+                                >&times;</button>
                             <h4 class="modal-title">Publication OverView</h4>
 
                         </div>
@@ -480,7 +480,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                (click)="closeModel()">Close</button>
+                                >Close</button>
                         </div>
                     </div>
                 </div>
@@ -491,17 +491,17 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
-                                (click)="closeModel()">&times;</button>
+                               >&times;</button>
                             <h4 class="modal-title">Workflow OverView</h4>
 
                         </div>
-                        <div class="modal-body" *ngIf="currentWorkflowId !=undefined">
-                            <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
+                        <div class="modal-body" *ngIf="currentWorkflowId !=undefined"> 
+                            <app-workflow-list [isWorkOrder]="true" [workFlowType]="subTabWorkFlow"
                                 [workFlowId]="currentWorkflowId"></app-workflow-list>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                (click)="closeModel()">Close</button>
+                                >Close</button>
                         </div>
                     </div>
                 </div>

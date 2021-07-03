@@ -53,7 +53,7 @@
             value="{{ charge.glAccountName }}" [(ngModel)]="charge.glAccountName" name="exd1_{{i}}" disabled />
         </td>
         <td>
-          <input type="text" pInputText value="{{ charge.description }}" (ngModelChange)="getActive()" [(ngModel)]="charge.description"
+          <input type="text" pInputText value="{{ charge.description }}" maxlength="500" (ngModelChange)="getActive()" [(ngModel)]="charge.description"
             class="form-control" name="desc_{{i}}" />
         </td>
         <td>

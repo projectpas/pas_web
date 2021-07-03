@@ -959,7 +959,12 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.GetCapabilityTypeDescription(capabilityId));
     });
   }
-
+  autoCompleteDropdownsWorkScopeByItemMasterCaps(searchText, itemMasterId,  managementStructureId,count?, idList?, masterCompanyId?) {
+    //?tableName=Customer&primaryColumn=CustomerId&textColumn=Name&searchText=Av&startWith=false&count=0
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsWorkScopeByItemMasterCaps?searchText=${searchText}&itemMasterId=${itemMasterId}&managementStructureId=${managementStructureId}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkScopeByItemMasterCaps(searchText, itemMasterId,managementStructureId, count, idList, masterCompanyId));
+    });
+  }
   // getAllEditID(purchaseOrderId) {
   //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
   // }

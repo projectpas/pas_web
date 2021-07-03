@@ -20,7 +20,7 @@ import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 // import { time } from 'console';
 import * as moment from 'moment';
-
+import { Location } from '@angular/common';
 @Component({
     selector: 'app-customer-work-setup',
     templateUrl: './customer-work-setup.component.html',
@@ -130,7 +130,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     customerTypeId: number = 1;
 
     constructor(private commonService: CommonService,
-        private datePipe: DatePipe,
+        private datePipe: DatePipe,private location: Location,
         private _actRoute: ActivatedRoute,
         private receivingCustomerWorkService: ReceivingCustomerWorkService,
         private authService: AuthService,
@@ -184,7 +184,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.loadTagTypes('');
             this.loadEmployeeData('');
             this.loadConditionData('');
-            this.getworkScope('');
+          
             this.getManagementStructureDetails(this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
@@ -424,7 +424,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 taggedById: res.taggedById == null ? 0 : res.taggedById,
                 certifiedById: res.certifiedById == null ? 0 : res.certifiedById,
                 purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
-            };
+            }; 
             this.getManagementStructureDetails(this.receivingForm
                 ? this.receivingForm.managementStructureId
                 : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
@@ -653,15 +653,19 @@ export class CustomerWorkSetupComponent implements OnInit {
     onFilterWorkScope(value) {
         this.getworkScope(value);
     }
-
+    arrayCustlist1:any=[]
     getworkScope(strText = '') {
-        this.arrayCustlist = [];
+        this.arrayCustlist1 = [];
         if (this.isEditMode == true) {
-            this.arrayCustlist.push(this.receivingForm.workScopeId ? this.receivingForm.workScopeId : 0);
+            this.arrayCustlist1.push(this.receivingForm.workScopeId ? this.receivingForm.workScopeId : 0);
         } else {
-            this.arrayCustlist.push(0);
+            this.arrayCustlist1.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        //     this.workScopeList = res;
+        // }); 
+        
+        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, this.receivingForm.itemMasterId.value, this.receivingForm.managementStructureId, 20, this.arrayCustlist1.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopeList = res;
         });
     }
@@ -916,7 +920,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.isTimeLife = value.isTimeLife;
             this.receivingForm.itemGroup = value.itemGroup;
             this.receivingForm.purchaseUnitOfMeasureId = this.getInactiveObjectOnEdit('value', value.unitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname');
-
+            this.getworkScope('');
         }
     }
     resetSerialNoTimeLife() {
@@ -1099,6 +1103,8 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.customerId = res.customerId;
                 this.receivingCustomerWorkId = res.receivingCustomerWorkId;
+                this.isEditMode=true;
+                this.location.replaceState(`receivingpages/app-customer-work-setup/edit//${this.receivingCustomerWorkId}`);
                 this.uploadDocs.next(true);
                 $('#workorderpopup').modal('show');
                 this.alertService.showMessage(
