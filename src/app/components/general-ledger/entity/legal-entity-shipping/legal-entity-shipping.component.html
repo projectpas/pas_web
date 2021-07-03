@@ -162,7 +162,7 @@
                             </ng-template>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th class="table-column-width">Flag</th>
+                                <th style="width:40px">Flag</th>
                                 <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.header == 'IsPrimary'">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -170,7 +170,7 @@
                                 <th class="table-actions-column" style="width:150px !important"> Actions</th>
                             </tr>
                             <tr>
-                                <th class="table-column-width"></th>
+                                <th style="width:40px"></th>
                                 <!-- <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                     <input style="width:100%;"  autocomplete="off" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
                                 </th> -->
@@ -188,7 +188,7 @@
 
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewSelectedRowdbl(rowData)"> 
-                                <td class="table-column-width">
+                                <td style="width:40px">
                                     <span class="flag">
                                         <i *ngIf="rowData.isPrimary == true" [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                            class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
@@ -434,15 +434,15 @@
 
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th class="table-column-width">Flag</th>
-                                <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                <th style="width:40px !important">Flag</th>
+                                <th class="table-column-width" [ngClass]="(col.field == 'exportLicense'||col.field == 'expirationDate' )?'width-140':''" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
                                 </th>
                                 <th class="table-actions-column" style="width:150px !important" *ngIf="selectedColumnsForInternationTable.length > 0"> Actions</th>
                             </tr>
                             <tr>
-                                <th class="table-column-width"></th>
+                                <th style="width:40px !important"></th>
                                 <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                     <input name="shippingInt" class="table-header-input-width" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'startDate' && col.field != 'expirationDate' " pInputText type="text" (input)="intlShippingTable.filter($event.target.value, col.field, 'contains')">
            
@@ -463,14 +463,14 @@
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewInterShipping(rowData)">
                                 <!-- [ngClass]="{'row-primary': rowData.isPrimary === true}" -->
-                                <td class="table-column-width">
+                                <td style="width:40px !important">
                                     <span class="flag">
                                         <i *ngIf="rowData.isPrimary == true" [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                            class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                                     </span>
                                 </td>
-                                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
-                                    {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
+                                <td class="table-column-width" [ngClass]="(col.field == 'amount' )?'text-right':''" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
+                                    {{ col.field == 'amount'?  (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                 </td>
 
                                 <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == false">
@@ -1358,15 +1358,15 @@
                     </ng-template>
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th style="width: auto;">Flag</th>
-                            <th style="width: auto;" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                            <th style="width: 40px;">Flag</th>
+                            <th style="width: auto;" [ngClass]="(col.field == 'shipAccountinfo' )?'width-140':''" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                 {{col.header}}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                             </th>
                             <th style="width:140px;position:sticky" > Actions</th>
                         </tr>
                         <tr>
-                            <th style="width: auto;"></th>
+                            <th style="width: 40px;"></th>
                             <!-- <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                 <input style="width:100%;" pInputText type="text" (input)="domesShipVia.filter($event.target.value, col.field, 'contains')">
                             </th> -->
@@ -1383,7 +1383,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData">
-                            <td style="width: auto;">
+                            <td style="width: 40px;">
                                 <span class="flag">
                                     <i *ngIf="rowData.isPrimary == true" [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                        class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
@@ -2333,7 +2333,7 @@
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">{{audit.description}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'startDate', audit.startDate)  ? 'black' : 'red'  }">{{audit.startDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'expirationDate', audit.expirationDate)  ? 'black' : 'red'  }">{{audit.expirationDate | date: 'MM/dd/yyyy h:mm a'}}</td>
-                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">{{audit.amount}}</td>
+                    <td class="text-right" [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">{{audit.amount}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'country', audit.country)  ? 'black' : 'red'  }">{{audit.country}}</td>
                     <td class="text-center">
                         <span class="value">

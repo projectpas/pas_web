@@ -167,7 +167,7 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" class="table-column-width">
+                    <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}">
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
@@ -320,7 +320,7 @@
             <div class="modal-body" *ngIf="auditHistory" >
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">
-						<table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
+						<table class="table table-bordered" style="white-space: nowrap;" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
                                 <th>Legal Entity  <span class="clr-red">*</span></th>

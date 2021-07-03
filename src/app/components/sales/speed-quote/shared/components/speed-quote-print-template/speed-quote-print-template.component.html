@@ -180,14 +180,14 @@
                 class="parttable print-table print-friendly table-margins" style="margin-top:10px">
                 <thead>
                   <tr>
-                    <th>Item Num</th>
-                    <th>PN</th>
-                    <th>PN Description</th>
-                    <th>UOM</th>
-                    <th></th>
-                    <th>Rep</th>
-                    <th>OH</th>
-                    <th>BC</th>
+                    <th style="width:62px">Item Num</th>
+                    <th style="width:180px">PN</th>
+                    <th style="width:200px">PN Description</th>
+                    <th class="width-80">UOM</th>
+                    <th class="width-80"></th>
+                    <th class="width-80">Rep</th>
+                    <th class="width-80">OH</th>
+                    <th class="width-80">BC</th>
 
                   </tr>
                 </thead>
@@ -210,10 +210,10 @@
                       </ng-container>
                     </tr>
                     <tr>
+                      <td colspan="4" rowspan="3"></td>
+                      <!-- <td> </td>
                       <td></td>
-                      <td> </td>
-                      <td></td>
-                      <td></td>
+                      <td></td> -->
                       <td>Unit Price</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
                         <td *ngIf="price.conditionDescription == 'Repair' ">{{price.unitPrice}}</td>
@@ -226,10 +226,10 @@
                       </ng-container>
                     </tr>
                     <tr>
-                      <td></td>
+                      <!-- <td></td>
                       <td> </td>
                       <td></td>
-                      <td></td>
+                      <td></td> -->
                       <td>Ext Price</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
                         <td *ngIf="price.conditionDescription == 'Repair' ">{{price.salesPriceExtended}}</td>
@@ -242,10 +242,10 @@
                       </ng-container>
                     </tr>
                     <tr>
-                      <td></td>
+                      <!-- <td></td>
                       <td> </td>
                       <td></td>
-                      <td></td>
+                      <td></td> -->
                       <td>TAT</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
                         <td *ngIf="price.conditionDescription == 'Repair' ">{{price.tat}}</td>

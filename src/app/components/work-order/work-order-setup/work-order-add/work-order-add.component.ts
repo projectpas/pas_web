@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 declare var $: any;
 import { WorkOrderPartNumber } from '../../../../models/work-order-partnumber.model';
@@ -3987,7 +3987,6 @@ triggerSaveApi(){
     }
     currentcmmId:any;
     viewCmm(workOrderPartNumber){
-        console.log("cmmId",workOrderPartNumber)
         this.currentcmmId=undefined;
         this.currentcmmId=workOrderPartNumber.cMMId;
     }     

@@ -1836,6 +1836,21 @@ export class SpeedQuoteCreateComponent implements OnInit {
             .border-bottom{
               border-bottom:1px solid black !important;
             }
+            .excluded-items-label{
+              border: 1px solid;
+              width: 500px !important;
+              padding:0% 30%;
+              font-size:12px !important;
+              /* padding: 1px; */
+              background: #fff;
+              text-align: center;
+          }
+          .width-80{
+            width:80px;
+          }
+          .width-90{
+            width:90px;
+          }
             .table-margins{
                   margin-top:-1px;margin-left:0px
                 }
@@ -1854,9 +1869,9 @@ export class SpeedQuoteCreateComponent implements OnInit {
                     text-align: center;
                     font-size: 12px;
                   }
-                  .aligntop{
-                    margin-top:300px;
-                  }
+                  // .aligntop{
+                  //   margin-top:300px;
+                  // }
             
                         </style>
         </head>

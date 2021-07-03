@@ -996,6 +996,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 country: this.sourceSOApproval.shipToCountry,
                 countryId: getValueFromObjectByKey('value', this.sourceSOApproval.shipToCountryId),
                 postalCode: this.sourceSOApproval.shipToPostalCode,
+                attention: this.sourceSOApproval.shipToAttention,
             }
 
             this.billToAddress = {
@@ -1010,6 +1011,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 country: this.sourceSOApproval.billToCountry,
                 countryId: getValueFromObjectByKey('value', this.sourceSOApproval.billToCountryId),
                 postalCode: this.sourceSOApproval.billToPostalCode,
+                attention: this.sourceSOApproval.billToAttention,
             }
 
             this.shipvia = {
@@ -1049,6 +1051,7 @@ export class SalesOrderBillingComponent implements OnInit {
         if (this.billToAddress !== undefined) {
             let customer = getObjectByValue('userID', this.billToAddress.userId, this.userBillingList);
             this.billingorInvoiceForm.billToCustomerId = customer;
+            this.billingorInvoiceForm.billToAttention = this.billToAddress.attention;
             this.setBillToSelectedSite(this.billToAddress.userId, this.billToAddress.siteId);
             this.billCustomerAddress.line1 = this.billToAddress.address1;
             this.billCustomerAddress.line2 = this.billToAddress.address2;
@@ -1056,11 +1059,13 @@ export class SalesOrderBillingComponent implements OnInit {
             this.billCustomerAddress.stateOrProvince = this.billToAddress.stateOrProvince;
             this.billCustomerAddress.country = this.billToAddress.country;
             this.billCustomerAddress.postalCode = this.billToAddress.postalCode;
+            this.billCustomerAddress.postalCode = this.billToAddress.postalCode;
         }
 
         if (this.shipToAddress !== undefined) {
             let shipcustomer = getObjectByValue('userID', this.shipToAddress.userId, this.userShipingList);
             this.billingorInvoiceForm.shipToCustomerId = shipcustomer;
+            this.billingorInvoiceForm.shipToAttention = this.shipToAddress.attention;
             this.setShipToSelectedSite(this.shipToAddress.userId, this.shipToAddress.siteId);
             this.shipCustomerAddress.line1 = this.shipToAddress.address1;
             this.shipCustomerAddress.line2 = this.shipToAddress.address2;
@@ -1127,6 +1132,8 @@ export class SalesOrderBillingComponent implements OnInit {
                             }
                         })
                     }
+
+                    this.billingorInvoiceForm.billToAttention = returnddataforbill.address[0].attention;
 
                     if (siteId > 0) {
                         if (this.billToSite && this.billToSite.length != 0) {
@@ -1242,6 +1249,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 this.shipCustomerAddress.stateOrProvince = site.stateOrProvince;
                 this.shipCustomerAddress.postalCode = site.postalCode;
                 this.shipCustomerAddress.country = site.country;
+                this.billingorInvoiceForm.shipToAttention = site.attention;
             }
         });
     }
