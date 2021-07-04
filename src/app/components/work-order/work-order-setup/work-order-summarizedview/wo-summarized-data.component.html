@@ -79,7 +79,6 @@
                                                                 <table  class="table table-bordered">
                                                                 <thead >
                                                                     <tr>
-                                                                        <!-- <th class="table-column-icon-width"></th> -->
                                                                         <th *ngFor="let matHeader of materialListHeader" [ngStyle]="{'width': matHeader.width}" style="border: 1px solid #c8c8c8 !important; min-width: 100px !important;">
                                                                             {{matHeader.header}}
                                                                         </th>
@@ -195,12 +194,6 @@
                         [ngClass]="{hidedata : gridActiveTab !== 'charges' }"> 
                             <app-charges-wo-summarization [value]="chargesListMPNs"  [workOrderId]="workOrderId"></app-charges-wo-summarization>
                         </div> 
-
-                        <!-- <div *ngIf="workOrderId && (gridActiveTab == 'documents')"
-                        [ngClass]="{hidedata : gridActiveTab !== 'documents' }"> 
-                            <app-document-wo-summarization [value]="documentsListMPNs"></app-document-wo-summarization>
-                        </div> -->
-
                         <div *ngIf="workOrderId && (gridActiveTab == 'documents')"
                         [ngClass]="{hidedata : gridActiveTab !== 'documents' }">  
                             <div style="float: right;" class="m-t-2"> 
@@ -212,12 +205,10 @@
                                                 <div class="panel-title">
                                                     <div></div>
                                                        <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
-                                                        <!-- style="overflow: hidden !important;" -->
                                                             <div class="tableFixHead">
                                                             <table  class="table table-bordered">
                                                                 <thead  >
                                                                     <tr>
-                                                                        <!-- <th class="table-column-icon-width"></th> -->
                                                                         <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
@@ -225,8 +216,6 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody >
-                        
-                                                                   
                                                                    <ng-container *ngFor="let documentMPN of documentNumberList; let i=index">
                                                                     <tr>
                                                                         <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
@@ -261,9 +250,6 @@
                         </div>
 
                         <div [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
-                            <!-- <div *ngIf="(selectedCommunicationTab == 'memo')">
-                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
-                            </div> -->
                             <div *ngIf="(selectedCommunicationTab == 'memo')">  
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
@@ -274,12 +260,10 @@
                                                     <div class="panel-title">
                                                         <div></div>
                                                            <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
-                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
                                                                         <tr>
-                                                                            <!-- <th class="table-column-icon-width"></th> -->
                                                                             <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                             color: white;">
                                                                                 {{matHeader.header}}
@@ -287,8 +271,6 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody >
-                            
-                                                                       
                                                                        <ng-container *ngFor="let documentMPN of memoNumberList; let i=index">
                                                                         <tr>
                                                                             <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;color: black;">
@@ -329,12 +311,10 @@
                                                     <div class="panel-title">
                                                         <div></div>
                                                            <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1">
-                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
                                                                         <tr>
-                                                                            <!-- <th class="table-column-icon-width"></th> -->
                                                                             <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                             color: white;">
                                                                                 {{matHeader.header}}
@@ -342,8 +322,6 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody >
-                            
-                                                                       
                                                                        <ng-container *ngFor="let documentMPN of emailNumberList; let i=index">
                                                                         <tr>
                                                                             <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
@@ -358,9 +336,6 @@
                                                                             <td></td>
                                                                             <td colspan="9" class="p-0">
                                                                             <div> 
-                                                                                <!-- <app-common-documents [moduleName]="'WorkOrder'"
-                                                                                    [referenceId]="documentMPN.value" [isSummarizedView]="true"
-                                                                                    [isViewMode]="true" [offLineUpload]="false"></app-common-documents> -->
                                                                                     <app-common-email [isView]="true"  [type]="1" [isSummarizedView]="true"  [moduleId]="15" [referenceId]="documentMPN.value"></app-common-email>
                                                                                 </div>
                                                                               </td>
@@ -377,14 +352,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- <div *ngIf="(selectedCommunicationTab == 'email')">
-                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
-                            </div> -->
-                            
-                            <!-- <div *ngIf="(selectedCommunicationTab == 'text')">
-                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
-                            </div> -->
                             <div *ngIf="(selectedCommunicationTab == 'text')">  
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
@@ -395,12 +362,10 @@
                                                     <div class="panel-title">
                                                         <div></div>
                                                            <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
-                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
                                                                         <tr>
-                                                                            <!-- <th class="table-column-icon-width"></th> -->
                                                                             <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                             color: white;">
                                                                                 {{matHeader.header}}
@@ -408,8 +373,6 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody >
-                            
-                                                                       
                                                                        <ng-container *ngFor="let documentMPN of textNumberList; let i=index">
                                                                         <tr>
                                                                             <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
@@ -441,9 +404,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div *ngIf="(selectedCommunicationTab == 'phone')">
-                                <app-communication-wo-summarization [value]="mpnPartNumbersList" [type]="selectedCommunicationTab" [workOrderId]="workOrderId"></app-communication-wo-summarization>
-                            </div> -->
                             <div *ngIf="(selectedCommunicationTab == 'phone')">  
                                 <div style="float: right;" class="m-t-2"> 
                                 </div>
@@ -454,12 +414,10 @@
                                                     <div class="panel-title">
                                                         <div></div>
                                                            <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block1" >
-                                                            <!-- style="overflow: hidden !important;" -->
                                                                 <div class="tableFixHead">
                                                                 <table  class="table table-bordered">
                                                                     <thead  >
                                                                         <tr>
-                                                                            <!-- <th class="table-column-icon-width"></th> -->
                                                                             <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
                                                                             color: white;">
                                                                                 {{matHeader.header}}
@@ -467,8 +425,6 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody >
-                            
-                                                                       
                                                                        <ng-container *ngFor="let documentMPN of phoneNumberList; let i=index">
                                                                         <tr>
                                                                             <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
@@ -483,13 +439,7 @@
                                                                             <td></td>
                                                                             <td colspan="9" class="p-0">
                                                                             <div> 
-                                                                                <!-- <app-common-documents [moduleName]="'WorkOrder'"
-                                                                                    [referenceId]="documentMPN.value" [isSummarizedView]="true"
-                                                                                    [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
-                                                                          -->
-                                                                         
                                                                           <app-common-phone [isView]="true"  [type]="1" [referenceId]="documentMPN.value" [isSummarizedView]="true"  [moduleId]="15"  ></app-common-phone>
-                                                                         
                                                                                 </div>
                                                                               </td>
                                                                             </tr>
