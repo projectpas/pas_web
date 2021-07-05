@@ -122,21 +122,21 @@ export class VendorContactsComponent implements OnInit {
     isEditContactInfo: boolean = false;
     selectedRowforDelete: any;
     vendorContactsColumns = [
-        { field: 'firstName', header: 'First Name' },
+        { field: 'firstName', header: 'First Name',width:"50px" },
         { field: 'lastName', header: 'Last Name' },
-        { field: 'contactTitle', header: 'Contact Title' }, 
-        { field: 'email', header: 'Email' },
-        { field: 'tagName', header: 'Tag' },
-        { field: 'attention', header: 'Attention' },
-        { field: 'mobilePhone', header: 'Mobile Phone',width:"100px" },
-        { field: 'fullContactNo', header: 'Work Phone' ,width:"100px"},
+        { field: 'contactTitle', header: 'Contact Title'}, 
+        { field: 'email', header: 'Email',width:"100px" },
+        { field: 'tagName', header: 'Tag',width:"200px" },
+        { field: 'attention', header: 'Attention',width:"70px" },
+        { field: 'mobilePhone', header: 'Mobile Phone',width:"110px" },
+        { field: 'fullContactNo', header: 'Work Phone' ,width:"110px"},
         { field: 'notes', header: 'Memo' ,width:"130px"},
         //{ field: 'fax', header: 'FAX' },
         { field: 'isDefaultContact', header: 'IsPrimary' },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
+        { field: 'createdBy', header: 'Created By',width:"100px" },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' }
+        { field: 'updatedBy', header: 'Updated By',width:"100px" }
     ];
 
     selectedColumns = this.vendorContactsColumns;
@@ -873,7 +873,7 @@ export class VendorContactsComponent implements OnInit {
 
     getAllATAChapter() {
         this.isSpinnerVisible = true;
-        this.atamain.getAtaMainList().subscribe(res => {
+        this.atamain.getAtaMainList(this.currentUserMasterCompanyId).subscribe(res => {
             const responseData = res[0];
             this.isSpinnerVisible = false;
             // used to get the complete object in the value 

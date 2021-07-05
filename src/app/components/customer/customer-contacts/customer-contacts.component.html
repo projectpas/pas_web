@@ -1442,9 +1442,9 @@
         <h4 class="modal-title">Edit Contact ATA Chapters</h4>
       </div>
       <div class="modal-body" *ngIf="ataChapterEditData">
-        <div class="card">
-          <div class="form-row">
-            <div class="col-md-4">
+        <!-- <div class="card">
+          <div class="form-row"> -->
+            <div class="col-md-6">
               <div class="form-group">
                 <label class="fs12">
                   ATA Chapter
@@ -1459,8 +1459,6 @@
                   </option>
                 </select>
               </div>
-            </div>
-            <div class="col-md-4">
               <div class="form-group">
                 <label label class="popup-plusicon-cstm ata-subchapters-label">
                   ATA Sub Chapters
@@ -1472,17 +1470,23 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-4">
+             
+            </div> -->
+            <!-- <div class="col-md-3">
               <div class="form-group">
                 <button class="btn btn-primary m-t-20" (click)="updateATAChapters()" data-dismiss="modal">
                   Update
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
+            </div> -->
+          <!-- </div>
+        </div> -->
       </div>
       <div class="modal-footer">
+        <button class="btn btn-primary" (click)="updateATAChapters()" data-dismiss="modal">
+          Update
+        </button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">
           Close
         </button>
@@ -1524,7 +1528,7 @@
       <div class="modal-body" *ngIf="auditHistory1">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistory1.length > 0; else noDatavailable">
+					<table class="table table-bordered" *ngIf="auditHistory1.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Contact</th>

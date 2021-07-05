@@ -106,11 +106,11 @@
                         <div class="col">
                             <div class="advance-search-card" >
                                 <div class="col-md-1">
-                                    <h4 class="f-s-14" style="margin-top: 26px;">Search:</h4>
+                                    <h4 class="search-font search-margin" style="margin-left:55%">Search:</h4>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group ">
-                                        <label class="fs12">Contact</label>
+                                        <label style="width:95%">Contact</label>
                                         <p-multiSelect [options]="contactList" name="atasearch" optionLabel="label"
                                                        [(ngModel)]="search_SelectedContact" (onChange)="getContactsByVendorId()"
                                                        [panelStyle]="{ minWidth: '12em' }" class="pub-multi">
@@ -120,7 +120,7 @@
                     
                                 <div class="col-md-3">
                                     <div class="form-group ">
-                                        <label class="fs12">ATA Chapter</label>
+                                        <label style="width:95%">ATA Chapter</label>
                                         <p-multiSelect [options]="search_ataChapterList" name="atasearch" [(ngModel)]="search_SelectedATA"
                                                        (onChange)="getSubChapterByATAChapter()" [panelStyle]="{ minWidth: '12em' }" class="pub-multi">
                                         </p-multiSelect>
@@ -128,16 +128,16 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="fs12">
+                                        <label style="width:95%">
                                             ATA Subchapter
                                         </label>
                                         <p-multiSelect [(ngModel)]="search_SelectedATASubChapter" [options]="search_ataSubChapterList"
                                                        name="ataSubchapter" [panelStyle]="{ minWidth: '12em' }" class="pub-multi"></p-multiSelect>
                                     </div>
                                 </div>
-                                <div class="col-md-1 add-new-align">
+                                <div class="col-md-1 add-new-align padding-top-20">
                                     <div class="form-group">
-                                        <button style="margin-top: 20px !important;" class="btn btn-primary mtop20 mn_col" (click)="searchATA()" >
+                                        <button class="btn btn-primary mtop20" (click)="searchATA()" >
                                             <i class="pi pi-search pi-search"></i>
                                         </button>
                                     </div>

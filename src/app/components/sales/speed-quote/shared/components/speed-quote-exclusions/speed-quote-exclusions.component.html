@@ -107,6 +107,10 @@
                 (click)="openDelete(content,partList,row_index)" matTooltip="Remove" matTooltipPosition="above">
                 <i class="fa fa-trash"></i>
               </a>
+              <a class="btn nobg"
+                (click)="openView(contentview,partList,row_index)" matTooltip="View" matTooltipPosition="above">
+                <i class="fa fa-eye"></i>
+              </a>
             </td>
           </tr>
         </ng-container>
@@ -195,5 +199,29 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="deleteExclusion()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+  </div>
+</ng-template>
+<ng-template #contentview let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Exclusion Part View</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="modal-body">MPN : {{row_data.pn}}</h6>
+    <h6 class="modal-body">PN Description : {{row_data.description}}</h6>
+    <h6 class="modal-body">PN : {{row_data.exPartNumber}}</h6>
+    <h6 class="modal-body">PN Description : {{row_data.exPartDescription}}</h6>
+    <h6 class="modal-body">Item Type : {{row_data.exStockType}}</h6>
+    <h6 class="modal-body">Qty : {{row_data.exQuantity}}</h6>
+    <h6 class="modal-body">Unit Price : {{row_data.exUnitPrice}}</h6>
+    <h6 class="modal-body">Est Price : {{row_data.exExtPrice}}</h6>
+    <h6 class="modal-body">Occurance (%) : {{row_data.exOccurance}}</h6>
+    <h6 class="modal-body">Notes : {{row_data.exNotes}}</h6>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
   </div>
 </ng-template>

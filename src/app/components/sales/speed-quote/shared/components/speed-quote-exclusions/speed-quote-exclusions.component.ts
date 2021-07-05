@@ -329,6 +329,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   selected: any;
   selectedExclusionToDelete: any;
   index:number;
+  row_data:any;
   openDelete(content, rowData,row_index) {
     this.selected = rowData.exclusionPartId;
     this.selectedExclusionToDelete = rowData.pn;
@@ -337,6 +338,18 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
       this.partListData.splice(this.index, 1);
     }else{
     this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    }
+  }
+  openView(content, rowData,row_index) {
+    this.selected = rowData.exclusionPartId;
+    this.selectedExclusionToDelete = rowData.pn;
+    this.index = row_index;
+    console.log(rowData);
+    this.row_data=rowData;
+    if (this.selected == 0) {
+      this.partListData.splice(this.index, 1);
+    }else{
+    this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
     }
   }
   deleteExclusion(): void {

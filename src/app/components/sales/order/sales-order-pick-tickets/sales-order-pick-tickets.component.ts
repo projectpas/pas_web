@@ -114,12 +114,12 @@ export class SalesOrderPickTicketsComponent implements OnInit {
 
     this.pickTicketItemInterfaceheader = [
       { field: "partNumber", header: "PN", width: "100px" },
-      { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
-      { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
-      { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
-      { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
+      { field: "stockLineNumber", header: "Stk Line Num", width: "100px" },
+      { field: "qtyOnHand", header: "Qty On Hand", width: "90px" },
+      { field: "qtyAvailable", header: "Qty Avail", width: "70px" },
+      { field: "qtyToShip", header: "Qty To Pick", width: "80px" },
       { field: "serialNumber", header: "Serial Num", width: "100px" },
-      { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
+      { field: "stkLineManufacturer", header: "Manufacturer", width: "200px" },
       { field: "stockType", header: "Stock Type", width: "100px" },
       { field: "tracableToName", header: "Tracable To", width: "100px" },
     ];

@@ -44,7 +44,7 @@
           <label>Exchange/Loan Fee<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="exchangeListPrice" [ngModel]="part.exchangeListPrice  | twoDecimalGlobalNumberFormatPipe"
-            (ngModelChange)="part.exchangeListPrice=formatStringToNumberGlobal($event)" />
+            (ngModelChange)="part.exchangeListPrice=formatStringToNumberGlobal($event)" [ngModelOptions]="{updateOn:'blur'}" />
         </div>
       </div>
       <div class="col-3 column">
@@ -62,7 +62,7 @@
           <label>Overhaul Price (Est)<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="exchangeOverhaulPrice" [ngModel]="part.exchangeOverhaulPrice  | twoDecimalGlobalNumberFormatPipe"
-            (ngModelChange)="part.exchangeOverhaulPrice=formatStringToNumberGlobal($event)" />
+            (ngModelChange)="part.exchangeOverhaulPrice=formatStringToNumberGlobal($event)" [ngModelOptions]="{updateOn:'blur'}"/>
         </div>
       </div>
       <div class="col-3 column">
@@ -70,7 +70,7 @@
           <label>Core Price<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="money"
             name="exchangeCorePrice" [ngModel]="part.exchangeCorePrice  | twoDecimalGlobalNumberFormatPipe"
-            (ngModelChange)="part.exchangeCorePrice=formatStringToNumberGlobal($event)" />
+            (ngModelChange)="part.exchangeCorePrice=formatStringToNumberGlobal($event)" [ngModelOptions]="{updateOn:'blur'}"/>
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@
           <label>Out Right Amt<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="exchangeOutrightPrice" [ngModel]="part.exchangeOutrightPrice  | twoDecimalGlobalNumberFormatPipe"
-            (ngModelChange)="part.exchangeOutrightPrice=formatStringToNumberGlobal($event)" />
+            (ngModelChange)="part.exchangeOutrightPrice=formatStringToNumberGlobal($event)" [ngModelOptions]="{updateOn:'blur'}"/>
         </div>
       </div>
       <div class="col-3 column">
@@ -141,7 +141,7 @@
           <label>Deposit Amt</label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="depositeAmount" [ngModel]="part.depositeAmount  | twoDecimalGlobalNumberFormatPipe"
-            (ngModelChange)="part.depositeAmount=formatStringToNumberGlobal($event)" />
+            (ngModelChange)="part.depositeAmount=formatStringToNumberGlobal($event)" [ngModelOptions]="{updateOn:'blur'}"/>
         </div>
       </div>
       <div class="col-3 column">

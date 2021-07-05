@@ -84,6 +84,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
     partListForPMA: any;
     partListForDER: any;
     partListOriginal: any;
+    partListOriginalPma: any;
+    partListOriginalDer: any;
     selectedActionName: any;
     disableSaveCustomerName: boolean=false;
     disableSaveParentName: boolean = false;
@@ -173,7 +175,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
         this.id = this.editCustomerId;
         this.isEdit = this.editMode;
 
-        this.getAllPartListSmartDropDown();
+        this.getAllPartListSmartDropDownForPma('','IsPma');
+        this.getAllPartListSmartDropDownForDer('','IsDer');
         this.getAllIntegrations();
 
         if (this.isEdit) {
@@ -352,33 +355,65 @@ export class CustomerGeneralInformationComponent implements OnInit {
             : null;
     }
 
-    getAllPartListSmartDropDown(strText = '') {
+    getAllPartListSmartDropDownForPma(strText = '', ispmaorIsder) {
         if (this.arrayItemMasterlist.length == 0) {
             this.arrayItemMasterlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-            this.partListOriginal = response.map(x => {
+        // this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        //     this.partListOriginal = response.map(x => {
+        //         return {
+        //             partNumber: x.label, itemMasterId: x.value
+        //         }
+        //     })
+        this.commonService.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId,ispmaorIsder).subscribe(response => {              
+            this.partListOriginalPma = response.map(x => {
                 return {
-                    partNumber: x.label, itemMasterId: x.value
-                }
-            })
+                    partNumber: x.label,
+                    itemMasterId: x.value
+                };
+            });                      
 
             if (this.generalInformation.restrictedPMAParts != undefined && this.generalInformation.restrictedPMAParts.length > 0) {
                 this.partListForPMA = this.generalInformation.restrictedPMAParts.reduce((acc, obj) => {
                     return acc.filter(x => x.itemMasterId !== obj.itemMasterId)
-                }, this.partListOriginal)
+                }, this.partListOriginalPma)
             }
             else {
-                this.partListForPMA = [...this.partListOriginal];
+                this.partListForPMA = [...this.partListOriginalPma];
             }
 
+            // if (this.generalInformation.restrictedDERParts != undefined && this.generalInformation.restrictedDERParts.length > 0) {
+            //     this.partListForDER = this.generalInformation.restrictedDERParts.reduce((acc, obj) => {
+            //         return acc.filter(x => x.itemMasterId !== obj.itemMasterId)
+            //     }, this.partListOriginal)
+            // }
+            // else {
+            //     this.partListForDER = [...this.partListOriginal.filter(x=>x.isDER == true)];
+            // }
+
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+
+    getAllPartListSmartDropDownForDer(strText = '', ispmaorIsder) {
+        if (this.arrayItemMasterlist.length == 0) {
+            this.arrayItemMasterlist.push(0);
+        }       
+        this.commonService.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId,ispmaorIsder).subscribe(response => {              
+            this.partListOriginalDer = response.map(x => {
+                return {
+                    partNumber: x.label,
+                    itemMasterId: x.value
+                };
+            }); 
             if (this.generalInformation.restrictedDERParts != undefined && this.generalInformation.restrictedDERParts.length > 0) {
                 this.partListForDER = this.generalInformation.restrictedDERParts.reduce((acc, obj) => {
                     return acc.filter(x => x.itemMasterId !== obj.itemMasterId)
-                }, this.partListOriginal)
+                }, this.partListOriginalDer)
             }
             else {
-                this.partListForDER = [...this.partListOriginal];
+                this.partListForDER = [...this.partListOriginalDer];
             }
 
         }, err => {
@@ -388,14 +423,14 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     filterpartListForPMA(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getAllPartListSmartDropDown(event.query);
+            this.getAllPartListSmartDropDownForPma(event.query,'IsPma');
         }
     }
 
 
     filterpartListForDER(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getAllPartListSmartDropDown(event.query);
+            this.getAllPartListSmartDropDownForDer(event.query,'IsDer');
         }
     }
 
@@ -614,7 +649,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                         this.generalInformation.restrictedPMAParts = this.generalInformation.restrictedPMAParts.slice();
                         this.partListForPMA = this.generalInformation.restrictedPMAParts.reduce((acc, obj) => {
                             return acc.filter(x => x.itemMasterId !== obj.itemMasterId)
-                        }, this.partListOriginal)
+                        }, this.partListOriginalPma)
 
                         this.restictPMAtempList = [];
                     }
@@ -734,7 +769,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                         this.generalInformation.restrictedDERParts = this.generalInformation.restrictedDERParts.slice();
                         this.partListForDER = this.generalInformation.restrictedDERParts.reduce((acc, obj) => {
                             return acc.filter(x => x.itemMasterId !== obj.itemMasterId)
-                        }, this.partListOriginal)
+                        }, this.partListOriginalDer)
 
                         this.restictDERtempList = [];
                     }

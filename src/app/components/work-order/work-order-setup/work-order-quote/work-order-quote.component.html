@@ -470,7 +470,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
-                                (click)="closeModel()">&times;</button>
+                                >&times;</button>
                             <h4 class="modal-title">Publication OverView</h4>
 
                         </div>
@@ -480,7 +480,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                (click)="closeModel()">Close</button>
+                                >Close</button>
                         </div>
                     </div>
                 </div>
@@ -491,17 +491,17 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
-                                (click)="closeModel()">&times;</button>
+                               >&times;</button>
                             <h4 class="modal-title">Workflow OverView</h4>
 
                         </div>
-                        <div class="modal-body" *ngIf="currentWorkflowId !=undefined">
-                            <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
+                        <div class="modal-body" *ngIf="currentWorkflowId !=undefined"> 
+                            <app-workflow-list [isWorkOrder]="true" [workFlowType]="subTabWorkFlow"
                                 [workFlowId]="currentWorkflowId"></app-workflow-list>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                (click)="closeModel()">Close</button>
+                                >Close</button>
                         </div>
                     </div>
                 </div>
@@ -798,20 +798,20 @@
                      <h4 class="header-name"> Material list</h4>
                      <!-- {{isQuote? 'Work Order Quote' :'Work Order'}} -->
                  </div>
-                 <!-- <div *ngIf="!isView &&  !isViewForApprovedPart">
+                 <div *ngIf="!isView &&  !isViewForApprovedPart">
                      <button type="button" matTooltipPosition="above" matTooltip="Transfer Materials From Work Order" *ngIf="loadworkorderData" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadMaterials()">
                         Transfer WO Materials
                      </button>
                      <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part Num</button>
-                 </div> -->
+                 </div>
              </div>
            </div>
-           <div *ngIf="!isView &&  !isViewForApprovedPart" class="m-t-5 m-b-5">
+           <!-- <div *ngIf="!isView &&  !isViewForApprovedPart" class="m-t-5 m-b-5">
             <button type="button" matTooltipPosition="above" matTooltip="Transfer Materials From Work Order" *ngIf="loadworkorderData" style="margin-right: 10px;" class="btn-sm header-button "   (click)="loadMaterials()">
                Transfer WO Materials
             </button>
             <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part Num</button>
-        </div>
+        </div> -->
          <div class="table-responsive table-overflow headertable-width m-t-0">
              <div class="tableFixHead">
              <table class="table table-bordered lastcol-fix">
