@@ -168,13 +168,13 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     ]
     pickTicketItemInterfaceheader = [
         { field: "partNumber", header: "PN", width: "100px" },
-        { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
-        { field: "qtyOnHand", header: "Qty On Hand", width: "130px" },
-        { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
-        { field: "qtyToPick", header: "Ready To Pick", width: "130px" },
-        { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
-        { field: "serialNumber", header: "Serial Num", width: "100px" },
-        { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
+        { field: "stockLineNumber", header: "Stk Line Num", width: "100px" },
+        { field: "qtyOnHand", header: "Qty On Hand", width: "90px" },
+        { field: "qtyAvailable", header: "Qty Avail", width: "70px" },
+        { field: "qtyToPick", header: "Ready To Pick", width: "90px" },
+        { field: "qtyToShip", header: "Qty To Pick", width: "80px" },
+        { field: "serialNumber", header: "Serial Num", width: "130px" },
+        { field: "stkLineManufacturer", header: "Manufacturer", width: "200px" },
         { field: "stockType", header: "Stock Type", width: "100px" },
         { field: "tracableToName", header: "Tracable To", width: "100px" },
     ];
@@ -1338,7 +1338,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.viewSubWolist = false;
         }, 1000)
     }
-
+    updateModel(){
+        console.log("hello")
+        this.modal.close(); 
+            this.viewSubWolist = false;
+   
+    }
     subWoClick(currentRecord) {
         this.subWoRecord = {};
         this.subWoRecord = currentRecord;
@@ -1354,11 +1359,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         );
     }
 
-    addToExistingSubWo() {
-        this.viewSubWolist = true;
+    addToExistingSubWo(existingSubWo) {
         this.dismissModel();
-    }
-
+        this.viewSubWolist = true;
+        this.modal = this.modalService.open(existingSubWo, { size: 'xl', backdrop: 'static', keyboard: false });
+    } 
     clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
 
     auditHistoryList: any = []

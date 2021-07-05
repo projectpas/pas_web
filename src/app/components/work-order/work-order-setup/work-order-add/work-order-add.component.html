@@ -600,8 +600,10 @@
                                                 </p-dropdown>
                                             </td>
                                             <td>
+                                                <!-- [options]="workScopesList" -->
                                                 <p-dropdown filter="true" placeholder="Select" name="scope{{i}}"
-                                                    #scope="ngModel" [options]="workScopesList"
+                                                    #scope="ngModel" 
+                                                    [options]="getDynamicVariableData('dynamicworkScopesList',i)"
                                                     class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     (ngModelChange)="getValid()" [autoWidth]="false"
                                                     [style]="pDropdownStyle"
@@ -673,7 +675,7 @@
                                                         matTooltip="View Workflow" matTooltipPosition="above">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                </span>
+                                                </span> 
                                                 <!-- [disabled]="workOrderPartNumber.isWorkflowTranfer" -->
                                                 <span *ngIf="workOrderPartNumber.workflowId!=0 && workOrderPartNumber.workflowId!=null"
                                                     [ngClass]="{pointerEvents : isView || workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
@@ -859,7 +861,7 @@
                                     </div>
                                     <div class="modal-body" *ngIf="currentWorkflowId !=undefined">
                                         <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
-                                            [workFlowId]="currentWorkflowId"></app-workflow-list>
+                                            [workFlowId]="currentWorkflowId"></app-workflow-list> 
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal"
@@ -923,7 +925,32 @@
 
                             </div>
                         </div>
+                        <div id="confirmCMMInfo" class="modal fade" role="dialog" data-backdrop="static">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title"> Alert Message !</h4>
+                                        <button type="button" class="close" aria-label="Close"
+                                            (click)="dismissCmmClose()">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <strong>
+                                            There is no CMM for MPN  Do you want to create Work Order?
+                                        </strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary"
+                                        (click)="allowtoSaveWO()">Yes</button>
+                                        <button type="button" class="btn btn-danger"
+                                            (click)="dismissCmm()">No</button>
+                                    </div>
+                                </div>
 
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -1334,9 +1361,10 @@
                 </div>
                 <div *ngIf="workOrderId && (gridActiveTab === 'subWO') "
                     [ngClass]="{hidedata : gridActiveTab !== 'subWO'}">
+
                     <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="workOrderPartNumberId" [workOrderNumberStatus]="workOrderNumberStatus"    
-                        [isView]="isView || isViewForApprovedPart" [forSubWorkOrder]="false">
-                    </app-sub-work-orderlist>
+                        [isView]="isView || isViewForApprovedPart" [forSubWorkOrder]="false"> 
+                    </app-sub-work-orderlist> 
                 </div>
                 <div *ngIf="(gridActiveTab == 'communication')"
                     [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
@@ -1352,7 +1380,7 @@
                             [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                             [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
                     </div>
-                </div>
+                </div> 
                 <div *ngIf="(gridActiveTab == 'woanalysis')" [ngClass]="{hidedata: gridActiveTab !== 'woanalysis'}">
                     <app-work-order-analysis [savedWorkOrderData]="savedWorkOrderData"
                         [selectedPartNumber]="selectedPartNumber" [isSubWorkOrder]="isSubWorkOrder"

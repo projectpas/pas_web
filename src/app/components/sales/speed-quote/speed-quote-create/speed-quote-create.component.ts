@@ -1869,6 +1869,18 @@ export class SpeedQuoteCreateComponent implements OnInit {
                     text-align: center;
                     font-size: 12px;
                   }
+                  .width-65{
+                    width:65px;
+                  }
+                  .width-50{
+                    width:50px;
+                  }
+                  .width-130{
+                    width:130px;
+                  }
+                  .width-250{
+                    width:250px;
+                  }
                   // .aligntop{
                   //   margin-top:300px;
                   // }

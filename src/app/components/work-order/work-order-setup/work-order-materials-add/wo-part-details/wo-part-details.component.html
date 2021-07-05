@@ -1,6 +1,6 @@
 <div class="row" *ngIf="!isEdit">
     <div>
-      <label>Stock Type:</label>
+      <label>Stock Type</label>
     </div>
     <div>
       <label style="width: 120px;">
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="col-6 column">
-      <div class="col-2 column">
+      <div class="col-3 column">
         <label class="width_100per text_start"> Cond <span class="clr-red">*</span> </label>
         <div class="form-group">
           <p-multiSelect [options]="allConditionInfo" (ngModelChange)="getActive()" (onChange)="onConditionSelect()"
@@ -54,7 +54,7 @@
           </p-multiSelect>
         </div>
       </div>
-      <div class="col-1 column">
+      <div class="col-2 column">
         <div class="form-group">
           <label >Qty Req<span class="clr-red">*</span></label>
           <input class="form-control text-right" type="text"  (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
@@ -192,7 +192,7 @@
 
                             <ng-template pTemplate="header" let-stockLinecolumns>
                 <tr>
-                    <th style="text-align: left !important;" *ngFor="let col of stockLinecolumns" pResizableColumn
+                    <th style="text-align: left !important;text-transform: capitalize;" *ngFor="let col of stockLinecolumns" pResizableColumn
                         pReorderableColumn>
                         <span *ngIf="col.field == 'stockLineNumber' ||
                                             col.field == 'controlNumber' || 
@@ -220,7 +220,7 @@
                         </span>
 
                     </th>
-                    <th>Actions</th>
+                    <th style="text-transform: capitalize;">Actions</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-part let-rowIndex="rowIndex" let-columns="stockLinecolumns">
@@ -321,8 +321,10 @@
                 <h4 class="modal-title">History of Stockline</h4>
             </div>
             <div class="modal-body pd-10">
-                <div class="table-responsive stockline-audit history_hg tin_cal">
-                    <table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
+                <!-- <div class="table-responsive stockline-audit history_hg tin_cal"> -->
+                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                        <div class="tableFixHead">  
+                    <table class="table table-bordered" style="white-space: nowrap;" *ngIf="auditHistory.length > 0; else noDatavailable">
                         <thead>
                             <tr>
                                 <th colspan="16">General</th>
@@ -450,9 +452,12 @@
                         </thead>
                         <tbody *ngIf="auditHistory.length > 0">
                             <tr *ngFor="let audit of auditHistory; let i = index">
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="isCustomerStock"
-                                            [(ngModel)]="audit.isCustomerStock" disabled></p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"> <input type="checkbox" name="isCustomerStock"
+                                            [(ngModel)]="audit.isCustomerStock" disabled>
+                                      </label>
+                                      </span>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'partNumber', audit.partNumber) ? 'black' : 'red'}">
@@ -463,14 +468,23 @@
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'revisedPart', audit.revisedPart) ? 'black' : 'red'}">
                                     {{ audit.revisedPart }}</td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="oem" [(ngModel)]="audit.oem" disabled></p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto"> <input type="checkbox" name="oem" [(ngModel)]="audit.oem" disabled>
+                                          </label>
+                                        </span>
                                 </td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="isPMA" [(ngModel)]="audit.isPMA" disabled></p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"> <input type="checkbox" name="isPMA" [(ngModel)]="audit.isPMA" disabled>
+                                      </label>
+                                    </span>
                                 </td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="isDER" [(ngModel)]="audit.isDER" disabled></p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"> <input type="checkbox" name="isDER" [(ngModel)]="audit.isDER" disabled>
+                                      </label>
+                                    </span>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'itemGroup', audit.itemGroup) ? 'black' : 'red'}">
@@ -478,9 +492,12 @@
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'condition', audit.condition) ? 'black' : 'red'}">
                                     {{ audit.condition }}</td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="isSerialized" [(ngModel)]="audit.isSerialized"
-                                            disabled></p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto"> <input type="checkbox" name="isSerialized" [(ngModel)]="audit.isSerialized"
+                                            disabled>
+                                        </label>
+                                    </span>
                                 </td>
                                 <td class="text-right"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'serialNumber', audit.serialNumber) ? 'black' : 'red'}">
@@ -512,9 +529,11 @@
                                 <td class="text-right"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'openDays', audit.openDays) ? 'black' : 'red'}">
                                     {{ audit.openDays }}</td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="shelfLife" [(ngModel)]="audit.shelfLife" disabled>
-                                    </p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto"> <input type="checkbox" name="shelfLife" [(ngModel)]="audit.shelfLife" disabled>
+                                          </label>
+                                        </span>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'shelfLifeExpirationDate', audit.shelfLifeExpirationDate) ? 'black' : 'red'}">
@@ -649,29 +668,39 @@
                                 <td class="text-right"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'lotCost', audit.lotCost) ? 'black' : 'red'}">
                                     {{ audit.lotCost }}</td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="blackListed" [(ngModel)]="audit.blackListed"
-                                            disabled></p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto"> <input type="checkbox" name="blackListed" [(ngModel)]="audit.blackListed"
+                                            disabled>
+                                        </label>
+                                    </span>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'blackListedReason', audit.blackListedReason) ? 'black' : 'red'}">
-                                    <p class="p_editor" [innerHTML]="audit.blackListedReason"></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                    [matTooltip]="parsedText(audit.blackListedReason)" [innerHTML]="audit.blackListedReason"></p>
                                 </td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="accident" [(ngModel)]="audit.accident" disabled>
-                                    </p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"> <input type="checkbox" name="accident" [(ngModel)]="audit.accident" disabled>
+                                   </label>
+                                   </span>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'accidentReason', audit.accidentReason) ? 'black' : 'red'}">
-                                    <p class="p_editor" [innerHTML]="audit.accidentReason"></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                    [matTooltip]="parsedText(audit.accidentReason)" [innerHTML]="audit.accidentReason"></p>
                                 </td>
-                                <td style="text-align: center;">
-                                    <p> <input type="checkbox" name="incident" [(ngModel)]="audit.incident" disabled>
-                                    </p>
+                                <td class="text-center width-60">
+                                    <span class="value">
+                                      <label class="wauto"><input type="checkbox" name="incident" [(ngModel)]="audit.incident" disabled>
+                                      </label>
+                                      </span>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'incidentReason', audit.incidentReason) ? 'black' : 'red'}">
-                                    <p class="p_editor" [innerHTML]="audit.incidentReason"></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                    [matTooltip]="parsedText(audit.incidentReason)" [innerHTML]="audit.incidentReason"></p>
                                 </td>
                                 <td class="min-w-100"
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">
@@ -717,7 +746,8 @@
                                     {{ audit.integrationPortal }}</td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                                    <p class="p_editor" [innerHTML]="audit.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above" 
+                                    [matTooltip]="parsedText(audit.memo)" [innerHTML]="audit.memo"></p>
                                 </td>
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesRemaining', audit.cyclesRemaining) ? 'black' : 'red'}">
@@ -758,9 +788,11 @@
                                 <td
                                     [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceInspection', audit.lastSinceInspection) ? 'black' : 'red'}">
                                     {{ audit.lastSinceInspection }}</td>
-                                <td style="background-color: #fff !important; text-align: center;">
-                                    <p> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
-                                    </p>
+                                    <td class="text-center width-60">
+                                        <span class="value">
+                                          <label class="wauto"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
+                                   </label>
+                                   </span>
                                 </td>
 
                                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
@@ -775,6 +807,7 @@
                             <h4 style="color: #ff5663;">No History Found</h4>
                         </div>
                     </ng-template>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
