@@ -351,6 +351,9 @@ export class SpeedQuotePartNumberComponent {
         this.countItemNo = uniqueParts[i].itemNo
       });
       this.summaryParts = uniqueParts;
+    }else{
+      this.speedQuoteService.selectedParts = [];
+      this.summaryParts = [];
     }
     this.totalRecords = this.summaryParts.length;
     this.pageLinks = Math.ceil(

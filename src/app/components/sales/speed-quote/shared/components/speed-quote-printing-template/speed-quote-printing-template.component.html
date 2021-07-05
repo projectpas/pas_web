@@ -49,7 +49,7 @@
               </div>
               <div class="second-block col-sm-4">
                 <h3
-                  style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                  style="margin-top:1px;margin-bottom:-2px;margin-left:-3px;width:103%;border-bottom:1px solid black !important;text-align:center">
                   SPEED QUOTE</h3>
                 <div class="second-block-div">
                   <label class="col-sm-6 second-block-label" style="width:100%">Speed Qte Num</label>
@@ -113,7 +113,7 @@
                 </div>
               </div>
               <div class="first-block-ship col-sm-6">
-                <label class="label-margin-ship"><b> Ship To:</b></label>
+                <label class="label-margin-ship"><b>Ship To:</b></label>
                 <div class="first-block-ship-to">
 
                   <div class="ship-block-div">
@@ -180,14 +180,14 @@
                 class="parttable print-table print-friendly table-margins" style="margin-top:10px">
                 <thead>
                   <tr>
-                    <th style="width:62px">Item Num</th>
-                    <th style="width:160px">PN</th>
-                    <th style="width:180px">PN Description</th>
-                    <th class="width-80">UOM</th>
-                    <th class="width-80"></th>
-                    <th class="width-80">Rep</th>
-                    <th class="width-80">OH</th>
-                    <th class="width-80">BC</th>
+                    <th style="width:45px">Item Num</th>
+                    <th style="width:120px">PN</th>
+                    <th style="width:200px">PN Description</th>
+                    <th class="width-50">UOM</th>
+                    <th class="width-50"></th>
+                    <th class="width-50">Rep</th>
+                    <th class="width-50">OH</th>
+                    <th class="width-50">BC</th>
 
                   </tr>
                 </thead>
@@ -300,11 +300,10 @@
           <tr><td>
             <div class="form-group memo-popup-cstm mat_emo">
               <div [innerHTML]="speedQuote.notes"
-                  [matTooltip]="parsedText(speedQuote.notes)" matTooltipPosition="above"
-                  class="form-control"
-                  style="height: 60px !important; width:100% !important"
-                  class="text_editor_box">
+                  matTooltipPosition="above"
+                  class="text_editor_box printnotes">
               </div>
+              <!-- <textarea [(ngModel)]="speedQuote.notes" name="notes" class="text_editor_box printnotes">{{getFormattedNotes(speedQuote.notes)}}</textarea> -->
           </div>
           </td></tr>
         </tbody>
@@ -372,21 +371,22 @@
                     </div>
                 </div> -->
                 <div class="clear"></div>
-                <div class="col-sm-12" style="margin-bottom:-3px">
+                <div class="col-sm-12" style="margin-bottom:-3px;margin-top:-3px;">
                     <table rules=none class="parttable print-table print-friendly table-margins" *ngFor="let part of this.exclusionParts let i=index">
                         <thead>
                             <tr>
-                              <th colspan="8" class="exclusdeditem"><label class="excluded-items-label">Excluded Items</label></th>
+                              <th colspan="2"></th>
+                              <th colspan="6" class="exclusdeditem"><label class="excluded-items-label">Excluded Items</label></th>
                             </tr>
                             <tr>
                                 <th style="width:62px">Item Num</th>
-                                <th>PN</th>
-                                <th>PN</th>
-                                <th>PN Description</th>
-                                <th class="width-80">Qty</th>
-                                <th class="width-80">Unit Price</th>
-                                <th class="width-80">Ext Price</th>
-                                <th class="width-90">% Occurance</th>
+                                <th class="width-130">PN</th>
+                                <th class="width-130">PN</th>
+                                <th class="width-250">PN Description</th>
+                                <th class="width-50">Qty</th>
+                                <th class="width-65">Unit Price</th>
+                                <th class="width-65">Ext Price</th>
+                                <th style="width:83px">% Occurance</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -402,7 +402,7 @@
                                     <td style="text-align: right;">{{printdata.exOccurance | twoDecimalGlobalNumberFormatPipe}}%</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" rowspan="3" style="border:1px solid black">Notes: {{printdata.exNotes}}</td>
+                                    <td colspan="8" rowspan="3" style="border:1px solid black">Notes: {{getFormattedNotes(printdata.exNotes)}}</td>
                                 </tr>
                                 <tr></tr>
                                 <tr> </tr>

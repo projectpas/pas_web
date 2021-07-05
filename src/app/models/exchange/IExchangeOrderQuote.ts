@@ -56,4 +56,7 @@ export interface IExchangeOrderQuote {
 	departmentId: number;
 	memo: string;
 	notes: string;
+	accountTypeId: number;
+	contractReference: string;
+	contractReferenceName: string;
 }

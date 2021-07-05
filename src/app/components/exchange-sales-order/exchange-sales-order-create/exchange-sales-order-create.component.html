@@ -110,7 +110,7 @@
                                               <label>Exch SO Num <span class="clr-red">*</span></label>
                                               <input type="text" class="form-control" name="salesOrderNumber"
                                                   [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true"
-                                                  #accountTypeId="ngModel" id="salesOrderNumber"
+                                                  id="salesOrderNumber"
                                                   #salesOrderNumber="ngModel" />
                                               <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
                                                   class="alert alert-danger alert-danger-cstm">

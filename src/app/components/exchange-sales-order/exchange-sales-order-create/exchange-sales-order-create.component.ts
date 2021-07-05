@@ -684,7 +684,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     this.salesQuote.masterCompanyId = this.masterCompanyId;
     this.status = this.salesQuote.status && this.salesQuote.status.length > 0 ? this.salesQuote.status.slice(0) : [];
     this.salesQuote.exchangeQuoteId = this.salesOrderObj.exchangeQuoteId;
-    this.salesQuote.quoteTypeId = this.salesOrderObj.typeId;
+    this.salesQuote.quoteTypeId = this.salesOrderObj.typeId.toString();
     this.salesQuote.statusChangeDate = new Date(this.salesOrderObj.statusChangeDate);
     this.salesQuote.openDate = new Date(this.salesOrderObj.openDate);
     this.salesQuote.contractReferenceName = this.salesOrderObj.contractReference;
