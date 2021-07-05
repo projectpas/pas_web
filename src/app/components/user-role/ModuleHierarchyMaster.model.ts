@@ -45,6 +45,7 @@ export class RolePermission {
     canReportView:boolean;
     canReportDelete:boolean;
     canPrint:boolean;
+    isDisabled:boolean = false;
 }
 
 export class UserRoleMapper {

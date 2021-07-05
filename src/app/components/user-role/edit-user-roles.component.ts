@@ -87,7 +87,6 @@ export class EditUserRolesComponent implements OnInit {
                 this.hasChild(parentModule);
             }
         }
-
     }
     
     hasChild(currentModule: ModuleHierarchyMaster) {
@@ -240,6 +239,7 @@ export class EditUserRolesComponent implements OnInit {
         else{
             this.isSpinnerVisible=false;
         }
+        this.enableDisableViewPermission();
     }
     
     setPermissionByType(currentModule: ModuleHierarchyMaster, type: string, value: boolean) {
@@ -369,10 +369,24 @@ export class EditUserRolesComponent implements OnInit {
                 this.checkParentModule(currentModule,currentModule.parentId,type,value);
         }
         //console.log(this.currentUserRole.rolePermissions);
+        this.enableDisableViewPermission();
+    }
+
+    enableDisableViewPermission(){
+       this.sortedHierarchy.filter(function (module) {
+            // if(module.parentId == currentModule.id || module.parentId == currentModule.parentId){
+                if(module.rolePermission.canAdd || module.rolePermission.canUpdate || module.rolePermission.canDelete){
+                    module.rolePermission.canView = true;
+                    module.rolePermission.isDisabled = true;
+                }else {
+                    module.rolePermission.isDisabled = false;
+                }
+            // }
+            return module
+        });
     }
 
     setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,type,value:boolean=true): void {
-
         // var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
         //     return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == currentModule.rolePermission.permissionID;
         // })[0];
@@ -406,6 +420,7 @@ export class EditUserRolesComponent implements OnInit {
                 var rolePermissionData=Object.assign({}, currentModule.rolePermission);
                 rolePermissionData.permissionID=2;
                 rolePermissionData.moduleHierarchyMasterId = currentModule.id;
+                // rolePermissionData.isDisabled = true;
                 this.currentUserRole.rolePermissions.push(rolePermissionData);
                 this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
             }
@@ -422,6 +437,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     hasPages(currentModule: ModuleHierarchyMaster, type: string, checkedValue: boolean) {
+        
         var modules = this.sortedHierarchy.filter(function (module: ModuleHierarchyMaster) {
             return module.parentId == currentModule.id;
         });
@@ -485,6 +501,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     UpdateUserRole(): void {
+        
         this.isSpinnerVisible=true;
         this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
             x.userRoleId = this.currentUserRole.id;
@@ -524,6 +541,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     checkparent(currentModule,parentId,type){        
+        
         var parentModule = this.sortedHierarchy.filter(function (module) {
             return (module.id == parentId && module.hasChildren == true);
         })[0];        
@@ -560,6 +578,7 @@ export class EditUserRolesComponent implements OnInit {
         this.canReportView = 0;
         this.canReportDelete = 0;
         this.canPrint = 0;
+        
         var childlist = this.sortedHierarchy.filter(function (module) {
             return module.parentId == parentId
         });              

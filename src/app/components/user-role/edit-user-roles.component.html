@@ -52,6 +52,10 @@
     .level6 td:first-child {
     padding-left: 125px;
     }
+    .disabled-pointer{
+      pointer-events: none;
+    cursor: not-allowed;
+    }
  </style>
  <div>
     <div class="col-md-12">
@@ -109,30 +113,10 @@
                                                  <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
                                               </td>
                                               <td style="text-align:center;" *ngFor="let permission of permissionMaster; index as i">
-                                                 <!-- <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="module.rolePermission.isSelect" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" /> -->
-                                                 <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" />
+                                                 <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" [disabled]="permission.permissionID == 2 && module.rolePermission.isDisabled"/> 
+                                                 <!-- [ngClass]="permission.permissionID == 2 && module.rolePermission.isDisabled ?'disabled-pointer' :''" -->
                                               </td>
-                                              <!-- <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
-                                              </td> -->
-                                              <!-- <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
-                                              </td>
-                                              <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
-                                              </td>
-                                              <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
-                                              </td>
-                                              <td>
-                                                 <input *ngIf="!module.isPage" type="checkbox" />
-                                              </td>
-                                              <td>
-                                                 <input *ngIf="!module.isPage" type="checkbox" />
-                                              </td>
-                                              <td>
-                                                 <input *ngIf="!module.isPage" type="checkbox" />
-                                              </td> -->
+                                             
                                            </tr>
                                         </ng-container>
                                      </tbody>
