@@ -58,6 +58,9 @@ export class ExchangeQuote implements IExchangeQuote {
 	departmentId: number;
 	memo: string;
 	notes: string;
+	accountTypeId: number;
+	contractReference: string;
+	contractReferenceName: string;
 	constructor() {
 	}
 
