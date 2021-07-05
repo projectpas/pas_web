@@ -19,7 +19,7 @@ import * as moment from 'moment';
 import { CommonService } from '../../../services/common.service';
 import { DatePipe } from '@angular/common';
 declare let $: any;
-
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-account-listing',
@@ -82,6 +82,11 @@ export class AccountListingComponent implements OnInit {
     sourceEmployee: any;
     Active: any;
     isSaving: boolean
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isDownload:boolean=true;
+    isUpload:boolean=true;
 
     constructor(private _route: Router,
         private authService: AuthService,
@@ -92,7 +97,11 @@ export class AccountListingComponent implements OnInit {
         public commonService: CommonService,
         private datePipe: DatePipe
     ) {
-
+        this.isAdd=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Update])
+        this.isDelete=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Delete])
+        this.isDownload=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Download])
+        this.isUpload=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Upload])
     }
     ngOnInit() {
         this.breadcrumbs = [
