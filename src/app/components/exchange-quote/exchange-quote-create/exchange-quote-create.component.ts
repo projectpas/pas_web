@@ -128,6 +128,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   tempMemo: any;
   tempMemoLabel: any;
   salesOrderView: ExchangeSalesOrderView;
+  accountTypes: any[];
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -308,6 +309,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     let creditLimitTermsId = this.exchangeQuote.creditTermId ? this.exchangeQuote.creditTermId : 0;
     let leadSourceId = this.exchangeQuote.leadSourceId ? this.exchangeQuote.leadSourceId : 0;
     let warningTypeId = 0;
+    let accountTypeId = this.exchangeQuote.accountTypeId ? this.exchangeQuote.accountTypeId : 0;
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.exchangeQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
@@ -315,7 +317,8 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(), this.masterCompanyId),
       this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, [warningTypeId].join(), 0),
-      this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 0, [leadSourceId].join(), this.masterCompanyId)).subscribe(result => {
+      this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 0, [leadSourceId].join(), this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join(), this.masterCompanyId),).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -325,6 +328,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         this.setValidDays(result[4]);
         this.setTypesOfWarnings(result[5]);
         this.setLeadSources(result[6]);
+        this.setAccountTypes(result[7]);
         this.getCustomerDetails();
         if (this.id) {
         } else {
@@ -336,6 +340,9 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       }, error => {
         this.isSpinnerVisible = false;
       });
+  }
+  setAccountTypes(responseData) {
+    this.accountTypes = responseData;
   }
 
   setValidDays(result) {
@@ -487,6 +494,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     if (!this.isEdit) {
       this.exchangeQuote.salesPersonId = this.customerDetails.primarySalesPersonId;
       this.exchangeQuote.customerServiceRepId = this.customerDetails.csrId;
+      this.exchangeQuote.contractReferenceName = this.customerDetails.contractReference;
+      this.exchangeQuote.restrictPMA = this.customerDetails.restrictPMA;
+      this.exchangeQuote.restrictDER = this.customerDetails.restrictDER;
+      this.exchangeQuote.accountTypeId = this.customerDetails.customerTypeId;
     }
 
     if (!this.id) {
@@ -613,6 +624,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.errorMessages.push("Request date cannot be greater than Est.Ship Date.");
       haveError = true;
     }
+    if (this.exchangeQuote.accountTypeId <= 0) {
+      this.errorMessages.push("Please select Account Type");
+      haveError = true;
+    }
 
     if (haveError) {
       let content = this.errorMessagePop;
@@ -652,7 +667,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         //this.salesOrder.managementStructureId = this.salesQuote.managementStructureId;
         this.exchangOrdereQuote.creditLimit = this.exchangeQuote.creditLimit;
       this.exchangOrdereQuote.creditTermId = this.exchangeQuote.creditTermId;
-
+      this.exchangOrdereQuote.accountTypeId = this.exchangeQuote.accountTypeId;
+      this.exchangOrdereQuote.restrictPMA = this.exchangeQuote.restrictPMA;
+      this.exchangOrdereQuote.restrictDER = this.exchangeQuote.restrictDER;
+      this.exchangOrdereQuote.contractReference = this.exchangeQuote.contractReferenceName;
       //this.exchangOrdereQuote.contractReference = this.salesQuote.contractReferenceName;
       this.exchangOrdereQuote.employeeId = this.authService.currentEmployee.employeeId,
         this.exchangOrdereQuote.salesPersonId = editValueAssignByCondition(
@@ -857,6 +875,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.creditLimit = this.exchangeQuoteObj.creditLimit;
       this.exchangeQuote.creditTermId = this.exchangeQuoteObj.creditTermId;
       this.exchangeQuote.masterCompanyId = this.exchangeQuoteObj.masterCompanyId;
+      this.exchangeQuote.accountTypeId = this.exchangeQuoteObj.accountTypeId;
+      this.exchangeQuote.restrictPMA = this.exchangeQuoteObj.restrictPMA;
+      this.exchangeQuote.restrictDER = this.exchangeQuoteObj.restrictDER;
+      this.exchangeQuote.contractReferenceName = this.exchangeQuoteObj.contractReference;
       if (this.exchangeQuoteObj.approvedDate)
         this.exchangeQuote.approvedDate = new Date(
           this.exchangeQuoteObj.approvedDate
