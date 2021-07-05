@@ -1,6 +1,6 @@
 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-top: 15px;">
     <div class="tableFixHead">
-<p-treeTable class="table header-table-width p-Treetable-view" [style]="{ 'overflow':'scroll'}" [value]="gridData">
+<p-treeTable class="table p-Treetable-view" style="white-space: nowrap;" [style]="{ 'overflow':'scroll'}" [value]="gridData">
     <ng-template pTemplate="header">
         <tr>
             <th class="analysis-detail-header table-column-width" [ngStyle]="{'width': f.width}" *ngFor="let f of fields">{{f.header}}</th>
