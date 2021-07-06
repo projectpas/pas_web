@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output,ViewChild,ElementRef, EventEmitter, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 declare var $: any;
 import { WorkOrderPartNumber } from '../../../../models/work-order-partnumber.model';
@@ -16,8 +16,9 @@ import { getValueFromObjectByKey, getObjectById, editValueAssignByCondition, get
 import { AuthService } from '../../../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkFlowtService } from '../../../../services/workflow.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+// import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Billing } from '../../../../models/work-order-billing.model';
 import * as moment from 'moment';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
@@ -41,6 +42,10 @@ import { SalesQuoteService } from '../../../../services/salesquote.service';
 })
 
 export class WorkOrderAddComponent implements OnInit {
+    @ViewChild("confirmCMMInfo", { static: false }) confirmCMMInfo: ElementRef;
+    @ViewChild("confirmCMMInfoCreate", { static: false }) confirmCMMInfoCreate: ElementRef;
+    @ViewChild("modalWorkScope", { static: false }) modalWorkScope: ElementRef;
+    
     workOrderModule = "WorkOrder";
     subWorkOrderModule = "SubWorkOrder";
     breadcrumbs: MenuItem[];
@@ -130,6 +135,9 @@ export class WorkOrderAddComponent implements OnInit {
     workFlowId: any = null;
     editWorkFlowData: any;
     modal: NgbModalRef;
+    modalRef: NgbModalRef;
+    modalRefCreate: NgbModalRef;
+    modalWorkScopeModel:NgbModalRef
     workFlowObject = {
         materialList: [],
         equipments: [],
@@ -561,6 +569,7 @@ export class WorkOrderAddComponent implements OnInit {
                     }
                     x.workOrderStageId = x.workOrderStageId ? x.workOrderStageId : 0;
                     x.workOrderPriorityId = x.workOrderPriorityId ? x.workOrderPriorityId : 0;
+                   
                     return {
                         ...x,
 
@@ -602,9 +611,12 @@ export class WorkOrderAddComponent implements OnInit {
             this.getEmployeeData();
         }
 
+if(this.router.url.includes('workordersmodule/workorderspages/app-work-order-receivingcustworkid')){
 
-        this.showWaringForPublication()
-        this.showWaringForWorkflow()
+}else{
+    this.showWaringForPublication();
+}
+        this.showWaringForWorkflow();
     }
     removePublication(currentRecord, index) {
         setTimeout(() => {
@@ -1147,11 +1159,20 @@ export class WorkOrderAddComponent implements OnInit {
     }
     isValidationfailed: boolean = false;
     dismissCmm(){
-        $('#confirmCMMInfo').modal('hide');
+        // $('#confirmCMMInfo').modal('hide');
+        this.modalRef.close();
         this.router.navigate([`workordersmodule/workorderspages/app-work-order-list`]);
     }
     dismissCmmClose(){
-        $('#confirmCMMInfo').modal('hide');
+        // $('#confirmCMMInfo').modal('hide');
+        this.modalRef.close();
+    }
+    dismissCreateCMM(){
+        this.modalRefCreate.close();
+        this.router.navigate([`workordersmodule/workorderspages/app-work-order-list`]);
+    }
+    dismissCreatepub(){
+        this.modalRefCreate.close(); 
     }
     allowtoSaveWO(){
         this.triggerSaveApi();
@@ -1279,14 +1300,30 @@ export class WorkOrderAddComponent implements OnInit {
             } else {
                 const newData=[...  this.newWorkOrder.partNumbers];
                 const arrayWithFilterObjects= newData.filter((x) => x.cMMId ===null);
+                this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+                    if (x.publicatonExpirationDate) {
+                        if ((new Date(x.publicatonExpirationDate)) < (new Date())) {
+                            this.isPublicationExpired=true;
+                            this.publicationNos.push(x.publicationNo);
+                            // $('#warningForCmmPublication').modal('show');
+                        }
+                    }
+                });
                 if((arrayWithFilterObjects && arrayWithFilterObjects.length !=0)){
-                    $('#confirmCMMInfo').modal('show');
+                    // $('#confirmCMMInfo').modal('show');
+                    var modelName=this.confirmCMMInfo;
+                    this.modalRef = this.modalService.open(modelName, { size: 'sm' });
+                }else if(this.isPublicationExpired==true){
+                    // console.log("this.publicationNos",this.publicationNos)
+                    var modelName=this.confirmCMMInfoCreate;
+                    this.modalRefCreate = this.modalService.open(modelName, { size: 'sm' });
                 }else{
                     this.triggerSaveApi();
                 }
             }
         }
     }
+    publicationNos:any=[];
 triggerSaveApi(){
     this.isSpinnerVisible = true;
     this.workOrderService.createNewWorkOrder(this.newWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
@@ -1507,7 +1544,7 @@ triggerSaveApi(){
             if (this.cmmList && this['cmmPublicationList' + index].length > 0) {
                 currentRecord.cMMId = this['cmmPublicationList' + index][0].value;
                 this.workOrderGeneralInformation.partNumbers[index].cMMId = this['cmmPublicationList' + index][0].value;
-
+                this.workOrderGeneralInformation.partNumbers[index].publicationNo = this['cmmPublicationList' + index][0].label;
                 if (this.cmmListNew && this.cmmListNew[0].expirationDate) {
                     this.workOrderGeneralInformation.partNumbers[index].publicatonExpirationDate = this.cmmListNew[0].expirationDate;
                     // this.showWaringForPublication();
@@ -1596,9 +1633,39 @@ triggerSaveApi(){
             this.showWaringForWorkflow();
         }
     }
+    workOrderScopeName:any;
+    PartNumber:any;
+    workScopeIndex:any;;
+    allowtoSaveWorkScope(){
+        this.modalWorkScopeModel.close();
+    }
+    dismissWorkSocpe(){
+        this.workOrderGeneralInformation.partNumbers[this.workScopeIndex].workOrderScopeId=undefined;
+        this.modalWorkScopeModel.close();
+    }
+    workScopeObjDetails:any={}
     getWorkFlowByPNandScope(value, workOrderPart, form, index) {
         if (value != null && form == 'html') {
             workOrderPart.workOrderScopeId = value;
+            workOrderPart.masterCompanyId=this.currentUserMasterCompanyId
+        //  console.log("wo part",workOrderPart)
+            this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isWO').subscribe(res => {
+                // console.log('res',res);
+                this.workScopeObjDetails={};
+                this.workScopeObjDetails=res;
+                if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){ 
+                    this.workScopeIndex=index;
+                    this['dynamicworkScopesList'+index].forEach(element => {
+                        if(element.value==workOrderPart.workOrderScopeId){
+                            this.workOrderScopeName=element.value;
+                            this.PartNumber=workOrderPart.masterPartId.label;
+                        }
+                    });
+                    let modelName3=this.modalWorkScope;
+                    this.modalWorkScopeModel = this.modalService.open(modelName3, { size: 'sm' }); 
+                }
+            });
+       
         }
         workOrderPart.workOrderScopeId = (workOrderPart.workOrderScopeId != undefined || workOrderPart.workOrderScopeId != null) ? workOrderPart.workOrderScopeId : 0;
         const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId);
@@ -3824,12 +3891,18 @@ triggerSaveApi(){
             this.setEditArray.push(0);
         } 
         const strText = '';
-        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.masterPartId.itemMasterId, currentRecord.masterPartId.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+
+  this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopesList = res;
             this['dynamicworkScopesList'+index] = []
             this['dynamicworkScopesList'+index] = this.workScopesList;
-
         });
+
+        // this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.masterPartId.itemMasterId, currentRecord.masterPartId.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //     this.workScopesList = res;
+        //     this['dynamicworkScopesList'+index] = []
+        //     this['dynamicworkScopesList'+index] = this.workScopesList;
+        // });
     }
     getConditionsList(value) {
         this.setEditArray = [];
@@ -4098,6 +4171,7 @@ triggerSaveApi(){
     }
     publicationNo: any;
     workflowNumber: any;
+    isPublicationExpired:boolean=false;
     showWaringForPublication() {
         if (!this.isView) {
             setTimeout(() => {
@@ -4107,6 +4181,7 @@ triggerSaveApi(){
                             setTimeout(() => {
                                 this.disableSaveForPart = false;
                             }, 2000);
+                            this.isPublicationExpired=true;
                             this.publicationNo = x.publicationNo;
                             $('#warningForCmmPublication').modal('show');
                         }

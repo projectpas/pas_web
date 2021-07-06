@@ -453,18 +453,16 @@ export class SubWorkOrderComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
-        //     this.workScopesList = res;
-        // });
-        console.log("curret",currentRecord,index);
-        // debugger;
-        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.itemMasterId, currentRecord.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.workScopesList = res;
             this['workScopesList' + index] = []
             this['workScopesList' + index] = this.workScopesList;
-
-            console.log(' this ', this['workScopesList' + index])
         });
+        // this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.itemMasterId, currentRecord.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //     this.workScopesList = res;
+        //     this['workScopesList' + index] = []
+        //     this['workScopesList' + index] = this.workScopesList;\
+        // });
     }
     getDynamicVariableData(variable, index) {
         return this[variable + index]
