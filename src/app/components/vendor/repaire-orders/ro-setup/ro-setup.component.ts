@@ -1521,7 +1521,7 @@ export class RoSetupComponent implements OnInit {
 	// }
 
 	loadModuleListForVendorComp() {
-		this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
+		this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
 			this.userTypes = res;
 			this.userTypes.map(x => {
 				if (x.moduleName.toUpperCase() == 'COMPANY') {

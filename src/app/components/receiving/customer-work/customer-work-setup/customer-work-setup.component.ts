@@ -193,7 +193,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     loadModulesNamesForObtainOwnerTraceable() {
-        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
             this.moduleListDropdown = res;
         })
     }
