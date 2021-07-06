@@ -21,6 +21,7 @@ import { RepairOrderService } from '../../../services/repair-order.service';
 import { PurchaseOrder, PurchaseOrderPart, StockLine, StockLineDraft, DropDownData, TimeLife, ReceiveParts, TimeLifeDraft } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 import { ManagementStructure } from '../../../components/receiving/po-ro/receivng-po/managementstructure.model';
 import { RepairOrder, RepairOrderPart } from '../../../components/receiving/repair-order/receiving-ro/RepairOrder.model';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
   selector: 'app-all-view',
@@ -137,6 +138,14 @@ export class AllViewComponent implements OnInit {
   ];
   poApproverStatusList: any;
   roApproverStatusList: any;
+  isPOHeaderView:boolean=true;
+  isPOPartlistView:boolean=true;
+  isPOAddressView:boolean=true;
+  isInternalApproversView:boolean=true;
+  isPOApproverProcessView:boolean=true;
+  isPOVendorCapesView:boolean=true;
+  isPODocumentsView:boolean=true;
+  isPOCommunicationView:boolean=true;
 
   constructor(private commonService: CommonService,
     private activeModal: NgbActiveModal,
@@ -148,7 +157,16 @@ export class AllViewComponent implements OnInit {
     private receivingService: ReceivingService,
     private authService: AuthService,
     private route: Router,
-  ) { }
+  ) {
+      this.isPOHeaderView=this.authService.checkPermission([ModuleConstants.PO_Header+'.'+PermissionConstants.View])
+      this.isPOPartlistView=this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.View])  
+      this.isPOAddressView=this.authService.checkPermission([ModuleConstants.PO_Address+'.'+PermissionConstants.View]) 
+      this.isInternalApproversView=this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.View]) 
+      this.isPOApproverProcessView=this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.View]) 
+      this.isPOVendorCapesView=this.authService.checkPermission([ModuleConstants.PO_Vendor_Capes+'.'+PermissionConstants.View])
+      this.isPODocumentsView=this.authService.checkPermission([ModuleConstants.PO_Documents+'.'+PermissionConstants.View]) 
+      this.isPOCommunicationView=this.authService.checkPermission([ModuleConstants.PO_Communication+'.'+PermissionConstants.View])  
+   }
 
   ngOnInit() {
     this.selectedPurchaseOrderId = this.OrderId;
@@ -167,9 +185,13 @@ export class AllViewComponent implements OnInit {
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;
       this.getPOViewById(OrderId);
-      this.getPOPartsViewById(OrderId);
-      this.getApproversListById(OrderId);
-      this.getApprovalProcessListById(OrderId);
+      if(this.isPOPartlistView){
+        this.getPOPartsViewById(OrderId);
+      }
+      if(this.isPOApproverProcessView){
+        this.getApproversListById(OrderId);
+        this.getApprovalProcessListById(OrderId);
+      }
       this.tabindex = 0;
     }
     else if (this.OrderTypes == 'Repair Order') {

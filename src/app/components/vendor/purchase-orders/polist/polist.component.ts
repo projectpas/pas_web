@@ -20,6 +20,7 @@ import { ReceivingService } from '../../../../services/receiving/receiving.servi
 import { AllViewComponent } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
 import { StatusEnum } from '../../../../enum/status.enum';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-polist',
@@ -187,7 +188,30 @@ export class PolistComponent implements OnInit {
     canceledStatusId: number  = 0
     descriptionStatusId: number  = 0
     closingStatusId: number  = 0
+    isViewpo:boolean=true;
+    isAddpo:boolean=true;
+    isEditpo:boolean=true;
+    isDeletepo:boolean=true;
+    isDownload:boolean=true;
+                                          
+    permissionAddCheck = [ModuleConstants.PurchaseOrder + '.' + PermissionConstants.Add,
+    ModuleConstants.POList + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Header + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Address + '.' + PermissionConstants.Add,    
+    ModuleConstants.PO_Approver_Process + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Vendor_Capes + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Documents + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Communication + '.' + PermissionConstants.Add];
 
+    permissionUpdateCheck = [ModuleConstants.PurchaseOrder + '.' + PermissionConstants.Update,
+    ModuleConstants.POList + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Header + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Address + '.' + PermissionConstants.Update,    
+    ModuleConstants.PO_Approver_Process + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Vendor_Capes + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Documents + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Communication + '.' + PermissionConstants.Update];
+   
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -208,8 +232,14 @@ export class PolistComponent implements OnInit {
         this.closedStatusId = StatusEnum.Closed;    
         this.canceledStatusId = StatusEnum.Canceled;    
         this.descriptionStatusId = StatusEnum.Description;    
-        this.closingStatusId = StatusEnum.Closing;    
+        this.closingStatusId = StatusEnum.Closing; 
+        
+        this.isAddpo=this.authService.checkPermission(this.permissionAddCheck)
+		this.isEditpo=this.authService.checkPermission(this.permissionUpdateCheck)
+        this.isDeletepo=this.authService.checkPermission([ModuleConstants.PurchaseOrder+'.'+PermissionConstants.Delete])
+        this.isDownload=this.authService.checkPermission([ModuleConstants.POList+'.'+PermissionConstants.Download])        
     }
+    
     ngOnInit() {
         this.loadPOStatus();
         //this.loadApprovalProcessStatus();

@@ -70,6 +70,17 @@ export class ModuleConstants
         static Item_ExportInformation:string = "Item_ExportInformation";
         static Stockline:string = "Stockline";
         static GLAccount:string = "GLAccount";
+
+        static PurchaseOrder:string = "PurchaseOrder";
+        static POList:string = "POList";
+        static PO_Header:string = "PO_Header";
+        static PO_Partlist:string = "PO_Partlist";
+        static PO_Address:string = "PO_Address";   
+        static PO_Approver_Process:string = "PO_Approver_Process";
+        static PO_Vendor_Capes:string = "PO_Vendor_Capes";
+        static PO_Documents:string = "PO_Documents";
+        static PO_Communication:string = "PO_Communication";
+
 }
 
 export class PermissionConstants
