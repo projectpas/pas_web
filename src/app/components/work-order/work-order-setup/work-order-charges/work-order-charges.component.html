@@ -188,7 +188,8 @@
               <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
-              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId' && col.field != 'description'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId' && col.field != 'description'" 
+              [ngClass]="{'text-right': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
                 <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
                 {{dt[col.field]}}
               </td>
@@ -269,7 +270,7 @@
               <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
-              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId'" [ngClass]="{'text-right': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
                 <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
                 {{dt[col.field]}}
               </td>
@@ -302,7 +303,7 @@
               <td>
                 <input type="number" [(ngModel)]="dt.flateRate" [disabled]="dt.billingMethodId != 2"/>
               </td> -->
-              <td class="content-to-end table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
+              <td class="text-right table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
               <td class="table-column-width">
                 <input type="text" class="form-control text-right" (ngModelChange)="getValidCrg()"  pInputText pKeyFilter="money" (change)="calculatebCost($event.target.value,dt)" [(ngModel)]="dt.billingAmount"
                   [disabled]="isView || dt.billingMethodId != '2'" />
@@ -348,16 +349,16 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td class="content-to-end" style="padding:2px 2px"><strong>{{ getTotalTaskQuantity(rowData) }}</strong></td>
+        <td class="text-right" style="padding:2px 2px"><strong>{{ getTotalTaskQuantity(rowData) }}</strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td class="content-to-end" style="padding:2px 2px"><strong>{{ getTotalTaskUnitCost1(rowData) }} </strong></td>
+        <td class="text-right" style="padding:2px 2px"><strong>{{ getTotalTaskUnitCost1(rowData) }} </strong></td>
         <td>&nbsp;</td>
         <!-- <td>&nbsp;</td> -->
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf="isQuote" class="content-to-end" style="padding:2px 2px"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
+        <td *ngIf="isQuote" class="text-right" style="padding:2px 2px"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
         <td *ngIf=" !isEdit && !isQuote">&nbsp;</td>
         <td *ngIf=" !isEdit &&  isQuote && !isView">&nbsp;</td>
       </tr>
@@ -381,16 +382,16 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td class="content-to-end"><strong>{{ getTotalQuantity() }} </strong></td>
+        <td class="text-right"><strong>{{ getTotalQuantity() }} </strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td class="content-to-end"><strong>{{ getTotalUnitCost() }} </strong></td>
+        <td class="text-right"><strong>{{ getTotalUnitCost() }} </strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td></td>
         <td *ngIf="isQuote">&nbsp;</td>
         <ng-container *ngIf="costPlusType != 3">
-          <td class="content-to-end"><strong>{{ getTotalBillingAmount()}} </strong></td>
+          <td class="text-right"><strong>{{ getTotalBillingAmount()}} </strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
             <input type="text" class="text-ee" pInputText pKeyFilter="money"  (blur)="chargesFlatRateBillingAmount = (chargesFlatRateBillingAmount)?formateCurrency(chargesFlatRateBillingAmount):'0.00'" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg();"  [disabled]="isView" />

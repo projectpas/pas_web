@@ -156,7 +156,7 @@
           <td class="content-to-end table-column-width">{{dt.width}}</td>
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
-          <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
+          <td class="text-right table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
           <td class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
           [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
@@ -260,7 +260,7 @@
           <td class="content-to-end table-column-width">{{dt.width}}</td>
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
-          <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
+          <td class="text-right table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
           <td class="table-column-width value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
           [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
@@ -340,13 +340,13 @@
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
-        <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalTaskAmount(rowData))}}</strong></td>
+        <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalTaskAmount(rowData))}}</strong></td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <ng-container *ngIf="isQuote">
           <td class="table-column-width">&nbsp;</td>
           <!-- <td>{{getTotalBillingRate()}}</td> -->
-          <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalTaskBillingAmount(rowData))}}</strong></td>
+          <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalTaskBillingAmount(rowData))}}</strong></td>
           <td class="table-column-width" *ngIf="!isView">&nbsp;</td>
         </ng-container>
       </tr>
@@ -372,13 +372,13 @@
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
-        <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalAmount())}}</strong></td>
+        <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalAmount())}}</strong></td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <!-- <td>{{getTotalBillingRate()}}</td> -->
         <ng-container *ngIf="costPlusType != 3">
-            <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalBillingAmount())}}</strong></td>
+            <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalBillingAmount())}}</strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
           <td class="table-column-width">
@@ -541,7 +541,7 @@
                     </td>
                     <td>
                       <input type="text"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
-                        class="form-control w50 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
+                        class="form-control w50 text-right" (change)="f.amount = formateCurrency(f.amount);" required />
                     </td>
                     <!-- <td>
                       <input type="checkbox" name="fixed{{ i }}" #fixed="ngModel" [(ngModel)]="f.isFixedFreight" />

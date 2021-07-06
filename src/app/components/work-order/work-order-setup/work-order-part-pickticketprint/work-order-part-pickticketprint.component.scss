@@ -351,7 +351,7 @@ hr {
     padding-right: 2px;
     width: 35%;
     height: auto;
-     border-left: 1px solid black;
+    //  border-left: 1px solid black;
     // margin-left: 16%;
     padding-left: 2px;
     box-sizing: border-box;
@@ -470,8 +470,9 @@ hr {
 
 .very-first-block {
     position: relative;
-    min-height: 1px;
+    min-height: 160px;
     float: left;
+    border-right:1px solid black;
     padding-right: 2px;
     padding-left: 2px;
     width: 70% !important;
