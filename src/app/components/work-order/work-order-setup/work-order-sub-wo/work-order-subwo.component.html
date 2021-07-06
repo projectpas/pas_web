@@ -191,7 +191,7 @@
               <td> 
                 <p-autoComplete field="name" required [(ngModel)]="workOrderPartNumber.partTechnicianId" name="technician{{i}}" (ngModelChange)="getActiveMPN()"
                   #technician="ngModel" errorMessage="Records not found" [forceSelection]="true" [dropdown]="true"
-                  [suggestions]="technicianList" (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
+                  [suggestions]="technicianList" (onSelect)="onSelectedTechnician($event, workOrderPartNumber,i);"
                   (completeMethod)="filterTechnician($event)" [size]="30" [minLength]="1"
                   class="p-autoComplete-ctsm custome_automo p-autocomplete-mh120" [disabled]="isView" appendTo="body">
 
@@ -210,9 +210,10 @@
                 </p-dropdown>
               </td> -->
               <td>
-                <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel" [options]="workScopesList"  [options]="getDynamicVariableData('workScopesList',i)" (ngModelChange)="getActiveMPN()"
+                <!-- [options]="getDynamicVariableData('workScopesList',i)" -->
+                <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel" [options]="workScopesList"   (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.subWorkOrderScopeId"
-                  (onChange)="getWorkFlowByPNandScope(workOrderPartNumber,i)" required appendTo="body">
+                  (onChange)="getWorkFlowByPNandScope(workOrderPartNumber,i,'html')" required appendTo="body">
                 </p-dropdown>
               </td>
               <td>
@@ -374,3 +375,27 @@
       <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
   </div>
 </div>
+<ng-template #modalWorkScope let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+      <h4 class="modal-title"> Alert Message !</h4>
+      <button type="button" class="close" aria-label="Close"
+          (click)="dismissWorkSocpe()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workOrderScopeName}}</span> capability for MPN
+          <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>.
+
+          </p>
+      <strong>
+          Do you want to allow to create Work Order?
+      </strong>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-primary"
+      (click)="allowtoSaveWorkScope()">Yes</button>
+      <button type="button" class="btn btn-danger"
+          (click)="dismissWorkSocpe()">No</button>
+  </div> 
+  </ng-template>

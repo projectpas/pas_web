@@ -600,10 +600,11 @@
                                                 </p-dropdown>
                                             </td>
                                             <td>
-                                                <!-- [options]="workScopesList" -->
+                                                <!--          [options]="getDynamicVariableData('dynamicworkScopesList',i)" -->
                                                 <p-dropdown filter="true" placeholder="Select" name="scope{{i}}"
                                                     #scope="ngModel" 
-                                                    [options]="getDynamicVariableData('dynamicworkScopesList',i)"
+                                           
+                                                    [options]="workScopesList"
                                                     class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     (ngModelChange)="getValid()" [autoWidth]="false"
                                                     [style]="pDropdownStyle"
@@ -1708,7 +1709,7 @@
                 <div class="modal-body">
                     <!-- {{receivingForm.workScopeName}} -->
                     <!-- {{receivingForm.itemMasterId.label} -->
-                    <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workScopeName}}</span> capability for MPN
+                    <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workOrderScopeName}}</span> capability for MPN
                         <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>.
             
                         </p>
