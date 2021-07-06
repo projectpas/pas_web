@@ -90,6 +90,12 @@ export class ExchangeSalesOrderShippingComponent {
   disableGeneratePackagingBtn: boolean = true;
   isViewShipping: boolean = false;
   disableCreateShippingBtn: boolean = true;
+  sourceSOApproval: any = {};
+  shipToAddress: any = {};
+  billToAddress: any = {};
+  shipvia: any = {};
+  shiptomoduleTypeId: number;
+  billtomoduleTypeId: number;
   constructor(public exchangeSalesOrderService: ExchangeSalesOrderService,
     public alertService: AlertService,
     public commonService: CommonService,
@@ -145,7 +151,7 @@ export class ExchangeSalesOrderShippingComponent {
     this.getCountriesList();
     this.getOriginSiteNames();
     this.getUnitOfMeasure();
-    this.getAddressById(this.salesOrderId);
+    //this.getAddressById(this.salesOrderId);
 
     if (this.customerDetails) {
       this.shippingHeader['soldToName'] = this.customerDetails['name'];
@@ -169,7 +175,7 @@ export class ExchangeSalesOrderShippingComponent {
     this.partSelected = true;
     this.isMultipleSelected = false;
     this.isViewShipping = false;
-    this.clearData();
+    //this.clearData();
     this.bindData();
   }
 
@@ -574,15 +580,15 @@ export class ExchangeSalesOrderShippingComponent {
   getShippingList() {
     this.isSpinnerVisible = true;
     this.exchangeSalesOrderService
-        .getShippingDataList(this.salesOrderId)
-        .subscribe((response: any) => {
-            this.isSpinnerVisible = false;
-            this.shippingList = response[0];
-            //this.checkIsChecked();
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-}
+      .getShippingDataList(this.salesOrderId)
+      .subscribe((response: any) => {
+        this.isSpinnerVisible = false;
+        this.shippingList = response[0];
+        //this.checkIsChecked();
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
+  }
 }
 
 export class ShippingItems {
