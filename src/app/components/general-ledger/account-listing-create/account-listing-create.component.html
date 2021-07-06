@@ -160,11 +160,11 @@
 
                         <button type="submit" class="btn btn-primary pull-right"
                             [disabled]="!accountListCreateForm.valid || disableSave || glAccountObj.glAccountTypeId == 0 || glAccountObj.gLClassFlowClassificationId == 0 "
-                            (click)="saveglaccount()" *ngIf="saveUpdateBtn == null">Save</button>
+                            (click)="saveglaccount()" *ngIf="saveUpdateBtn == null && isAdd">Save</button>
 
                         <button type="submit" class="btn btn-primary pull-right"
                             [disabled]="!accountListCreateForm.valid || disableSave || glAccountObj.glAccountTypeId == 0 || glAccountObj.gLClassFlowClassificationId == 0 "
-                            *ngIf="saveUpdateBtn != null" (click)="saveglaccount()">Update</button>
+                            *ngIf="saveUpdateBtn != null && isEdit" (click)="saveglaccount()">Update</button>
 
                         <div class="clear"></div>
 

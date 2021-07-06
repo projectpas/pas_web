@@ -87,7 +87,6 @@ export class EditUserRolesComponent implements OnInit {
                 this.hasChild(parentModule);
             }
         }
-
     }
     
     hasChild(currentModule: ModuleHierarchyMaster) {
@@ -146,7 +145,6 @@ export class EditUserRolesComponent implements OnInit {
                         const element = k[index];
                         element.classList.remove('fa-caret-right');
                         element.classList.add('fa-caret-down');
-                        
                     }
                 });
             }
@@ -163,7 +161,6 @@ export class EditUserRolesComponent implements OnInit {
         this.isSpinnerVisible=true;
         this.sortModules();        
         this.currentUserRole.rolePermissions = [];
-
         if ( this.currentUserRole.id != undefined && this.currentUserRole.id != 0 ) {
             let userRoleId: number = this.currentUserRole.id;
             let selectedUserRole: UserRole = this.userRoles.filter(function (userRole: UserRole) {
@@ -240,6 +237,7 @@ export class EditUserRolesComponent implements OnInit {
         else{
             this.isSpinnerVisible=false;
         }
+        this.enableDisableViewPermission(null,false);
     }
     
     setPermissionByType(currentModule: ModuleHierarchyMaster, type: string, value: boolean) {
@@ -322,64 +320,95 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
-        var value = event.target.checked;        
-        if (value == false) {
-            this.setPermissionByType(currentModule, type, value);
-            if (currentModule.parentId != null)
-                this.uncheckAllParentModule(currentModule.parentId, type);
-        }
-
-        if (currentModule.hasChildren) {
-            this.setPermissionByType(currentModule, type, value);
-            this.pages = [];
-            this.hasPages(currentModule, type, value);
-            for (let page of this.pages) {
-                this.setModuleHierarchyPermission(page,type,value);
+        var value = event.target.checked;   
+        this.enableDisableViewPermission(currentModule,value);  
+            if (value == false) {
+                this.setPermissionByType(currentModule, type, value);
+                if (currentModule.parentId != null)
+                    this.uncheckAllParentModule(currentModule.parentId, type);
             }
-            if(value==true && (currentModule.parentId==null || currentModule.hasChildren)){
-                var currentRolePermission = Object.assign({}, currentModule.rolePermission);
-                currentRolePermission.moduleHierarchyMasterId = currentModule.id;
-                this.currentUserRole.rolePermissions.push(currentRolePermission);
-
-                var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-                    return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
-                })[0];
+            
+            if (currentModule.hasChildren) {
+                this.setPermissionByType(currentModule, type, value);
+                this.pages = [];
+                this.hasPages(currentModule, type, value);
+                for (let page of this.pages) {
+                    this.setModuleHierarchyPermission(page,type,value);
+                }
+                if(value==true && (currentModule.parentId==null || currentModule.hasChildren)){
+                    var currentRolePermission = Object.assign({}, currentModule.rolePermission);
+                    currentRolePermission.moduleHierarchyMasterId = currentModule.id;
+                    this.currentUserRole.rolePermissions.push(currentRolePermission);
     
-                if(viewPermission==undefined){
-                if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
-                    var rolePermissionData=Object.assign({}, currentModule.rolePermission);
-                    rolePermissionData.permissionID=2;
-                    rolePermissionData.moduleHierarchyMasterId = currentModule.id;
-                    this.currentUserRole.rolePermissions.push(rolePermissionData);
-                    this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
+                    var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
+                        return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
+                    })[0];
+        
+                    if(viewPermission==undefined){
+                    if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
+                        var rolePermissionData=Object.assign({}, currentModule.rolePermission);
+                        rolePermissionData.permissionID=2;
+                        rolePermissionData.moduleHierarchyMasterId = currentModule.id;
+                        this.currentUserRole.rolePermissions.push(rolePermissionData);
+                        this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
+                    }
+                }
+                }
+                else{
+                    this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.id);
+                    if(currentModule.parentId!=null){
+                    this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.parentId);
+                    }
                 }
             }
+            else {
+                this.setPermissionByType(currentModule, type, value);
+                this.setModuleHierarchyPermission(currentModule,type,value);
+                if (currentModule.parentId != null)
+                    this.checkParentModule(currentModule,currentModule.parentId,type,value);
             }
-            else{
-                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.id);
-                if(currentModule.parentId!=null){
-                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.parentId);
+        
+        this.enableDisableViewPermission(currentModule,value);
+    }
+
+    enableDisableViewPermission(currentModule,value){
+       let genInfoCount : number = 0
+       if(currentModule != null){
+            this.sortedHierarchy.filter(function (module) {
+                if(module.parentId != null && (currentModule.parentId == module.parentId)){
+                    if(module.displayOrder != null && module.displayOrder == 0){
+                        genInfoCount = genInfoCount +1;
+                    }
                 }
-            }
-        }
-        else {
-            this.setPermissionByType(currentModule, type, value);
-            this.setModuleHierarchyPermission(currentModule,type,value);
-            if (currentModule.parentId != null)
-                this.checkParentModule(currentModule,currentModule.parentId,type,value);
-        }
-        //console.log(this.currentUserRole.rolePermissions);
+         });
+       }
+
+       this.sortedHierarchy.filter(function (module) {
+                if(genInfoCount >0){
+                    if(module.parentId != null && (currentModule.parentId == module.parentId)){
+                        if(module.displayOrder != null && module.displayOrder == 0 && value){
+                            module.rolePermission.canAdd = true;
+                            module.rolePermission.canView = true;
+                        }
+                    }
+                }
+                if(module.rolePermission.canAdd || module.rolePermission.canUpdate || module.rolePermission.canDelete){
+                    module.rolePermission.canView = true;
+                    module.rolePermission.isDisabled = true;
+                }else {
+                    module.rolePermission.isDisabled = false;
+                }
+            return module
+        });
     }
 
     setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,type,value:boolean=true): void {
-
         // var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
         //     return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == currentModule.rolePermission.permissionID;
-        // })[0];
+        // })[0];   
         var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
             return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == type;
         })[0];
-
         if (permission != undefined) {
             var currentRolePermission = Object.assign({}, currentModule.rolePermission);
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
@@ -411,7 +440,6 @@ export class EditUserRolesComponent implements OnInit {
             }
         }
         }
-
     }
 
     updatePermission(previousPermission: RolePermission, latestPermission: RolePermission): void {
@@ -428,9 +456,7 @@ export class EditUserRolesComponent implements OnInit {
         if (modules != undefined && modules.length > 0) {
             for (let module of modules) {
                 this.setPermissionByType(module, type, checkedValue);
-                //if (module.isPage) {
-                    this.pages.push(module);
-                //}
+                this.pages.push(module);
                 this.hasPages(module, type, checkedValue);
             }
         }
@@ -485,15 +511,126 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     UpdateUserRole(): void {
-        this.isSpinnerVisible=true;
-        this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
-            x.userRoleId = this.currentUserRole.id;
-            return x;
-        })        
+    this.isSpinnerVisible=true;
+        let userRoleID = this.currentUserRole.id
+        this.currentUserRole.rolePermissions = [];
+        let arrayData :any = [];
+        this.sortedHierarchy.filter(function (module) {
+            let e = module.rolePermission;
+          if(e.canAdd ||e.canView ||e.canUpdate ||e.canDelete ||e.canAssign ||e.canApprove ||e.canUpload ||e.canDownload ||e.canReport || e.canRun ||e.canReportView ||e.canReportDelete  ||e.canPrint ){
+            if(e.canAdd != undefined && e.canAdd != null && e.canAdd){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = e.canAdd;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 1 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = false;
+                moduleObj.CanUpdate  = false;
+                moduleObj.CanDelete = false;
+                moduleObj.Reports = false;
+                moduleObj.CanUpload = false;
+                moduleObj.CanDownload = false;
+                arrayData.push(moduleObj);
+            }
+            if(e.canView != undefined && e.canView != null && e.canView){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = false;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 2 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = e.canView;
+                moduleObj.CanUpdate  = false;
+                moduleObj.CanDelete = false;
+                moduleObj.Reports = false;
+                moduleObj.CanUpload = false;
+                moduleObj.CanDownload = false;
+                arrayData.push(moduleObj);
+            }
+            if(e.canUpdate != undefined && e.canUpdate != null && e.canUpdate){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = false;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 3 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = false;
+                moduleObj.CanUpdate  = e.canUpdate;
+                moduleObj.CanDelete = false;
+                moduleObj.Reports = false;
+                moduleObj.CanUpload = false;
+                moduleObj.CanDownload = false;
+                arrayData.push(moduleObj);
+            }
+            if(e.canDelete != undefined && e.canDelete != null && e.canDelete){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = false;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 4 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = false;
+                moduleObj.CanUpdate  = false;
+                moduleObj.CanDelete = e.canDelete;
+                moduleObj.Reports = false;
+                moduleObj.CanUpload = false;
+                moduleObj.CanDownload = false;
+                arrayData.push(moduleObj);
+            }
+            if(e.canReport != undefined && e.canReport != null && e.canReport){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = false;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 9 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = false;
+                moduleObj.CanUpdate  = false;
+                moduleObj.CanDelete = false;
+                moduleObj.Reports = e.canReport;
+                moduleObj.CanUpload = false;
+                moduleObj.CanDownload = false;
+                arrayData.push(moduleObj);
+            }
+            if(e.canUpload != undefined && e.canUpload != null && e.canUpload){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = false;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 7 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = false;
+                moduleObj.CanUpdate  = false;
+                moduleObj.CanDelete = false;
+                moduleObj.Reports = false;
+                moduleObj.CanUpload = e.canUpload;
+                moduleObj.CanDownload = false;
+                arrayData.push(moduleObj);
+            }
+            if(e.canDownload != undefined && e.canDownload != null && e.canDownload){
+                let moduleObj :any ={};
+                moduleObj.CanAdd = false;
+                moduleObj.id = 0
+                moduleObj.moduleHierarchyMasterId  = module.id ;
+                moduleObj.permissionID = 8 ;
+                moduleObj.userRoleId= userRoleID;
+                moduleObj.CanView = false;
+                moduleObj.CanUpdate  = false;
+                moduleObj.CanDelete = false;
+                moduleObj.Reports = false;
+                moduleObj.CanUpload = false;
+                moduleObj.CanDownload = e.canDownload;
+                arrayData.push(moduleObj);
+            }
+          }
+     });
+
+     this.currentUserRole.rolePermissions = arrayData;
+        this.isSpinnerVisible=false;
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);
-                //console.log(result)
                 for (let module of this.sortedHierarchy) {
                     this.resetRolePermission(module.rolePermission);
                 }
@@ -509,18 +646,9 @@ export class EditUserRolesComponent implements OnInit {
                 this.isSpinnerVisible=false;
             },
             error => {
-                // var message = '';
-                // if (error.error.constructor == Array) {
-                //     message = error.error[0].errorMessage;
-                // }
-                // else {
-                //     message = error.error.Message;
-                // } 
                 this.isSpinnerVisible=false;
-               // this.alertService.showMessage('User Role', message, MessageSeverity.error);
             }
         );
-
     }
 
     checkparent(currentModule,parentId,type){        
@@ -560,6 +688,7 @@ export class EditUserRolesComponent implements OnInit {
         this.canReportView = 0;
         this.canReportDelete = 0;
         this.canPrint = 0;
+        
         var childlist = this.sortedHierarchy.filter(function (module) {
             return module.parentId == parentId
         });              

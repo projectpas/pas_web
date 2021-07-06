@@ -107,7 +107,7 @@ export class GlAccountEndpointService extends EndpointFactory {
   }
 
   deleteRestoreGL(id,status, userName){
-    return this.http.post(this.configurations.baseUrl + `${this.deleteRestoreGLURL}?id=${id}&status=${status}&userName=${userName}`, this.getRequestHeaders())
+    return this.http.get(this.configurations.baseUrl + `${this.deleteRestoreGLURL}?id=${id}&status=${status}&userName=${userName}`, this.getRequestHeaders())
     .catch(error => {
         return this.handleErrorCommon(error, () => this.deleteRestoreGL(id,status,userName));
     });
@@ -115,7 +115,7 @@ export class GlAccountEndpointService extends EndpointFactory {
 
   updatestatusactive(id,status, userName) {
     let endpointUrl = `${this.glaccountstatusList}?glAccountId=${id}&status=${status}&updatedBy=${userName}`;
-    return this.http.post(endpointUrl,  this.getRequestHeaders())
+    return this.http.get(endpointUrl,  this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.updatestatusactive(id,status, userName));
         });
