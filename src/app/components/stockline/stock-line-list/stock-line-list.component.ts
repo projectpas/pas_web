@@ -1,4 +1,6 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { PermissionConstants } from './../../../generic/ModuleConstant';
+import { ModuleConstants } from 'src/app/generic/ModuleConstant';
+import { Component, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { FormBuilder } from '@angular/forms';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -213,9 +215,20 @@ export class StockLineListComponent implements OnInit {
     globalSearchText: string;
     columnInputText: any;
     selectedOnly: boolean = false;
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isView:boolean=true;
+    isDownload:boolean=true;
+    isActive:boolean=true;
 
     constructor(private workFlowtService: StocklineService, private datePipe: DatePipe, private _route: Router, private authService: AuthService, private commonService: CommonService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private stocklineReferenceStorage: StocklineReferenceStorage) {
         this.dataSource = new MatTableDataSource();
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Update]);
+        this.isView=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.View]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Download])
     }
 
     ngOnInit(): void {
