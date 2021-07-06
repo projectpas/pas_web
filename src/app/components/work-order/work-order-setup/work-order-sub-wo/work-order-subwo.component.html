@@ -385,11 +385,11 @@
   </div>
   <div class="modal-body">
       <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workOrderScopeName}}</span> capability for MPN
-          <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>.
+          <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>
 
           </p>
       <strong>
-          Do you want to allow to create Work Order?
+          Do you want to allow to {{activeGridUpdateButton ? 'update' : 'create'}}  Sub Work Order ?
       </strong>
   </div>
   <div class="modal-footer">

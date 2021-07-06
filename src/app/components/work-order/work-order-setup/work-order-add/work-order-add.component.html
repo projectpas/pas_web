@@ -809,6 +809,7 @@
                                 (click)="saveWorkOrder()">
                                 Save
                             </button>
+           
                             <button class="btn btn-primary pull-right" *ngIf="isEdit && !isRecCustomer" type="button"
                                 [disabled]=" disableSaveForPart || !workOrderForm.valid || checkTechnician()"
                                 (click)="saveWorkOrder()">
@@ -1709,11 +1710,16 @@
                     <!-- {{receivingForm.workScopeName}} -->
                     <!-- {{receivingForm.itemMasterId.label} -->
                     <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workOrderScopeName}}</span> capability for MPN
-                        <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>.
+                        <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>
             
                         </p>
                     <strong>
-                        Do you want to allow to create Work Order?
+                        Do you want to allow to
+                        
+                       
+                        <span *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer">create</span>
+                        <span  *ngIf="isEdit && !isRecCustomer" >update</span>
+                          Work Order?
                     </strong>
                 </div>
                 <div class="modal-footer">
