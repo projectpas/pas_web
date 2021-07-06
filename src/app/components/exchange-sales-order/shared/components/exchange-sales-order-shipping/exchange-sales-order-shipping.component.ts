@@ -453,6 +453,14 @@ export class ExchangeSalesOrderShippingComponent {
     });
   }
 
+  addressFormForShipping = new CustomerShippingModel();
+  lstfilterShippingSite: any[];
+  shippingSieListOriginal: any[];
+  shipToSite: any;
+  isShippingSiteNameAlreadyExists: boolean = false;
+  ShipAddbutton: boolean = false;
+  isEditModeShipping: boolean = false;
+
   async setSiteNamesByShipCustomerId(object, siteId) {
     this.clearShipToAddress();
     let customerId = object.userID;
@@ -474,6 +482,17 @@ export class ExchangeSalesOrderShippingComponent {
     }, err => {
     });
   }
+
+  addressFormForBilling = new CustomerShippingModel();
+  lstfilterBillingSite: any[];
+  billingSieListOriginal: any[];
+  billToSite: any;
+  changeName: boolean = false;
+  isSiteNameAlreadyExists: boolean = false;
+  editSiteName: string = '';
+  billAddbutton: boolean = false;
+  isEditModeBilling: boolean = false;
+  countriesList: any = [];
 
   async setSiteNamesBySoldCustomerId(object, siteId) {
     this.clearSoldToAddress();
