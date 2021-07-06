@@ -69,6 +69,7 @@ import { AddExchangeSalesOrderReserveUnreservePartNumberComponent } from "../com
 import { ExchangeSalesOrderPickTicketsComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component";
 import { ExchangeSalesOrderPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-ticket/exchange-sales-order-pick-ticket.component";
 import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
+import { ExchangeSalesOrderShippingComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -139,6 +140,7 @@ import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchan
     //ExchangeSalesOrderPickTicketComponent,
     ExchangeSalesOrderPickTicketsComponent,
     //ExchangeSalesOrderMultiPickTicketComponent
+    ExchangeSalesOrderShippingComponent
   ],
   providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
   //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]
