@@ -600,10 +600,11 @@
                                                 </p-dropdown>
                                             </td>
                                             <td>
-                                                <!-- [options]="workScopesList" -->
+                                                <!--          [options]="getDynamicVariableData('dynamicworkScopesList',i)" -->
                                                 <p-dropdown filter="true" placeholder="Select" name="scope{{i}}"
                                                     #scope="ngModel" 
-                                                    [options]="getDynamicVariableData('dynamicworkScopesList',i)"
+                                           
+                                                    [options]="workScopesList"
                                                     class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     (ngModelChange)="getValid()" [autoWidth]="false"
                                                     [style]="pDropdownStyle"
@@ -808,6 +809,7 @@
                                 (click)="saveWorkOrder()">
                                 Save
                             </button>
+           
                             <button class="btn btn-primary pull-right" *ngIf="isEdit && !isRecCustomer" type="button"
                                 [disabled]=" disableSaveForPart || !workOrderForm.valid || checkTechnician()"
                                 (click)="saveWorkOrder()">
@@ -1707,12 +1709,17 @@
                 <div class="modal-body">
                     <!-- {{receivingForm.workScopeName}} -->
                     <!-- {{receivingForm.itemMasterId.label} -->
-                    <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workScopeName}}</span> capability for MPN
-                        <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>.
+                    <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workOrderScopeName}}</span> capability for MPN
+                        <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>
             
                         </p>
                     <strong>
-                        Do you want to allow to create Work Order?
+                        Do you want to allow to
+                        
+                       
+                        <span *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer">create</span>
+                        <span  *ngIf="isEdit && !isRecCustomer" >update</span>
+                          Work Order?
                     </strong>
                 </div>
                 <div class="modal-footer">

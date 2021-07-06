@@ -280,38 +280,29 @@
                                         <span>{{getFormattedNotes(child.notes)}}</span></td>
                                 </tr>
                                 <tr></tr>
-                                <!-- <tr>
-                                        <td colspan="7"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr> -->
                                 <tr></tr>
                                 <ng-container *ngFor="let chargeChild of this.salesOrderCharges; let i = index;">
-                                    <tr *ngIf="chargeChild.itemMasterId == child.itemMasterId">
+                                    <tr
+                                        *ngIf="!(this.salesOrderInvoice.headerMarkupIdCharge != undefined && this.salesOrderInvoice.headerMarkupIdCharge == 3) &&  chargeChild.itemMasterId == child.itemMasterId">
                                         <td>NA</td>
                                         <td colspan="3"> MISC: {{chargeChild.chargeType}}
                                         </td>
                                         <td style="border: 1px solid black"> - </td>
                                         <td style="border: 1px solid black">{{child.chargeChild}}</td>
                                         <td style="border: 1px solid black"> - </td>
-                                        <td style="text-align: right;border-bottom:1px solid black;">{{chargeChild.quantity}}
+                                        <td style="text-align: right;border-bottom:1px solid black;">
+                                            {{chargeChild.quantity}}
                                         </td>
                                         <td style="text-align: right;border-bottom: 1px solid black;">
                                             {{chargeChild.unitCost | number : '1.2-2'}}</td>
                                         <td style="text-align: right;border-bottom:1px solid black;">
                                             {{chargeChild.billingAmount | number : '1.2-2'}}</td>
                                     </tr>
-                                    <!-- <tr>
-                                            <td colspan="7"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr> -->
                                     <tr></tr>
                                 </ng-container>
                                 <ng-container *ngFor="let freightChild of this.salesOrderFreights; let i = index;">
-                                    <tr *ngIf="freightChild.itemMasterId == child.itemMasterId">
+                                    <tr
+                                        *ngIf="!(this.salesOrderInvoice.headerMarkupIdCharge != undefined && this.salesOrderInvoice.headerMarkupIdCharge == 3) && freightChild.itemMasterId == child.itemMasterId">
                                         <td>NA</td>
                                         <td colspan="3"> FREIGHT: {{freightChild.shipViaName}}
                                         </td>
@@ -324,25 +315,50 @@
                                         <td style="text-align: right;border-bottom:1px solid black;">
                                             {{freightChild.billingAmount | number : '1.2-2'}}</td>
                                     </tr>
-                                    <!-- <tr>
-                                            <td colspan="7"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr> -->
                                     <tr></tr>
                                 </ng-container>
                             </ng-container>
-                            <!-- <tr>
-                                    <td colspan="7"></td>
-                                    <td style="border-bottom-color:white;border-right-color:white;" colspan="2">
+                            <ng-container
+                                *ngIf="(this.salesOrderInvoice.headerMarkupIdCharge != undefined && this.salesOrderInvoice.headerMarkupIdCharge == 3)">
+                                <tr>
+                                    <td>NA</td>
+                                    <td colspan="3"> MISC: NA
                                     </td>
-                                    <td style="border-right-color:white;"></td>
-                                </tr> -->
+                                    <td style="border: 1px solid black"> - </td>
+                                    <td style="border: 1px solid black"> - </td>
+                                    <td style="border: 1px solid black"> - </td>
+                                    <td style="text-align: right;border-bottom:1px solid black;">
+                                        1
+                                    </td>
+                                    <td style="text-align: right;border-bottom: 1px solid black;">
+                                        {{this.salesOrderInvoice.miscCharges | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;border-bottom:1px solid black;">
+                                        {{this.salesOrderInvoice.miscCharges | number : '1.2-2'}}</td>
+                                </tr>
+                                <tr></tr>
+                            </ng-container>
+                            <ng-container
+                                *ngIf="(this.salesOrderInvoice.headerMarkupIdFreight != undefined && this.salesOrderInvoice.headerMarkupIdFreight == 3)">
+                                <tr>
+                                    <td>NA</td>
+                                    <td colspan="3"> MISC: NA
+                                    </td>
+                                    <td style="border: 1px solid black"> - </td>
+                                    <td style="border: 1px solid black"> - </td>
+                                    <td style="border: 1px solid black"> - </td>
+                                    <td style="text-align: right; border-bottom:1px solid black;">
+                                        1
+                                    </td>
+                                    <td style="text-align: right; border-bottom: 1px solid black;">
+                                        {{this.salesOrderInvoice.freight | number : '1.2-2'}}</td>
+                                    <td style="text-align: right; border-bottom:1px solid black;">
+                                        {{this.salesOrderInvoice.freight | number : '1.2-2'}}</td>
+                                </tr>
+                                <tr></tr>
+                            </ng-container>
                             <tr></tr>
                             <tr>
                                 <td rowspan="7" colspan="7" style="border:1px solid black;">
-                                    <!-- Notes/Instructions: <span>{{this.salesOrderInvoice.soNotes}}</span> -->
                                     Notes/Instructions:
                                     <span>{{getFormattedNotes(this.salesOrderInvoice.soNotes)}}</span>
                                 </td>
