@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { PermissionConstants } from './../../../generic/ModuleConstant';
+import { ModuleConstants } from 'src/app/generic/ModuleConstant';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConditionService } from '../../../services/condition.service';
 import { Condition } from '../../../models/condition.model';
 import { fadeInOut } from '../../../services/animations';
@@ -173,7 +175,12 @@ export class StockLineSetupComponent implements OnInit {
 	selectedPartNumber: any;
 	receiverNumber: any;
 	moduleName:any='StockLine';
+	isAdd:boolean=true;
+    isEdit:boolean=true;
 	constructor(private alertService: AlertService, private stocklineser: StocklineService, private commonService: CommonService, private conditionService: ConditionService, private binService: BinService, private siteService: SiteService, private vendorService: VendorService, private manufacturerService: ManufacturerService, private integrationService: IntegrationService, private itemMasterService: ItemMasterService, private glAccountService: GlAccountService, private router: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe, private authService: AuthService, private configurations: ConfigurationService, private modalService: NgbModal) {
+
+		// this.isAdd=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Add]);
+        // this.isEdit=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Update]);
 		this.stockLineForm.siteId = 0;
 		this.stockLineForm.acquistionTypeId = 0;
 		this.stockLineForm.nhaItemMasterId = 0;

@@ -112,10 +112,10 @@ export class ItemMasterService {
         return Observable.forkJoin(
             this.itemMasterEndpoint.getitemListEndpoint<any[]>(value, masterCompanyId));
     }
-    getItemMasterStockListData(data) {
-        return Observable.forkJoin(
-            this.itemMasterEndpoint.getItemStockListEndPoint<any[]>(data));
-    }
+        getItemMasterStockListData(data) {
+            return Observable.forkJoin(
+                this.itemMasterEndpoint.getItemStockListEndPoint<any[]>(data));
+        }
 
     getAllStockDataforDownload() {
         return Observable.forkJoin(

@@ -275,13 +275,20 @@ export class ItemMasterEndpoint extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getitemListEndpoint(value, masterCompanyId));
             });
     }
+    // getItemStockListEndPoint<T>(data): Observable<T> {
+    //     let url = `${this.stockListUrl}`;
+    //     return this.http.post<T>(url, data, this.getRequestHeaders())
+    //         .catch(error => {
+    //             return this.handleErrorCommon(error, () => this.getItemStockListEndPoint(data));
+    //         });
+    // }
     getItemStockListEndPoint<T>(data): Observable<T> {
         let url = `${this.stockListUrl}`;
-        return this.http.post<T>(url, data, this.getRequestHeaders())
-            .catch(error => {
-                return this.handleErrorCommon(error, () => this.getItemStockListEndPoint(data));
-            });
-    }
+        return this.http.post(url, JSON.stringify(data), this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getItemStockListEndPoint(data));
+          });
+      }
 
     getAllStockDataforDownload<T>(): Observable<T> {
         let url = `${this.getAllStockListUrl}`;
@@ -1330,21 +1337,21 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterNhaMappingParts(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/GetItemMasterNhaMappingParts?itemMasterId=${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/GetItemMasterNhaMappingParts?itemMasterId=${id}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterNhaMappingParts(id));
             });
     }
 
     getItemMasterTlaMappingParts(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/getItemMasterTlaMappingParts?itemMasterId=${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/getItemMasterTlaMappingParts?itemMasterId=${id}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterTlaMappingParts(id));
             });
     }
 
     getDataForStocklineByItemMasterId(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getdataforstockline/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getdataforstockline/${id}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getDataForStocklineByItemMasterId(id));
             });
@@ -1372,13 +1379,13 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterMappingPart(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/get-itemmaster-mappingpart/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/get-itemmaster-mappingpart/${id}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterMappingPart(id));
             });
     }
     GetManufacturerByitemMasterId(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getmanufacturebyitemmasterid?itemMasterId=${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getmanufacturebyitemmasterid?itemMasterId=${id}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.GetManufacturerByitemMasterId(id));
             });

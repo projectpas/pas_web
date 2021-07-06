@@ -5,7 +5,7 @@
 			<h4 class="header-name">Stock Line List</h4>
 		  </div>
 		  <div>
-			<button
+			<button *ngIf="isAdd"
 			type="button"
 			class="btn-sm header-button"
 			[routerLink]="['/stocklinemodule/stocklinepages/app-stock-line-setup']">
@@ -61,7 +61,7 @@
               </div>
                 <div class="row">
                   <div class="col">
-                    <button type="button"
+                    <button *ngIf="isDownload" type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
                                     matTooltipPosition="above"
@@ -73,7 +73,7 @@
                                     (click)="selectedOnly = false; targetData = dt;"
                                      data-target="#downloadConfirmation">
                             </button> 
-                            <button type="button"
+                            <button *ngIf="isDownload" type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
                                     matTooltipPosition="above"
@@ -182,9 +182,9 @@
                     </td>
 
                     <td class="action-icons-cstm table-column-width" *ngIf="selectedGridColumns.length > 0">
-                        <span data-toggle="modal"><a class="btn nobg btn-view-cstm" (click)="openView(rowData)"
+                        <span *ngIf="isView" data-toggle="modal"><a class="btn nobg btn-view-cstm" (click)="openView(rowData)"
                                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                        <span><a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit"
+                        <span *ngIf="isEdit" ><a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit"
                                 matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                         <span><a class="btn nobg btn-stock-cstm btn-users-cstm" (click)="openAdjustment(rowData)"
                                 matTooltip="Stock Adjustment" matTooltipPosition="above"><i class="fa fa-cubes"></i></a> </span>

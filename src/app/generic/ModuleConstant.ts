@@ -68,6 +68,8 @@ export class ModuleConstants
         static Item_NHATLA:string = "Item_NHATLA";
         static Item_ExchangeLoan:string = "Item_ExchangeLoan";
         static Item_ExportInformation:string = "Item_ExportInformation";
+
+        static Stockline:string = "Stockline";
 }
 
 export class PermissionConstants
