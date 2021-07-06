@@ -1396,7 +1396,7 @@
     <div class="modal-body">
         <!-- {{receivingForm.workScopeName}} -->
         <!-- {{receivingForm.itemMasterId.label} -->
-        <p>There is no  capability for MPN }.
+        <p>There is no  capability for MPN .
 
             </p>
         <strong>
@@ -1421,11 +1421,11 @@
                     <!-- {{receivingForm.workScopeName}} -->
                     <!-- {{receivingForm.itemMasterId.label} -->
                     <p>There is no  <span class="new-label" *ngIf="receivingForm && receivingForm.workScopeName"> {{receivingForm.workScopeName}}</span> capability for MPN
-                        <span class="new-label" *ngIf="receivingForm && receivingForm.itemMasterId"> {{receivingForm.itemMasterId.label}} </span>.
+                        <span class="new-label" *ngIf="receivingForm && receivingForm.itemMasterId"> {{receivingForm.itemMasterId.label}} </span>
             
                         </p>
                     <strong>
-                        Do you want to create Receceiving Customer?
+                        Do you want to {{isEditMode ? 'update' :'create'}} Receceiving Customer?
                     </strong>
                 </div>
                 <div class="modal-footer">

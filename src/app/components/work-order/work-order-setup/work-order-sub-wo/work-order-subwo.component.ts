@@ -655,8 +655,10 @@ export class SubWorkOrderComponent implements OnInit {
         }
     }
     onSelectedTechnician(object, currentRecord,index) {
-        currentRecord.masterCompanyId=this.currentUserMasterCompanyId
-        this.triggherWorkScopeData(currentRecord,index)
+        currentRecord.masterCompanyId=this.currentUserMasterCompanyId;
+        if(!this.activeGridUpdateButton){
+            this.triggherWorkScopeData(currentRecord,index)
+        }
         if (object.employeeId != undefined && object.employeeId > 0) {
             this.commonService.getTechnicianStation(object.employeeId,this.currentUserMasterCompanyId).subscribe(res => {
                 currentRecord.techStationId = res.stationId;
