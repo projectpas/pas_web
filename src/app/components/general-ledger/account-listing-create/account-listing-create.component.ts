@@ -15,6 +15,7 @@ import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CommonService } from "../../../services/common.service";
 import { AccountListingService } from "../../../services/account-listing/account-listing.service";
 import { getValueFromObjectByKey, getObjectByValue, validateRecordExistsOrNot, selectedValueValidate } from "../../../generic/autocomplete";
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
   selector: "app-account-listing-create",
@@ -75,6 +76,8 @@ export class AccountListingCreateComponent implements OnInit {
   home: any;
   breadcrumbs: MenuItem[];
   ledgerNameValue: string;
+  isAdd:boolean=true;
+  isEdit:boolean=true;
   constructor(
     private route: ActivatedRoute,
     private accountListingService: AccountListingService,  
@@ -89,6 +92,8 @@ export class AccountListingCreateComponent implements OnInit {
     if (this.glAccountService.glAccountEditCollection) {
       this.currentGLAccount = this.glAccountService.glAccountEditCollection;
     }
+    this.isAdd=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Add])
+    this.isEdit=this.authService.checkPermission([ModuleConstants.GLAccount+'.'+PermissionConstants.Update])
   }
 
   get userName(): string {
