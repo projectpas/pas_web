@@ -380,5 +380,5 @@ table {
     font-size: 12px;
   }
   .printnotes{
-    height: 60px !important; width:100% !important
+    height: auto !important; width:100% !important; min-height: 60px;
   }

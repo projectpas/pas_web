@@ -79,7 +79,8 @@
                                                                 <table  class="table table-bordered">
                                                                 <thead >
                                                                     <tr>
-                                                                        <th *ngFor="let matHeader of materialListHeader" [ngStyle]="{'width': matHeader.width}" style="border: 1px solid #c8c8c8 !important; min-width: 100px !important;">
+                                                                        <th *ngFor="let matHeader of materialListHeader" [ngStyle]="{'min-width': matHeader.width}"
+                                                                         style="border: 1px solid #c8c8c8 !important;">
                                                                             {{matHeader.header}}
                                                                         </th>
                                                                     </tr>

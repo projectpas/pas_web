@@ -481,7 +481,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayModulelist.length == 0) {
 			this.arrayModulelist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, this.arrayModulelist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, this.arrayModulelist.join(), 0 ).subscribe(res => {
 			this.userTypes = res;
 			this.userTypes.map(x => {
 				if (x.label.toUpperCase() == 'COMPANY') {
@@ -507,7 +507,7 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	loadModulesNamesForObtainOwnerTraceable() {
-		this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
+		this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
 			this.moduleListDropdown = res;
 		})
 	}

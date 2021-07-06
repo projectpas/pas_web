@@ -1,3 +1,24 @@
 .modal-body div.form-group label {
     width: 100%;
 }
+.card-stock {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .card-stock .card-header {
+    padding: 10px 12px;
+  }
+  .card-stock .card-header h5 {
+    margin-bottom: 0; 
+    font-size: 12px;
+  }
+  .card-stock .card-body {
+    padding: 12px 12px 4px;
+  }
+  .text_editor_box {
+    padding: 10px 3px !important;
+    width:100%;
+  }
+  .card-tolerance .form-group {
+    margin-bottom: 4px;
+  }

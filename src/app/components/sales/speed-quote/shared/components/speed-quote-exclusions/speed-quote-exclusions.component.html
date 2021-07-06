@@ -18,7 +18,7 @@
           <th class="th-width">PN</th>
           <th>PN Description</th>
           <th *ngIf="isViewMode == false"></th>
-          <th>PN</th>
+          <th>PN<span class="clr-red">*</span></th>
           <th>PN Description</th>
           <th style="width:85px">Item Type</th>
           <th class="text-center">Qty<span class="clr-red">*</span></th>
@@ -209,7 +209,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">MPN : {{row_data.pn}}</h6>
+    <!-- <h6 class="modal-body">MPN : {{row_data.pn}}</h6>
     <h6 class="modal-body">PN Description : {{row_data.description}}</h6>
     <h6 class="modal-body">PN : {{row_data.exPartNumber}}</h6>
     <h6 class="modal-body">PN Description : {{row_data.exPartDescription}}</h6>
@@ -218,7 +218,65 @@
     <h6 class="modal-body">Unit Price : {{row_data.exUnitPrice}}</h6>
     <h6 class="modal-body">Est Price : {{row_data.exExtPrice}}</h6>
     <h6 class="modal-body">Occurance (%) : {{row_data.exOccurance}}</h6>
-    <h6 class="modal-body">Notes : {{row_data.exNotes}}</h6>
+    <h6 class="modal-body">Notes : {{row_data.exNotes}}</h6> -->
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive default-bg clear">
+          <div class="col-md-6">
+            <p><span class="label"><b>MPN : </b></span>
+              <span class="value">
+                {{row_data.pn ? row_data.pn : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>PN Description : </b></span>
+              <span class="value">
+                {{row_data.description ? row_data.description : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>PN<span class="clr-red">*</span> : </b></span>
+              <span class="value">
+                {{row_data.exPartNumber ? row_data.exPartNumber : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>PN Description : </b></span>
+              <span class="value">
+                {{row_data.exPartDescription ? row_data.exPartDescription : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>Item Type : </b></span>
+              <span class="value">
+                {{row_data.exStockType ? row_data.exStockType : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>Qty<span class="clr-red">*</span> : </b></span>
+              <span class="value">
+                {{row_data.exQuantity ? row_data.exQuantity : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>Unit Price : </b></span>
+              <span class="value">
+                {{row_data.exUnitPrice ? row_data.exUnitPrice : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>Est Price : </b></span>
+              <span class="value">
+                {{row_data.exExtPrice ? row_data.exExtPrice : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>Occurance (%) : </b></span>
+              <span class="value">
+                {{row_data.exOccurance ? row_data.exOccurance : '-'}}
+              </span>
+            </p>
+            <p><span class="label"><b>Notes : </b></span>
+              <span class="value">
+                {{row_data.exNotes ? row_data.exNotes : '-'}}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="modal-footer">
