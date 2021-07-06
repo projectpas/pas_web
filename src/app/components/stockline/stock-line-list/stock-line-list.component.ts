@@ -221,6 +221,9 @@ export class StockLineListComponent implements OnInit {
     isView:boolean=true;
     isDownload:boolean=true;
     isActive:boolean=true;
+    isstocklineadjustmentAdd:boolean=true;
+    isstocklineadjustmentEdit:boolean=true;
+    isstocklineadjustmentView:boolean=true;
 
     constructor(private workFlowtService: StocklineService, private datePipe: DatePipe, private _route: Router, private authService: AuthService, private commonService: CommonService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private stocklineReferenceStorage: StocklineReferenceStorage) {
         this.dataSource = new MatTableDataSource();
@@ -229,6 +232,9 @@ export class StockLineListComponent implements OnInit {
         this.isView=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.View]);
         this.isDelete=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Delete]);
         this.isDownload=this.authService.checkPermission([ModuleConstants.Stockline+'.'+PermissionConstants.Download])
+        this.isstocklineadjustmentEdit=this.authService.checkPermission([ModuleConstants.Stockline_Adjustment+'.'+PermissionConstants.Update]);
+        this.isstocklineadjustmentAdd=this.authService.checkPermission([ModuleConstants.Stockline_Adjustment+'.'+PermissionConstants.Add]);
+        this.isstocklineadjustmentView=this.authService.checkPermission([ModuleConstants.Stockline_Adjustment+'.'+PermissionConstants.View]);
     }
 
     ngOnInit(): void {
