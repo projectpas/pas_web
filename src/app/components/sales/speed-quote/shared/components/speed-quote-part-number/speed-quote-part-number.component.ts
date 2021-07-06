@@ -103,6 +103,7 @@ export class SpeedQuotePartNumberComponent {
     });
     this.columns = [];
     this.initColumns();
+    this.canSaveParts = true;
   }
 
   addPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -520,7 +521,7 @@ export class SpeedQuotePartNumberComponent {
       }
       this.filterParts();
     });
-    this.canSaveParts = true;
+    //this.canSaveParts = true;
     if (this.salesQuote.priorities) {
       let activePriorities = this.salesQuote.priorities.filter(x => x.isActive == true);
       if (activePriorities && activePriorities.length > 0) {

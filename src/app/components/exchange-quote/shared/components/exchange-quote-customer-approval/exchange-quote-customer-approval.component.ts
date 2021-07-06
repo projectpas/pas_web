@@ -129,7 +129,7 @@ export class ExchangeQuoteCustomerApprovalComponent {
             this.setDefaultContact();
 
         }
-        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId),
+        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0),
             this.exchangequoteService.approverslistbyTaskId(ApprovalTaskEnum.ExchangeQuoteApproval, this.exchangeQuoteId),
             this.exchangequoteService.getCustomerQuotesList(this.exchangeQuoteId)
             ).subscribe(response => {
@@ -179,7 +179,7 @@ export class ExchangeQuoteCustomerApprovalComponent {
     if (this.arrayApprovalStatuslst.length == 0) {
       this.arrayApprovalStatuslst.push(0);
     }
-    this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0).subscribe(res => {
           this.statusList = res.map(x => {
               return {
                   ...x,
@@ -263,29 +263,29 @@ export class ExchangeQuoteCustomerApprovalComponent {
           this.quotesList[i].approvedContactId = this.quotesList[i].statusId == (ApprovalStatusEnum.WaitingForApproval || ApprovalStatusEnum.WaitingForApproval.toString()) ? this.quotesList[i].approvedContactId : null;
           if (this.quotesList[i].internalSentDate) {
               this.quotesList[i].internalSentDate = new Date(this.quotesList[i].internalSentDate);
-              if (!this.quotesList[i].internalApprovedDate) {
-                  this.quotesList[i].internalApprovedDate = new Date();
-              }
+            //   if (!this.quotesList[i].internalApprovedDate) {
+            //       this.quotesList[i].internalApprovedDate = new Date();
+            //   }
           }
-          else if (!this.quotesList[i].internalSentDate) {
-              this.quotesList[i].internalSentDate = new Date();
-          }
+        //   else if (!this.quotesList[i].internalSentDate) {
+        //       this.quotesList[i].internalSentDate = new Date();
+        //   }
           if (this.quotesList[i].customerSentDate) {
               this.quotesList[i].customerSentDate = new Date(this.quotesList[i].customerSentDate);
-              if (!this.quotesList[i].customerApprovedDate) {
-                  this.quotesList[i].customerApprovedDate = new Date();
-              }
+            //   if (!this.quotesList[i].customerApprovedDate) {
+            //       this.quotesList[i].customerApprovedDate = new Date();
+            //   }
           }
-          else {
-              if (this.quotesList[i].approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
-                  this.quotesList[i].customerSentDate = new Date();
-              }
-          }
+        //   else {
+        //       if (this.quotesList[i].approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+        //           this.quotesList[i].customerSentDate = new Date();
+        //       }
+        //   }
           if (this.quotesList[i].internalApprovedDate) {
               this.quotesList[i].internalApprovedDate = new Date(this.quotesList[i].internalApprovedDate);
-              if (!this.quotesList[i].customerSentDate) {
-                  this.quotesList[i].customerSentDate = new Date();
-              }
+            //   if (!this.quotesList[i].customerSentDate) {
+            //       this.quotesList[i].customerSentDate = new Date();
+            //   }
           }
           if (this.quotesList[i].customerApprovedDate) {
               this.quotesList[i].customerApprovedDate = new Date(this.quotesList[i].customerApprovedDate);

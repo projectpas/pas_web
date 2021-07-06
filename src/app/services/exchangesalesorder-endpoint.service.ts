@@ -21,6 +21,7 @@ import { environment } from "../../environments/environment";
 import { IExchangeSalesSearchParameters } from "../models/exchange/IExchangeSalesSearchParameters";
 import { IExchangeSalesOrderListView } from "../models/exchange/IExchangeSalesOrderListView";
 import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
+import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrderShipping";
 @Injectable()
 export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getNewSalesOrderInstanceUrl: string = environment.baseUrl + "/api/exchangesalesorder/new";
@@ -39,6 +40,10 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/exchangesalesorder/getpickticketedit"
     private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/exchangesalesorder/getsalesorderpickticketforprint";
     private readonly getMultiPickTicketForPrint: string = environment.baseUrl + "/api/exchangesalesorder/getMultiSalesOrderPickTicketForPrint";
+    private readonly exchangeSalesorderShippingGet: string = environment.baseUrl + "/api/exchangesalesorder/exchangesalesordershippingdetails";
+    private readonly salesorderShippingSave: string = environment.baseUrl + "/api/exchangesalesorder/createsalesordershipping";
+    private readonly getShippingDataListURL: string = environment.baseUrl + "/api/exchangesalesorder/getsalesordershippinglist";
+    private readonly getShippingforEdit: string = environment.baseUrl + "/api/exchangesalesorder/getshippingedit"
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -184,6 +189,29 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
       return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangesalesorder/sales-order-pick-ticket-history/?soPickTicketId=${pickticketid}`)
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getpickticketHistory(pickticketid));
+        });
+    }
+    getExchangeSalesOrderShipping(exchangeSalesOrderId: number, partId): Observable<any> {
+      const URL = `${this.exchangeSalesorderShippingGet}?exchangeSalesOrderId=${exchangeSalesOrderId}&exchangeSalesOrderPartId=${partId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderShipping(exchangeSalesOrderId, partId));
+        });
+    }
+    createShipping(shippingInfo: ExchangeSalesOrderShipping): Observable<any> {
+      return this.http
+        .post(this.salesorderShippingSave, JSON.stringify(shippingInfo), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createShipping(shippingInfo));
+        });
+    }
+    getShippingDataList(salesOrderId: number): Observable<any> {
+      const URL = `${this.getShippingDataListURL}/${salesOrderId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getShippingDataList(salesOrderId));
         });
     }
 }
