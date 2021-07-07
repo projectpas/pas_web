@@ -363,4 +363,9 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
     }
+    getFormattedNotes(notes) {
+      if (notes != undefined) {
+        return notes.replace(/<[^>]*>/g, '');
+      }
+    }
 }
