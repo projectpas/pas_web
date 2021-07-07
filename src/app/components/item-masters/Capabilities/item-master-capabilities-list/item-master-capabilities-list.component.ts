@@ -208,6 +208,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             filters: {
                 partNo: "",
                 itemMasterId: iMid,
+                MasterCompanyId:this.authService.currentUser.masterCompanyId,
                 isDeleted: this.currentDeleteStatus
             },
             globalFilter: null
