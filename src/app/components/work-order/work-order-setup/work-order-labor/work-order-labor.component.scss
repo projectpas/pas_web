@@ -103,6 +103,10 @@ label {
   margin-right: 0;
   font-weight: normal;
 }
+input[type='tel']{
+  text-align: end !important;
+}
+input[type='tel'],
 input[type='text'],
 input[type='number'],
 select,
@@ -110,6 +114,7 @@ textarea {
   height: 24px !important;
   border-radius: 5px !important;
 }
+
 table.table-bordered td .start-btn {
   font-size: 10.5px !important;
   padding: 5px !important;

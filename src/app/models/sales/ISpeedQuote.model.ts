@@ -72,4 +72,5 @@ export interface ISpeedQuote {
   qtyToBeQuoted: number;
   statusName: string;
   isApproved: boolean;
+  cname:string;
 }

@@ -318,9 +318,9 @@
                     laborForm.hoursorClockorScan === laborMethods.ManualEntry
                   " class="check-flex">
                   <div class="check-flex-div1">
-                    <input type="number" class="form-control check-flex-input" (blur)="
+                    <input maxlength="6" type="tel"    class="form-control check-flex-input" (blur)="
                     calculateHoursDifference(rec);
-                    calculateTaskHours(task);
+                    calculateTaskHours(task); 
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
                     " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;" required/>
@@ -330,7 +330,7 @@
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
+                    " [(ngModel)]="rec.totalMinutes"   max="60"   (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
                   </div>
                  
                 </td>
@@ -340,19 +340,19 @@
                       "/> -->
                
                       <div class="check-flex-div1" >
-                        <input type="number" class="form-control check-flex-input" (blur)="
+                        <input maxlength="6" type="tel"  class="form-control check-flex-input" (blur)="
                         calculateHoursDifference(rec);
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
                         markupChanged(rec, 'row') 
                         " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;"  />
                         <span style="font-size: 17px; margin: 0 5px;">:</span>
-                        <input type="number" class="form-control" (blur)="
+                        <input maxlength="2" type="tel" class="form-control" (blur)="
                         calculateHoursDifference(rec);
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
                         markupChanged(rec, 'row')
-                        " [(ngModel)]="rec.ajdtotalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''"  />
+                        " [(ngModel)]="rec.ajdtotalMinutes"   max="60"  (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''"  />
                       </div>
                     </td>
                   <td class="content-to-end" style="width:70px !important;text-align:right !important">

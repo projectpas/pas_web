@@ -233,13 +233,13 @@
                                             </td>
                                             <td *ngIf="(statusId === 1 || statusId === 5)">
                                                 <input type="number" name="quantity{{i}}"
-                                                    [(ngModel)]="x.quantityReserved" (keypress)="restrictMinus($event)"
+                                                    [(ngModel)]="x.quantityReserved" maxLength="12" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)" (change)="handleQty(x)"
                                                     [disabled]="!x.isParentSelected">
                                             </td>
                                             <td *ngIf="!isSubWorkOrder &&  (statusId === 2  || statusId === 3 || statusId === 4)">
                                                 <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
-                                                    (change)="handleQty(x)" (keypress)="restrictMinus($event)"
+                                                    (change)="handleQty(x)" maxLength="12" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
                                                     [disabled]="!x.isParentSelected">
                                                   
@@ -250,7 +250,7 @@
 
                                             </td>
                                             <td *ngIf="(( statusId === 2  || statusId === 3 || statusId === 4) && isSubWorkOrder)">
-                                                <input type="number" name="quantity{{i}}" [(ngModel)]="x.quantityIssued"
+                                                <input type="number" name="quantity{{i}}" maxLength="12" [(ngModel)]="x.quantityIssued"
                                                     (change)="handleQty(x)" (keypress)="restrictMinus($event)"
                                                     (keyup)="validatePartsQuantity($event,x)"
                                                     [disabled]="!x.isParentSelected">
@@ -344,7 +344,7 @@
                                                 <td *ngIf="(statusId === 1 || statusId === 5)">
                                                     <input type="number" name="quantity1_{{y}}"
                                                         [(ngModel)]="b.quantityReserved"
-                                                        (keypress)="restrictMinus($event)"
+                                                        (keypress)="restrictMinus($event)" maxLength="12"
                                                         (keyup)="validatePartsQuantity($event,b)"
                                                         (input)="childPartValidate($event.target.value, b,1)"
                                                         [disabled]="b.quantityReserved==0">
@@ -353,7 +353,7 @@
 
                                                     <input type="number" name="quantity2_{{y}}"
                                                         [(ngModel)]="b.quantityIssued"
-                                                        (keypress)="restrictMinus($event)"
+                                                        (keypress)="restrictMinus($event)"  maxLength="12"
                                                         (keyup)="validatePartsQuantity($event,b)"
                                                         (input)="childPartValidate($event.target.value, b,1)"
                                                         [disabled]="b.quantityIssued==0">
@@ -413,11 +413,11 @@
                                             <tr *ngFor="let c of x.woReservedIssuedEquParts; let z=index; ">
                                                 <td class="text-center">
                                                     <input type="checkbox" *ngIf="(statusId === 1 || statusId === 5)"
-                                                        [(ngModel)]="c.isChildSelected"
+                                                        [(ngModel)]="c.isChildSelected"  maxLength="12"
                                                         [disabled]="c.quantityReserved==0" name="isChildSelected{{z}}"
                                                         (change)="selectedParts(c,$event)">
 
-                                                    <input type="checkbox"
+                                                    <input type="checkbox"  maxLength="12"
                                                         *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)"
                                                         [(ngModel)]="c.isChildSelected" [disabled]="c.quantityIssued==0"
                                                         name="isChildSelected{{z}}" (change)="selectedParts(c,$event)">
@@ -444,7 +444,7 @@
                                                 <td *ngIf="(statusId === 1 || statusId === 5)">
                                                     <input type="number" name="quantity11_{{z}}"
                                                         [(ngModel)]="c.quantityReserved"
-                                                        (keypress)="restrictMinus($event)"
+                                                        (keypress)="restrictMinus($event)"  maxLength="12"
                                                         (keyup)="validatePartsQuantity($event,c)"
                                                         (input)="childPartValidate($event.target.value, c,2)"
                                                         [disabled]="!c.isChildSelected">
@@ -452,7 +452,7 @@
                                                 <td *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)">
                                                     <input type="number" name="quantity22_{{z}}"
                                                         [(ngModel)]="c.quantityIssued"
-                                                        (keyup)="validatePartsQuantity($event,c)"
+                                                        (keyup)="validatePartsQuantity($event,c)"  maxLength="12"
                                                         (keypress)="restrictMinus($event)"
                                                         (input)="childPartValidate($event.target.value, c,2)"
                                                         [disabled]="!c.isChildSelected">
@@ -872,7 +872,7 @@
 <div *ngIf="!ispickticket">
     <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
         style="min-height: 130px !important;">
-        <p-table   class=" rpo-table-cstm rro-table-cstm materialListTable" id="custome_material"
+        <p-table   class=" rpo-table-cstm rro-table-cstm text-left materialListTable" id="custome_material"
             [columns]="summaryColumns" #materialTble [value]="workOrderMaterialList" [paginator]="true"
             [rows]="pageSize"  selectionMode="multiple"  [reorderableColumns]="true" [metaKeySelection]="true" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]" (onPage)="pageIndexChange($event)">
             <ng-template pTemplate="caption">
@@ -1193,7 +1193,7 @@
         <button type="button" class="close font_chck" (click)="dismissModel()">
             &times;
         </button>
-        <h4 class="modal-title">Pick Item</h4>
+        <h4 class="modal-title">Pick Items</h4>
     </div>
     <div class="modal-body">
         <form #ptiteminterface="ngForm" class="form-horizontal">
@@ -1210,7 +1210,7 @@
                     <tr>
                         <th class="text-left">
                         </th>
-                        <th *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}">
+                        <th *ngFor="let col of pickTicketItemInterfaceheader" >
                             {{col.header}}
                         </th>
                     </tr>
@@ -1224,7 +1224,8 @@
                                 </p-checkbox>
                             </span>
                         </td>
-                        <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+                        <td *ngFor="let col of pickTicketItemInterfaceheader" 
+                         [ngClass]="(col.field == 'qtyToPick' ||col.field == 'qtyAvailable' ||col.field == 'qtyOnHand') ? 'text-right' : ''" pReorderableRowHandle>
                             <ng-container *ngIf="col.field != 'qtyToShip'">
                                 {{part[col.field]}}
                             </ng-container>

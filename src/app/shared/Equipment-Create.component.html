@@ -46,7 +46,7 @@
           {{ eqp.assetTypeName }}
         </td>
         <td class="text-center">
-          <input type="text" (ngModelChange)="getActive()" (keypress)="allowNumberOnly($event)" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
+          <input type="text" (ngModelChange)="getActive()" maxLength="12" (keypress)="allowNumberOnly($event)" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
         <td *ngIf="isWorkFlow">

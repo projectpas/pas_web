@@ -570,7 +570,7 @@ export class CommonService extends EndpointFactory {
   }
 
   getModuleListForObtainOwnerTraceable(masterCompanyId) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/modulelistfordropdown/${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/modulelistfordropdown/${0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getModuleListForObtainOwnerTraceable(masterCompanyId));
     });
   }
@@ -973,10 +973,16 @@ export class CommonService extends EndpointFactory {
   }
 
   getDataWorkScopeByItemMasterCaps(data,type:any) {
-
-    return this.http.get<any>(`${this.baseUrl}/api/workorder/verifiedcapsbyitemmasterandworkscope?ItemMasterId=${type=='rc'? data.itemMasterId.value:data.masterPartId.itemMasterId}&WorkScopeId=${type=='rc'?data.workScopeId:data.workOrderScopeId}&managementStructureId=${data.managementStructureId}&masterCompanyID=${data.masterCompanyId !== undefined ? data.masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getDataWorkScopeByItemMasterCaps(data,type));
-    });
+if(type=='isSubWO'){
+  return this.http.get<any>(`${this.baseUrl}/api/workorder/verifiedcapsbyitemmasterandworkscope?ItemMasterId=${data.itemMasterId}&WorkScopeId=${data.subWorkOrderScopeId}&managementStructureId=${data.managementStructureId}&masterCompanyID=${data.masterCompanyId !== undefined ? data.masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.getDataWorkScopeByItemMasterCaps(data,type));
+  });
+}else{
+  return this.http.get<any>(`${this.baseUrl}/api/workorder/verifiedcapsbyitemmasterandworkscope?ItemMasterId=${type=='rc'? data.itemMasterId.value:data.masterPartId.itemMasterId}&WorkScopeId=${type=='rc'?data.workScopeId:data.workOrderScopeId}&managementStructureId=${data.managementStructureId}&masterCompanyID=${data.masterCompanyId !== undefined ? data.masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.getDataWorkScopeByItemMasterCaps(data,type));
+  });
+}
+   
   }
 // getAllEditID(purchaseOrderId) {
   //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);

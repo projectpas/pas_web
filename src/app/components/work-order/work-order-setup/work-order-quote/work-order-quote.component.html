@@ -95,11 +95,11 @@
                      <label for="accountsReceivableBalance">
                          AR Balance
                      </label>
-                     <input class="form-control" type="number"  (ngModelChange)="getValid()" [(ngModel)]="accountsReceivableBalance" name="accountsReceivableBalance" [disabled]="isView" />
+                     <input class="form-control" type="tel" maxlength="20"  (ngModelChange)="getValid()" [(ngModel)]="accountsReceivableBalance" name="accountsReceivableBalance" [disabled]="isView" />
                  </div>
                  <div class="form-group ">
                      <label> DSO </label>
-                     <input class="form-control" type="text"  maxlength="50" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
+                     <input class="form-control" type="text"  maxlength="256" (ngModelChange)="getValid()" [(ngModel)]="dso" name="DSO" [disabled]="isView" />
                  </div>
                
              </div>

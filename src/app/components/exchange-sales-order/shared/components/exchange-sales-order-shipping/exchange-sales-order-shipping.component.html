@@ -1,3 +1,982 @@
-<p>
-  exchange-sales-order-shipping works!
-</p>
+<div class="card">
+  <div class="card-body p-t-0">
+      <div class="row" *ngIf="!isView">
+          <div class="col-md-12 shipping-div">
+              <label class="input-width-100-percent"></label>
+              <div class="form-group perform-shipping-div" *ngIf="isView == false">
+                  <button type="submit" class="btn  submit-btn btn btn-primary"
+                      [disabled]="disableGeneratePackagingBtn" (click)="generatePackagingSlip()">Generate Packaging
+                      Label</button>&nbsp;
+                  <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedPackagingSlip()">Print Packaging Label</button>&nbsp;
+                  <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableGeneratePackagingBtn" (click)="printSelectedShippingLabel()">Print Shipping
+                      Label</button>&nbsp;
+                  <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn"
+                      (click)="PerformShipping()">Perform Shipping</button>
+              </div>
+          </div>
+      </div>
+      <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex':'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+          style="min-height: 130px !important;">
+          <div class="tableFixHead">
+              <table class="table table-bordered" id="so-table">
+                  <tr class="header-table-width font-10">
+                      <th *ngFor="let summaryColumn of headers">
+                          <span>
+                              {{ summaryColumn.header }}
+                          </span>
+                      </th>
+                      <th colspan="7"></th>
+                      <th *ngIf="isView == false"></th>
+                  </tr>
+                  <ng-container *ngIf="shippingList.length > 0">
+                      <ng-container *ngFor="let summaryPart of shippingList; let rowIndex = index;">
+                          <tbody>
+                              <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                                  <td *ngFor="let summaryColumn of headers" class="summary-column"
+                                      pReorderableRowHandle>
+                                      <span *ngIf="summaryColumn.field != 'itemNo'">
+                                          {{summaryPart[summaryColumn.field]}}
+                                      </span>
+                                  </td>
+                                  <td colspan="7"></td>
+                                  <td *ngIf="isView == false"></td>
+                              </tr>
+                              <tr class="child-header splitship-head child-header-back">
+                                  <th class="background-white"></th>
+                                  <th>Ready?</th>
+                                  <th>Ship Date</th>
+                                  <th>Shipping Num </th>
+                                  <th style="min-width:150px;">AWB</th>
+                                  <th>Pick Ticket Ref</th>
+                                  <th>Line #</th>
+                                  <th style="min-width: 120px;">PN</th>
+                                  <th style="min-width: 200px;">PN Description</th>
+                                  <th style="min-width: 120px;">Stk Line Num</th>
+                                  <th style="min-width: 120px;">Serial Num</th>
+                                  <th style="min-width: 70px;">Qty To Ship</th>
+                                  <th style="min-width: 100px;">Customs Value</th>
+                                  <th style="min-width: 120px;">Commodity Code</th>
+                                  <th *ngIf="isView == false" style="min-width: 120px; position: sticky !important">
+                                      Actions</th>
+                              </tr>
+                              <tr class="child-data splitship-child child-data-back"
+                                  *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
+                                  <td>
+                                      <!-- *ngIf="ship.packagingSlipNo === undefined || ship.packagingSlipNo == ''" -->
+                                      <input id="{{poIndex}}" name="ship.selectedToGeneratePackaging{{poIndex}}"
+                                          type="checkbox" (change)="checkedToGenerate($event, ship);"
+                                          [(ngModel)]="ship.selectedToGeneratePackaging" />
+                                  </td>
+                                  <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
+                                      <label style="color: #0F9D58">Shipped</label>
+                                  </td>
+                                  <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
+                                      <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox"
+                                          (change)="checked($event, ship);" [(ngModel)]="ship.selected" />
+                                  </td>
+                                  <td>
+                                      {{ ship.shipDate | date : "MM/dd/yyyy" }}
+                                  </td>
+                                  <td>
+                                      {{ ship.soShippingNum }}
+                                  </td>
+                                  <td>
+                                      {{ ship.airwayBill }}
+                                  </td>
+                                  <td>
+                                      {{ ship.soPickTicketNumber }}
+                                  </td>
+                                  <td>
+                                      Line {{ ship.itemNo}}
+                                  </td>
+                                  <td>
+                                      {{ ship.partNumber }}
+                                  </td>
+                                  <td>
+                                      {{ ship.partDescription }}
+                                  </td>
+                                  <td>
+                                      {{ ship.stockLineNumber }}
+                                  </td>
+                                  <td>
+                                      {{ ship.serialNumber }}
+                                  </td>
+                                  <td>
+                                      {{ ship.qtyToShip}}
+                                  </td>
+                                  <td>
+                                      {{ ship.customsValue }}
+                                  </td>
+                                  <td>
+                                      {{ ship.commodityCode }}
+                                  </td>
+                                  <td *ngIf="isView == false" class="zui-sticky-col" style="width:107px !important">
+                                      <span *ngIf="ship.packagingSlipNo !== undefined && ship.packagingSlipNo != ''">
+                                          <a class="btn nobg" matTooltip="Print Packaging Slip"
+                                              matTooltipPosition="above" (click)="printPackagingLabel(ship);"><i
+                                                  class="fa fa-print"></i></a>
+                                      </span>
+                                      <span *ngIf="ship.qtyShipped > 0">
+                                          <a class="btn nobg" matTooltip="Print Shipping Label"
+                                              matTooltipPosition="above" (click)="printShippingLabel(ship);"><i
+                                                  class="fa fa-print"></i></a>
+                                      </span>
+                                      <span>
+                                          <button *ngIf="ship.qtyShipped > 0" class="btn nobg font-bold"
+                                              mat-icon-button (click)="viewShipping(ship)" matTooltip="View Shipping"
+                                              matTooltipPosition="above">
+                                              <i class="fa fa-eye"></i>
+                                          </button>
+                                      </span>
+                                      <span>
+                                          <button class="btn nobg font-bold" *ngIf="ship.qtyShipped == 0"
+                                              type="submit" (click)="onSelectPartNumber(ship)"
+                                              matTooltip="Perform Shipping" matTooltipPosition="above"
+                                              [disabled]="!ship.selected">
+                                              <i class="fa fa-plus"></i></button>
+                                      </span>
+                                      <span>
+                                          <button [hidden]="true" class="btn nobg font-bold" mat-icon-button
+                                              (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                              matTooltipPosition="above">
+                                              <i class="fa fa-pencil"></i>
+                                          </button>
+                                      </span>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="shippingList.length == 0">
+                      <tbody>
+                          <tr>
+                              <td colspan="48"
+                                  style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                  No records found
+                              </td>
+                          </tr>
+                      </tbody>
+                  </ng-container>
+              </table>
+          </div>
+      </div>
+      <div *ngIf="partSelected">
+          <form #shippingForm="ngForm">
+              <div class="form-row">
+                  <div class="col-md-6">
+                      <div class="card card-stock">
+                          <div class="card-body">
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Shipping Order Num</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.soShippingNum" name="shippingOrderNum"
+                                          disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Status<span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <select [(ngModel)]="shippingHeader.soShippingStatusId" name="status" required
+                                          [disabled]="isViewShipping">
+                                          <option value="">Select</option>
+                                          <option
+                                              *ngFor="let status of [{'label':'Open', 'id':1}, {'label':'Shipped', 'id':2}, {'label':'In Transit', 'id':3}, {'label':'Received', 'id':4}]"
+                                              [value]="status.id">{{status.label}}</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Open Date <span
+                                              class="clr-red">*</span> </label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <p-calendar [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="shippingHeader.openDate"
+                                          name="openDate" [disabled]="isViewShipping" required></p-calendar>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Customer</label>
+                                  </div>
+                                  <div class="col-md-8" *ngIf="customerDetails">
+                                      <input class="form-control" type="text" [(ngModel)]="customerDetails.name"
+                                          name="customer" disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12" *ngIf="customerDetails">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Cus Code</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="customerDetails.customerCode" name="customerCode" disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Cert Num</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="number" [(ngModel)]="validFor" name="certNum"
+                                          disabled />
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="card card-stock">
+                          <div class="card-body">
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Ship Via <span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <select [(ngModel)]="shippingHeader.shipviaId" [disabled]="isViewShipping"
+                                          name="shipVia" required>
+                                          <option value="">Select</option>
+                                          <option *ngFor="let shipvia of shipViaList" [value]="shipvia.value">
+                                              {{shipvia.label}}</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Shipping Acct Num <span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.shippingAccountNo" name="shippingAccountNo"
+                                          [disabled]="isViewShipping" required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Ship Date<span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <p-calendar [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="shippingHeader.shipDate"
+                                          name="shipDate" [disabled]="isViewShipping" required></p-calendar>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">AWB/Tracking Num<span
+                                              class="clr-red">*</span> </label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.airwayBill"
+                                          name="airwayBill" [disabled]="isViewShipping" required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Weight</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                          maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
+                                          id="shipWeight" title="Export Weight" (keyup)="btnChange()"
+                                          [disabled]="isViewShipping" />
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label class="sale-order-shipping-lable m-l-40">UOM <span class="clr-red"
+                                              *ngIf="shippingHeader.shipWeight">*</span>
+                                      </label>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                          [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
+                                          [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
+                                          [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()"
+                                          [disabled]="isViewShipping">
+                                      </p-dropdown>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">Dimension (L, W, H)</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <span class="display-flex inline-block">
+                                          <input type="number" name="exportLength" class="input-field-value"
+                                              pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                              [(ngModel)]="shippingHeader.shipSizeLength"
+                                              [disabled]="isViewShipping" />&nbsp;
+                                          <input type="number" name="exportWidth" class="input-field-value" pInputText
+                                              pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                              [(ngModel)]="shippingHeader.shipSizeWidth"
+                                              [disabled]="isViewShipping" />&nbsp;
+                                          <input type="number" name="exportHeight" class="input-field-value"
+                                              pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                              [(ngModel)]="shippingHeader.shipSizeHeight"
+                                              [disabled]="isViewShipping" />
+                                      </span>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label class="sale-order-shipping-lable m-l-40">
+                                          UOM <span class="clr-red"
+                                              *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
+                                      </label>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                          [(ngModel)]="shippingHeader.shipSizeUnitOfMeasureId"
+                                          name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
+                                          placeholder="Select" [showClear]="true"
+                                          [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
+                                          (onChange)="btnChange()" [disabled]="isViewShipping"></p-dropdown>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="sale-order-shipping-lable">No of Containers</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <span class="display-flex inline-block">
+                                          <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                              maxlength="10" [(ngModel)]="shippingHeader.noOfContainer"
+                                              name="noOfContainer" id="noOfContainer" title="No Of Container"
+                                              (keyup)="btnChange()" [disabled]="isViewShipping" required />
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <h4 class="heading">Address Details</h4>
+              <div class="form-row">
+                  <div class="col-md-4">
+                      <div class="card card-stock">
+                          <div class="card-header card-height">
+                              <h5 class="text-center card-title">Origin</h5>
+                          </div>
+                          <div class="card-body">
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Name <span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
+                                          (change)="setOriginToAddress(shippingHeader.originSiteId)" required
+                                          [disabled]="isViewShipping">
+                                          <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
+                                              {{site.originName}}</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="workorder-label">Address Line 1<span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.originAddress1" name="originAddress1" disabled
+                                          required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="workorder-label">Address Line 2</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.originAddress2" name="originAddress2"
+                                          disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>City<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.originCity"
+                                          name="originCity" disabled required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>State<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.originState"
+                                          name="originState" disabled required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Zip<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.originZip"
+                                          name="originZip" required disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Country<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.originCountryName" name="originCountryName"
+                                          required disabled />
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="card card-stock">
+                          <div class="card-header card-height">
+                              <h5 class="text-center card-title">Bill To</h5>
+                          </div>
+                          <div class="card-body">
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Name <span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <p-autoComplete field="userName" [(ngModel)]="shippingHeader.soldToName"
+                                          name="soldToName" errorMessage="Records not found" [forceSelection]="true"
+                                          (onSelect)="onBillToSelected($event)" [suggestions]="userBillingList"
+                                          (completeMethod)="filterCustomerNameSold($event)"
+                                          (onKeyUp)="clearAddress('SoldTo', $event.target.value)" [size]="30"
+                                          [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                          class="p-autoComplete-ctsm" [disabled]="isViewShipping">
+                                      </p-autoComplete>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Site <span class="clr-red">*</span>
+                                          <span
+                                              *ngIf="isViewShipping ? false : (shippingHeader.soldToName ? true : false) "
+                                              class="label-span"><a class="fa fa-plus-circle fa-lg"
+                                                  matTooltip="Add Site Name" matTooltipPosition="above"
+                                                  data-toggle="modal" data-target="#createBillingSiteName1"
+                                                  (click)="onClickBillSiteName('Add')"></a></span>
+                                      </label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <select [(ngModel)]="shippingHeader.soldToSiteId"
+                                          (change)="setSoldToAddresses()" [disabled]="isViewShipping"
+                                          name="soldToSite" required>
+                                          <option value="">Select</option>
+                                          <option *ngFor="let site of soldCustomerSiteList" [value]="site.siteID">
+                                              {{site.siteName}}
+                                          </option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="workorder-label">Address Line 1<span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.soldToAddress1" name="soldToAddress1" required
+                                          [disabled]="isViewShipping" disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="workorder-label">Address Line 2</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.soldToAddress2" name="soldToAddress2"
+                                          [disabled]="isViewShipping" disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>City<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToCity"
+                                          name="soldToCity" [disabled]="isViewShipping" required disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>State<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToState"
+                                          name="soldToState" [disabled]="isViewShipping" required disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Zip<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToZip"
+                                          name="soldToZip" [disabled]="isViewShipping" required disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Country<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.soldToCountryName" name="soldToCountryName"
+                                          [disabled]="isViewShipping" required disabled />
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="card card-stock">
+                          <div class="card-header card-height">
+                              <h5 class="text-center card-title">Ship To</h5>
+                          </div>
+                          <div class="card-body">
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Name <span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <p-autoComplete field="userName" [(ngModel)]="shippingHeader.shipToCustomerId"
+                                          name="shipToName" errorMessage="Records not found" [forceSelection]="true"
+                                          (onSelect)="onShipToSelected($event)" [suggestions]="customerNamesList"
+                                          (completeMethod)="filterCustomerName($event)"
+                                          (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
+                                          [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                          class="p-autoComplete-ctsm" [disabled]="isViewShipping">
+                                      </p-autoComplete>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Site <span class="clr-red">*</span>
+                                          <span
+                                              *ngIf="isViewShipping ? false : (shippingHeader.shipToCustomerId ? true : false) "
+                                              class="label-span"><a class="fa fa-plus-circle fa-lg"
+                                                  matTooltip="Add Site Name" matTooltipPosition="above"
+                                                  data-toggle="modal" data-target="#createPOSiteName1"
+                                                  (click)="onClickShipSiteName('Add')"></a></span>
+                                      </label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
+                                          [disabled]="isViewShipping" name="shipToSite" required>
+                                          <option value="">Select</option>
+                                          <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">
+                                              {{site.siteName}}</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="workorder-label">Address Line 1<span
+                                              class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.shipToAddress1" name="shipToAddress1"
+                                          disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label class="workorder-label">Address Line 2</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.shipToAddress2" name="shipToAddress2"
+                                          disabled />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>City<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToCity"
+                                          name="shipToCity" disabled required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>State<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToState"
+                                          name="shipToState" disabled required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Zip<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToZip"
+                                          name="shipToZip" disabled required />
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-12">
+                                  <div class="col-md-4">
+                                      <label>Country<span class="clr-red">*</span></label>
+                                  </div>
+                                  <div class="col-md-8">
+                                      <input class="form-control" type="text"
+                                          [(ngModel)]="shippingHeader.shipToCountryName" name="shipToCountryName"
+                                          disabled required />
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- <div class="form-row"
+                  *ngIf="(shippingHeader.originCountryId && shippingHeader.shipToCountryId) && shippingHeader.originCountryId !=shippingHeader.shipToCountryId"> -->
+              <div class="form-row">
+                  <h4 class="heading" style="text-align: left;">Custom Info &nbsp;<a [ngClass]="addCustomerInfo == true ? 'fa fa-minus-circle fa-lg' : 'fa fa-plus-circle fa-lg'"
+                          matTooltip="Add Custom Info" matTooltipPosition="above" (click)="AddCustomInfo();"></a></h4>
+                  <div class="form-row" *ngIf="addCustomerInfo">
+                      <div class="col-md-4">
+                          <div class="card card-stock">
+                              <div class="card-body">
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>Entry Type <span class="clr-red"
+                                                  *ngIf="addCustomerInfo == true">*</span></label>
+                                          <!-- *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" -->
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryType']"
+                                              [required]="addCustomerInfo == true" name="entryType"
+                                              [disabled]="isViewShipping" />
+                                          <!-- [required]="shippingHeader.originCountryId != shippingHeader.shipToCountryId" -->
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>Entry Num <span class="clr-red"
+                                                  *ngIf="addCustomerInfo == true">*</span></label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryNumber']"
+                                              [required]="addCustomerInfo == true" name="entryNumber"
+                                              [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label class="workorder-label">Entry Commodity Code</label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['commodityCode']"
+                                              name="entryCommodityCode" [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="card card-stock">
+                              <div class="card-body">
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>EPU <span class="clr-red"
+                                                  *ngIf="addCustomerInfo == true">*</span></label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['epu']" name="epu"
+                                              [required]="addCustomerInfo == true" [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>UCR <span class="clr-red"
+                                                  *ngIf="addCustomerInfo == true">*</span></label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['ucr']" name="ucr"
+                                              [required]="addCustomerInfo == true" [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>Master UCR</label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['masterUCR']"
+                                              name="masterUCR" [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label class="workorder-label">Movement Ref No</label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="text"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['movementRefNo']"
+                                              name="MovementRefNo" [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="card card-stock">
+                              <div class="card-body">
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label class="workorder-label">Customs Value <span class="clr-red"
+                                                  *ngIf="addCustomerInfo == true">*</span></label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="number"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['customsValue']"
+                                              [required]="addCustomerInfo == true" name="customsValue"
+                                              [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>Net Mass <span class="clr-red"
+                                                  *ngIf="addCustomerInfo == true">*</span></label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="number"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['netMass']"
+                                              [required]="addCustomerInfo == true" name="netMass"
+                                              [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <div class="col-md-4">
+                                          <label>VAT Value</label>
+                                      </div>
+                                      <div class="col-md-8">
+                                          <input class="form-control" type="number"
+                                              [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['vatValue']"
+                                              name="VATValue" [disabled]="isViewShipping" />
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-row padding-5">
+                  <div class="col-md-12">                        
+                              <button *ngIf="!isView && !isViewShipping" class="btn btn-primary pull-right"
+                                  (click)="save()"
+                                  [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>                          
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createBillingSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog partsList-modal">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                  (click)="resetAddressBillingForm();">&times;</button>
+              <h4 class="modal-title">Add Bill To Details</h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-row">
+                  <form #addBillNameForm="ngForm" class="form-horizontal">
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Is Primary </label>
+                          <input type="checkbox" name="isPrimary" class="form-control col-md-6"
+                              [(ngModel)]="addressFormForBilling.isPrimary" (ngModelChange)="billAddChange()">
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Site Name <span class="clr-red">*</span></label>
+                          <p-autoComplete class="autocomp-customer-cstm" name="siteName"
+                              [(ngModel)]="addressFormForBilling.siteName" [suggestions]="lstfilterBillingSite"
+                              emptyMessage="No Match Found" field="siteName"
+                              (onKeyUp)="checkSiteNameExist($event.target.value)"
+                              (onChange)="checkSiteNameExist($event.target.value)" (onSelect)="checkSiteNameSelect()"
+                              (completeMethod)="filterBillingSite($event);" (ngModelChange)="billAddChange()"
+                              [size]="30" [minLength]="1" [dropdown]="true" required>
+                          </p-autoComplete>
+                          <div *ngIf="isSiteNameAlreadyExists" class="clr-red">
+                              Site Name Already Exists
+                          </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="address1" (change)="billAddChange()"
+                              [(ngModel)]="addressFormForBilling.address1" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Address 2 </label>
+                          <input type="text" class="form-control col-md-6" name="address2" (change)="billAddChange()"
+                              [(ngModel)]="addressFormForBilling.address2">
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">City <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="city" (change)="billAddChange()"
+                              [(ngModel)]="addressFormForBilling.city" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">State <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="stateOrProvince"
+                              (change)="billAddChange()" [(ngModel)]="addressFormForBilling.stateOrProvince" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="postalCode"
+                              (change)="billAddChange()" [(ngModel)]="addressFormForBilling.postalCode" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                          <p-autoComplete field="label" class="pautocomp-cstm" (onSelect)="billAddChange()"
+                              (change)="billAddChange()" [(ngModel)]="addressFormForBilling.countryId" name="country"
+                              [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30"
+                              [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                              [forceSelection]="true" required></p-autoComplete>
+                      </div>
+                      <!-- <div class="form-group col-md-12" style="margin-top: 8px;">
+                            <button type="button" class="btn btn-primary" 
+                            (click)="saveBillingAddress();"  
+                            *ngIf="(!isEditModeBilling) || isEditModeBilling"
+                             [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)" 
+                              data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>
+                      </div> -->
+                  </form>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="saveBillingAddress();"
+                  *ngIf="(!isEditModeBilling) || isEditModeBilling"
+                  [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)"
+                  data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal"
+                  (click)="resetAddressBillingForm();">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="createPOSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog partsList-modal">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                  (click)="resetAddressShippingForm();">&times;</button>
+              <h4 class="modal-title">Add Ship To Details</h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-row">
+                  <form #addSiteNameForm="ngForm" class="form-horizontal">
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Is Primary </label>
+                          <input type="checkbox" name="isPrimary" class="form-control col-md-6"
+                              [(ngModel)]="addressFormForShipping.isPrimary" (ngModelChange)="shipAddChange()">
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Site Name <span class="clr-red">*</span> :</label>
+                          <p-autoComplete class="autocomp-customer-cstm" name="siteName"
+                              [(ngModel)]="addressFormForShipping.siteName" [suggestions]="lstfilterShippingSite"
+                              emptyMessage="No Match Found" field="siteName"
+                              (onKeyUp)="checkShippingSiteNameExist($event.target.value)"
+                              (onChange)="checkShippingSiteNameExist($event.target.value)"
+                              (onSelect)="checkShippingSiteNameSelect()"
+                              (completeMethod)="filterShippingSite($event);" (ngModelChange)="shipAddChange()"
+                              [size]="30" [minLength]="1" [dropdown]="true" required>
+                          </p-autoComplete>
+                          <div *ngIf="isShippingSiteNameAlreadyExists" class="clr-red">
+                              Site Name Already Exists
+                          </div>
+                          <!-- <input type="text" class="form-control col-md-6" name="siteName" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.siteName" required>-->
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="address1" (change)="shipAddChange()"
+                              [(ngModel)]="addressFormForShipping.address1" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Address 2:</label>
+                          <input type="text" class="form-control col-md-6" name="address2" (change)="shipAddChange()"
+                              [(ngModel)]="addressFormForShipping.address2">
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">City <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="city" (change)="shipAddChange()"
+                              [(ngModel)]="addressFormForShipping.city" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">State <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="stateOrProvince"
+                              (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.stateOrProvince"
+                              required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                          <input type="text" class="form-control col-md-6" name="postalCode"
+                              (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.postalCode" required>
+                      </div>
+                      <div class="form-group col-md-12">
+                          <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                          <p-autoComplete field="label" class="pautocomp-cstm" (onSelect)="shipAddChange()"
+                              (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.countryId" name="country"
+                              [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30"
+                              [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                              [forceSelection]="true" required></p-autoComplete>
+                      </div>
+                      <!-- <div class="form-group col-md-12" style="margin-top: 8px;">
+                          <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
+                      <!-- <button type="button" class="btn btn-primary" *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly" [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists) || addressFormForShipping.isPrimary" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+                      </div> -->
+
+                  </form>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping"
+                  (click)="saveShippingAddress();"
+                  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"
+                  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button>
+              <!--resetAddressShippingForm();-->
+              <button type="button" class="btn btn-danger" data-dismiss="modal"
+                  (click)="resetAddressShippingForm();">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
