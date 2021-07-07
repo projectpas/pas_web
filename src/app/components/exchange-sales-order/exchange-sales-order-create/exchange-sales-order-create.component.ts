@@ -59,7 +59,7 @@ import { forkJoin } from "rxjs/observable/forkJoin";
 // import { SalesOrderPartNumberComponent } from "../../sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
 // import { SalesOrderBillingComponent } from "../../sales/order/shared/components/sales-order-billing/sales-order-billing.component";
 // import { SalesOrderAnalysisComponent } from "../../sales/order/sales-order-analysis/sales-order-analysis.component";
-// import { SalesOrderShippingComponent } from "../../sales/order/shared/components/sales-order-shipping/sales-order-shipping.component";
+ import { ExchangeSalesOrderShippingComponent } from "../shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
 // import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { ExchangeSalesOrderPartNumberComponent } from '../shared/components/exchange-sales-order-part-number/exchange-sales-order-part-number.component';
 import { ExchangeSalesOrderPickTicketsComponent } from '../shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component';
@@ -148,6 +148,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   @ViewChild(ExchangeSalesOrderPickTicketsComponent, { static: false }) public exchangeSalesOrderPickTicketsComponent: ExchangeSalesOrderPickTicketsComponent;
   // @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
   // @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
+  @ViewChild(ExchangeSalesOrderShippingComponent, { static: false }) public exchangeSalesOrderShippingComponent: ExchangeSalesOrderShippingComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
@@ -1201,6 +1202,9 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     }
     if (event.index == 2) {
       this.exchangeSalesOrderPickTicketsComponent.refresh(this.id);
+    }
+    if (event.index == 3) {
+      this.exchangeSalesOrderShippingComponent.refresh(this.selectedParts);
     }
   }
 
