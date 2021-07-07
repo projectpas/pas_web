@@ -38,7 +38,7 @@ export class ModuleConstants
         static Vendors_Documents:string="Vendors_Documents";
 
         static Publications:string = "Publications";
-        static PublicationsList:string = "PublicationsList";
+       static PublicationsList:string = "PublicationsList";
         static Publications_GeneralInformation:string = "Publications_GeneralInformation";
         static Publications_PNMapping:string = "Publications_PNMapping";
         static Publications_ViewAircraftInformation:string = "Publications_ViewAircraftInformation";
@@ -70,13 +70,6 @@ export class ModuleConstants
         static Item_ExportInformation:string = "Item_ExportInformation";
         static Stockline:string = "Stockline";
         static GLAccount:string = "GLAccount";
-
-        static Asset_List :string  = "Asset_List";
-        static Asset_Create :string  = "Asset_Create";
-        static Asset_GeneralInformation :string  = "Asset_GeneralInformation";
-        static Asset_Capes :string  = "Asset_Capes";
-        static Asset_Calibration :string  = "Asset_Calibration";
-        static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
 }
 
 export class PermissionConstants
