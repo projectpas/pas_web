@@ -225,7 +225,7 @@
                                                 </div>
                                             </div>
                                         </div> -->
-                                        <div class="form-group">
+                                        <div class="form-group padding-top-5">
                                             <label style="height: 15px;">Customer Name
                                                 <span class="clr-red">*</span>
                                                 <span style="color:blue" class="ng-star-inserted">
@@ -252,7 +252,7 @@
                                                     </div>
                                                 </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group padding-top-4">
                                             <label>Customer Contact<span class="clr-red">*</span></label>
                                             <select [(ngModel)]="salesQuote.customerContactId" required
                                                 [ngModelOptions]="{standalone: true}" name="customerContactId"
@@ -300,12 +300,52 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
+                                            <label style="margin-top:14px">Currency</label>
+                                            <div class="col-md-5">
+                                                <p-dropdown placeholder="Select" (ngModelChange)="onChangeInput()"
+                                                    name="currencyId" [options]="currencyList" appendTo='body'
+                                                    [baseZIndex]="9999" class="p-dropdown-custom-md"
+                                                    [(ngModel)]="salesQuote.currencyId">
+                                                </p-dropdown>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <label>Contract Ref</label>
+                                                <input type="text" class="form-control" name="contractReferenceName"
+                                                [(ngModel)]="salesQuote.contractReferenceName"
+                                                (change)="onChangeInput()" [disabled]="true" />
+                                            </div>
+                                        </div> -->
+                                        <div class="form-group col-md-12">
+                                            <div class="col-md-5" style="padding-left:0px">
+                                                <label style="margin-top:14px">Currency</label>
+                                                <p-dropdown placeholder="Select" (ngModelChange)="onChangeInput()"
+                                                    name="currencyId" [options]="currencyList" appendTo='body'
+                                                    [baseZIndex]="9999" class="p-dropdown-custom-md"
+                                                    [(ngModel)]="salesQuote.currencyId">
+                                                </p-dropdown>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <label style="margin-top:14px">Contract Ref</label>
+                                                <input type="text" class="form-control" name="leadSourceReference"
+                                                    [(ngModel)]="salesQuote.leadSourceReference"
+                                                    (change)="onChangeInput()" [disabled]="true" />
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group">
                                             <label style="margin-top:14px">Contract Ref</label>
                                             <input type="text" class="form-control" name="contractReferenceName"
                                                 [(ngModel)]="salesQuote.contractReferenceName"
                                                 (change)="onChangeInput()" [disabled]="true" />
                                         </div>
+                                        <div class="form-group">
+                                            <label style="margin-top:14px">Currency</label>
+                                            <p-dropdown placeholder="Select" (ngModelChange)="onChangeInput()"
+                                                    name="currencyId" [options]="currencyList" appendTo='body'
+                                                    [baseZIndex]="9999" class="p-dropdown-custom-md"
+                                                    [(ngModel)]="salesQuote.currencyId">
+                                                </p-dropdown>
+                                        </div> -->
                                         
                                         <!-- <div class="form-group" style="padding-top: 24px">
                                             <label>Valid For (Days)<span class="clr-red">*</span></label>
@@ -374,7 +414,7 @@
                                                 [minLength]="1" [dropdown]="true">
                                             </p-autoComplete>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group padding-top-4">
                                             <label>CSR</label>
                                             <p-autoComplete class=" autocomp-customer-cstm"
                                                 name="customerServiceRepName"

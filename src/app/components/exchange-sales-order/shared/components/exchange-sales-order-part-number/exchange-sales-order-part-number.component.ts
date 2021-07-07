@@ -584,4 +584,23 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
     this.salesReserveModal.close();
     //this.refreshParts();
   }
+  salesOrderObj: any;
+  refreshParts() {
+    this.exchangeSalesOrderService.getSalesOrder(this.exchangeSalesOrderId).subscribe(res => {
+      this.salesOrderObj = res[0].salesOrder;
+      let partList: any[] = res[0].parts;
+
+      if (this.selectedParts.length > 0)
+        this.selectedParts = [];
+
+      for (let i = 0; i < partList.length; i++) {
+        let selectedPart = partList[i];
+        let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToView(selectedPart);
+        this.selectedParts.push(partNumberObj);
+      }
+
+      this.exchangeSalesOrderService.selectedParts = this.selectedParts;
+      this.refresh();
+    });
+  }
 }

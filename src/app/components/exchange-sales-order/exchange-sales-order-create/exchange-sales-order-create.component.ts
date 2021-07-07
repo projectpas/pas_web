@@ -301,6 +301,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
           this.soSettingsList = settingList;
         }
         this.customerDetails = result[0];
+        debugger;
         this.getCustomerDetails();
         this.setTypesOfWarnings(result[2]);
         this.setAccountTypes(result[3]);
@@ -1196,6 +1197,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   onTabChange(event) {
     if (event.index == 0) {
       this.exchangeSalesOrderPartNumberComponent.refresh();
+      this.exchangeSalesOrderPartNumberComponent.refreshParts();
     }
     if (event.index == 1) {
       this.showAddresstab = true;
