@@ -381,19 +381,14 @@ export class NTAEAlternateComponent implements OnInit {
   getAuditHistory(content, row) {
     this.isSpinnerVisible = true;
     this.showHistory = true;
-    this.itemser
-      .getnhatlaaltequparthistory(row.itemMappingId)
-      .subscribe((results) => {
-        this.nhaTlaHistory = results;
-        this.modal = this.modalService.open(content, {
-          size: "lg",
-          backdrop: "static",
-          keyboard: false,
+    this.itemser.getnhatlaaltequparthistory(row.itemMappingId).subscribe(
+        results => {
+            this.nhaTlaHistory = results;
+            this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
+            this.isSpinnerVisible = false;
         });
-        this.isSpinnerVisible = false;
-      });
-  }
-  dismissModel() {
+}
+dismissModel() {
     this.modal.close();
     this.nhaTlaHistory = [];
   }

@@ -284,6 +284,10 @@ import { ExchangeSalesOrderEndpointService } from './services/exchangesalesorder
 import { ExchangeSalesOrderService } from './services/exchangesalesorder.service';
 import { ExchangeSalesOrderMultiPickTicketComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
 import { CommonPublicationViewModule } from './components/common-components/common-publicationView/common-publicationView.module';
+import { ExchangeSalesOrderShippingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-shipping-label/exchange-sales-order-shipping-label.component";
+import { ExchangeSalesOrderPackagingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-Packaging-Label/exchange-sales-order-Packaging-Label.component";
+import { ExchangeSalesOrderMultiPackagingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-Packaging-Label/exchange-sales-order-multi-Packaging-Label.component";
+import { ExchangeSalesOrderMultiShippingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-shipping-label/exchange-sales-order-multi-shipping-label.component";
 @NgModule({
   imports: [
     CardModule,
@@ -354,7 +358,11 @@ import { CommonPublicationViewModule } from './components/common-components/comm
     ResetPasswordComponent,
     ResetPassComponent,
     ExchangeSalesOrderPickTicketComponent,
-    ExchangeSalesOrderMultiPickTicketComponent
+    ExchangeSalesOrderMultiPickTicketComponent,
+    ExchangeSalesOrderShippingLabelComponent,
+    ExchangeSalesOrderPackagingLabelComponent,
+    ExchangeSalesOrderMultiPackagingLabelComponent,
+    ExchangeSalesOrderMultiShippingLabelComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -579,7 +587,11 @@ import { CommonPublicationViewModule } from './components/common-components/comm
     AssetInventoryViewComponent,
     AuditComponentComponent,
     ExchangeSalesOrderPickTicketComponent,
-    ExchangeSalesOrderMultiPickTicketComponent
+    ExchangeSalesOrderMultiPickTicketComponent,
+    ExchangeSalesOrderShippingLabelComponent,
+    ExchangeSalesOrderPackagingLabelComponent,
+    ExchangeSalesOrderMultiPackagingLabelComponent,
+    ExchangeSalesOrderMultiShippingLabelComponent
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],

@@ -16,7 +16,7 @@ export class ModuleConstants
     static Customers_Warnings:string = "Customers_Warnings";
     static Customers_Documents:string = "Customers_Documents";
 
-    static Employees:string = "Employees";
+        static Employees:string = "Employees";
        static EmployeesList:string = "EmployeesList";
         static Employees_GeneralInformation:string = "Employees_GeneralInformation";
         static Employees_Certification:string = "Employees_Certification";
@@ -69,6 +69,7 @@ export class ModuleConstants
         static Item_ExchangeLoan:string = "Item_ExchangeLoan";
         static Item_ExportInformation:string = "Item_ExportInformation";
         static Stockline:string = "Stockline";
+        static Stockline_Adjustment:string = "Stockline_Adjustment";
         static GLAccount:string = "GLAccount";
 
         static Asset_List :string  = "Asset_List";

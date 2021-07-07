@@ -74,5 +74,6 @@ export class SpeedQuote implements ISpeedQuote {
   qtyToBeQuoted: number;
   statusName: string;
   isApproved: boolean;
+  cname:string;
   constructor() { }
 }
