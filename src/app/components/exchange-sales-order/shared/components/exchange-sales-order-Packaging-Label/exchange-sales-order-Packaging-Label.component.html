@@ -1,0 +1,489 @@
+<div class="modal-header">
+  <!-- <h4 class="modal-title" id="modal-basic-title"></h4> -->
+  <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+</div>
+<div class="modal-content" id="PackagingSlip">
+  <div class="modal-body">
+      <form id="" name="" action="#" method="post" onsubmit="return false;">
+          <div class="image">
+              <div style="padding: 0; margin: 0;">
+                  <div>
+                      <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                          <!-- <div class="logo-block">
+                              <img src="{{this.endPointURL + this.management.logo}}" width="130" /> </div>
+                          <div class="clear"></div>
+                          <hr /> -->
+                          <div class="col-sm-12 invoice-border">
+                          <div class="col-sm-8 very-first-block">
+                              <div class="col-sm-12 address-block" style="width:100%;display:flex;">
+                                  <div class="col-sm-6" style="width:50%"><img class="logo"
+                                          src="{{this.endPointURL + this.management.logo}}"/></div>
+                                          <div class="col-sm-6" style="width:50%;padding-top:15px;margin-left:20px">
+                                          <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{this.management.companyName}}</label>
+                                  </div>
+                                 
+                                  <!-- <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-3 first-block-label">Logo/Slogan :</label>
+                                      <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                  </div>
+                                  <br /><br />
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-3 first-block-label">Tagline :</label>
+                                      <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                  </div>
+                                  <br /><br /> -->
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{this.management.address1}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{this.management.address2}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{this.management.city}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{this.management.stateOrProvince}}</label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-12 first-block-label"
+                                          disabled>{{this.management.postalCode}}</label>
+                                  </div>
+                                  <!-- <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-3 first-block-label">Country :</label>
+                                      <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                  </div>
+                                  <div class="col-sm-12 first-block-name">
+                                      <label class="col-sm-3 first-block-label">Phone :</label>
+                                      <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                  </div> -->
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-4 second-block border-height">
+                              <h3 style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">Packing Slip</h3>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Packaging Slip Id</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{this.salesOrder.packagingSlipNo}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%"> Invoice Num</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{this.salesOrder.invoiceNo}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Invoice Date & Time</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{this.salesOrder.invoiceDate | date: 'MM/dd/yyyy h:mm a '}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Exch SO Num</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{this.salesOrder.exchangeSalesOrderNumber}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Num of Pieces</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{this.salesOrder.numberOfItems}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Num of Containers</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{this.salesOrder.noOfContainer}}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Prepared By</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%" disabled>{{ fullName }}</label>
+                              </div>
+                              <div class="second-block-div">
+                                  <label class="col-sm-6 second-block-label" style="width:100%">Date Printed</label>
+                                  <label class="col-sm-6 second-block-label" style="width:100%"
+                                      disabled>{{todayDate | date: 'MM/dd/yyyy h:mm a ' }}</label>
+                              </div>
+                              <!-- <div class="second-block-div">
+                                  <label class="col-sm-4 second-block-label">Page</label>
+                                  <label class="col-sm-4 second-block-label" style="width:30%" disabled></label>
+                              </div> -->
+                          </div>
+                      </div>
+                          <div class="col-sm-12 first-block-sold-bottom">
+                              <div class="first-block-sold col-sm-6">
+                                  <label class="label-margin"><b>Sold To:</b></label>
+                                  <div class="first-block-sold-to">
+                                     
+                                      <div class="sold-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.customerName}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.custToAddress1}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.custToAddress2}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.custToCity}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.custToState}},{{this.salesOrder.custToCountry}}</label>
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-6 first-block-label" disabled>Zip
+                                          </label> -->
+                                          <!-- <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.custToCountry}}</label> -->
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-6 first-block-label" disabled>Country
+                                          </label> -->
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-6 first-block-label" disabled>Email
+                                          </label> -->
+                                      </div>
+                                      <div class="sold-block-div">
+                                          <!-- <label class="col-sm-6 first-block-label" disabled>Attn
+                                          </label> -->
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="first-block-ship col-sm-6">
+                                  <label class="label-margin"><b> Ship To:</b></label>
+                                  <div class="first-block-ship-to">
+                                      
+                                      <div class="ship-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToContactName}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToAddress1}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToAddress2}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToCity}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToState}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToPostalCode}},{{this.salesOrder.shipToCountry}}</label>
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-12 first-block-label"
+                                              disabled>
+                                              {{this.salesOrder.shipToCountry}}</label> -->
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-6 first-block-label" disabled>Email
+                                          </label> -->
+                                      </div>
+                                      <div class="ship-block-div">
+                                          <!-- <label class="col-sm-6 first-block-label" disabled>Attn
+                                          </label> -->
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="clear"></div>
+                          <!-- <hr /> -->
+                          <div class="clear"></div>
+                          <div class="col-sm-12">
+                              <table rules=none class="parttable table-margins packing-slip-table">
+                                  <thead>
+                                      <tr>
+                                          <th>PO/RO NUM</th>
+                                          <th>Salesperson</th>
+                                          <th>Buyer</th>
+                                          <!-- <th>Credit Terms</th> -->
+                                          <th>Shipping Terms</th>
+                                          <th>Ship Via</th>
+                                          <th>Ship Date</th>
+                                          <th>AWB</th>
+                                          <th>Ship Order Num</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.poroNum}}</td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.salesPersonName}}</td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.customerContactName}}
+                                          </td>
+                                          <!-- <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.creditTerm}}</td> -->
+                                          <td style="vertical-align: top;border-right:1px solid black;"></td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.shipViaName}}</td>
+                                          <td style="vertical-align: top;border-right:1px solid black;" >
+                                              {{this.salesOrder.shipDate | date : "MM/dd/yyyy"}}</td>
+                                          <td style="vertical-align: top;border-right:1px solid black;" >{{this.salesOrder.awb}}</td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">{{this.salesOrder.shippingOrderNo}}</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div class="clear"></div>
+                          <!-- <hr /> -->
+                          <div class="clear"></div>
+                          <div class="col-sm-12">
+                              <table rules=none class="parttable table-margins">
+                                  <thead>
+                                      <tr>
+                                          <th class="width-110">Item Num</th>
+                                          <th>PN</th>
+                                          <th style="text-align:center" class="width-90">Stk Line Num</th>
+                                          <th>PN Description</th>
+                                          <th class="width-80">Serial Num</th>
+                                          <th>UOM</th>
+                                          <th>Cond</th>
+                                          <th class="width-80">Qty Shipped</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <ng-container *ngFor="let part of this.parts let i=index">
+                                        <tr>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{i+1}}
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>
+                                                          <img src="{{part.partBarcode}}" style="width: 100px;" alt="barcode" width="98%" />
+                                                      </td>
+                                                  </tr>
+                                              </table>
+                                          </td>
+
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.partNumber}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.stockLineNumber}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.partDescription}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.serialNumber}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.uom}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.conditionDescription}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                          <td style="vertical-align: top;border-right:1px solid black;">
+                                              <table class="border-none">
+                                                  <tr>
+                                                      <td>
+                                                          {{part.qtyPicked}}
+                                                      </td>
+                                                  </tr>
+                                                 
+                                              </table>
+                                          </td>
+                                            </tr>
+                                            
+                                         
+                                            <!-- <tr>
+                                              <td>{{i+1}}</td>
+                                              <td>{{part.partNumber}}</td>
+                                              <td>{{part.stockLineNumber}}</td>
+                                              <td>{{part.partDescription}}</td>
+                                              <td>{{part.serialNumber}}</td>
+                                              <td>{{part.uom}}</td>
+                                              <td>{{part.conditionDescription}}</td>
+                                              <td class="text-right"> {{part.qtyPicked}} </td>
+                                          </tr>
+                                          <tr>
+                                              <td style="border:1px solid black; max-width: 60px">
+                                              
+                                                  <img src="{{part.partBarcode}}" alt="barcode" width="100%" />
+                                              </td>
+                                              <td colspan="7"></td>
+                                          </tr>
+                                          <tr>
+                                              <td style="background:#f4f4f4">
+                                              </td>
+                                              <td style="background:#f4f4f4" colspan="7"></td>
+                                          </tr> -->
+                                      </ng-container>
+                                      <tr>
+                                          <td rowspan="3" style="border:1px solid black" colspan="8">Notes</td>
+                                      </tr>
+                                      <tr></tr>
+                                  <tr></tr>
+                                  <tr></tr>
+                                      <tr>
+                                          <td colspan="8">
+                                              <p>
+                                                  Hazardous Material Warning:
+                                              </p>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="border-bottom:1px solid black" colspan="8">
+                                              <p>Before you work with any component, assembly or product referred to
+                                                  in this document, please read, understand and follow all safety
+                                                  instructions and take all safety precautions including instructions
+                                                  from the
+                                                  manufacturer, the material safety data sheet (MSDS), the component
+                                                  Repair Manual, service information letters, all operations letters
+                                                  and government regulations. An MSDS gives instructions on how you
+                                                  must
+                                                  safely use, store and discard chemicals. Get instructions from your
+                                                  employer on how you must safely use, store and discard chemicals.
+                                                  Chemicals may cause injury to you or make you sick. Personal injury
+                                                  or
+                                                  disease may result if safety instructions are not followed.</p>
+                                          </td>
+                                      </tr>
+                                      <tr></tr>
+                                  <tr></tr>
+                                  <tr></tr>
+                                      <!-- <tr>
+                                          <td colspan="8"></td>
+                                      </tr>
+                                      <tr>
+                                          <td colspan="8"></td>
+                                      </tr>
+                                      <tr>
+                                          <td rowspan="3" style="border:1px solid black" colspan="8">Notes</td>
+                                      </tr>
+                                      <tr></tr>
+                                      <tr></tr>
+                                      <tr></tr>
+                                      <tr>
+                                          <td colspan="8">
+                                              <p>
+                                                  Hazardous Material Warning:
+                                              </p>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="border-bottom:1px solid black" colspan="8">
+                                              <p>Before you work with any component, assembly or product referred to
+                                                  in this document, please read, understand and follow all safety
+                                                  instructions and take all safety precautions including instructions
+                                                  from the
+                                                  manufacturer, the material safety data sheet (MSDS), the component
+                                                  Repair Manual, service information letters, all operations letters
+                                                  and government regulations. An MSDS gives instructions on how you
+                                                  must
+                                                  safely use, store and discard chemicals. Get instructions from your
+                                                  employer on how you must safely use, store and discard chemicals.
+                                                  Chemicals may cause injury to you or make you sick. Personal injury
+                                                  or
+                                                  disease may result if safety instructions are not followed.</p>
+                                          </td>
+                                      </tr>
+                                      <tr></tr>
+                                      <tr></tr>
+                                      <tr></tr> -->
+                                  </tbody>
+                              </table>
+                          </div>
+                          <br />
+                          <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode" class="image" /> -->
+                          <img src="{{this.salesOrder.packagingLabelBarcode}}" alt="barcode"
+                              style="padding-left: 7px; padding-top: 5px;" />
+                          <p class="barcode-name"></p>
+                          <div class="clear"></div>
+                          <!-- <hr /> -->
+                          <div class="clear"></div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="printContent()">Print</button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>

@@ -59,6 +59,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   selectedPartActionType: any;
   @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
   salesReserveModal: NgbModalRef;
+  columns: any[];
   constructor(private exchangeSalesOrderService: ExchangeSalesOrderService,
     private authService: AuthService,
     private modalService: NgbModal,
@@ -68,6 +69,20 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
     }
 
   ngOnInit() {
+    //this.getDefaultCurrency();
+    this.exchangeSalesOrderService.getSearchPartObject().subscribe(data => {
+      this.query = data;
+    });
+    this.exchangeSalesOrderService.getSelectedParts().subscribe(data => {
+      if (data) {
+        this.selectedParts = data;
+      } else {
+        this.selectedParts = [];
+      }
+    });
+    this.filterParts();
+
+    this.columns = [];
     this.initColumns();
   }
   initColumns() {
