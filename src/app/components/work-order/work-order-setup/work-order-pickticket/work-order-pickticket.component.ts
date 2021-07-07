@@ -76,7 +76,6 @@ export class WorkOrderPickticketComponent implements OnInit {
   ngOnInit() {
     this.initColumns();
     this.onSearch();
-    console.log("hello",this.workFlowWorkOrderId)
   }
 
   attachmoduleList: any = [];
