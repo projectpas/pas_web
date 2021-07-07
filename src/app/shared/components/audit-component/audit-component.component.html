@@ -20,7 +20,8 @@
             <tbody class="audithistory-cstm">
                 <tr *ngFor="let audit of auditHistory; let i = index;">
                     <ng-container *ngFor="let headername of auditHistoryHeader; let j = index;">
-                        <td *ngIf="headername.isCheckbox == false  && headername.isDate == false && headername.field != 'memo'"
+                        <td [ngClass]="{'text-right': headername.field == 'amount' ||  headername.field == 'unitCost' || headername.field == 'extendedCost' || headername.field == 'quantity' }"
+                        *ngIf="headername.isCheckbox == false  && headername.isDate == false && headername.field != 'memo'"
                             [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
                             {{audit[headername.field]}}</td>
                         <td *ngIf="headername.isDate == true  "

@@ -59,15 +59,15 @@
         </ng-template>
         <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
             <tr>
-                <td class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
+                <td class="table-column-width" style="text-align:left !important" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
                     <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                         {{rowData[col.field]}}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                        {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
+                        {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
                     </ng-container>
                 </td>
-                <td class="table-column-width" *ngIf="selectedTab == 'Equivalency'">
+                <td class="table-column-width" style="text-align:left !important" *ngIf="selectedTab == 'Equivalency'">
                     <a *ngFor="let fileItem of rowData?.attachmentDetails" class="filelink"
                        (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
                        download>{{fileItem?.ad.fileName}}</a>
@@ -278,7 +278,7 @@
         <app-pn-header [partData]="partData"></app-pn-header>
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
-                <table class="table table-bordered header-table-width" *ngIf="nhaTlaHistory.length> 0 else noDatavailable">
+                <table class="table table-bordered" style="white-space: nowrap;" *ngIf="nhaTlaHistory.length> 0 else noDatavailable">
                     <thead>
                         <tr>
 
@@ -350,9 +350,9 @@
                                    download>{{fileItem?.ad.fileName}}</a>
                             </td>
                             <!-- <td>{{ntae.isActive}}</td> -->
-                            <td>{{ntae.createdDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
+                            <td>{{ntae.createdDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                             <td>{{ntae.createdBy}}</td>
-                            <td>{{ntae.updatedDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
+                            <td>{{ntae.updatedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                             <td>{{ntae.updatedBy}}</td>
 
                             <td class="text-center width-60">

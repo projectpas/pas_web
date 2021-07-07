@@ -19,6 +19,7 @@ import { IExchangeSalesOrderListView } from "../models/exchange/IExchangeSalesOr
 import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
 import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
+import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrderShipping";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
     roles: Role[] | string[];
@@ -325,4 +326,17 @@ export class ExchangeSalesOrderService {
     getpickticketHistory(pickticketid) {
       return this.exchangeSalesOrderEndpointService.getpickticketHistory(pickticketid)
     }
+    getExchangeSalesOrderShipping(exchangeSalesOrderId, partId) {
+      return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderShipping(exchangeSalesOrderId, partId);
+    }
+    createShipping(salesOrderShipping: ExchangeSalesOrderShipping): Observable<any> {
+      return Observable.forkJoin(
+        this.exchangeSalesOrderEndpointService.createShipping(salesOrderShipping)
+      );
+    }
+    getShippingDataList(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.getShippingDataList(salesOrderId)
+    );
+  }
 }
