@@ -188,7 +188,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                exclusionsIds.push(acc.itemMasterId);
             })
         } 
-        this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, exclusionsIds)
+        this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, exclusionsIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.partCollection = res.map(x => {

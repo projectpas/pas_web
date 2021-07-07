@@ -5,6 +5,8 @@ import { CommonService } from "../services/common.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 import { WorkFlowtService } from "../services/workflow.service";
+import { AuthService } from '../services/auth.service';
+
 declare var $ : any;
 @Component({
     selector: 'grd-expertise',
@@ -24,7 +26,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     isSpinnerVisible = false;
     modal: NgbModalRef;
 
-    constructor(private alertService: AlertService,
+    constructor(private alertService: AlertService,private authService: AuthService,
         private commonService: CommonService, private modalService: NgbModal, private wflwService:WorkFlowtService) {
     }
 
@@ -36,6 +38,11 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         this.row.taskId = this.workFlow.taskId;
         this.getExpertiseData();
     }
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+          ? this.authService.currentUser.masterCompanyId
+          : null;
+      }
 
     getExpertiseData() {
         let expertiseIds = []; 
@@ -54,7 +61,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
 
         //     .subscribe(res => {
             const strText = '';
-            this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 0, expertiseIds.join()).subscribe(res => {
+            this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 0, expertiseIds.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.expertiseTypes = res.map(x => {
                     return {

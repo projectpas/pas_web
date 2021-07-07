@@ -429,7 +429,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayEmployeelist.length == 0) {
 			this.arrayEmployeelist.push(0);
 		}
-		this.commonService.autoCompleteDropdownsCertifyEmployeeByMS(strText, true, 20, this.arrayEmployeelist.join(), this.currentUserManagementStructureId)
+		this.commonService.autoCompleteDropdownsCertifyEmployeeByMS(strText, true, 20, this.arrayEmployeelist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId)
 			.subscribe(response => {
 				this.allEmployeeList = response;
 				this.certifyByNames = this.allEmployeeList;

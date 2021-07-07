@@ -12,6 +12,8 @@ import { WorkOrderService } from '../../services/work-order/work-order.service';
 import { WorkOrderType } from '../../models/work-order-type.model';
 import { WorkOrderSettingsService } from '../../services/work-order-settings.service';
 import { CommonService } from '../../services/common.service';
+import { AuthService } from '../../services/auth.service';
+
 @Component({
     selector: 'app-create-wo-quote-settings',
     templateUrl: './create-wo-quote-settings.component.html',
@@ -45,7 +47,7 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
     workOrderTypes: WorkOrderType[];
     moduleName: string = "WO Quote Settings";    
 
-    constructor(private router: Router,
+    constructor(private router: Router,private authService: AuthService,
         private commonService: CommonService, private workOrderService: WorkOrderService, private alertService: AlertService, private receivingCustomerWorkOrderService: WorkOrderSettingsService){
     }
 
@@ -86,7 +88,7 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         }else{
             this.setEditArray.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'ID', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
       this.workOrderTypes = res.map(x => {
                 return {
                     id: x.value,

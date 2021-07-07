@@ -115,7 +115,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
                 measurementIds.push(element.itemMasterId);
             });
         }
-        this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, measurementIds)
+        this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, measurementIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.partCollection = res.map(x => {
