@@ -170,9 +170,10 @@
 					</td>
 					<td >
 						<!-- [required]="rowData.isVerified==true" -->
+						<!-- [minDate]="rowData.addedDate" -->
 					  <p-calendar
 					  	class="pcal-item-capes"
-						[(ngModel)]="rowData.verifiedDate"
+						[(ngModel)]="rowData.verifiedDate" 
 						[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
 						[disabled]="rowData.isVerified"
 						appendTo='body' [baseZIndex]="9999"

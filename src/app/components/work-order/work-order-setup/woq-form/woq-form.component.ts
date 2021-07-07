@@ -100,8 +100,36 @@ GetWorkOrderQoutePrintFormData() {
         <head>
           <title>Print tab</title>
           <style>
+          @page { size: auto;  margin: 0mm; }
+              
+          @media print
+{
+@page {
+margin-top: 0;
+margin-bottom: 0;
+}
+
+@page {size: landscape}
+} 
+span {
+/* font-weight: normal; */
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 10.5px !important;
+font-weight: 700;
+}
+          table {font-size:12px !important}        
+table thead { background: #808080;}    
+
+table, thead, td {
+border: 1px solid black;
+border-collapse: collapse;
+} 
+table, thead, th {
+border: 1px solid black;
+border-collapse: collapse;
+} 
           table {
-            width: 100.6%;
+            width: 100.2%;
            overflow: auto !important;
           }
           
@@ -459,7 +487,7 @@ GetWorkOrderQoutePrintFormData() {
           .table-margins{
             /* margin-top:20px; */
            margin-top:-5px;
-           margin-left:-3px;
+           margin-left:-2px;
           }
           .invoice-border{border-bottom: 1px solid;
              min-height: 200px;

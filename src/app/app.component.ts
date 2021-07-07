@@ -204,6 +204,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.newVendorClick();
         } : label == "Create Employee" ? (event?: any) => {
           this.newEmployeeClick();
+        } : label == "Logout" ? (event?: any) => {
+          this.logout();
         } : label == "Create Legal Entity" ? (event?: any) => {
           this.newLegalEntityClick();
         } : null

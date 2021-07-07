@@ -156,7 +156,7 @@
           <td class="content-to-end table-column-width">{{dt.width}}</td>
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
-          <td class="text-right table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
+          <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
           <td class="value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
           [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
@@ -260,7 +260,7 @@
           <td class="content-to-end table-column-width">{{dt.width}}</td>
           <td class="table-column-width">{{dt.dimensionUOM}}</td>
           <td class="table-column-width">{{dt.currency}}</td>
-          <td class="text-right table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
+          <td class="content-to-end table-column-width"><span *ngIf="dt.amount">{{formateCurrency(dt.amount)}}</span></td>
           <td class="table-column-width value m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
           [matTooltip]="parsedText(dt.memo)" [innerHTML]="dt.memo"></td> 
           <!-- <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]"> </span> -->
@@ -340,13 +340,13 @@
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
-        <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalTaskAmount(rowData))}}</strong></td>
+        <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalTaskAmount(rowData))}}</strong></td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <ng-container *ngIf="isQuote">
           <td class="table-column-width">&nbsp;</td>
           <!-- <td>{{getTotalBillingRate()}}</td> -->
-          <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalTaskBillingAmount(rowData))}}</strong></td>
+          <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalTaskBillingAmount(rowData))}}</strong></td>
           <td class="table-column-width" *ngIf="!isView">&nbsp;</td>
         </ng-container>
       </tr>
@@ -372,13 +372,13 @@
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
-        <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalAmount())}}</strong></td>
+        <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalAmount())}}</strong></td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <td class="table-column-width">&nbsp;</td>
         <!-- <td>{{getTotalBillingRate()}}</td> -->
         <ng-container *ngIf="costPlusType != 3">
-            <td class="text-right table-column-width"><strong>{{formateCurrency(getTotalBillingAmount())}}</strong></td>
+            <td class="content-to-end table-column-width"><strong>{{formateCurrency(getTotalBillingAmount())}}</strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
           <td class="table-column-width">
@@ -515,7 +515,7 @@
                         class="form-control w50" required />H
                     </td> -->
                     <td>
-                      <input type="number" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
+                      <input type="tel" maxlength="10" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
                         class="form-control w50" />
                     </td>
                     <td>
@@ -523,11 +523,11 @@
                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                       </p-dropdown>
                     </td>
-                    <td><input type="number" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
+                    <td><input type="tel" maxlength="10" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
+                    <td><input type="tel" maxlength="10" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
+                    <td><input type="tel" maxlength="10" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
                         class="form-control w50" /></td>
                     <td>
                       <p-dropdown placeholder="Select UOM"  [required]="f.width" appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
@@ -540,8 +540,8 @@
                       </p-dropdown>
                     </td>
                     <td>
-                      <input type="text"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
-                        class="form-control w50 text-right" (change)="f.amount = formateCurrency(f.amount);" required />
+                      <input type="text" maxlength="22"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
+                        class="form-control w50 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
                     </td>
                     <!-- <td>
                       <input type="checkbox" name="fixed{{ i }}" #fixed="ngModel" [(ngModel)]="f.isFixedFreight" />

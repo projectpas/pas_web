@@ -4,6 +4,7 @@
 /* .ui-radiobutton-label{
   color: #ffffff !important;
 } */
+input[type='tel'],
 input[type='text'],
 input[type='number'],
 select,
@@ -11,6 +12,10 @@ textarea {
   height: 24px !important;
   border-radius: 5px !important;
 }
+input[type='tel']{
+  text-align: end !important;
+}
+ 
 .select-read-only{
   border: none;
   -webkit-appearance: none;

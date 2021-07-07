@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WorkFlowtService } from '../../../../services/workflow.service';
 // import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Billing } from '../../../../models/work-order-billing.model';
 import * as moment from 'moment';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
@@ -556,12 +556,15 @@ export class WorkOrderAddComponent implements OnInit {
                 customerId: data.customerDetails,
                 customerPhoneNo: data.customerPhoneNo != null ? data.customerPhoneNo : data.customerDetails.customerPhone,
                 partNumbers: data.partNumbers.map((x, index) => {
+                    x.masterPartId= x.woPart,
                     // x.technicianName='Suresh-33 Reddy';
+                    this.getAllWorkScpoes('',x,index);
                     this.getStockLineByItemMasterId(x.masterPartId, x.conditionId, index);
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId, index);
+                  setTimeout(() => {
                     this.getWorkFlowByPNandScope(null, x, 'onload', index);
-                    this.getAllWorkScpoes('',x,index);
+                  },600);
                     if (this.workorderSettings) {
                         x.workOrderStageId = x.workOrderStageId ? x.workOrderStageId : this.workorderSettings.defaultStageCodeId;
                         x.workOrderPriorityId = x.workOrderPriorityId ? x.workOrderPriorityId : this.workorderSettings.defaultPriorityId;
@@ -612,7 +615,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
 
 if(this.router.url.includes('workordersmodule/workorderspages/app-work-order-receivingcustworkid')){
-
+    this.triggherWorkScopeData(this.workOrderGeneralInformation.partNumbers[0],0);
 }else{
     this.showWaringForPublication();
 }
@@ -1425,9 +1428,11 @@ triggerSaveApi(){
 
     onSelectedPartNumber(object, currentRecord, index, from) {
         if (from == 'html') {
+            currentRecord.masterCompanyId=this.currentUserMasterCompanyId;
             currentRecord.workOrderScopeId = object.workOderScopeId;
             if (this.workorderSettings) {
                 currentRecord.conditionId = (this.workorderSettings.defaultConditionId != 0 && this.workorderSettings.defaultConditionId != null) ? this.workorderSettings.defaultConditionId : object.conditionId;
+                this.triggherWorkScopeData(currentRecord,index);
             }
             this.getAllWorkScpoes('',currentRecord,index);
         }
@@ -1450,10 +1455,10 @@ triggerSaveApi(){
         }
         if (!this.workOrderGeneralInformation.isSinglePN) {
         }
-        const { itemMasterId } = object;
+        const { masterPartId } = object;
         this['cmmPublicationList' + index] = [];
         this['dynamicWorkflowList' + index] = [];
-        this.getPartPublicationByItemMasterId(currentRecord, itemMasterId, index);
+        this.getPartPublicationByItemMasterId(currentRecord, masterPartId, index);
         // currentRecord.masterPartId=object.itemMasterId;
         // getWorkFlowByPNandScope(workOrderPartNumber);
         this.getWorkFlowByPNandScope(null, currentRecord, 'onload', index);
@@ -1527,7 +1532,7 @@ triggerSaveApi(){
 
     async getPartPublicationByItemMasterId(currentRecord, itemMasterId, index) {
         this.isSpinnerVisible = true;
-        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId.itemMasterId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.cmmList = [];
             this.cmmListNew = [];
@@ -1635,7 +1640,7 @@ triggerSaveApi(){
     }
     workOrderScopeName:any;
     PartNumber:any;
-    workScopeIndex:any;;
+    workScopeIndex:any;
     allowtoSaveWorkScope(){
         this.modalWorkScopeModel.close();
     }
@@ -1643,31 +1648,43 @@ triggerSaveApi(){
         this.workOrderGeneralInformation.partNumbers[this.workScopeIndex].workOrderScopeId=undefined;
         this.modalWorkScopeModel.close();
     }
+    triggherWorkScopeData(workOrderPart,index){
+        workOrderPart.masterCompanyId=this.currentUserMasterCompanyId;
+        // console.log("workOrderPart",workOrderPart)
+        this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isWO').subscribe(res => {
+            // console.log('res',res);
+            this.workScopeObjDetails={};
+            this.workScopeObjDetails=res;
+            if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){ 
+                this.workScopeIndex=index;
+                this.PartNumber=workOrderPart.masterPartId.partNumber;
+                this.workScopesList.forEach(element => {
+                    if(element.value==workOrderPart.workOrderScopeId){
+                        this.workOrderScopeName=element.label;
+                   return;
+                    }
+                });
+                let modelName3=this.modalWorkScope;
+                let ngbModalOptions: NgbModalOptions = {
+                    backdrop : 'static',
+                    keyboard : false,
+                    size: 'sm'
+              };
+                this.modalWorkScopeModel = this.modalService.open(modelName3, ngbModalOptions); 
+            }
+        });
+    }
     workScopeObjDetails:any={}
     getWorkFlowByPNandScope(value, workOrderPart, form, index) {
+        // console.log("part",workOrderPart)
         if (value != null && form == 'html') {
             workOrderPart.workOrderScopeId = value;
             workOrderPart.masterCompanyId=this.currentUserMasterCompanyId
         //  console.log("wo part",workOrderPart)
-            this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isWO').subscribe(res => {
-                // console.log('res',res);
-                this.workScopeObjDetails={};
-                this.workScopeObjDetails=res;
-                if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){ 
-                    this.workScopeIndex=index;
-                    this['dynamicworkScopesList'+index].forEach(element => {
-                        if(element.value==workOrderPart.workOrderScopeId){
-                            this.workOrderScopeName=element.value;
-                            this.PartNumber=workOrderPart.masterPartId.label;
-                        }
-                    });
-                    let modelName3=this.modalWorkScope;
-                    this.modalWorkScopeModel = this.modalService.open(modelName3, { size: 'sm' }); 
-                }
-            });
-       
-        }
+        
         workOrderPart.workOrderScopeId = (workOrderPart.workOrderScopeId != undefined || workOrderPart.workOrderScopeId != null) ? workOrderPart.workOrderScopeId : 0;
+        this.triggherWorkScopeData(workOrderPart,index);
+    }
         const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId);
         const { workOrderScopeId } = workOrderPart;
         if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
@@ -3894,8 +3911,8 @@ triggerSaveApi(){
 
   this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.workScopesList = res;
-            this['dynamicworkScopesList'+index] = []
-            this['dynamicworkScopesList'+index] = this.workScopesList;
+            // this['dynamicworkScopesList'+index] = []
+            // this['dynamicworkScopesList'+index] = this.workScopesList;
         });
 
         // this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.masterPartId.itemMasterId, currentRecord.masterPartId.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {

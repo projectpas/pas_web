@@ -37,7 +37,7 @@
                         <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                                    <td *ngFor="let summaryColumn of summaryColumns;let i=index;" class="summary-column"
+                                    <td *ngFor="let summaryColumn of summaryColumns;let i=index;"   [ngClass]="(summaryColumn.field == 'manufacturer' )?'min-width-150':''" class="summary-column"
                                         pReorderableRowHandle>
                                         <!-- <span *ngIf="summaryColumn.field == 'count'">
                                             Item {{ rowIndex + 1 }}

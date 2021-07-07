@@ -263,7 +263,7 @@
     <button type="button" class="close font_chck" (click)="dismissModel()">
       &times;
     </button>
-    <h4 class="modal-title">Pick Item</h4>
+    <h4 class="modal-title">Pick Items</h4>
   </div>
   <div class="modal-body">
     <form #ptiteminterface="ngForm" class="form-horizontal">
@@ -294,7 +294,8 @@
                 </p-checkbox>
               </span>
             </td>
-            <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+            <td *ngFor="let col of pickTicketItemInterfaceheader" 
+            [ngClass]="( col.field == 'qtyToPick' ||col.field == 'qtyAvailable' ||col.field == 'qtyOnHand') ? 'text-right' : ''" pReorderableRowHandle>
               <ng-container *ngIf="col.field != 'qtyToShip'">
                 {{part[col.field]}}
               </ng-container>
