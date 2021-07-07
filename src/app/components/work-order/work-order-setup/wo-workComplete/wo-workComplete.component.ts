@@ -17,7 +17,8 @@ import { AuditComponentComponent } from '../../../../../app/shared/components/au
 /** WorkOrderDocuments component*/
 export class WorkOrderWorkCompleteComponent implements OnChanges, OnInit {
   @Input() isWorkOrder;
-  @Output() refreshData = new EventEmitter();
+  @Output() refreshMpnGrid = new EventEmitter();
+
   @Input() isView: boolean = false;
   @Input() workOrderId;
   @Input() workFlowWorkOrderId;
@@ -143,6 +144,9 @@ upDateSettlemts( ){
   }
   this.isSpinnerVisible=true;
   this.workOrderService.updateWoSettlements(newData,this.isWOClose).subscribe(res => {
+  if(this.isWOClose==true){
+    this.refreshMpnGrid.emit(true)
+  }
     this.woSettlements.forEach(element => {
       element.userId=this.authService.currentEmployee;
       element.isenableUpdate=false;

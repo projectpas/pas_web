@@ -98,39 +98,7 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.recCustomerId = 0;
             }
             this.isSpinnerEnable = true;
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                setTimeout(() => {
-                    this.isSpinnerEnable = false;
-                }, 3000)
-                this.ishowEditDiv = true;
-                this.getPartNosByCustomer(res.customerId, 0);
-
-                const workOrderData = res;
-                const data = {
-                    ...res,
-                    workOrderNumber: res.workOrderNum,
-                    openDate: new Date(res.openDate),
-                    customerId: res.customerId,
-                    partNumbers: res.partNumbers.map(x => {
-                        return {
-                            ...x,
-                            promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
-                            estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
-                            estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
-                            receivedDate: this.recCustomerId == 0 && res.receivingCustomerWorkId == null ? null : new Date(x.receivedDate)
-                        }
-                    })
-                }
-                this.editWorkOrderGeneralInformation = data;
-                this.getAllWorkOrderTypes();
-                this.getAllCreditTerms();
-                this.getJobTitles();
-                this.getAllWorkOrderStages();
-                this.getAllExpertiseType();
-                this.getAllWorkOrderStatus();
-            }, err => {
-                this.isSpinnerEnable = false;
-            })
+  this.triggerWorkOrderData();
         } else {
             this.ishowEditDiv = false;
             this.getWorkOrderDefaultSetting();
@@ -148,6 +116,47 @@ export class WorkOrderSmartComponent implements OnInit {
     }
     ngOnDestroy(): void {
         this.onDestroy$.next();
+    }
+    refreshWo(){
+        this.workOrderId = this.acRouter.snapshot.params['id'];
+        this.recCustomerId=0;
+        this.triggerWorkOrderData();
+    }
+    triggerWorkOrderData(){
+        
+        this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            setTimeout(() => {
+                this.isSpinnerEnable = false;
+            }, 3000)
+            this.ishowEditDiv = true;
+            this.getPartNosByCustomer(res.customerId, 0);
+
+            const workOrderData = res;
+            const data = {
+                ...res,
+                workOrderNumber: res.workOrderNum,
+                openDate: new Date(res.openDate),
+                customerId: res.customerId,
+                partNumbers: res.partNumbers.map(x => {
+                    return {
+                        ...x,
+                        promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
+                        estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
+                        estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
+                        receivedDate: this.recCustomerId == 0 && res.receivingCustomerWorkId == null ? null : new Date(x.receivedDate)
+                    }
+                })
+            }
+            this.editWorkOrderGeneralInformation = data;
+            this.getAllWorkOrderTypes();
+            this.getAllCreditTerms();
+            this.getJobTitles();
+            this.getAllWorkOrderStages();
+            this.getAllExpertiseType();
+            this.getAllWorkOrderStatus();
+        }, err => {
+            this.isSpinnerEnable = false;
+        })
     }
     getAllExpertiseType() {
         this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {

@@ -100,7 +100,7 @@
                                                                     <tr *ngIf="materialMPN.workOrderMaterialList && isShowChild==true && materialMPN.isShowPlus ==false" class="sub-table no-bg">
                                                                         <td></td>
                                                                         <td colspan="22" class="p-0">
-                                                                                <app-work-order-complete-material-list [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
+                                                                                <app-work-order-complete-material-list [isSummary]="true" [materialStatus]="materialMPN.materialStatus" isWorkOrder="true"
                                                                                 [workFlowObject]="workFlowObject" [savedWorkOrderData]="savedWorkOrderData" isSubWorkOrder="false" subWOPartNoId="0"
                                                                                 [mpnId]="materialMPN.workOrderPartNumberId" [employeesOriginalData]="employeesOriginalData"
                                                                                 [workOrderMaterialList]="materialMPN.workOrderMaterialList"[taskList]="taskList" [mpnPartNumbersList]="mpnPartNumbersList" isView="true"></app-work-order-complete-material-list>

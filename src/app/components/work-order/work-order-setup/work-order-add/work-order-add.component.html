@@ -1442,7 +1442,7 @@
 
 <div *ngIf="workOrderId && (gridActiveTab == 'workComplete')" class="wf-label-cstm  "
 [ngClass]="{hidedata : gridActiveTab !== 'workComplete'}">
-<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+<app-wo-workComplete [isWorkOrder]="isWorkOrder" (refreshMpnGrid)="refreshMpnList($event)" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
   [workFlowWorkOrderId]="workFlowWorkOrderId"   
 ></app-wo-workComplete>
 </div>
@@ -1701,7 +1701,7 @@
 
             <ng-template #modalWorkScope let-c="close" let-d="dismiss" data-backdrop="static">
                 <div class="modal-header">
-                    <h4 class="modal-title"> Alert Message !</h4>
+                    <h4 class="modal-title">Warning</h4>
                     <button type="button" class="close" aria-label="Close"
                         (click)="dismissWorkSocpe()">
                         <span aria-hidden="true">&times;</span>
@@ -1715,7 +1715,7 @@
             
                         </p>
                     <strong>
-                        Do you want to allow to
+                        Do you still want to 
                         
                        
                         <span *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer">create</span>

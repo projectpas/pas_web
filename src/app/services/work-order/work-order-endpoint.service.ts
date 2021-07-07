@@ -1350,9 +1350,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
-    getPickTicketList(workOrderId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getpickticketapprovelist?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getPickTicketList(workOrderId));
+    getPickTicketList(workOrderId,wfwoId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getpickticketapprovelist?workOrderId=${workOrderId}&wfwoId=${wfwoId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getPickTicketList(workOrderId,wfwoId));
         });
     }
 

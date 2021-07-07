@@ -78,7 +78,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() isListView: boolean = false;
     @Input() subWoMpnGridUpdated = false;
     @Input() triggerSubWoMpn = false;
-    //@Output() onWorkOrderPrintLoad = new EventEmitter();
+    @Output() refreshGrid = new EventEmitter();
     technicianOriginalList1: any = [];
     isRecCustomer: boolean;
     selectedCustomer: Customer;
@@ -4206,5 +4206,8 @@ triggerSaveApi(){
                 });
             }, 5000);
         }
+    }
+    refreshMpnList(data){
+        this.refreshGrid.emit(true)
     }
 }
