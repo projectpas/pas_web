@@ -326,7 +326,6 @@ export class EditUserRolesComponent implements OnInit {
                 if (currentModule.parentId != null)
                     this.uncheckAllParentModule(currentModule.parentId, type);
             }
-            
             if (currentModule.hasChildren) {
                 this.setPermissionByType(currentModule, type, value);
                 this.pages = [];
