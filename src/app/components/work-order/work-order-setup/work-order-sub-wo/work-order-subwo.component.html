@@ -377,7 +377,7 @@
 </div>
 <ng-template #modalWorkScope let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
-      <h4 class="modal-title"> Alert Message !</h4>
+      <h4 class="modal-title">Warning</h4>
       <button type="button" class="close" aria-label="Close"
           (click)="dismissWorkSocpe()">
           <span aria-hidden="true">&times;</span>
@@ -389,7 +389,7 @@
 
           </p>
       <strong>
-          Do you want to allow to {{activeGridUpdateButton ? 'update' : 'create'}}  Sub Work Order ?
+        Do you still want to  {{activeGridUpdateButton ? 'update' : 'create'}}  Sub Work Order ?
       </strong>
   </div>
   <div class="modal-footer">

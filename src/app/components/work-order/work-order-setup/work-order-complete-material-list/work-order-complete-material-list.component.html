@@ -63,7 +63,7 @@
     </app-work-order-materials-add>
 </ng-template>
 <div *ngIf="ispickticket">
-    <app-work-order-pickticket [referenceId]="this.savedWorkOrderData.workOrderId"></app-work-order-pickticket>
+    <app-work-order-pickticket [referenceId]="savedWorkOrderData.workOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"></app-work-order-pickticket>
 </div>
 <div id="reserve" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
