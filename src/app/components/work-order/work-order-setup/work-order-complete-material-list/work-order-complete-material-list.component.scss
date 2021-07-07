@@ -243,9 +243,9 @@ input[type='number']::-webkit-outer-spin-button {
 button {
   border-radius: 5px;
 }
-p-table tr td {
-  text-align: left !important;
-}
+// p-table tr td {
+//   text-align: left !important;
+// }
 
 button:disabled {
   opacity: 0.5;
@@ -392,4 +392,12 @@ button:disabled {
 }
 .text_st{
   text-align: start !important;
+}
+.exp_btn{
+  width: 108px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  margin-right: 4px !important;
+  padding: 4px;
+  height: 24px;
 }

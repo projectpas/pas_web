@@ -71,7 +71,7 @@
               <span [ngClass]="(matField.field == 'quantity'||matField.field == 'unitCost'||matField.field == 'extendedCost' )?'float-right':''" *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
                 <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
                    <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
-                   <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;" (click)="handelPlus(materialMPN)"></i>   
+                   <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Hide stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;" (click)="handelPlus(materialMPN)"></i>   
                </a> 
             </td>
         </tr>
@@ -82,8 +82,6 @@
                 [workOrderChargesList]="workOrderChargesList"
                 [isSubWorkOrder]="false" [isView]="true">
             </app-work-order-charges>
-
-
                 </td>
             </tr>
             </ng-container>

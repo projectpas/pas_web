@@ -57,7 +57,7 @@
       <div class="col-2 column">
         <div class="form-group">
           <label >Qty Req<span class="clr-red">*</span></label>
-          <input class="form-control text-right" type="text"  (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
+          <input class="form-control text-right" type="text" maxLength="10" (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
           [(ngModel)]="formObject.quantity" (change)="calculateExtendedCost()" name="quantity" autocomplete="off" />
          </div>
       </div>
@@ -91,7 +91,7 @@
   </div>
 <div class="row">
     <div style="overflow-y: auto;width: 100%;">
-        <p-table #dt class="rpo-table-cstm salesquotePart" [value]="parts" [rows]="10" [lazy]="true"
+        <p-table #dt class="rpo-table-cstm salesquotePart" [value]="parts" [rows]="20" [lazy]="true"
             [paginator]="showPaginator" [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords"
             [pageLinks]="pageLinks" [columns]="columns" [scrollable]="true" [resizableColumns]="true"
             [reorderableColumns]="true" scrollHeight="450px" [style]="{ width: '100%' }"

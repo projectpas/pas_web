@@ -1,14 +1,8 @@
-// ===============================
-// info@ebenmonney.com
-// www.ebenmonney.com/quickapp-pro
-// ===============================
-
 import { Component, OnDestroy, ViewChild, Input, OnChanges } from '@angular/core';
 import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { AccountService } from "../services/account.service";
 import { AlertService, MessageSeverity } from '../services/alert.service';
-import { AppTranslationService } from '../services/app-translation.service';
 import { User } from '../models/user.model';
 import { UserEdit } from '../models/user-edit.model';
 import { Permission } from '../models/permission.model';
@@ -35,6 +29,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     userProfileForm: FormGroup;
     userSaved$ = this.onUserSaved.asObservable();
     roleAssign: string[] = [];
+    isSpinnerVisible = false;
     get userName() {
         return this.userProfileForm.get('userName');
     }
@@ -208,9 +203,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
 
         this.isSaving = true;
         this.alertService.startLoadingMessage("Saving changes...");
-
         const editedUser = this.getEditedUser();
-
         if (this.isNewUser) {
             this.accountService.newUser(editedUser).subscribe(
                 user => this.saveCompleted(user),
@@ -226,7 +219,6 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     public cancel() {
         this.resetForm();
         this.isEditMode = false;
-
         this.alertService.resetStickyMessage();
     }
 

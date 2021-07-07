@@ -153,6 +153,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
         this.receivingForm.receivedDate = new Date();
+        this.receivingForm.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
@@ -192,7 +193,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     loadModulesNamesForObtainOwnerTraceable() {
-        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
             this.moduleListDropdown = res;
         })
     }
@@ -661,15 +662,47 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.arrayCustlist1.push(0);
         }
-        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-        //     this.workScopeList = res;
-        // }); 
-        
-        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, this.receivingForm.itemMasterId.value, this.receivingForm.managementStructureId, 20, this.arrayCustlist1.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.workScopeList = res;
-        });
+        }); 
+        
+        // this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, this.receivingForm.itemMasterId.value, this.receivingForm.managementStructureId, 20, this.arrayCustlist1.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //     this.workScopeList = res;
+        // });
     }
-
+    onChangesWorkScope(form){
+        this.getWorkScopeDataByIds();
+    }
+    workScopeObjDetails:any={};
+getWorkScopeDataByIds(){
+    console.log("form",this.receivingForm)
+    this.commonService.getDataWorkScopeByItemMasterCaps(this.receivingForm,'rc').subscribe(res => {
+        console.log('res',res);
+        this.workScopeObjDetails={};
+        this.workScopeObjDetails=res;
+        if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){
+            // let modelName2="confirmWorkScopeInfo";
+            // this.modal = this.modalService.open(modelName2, { size: 'sm' });hide
+            this.workScopeList.forEach(element => {
+         if(element.value==this.receivingForm.workScopeId){
+             this.receivingForm.workScopeName=element.label;
+             return;
+         }
+        });
+            $('#confirmWorkScopeInfo').modal('show');
+        }
+    });
+    
+}
+dismissWorkSocpe(){
+    // this.modal.close();
+    $('#confirmWorkScopeInfo').modal('hide');
+    this.receivingForm.workScopeId=undefined;
+}
+allowtoSaveWO(){
+    // this.modal.close(); 
+    $('#confirmWorkScopeInfo').modal('hide');
+}
     filterCustCodes(event) {
         this.customerCodesInfo = this.allCustomersInfo;
 

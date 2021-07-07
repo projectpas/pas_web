@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Work Scope <span class="text-danger">*</span></label>
-                                <p-dropdown [showClear]="true" class="p-dropdown-100" required
+                                <p-dropdown [showClear]="true"   (onChange)="onChangesWorkScope($event)" class="p-dropdown-100" required
                                     (ngModelChange)="getActive()" (input)="onFilterWorkScope($event.target.value)"
                                     [options]="workScopeList" filter="true" [(ngModel)]="receivingForm.workScopeId"
                                     name="workScopeId" [resetFilterOnHide]="true" placeholder="--Select--"></p-dropdown>
@@ -311,7 +311,7 @@
                                                 Serial Number <span *ngIf="receivingForm.isSerialized"
                                                     class="text-danger">*</span>
                                             </label>
-                                            <input class="form-control" type="text" name="serialNumber"
+                                            <input class="form-control" type="text" maxlength="100" name="serialNumber"
                                                 [(ngModel)]="receivingForm.serialNumber" (ngModelChange)="getActive()"
                                                 [required]="receivingForm.isSerialized">
                                         </div>
@@ -1385,6 +1385,59 @@
         </div>
     </div>
 </div>
+<ng-template #confirmWorkScopeInfo1 let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title"> Alert Message !</h4>
+        <button type="button" class="close" aria-label="Close"
+            (click)="dismissWorkSocpe()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- {{receivingForm.workScopeName}} -->
+        <!-- {{receivingForm.itemMasterId.label} -->
+        <p>There is no  capability for MPN .
+
+            </p>
+        <strong>
+            Do you want to create Receceiving Customer?
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+        (click)="allowtoSaveWO()">Yes</button>
+        <button type="button" class="btn btn-danger"
+            (click)="dismissWorkSocpe()">No</button>
+    </div> 
+    </ng-template>
+    <div class="modal fade" id="confirmWorkScopeInfo" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="dismissWorkSocpe()">&times;</button>
+                    <h4 class="modal-title">Warning</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- {{receivingForm.workScopeName}} -->
+                    <!-- {{receivingForm.itemMasterId.label} -->
+                    <p>There is no  <span class="new-label" *ngIf="receivingForm && receivingForm.workScopeName"> {{receivingForm.workScopeName}}</span> capability for MPN
+                        <span class="new-label" *ngIf="receivingForm && receivingForm.itemMasterId"> {{receivingForm.itemMasterId.label}} </span>
+            
+                        </p>
+                    <strong>
+                        Do you still want to  {{isEditMode ? 'update' :'create'}} Receiving Customer?
+                    </strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                    (click)="allowtoSaveWO()">Yes</button>
+                    <button type="button" class="btn btn-danger"
+                        (click)="dismissWorkSocpe()">No</button>
+                </div> 
+
+            </div>
+        </div>
+    </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">

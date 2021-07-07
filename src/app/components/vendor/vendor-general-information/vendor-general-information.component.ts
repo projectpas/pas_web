@@ -609,19 +609,23 @@ export class VendorGeneralInformationComponent implements OnInit {
 		var strText = '';
         if(this.arrayIntegrationlist.length == 0) {			
             this.arrayIntegrationlist.push(0); }
-        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description',strText,true,300,this.arrayIntegrationlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description',strText,true,300,this.arrayIntegrationlist.join(),this.currentUserMasterCompanyId).subscribe(res => {            
             this.integrationOriginalList = res.map(x => {
                 return {
                     label: x.label, value: x.value 
-                }
-            })
+                }                
+            })            
 		})
 	}
 
     async getVendorIntegrationByVendorrId() {
         if (this.sourceVendor.vendorId > 0) {
-            await this.commonService.getIntegrationMapping(this.sourceVendor.vendorId, 3).subscribe(res => {
+            await this.commonService.getIntegrationMapping(this.sourceVendor.vendorId, 3).subscribe(res => {                
                 this.sourceVendor.integrationPortalIds = res.map(x => x.integrationPortalId);
+                if(this.sourceVendor.integrationPortalIds){
+                    this.arrayIntegrationlist.push(this.sourceVendor.integrationPortalIds);
+                    this.getAllIntegrations();
+                }                
             },error => this.isSpinnerVisible = false )//this.onDataLoadFailed(error));
         }
     }

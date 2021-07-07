@@ -500,7 +500,7 @@
                                appendTo='body' [baseZIndex]="9999" hourFormat="24"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
-                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy , h:mm a'}}</div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy h:mm a'}}</div>
                           </td>
                           <td>
                             <div class="align_adh">

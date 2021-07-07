@@ -147,7 +147,7 @@
                                                         WO Status
                                                         <span class="clr-red">*</span>
                                                     </label>
-                                                    <input class="form-control" matTooltipPosition="above" required
+                                                    <input class="form-control" maxLength="250" matTooltipPosition="above" required
                                                         type="text" name="WoSatus" #contactName="ngModel" disabled
                                                         [ngModel]="workOrderNumberStatus" />
                                                 </div>
@@ -600,10 +600,11 @@
                                                 </p-dropdown>
                                             </td>
                                             <td>
-                                                <!-- [options]="workScopesList" -->
+                                                <!--          [options]="getDynamicVariableData('dynamicworkScopesList',i)" -->
                                                 <p-dropdown filter="true" placeholder="Select" name="scope{{i}}"
                                                     #scope="ngModel" 
-                                                    [options]="getDynamicVariableData('dynamicworkScopesList',i)"
+                                           
+                                                    [options]="workScopesList"
                                                     class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     (ngModelChange)="getValid()" [autoWidth]="false"
                                                     [style]="pDropdownStyle"
@@ -629,9 +630,8 @@
                                                     [style]="pDropdownStyle" name="condition{{i}}" #condition="ngModel"
                                                     (onChange)="selectedCondition($event.value,workOrderPartNumber,i)"
                                                     class="p-dropdown-custom-md1"
-                                                    [(ngModel)]="workOrderPartNumber.conditionId" required
-                                                    [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                                    appendTo="body">
+                                                    [(ngModel)]="workOrderPartNumber.conditionId" required                                                   
+                                                    appendTo="body" [disabled] ="true">
                                                 </p-dropdown>
                                             </td>
                                             <td>
@@ -639,10 +639,10 @@
                                                     #cmm="ngModel" (ngModelChange)="getValid()" [autoWidth]="false"
                                                     [style]="pDropdownStyle" (onChange)="onSelectPublication($event,workOrderPartNumber,i)"
                                                     [options]="getDynamicVariableData('cmmPublicationList',i)"
-                                                    class="p-dropdown-custom-md1 p-dropdown-mh120"
-                                                    [(ngModel)]="workOrderPartNumber.cMMId"
+                                                    class="p-dropdown-custom-md1 p-dropdown-mh120" placeholder="No CMM" 
+                                                    [(ngModel)]="workOrderPartNumber.cMMId"  [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}"
                                                     [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                                    appendTo="body">
+                                                    appendTo="body"> 
                                                 </p-dropdown>
 
                                                 <span data-toggle="modal" data-target="#cmmView" *ngIf="workOrderPartNumber.cMMId!=0 && workOrderPartNumber.cMMId!=null"
@@ -724,7 +724,7 @@
                                                     [(ngModel)]="workOrderPartNumber.stockLineNumber" disabled>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control w50 width-100"
+                                                <input type="text" maxLength="30" class="form-control w50 width-100"
                                                     [(ngModel)]="workOrderPartNumber.nte" name="nte{{i}}"
                                                     #nte="ngModel">
                                             </td>
@@ -809,6 +809,7 @@
                                 (click)="saveWorkOrder()">
                                 Save
                             </button>
+           
                             <button class="btn btn-primary pull-right" *ngIf="isEdit && !isRecCustomer" type="button"
                                 [disabled]=" disableSaveForPart || !workOrderForm.valid || checkTechnician()"
                                 (click)="saveWorkOrder()">
@@ -925,31 +926,7 @@
 
                             </div>
                         </div>
-                        <div id="confirmCMMInfo" class="modal fade" role="dialog" data-backdrop="static">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title"> Alert Message !</h4>
-                                        <button type="button" class="close" aria-label="Close"
-                                            (click)="dismissCmmClose()">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <strong>
-                                            There is no CMM for MPN  Do you want to create Work Order?
-                                        </strong>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary"
-                                        (click)="allowtoSaveWO()">Yes</button>
-                                        <button type="button" class="btn btn-danger"
-                                            (click)="dismissCmm()">No</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                      
                         
                     </div>
                 </div>
@@ -1464,7 +1441,7 @@
 
 <div *ngIf="workOrderId && (gridActiveTab == 'workComplete')" class="wf-label-cstm  "
 [ngClass]="{hidedata : gridActiveTab !== 'workComplete'}">
-<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+<app-wo-workComplete [isWorkOrder]="isWorkOrder" (refreshMpnGrid)="refreshMpnList($event)" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
   [workFlowWorkOrderId]="workFlowWorkOrderId"   
 ></app-wo-workComplete>
 </div>
@@ -1649,3 +1626,106 @@
         </div>
     </div>
 </div>
+<ng-template #confirmWorkScopeInfo let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title"> Alert Message !</h4>
+        <button type="button" class="close" aria-label="Close"
+            (click)="dismissWorkSocpe()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- {{receivingForm.workScopeName}} -->
+        <!-- {{receivingForm.itemMasterId.label} -->
+        <p>There is no  capability for MPN .
+
+            </p>
+        <strong>
+            Do you want to create Receceiving Customer?
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+        (click)="allowtoSaveWO()">Yes</button>
+        <button type="button" class="btn btn-danger"
+            (click)="dismissWorkSocpe()">No</button>
+    </div> 
+    </ng-template>
+    <ng-template #confirmCMMInfoCreate let-c="close" let-d="dismiss" data-backdrop="static">
+        <div class="modal-header">
+            <h4 class="modal-title"> Alert Message !</h4>
+            <button type="button" class="close" aria-label="Close"
+                (click)="dismissCreateCMM()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- {{receivingForm.workScopeName}} -->
+            <!-- {{receivingForm.itemMasterId.label} -->
+           
+            <strong>
+                CMM <span *ngIf="publicationNos && publicationNos.length>0">
+                    <strong style="color: #007ad9;" *ngFor="let val of publicationNos">{{val}}</strong>
+                </span>Expired  Do you want to create Work Order?
+            </strong>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary"
+            (click)="allowtoSaveWO();dismissCreatepub()">Yes</button>
+            <button type="button" class="btn btn-danger"
+                (click)="dismissCreateCMM()">No</button>
+        </div> 
+        </ng-template>
+
+        <ng-template #confirmCMMInfo let-c="close" let-d="dismiss"> 
+            <div class="modal-header">
+                <h4 class="modal-title"> Alert Message !</h4>
+                <button type="button" class="close" aria-label="Close"
+                    (click)="dismissCmm()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    There is no CMM for MPN  Do you want to create Work Order?
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                (click)="allowtoSaveWO();dismissCmmClose()">Yes</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="dismissCmm()">No</button>
+            </div> 
+            </ng-template>
+
+            <ng-template #modalWorkScope let-c="close" let-d="dismiss" data-backdrop="static">
+                <div class="modal-header">
+                    <h4 class="modal-title">Warning</h4>
+                    <button type="button" class="close" aria-label="Close"
+                        (click)="dismissWorkSocpe()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- {{receivingForm.workScopeName}} -->
+                    <!-- {{receivingForm.itemMasterId.label} -->
+                    <p>There is no  <span class="new-label" *ngIf="workOrderScopeName"> {{workOrderScopeName}}</span> capability for MPN
+                        <span class="new-label" *ngIf="PartNumber"> {{PartNumber}} </span>
+            
+                        </p>
+                    <strong>
+                        Do you still want to 
+                        
+                       
+                        <span *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer">create</span>
+                        <span  *ngIf="isEdit && !isRecCustomer" >update</span>
+                          Work Order?
+                    </strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                    (click)="allowtoSaveWorkScope()">Yes</button>
+                    <button type="button" class="btn btn-danger"
+                        (click)="dismissWorkSocpe()">No</button>
+                </div> 
+                </ng-template>

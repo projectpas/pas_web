@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef ,ViewChild,ElementRef} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { CommonService } from '../../../../services/common.service';
@@ -8,6 +8,7 @@ import {   editValueAssignByCondition, getObjectById } from '../../../../generic
 import * as moment from 'moment';
 import { SubWorkOrderPartNumber } from '../../../../models/sub-work-order-partnumber.model';
 import { DatePipe, Location } from '@angular/common';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 @Component({
     selector: 'app-sub-work-order',
@@ -15,6 +16,7 @@ declare var $: any;
     styleUrls: ['./work-order-subwo.component.scss']
 }) 
 export class SubWorkOrderComponent implements OnInit {
+    @ViewChild("modalWorkScope", { static: false }) modalWorkScope: ElementRef;
     @Input() isView: boolean = false;
     @Input() subWorkOrderIdForView;
     @Input() workOrderIdForView;
@@ -25,6 +27,7 @@ export class SubWorkOrderComponent implements OnInit {
     workOrderId: any;
     mpnId: any;
     subWorkOrderId: any;
+    modalWorkScopeModel:NgbModalRef
     workOrderMaterialsId: any;
     subWorkOrderGeneralInformation: any;
     workOrderStagesList: any;
@@ -68,6 +71,7 @@ export class SubWorkOrderComponent implements OnInit {
         private alertService: AlertService,
         private authService: AuthService,
         private cdRef: ChangeDetectorRef,
+        private modalService: NgbModal,
         private location: Location,
         private workOrderService: WorkOrderService) {
     }
@@ -146,7 +150,7 @@ export class SubWorkOrderComponent implements OnInit {
                         //   getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
                         // 
                         this.getAllWorkScpoes('',x,index);
-                        this.getWorkFlowByPNandScope(x, index);
+                        this.getWorkFlowByPNandScope(x, index,'onload');
                         
                     }) 
 
@@ -250,7 +254,7 @@ export class SubWorkOrderComponent implements OnInit {
                 this.workOrderStatus();
                 if (this.addToExisting == NaN) {
                     this.subWorkOrderPartNumbers.map((x, index) => {
-                        this.getWorkFlowByPNandScope(x, index);
+                        this.getWorkFlowByPNandScope(x, index,'onload');
                     })
                 }
             }
@@ -453,18 +457,16 @@ export class SubWorkOrderComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
-        //     this.workScopesList = res;
-        // });
-        console.log("curret",currentRecord,index);
-        // debugger;
-        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.itemMasterId, currentRecord.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.workScopesList = res;
-            this['workScopesList' + index] = []
-            this['workScopesList' + index] = this.workScopesList;
-
-            console.log(' this ', this['workScopesList' + index])
+            // this['workScopesList' + index] = []
+            // this['workScopesList' + index] = this.workScopesList;
         });
+        // this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, currentRecord.itemMasterId, currentRecord.managementStructureId, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //     this.workScopesList = res;
+        //     this['workScopesList' + index] = []
+        //     this['workScopesList' + index] = this.workScopesList;\
+        // });
     }
     getDynamicVariableData(variable, index) {
         return this[variable + index]
@@ -478,7 +480,11 @@ export class SubWorkOrderComponent implements OnInit {
         });
         this.workOrderStatus();
     }
-    getWorkFlowByPNandScope(workOrderPart, index) {
+    getWorkFlowByPNandScope(workOrderPart, index,isFrom) {
+        if(isFrom=='html'){
+            workOrderPart.masterCompanyId=this.currentUserMasterCompanyId;
+            this.triggherWorkScopeData(workOrderPart,index)
+        }
         const { subWorkOrderScopeId } = workOrderPart;
         if ((workOrderPart.itemMasterId !== 0 && workOrderPart.itemMasterId !== null) && (subWorkOrderScopeId !== null && subWorkOrderScopeId !== 0)) {
             this.workOrderService.getWorkFlowByPNandScope(workOrderPart.itemMasterId, subWorkOrderScopeId,this.currentUserMasterCompanyId).subscribe(res => {
@@ -648,8 +654,11 @@ export class SubWorkOrderComponent implements OnInit {
             this.technicianList = technician;
         }
     }
-    onSelectedTechnician(object, currentRecord) {
-
+    onSelectedTechnician(object, currentRecord,index) {
+        currentRecord.masterCompanyId=this.currentUserMasterCompanyId;
+        if(!this.activeGridUpdateButton){
+            this.triggherWorkScopeData(currentRecord,index)
+        }
         if (object.employeeId != undefined && object.employeeId > 0) {
             this.commonService.getTechnicianStation(object.employeeId,this.currentUserMasterCompanyId).subscribe(res => {
                 currentRecord.techStationId = res.stationId;
@@ -713,5 +722,41 @@ export class SubWorkOrderComponent implements OnInit {
                 // currentRecord.workflowId=0;
                 this.disableUpdateMpn=false;
             }, 2000);
+            }
+            allowtoSaveWorkScope(){
+                this.modalWorkScopeModel.close();
+            }
+            dismissWorkSocpe(){
+                this.subWorkOrderPartNumbers[this.workScopeIndex].subWorkOrderScopeId=undefined;
+                this.modalWorkScopeModel.close();
+            }
+            workScopeObjDetails:any={};
+            workOrderScopeName:any;
+            PartNumber:any;
+            workScopeIndex:any;
+            triggherWorkScopeData(workOrderPart,index){
+                workOrderPart.masterCompanyId=this.currentUserMasterCompanyId;
+                this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isSubWO').subscribe(res => {
+                    // console.log('res',res);
+                    this.workScopeObjDetails={};
+                    this.workScopeObjDetails=res;
+                    if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){ 
+                        this.workScopeIndex=index;
+                        this.PartNumber=workOrderPart.partNumber;
+                        this.workScopesList.forEach(element => {
+                            if(element.value==workOrderPart.subWorkOrderScopeId){
+                                this.workOrderScopeName=element.label;
+                           return;
+                            }
+                        });
+                        let modelName3=this.modalWorkScope;
+                        let ngbModalOptions: NgbModalOptions = {
+                            backdrop : 'static',
+                            keyboard : false,
+                            size: 'sm'
+                      };
+                        this.modalWorkScopeModel = this.modalService.open(modelName3, ngbModalOptions); 
+                    }
+                });
             }
 }

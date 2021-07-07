@@ -1,9 +1,3 @@
-<!-- <div *ngIf="!isView">
-  <button data-target="#addNewFreight" data-toggle="modal" (click)="createNew()" class="btn btn-primary" style="margin-left: 10px;">
-    Add Freight
-  </button>
-</div> -->
-
 <div>
   <div class="header" *ngIf="!isSummarizedView">
     <div class="row">
@@ -95,21 +89,7 @@
                 </div>
               </div>
             </th>
-            <!-- <th></th> -->
-            <!-- <th style="background: #fff; border: 1px solid #fff;"></th> -->
         </ng-container>
-        <!-- <th colspan="2">
-          <div>
-            <p-radioButton
-              class="p-radiobutton-label-horizontal col-width p-radio-custom"
-              name="costPlusType"
-              value="Fixed Mat Price"
-              label="Fixed Mat Price"
-              [(ngModel)]="costPlusType"
-              [disabled]="isView"
-            ></p-radioButton>
-          </div>
-        </th> -->
       </tr>
       <tr>
         <th class="table-column-width" rowspan="2">Task</th>
@@ -118,7 +98,7 @@
         </th>
         <th class="table-column-width" colspan="3">Dimensions</th>
         <th class="table-column-width" rowspan="2">Dimension UOM</th>
-        <th class="table-column-width" rowspan="2">Currency</th>
+        <th class="table-column-width" rowspan="2" style="width:60px !important">Currency</th>
         <th rowspan="2" style="width:60px !important">Amount  <span style="color: #ff0000;">*</span></th>
         <th class="table-column-width" style="width:200px !important" rowspan="2">Memo</th>
         <ng-container *ngIf="isQuote">
@@ -535,7 +515,7 @@
                         class="form-control w50" required />H
                     </td> -->
                     <td>
-                      <input type="number" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
+                      <input type="tel" maxlength="10" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
                         class="form-control w50" />
                     </td>
                     <td>
@@ -543,11 +523,11 @@
                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                       </p-dropdown>
                     </td>
-                    <td><input type="number" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
+                    <td><input type="tel" maxlength="10" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
+                    <td><input type="tel" maxlength="10" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
+                    <td><input type="tel" maxlength="10" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
                         class="form-control w50" /></td>
                     <td>
                       <p-dropdown placeholder="Select UOM"  [required]="f.width" appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
@@ -560,7 +540,7 @@
                       </p-dropdown>
                     </td>
                     <td>
-                      <input type="text"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
+                      <input type="text" maxlength="22"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
                         class="form-control w50 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
                     </td>
                     <!-- <td>
