@@ -101,7 +101,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
   customer: any = {
     customerName: "",
     customerCode: "",
-    promisedDate: ""
+    promisedDate: "",
+    cname: ""
   };
   salesQuoteForm: FormGroup;
   display: boolean = false;
@@ -489,10 +490,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
       //this.salesQuote.customerName = this.customerDetails.name;
       //this.salesQuote.customerEmail = this.customerDetails.email;
       this.salesQuote.customerCode = this.customerDetails.customerCode;
+      this.salesQuote.cname = getValueFromArrayOfObjectById('label', 'value', this.customerId, this.splitcustomersList);
       this.customerInfoFromSalesQuote = {
         customerName: this.customerDetails.name,
         customerCode: this.customerDetails.customerCode,
-        customerId: this.customerDetails.customerId
+        customerId: this.customerDetails.customerId,
       }
       if (!this.isEdit) {
         this.salesQuote.salesPersonId = this.customerDetails.primarySalesPersonId;
