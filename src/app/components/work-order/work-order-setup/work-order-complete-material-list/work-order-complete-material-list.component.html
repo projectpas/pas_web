@@ -872,7 +872,7 @@
 <div *ngIf="!ispickticket">
     <div [ngClass]="(isView == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
         style="min-height: 130px !important;">
-        <p-table   class=" rpo-table-cstm rro-table-cstm materialListTable" id="custome_material"
+        <p-table   class=" rpo-table-cstm rro-table-cstm text-left materialListTable" id="custome_material"
             [columns]="summaryColumns" #materialTble [value]="workOrderMaterialList" [paginator]="true"
             [rows]="pageSize"  selectionMode="multiple"  [reorderableColumns]="true" [metaKeySelection]="true" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]" (onPage)="pageIndexChange($event)">
             <ng-template pTemplate="caption">
@@ -1193,7 +1193,7 @@
         <button type="button" class="close font_chck" (click)="dismissModel()">
             &times;
         </button>
-        <h4 class="modal-title">Pick Item</h4>
+        <h4 class="modal-title">Pick Items</h4>
     </div>
     <div class="modal-body">
         <form #ptiteminterface="ngForm" class="form-horizontal">
@@ -1210,7 +1210,7 @@
                     <tr>
                         <th class="text-left">
                         </th>
-                        <th *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}">
+                        <th *ngFor="let col of pickTicketItemInterfaceheader" >
                             {{col.header}}
                         </th>
                     </tr>
@@ -1224,7 +1224,8 @@
                                 </p-checkbox>
                             </span>
                         </td>
-                        <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+                        <td *ngFor="let col of pickTicketItemInterfaceheader" 
+                         [ngClass]="(col.field == 'qtyToPick' ||col.field == 'qtyAvailable' ||col.field == 'qtyOnHand') ? 'text-right' : ''" pReorderableRowHandle>
                             <ng-container *ngIf="col.field != 'qtyToShip'">
                                 {{part[col.field]}}
                             </ng-container>

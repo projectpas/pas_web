@@ -103,6 +103,7 @@ export class SpeedQuotePartNumberComponent {
     });
     this.columns = [];
     this.initColumns();
+    this.canSaveParts = true;
   }
 
   addPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -165,7 +166,7 @@ export class SpeedQuotePartNumberComponent {
       { field: 'description', header: 'PN Description', width: '200px' },
       { field: 'conditionDescription', header: 'Cond', width: "130px" },
       { field: 'quantityRequested', header: 'Qty', width: "50px" },
-      { field: 'manufacturer', header: 'Manufacturer', width: "84px" },
+      { field: 'manufacturer', header: 'Manufacturer', width: "150px" },
       { field: 'oempmader', header: 'Item Type', width: "9px" },
       { field: 'unitSalePrice', header: 'Unit Price', width: "100px" },
       { field: 'salesPriceExtended', header: 'Ext Price', width: "90px" },
@@ -520,7 +521,7 @@ export class SpeedQuotePartNumberComponent {
       }
       this.filterParts();
     });
-    this.canSaveParts = true;
+    //this.canSaveParts = true;
     if (this.salesQuote.priorities) {
       let activePriorities = this.salesQuote.priorities.filter(x => x.isActive == true);
       if (activePriorities && activePriorities.length > 0) {

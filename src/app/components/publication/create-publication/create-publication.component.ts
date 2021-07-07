@@ -1595,16 +1595,17 @@ export class CreatePublicationComponent implements OnInit {
 
   getPublishedByModulesList() {
     let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
-    this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
-         this.publishedByModulesList = res; 
-      // this.publishedByModulesList = [];
-      // for(let i=0; i<res.length; i++) {
-      //     if(res[i].label.toUpperCase() == 'COMPANY' || res[i].label.toUpperCase() == 'VENDOR' || res[i].label.toUpperCase() == 'CUSTOMER' ||  res[i].label.toUpperCase() == 'EMPLOYEE' || res[i].label.toUpperCase() == 'OTHERS') {
-      //       this.publishedByModulesList.push(res[i])
-      //     }
-      // }  
+    this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), 0).subscribe(res => {
+      //   this.publishedByModulesList = res; 
+      this.publishedByModulesList = [];
+      for(let i=0; i<res.length; i++) {
+          if(res[i].value == AppModuleEnum.Vendor || res[i].value == AppModuleEnum.Manufacturer ||  res[i].value == AppModuleEnum.Others) {
+            this.publishedByModulesList.push(res[i])
+          }
+      }  
     });
   }
+
   getPublishedByReferencesList(event, id) {
     let tableName = "";
     let tableColumnId = "";

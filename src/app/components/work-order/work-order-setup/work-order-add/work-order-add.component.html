@@ -630,9 +630,8 @@
                                                     [style]="pDropdownStyle" name="condition{{i}}" #condition="ngModel"
                                                     (onChange)="selectedCondition($event.value,workOrderPartNumber,i)"
                                                     class="p-dropdown-custom-md1"
-                                                    [(ngModel)]="workOrderPartNumber.conditionId" required
-                                                    [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                                    appendTo="body">
+                                                    [(ngModel)]="workOrderPartNumber.conditionId" required                                                   
+                                                    appendTo="body" [disabled] ="true">
                                                 </p-dropdown>
                                             </td>
                                             <td>

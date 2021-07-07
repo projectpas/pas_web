@@ -69,6 +69,11 @@ import { AddExchangeSalesOrderReserveUnreservePartNumberComponent } from "../com
 import { ExchangeSalesOrderPickTicketsComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component";
 import { ExchangeSalesOrderPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-pick-ticket/exchange-sales-order-pick-ticket.component";
 import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-pickTicket/exchange-sales-order-multi-pickTicket.component";
+import { ExchangeSalesOrderShippingComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
+// import { ExchangeSalesOrderShippingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-shipping-label/exchange-sales-order-shipping-label.component";
+// import { ExchangeSalesOrderPackagingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-Packaging-Label/exchange-sales-order-Packaging-Label.component";
+// import { ExchangeSalesOrderMultiPackagingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-Packaging-Label/exchange-sales-order-multi-Packaging-Label.component";
+// import { ExchangeSalesOrderMultiShippingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-shipping-label/exchange-sales-order-multi-shipping-label.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -139,6 +144,11 @@ import { ExchangeSalesOrderMultiPickTicketComponent } from "../components/exchan
     //ExchangeSalesOrderPickTicketComponent,
     ExchangeSalesOrderPickTicketsComponent,
     //ExchangeSalesOrderMultiPickTicketComponent
+    ExchangeSalesOrderShippingComponent,
+    // ExchangeSalesOrderShippingLabelComponent,
+    // ExchangeSalesOrderPackagingLabelComponent,
+    // ExchangeSalesOrderMultiPackagingLabelComponent,
+    // ExchangeSalesOrderMultiShippingLabelComponent
   ],
   providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
   //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]

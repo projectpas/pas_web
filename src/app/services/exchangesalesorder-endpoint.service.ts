@@ -21,6 +21,7 @@ import { environment } from "../../environments/environment";
 import { IExchangeSalesSearchParameters } from "../models/exchange/IExchangeSalesSearchParameters";
 import { IExchangeSalesOrderListView } from "../models/exchange/IExchangeSalesOrderListView";
 import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
+import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrderShipping";
 @Injectable()
 export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getNewSalesOrderInstanceUrl: string = environment.baseUrl + "/api/exchangesalesorder/new";
@@ -39,6 +40,16 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/exchangesalesorder/getpickticketedit"
     private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/exchangesalesorder/getsalesorderpickticketforprint";
     private readonly getMultiPickTicketForPrint: string = environment.baseUrl + "/api/exchangesalesorder/getMultiSalesOrderPickTicketForPrint";
+    private readonly exchangeSalesorderShippingGet: string = environment.baseUrl + "/api/exchangesalesorder/exchangesalesordershippingdetails";
+    private readonly salesorderShippingSave: string = environment.baseUrl + "/api/exchangesalesorder/createsalesordershipping";
+    private readonly getShippingDataListURL: string = environment.baseUrl + "/api/exchangesalesorder/getsalesordershippinglist";
+    private readonly getShippingforEdit: string = environment.baseUrl + "/api/exchangesalesorder/getshippingedit"
+    private readonly salesorderSavePackingSlip: string = environment.baseUrl + "/api/exchangesalesorder/SavePackingSlip";
+    private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/exchangesalesorder/getShipingLabelForPrint";
+    private readonly updateServiceClass: string = environment.baseUrl + "/api/exchangesalesorder/updateServiceClass";
+    private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/exchangesalesorder/printPackagingSlip";
+    private readonly getMultiPackagingSlipForPrint: string = environment.baseUrl + "/api/exchangesalesorder/printMultiplePackagingSlip";
+    private readonly getMultiShipingLabelForPrint: string = environment.baseUrl + "/api/exchangesalesorder/getMultiShipingLabelForPrint";
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -184,6 +195,84 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
       return this.http.get<any>(`${this.configurations.baseUrl}/api/exchangesalesorder/sales-order-pick-ticket-history/?soPickTicketId=${pickticketid}`)
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getpickticketHistory(pickticketid));
+        });
+    }
+    getExchangeSalesOrderShipping(exchangeSalesOrderId: number, partId): Observable<any> {
+      const URL = `${this.exchangeSalesorderShippingGet}?exchangeSalesOrderId=${exchangeSalesOrderId}&exchangeSalesOrderPartId=${partId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderShipping(exchangeSalesOrderId, partId));
+        });
+    }
+    createShipping(shippingInfo: ExchangeSalesOrderShipping): Observable<any> {
+      return this.http
+        .post(this.salesorderShippingSave, JSON.stringify(shippingInfo), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createShipping(shippingInfo));
+        });
+    }
+    getShippingDataList(salesOrderId: number): Observable<any> {
+      const URL = `${this.getShippingDataListURL}/${salesOrderId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getShippingDataList(salesOrderId));
+        });
+    }
+    generatePackagingSlip(packagingSlip: any): Observable<any> {
+      return this.http
+        .post(this.salesorderSavePackingSlip, JSON.stringify(packagingSlip), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.generatePackagingSlip(packagingSlip));
+        });
+    }
+    getShippingLabelPrint(salesOrderId: number, salesOrderPartId: number, soShippingId: number): Observable<any> {
+      const URL = `${this.getShipingLabelForPrintPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soShippingId=${soShippingId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId));
+        });
+    }
+    updateShipping(serviceClass: string, salesOrderShippingId: number): Observable<any> {
+      let url: string = `${this.updateServiceClass}?serviceClass=${serviceClass}&salesOrderShippingId=${salesOrderShippingId}`;
+      return this.http
+        .put(url, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.updateShipping(serviceClass, salesOrderShippingId));
+        });
+    }
+    getShippingEdit(salesOrderShippingId: number): Observable<any> {
+      const URL = `${this.getShippingforEdit}?exchangeSalesOrderShippingId=${salesOrderShippingId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getShippingEdit(salesOrderShippingId));
+        });
+    }
+    getPackagingSlipPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number, packagingSlipId: number): Observable<any> {
+      const URL = `${this.getPackagingSlipForPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soPickTicketId=${soPickTicketId}&packagingSlipId=${packagingSlipId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getPackagingSlipPrint(salesOrderId, salesOrderPartId, soPickTicketId, packagingSlipId));
+        });
+    }
+    getMultiPackagingSlipPrint(multiPackagingSlip: any): Observable<any> {
+      const URL = `${this.getMultiPackagingSlipForPrint}`;
+      return this.http
+        .post<any>(URL, JSON.stringify(multiPackagingSlip), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getMultiPackagingSlipPrint(multiPackagingSlip));
+        });
+    }
+    getMultiShippingLabelPrint(multiShippingLabel: any): Observable<any> {
+      const URL = `${this.getMultiShipingLabelForPrint}`;
+      return this.http
+        .post<any>(URL, JSON.stringify(multiShippingLabel), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiShippingLabel));
         });
     }
 }

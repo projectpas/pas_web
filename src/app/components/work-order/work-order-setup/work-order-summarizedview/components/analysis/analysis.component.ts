@@ -63,7 +63,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Status',
-                        field: 'status'
+                        field: 'status',
+                        width:"60px"
                     },
                     {
                         header: 'Customer Name',
@@ -71,15 +72,18 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Revenue',
-                        field: 'revenue'
+                        field: 'revenue',
+                        width:"60px"
                     },
                     {
                         header: 'Material Revenue',
-                        field: 'materialRevenue'
+                        field: 'materialRevenue',
+                        width:"100px"
                     },
                     {
                         header: 'Material Cost',
-                        field: 'materialCost'
+                        field: 'materialCost',
+                        width:"70px",
                     },
                     {
                         header: 'Material Revenue Percentage',
@@ -87,7 +91,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Total Labor Cost',
-                        field: 'totalLaborCost'
+                        field: 'totalLaborCost',
+                        width:"70px"
                     },
                     {
                         header: 'Labor Revenue Percentage',
@@ -95,7 +100,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'OverHead Cost',
-                        field: 'overHeadCost'
+                        field: 'overHeadCost',
+                        width:"80px"
                     },
                     {
                         header: 'OverHead Cost Revenue Percentage',
@@ -103,19 +109,23 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Charges Cost',
-                        field: 'chargesCost'
+                        field: 'chargesCost',
+                        width:"70px"
                     },
                     {
                         header: 'Freight Cost',
-                        field: 'freightCost'
+                        field: 'freightCost',
+                        width:"70px"
                     },
                     {
                         header: 'Other Cost',
-                        field: 'otherCost'
+                        field: 'otherCost',
+                        width:"70px"
                     },
                     {
                         header: 'DirectCost',
-                        field: 'directCost'
+                        field: 'directCost',
+                        width:"70px"
                     },
                     {
                         header: 'Direct Cost Revenue Percentage',
@@ -123,7 +133,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Margin',
-                        field: 'margin'
+                        field: 'margin',
+                        width:"70px"
                     },
                     {
                         header: 'Margin Percentage',
@@ -164,7 +175,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Revenue',
-                        field: 'revenue'
+                        field: 'revenue',
+                        width:"70px"
                     },
                     {
                         header: 'Material Revenue',
@@ -172,7 +184,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Material Cost',
-                        field: 'materialCost'
+                        field: 'materialCost',
+                        width:"80px"
                     },
                     {
                         header: 'Material Revenue Percentage',
@@ -200,19 +213,23 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Charges Cost',
-                        field: 'chargesCost'
+                        field: 'chargesCost',
+                        width:"70px"
                     },
                     {
                         header: 'Freight Cost',
-                        field: 'freightCost'
+                        field: 'freightCost',
+                        width:"70px"
                     },
                     {
                         header: 'Other Cost',
-                        field: 'otherCost'
+                        field: 'otherCost',
+                        width:"70px"
                     },
                     {
                         header: 'DirectCost',
-                        field: 'directCost'
+                        field: 'directCost',
+                        width:"70px" 
                     },
                     {
                         header: 'Direct Cost Revenue Percentage',
@@ -220,7 +237,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Margin',
-                        field: 'margin'
+                        field: 'margin',
+                        width:"70px"
                     },
                     {
                         header: 'Margin Percentage',
