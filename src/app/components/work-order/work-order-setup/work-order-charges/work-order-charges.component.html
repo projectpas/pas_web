@@ -3,8 +3,9 @@
     Add Charges
   </button>
 </div> -->
-<div class="header" *ngIf=" !isQuote">
-  <div class="row" *ngIf="!isSummarizedView">
+<div class="header" *ngIf=" !isQuote && !isSummarizedView">
+  <div class="row" >
+    <!-- *ngIf="!isSummarizedView" -->
       <div class="col">
           <h4 class="header-name">Work Order Charges List</h4>
       </div>

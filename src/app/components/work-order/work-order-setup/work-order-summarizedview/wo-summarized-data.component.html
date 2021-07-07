@@ -140,8 +140,8 @@
                                                                     <tr>
                                                                         <!-- <th class="table-column-icon-width"></th> -->
                                                                         
-                                                                        <th *ngFor="let matHeader of labourListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
-                                                                        color: white;">
+                                                                        <th *ngFor="let matHeader of labourListHeader" style="border: 1px solid #c8c8c8 !important;
+                                                                        color: white;" [ngStyle]="{'min-width': matHeader.width}">
                                                                             {{matHeader.header}}
                                                                         </th>
                                                                     </tr>
@@ -151,10 +151,10 @@
                                                                    
                                                                    <ng-container *ngFor="let labourMPN of labourListMPNs; let i=index" >
                                                                     <tr>
-                                                                        <td *ngFor="let matField of labourListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
+                                                                        <td   [ngClass]="(matField.field == 'plus' )?'width-10':''"  *ngFor="let matField of labourListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
                                                                           <span [ngClass]="(matField.field == 'hours' )?'float-right':''"
                                                                            *ngIf="matField.field !='plus'"> {{globalizeAmount(labourMPN[matField.field], matField.field)}}</span>
-                                                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px;padding-top:0px"> 
                                                                                <i *ngIf="labourMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(labourMPN)"></i>
                                                                                <i *ngIf="labourMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(labourMPN)"></i>   
                                                                            </a> 
@@ -210,7 +210,7 @@
                                                             <table  class="table table-bordered">
                                                                 <thead  >
                                                                     <tr>
-                                                                        <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
+                                                                        <th *ngFor="let matHeader of documentsListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 10px;background-color: #4397f7;
                                                                         color: white;">
                                                                             {{matHeader.header}}
                                                                         </th>
@@ -219,8 +219,8 @@
                                                                 <tbody >
                                                                    <ng-container *ngFor="let documentMPN of documentNumberList; let i=index">
                                                                     <tr>
-                                                                        <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;min-width: 100px !important;;color: black;">
-                                                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                                                        <td [ngClass]="(matField.field == 'plus' )?'width-10':''" *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;color: black;">
+                                                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px;padding-top:0px"> 
                                                                                 <i *ngIf="documentMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  style="padding: 1px 5px !important;color: #fff !important;"  (click)="getLabourListData(documentMPN)"></i>
                                                                                 <i *ngIf="documentMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(documentMPN)"></i>   
                                                                             </a> 

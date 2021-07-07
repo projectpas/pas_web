@@ -75,7 +75,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     ]
 
     labourListHeader = [
-        {"header": "", "field": "plus"},
+        {"header": "", "field": "plus",width:"30px"},
         {
             "header": "WO Num",
             "field": "workOrderNum"

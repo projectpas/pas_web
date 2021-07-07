@@ -248,7 +248,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             { field: 'isVerified', header: 'Verified', width: "80px" },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
-            { field: 'memo', header: 'Memo', width: "200px" },
+            { field: 'memo', header: 'Memo', width: "250px" },
             { field: 'createdDate', header: 'Created Date' },
             { field: 'createdBy', header: 'Created By' },
             { field: 'updatedDate', header: 'Updated Date' },
