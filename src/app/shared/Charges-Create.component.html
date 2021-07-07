@@ -53,7 +53,7 @@
             value="{{ charge.glAccountName }}" [(ngModel)]="charge.glAccountName" name="exd1_{{i}}" disabled />
         </td>
         <td>
-          <input type="text" pInputText value="{{ charge.description }}" maxlength="500" (ngModelChange)="getActive()" [(ngModel)]="charge.description"
+          <input type="text"  pInputText value="{{ charge.description }}" maxlength="256" (ngModelChange)="getActive()" [(ngModel)]="charge.description"
             class="form-control" name="desc_{{i}}" />
         </td>
         <td>
@@ -69,12 +69,12 @@
             [(ngModel)]="charge.refNum" name="refNum_{{i}}" />
         </td>
         <td>
-          <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getActive()" class="form-control text-right" value="{{ charge.unitCost }}"
+          <input type="text" maxlength="20" pInputText pKeyFilter="money" (ngModelChange)="getActive()" class="form-control text-right" value="{{ charge.unitCost }}"
             (change)="calculateExtendedCost(charge)" [(ngModel)]="charge.unitCost" name="unitCost_{{i}}" maxlength="15"
             required />
         </td>
         <td>
-          <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getActive()" class="form-control text-right" [disabled]="true"
+          <input type="text" maxlength="20" pInputText pKeyFilter="money" (ngModelChange)="getActive()" class="form-control text-right" [disabled]="true"
             value="{{ charge.extendedCost }}" [(ngModel)]="charge.extendedCost"
             (change)="calculateExtendedCostSummation();calculateExtendedPriceSummation()" name="exd_{{i}}" [required]="!isWorkOrder" disabled
             maxlength="15" />

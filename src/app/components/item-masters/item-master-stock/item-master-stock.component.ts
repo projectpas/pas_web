@@ -6139,5 +6139,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     SetSalesCurrency() {
         this.sourceItemMaster.salesCurrencyId = this.sourceItemMaster.purchaseCurrencyId;
     }
-    
+    clearSerchDataAirInfo(){
+        this.selectedDashNumbers=undefined;
+        this.selectedAircraftModel=undefined;
+        this.selectAircraftManfacturer=undefined; 
+    }
 }

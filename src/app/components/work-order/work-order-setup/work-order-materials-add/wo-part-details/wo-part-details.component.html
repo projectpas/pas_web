@@ -57,7 +57,7 @@
       <div class="col-2 column">
         <div class="form-group">
           <label >Qty Req<span class="clr-red">*</span></label>
-          <input class="form-control text-right" type="text"  (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
+          <input class="form-control text-right" type="text" maxLength="10" (ngModelChange)="getActive()" pKeyFilter="pint" pInputText required          
           [(ngModel)]="formObject.quantity" (change)="calculateExtendedCost()" name="quantity" autocomplete="off" />
          </div>
       </div>

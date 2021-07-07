@@ -570,7 +570,7 @@ export class CommonService extends EndpointFactory {
   }
 
   getModuleListForObtainOwnerTraceable(masterCompanyId) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/modulelistfordropdown/${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/modulelistfordropdown/${0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getModuleListForObtainOwnerTraceable(masterCompanyId));
     });
   }
