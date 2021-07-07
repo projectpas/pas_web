@@ -390,7 +390,7 @@
                                              class="table-checkbox"/>
                                     </ng-container>
                                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                                        {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
+                                        {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
                                     </ng-container>
                                 </td>
                                 <td class="action-icons-cstm table-column-width">
@@ -683,7 +683,7 @@
                                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                                     </td>                                        
                                     <td class="table-column-width" *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
-                                        <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}</p>
+                                        <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}</p>
                                     </td>    
                                 </ng-container>
                                 
