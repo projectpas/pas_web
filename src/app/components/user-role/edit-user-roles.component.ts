@@ -321,6 +321,7 @@ export class EditUserRolesComponent implements OnInit {
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
         var value = event.target.checked;   
+        this.enableDisableViewPermission(currentModule,value);  
             if (value == false) {
                 this.setPermissionByType(currentModule, type, value);
                 if (currentModule.parentId != null)
@@ -381,10 +382,12 @@ export class EditUserRolesComponent implements OnInit {
                 }
          });
        }
+
        this.sortedHierarchy.filter(function (module) {
                 if(genInfoCount >0){
                     if(module.parentId != null && (currentModule.parentId == module.parentId)){
                         if(module.displayOrder != null && module.displayOrder == 0 && value){
+                            module.rolePermission.canAdd = true;
                             module.rolePermission.canView = true;
                         }
                     }
