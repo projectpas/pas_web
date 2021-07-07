@@ -132,7 +132,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
                 val = Number(val.replace(/[^0-9.-]+/g, ""));
             }
             val = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
-            return val.toFixed(2);
+            return val;
         }
     }
     closeModal() {
