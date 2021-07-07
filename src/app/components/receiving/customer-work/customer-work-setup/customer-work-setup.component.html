@@ -311,7 +311,7 @@
                                                 Serial Number <span *ngIf="receivingForm.isSerialized"
                                                     class="text-danger">*</span>
                                             </label>
-                                            <input class="form-control" type="text" name="serialNumber"
+                                            <input class="form-control" type="text" maxlength="100" name="serialNumber"
                                                 [(ngModel)]="receivingForm.serialNumber" (ngModelChange)="getActive()"
                                                 [required]="receivingForm.isSerialized">
                                         </div>

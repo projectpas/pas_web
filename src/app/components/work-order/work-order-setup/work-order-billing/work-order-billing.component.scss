@@ -109,6 +109,10 @@ label {
   margin-right: 0;
   font-weight: normal;
 }
+input[type='tel']{
+  text-align: end !important;
+}
+input[type='tel'],
 input[type='text'],
 input[type='number'],
 select,
