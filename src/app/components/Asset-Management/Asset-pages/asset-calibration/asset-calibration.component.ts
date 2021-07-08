@@ -17,6 +17,7 @@ import { CommonService } from '../../../../services/common.service';
 // declare var $ : any;
 declare var $ : any;
 import { MenuItem } from 'primeng/api';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-asset-calibration',
     templateUrl: './asset-calibration.component.html',
@@ -47,12 +48,40 @@ export class AssetCalibrationComponent implements OnInit {
     static assetService;
     nextOrPreviousTab: any;
     disableSaveForEdit:boolean=false;
+    isView:boolean=true;
+    isAssetView : boolean = true;
+    isCalibrationAdd:boolean=true;
+    isCalibrationUpdate:boolean=true;
+    isCalibrationDownload:boolean=true;
+    isMaintenanceDownload:boolean=true;
+    isGeneralInfoAdd:boolean=true;
+    isNextVisible:Boolean=true;
+    isCapeNextVisible: Boolean=true;
+    isCalibrationNext: Boolean=true;
+    isCalibrationPrev: Boolean=true;
+    isMaintenancePrev: Boolean=true;
     constructor(private router: ActivatedRoute, public assetService: AssetService, private vendorService: VendorService, private alertService: AlertService,
         private authService: AuthService,private commonService: CommonService,
         private modalService: NgbModal, private glAccountService: GlAccountService, private route: Router, private currencyService: CurrencyService) {
         this.AssetId = this.router.snapshot.params['id'];
         this.activeIndex = 2;
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.View]);
+        this.isAssetView=this.authService.checkPermission([ModuleConstants.Asset_List+'.'+PermissionConstants.View]);
+        this.isCalibrationAdd=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Add]);
+        this.isCalibrationUpdate=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab('Create Asset','Capes');
+        this.isCapeNextVisible=this.authService.ShowTab('Create Asset','Calibration');
+        this.isCalibrationNext=this.authService.ShowTab('Create Asset','Maintenance & Warranty');
+        this.isCalibrationPrev=this.authService.ShowTab('Create Asset','Capes');
+        this.isMaintenancePrev=this.authService.ShowTab('Create Asset','Calibration');
     }
+
+    isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Asset',value);
+		return isShow;
+	
+	}
     ngOnInit(): void {
         if( this.assetService.isEditMode == false){
 

@@ -121,11 +121,11 @@ export class EditUserRolesComponent implements OnInit {
             if (target.classList.contains('fa-caret-down')) {
                 target.classList.remove('fa-caret-down');
                 target.classList.add('fa-caret-right');
-                visible = true;
             }
             else {
                 target.classList.remove('fa-caret-right');
                 target.classList.add('fa-caret-down');
+                visible = true;
             }
             if (visible) {
                 var selectedModule = this.sortedHierarchy.filter(function (filteredModule: ModuleHierarchyMaster) {
@@ -143,8 +143,8 @@ export class EditUserRolesComponent implements OnInit {
                     var k=document.getElementsByClassName('cls'+currentModule.id);
                     for (let index = 0; index < k.length; index++) {
                         const element = k[index];
-                        element.classList.remove('fa-caret-right');
-                        element.classList.add('fa-caret-down');
+                        element.classList.remove('fa-caret-down');
+                        element.classList.add('fa-caret-right');
                     }
                 });
             }
@@ -508,6 +508,7 @@ export class EditUserRolesComponent implements OnInit {
 
     UpdateUserRole(): void {
     this.isSpinnerVisible=true;
+    debugger;
         let userRoleID = this.currentUserRole.id
         this.currentUserRole.rolePermissions = [];
         let arrayData :any = [];
@@ -622,8 +623,7 @@ export class EditUserRolesComponent implements OnInit {
           }
      });
 
-     this.currentUserRole.rolePermissions = arrayData;
-        this.isSpinnerVisible=false;
+     this.currentUserRole.rolePermissions = arrayData;        
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);

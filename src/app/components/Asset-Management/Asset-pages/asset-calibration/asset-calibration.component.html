@@ -9,7 +9,7 @@
           <button
             type="button"
             class="btn-sm header-button"
-            [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+            [routerLink]="['/assetmodule/assetpages/app-asset-listing']" *ngIf="isAssetView">
             Asset List
           </button>
         </div>
@@ -24,7 +24,7 @@
         <div class="md-step-bar-left"></div>
         <div class="md-step-bar-right"></div>
     </div>
-    <div class="md-step"
+    <div *ngIf="isShowTab('Capes')" class="md-step"
          [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
          (click)="changeOfTab('Capes')">
         <div class="md-step-circle"><span>2</span></div>
@@ -32,7 +32,7 @@
         <div class="md-step-bar-left"></div>
         <div class="md-step-bar-right"></div>
     </div>
-    <div class="md-step"
+    <div  *ngIf="isShowTab('Calibration')"  class="md-step"
          [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
          (click)="changeOfTab('Calibration')">
         <div class="md-step-circle"><span>3</span></div>
@@ -40,7 +40,7 @@
         <div class="md-step-bar-left"></div>
         <div class="md-step-bar-right"></div>
     </div>
-    <div class="md-step"
+    <div *ngIf="isShowTab('Maintenance & Warranty')" class="md-step"
          [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
          (click)="changeOfTab('Maintenance')">
         <div class="md-step-circle"><span>4</span></div>
@@ -485,12 +485,12 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="margintop">
-                                        <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
-                                        <button  [disabled]="!generalForm.valid ||  disableSaveForEdit" type="submit" class="btn btn-primary pull-right submit-btn"
+                                        <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')" *ngIf="isCalibrationNext">Next</button>
+                                        <button *ngIf="isCalibrationAdd || isCalibrationUpdate"  [disabled]="!generalForm.valid ||  disableSaveForEdit" type="submit" class="btn btn-primary pull-right submit-btn"
                                                 (click)="saveCalibration()">
                                              {{currentCalibration.assetCal==true ? 'Update' : 'Save'}}
                                         </button>
-                                      <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">Previous</button>
+                                      <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')" *ngIf="isCalibrationPrev">Previous</button>
                                     </div>
                                 </div>
 
