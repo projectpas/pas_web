@@ -678,6 +678,8 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.selectedSitename = "";
         this.isEditDomestic = false;
         this.domesticShippingInfo = new CustomerShippingModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
     addInternationalShipping() {
         this.isEditInternational = false;
