@@ -102,8 +102,12 @@ export class CreateSalesQuoteSettingsComponent implements OnInit {
         })
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     getAllsalesOrderTypes(): void {
-        this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description").subscribe(
+        this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description", this.currentUserMasterCompanyId).subscribe(
             result => {
                 this.salesOrderTypes = result[0];
             }, error => {

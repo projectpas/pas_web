@@ -296,13 +296,13 @@ export class CrmCreateComponent {
     }
 	
 	async getAllCustomerClassification() {
-        await this.commonService.smartDropDownList('CustomerClassification', 'CustomerClassificationId', 'Description').subscribe(res => {
+        await this.commonService.smartDropDownList('CustomerClassification', 'CustomerClassificationId', 'Description',this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allcustomerclassificationInfo = res;
         });
 
 	}
 	getAllcreditTermList() {
-        this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').subscribe(res => {
+        this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.crmList = res;
         })
 	}
@@ -318,7 +318,7 @@ export class CrmCreateComponent {
 	}
 	
 	async getAllReports() {
-		await this.commonService.smartDropDownList('Report', 'ReportId', 'ReportName').subscribe(res => {
+		await this.commonService.smartDropDownList('Report', 'ReportId', 'ReportName', this.currentUserMasterCompanyId).subscribe(res => {
 			this.reportList = res;
 		});
 	
@@ -743,7 +743,7 @@ updatedBy: this.userName
 
 
 	getAllCreditTerms() {
-		this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').subscribe(res => {
+		this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
 			this.creditTermsListOriginal = res;
 
 		})

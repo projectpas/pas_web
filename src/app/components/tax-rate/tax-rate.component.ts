@@ -208,7 +208,7 @@ export class TaxRateComponent implements OnInit {
     }
 
     getAllPercentage() {
-        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue', this.authService.currentUser.masterCompanyId).subscribe(res => {
             //////console.log('res: '+res);
             this.percentageList = res;
         });

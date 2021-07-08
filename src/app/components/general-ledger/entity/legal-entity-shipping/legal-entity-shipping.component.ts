@@ -1072,7 +1072,6 @@ export class EntityShippingComponent implements OnInit {
                 this.setEditArray.push(0);
             }
             const strText = value ? value : '';
-            //this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
             this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.countryListOriginal = res.map(x => {
                     return {

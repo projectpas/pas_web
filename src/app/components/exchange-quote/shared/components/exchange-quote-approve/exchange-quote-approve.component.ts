@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ExchangequoteService } from "../../../../../services/exchangequote.service";
 import { CommonService } from "../../../../../services/common.service";
+import { AuthService } from "../../../../../services/auth.service";
 //import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
 //import { SOQuoteMarginSummary } from "../../../../../../models/sales/SoQuoteMarginSummary";
 @Component({
@@ -16,7 +17,7 @@ export class ExchangeQuoteApproveComponent{
   apporoverNamesList: any = [];
   poApprovaltaskId = 7;
   constructor(public exchangequoteService: ExchangequoteService
-    ,private commonService: CommonService) { }
+    ,private commonService: CommonService, private authService: AuthService) { }
 
   ngOnInit() {
   }
@@ -28,7 +29,7 @@ export class ExchangeQuoteApproveComponent{
 getApproversListById(poId) {	
 this.isSpinnerVisible = true;
 if(this.poApprovaltaskId == 0) {
-this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
+this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => { 		        
 if(response) {					
         response.forEach(x => {
             if (x.label.toUpperCase() == "Exchange Quote Approval") {

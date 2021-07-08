@@ -2219,13 +2219,10 @@ const data={...newdata};
     getMarkup(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
-            // this.setEditArray.push(this.currentAsset.tangibleClassId ? this.currentAsset.tangibleClassId : 0);
-
         } else {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) { 
                 this.markupList = res;
@@ -2632,7 +2629,7 @@ const data={...newdata};
     }
     
     getCustomerWarningsList(): void {
-        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
+        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create WO Quote for MPN') {
                     this.createQuoteListID = element.value;
@@ -3334,20 +3331,10 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
 
     getAllEmailType() {
         this.setEditArray = [];
-        const strText = '';
-     
-            this.setEditArray.push(0);
-
+        const strText = '';     
+        this.setEditArray.push(0);
         this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
-           
-
-
-        // this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name')
-        // .subscribe((res: any[])=>{
-
-
                 this.emailTypes = res;
-
                 this.emailTypes.forEach(
                     (x)=>{
                         if(x.label == 'Manual'){
