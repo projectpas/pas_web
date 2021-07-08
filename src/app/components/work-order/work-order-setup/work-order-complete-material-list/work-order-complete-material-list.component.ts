@@ -54,6 +54,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() updateMaterialsData = new EventEmitter();
     @Output() isSubWorkorder = new EventEmitter();
     @Input() workOrderNumberStatus: any;
+    @Input() isSummary:boolean=false;
     statusId = null;
     ispickticket: boolean = false;
     minDateValue: Date = new Date();

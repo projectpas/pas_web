@@ -22,7 +22,8 @@ export class SummarizedChargesComponent implements OnInit, OnChanges {
         {"header": "", "field": "plus",width:"30px"},
         {
             "header": "MPN",
-            "field": "partNumber"
+            "field": "partNumber",
+            width:"180px"
         },
         {
             "header": "Revised Part No",
@@ -30,7 +31,8 @@ export class SummarizedChargesComponent implements OnInit, OnChanges {
         },
         {
             "header": "Part Description",
-            "field": "partDescription"
+            "field": "partDescription",
+            width:"250px"
         },
         {
             "header": "Item",

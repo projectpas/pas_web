@@ -2,7 +2,7 @@
   <div *ngIf="isEdit">
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [isView]="isView"   [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
-      [jobTitles]="jobTitles" [workOrderStagesList]="workOrderStagesList"
+      [jobTitles]="jobTitles" [workOrderStagesList]="workOrderStagesList" (refreshGrid)="refreshWo($event)"
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
       [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
       [workorderSettings]="workorderSettings" [partNumberOriginalData]="partNumberOriginalData" 
@@ -13,7 +13,7 @@
     <app-work-order-add [isEdit]="isEdit"   [isView]="isView" [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
       [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" 
-      [jobTitles]="jobTitles" [salesPersonOriginalList]="salesPersonOriginalList"
+      [jobTitles]="jobTitles" [salesPersonOriginalList]="salesPersonOriginalList" (refreshGrid)="refreshWo($event)"
       [salesAgentsOriginalList]="salesAgentsOriginalList" [csrOriginalList]="csrOriginalList"
       [technicianOriginalList]="technicianOriginalList" 
       [workOrderStagesList]="workOrderStagesList" [workorderSettings]="workorderSettings" 

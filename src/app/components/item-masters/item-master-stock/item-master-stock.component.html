@@ -1,4 +1,4 @@
-<div class="card p-t-5">
+﻿<div class="card p-t-5">
     <div class="form-row status-radio">
         <div class="col-md-8">
             <div class="form-group">
@@ -1169,14 +1169,14 @@
                                                 <div class="col-md-1 col-md-1-cstm">
                                                     <label class="item-master-search">Search :</label>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group ">
                                                         <label>Aircraft </label>
                                                         <p-multiSelect [options]="manufacturerData" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAircraftManfacturer" (onChange)="getAircraftModelByManfacturerType()"
                                                                         class="pub-multi"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>
                                                             Aircraft Model
@@ -1185,7 +1185,7 @@
                                                                         class="pub-multi" (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>DashNumber </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="dashNumberList" [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{standalone: true}"
@@ -1197,7 +1197,7 @@
                                                         <button style="margin-top:20%;" class="btn btn-primary mtop20" type="button" (click)="searchAircraftInformation()">
                                                             <i class="pi pi-search pi-search"></i>
                                                         </button>
-                                                        <button type="button" matTooltip="Search" style="margin-top:20%" matTooltipPosition="above" (click)="clearSerchDataAirInfo()"
+                                                        <button type="button" matTooltip="Search" style="margin-top:20%;margin-left:-5px" matTooltipPosition="above" (click)="clearSerchDataAirInfo()"
                                                         class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
                                                           Clear
                                                        </button>
@@ -2122,27 +2122,39 @@
                                         </div>
                                         <label class="control-label">Classification  </label>
                                         <div class="inline-block display-flex">
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportUnspecified" [checked]="exportInfo.exportClassificationId == 1" value="1" [value]="1" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
-                                                    Unspecified
+                                            <div  class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"  class="form-control" id="IsExportUnspecified" 
+                                                    [checked]="exportInfo.exportClassificationId == 1" value="1" 
+                                                    [value]="1" name="exportClassificationId"
+                                                     [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
+                                                     <span class="checkmark"></span> Unspecified
                                                 </label>
                                             </div>
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportNONMilitary" [value]="2" value="2" [checked]="exportInfo.exportClassificationId == 2" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId"    (change)="btnChange()">NON-Military
+                                            <div class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"  class="form-control" id="IsExportNONMilitary" [value]="2" value="2" 
+                                                    [checked]="exportInfo.exportClassificationId == 2" name="exportClassificationId" 
+                                                    [(ngModel)]="exportInfo.exportClassificationId"    (change)="btnChange()">
+                                                    <span class="checkmark"></span>NON-Military
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="inline-block display-flex">
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportMilitary" value="3" [value]="3" [checked]="exportInfo.exportClassificationId == 3" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">Miltary
+                                            <div class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"   class="form-control" id="IsExportMilitary" value="3" [value]="3"
+                                                     [checked]="exportInfo.exportClassificationId == 3" name="exportClassificationId"
+                                                      [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
+                                                      <span class="checkmark"></span>Miltary
                                                 </label>
                                             </div>
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportDual" value="4" [value]="4" [checked]="exportInfo.exportClassificationId == 4" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">Dual
+                                            <div class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"  class="form-control" id="IsExportDual" value="4" [value]="4"
+                                                     [checked]="exportInfo.exportClassificationId == 4" name="exportClassificationId" 
+                                                     [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
+                                                     <span class="checkmark"></span>Dual
                                                 </label>
                                             </div>
                                         </div>

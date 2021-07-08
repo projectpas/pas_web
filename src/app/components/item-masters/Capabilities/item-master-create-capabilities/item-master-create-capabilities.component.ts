@@ -81,7 +81,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     itemMasterListOriginal: any;
     partListItemMaster: any;
     managementStructureData: any = [];
-
+currentDate=  new Date();
     constructor(public itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,

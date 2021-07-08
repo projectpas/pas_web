@@ -32,11 +32,11 @@ export class ExchangeSalesOrderService {
   salesOrderQuote: IExchangeOrderQuote;
   //salesOrderReference: SalesOrderReference;
   parts: IPartJson[];
-  selectedParts: PartDetail[];
+  //selectedParts: PartDetail[];
   activeStep = new Subject();
   query: ItemMasterSearchQuery;
   //activeStep = new Subject();
-  //selectedParts: any = [];
+  selectedParts: any = [];
   totalFreights = 0;
   totalCharges = 0;
   //salesOrderReferenceSubj = new BehaviorSubject<SalesOrderReference>(null);

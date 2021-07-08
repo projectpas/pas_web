@@ -23,6 +23,7 @@ import { StocklineViewComponent } from '../../../../shared/components/stockline/
 })
 export class WorkOrderPickticketComponent implements OnInit {
   @Input() referenceId;
+  @Input() workFlowWorkOrderId;
   isEnablePOList: any;
   pickTickes: any[] = []; 
   tempSales: any[] = [];
@@ -135,7 +136,7 @@ export class WorkOrderPickticketComponent implements OnInit {
   onSearch() {
     this.isSpinnerVisible = true;
     this.workOrderService
-      .getPickTicketList(this.referenceId)
+      .getPickTicketList(this.referenceId,this.workFlowWorkOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.pickTickes = response;
