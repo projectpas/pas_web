@@ -1587,4 +1587,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy));
         });
     }
+
+    GetWorkOrderSummarisedHistoryByMPN(itemMasterId: number,isTwelveMonth : boolean) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderSummarisedHistoryByMPN?ItemMasterId=${itemMasterId}&IsTwelveMonth=${isTwelveMonth}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderSummarisedHistoryByMPN(itemMasterId,isTwelveMonth));
+        });
+    }
 }

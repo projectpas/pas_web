@@ -821,4 +821,7 @@ export class WorkOrderService {
         return this.workOrderEndpointService.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy);
     }
 
+    GetWorkOrderSummarisedHistoryByMPN(itemMasterId,isTwelveMonth) {
+        return this.workOrderEndpointService.GetWorkOrderSummarisedHistoryByMPN(itemMasterId,isTwelveMonth);
     }
+}
