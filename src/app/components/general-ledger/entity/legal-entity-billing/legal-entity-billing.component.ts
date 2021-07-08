@@ -595,7 +595,7 @@ export class EntityBillingComponent {
                 this.setEditArray.push(0);
             }
             const strText = value ? value : '';
-            this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+            this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name', this.authService.currentUser.masterCompanyId).subscribe(res => {
                 // this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
                 this.countrycollection = res;
             }, err => {
@@ -630,7 +630,7 @@ export class EntityBillingComponent {
                 this.setEditArray.push(0);
             }
             if (this.id != undefined) {
-                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityBillingAddress', 'LegalEntityBillingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join()).subscribe(res => {
+                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityBillingAddress', 'LegalEntityBillingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
                     this.sitesOriginal = res;
                     this.sitesNamesList = [];
                     this.sitesNamesList = [...this.sitesOriginal];

@@ -599,7 +599,6 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
     
     async getAllVendorClassification() {
-        //await this.commonService.smartDropDownList('VendorClassification', 'VendorClassificationId', 'ClassificationName').subscribe(res => {
         await this.commonService.autoSuggestionSmartDropDownList('VendorClassification', 'VendorClassificationId', 'ClassificationName','',true,300,'',this.currentUserMasterCompanyId).subscribe(res => {
             this.allvendorclassificationInfo = res;
         },error => this.isSpinnerVisible = false )//this.onDataLoadFailed(error));

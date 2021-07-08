@@ -626,9 +626,13 @@ if(!this.isSummarizedView){
     return newTotal;
   }
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+  }
+
   getRONumberList() {
     if (this.roNumList && this.roNumList.length == 0) {
-      this.commonService.smartDropDownList('RepairOrder', 'RepairOrderId', 'RepairOrderNumber')
+      this.commonService.smartDropDownList('RepairOrder', 'RepairOrderId', 'RepairOrderNumber', this.currentUserMasterCompanyId)
         .subscribe(
           (res: any[]) => {
             this.roNumList = res;

@@ -396,7 +396,6 @@ export class VendorShippingInformationComponent {
     }
    
     getshipvialistList(){
-        //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
           this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
               this.shipViaDropdownList = res.map(x => {
                   return {
@@ -602,7 +601,7 @@ export class VendorShippingInformationComponent {
 
         if(this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(row.vendorShippingAddressId); }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                     return {
                         siteName: x.label, value: x.value
@@ -1778,7 +1777,7 @@ export class VendorShippingInformationComponent {
         //this.isSpinnerVisible = true;
 		if(this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value

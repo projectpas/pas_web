@@ -4,7 +4,7 @@ declare var $ : any;
 import { CommunicationService } from '../../../../../shared/services/communication.service';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { CommonService } from '../../../../../services/common.service'
-
+import { AuthService } from "../../../../../services/auth.service";
 import { getObjectById } from '../../../../../generic/autocomplete';
 import { DBkeys } from '../../../../../services/db-Keys';
 
@@ -43,7 +43,7 @@ export class TextComponent implements OnInit, OnChanges {
     ]
     selectedColumns = this.headers;
     addList: any = [];
-    constructor(private activeModal: NgbActiveModal, private communicationService: CommunicationService, private employeeService: EmployeeService, private commonService: CommonService ) {}
+    constructor(private activeModal: NgbActiveModal, private communicationService: CommunicationService, private employeeService: EmployeeService, private commonService: CommonService, private authService: AuthService ) {}
     
     ngOnInit(): void {
         if (this.salesQuoteId) {
@@ -155,7 +155,7 @@ export class TextComponent implements OnInit, OnChanges {
     }
 
     getAllEmployees(){
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').subscribe(res => {
+        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName',this.authService.currentUser.masterCompanyId).subscribe(res => {
             console.log("REs",res);
             this.employees = res.map(x => {
                 return {

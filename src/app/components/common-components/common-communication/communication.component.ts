@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, Input, OnChanges, ViewEncapsulation } from '@angular/core';
 import {  NgbActiveModal, NgbModalRef,  } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../services/common.service';
-
+import { AuthService } from "../../../services/auth.service";
 
 @Component({
     selector: 'app-communication',
@@ -22,7 +22,7 @@ export class CommonCommunicationComponent implements OnInit, OnChanges {
     emailstyle:any=false;
     phoneStyle:any=false;
     textStyle:any=false;
-    constructor(private activeModal: NgbActiveModal,
+    constructor(private activeModal: NgbActiveModal,private authService: AuthService,
       public  commonService: CommonService) { 
         }
     ngOnInit(): void {
@@ -64,7 +64,7 @@ export class CommonCommunicationComponent implements OnInit, OnChanges {
     moduleId:any;
     attachmoduleList: any = [];
     getModuleList(): void {
-        this.commonService.smartDropDownList('Module', 'ModuleId', 'ModuleName').subscribe(res => {
+        this.commonService.smartDropDownList('Module', 'ModuleId', 'ModuleName', this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.attachmoduleList = res;
             this.attachmoduleList.forEach(element => {
                 if (element.label == this.moduleName) {

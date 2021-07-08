@@ -393,7 +393,7 @@ export class VendorBillingInformationComponent {
         }
 
         this.arraySiteIdlist.push(row.vendorBillingAddressId); 
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorBillingAddress', 'VendorBillingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arraySiteIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorBillingAddress', 'VendorBillingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arraySiteIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.sitelistCollectionOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -833,7 +833,7 @@ export class VendorBillingInformationComponent {
     getAllSiteSmartDropDown(strText = ''){
 		if(this.arraySiteIdlist.length == 0) {
             this.arraySiteIdlist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorBillingAddress', 'VendorBillingAddressId', 'SiteName', strText , 'VendorId', this.vendorId, 20,this.arraySiteIdlist.join()).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorBillingAddress', 'VendorBillingAddressId', 'SiteName', strText , 'VendorId', this.vendorId, 20,this.arraySiteIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.sitelistCollectionOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
