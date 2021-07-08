@@ -135,15 +135,16 @@ export class PoApprovalComponent implements OnInit
     getEnitityList(strText = '') {
 		if(this.arrayLegalEntitylsit.length == 0) {			
 			this.arrayLegalEntitylsit.push(0); }	
-			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name',strText,true, 20,this.arrayLegalEntitylsit.join()).subscribe(res => {
-				this.legalEntityList = res;
-			});
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name',strText,true, 20,this.arrayLegalEntitylsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+			this.legalEntityList = res;
+		});
     }
     
     filterlegalEntityList(event) {
         if (event.query !== undefined && event.query !== null) {
-                    this.getEnitityList(event.query); }
+            this.getEnitityList(event.query); 
         }
+    }
 
     onEntitySelect()
     {
@@ -216,7 +217,7 @@ export class PoApprovalComponent implements OnInit
                
                 this.creatingData = res;
                 this.arrayLegalEntitylsit.push(this.creatingData.entityId); 	
-                this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name','',true, 20,this.arrayLegalEntitylsit.join()).subscribe(res => {
+                this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name','',true, 20,this.arrayLegalEntitylsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
                         this.legalEntityList = res;
                 });
                 this.getEntity(this.creatingData.entityId);

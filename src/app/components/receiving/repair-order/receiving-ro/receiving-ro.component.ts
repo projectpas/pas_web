@@ -266,7 +266,7 @@ export class ReceivingRoComponent implements OnInit {
         if (this.arrayglaccountlist.length == 0) {
             this.arrayglaccountlist.push(0);
         }
-        this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.arrayglaccountlist.join()).subscribe(res => {
+        this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.arrayglaccountlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             const data = res.map(x => {
                 return {
                     Key: x.value,

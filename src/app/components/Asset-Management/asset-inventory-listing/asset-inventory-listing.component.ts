@@ -837,11 +837,11 @@ getAssetInventoryStatusList() {
         this.setEditArray = [];
         this.setEditArray.push(this.currentAsset.inventoryStatusId);
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.assetInventoryStatusList = res;
         }, err => {
             const errorLog = err;
             this.errorMessageHandler(errorLog);
         });
-}
+    }
 }
