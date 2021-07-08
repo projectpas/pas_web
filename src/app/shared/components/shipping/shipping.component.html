@@ -228,7 +228,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Shipment</label>
-                            <input class="form-control" type="number" [(ngModel)]="shippingHeader.shipment" name="shipment" [disabled]="isView" />
+                            <input class="form-control" type="tel" maxlength="100" [(ngModel)]="shippingHeader.shipment" name="shipment" [disabled]="isView" />
                         </div>
                     </div>
                 </div>
@@ -323,7 +323,7 @@
                                     <label class="work-order-shipping-lable">Airway Bill<span class="clr-red">*</span> </label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.airwayBill" name="airwayBill" [disabled]="isView" required />
+                                    <input class="form-control" type="text" maxlength="50" [(ngModel)]="shippingHeader.airwayBill" name="airwayBill" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -331,7 +331,7 @@
                                     <label class="work-order-shipping-lable">House Airway Bill</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.houseAirwayBill" name="houseAirwayBill" [disabled]="isView" />
+                                    <input class="form-control" maxlength="50" type="text" [(ngModel)]="shippingHeader.houseAirwayBill" name="houseAirwayBill" [disabled]="isView" />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -339,7 +339,7 @@
                                     <label class="work-order-shipping-lable">Tracking #</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader.trackingNum" name="trackingNum" [disabled]="isView" />
+                                    <input class="form-control" maxlength="50" type="text" [(ngModel)]="shippingHeader.trackingNum" name="trackingNum" [disabled]="isView" />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -347,7 +347,7 @@
                                     <label class="work-order-shipping-lable">Weight</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                    <input type="tel" class="input-field-value" pKeyFilter="num" pInputText
                                         maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
                                         id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
                                 </div>
@@ -372,13 +372,13 @@
                                 </div>
                                 <div class="col-md-3">
                                     <span class="display-flex inline-block">
-                                        <input type="number" name="exportLength" class="input-field-value"
+                                        <input type="tel" name="exportLength" class="input-field-value ted_v"
                                             pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
                                             [(ngModel)]="shippingHeader.shipSizeLength" />&nbsp;
-                                        <input type="number" name="exportWidth" class="input-field-value" pInputText
+                                        <input type="tel" name="exportWidth" class="input-field-value ted_v" pInputText
                                             pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
                                             [(ngModel)]="shippingHeader.shipSizeWidth" />&nbsp;
-                                        <input type="number" name="exportHeight" class="input-field-value"
+                                        <input type="tel" name="exportHeight" class="input-field-value ted_v"
                                             pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
                                             [(ngModel)]="shippingHeader.shipSizeHeight" />
                                     </span>
@@ -783,7 +783,7 @@
                                     <label>Entry Type </label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['entryType']" name="entryType" [disabled]="isView" required />
+                                    <input class="form-control" type="text" maxlength="100" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['entryType']" name="entryType" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -791,7 +791,7 @@
                                     <label>Entry Num</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['entryNumber']" name="entryNumber" [disabled]="isView" required />
+                                    <input class="form-control" type="text" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['entryNumber']" name="entryNumber" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -799,7 +799,7 @@
                                     <label class="workorder-label">Entry Commodity Code</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['commodityCode']" name="entryCommodityCode" [disabled]="isView" />
+                                    <input class="form-control" type="text" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['commodityCode']" name="entryCommodityCode" [disabled]="isView" />
                                 </div>
                             </div>
                         </div>
@@ -813,7 +813,7 @@
                                     <label>EPU </label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['epu']" name="epu" [disabled]="isView" required />
+                                    <input class="form-control" type="text" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['epu']" name="epu" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -821,7 +821,7 @@
                                     <label>UCR</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['ucr']" name="ucr" [disabled]="isView" required />
+                                    <input class="form-control" type="text" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['ucr']" name="ucr" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -829,7 +829,7 @@
                                     <label>Master UCR</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['masterUCR']" name="masterUCR" [disabled]="isView" />
+                                    <input class="form-control" type="text" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['masterUCR']" name="masterUCR" [disabled]="isView" />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -837,7 +837,7 @@
                                     <label class="workorder-label">Movement Ref No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['movementRefNo']" name="MovementRefNo" [disabled]="isView" />
+                                    <input class="form-control" type="text" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['movementRefNo']" name="MovementRefNo" [disabled]="isView" />
                                 </div>
                             </div>
                         </div>
@@ -851,7 +851,7 @@
                                     <label class="workorder-label">Customs Value </label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="number" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['customsValue']" name="customsValue" [disabled]="isView" required />
+                                    <input class="form-control" type="tel" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['customsValue']" name="customsValue" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -859,7 +859,7 @@
                                     <label>Net Mass</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="number" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['netMass']" name="netMass" [disabled]="isView" required />
+                                    <input class="form-control" type="tel" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['netMass']" name="netMass" [disabled]="isView" required />
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
@@ -867,7 +867,7 @@
                                     <label>VAT Value</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="number" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['vatValue']" name="VATValue" [disabled]="isView" />
+                                    <input class="form-control" type="tel" maxlength="20" [(ngModel)]="shippingHeader['workOrderCustomsInfo']['vatValue']" name="VATValue" [disabled]="isView" />
                                 </div>
                             </div>
                         </div>

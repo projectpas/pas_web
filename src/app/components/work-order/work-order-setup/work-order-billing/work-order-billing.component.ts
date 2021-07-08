@@ -1654,7 +1654,7 @@ resetallcost()
         this.setEditArray=[];
         this.setEditArray.push(0);
         const strText='';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.currencyList = res;
         
     })

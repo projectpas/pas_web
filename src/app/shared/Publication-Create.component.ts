@@ -154,7 +154,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             })
         }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 20, publicationTypeIds)
+        this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 20, publicationTypeIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.publicationTypes = res.map(x => {

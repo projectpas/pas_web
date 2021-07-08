@@ -424,7 +424,7 @@ export class SalesOrderCreateComponent implements OnInit {
     this.enableUpdateButton = false;
   }
 
-  async setJobTitles(res) {
+  setJobTitles(res) {
     this.csrOriginalList = res.csrEmpList;
     this.salesPersonAndAgentOriginalList = res.salesEmpList;
   }
