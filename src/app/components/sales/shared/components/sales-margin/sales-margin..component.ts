@@ -54,6 +54,9 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onSave(event: Event): void {
+    if (this.part && !this.invalidQuantityenteredForQuantityFromThis) {
+      this.calculatePart();
+    }
     if (!this.isEdit) {
       let isInvalid = this.validateInput();
       if (!isInvalid) {
@@ -80,11 +83,9 @@ export class SalesMarginComponent implements OnInit {
   }
 
   calculate() {
-    setTimeout(() => {
-      if (this.part && !this.invalidQuantityenteredForQuantityFromThis) {
-        this.calculatePart();
-      }
-    }, 1000);
+    if (this.part && !this.invalidQuantityenteredForQuantityFromThis) {
+      this.calculatePart();
+    }
   }
 
   calculatePart() {
