@@ -63,7 +63,7 @@
     </app-work-order-materials-add>
 </ng-template>
 <div *ngIf="ispickticket">
-    <app-work-order-pickticket [referenceId]="this.savedWorkOrderData.workOrderId"></app-work-order-pickticket>
+    <app-work-order-pickticket [referenceId]="savedWorkOrderData.workOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"></app-work-order-pickticket>
 </div>
 <div id="reserve" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xlg">
@@ -876,7 +876,7 @@
             [columns]="summaryColumns" #materialTble [value]="workOrderMaterialList" [paginator]="true"
             [rows]="pageSize"  selectionMode="multiple"  [reorderableColumns]="true" [metaKeySelection]="true" [rowsPerPageOptions]="[5, 10, 20,50, 100,200,500]" (onPage)="pageIndexChange($event)">
             <ng-template pTemplate="caption">
-            <div class="row">
+            <div class="row" *ngIf="!isSummary">
                 <div class="col">
               <button  type="button"
                         class="btn btn-primary exp_btn"

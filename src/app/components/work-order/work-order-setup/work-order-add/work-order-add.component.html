@@ -13,7 +13,7 @@
                                     {{ isEdit ? 'Edit' : 'Create' }} Work Order
                                   </span>
                                   <span *ngIf="isView">
-                                   View Work Order
+                                    Work Order
                                   </span>
                                     <button class="btn-sm header-button header-button-alignment"
                                         (click)="toggleDisplayMode()">
@@ -639,11 +639,12 @@
                                                     #cmm="ngModel" (ngModelChange)="getValid()" [autoWidth]="false"
                                                     [style]="pDropdownStyle" (onChange)="onSelectPublication($event,workOrderPartNumber,i)"
                                                     [options]="getDynamicVariableData('cmmPublicationList',i)"
-                                                    class="p-dropdown-custom-md1 p-dropdown-mh120" placeholder="No CMM" 
-                                                    [(ngModel)]="workOrderPartNumber.cMMId"  [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}"
+                                                    class="p-dropdown-custom-md p-dropdown-mh120" placeholder="No CMM" 
+                                                    [(ngModel)]="workOrderPartNumber.cMMId" 
                                                     [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                                    appendTo="body"> 
+                                                    appendTo="body" required="isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null"> 
                                                 </p-dropdown>
+                                                <!-- [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}" -->
 
                                                 <span data-toggle="modal" data-target="#cmmView" *ngIf="workOrderPartNumber.cMMId!=0 && workOrderPartNumber.cMMId!=null"
                                                 [ngClass]="{pointerEvents : workOrderPartNumber.cMMId==0 || workOrderPartNumber.cMMId==null}">
@@ -1441,7 +1442,7 @@
 
 <div *ngIf="workOrderId && (gridActiveTab == 'workComplete')" class="wf-label-cstm  "
 [ngClass]="{hidedata : gridActiveTab !== 'workComplete'}">
-<app-wo-workComplete [isWorkOrder]="isWorkOrder" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
+<app-wo-workComplete [isWorkOrder]="isWorkOrder" (refreshMpnGrid)="refreshMpnList($event)" [workOrderPartNoId]="workOrderPartNumberId" [workOrderId]="workOrderId"  [isEdit]='isEdit' [isView]="isView || isViewForApprovedPart"
   [workFlowWorkOrderId]="workFlowWorkOrderId"   
 ></app-wo-workComplete>
 </div>
@@ -1700,7 +1701,7 @@
 
             <ng-template #modalWorkScope let-c="close" let-d="dismiss" data-backdrop="static">
                 <div class="modal-header">
-                    <h4 class="modal-title"> Alert Message !</h4>
+                    <h4 class="modal-title">Warning</h4>
                     <button type="button" class="close" aria-label="Close"
                         (click)="dismissWorkSocpe()">
                         <span aria-hidden="true">&times;</span>
@@ -1714,7 +1715,7 @@
             
                         </p>
                     <strong>
-                        Do you want to allow to
+                        Do you still want to 
                         
                        
                         <span *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer">create</span>

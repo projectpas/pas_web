@@ -17,7 +17,8 @@ import { AuditComponentComponent } from '../../../../../app/shared/components/au
 /** WorkOrderDocuments component*/
 export class WorkOrderWorkCompleteComponent implements OnChanges, OnInit {
   @Input() isWorkOrder;
-  @Output() refreshData = new EventEmitter();
+  @Output() refreshMpnGrid = new EventEmitter();
+
   @Input() isView: boolean = false;
   @Input() workOrderId;
   @Input() workFlowWorkOrderId;
@@ -52,6 +53,9 @@ if(event.target.checked==true){
   currentRecord.isMastervalue=true;
   currentRecord.isvalue_NA=false;
   
+}
+if(event.target.checked==false &&currentRecord.workOrderSettlementName=='Cond/Tag Changed'){
+  currentRecord.conditionId=null;
 }
 if(currentRecord.isMastervalue==true || currentRecord.isvalue_NA==true){
   currentRecord.closeWO=true;
@@ -97,6 +101,9 @@ getWorkCompleteDetails(){
       if(element.isMastervalue==true || element.isvalue_NA==true){
         element.closeWO=true;
       }
+      if(element.isMastervalue==false &&element.workOrderSettlementName=='Cond/Tag Changed'){
+        element.conditionId=null;
+      }
     });
     this.onchangecheck();
    }
@@ -139,10 +146,14 @@ upDateSettlemts( ){
   if((arrayWithFilterObjects && arrayWithFilterObjects.length)==(newData&&newData.length)){
     this.isWOClose=true;
   }else{
+
     this.isWOClose=false
   }
   this.isSpinnerVisible=true;
   this.workOrderService.updateWoSettlements(newData,this.isWOClose).subscribe(res => {
+  if(this.isWOClose==true){
+  }
+  this.refreshMpnGrid.emit(true)
     this.woSettlements.forEach(element => {
       element.userId=this.authService.currentEmployee;
       element.isenableUpdate=false;

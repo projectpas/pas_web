@@ -380,7 +380,7 @@
             </div>
             <div class="modal-body" *ngIf="viewCustWorkInfo">
                 <div class="form-row">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <p>
                             <span class="label"><b>Receiving Num: </b></span><span class="value">{{ viewCustWorkInfo.receivingNumber }}</span>
                         </p>
@@ -400,7 +400,7 @@
                             <span class="label"><b>Employee Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.employeeName }}</span>
                         </p>
                         <div class="form-group float-left" >
-                            <div class="pull-left radio-buttons-align padding-top-3" class="margin-bottom">
+                            <div class="pull-left radio-buttons-align" >
                                 <label class="radio-inline pointer-none">
                                     <input type="radio" value="1" name="assetRadio" class="form-check-inline"
                                         [checked]="viewCustWorkInfo.isCustomerStock == true"
@@ -408,7 +408,7 @@
                                     Rotable
                                 </label>
                             </div>
-                            <div class="pull-left padding-top-5 radio-buttons-align">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-inline pointer-none">
                                     <input type="radio" value="2" name="assetRadio" 
                                         [checked]="viewCustWorkInfo.isCustomerStock == false">
@@ -439,7 +439,7 @@
                             <span class="label"><b>WO CreatedDate: </b></span><span class="value">{{ viewCustWorkInfo.woCreatedDate ? (viewCustWorkInfo.woCreatedDate  | date: 'MM/dd/yyyy') : '-' }}</span>
                         </p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <p>
                             <span class="label"><b>PN: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.partNumber }}</span>
                         </p>
