@@ -226,7 +226,6 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     }
 
     getAllPercentage() {
-        //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
         this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
             this.percentageList = res;
         },

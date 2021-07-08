@@ -130,7 +130,7 @@ export class StageCodeComponent implements OnInit {
     }
 
     getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description',this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }

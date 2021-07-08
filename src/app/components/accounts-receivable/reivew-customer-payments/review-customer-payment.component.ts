@@ -156,8 +156,12 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
 
   }
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+}
+
   loadDiscType() {
-    this.commonservice.smartDropDownList('MasterDiscountType', 'Id', 'Name').subscribe(response => {
+    this.commonservice.smartDropDownList('MasterDiscountType', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.discTypeList = response;
         this.discTypeList = this.discTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -168,7 +172,7 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   }
 
   loadBankFeesType() {
-    this.commonservice.smartDropDownList('MasterBankFeesType', 'Id', 'Name').subscribe(response => {
+    this.commonservice.smartDropDownList('MasterBankFeesType', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.bankFeesTypeList = response;
         this.bankFeesTypeList = this.bankFeesTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -179,7 +183,7 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   }
 
   loadAdjustReason() {
-    this.commonservice.smartDropDownList('MasterAdjustReason', 'Id', 'Name').subscribe(response => {
+    this.commonservice.smartDropDownList('MasterAdjustReason', 'Id', 'Name',this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.adjustReasonList = response;
         this.adjustReasonList = this.adjustReasonList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));

@@ -167,7 +167,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     getAllTearDownTypes() {
-        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name', '', '', 0, this.authService.currentUser.masterCompanyId)
+        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name', this.authService.currentUser.masterCompanyId, '', '', 0)
             .subscribe(
                 res => {
                     this.tearDownTypes = res;
@@ -345,13 +345,13 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     private loadReceivingListRB() {
-        this.commonService.smartDropDownList('ReceivingListRB', 'ReceivingListRBId', 'Name', '', '', 0, this.authService.currentUser.masterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('ReceivingListRB', 'ReceivingListRBId', 'Name', this.authService.currentUser.masterCompanyId, '', '', 0).subscribe(response => {
             this.ReceivingListRBList = response;
         });
     }
 
     private loadWOListRB() {
-        this.commonService.smartDropDownList('WOListRB', 'WOListRBId', 'Name', '', '', 0, this.authService.currentUser.masterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('WOListRB', 'WOListRBId', 'Name', this.authService.currentUser.masterCompanyId, '', '', 0).subscribe(response => {
             this.WOListRBList = response.map(x => {
                 return {
                     label: x.label,
@@ -376,7 +376,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     getAllPriority() {
-        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description', '', '', 0, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description', this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.priorityList = res;
             if (!this.isEditMode) {
                 this.priorityList.map(x => {
@@ -389,7 +389,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description', '', '', 0, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description', this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }
@@ -477,7 +477,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
-        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
                     warehouseId: x.value,
@@ -502,7 +502,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.allShelfs = [];
         this.allBins = [];
         if (warehouseId != 0) {
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).subscribe(res => {
                 this.allLocations = res.map(x => {
                     return {
 
@@ -522,7 +522,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name',this.authService.currentUser.masterCompanyId, 'LocationId',  locationId, 0).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
                         shelfId: x.value,
@@ -540,7 +540,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     shelfValueChange(shelfId) {
         this.allBins = [];
         if (shelfId != 0) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).subscribe(res => {
                 this.allBins = res.map(x => {
                     return {
                         binId: x.value,

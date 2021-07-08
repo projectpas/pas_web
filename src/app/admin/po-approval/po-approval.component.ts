@@ -101,8 +101,12 @@ export class PoApprovalComponent implements OnInit
         )
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     async getTaskNames(){
-        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name')
+        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId)
         .subscribe(
             (res)=>{
                 this.taskNameList = res;
@@ -111,7 +115,7 @@ export class PoApprovalComponent implements OnInit
     }
 
     async getRuleNumber(){
-        await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo')
+        await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo', this.currentUserMasterCompanyId)
         .subscribe(
             (res)=>{
                 this.ruleNumList = res;
@@ -119,13 +123,6 @@ export class PoApprovalComponent implements OnInit
         )
     }
 
-    // async getEnitityList(){
-    //     // await this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name')
-    //     // .subscribe(
-    //     //     (res)=>{
-    //     //         this.legalEntityList = res;
-    //     //     }
-    //     // )
     //     this.commonService.getLegalEntityIdByMangStrucId(this.authService.currentUser.managementStructureId).subscribe(res=>{
            
     //         this.legalEntityList = res;
@@ -161,22 +158,13 @@ export class PoApprovalComponent implements OnInit
         })
     }
     async getPoAmountList(){
-        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name')
+        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', this.currentUserMasterCompanyId)
         .subscribe(
             (res)=>{
                 this.approvalAmountList = res;
             }
         )
     }
-
-    // async getApproverList(){
-    //     await this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName')
-    //     .subscribe(
-    //         (res)=>{
-    //             this.approverList = res;
-    //         }
-    //     )
-    // }
 
     savePoApproval(){
         this.creatingData.entityId = getValueFromObjectByKey('value',this.creatingData.entityId); 

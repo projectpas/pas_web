@@ -420,7 +420,7 @@ export class WorkOrderListComponent implements OnInit {
     }
     
     getCustomerWarningsList(): void {
-        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create WO for MPN') {
                     this.customerWarningListId = element.value;

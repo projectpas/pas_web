@@ -192,7 +192,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         // ? this.authService.currentUser.masterCompanyId
         // : null;
         // const strText='';
-        this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name').subscribe(res => {
+        this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', this.authService.currentUser.masterCompanyId).subscribe(res => {
             // this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
             this.attachmoduleList = res;
             //   setTimeout(() => {

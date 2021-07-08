@@ -686,7 +686,7 @@ export class AssetCapesComponent implements OnInit {
     loadModalsForExistingRecords(capData) {
         if (capData.selectedAircraftTypes) {
            
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId,'AircraftTypeId', capData.selectedAircraftTypes,0).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -704,7 +704,7 @@ export class AssetCapesComponent implements OnInit {
 
     loadModalsForExistingRecords_1(capData, aircrafttypeid) {
         if (aircrafttypeid) {
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', aircrafttypeid,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId, 'AircraftTypeId', aircrafttypeid,0).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -781,7 +781,7 @@ export class AssetCapesComponent implements OnInit {
         if (this.itemMasterService.isEditMode == false) {
             if (capData.selectedAircraftTypes) {
             
-                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
+                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId, 'AircraftTypeId', capData.selectedAircraftTypes,0).subscribe(results => {
                     const newResp = results.map(x => {
                         return {
                             ...x,

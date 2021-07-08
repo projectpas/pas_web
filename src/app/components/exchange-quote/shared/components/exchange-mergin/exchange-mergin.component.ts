@@ -4,6 +4,8 @@ import { CommonService } from '../../../../../services/common.service';
 import { ItemMasterSearchQuery } from "../../../models/item-master-search-query";
 import { formatStringToNumber } from "../../../../../generic/autocomplete";
 import { ExchangeQuoteScheduleBilling } from "../models/ExchangeQuoteScheduleBilling";
+import { AuthService } from "../../../../../services/auth.service";
+
 import * as moment from 'moment';
 import {
   NgbModal,
@@ -28,7 +30,7 @@ export class ExchangeMerginComponent implements OnInit {
   errorModal: NgbModalRef;
   currencyArr: any[] = [];
   isDisable: boolean = false;
-  constructor(private commonservice: CommonService, private modalService: NgbModal) { }
+  constructor(private commonservice: CommonService, private modalService: NgbModal, private authService: AuthService) { }
 
   ngOnInit() {
     this.getPercents();
@@ -51,13 +53,13 @@ export class ExchangeMerginComponent implements OnInit {
   }
 
   getPercents() {
-    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue',this.authService.currentUser.masterCompanyId).subscribe(res => {
       this.percentage = res;
       //console.log("this.percentage" , this.percentage);
     })
   }
   getCurrency() {
-    this.commonservice.smartDropDownList('[Currency]', 'CurrencyId', 'Code').subscribe(res => {
+    this.commonservice.smartDropDownList('[Currency]', 'CurrencyId', 'Code',this.authService.currentUser.masterCompanyId).subscribe(res => {
       this.currencyArr = res;
       // this.part.exchangeCurrencyId = getValueFromArrayOfObjectById(
       //   'label',

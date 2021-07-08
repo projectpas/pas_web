@@ -479,10 +479,14 @@ export class AllViewComponent implements OnInit {
     }
   }
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+  }
+
   getApproversListById(poId) {
     this.isSpinnerVisible = true;
     if (this.poApprovaltaskId == 0) {
-      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => {
+      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
         if (response) {
           response.forEach(x => {
             if (x.label.toUpperCase() == "PO APPROVAL") {
@@ -503,7 +507,7 @@ export class AllViewComponent implements OnInit {
   getRoApproversListById(roId) {
     this.isSpinnerVisible = true;
     if (this.roApprovaltaskId == 0) {
-      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => {
+      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => {
         if (response) {
           response.forEach(x => {
             if (x.label.toUpperCase() == "RO APPROVAL") {

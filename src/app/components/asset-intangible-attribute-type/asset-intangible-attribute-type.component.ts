@@ -214,23 +214,25 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
         this.filteredAssetWriteDownList = GLADATA;
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     getAllPercentage() {
-        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
-            //////console.log('res: '+res);
+        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue', this.currentUserMasterCompanyId).subscribe(res => {
             this.percentageList = res;
         });
-        //////console.log('percentge list : ', this.percentageList);
     }
 
     getAllFrequency() {
-        this.commonservice.smartDropDownList('[AssetDepreciationFrequency]', 'AssetDepreciationFrequencyId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('[AssetDepreciationFrequency]', 'AssetDepreciationFrequencyId', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
             this.depreciationFreqList = res;
             //this.loadSelectedNames();
         })
     }
 
     getAllDepreMthod() {
-        this.commonservice.smartDropDownList('[AssetDepreciationMethod]', 'AssetDepreciationMethodId', 'AssetDepreciationMethodName').subscribe(res => {
+        this.commonservice.smartDropDownList('[AssetDepreciationMethod]', 'AssetDepreciationMethodId', 'AssetDepreciationMethodName', this.currentUserMasterCompanyId).subscribe(res => {
             this.depreciationMethodList = res;
             //this.loadSelectedNames();
         })

@@ -406,7 +406,7 @@ export class AddressComponentComponent implements OnInit {
 
 
 	loadShippingViaList() {
-		this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
+		this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
 			this.allShipViaInfo = res;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -416,7 +416,7 @@ export class AddressComponentComponent implements OnInit {
 	}
 
 	getCountriesList() {
-		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name', this.currentUserMasterCompanyId).subscribe(res => {
 			this.allCountriesList = res;
 		}, err => {
 			this.isSpinnerVisible = false;

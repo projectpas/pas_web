@@ -4,7 +4,7 @@ import { Component, Input, ViewChild, ElementRef } from "@angular/core";
 // import { ISalesOrderQuote } from "../../../../../../models/sales/ISalesOrderQuote";
 // import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 // import { EmployeeService } from '../../../../../../services/employee.service';
-// import { AuthService } from '../../../../../../services/auth.service';
+import { AuthService } from '../../../../../../services/auth.service';
 // import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
 // import { ISalesQuoteView } from "../../../../../../models/sales/ISalesQuoteView";
 // import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
@@ -33,7 +33,7 @@ export class SalesApproveComponent {
   apporoverNamesList: any = [];
   poApprovaltaskId = 6;
   constructor(public salesQuoteService: SalesQuoteService
-    ,private commonService: CommonService) {
+    ,private commonService: CommonService,private authService: AuthService) {
 
   }
 
@@ -44,7 +44,7 @@ export class SalesApproveComponent {
   getApproversListById(poId) {	
 		this.isSpinnerVisible = true;
 		if(this.poApprovaltaskId == 0) {
-		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
+		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => { 		        
 		if(response) {					
             response.forEach(x => {
                 if (x.label.toUpperCase() == "Sales Quote Approval") {

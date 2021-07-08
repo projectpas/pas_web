@@ -92,8 +92,12 @@ export class QuoteViewComponent implements OnInit, OnChanges {
     }
   }
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+}
+
   getEmployeeList(woId) {
-    this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName')
+    this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName', this.currentUserMasterCompanyId)
       .subscribe(
         (employeeList: any[]) => {
           this.employeeList = employeeList;
@@ -123,7 +127,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   getMarkup() {
-    this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue')
+    this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue', this.currentUserMasterCompanyId)
       .subscribe(
         res => {
           this.markupList = res;
@@ -132,7 +136,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   loadCurrency() {
-    this.commonService.smartDropDownList('Currency', 'CurrencyId', 'symbol').subscribe(
+    this.commonService.smartDropDownList('Currency', 'CurrencyId', 'symbol', this.currentUserMasterCompanyId).subscribe(
       results => this.currencyList = results,
       error => { }
     );
@@ -275,7 +279,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   getCreditTerms(ctermId) {
-    this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name')
+    this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name', this.currentUserMasterCompanyId)
       .subscribe(
         (creditTermList: any[]) => {
 
