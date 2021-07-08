@@ -117,7 +117,7 @@ export class WorkOrderSmartComponent implements OnInit {
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
-    refreshWo(){
+    refreshWo(){ 
         this.workOrderId = this.acRouter.snapshot.params['id'];
         this.recCustomerId=0;
         this.triggerWorkOrderData();

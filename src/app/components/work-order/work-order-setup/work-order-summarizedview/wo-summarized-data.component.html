@@ -93,7 +93,7 @@
                                                                           *ngIf="matField.field !='plus'"> {{globalizeAmount(materialMPN[matField.field], matField.field)}}</span>
                                                                             <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
                                                                                <i *ngIf="materialMPN.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getMaterialListData(materialMPN)"></i>
-                                                                               <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(materialMPN)"></i>   
+                                                                               <i *ngIf="materialMPN.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Hide stock line details" matTooltipPosition="above" style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(materialMPN)"></i>   
                                                                            </a> 
                                                                         </td>
                                                                     </tr>
@@ -459,7 +459,53 @@
                         </div>
                         
                         <div *ngIf="(workOrderId && gridActiveTab == 'woAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'woAnalysis' }" >
-                            <app-analysis-wo-summarization [value]="woAnalysisMPNs" [type]="gridActiveTab" [workOrderId]="workOrderId"></app-analysis-wo-summarization>
+                          
+                          
+                            <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                <div class="tableFixHead">
+                                <table  class="table table-bordered">
+                                <thead >
+                                    <tr>
+                                        <th *ngFor="let matHeader of documentsListHeader" [ngStyle]="{'min-width': matHeader.width}"
+                                         style="border: 1px solid #c8c8c8 !important;">
+                                            {{matHeader.header}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let woAnalisis of woAnalisisListParent; let i=index" >
+                                    <tr>
+                                        <td *ngFor="let matField of documentsListHeader" style="border: 1px solid #c8c8c8 !important;color: black;">
+                                          <span [ngClass]="(matField.field == 'quantityReq' || matField.field == 'quantityOnHand' || matField.field == 'quantityAvailable' || matField.field == 'qtyssued' || matField.field == 'unitCost' || matField.field == 'extendedCost')?'float-right':''"  
+                                          *ngIf="matField.field !='plus'"> {{globalizeAmount(woAnalisis[matField.field], matField.field)}}</span>
+                                            <a data-toggle="collapse" *ngIf="matField.field=='plus'" style="padding-right:7px;padding-left:7px"> 
+                                               <i *ngIf="woAnalisis.isShowPlus ==true" class="fa fa-plus btn btn-primary btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 1px 5px !important;color: #fff !important;"  (click)="getWoAnalisisData(woAnalisis)"></i>
+                                               <i *ngIf="woAnalisis.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Hide WO Analisis details" matTooltipPosition="above" style="padding: 3px 5px !important;color: #fff !important;" (click)="handelPlus(woAnalisis)"></i>   
+                                           </a> 
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="woAnalisis.woAnalysisMPNs && isShowChild==true && woAnalisis.isShowPlus ==false" class="sub-table no-bg">
+                                        <td></td>
+                                        <td colspan="22" class="p-0">
+                                                <!-- <app-work-order-complete-material-list [isSummary]="true" [materialStatus]="woAnalisis.materialStatus" isWorkOrder="true"
+                                                [workFlowObject]="workFlowObject" [savedWorkOrderData]="savedWorkOrderData" isSubWorkOrder="false" subWOPartNoId="0"
+                                                [mpnId]="materialMPN.workOrderPartNumberId" [employeesOriginalData]="employeesOriginalData"
+                                                [workOrderMaterialList]="materialMPN.workOrderMaterialList"[taskList]="taskList" [mpnPartNumbersList]="mpnPartNumbersList" isView="true"></app-work-order-complete-material-list>
+                                        -->
+                                        <app-analysis-wo-summarization [value]="woAnalysisMPNs" [type]="gridActiveTab" [workOrderId]="workOrderId"></app-analysis-wo-summarization>
+                                       
+                                            </td>
+                                        </tr>
+                                        </ng-container>
+                                </tbody>
+                            </table>
+                            </div>
+                            </div>
+                          
+                          
+                          
+                          
+                            
                         </div>
 
                         <div *ngIf="(workOrderId && gridActiveTab == 'quoteAnalysis')" [ngClass]="{hidedata : gridActiveTab !== 'quoteAnalysis' }" >

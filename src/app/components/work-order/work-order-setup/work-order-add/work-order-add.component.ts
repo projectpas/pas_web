@@ -4207,7 +4207,45 @@ triggerSaveApi(){
             }, 5000);
         }
     }
-    refreshMpnList(data){
-        this.refreshGrid.emit(true)
+    // refreshMpnList(data){
+    //     this.refreshGrid.emit(true)
+    // }
+
+    refreshMpnList(){ 
+        // this.workOrderId = this.acRouter.snapshot.params['id'];
+        this.recCustomerId=0;
+        this.triggerWorkOrderData();
+    }
+    triggerWorkOrderData(){
+        this.isSpinnerVisible = true;
+        this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            setTimeout(() => {
+                this.isSpinnerVisible = false;
+            }, 3000)  
+
+            const workOrderData = res;
+            const data = {
+                ...res,
+                workOrderNumber: res.workOrderNum,
+                openDate: new Date(res.openDate),
+                customerId: res.customerId,
+                partNumbers: res.partNumbers.map(x => {
+                    return {
+                        ...x,
+                        promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
+                        estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
+                        estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
+                        receivedDate: this.recCustomerId == 0 && res.receivingCustomerWorkId == null ? null : new Date(x.receivedDate)
+                    }
+                })
+            } 
+            this.workOrderGeneralInformation=data;
+            this.modifyWorkorderdata();
+            setTimeout(() => {
+                this.workOrderStatus('onload');
+            }, 500);
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 }
