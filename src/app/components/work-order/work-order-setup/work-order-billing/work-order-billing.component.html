@@ -200,7 +200,7 @@
                             <div class="form-group ">
                               <label> Invoice Number </label>
                               <input
-                                type="text"
+                                type="text" maxlength="256"
                                 class="form-control wo-input"
                                 name="invoiceNumber"
                                 #invoiceNumber="ngModel"
@@ -213,7 +213,7 @@
                             <div class="form-group ">
                               <label> WO Type </label>
                               <input
-                                type="text"
+                                type="text" maxlength="200"
                                 class="form-control wo-input"
                                 name="woType"
                                 #woType="ngModel"
@@ -382,7 +382,7 @@
                             <div class="form-group ">
                               <label> Available Credit</label>
                               <input
-                                type="number"
+                                type="tel" maxlength="10"
                                 class="form-control wo-input"
                                 name="salePerson"
                                 #salePerson="ngModel"
@@ -398,7 +398,7 @@
                             <div class="form-group ">
                               <label> No of Pieces </label>
                               <input
-                                type="number"
+                                type="tel"  maxlength="16"
                                 class="form-control wo-input"
                                 name="noofPieces"
                                 #noofPieces="ngModel"
@@ -459,7 +459,7 @@
                             <div class="form-group ">
                               <label>Stage Code </label>
                               <input
-                                type="number"
+                                type="tel" maxlength="100"
                                 class="form-control wo-input"
                                 name="gateStatus"
                                 #gateStatus="ngModel"
@@ -730,7 +730,7 @@
                               <div class="form-group " style="margin-bottom:4px">
                                   <label>Attention </label>
                                   <input
-                                    type="text"
+                                    type="text" maxlength="256"
                                     class="form-control wo-input"
                                     name="shipToAttention"
                                     #shipToAttention="ngModel"
@@ -1101,7 +1101,7 @@
                                   <div class="form-group ">
                                       <label>Ship Account</label>
                                       <input
-                                      type="text"
+                                      type="text"  maxlength="100"
                                       class="form-control wo-input"
                                       name="shipAccount"
                                       #shipAccount="ngModel"
@@ -1115,7 +1115,7 @@
                                     <div class="form-group ">
                                         <label>Way Bill REF</label>
                                         <input
-                                          type="text"
+                                          type="text" maxlength="100"
                                           class="form-control wo-input"
                                           name="wayBillRef"
                                           #wayBillRef="ngModel"
@@ -1126,7 +1126,7 @@
                                       <div class="form-group ">
                                           <label>Tracking #</label>
                                           <input
-                                            type="text"
+                                            type="text" maxlength="100"
                                             class="form-control wo-input"
                                             name="tracking"
                                             #tracking="ngModel"

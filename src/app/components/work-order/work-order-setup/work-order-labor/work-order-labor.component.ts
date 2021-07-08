@@ -644,7 +644,7 @@ setTimeout(() => {
       this.setEditArray.push(0);
     }
     const strText = value ? value : '';
-    this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 20, this.setEditArray.join()).subscribe(res => {
+    this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
       if (res && res.length != 0) {
         this.expertiseTypeList = res;
       } else {

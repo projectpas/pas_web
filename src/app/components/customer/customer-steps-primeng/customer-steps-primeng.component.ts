@@ -153,7 +153,7 @@ export class CustomerStepsPrimengComponent {
 	}
 
 	getAllCountries() {
-		this.commonservice.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20).subscribe(res => {
+		this.commonservice.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,0,'',this.currentUserMasterCompanyId).subscribe(res => {
 			this.countryListOriginal = res;
 		})
 	}
@@ -170,7 +170,7 @@ export class CustomerStepsPrimengComponent {
 			this.arrayCustlist.push(this.customerId);
 		if(this.arrayCustlist.length == 0) {			
 			this.arrayCustlist.push(0); }
-		this.commonservice.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name',strText,true,20,this.arrayCustlist.join()).subscribe(response => {
+		this.commonservice.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name',strText,true,20,this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.customerListOriginal = response;
 			this.customerallListOriginal = response;
 		},err => {

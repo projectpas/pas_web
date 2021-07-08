@@ -427,7 +427,7 @@
                                                     class="clr-red">*</span></th>
                                             <th rowspan="2" style=" min-width: 100px !important;">Rec’d Cond <span
                                                     class="clr-red">*</span></th>
-                                            <th rowspan="2" style=" min-width: 148px !important;">CMM/Pub Ref</th>
+                                            <th rowspan="2" style=" min-width: 160px !important;">CMM/Pub Ref</th>
                                             <th rowspan="2" style=" min-width: 166px !important;">Workflow ID </th>
                                             <th rowspan="2" style="width:130px !important">Item Group</th>
                                             <th rowspan="2">Cust Ref</th>
@@ -773,7 +773,7 @@
                                             <td *ngIf="!isView" class="table-column-icon-width width100">
                                                 <span>
                                                     <!-- [disabled]="!isEdit || workOrderPartNumber.workOrderId==0 || workOrderPartNumber.workOrderId==null" -->
-                                                    <button class="btn nobg btn-plusro-cstm"
+                                                <button class="btn nobg btn-plusro-cstm"
                                                         (click)="createNewRoWorkOrder(workOrderPartNumber)" [disabled]="true"
                                                         matTooltip="Create RO" matTooltipPosition="above" ><i
                                                             class="fa fa-plus" style="color: #259e08;"></i></button> </span>
@@ -791,8 +791,11 @@
                                                         matTooltip="Remove" matTooltipPosition="above">
                                                         <i class="fa fa-trash"></i>
                                                     </button> </span>
+                                                <span> 
+                                                    <a class="btn nobg" (click)="openWOSummary(contentWOSummary,workOrderPartNumber, i)"
+                                                        matTooltip="WO Summary" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                                </span>
                                                 <span *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.isSinglePN ">
-
                                                     <button type="button" class="btn nobg btn-delete-cstm" disabled>
                                                         <i class="fa fa-trash"></i>
                                                     </button>
@@ -1629,7 +1632,7 @@
 </div>
 <ng-template #confirmWorkScopeInfo let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">
-        <h4 class="modal-title"> Alert Message !</h4>
+        <h4 class="modal-title">Warning</h4>
         <button type="button" class="close" aria-label="Close"
             (click)="dismissWorkSocpe()">
             <span aria-hidden="true">&times;</span>
@@ -1654,13 +1657,13 @@
     </ng-template>
     <ng-template #confirmCMMInfoCreate let-c="close" let-d="dismiss" data-backdrop="static">
         <div class="modal-header">
-            <h4 class="modal-title"> Alert Message !</h4>
+            <h4 class="modal-title"> Warning</h4>
             <button type="button" class="close" aria-label="Close"
                 (click)="dismissCreateCMM()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body"> 
             <!-- {{receivingForm.workScopeName}} -->
             <!-- {{receivingForm.itemMasterId.label} -->
            
@@ -1680,7 +1683,7 @@
 
         <ng-template #confirmCMMInfo let-c="close" let-d="dismiss"> 
             <div class="modal-header">
-                <h4 class="modal-title"> Alert Message !</h4>
+                <h4 class="modal-title"> Warning</h4>
                 <button type="button" class="close" aria-label="Close"
                     (click)="dismissCmm()">
                     <span aria-hidden="true">&times;</span>
@@ -1729,4 +1732,135 @@
                     <button type="button" class="btn btn-danger"
                         (click)="dismissWorkSocpe()">No</button>
                 </div> 
+                </ng-template>
+
+                <ng-template #contentWOSummary let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Work Order History</h4>
+                        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col">
+                            <div class="">
+                                <div class="col" style="padding:3px 0 0;">
+                                    <div class="form-group float-right">
+                                        <div
+                                        class="pull-left radio-buttons-align">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="monthrange" class="form-control" value="1"
+                                                (click)="getWOSummaryDetails('1')" [ngModel]="currentStatusWOSummary" checked>
+                                            <span class="checkmark"></span>Last 12 Months
+                                        </label>
+                                        </div>
+                                        <div class="pull-left radio-buttons-align ">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="monthrange" class="form-control" value="2"
+                                                    (click)="getWOSummaryDetails('2')" [ngModel]="currentStatusWOSummary">
+                                                <span class="checkmark"></span>Last 18 Months
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>MPN</th>
+                                        <th>Work Scope</th>
+                                        <th>Currency</th>
+                                        <th>Revenue</th>
+                                        <th>Direct Cost</th>
+                                        <th>Margin Amt</th>
+                                        <th>Margin %</th>
+                                        <th>TAT</th>
+                                    </tr>
+                                </thead>
+                                <tr *ngFor="let wosummpn of woSummaryMPNData;">
+                                    <td >
+                                        {{wosummpn.partNumber}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.workScope}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.currencyName}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.revenue}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.directCost}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.margin}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.revenuePercentage}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.tatdays}}
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Work Scope</th>
+                                        <th>Currency</th>
+                                        <th>Revenue</th>
+                                        <th>Direct Cost</th>
+                                        <th>Margin Amt</th>
+                                        <th>Margin %</th>
+                                        <th>TAT</th>
+                                        <th>WO Number</th>
+                                        <th>WO Date</th>
+                                        <th>Stage</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tr *ngFor="let wosummpn of woSummaryMPNData;">
+                                    <td >
+                                        {{wosummpn.partNumber}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.workScope}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.currencyName}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.revenue}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.directCost}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.margin}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.revenuePercentage}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.tatdays}}
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+                    </div>
                 </ng-template>
