@@ -150,7 +150,7 @@
         <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" pReorderableRowHandle>
 
-                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                    
+                <td class="table-column-width"   [ngClass]="(col.field == 'memo' )?'truncate-text':''" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                    
                     <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'

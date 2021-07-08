@@ -127,7 +127,7 @@ selectionMode="multiple"
             <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                 <td class="table-column-width"
                 *ngFor="let col of columns"
-                class="ui-resizable-column"
+                class="ui-resizable-column"   [ngClass]="(col.field == 'quantity' )?'text-right':''"
                 pReorderableRowHandle>
                   <ng-container *ngIf="col.field!='materialRevenue' && col.field!='materialCost' && col.field!='materialRevenuePercentage' && col.field!='laborCost' && col.field!='laborRevenuePercentage' && col.field!='overHeadCost' && col.field!='otherCost' && col.field!='directCost' && col.field!='otherCostRevenuePercentage'">
                       {{rowData[col.field]}}
