@@ -204,6 +204,7 @@ this.getWorkOrderWorkFlowNos();
     emailNumberList:any=[];
     phoneNumberList:any=[];
     textNumberList:any=[];
+    woAnalisisListParent:any=[];
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
             this.isSpinnerVisible = true;
@@ -218,7 +219,7 @@ this.getWorkOrderWorkFlowNos();
                 this.emailNumberList=[...res]; 
                 this.phoneNumberList=[...res]; 
                 this.textNumberList=[...res]; 
-                
+                this.woAnalisisListParent=[...res];
             },
                 err => { 
                 })
@@ -561,15 +562,15 @@ this.getWorkOrderWorkFlowNos();
             
             case 'woAnalysis': {
                 this.gridActiveTab = 'woAnalysis';
-                this.isSpinnerVisible = true;
-                this.workOrderService.getWOAnalysisMPNs(this.workOrderId).subscribe((res: any[]) => {
-                    this.isSpinnerVisible = false;
-                    this.woAnalysisMPNs = res;
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                    this.errorHandling(err);
-                })
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getWOAnalysisMPNs(this.workOrderId).subscribe((res: any[]) => {
+                //     this.isSpinnerVisible = false;
+                //     this.woAnalysisMPNs = res; 
+                // },
+                // err => {
+                //     this.isSpinnerVisible = false;
+                //     this.errorHandling(err);
+                // })
                 break;
             }
 
@@ -578,7 +579,33 @@ this.getWorkOrderWorkFlowNos();
                 this.isSpinnerVisible = true;
                 this.workOrderService.getQuoteAnalysisMPNs(this.workOrderId).subscribe((res: any[]) => {
                     this.isSpinnerVisible = false;
-                    this.quoteAnalysisMPNs = res;
+                    // this.quoteAnalysisMPNs = res;
+                    const data = res.map(x => {
+                        return {
+
+
+
+                            ...x,
+                            revenue: formatNumberAsGlobalSettingsModule(x.revenue,2),
+                            overHeadCostRevenuePercentage: formatNumberAsGlobalSettingsModule(x.overHeadCostRevenuePercentage,2),
+                            materialRevenuePercentage: formatNumberAsGlobalSettingsModule(x.materialRevenuePercentage,2),
+                            materialCost: formatNumberAsGlobalSettingsModule(x.materialCost,2),
+                            materialRevenue: formatNumberAsGlobalSettingsModule(x.materialRevenue,2),
+                            totalLaborCost: formatNumberAsGlobalSettingsModule(x.totalLaborCost,2),
+                            laborCost: formatNumberAsGlobalSettingsModule(x.laborCost,2),
+                            laborRevenuePercentage: formatNumberAsGlobalSettingsModule(x.laborRevenuePercentage,2),
+                            overHeadCost: formatNumberAsGlobalSettingsModule(x.overHeadCost,2),
+                            otherCost: formatNumberAsGlobalSettingsModule(x.otherCost,2),
+                            directCost: formatNumberAsGlobalSettingsModule(x.directCost,2),
+                            chargesCost: formatNumberAsGlobalSettingsModule(x.chargesCost,2),
+                            freightCost: formatNumberAsGlobalSettingsModule(x.freightCost,2),
+                            directCostRevenuePercentage: formatNumberAsGlobalSettingsModule(x.directCostRevenuePercentage,2),
+                            revenuePercentage: formatNumberAsGlobalSettingsModule(x.revenuePercentage,2),
+                            margin: formatNumberAsGlobalSettingsModule(x.margin,2),
+                            marginPercentage: formatNumberAsGlobalSettingsModule(x.marginPercentage,2)
+                        }
+                    }); 
+                    this.quoteAnalysisMPNs = data;
                 },
                 err => {
                     this.isSpinnerVisible = false;
@@ -687,6 +714,49 @@ this.getWorkOrderWorkFlowNos();
             this.isSpinnerVisible = false;
             this.errorHandling(err);
         })
+    }
+
+    getWoAnalisisData(currentRecord){
+        const id= currentRecord.workOrderPartNumberId;
+        this.isSpinnerVisible = true;
+                this.workOrderService.workOrderAnalysisData(this.workOrderId, id, false,this.authService.currentUser.masterCompanyId).subscribe(
+                        (res: any) => {
+                            this.woAnalisisListParent.forEach(element => {
+                                element.isShowPlus=true;
+                            });
+                            currentRecord.isShowPlus=false;
+                            this.isShowChild=true;
+                            this.isSpinnerVisible=false;
+                            if (res) {
+                                const data = res.map(x => {
+                                    return {
+                                        ...x,
+                                        revenue: formatNumberAsGlobalSettingsModule(x.revenue,2),
+                                        materialCost: formatNumberAsGlobalSettingsModule(x.materialCost,2),
+                                        materialRevenuePercentage: formatNumberAsGlobalSettingsModule(x.materialRevenuePercentage,2),
+                                        laborCost: formatNumberAsGlobalSettingsModule(x.laborCost,2),
+                                        laborRevenuePercentage: formatNumberAsGlobalSettingsModule(x.laborRevenuePercentage,2),
+                                        overHeadCost: formatNumberAsGlobalSettingsModule(x.overHeadCost,2),
+                                        otherCost: formatNumberAsGlobalSettingsModule(x.otherCost,2),
+                                        directCost: formatNumberAsGlobalSettingsModule(x.directCost,2),
+                                        freightCost: formatNumberAsGlobalSettingsModule(x.freightCost,2),
+                                        directCostRevenuePercentage: formatNumberAsGlobalSettingsModule(x.directCostRevenuePercentage,2),
+                                        revenuePercentage: formatNumberAsGlobalSettingsModule(x.revenuePercentage,2),
+                                        margin: formatNumberAsGlobalSettingsModule(x.margin,2),
+                                        marginPercentage: formatNumberAsGlobalSettingsModule(x.marginPercentage,2)
+                                    }
+                                }); 
+                                this.woAnalysisMPNs=[];
+                                this.woAnalysisMPNs=data;
+                                currentRecord.woAnalysisMPNs =[];
+                                currentRecord.woAnalysisMPNs=this.woAnalysisMPNs;
+                               
+                                console.log('fff',currentRecord.woAnalysisMPNs)
+                            }
+                        }, error => {
+                            this.isSpinnerVisible = false;
+                        }
+                    )
     }
     getUniqueParts(myArr, prop1, prop2, prop3) {
         let uniqueParts = JSON.parse(JSON.stringify(myArr));
