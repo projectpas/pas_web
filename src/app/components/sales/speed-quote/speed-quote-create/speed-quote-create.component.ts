@@ -186,6 +186,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
   selectedIndex: number = 0;
   exclusionCount: number = 0;
   exclusionSelectDisable: boolean = false;
+  arrayCurrencyList: any = [];
+  currencyList: any = [];
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -358,6 +360,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     let creditLimitTermsId = this.salesQuote.creditLimitTermsId ? this.salesQuote.creditLimitTermsId : 0;
     let leadSourceId = this.salesQuote.leadSourceId ? this.salesQuote.leadSourceId : 0;
     let warningTypeId = 0;
+    this.arrayCurrencyList.push(0);
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
@@ -366,7 +369,8 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
       this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(), this.masterCompanyId),
 
-      this.speedQuoteService.getAllSpeedQuoteSettings(this.masterCompanyId)).subscribe(result => {
+      this.speedQuoteService.getAllSpeedQuoteSettings(this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.masterCompanyId),).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -376,6 +380,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
         this.setCreditTerms(result[4]);
         this.setLeadSources(result[5]);
         this.setValidDays(result[6]);
+        this.currencyList = result[7];
         this.getCustomerDetails();
         if (this.id) {
         } else {
@@ -499,6 +504,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       if (!this.isEdit) {
         this.salesQuote.salesPersonId = this.customerDetails.primarySalesPersonId;
         this.salesQuote.customerServiceRepId = this.customerDetails.csrId;
+        this.salesQuote.currencyId = this.customerDetails.currencyId;
       }
       if (!this.id) {
         this.salesQuote.creditLimit = this.customerDetails.creditLimit;
@@ -956,6 +962,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.salesQuote.isApproved = this.speedQuoteView.speedQuote.isApproved;
       this.salesQuote.customerServiceRepId = this.salesOrderQuoteObj.customerSeviceRepId;
       this.salesQuote.salesPersonId = this.salesOrderQuoteObj.salesPersonId;
+      this.salesQuote.currencyId = this.salesOrderQuoteObj.currencyId;
       this.isSpinnerVisible = false;
       if (isInitialCall) {
         this.getInitialDataForSOQ();
