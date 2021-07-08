@@ -1657,7 +1657,7 @@ export class EntityShippingComponent implements OnInit {
                 this.setEditArray.push(0);
             }
             if (this.id != undefined) {
-                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityShippingAddress', 'LegalEntityShippingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join()).subscribe(res => {
+                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityShippingAddress', 'LegalEntityShippingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
                     this.sitesOriginalDomestic = res;
                     this.sitesNamesListDomestic = [];
                     this.sitesNamesListDomestic = [...this.sitesOriginalDomestic];
