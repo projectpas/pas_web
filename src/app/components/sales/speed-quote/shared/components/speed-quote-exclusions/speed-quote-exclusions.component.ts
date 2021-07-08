@@ -33,6 +33,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   @Output('on-exclusion-load') onExclusionLoad: EventEmitter<number> = new EventEmitter<number>();
   disabledSave: boolean = true;
   saveButton: boolean = false;
+  conditionList: any;
   constructor(private commonService: CommonService,
     private authService: AuthService, private itemMasterService: ItemMasterService,
     private changeDetector: ChangeDetectorRef, private _actRoute: ActivatedRoute,
@@ -46,6 +47,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     this.speedQuoteId = this.SQId;
     this.getExclusionList();
     //this.bindPartsDroppdown('');
+    this.getConditionsList();
   }
   refresh(rowdata) {
     //this.loapartItems();
@@ -81,6 +83,11 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     }
     this.partListData.push(newParentObject);
   }
+  getConditionsList() {
+      this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+        this.conditionList = res;
+    })
+}
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
   }
@@ -368,4 +375,11 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
         return notes.replace(/<[^>]*>/g, '');
       }
     }
+    onConditionChange(data,index)
+    {
+      alert();
+      console.log(data);
+      console.log(index);
+    }
+
 }

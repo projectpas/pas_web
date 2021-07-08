@@ -301,7 +301,6 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
           this.soSettingsList = settingList;
         }
         this.customerDetails = result[0];
-        debugger;
         this.getCustomerDetails();
         this.setTypesOfWarnings(result[2]);
         this.setAccountTypes(result[3]);
@@ -627,23 +626,23 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     });
   }
 
-  copySalesOrderInstance(salesOrderId: number) {
-    this.isSpinnerVisible = true;
-    this.salesOrderService.copy(salesOrderId).subscribe(data => {
-      this.getSOMarginSummary();
-      this.load(this.managementStructureId);
-      //this.salesOrderView = data && data.length ? data[0] : null;
-      if (this.salesOrderCopyParameters) {
-        if (!this.salesOrderCopyParameters.copyParts) {
-          this.salesOrderView.parts = [];
-        }
-      }
-      this.bindData(this.salesOrderView);
-      this.isSpinnerVisible = false;
-    }, error => {
-      this.isSpinnerVisible = false;
-    });
-  }
+  // copySalesOrderInstance(salesOrderId: number) {
+  //   this.isSpinnerVisible = true;
+  //   this.salesOrderService.copy(salesOrderId).subscribe(data => {
+  //     this.getSOMarginSummary();
+  //     this.load(this.managementStructureId);
+  //     //this.salesOrderView = data && data.length ? data[0] : null;
+  //     if (this.salesOrderCopyParameters) {
+  //       if (!this.salesOrderCopyParameters.copyParts) {
+  //         this.salesOrderView.parts = [];
+  //       }
+  //     }
+  //     this.bindData(this.salesOrderView);
+  //     this.isSpinnerVisible = false;
+  //   }, error => {
+  //     this.isSpinnerVisible = false;
+  //   });
+  // }
 
   bindData(salesOrderView: IExchangeSalesOrderView, initialCall = false) {
     this.salesOrderObj = salesOrderView.salesOrder;
