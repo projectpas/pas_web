@@ -2222,7 +2222,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
     this.setEditArray = [];
     this.setEditArray.push(0);
     const strText = value ? value : '';
-    this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
         this.emailTypes = res;
     }, err => {
     });

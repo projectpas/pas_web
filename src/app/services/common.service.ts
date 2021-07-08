@@ -43,7 +43,7 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoSuggestionSmartDropDownList(tableName, primaryKeyColumn, labelColumn, searchText, startWith, count?, idList?, masterCompanyId?) {
+  autoSuggestionSmartDropDownList(tableName, primaryKeyColumn, labelColumn, searchText, startWith, count, idList, masterCompanyId) {
     //?tableName=Customer&primaryColumn=CustomerId&textColumn=Name&searchText=Av&startWith=false&count=0
     return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownList(tableName, primaryKeyColumn, labelColumn, searchText, startWith, count, idList, masterCompanyId));
@@ -51,9 +51,9 @@ export class CommonService extends EndpointFactory {
   }
 
   //autoSuggestionSmartDropDownList        (tableName, primaryKeyColumn, labelColumn, searchText, startWith, count?, idList?)
-  autoSuggestionSmartDropDownListWtihColumn(tableName, primaryKeyColumn, labelColumn, searchValue?, secondarycolumn?, secondarytextcolumn?, count?, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdownsbasedoncolumn?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&secondarytextcolumn=${secondarytextcolumn}&count=${count !== undefined ? count : 0}&idList=${idList}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownListWtihColumn(tableName, primaryKeyColumn, labelColumn, searchValue, secondarycolumn, secondarytextcolumn, count, idList));
+  autoSuggestionSmartDropDownListWtihColumn(tableName, primaryKeyColumn, labelColumn, searchValue, secondarycolumn, secondarytextcolumn, count, idList,masterCompanyId) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/bindautocompletedropdownsbasedoncolumn?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&secondarytextcolumn=${secondarytextcolumn}&count=${count !== undefined ? count : 0}&idList=${idList}&masterCompanyId=${masterCompanyId}` , this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownListWtihColumn(tableName, primaryKeyColumn, labelColumn, searchValue, secondarycolumn, secondarytextcolumn, count, idList,masterCompanyId));
     });
   }
 
@@ -134,15 +134,15 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoCompleteSmartDropDownAssetList(searchText, startWith, count?, idList?,masterCompanyId?) {
+  autoCompleteSmartDropDownAssetList(searchText, startWith, count, idList,masterCompanyId) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownAssetList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownAssetList(searchText, startWith, count, idList,masterCompanyId));
     });
   }
 
-  autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
+  autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId, masterCompanyId) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsCertifyEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId));
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId,masterCompanyId));
     });
   }
   autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count?, idList?, managementStructureId?, masterCompanyId?) {
@@ -161,9 +161,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoCompleteDropdownsExpertiseTypes(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
+  autoCompleteDropdownsExpertiseTypes(searchText, startWith, count, idList,masterCompanyId) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsExpertiseTypes?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsExpertiseTypes(searchText, startWith, count, idList, managementStructureId,masterCompanyId));
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsExpertiseTypes(searchText, startWith, count, idList,masterCompanyId));
     });
   }
 
@@ -873,9 +873,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn?, searchValue?, count?, idList?,masterCompany?) {
+  getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn?, searchValue?, count?, idList?,masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/Bindautocompletedropdownsbasedontwocolumns?tableName1=${tableName1}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&searchText=${searchValue}&startWith=true&secondarycolumn=${secondarycolumn}&count=${count !== undefined ? count : 0}&idList=${idList}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn, searchValue, count, idList));
+      return this.handleErrorCommon(error, () => this.getAutoCompleteDropDownsByCodeWithName(tableName1, primaryKeyColumn, labelColumn, secondarycolumn, searchValue, count, idList,masterCompanyId));
     });
   }
 

@@ -647,7 +647,7 @@ export class EntityBillingComponent {
                 this.setEditArray.push(0);
             }
             if (this.id != undefined) {
-                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityBillingAddress', 'LegalEntityBillingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join()).subscribe(res => {
+                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityBillingAddress', 'LegalEntityBillingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
                     this.sitesOriginal = res;
                     this.sitesNamesList = [];
                     this.sitesNamesList = [...this.sitesOriginal];

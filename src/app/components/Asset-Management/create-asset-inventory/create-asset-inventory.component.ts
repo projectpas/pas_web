@@ -196,7 +196,7 @@ export class CreateAssetInventoryComponent implements OnInit {
         const strText = value;
 
 
-        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
 
             this.allAssetList = res;
         }, err => {
@@ -245,7 +245,7 @@ export class CreateAssetInventoryComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value;
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
         }, err => {
             const errorLog = err;
@@ -1859,7 +1859,7 @@ export class CreateAssetInventoryComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value;
-        this.commonService.autoSuggestionSmartDropDownList('AssetStatus', 'AssetStatusId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetStatus', 'AssetStatusId', 'Name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.assetStatusList = res.map(x => {
                 return {
                     ...x,
@@ -1879,7 +1879,7 @@ export class CreateAssetInventoryComponent implements OnInit {
             this.setEditArray = [];
             this.setEditArray.push(this.currentAsset.inventoryStatusId);
             const strText = '';
-            this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.assetInventoryStatusList = res;
             }, err => {
                 const errorLog = err;

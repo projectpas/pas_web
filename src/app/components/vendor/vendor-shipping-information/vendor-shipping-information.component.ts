@@ -616,10 +616,9 @@ export class VendorShippingInformationComponent {
             this.getAllTagNameSmartDropDown('', row.contactTagId);
         }
 
-        if (this.arrayDomesricShipIdlist.length == 0) {
-            this.arrayDomesricShipIdlist.push(row.vendorShippingAddressId);
-        }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName', '', 'VendorId', this.vendorId, 20, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        if(this.arrayDomesricShipIdlist.length == 0) {
+            this.arrayDomesricShipIdlist.push(row.vendorShippingAddressId); }
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -1791,10 +1790,9 @@ export class VendorShippingInformationComponent {
 
     getAllDomesticSiteSmartDropDown(strText = '') {
         //this.isSpinnerVisible = true;
-        if (this.arrayDomesricShipIdlist.length == 0) {
-            this.arrayDomesricShipIdlist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName', '', 'VendorId', this.vendorId, 20, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+		if(this.arrayDomesricShipIdlist.length == 0) {
+            this.arrayDomesricShipIdlist.push(0); }
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value

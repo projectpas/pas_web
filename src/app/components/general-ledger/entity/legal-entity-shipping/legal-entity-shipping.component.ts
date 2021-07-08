@@ -2248,79 +2248,52 @@ export class EntityShippingComponent implements OnInit {
       : "0.00";
   }
 
-  restoreTypeId: any;
-  restore(content, rowData, type) {
-    this.restoreTypeId = type;
-    this.restorerecord = rowData;
-    this.modal = this.modalService.open(content, {
-      size: "sm",
-      backdrop: "static",
-      keyboard: false,
-    });
-  }
-
-  filterSiteNamesDomestic(event) {
-    this.sitesNamesListDomestic = this.sitesOriginalDomestic
-      ? this.sitesOriginalDomestic
-      : [];
-    if (event.query != undefined && event.query != "") {
-      this.getAllSites(event.query);
-    } else {
-      this.getAllSites("");
+    restoreTypeId: any;
+    restore(content, rowData, type) {
+        this.restoreTypeId = type;
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-  }
-  // setEditArray: any = [];
-  sitesOriginalDomestic: any = [];
-  sitesNamesListDomestic: any = [];
-  getAllSites(value) {
-    if (this.isViewMode == false) {
-      this.setEditArray = [];
-      const strText = value ? value : "";
-      if (this.isEditDomestic == true) {
-        this.setEditArray.push(
-          this.legalEntityShippingAddressId
-            ? this.legalEntityShippingAddressId
-            : 0
-        );
-      } else {
-        this.setEditArray.push(0);
-      }
-      if (this.id != undefined) {
-        this.commonService
-          .autoSuggestionSmartDropDownListWtihColumn(
-            "LegalEntityShippingAddress",
-            "LegalEntityShippingAddressId",
-            "SiteName",
-            strText,
-            "LegalEntityId",
-            this.id,
-            20,
-            this.setEditArray.join()
-          )
-          .subscribe(
-            (res) => {
-              this.sitesOriginalDomestic = res;
-              this.sitesNamesListDomestic = [];
-              this.sitesNamesListDomestic = [...this.sitesOriginalDomestic];
-              if (
-                this.isEditDomestic == true &&
-                this.sitesNamesListDomestic &&
-                this.sitesNamesListDomestic.length != 0
-              ) {
-                this.sitesNamesListDomestic.forEach((element) => {
-                  if (element.label == this.domesticShippingInfo.siteName) {
-                    this.domesticShippingInfo.siteName = element;
-                  }
-                });
-              }
-            },
-            (err) => {
-              this.isSpinnerVisible = false;
+    
+    filterSiteNamesDomestic(event) {
+        this.sitesNamesListDomestic = this.sitesOriginalDomestic ? this.sitesOriginalDomestic : [];
+        if (event.query != undefined && event.query != "") {
+            this.getAllSites(event.query)
+        } else {
+            this.getAllSites('')
+        }
+    }
+    // setEditArray: any = [];
+    sitesOriginalDomestic: any = [];
+    sitesNamesListDomestic: any = [];
+    getAllSites(value) {
+        if (this.isViewMode == false) {
+            this.setEditArray = [];
+            const strText = value ? value : '';
+            if (this.isEditDomestic == true) {
+                this.setEditArray.push(this.legalEntityShippingAddressId ? this.legalEntityShippingAddressId : 0);
+            } else {
+                this.setEditArray.push(0);
             }
-          );
-      }
+            if (this.id != undefined) {
+                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityShippingAddress', 'LegalEntityShippingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                    this.sitesOriginalDomestic = res;
+                    this.sitesNamesListDomestic = [];
+                    this.sitesNamesListDomestic = [...this.sitesOriginalDomestic];
+                    if (this.isEditDomestic == true && this.sitesNamesListDomestic && this.sitesNamesListDomestic.length != 0) {
+                        this.sitesNamesListDomestic.forEach(element => {
+                            if (element.label == this.domesticShippingInfo.siteName) {
+                                this.domesticShippingInfo.siteName = element
+                            }
+                        });
+                    }
+
+                }, err => {
+                    this.isSpinnerVisible = false;
+                });
+            }
+        }
     }
-  }
 
   showExistMsg: any = false;
   onSiteNameSelectedDomestic() {
