@@ -12,6 +12,7 @@ import { MasterCompany } from "../../../models/mastercompany.model";
 import { ForgotPassword } from "../../../models/forgot-password.model";
 import { Utilities } from "../../../services/utilities";
 import { EmployeeService } from "../../../services/employee.service";
+import { MasterComapnyService } from "../../../services/mastercompany.service";
 
 declare var $: any;
 @Component({
@@ -33,14 +34,43 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private formBuilder: FormBuilder,
         private router: Router,
+        private masterCompanyService: MasterComapnyService,
         private employeeService: EmployeeService) {
         this.buildForm();
     }
 
     ngOnInit() {
         this.forgotPasswordForm.setValue({
-            email: ''
+            email: '',
+            masterCompanyId: 1
         });
+
+        this.loadMasterCompanies();
+    }
+
+    private loadMasterCompanies() {
+        this.masterCompanyService.getMasterCompanies().subscribe(
+            results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
+            error => this.onDataLoadFailed(error)
+        );
+    }
+
+    private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
+        this.masterCompanyList = allComapnies;
+        if (this.getShouldRedirect()) {
+            this.authService.redirectLoginUser();
+        }
+        else {
+            this.loginStatusSubscription = this.authService.getLoginStatusEvent()
+                .subscribe(isLoggedIn => {
+                    if (this.getShouldRedirect()) {
+                        this.authService.redirectLoginUser();
+                    }
+                });
+        }
+    }
+
+    private onDataLoadFailed(error: any) {
     }
 
     ngOnDestroy() {
@@ -51,7 +81,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
     buildForm() {
         this.forgotPasswordForm = this.formBuilder.group({
-            email: ['', Validators.required]
+            email: ['', Validators.required],
+            masterCompanyId: ['', Validators.required]
         });
     }
 
@@ -73,24 +104,31 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
     getUserLogin(): ForgotPassword {
         const formModel = this.forgotPasswordForm.value;
-        return new ForgotPassword(formModel.email);
+        return new ForgotPassword(formModel.email, formModel.masterCompanyId);
     }
+
+    backToLoginLink() {
+        this.router.navigateByUrl('/Login');
+    }
+
+    get masterCompanyId() { return this.forgotPasswordForm.get('masterCompanyId'); }
 
     sendForgetPasswordLink() {
         this.isLoading = true;
         this.alertService.startLoadingMessage("", "Attempting login...");
         var email = this.forgotPasswordForm.value.email;
+        var masterCompanyId = this.forgotPasswordForm.value.email;
         this.alertService.startLoadingMessage();
-        this.employeeService.forgotPassword(email).subscribe(res => {
+        this.employeeService.forgotPassword(email, this.masterCompanyId.value).subscribe(res => {
             this.alertService.stopLoadingMessage();
             this.isLoading = false;
-            this.alertService.showMessage("Reset Password", `The link has been sent, please check your email to reset your password.`, MessageSeverity.success);
+            this.alertService.showMessage("Reset Password", `please check your email to reset your password.`, MessageSeverity.success);
             //this.router.navigateByUrl('/Login');
         }, error => {
             this.alertService.stopLoadingMessage();
             this.isLoading = false;
-            this.alertService.showStickyMessage("Load Error", `Unable to reset password.\r\nErrors: "${Utilities.getHttpResponseMessage(error)}"`,
-                MessageSeverity.error, error);
+            //this.alertService.showStickyMessage("Load Error", `Unable to reset password.\r\nErrors: "${Utilities.getHttpResponseMessage(error)}"`, MessageSeverity.error, error);
+            this.alertService.showMessage("Reset Password", `please check your email to reset your password.`, MessageSeverity.success);
         });
     }
 

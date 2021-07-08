@@ -11,6 +11,7 @@ export class ResetPassComponent implements AfterViewInit {
   @ViewChild(ResetPasswordComponent, { static: false }) resetpasswordControl: ResetPasswordComponent;
   userId: any;
   code: any;
+  masterCompanyId: any;
 
   constructor(private activatedRoute: ActivatedRoute) {
   }
@@ -19,12 +20,14 @@ export class ResetPassComponent implements AfterViewInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.userId = params['UserId'];
       this.code = params['code'];
+      this.masterCompanyId = params['cId'];
     });
   }
 
   resetPassword() {
     this.resetpasswordControl.userId = this.userId;
     this.resetpasswordControl.token = this.code;
+    this.resetpasswordControl.companyId = this.masterCompanyId;
     this.resetpasswordControl.resetPassword();
   }
 }
