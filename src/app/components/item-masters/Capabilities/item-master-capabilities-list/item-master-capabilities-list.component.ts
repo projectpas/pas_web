@@ -299,59 +299,60 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
       iMid = this.itemMasterId
     }
 
-    let reqData = {
-      first: 0,
-      rows: 1000,
-      sortOrder: -1,
-      filters: {
-        partNo: "",
-        itemMasterId: iMid,
-        isDeleted: this.currentDeleteStatus,
-      },
-      globalFilter: null,
-    };
-    this.itemMasterService.getItemMasterCapsList(reqData).subscribe(
-      (results) => this.onDataLoadSuccessful(results[0]),
-      (error) => this.onDataLoadFailed(error)
-    );
+        let reqData = {
+            first: 0,
+            rows: 1000,
+            sortOrder: -1,
+            filters: {
+                partNo: "",
+                itemMasterId: iMid,
+                MasterCompanyId:this.authService.currentUser.masterCompanyId,
+                isDeleted: this.currentDeleteStatus
+            },
+            globalFilter: null
+        }
+        this.itemMasterService.getItemMasterCapsList(reqData).subscribe(
+            results => this.onDataLoadSuccessful(results[0]),
+            error => this.onDataLoadFailed(error)
+        );
 
-    // To display the values in header and column name values
-    this.pnCols = [
-      { field: 'capabilityType', header: 'Cap Type' },
-      { field: 'partNo', header: 'PN' },
-      { field: 'pnDiscription', header: 'PN Description', width: "200px" },
-      { field: 'level1', header: 'Management Structure' },
-      { field: 'level2' },
-      { field: 'level3' },
-      { field: 'level4' },
-      { field: 'addedDate', header: 'Added Date' },
-      { field: 'isVerified', header: 'Verified', width: "80px" },
-      { field: 'verifiedBy', header: 'Verified By' },
-      { field: 'verifiedDate', header: 'Verified Date' },
-      { field: 'memo', header: 'Memo', width: "200px" },
-      { field: 'createdDate', header: 'Created Date' },
-      { field: 'createdBy', header: 'Created By' },
-      { field: 'updatedDate', header: 'Updated Date' },
-      { field: 'updatedBy', header: 'Updated By' },
-    ];
-    this.nonPnCols = [
-      { field: 'capabilityType', header: 'Cap Type' },
-      { field: 'partNo', header: 'PN' },
-      { field: 'pnDiscription', header: 'PN Description', width: "200px" },
-      { field: 'level1', header: 'Level 01' },
-      { field: 'level2', header: 'Level 02' },
-      { field: 'level3', header: 'Level 03' },
-      { field: 'level4', header: 'Level 04' },
-      { field: 'addedDate', header: 'Added Date' },
-      { field: 'isVerified', header: 'Verified', width: "80px" },
-      { field: 'verifiedBy', header: 'Verified By' },
-      { field: 'verifiedDate', header: 'Verified Date' },
-      { field: 'memo', header: 'Memo', width: "200px" },
-      { field: 'createdDate', header: 'Created Date' },
-      { field: 'createdBy', header: 'Created By' },
-      { field: 'updatedDate', header: 'Updated Date' },
-      { field: 'updatedBy', header: 'Updated By' },
-    ];
+        // To display the values in header and column name values
+        this.pnCols = [
+            { field: 'capabilityType', header: 'Cap Type' },
+            { field: 'partNo', header: 'PN' },
+            { field: 'pnDiscription', header: 'PN Description', width: "200px" },
+            { field: 'level1', header: 'Management Structure' },
+            { field: 'level2' },
+            { field: 'level3' },
+            { field: 'level4' },
+            { field: 'addedDate', header: 'Added Date' },
+            { field: 'isVerified', header: 'Verified', width: "80px" },
+            { field: 'verifiedBy', header: 'Verified By' },
+            { field: 'verifiedDate', header: 'Verified Date' },
+            { field: 'memo', header: 'Memo', width: "200px" },
+            { field: 'createdDate', header: 'Created Date' },
+            { field: 'createdBy', header: 'Created By' },
+            { field: 'updatedDate', header: 'Updated Date' },
+            { field: 'updatedBy', header: 'Updated By' },
+        ];
+        this.nonPnCols = [
+            { field: 'capabilityType', header: 'Cap Type' },
+            { field: 'partNo', header: 'PN' },
+            { field: 'pnDiscription', header: 'PN Description', width: "200px" },
+            { field: 'level1', header: 'Level 01' },
+            { field: 'level2', header: 'Level 02' },
+            { field: 'level3', header: 'Level 03' },
+            { field: 'level4', header: 'Level 04' },
+            { field: 'addedDate', header: 'Added Date' },
+            { field: 'isVerified', header: 'Verified', width: "80px" },
+            { field: 'verifiedBy', header: 'Verified By' },
+            { field: 'verifiedDate', header: 'Verified Date' },
+            { field: 'memo', header: 'Memo', width: "250px" },
+            { field: 'createdDate', header: 'Created Date' },
+            { field: 'createdBy', header: 'Created By' },
+            { field: 'updatedDate', header: 'Updated Date' },
+            { field: 'updatedBy', header: 'Updated By' },
+        ];
 
     if (this.itemMasterId == undefined) {
       this.cols = this.nonPnCols

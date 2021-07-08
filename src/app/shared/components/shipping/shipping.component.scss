@@ -34,6 +34,13 @@ label {
     margin-right: 0;
     font-weight: normal;
 }
+input[type='tel']{
+    text-align: end !important;
+  }
+  .ted_v{
+    width: 46px !important;
+  }
+input[type="tel"],
 input[type="text"], input[type="number"], select {
     height: 24px !important;
     border-radius: 5px !important;

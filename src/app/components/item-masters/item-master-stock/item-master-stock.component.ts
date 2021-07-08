@@ -5198,7 +5198,15 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     getPercentValuePP(field) {
         let vendorListPrice = field.PP_VendorListPrice ? parseFloat(field.PP_VendorListPrice.toString().replace(/\,/g,'')) : 0;
-        let purchaseDiscAmount = ((vendorListPrice * field.PP_PurchaseDiscPerc) / 100);
+        let discountlabel=0;
+        this.itemQuantitys.forEach((discount) => {
+            if (discount.value == field.PP_PurchaseDiscPerc) 
+            {
+                discountlabel = discount.label;
+            }
+        })
+        
+        let purchaseDiscAmount = ((vendorListPrice * discountlabel) / 100);
         let unitPurchasePrice = vendorListPrice - purchaseDiscAmount;
         field.PP_PurchaseDiscAmount = purchaseDiscAmount ? formatNumberAsGlobalSettingsModule(purchaseDiscAmount, 2) : '0.00';
         field.PP_UnitPurchasePrice = unitPurchasePrice ? formatNumberAsGlobalSettingsModule(unitPurchasePrice, 2) : '0.00';
@@ -5222,7 +5230,16 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getPercentValueSPUsingPP(field) {
         if(field.SalePriceSelectId == 2) {
             let vendorListPrice = field.PP_VendorListPrice ? parseFloat(field.PP_VendorListPrice.toString().replace(/\,/g,'')) : 0;
-            let markUpAmount = ((vendorListPrice * field.SP_CalSPByPP_MarkUpPercOnListPrice) / 100);
+            
+            let SP_CalSPByPP_MarkUpPercOnListPrice=0;
+            this.itemQuantity.forEach((markup) => {
+            if (markup.value == field.SP_CalSPByPP_MarkUpPercOnListPrice) 
+            {
+                SP_CalSPByPP_MarkUpPercOnListPrice = markup.label;
+            }
+            })
+            
+            let markUpAmount = ((vendorListPrice * SP_CalSPByPP_MarkUpPercOnListPrice) / 100);
             let baseSalePrice = vendorListPrice + markUpAmount;
             let saleDiscAmount: any;
             let unitSalePrice: any;

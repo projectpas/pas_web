@@ -846,19 +846,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             },
           ],
           [
-            {
-              label: 'Journals',
-              items: [
-                {
-                  label: 'Journal List',
-                  routerLink: '/accountmodule/accountpages/app-list-journel',
-                },
-                {
-                  label: 'Schedule Journals',
-                  routerLink: '/accountmodule/accountpages/app-schedule',
-                }
-              ],
-            },
+          
             {
               label: 'GL Accounts ',
               items: [
@@ -1050,6 +1038,42 @@ export class AppComponent implements OnInit, AfterViewInit {
         // icon: '',
         items: [
           [
+            {
+              label: 'Journals',
+              items: [
+                {
+                  label: 'Journal List',
+                  routerLink: '/accountmodule/accountpages/app-list-journel',
+                },
+                {
+                  label: 'Schedule Journals',
+                  routerLink: '/accountmodule/accountpages/app-schedule',
+                }
+              ],
+            },
+           
+                  {
+                    label: 'Management Structure',
+                    items: [
+                      {
+                        label: 'Comp',
+                        routerLink: '',
+                      },
+                      {
+                        label: 'BU',
+                        routerLink: '',
+                      },
+                      {
+                        label: 'Div',
+                        routerLink: '',
+                      },
+                      {
+                        label: 'Dept',
+                        routerLink: '',
+                      },
+                    ],
+                  },
+               
             {
               label: 'Accounts Receivable',
               items: [
@@ -1555,35 +1579,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           ],
         ],
       },
-      {
-        label: 'Management Structure',
-        icon: 'fa fa-user-circle',
-        items: [
-          [
-            {
-              label: 'Management Structure',
-              items: [
-                {
-                  label: 'Comp',
-                  routerLink: '',
-                },
-                {
-                  label: 'BU',
-                  routerLink: '',
-                },
-                {
-                  label: 'Div',
-                  routerLink: '',
-                },
-                {
-                  label: 'Dept',
-                  routerLink: '',
-                },
-              ],
-            },
-          ],
-        ],
-      },
+    
       {
         label: 'Account',
         icon: 'fa fa-user-circle-o',
