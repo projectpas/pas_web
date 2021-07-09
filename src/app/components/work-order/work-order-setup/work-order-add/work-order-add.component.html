@@ -1742,6 +1742,20 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                            <div class="loading">
+                                <div class="lds-roller">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col">
                             <div class="">
                                 <div class="col" style="padding:3px 0 0;">
@@ -1868,8 +1882,8 @@
                                         {{wosummpn.workOrderStatus}}
                                     </td>
                                     <td >
-                                        <span data-toggle="modal" data-target="#viewWorkOrder">
-                                            <a class="btn nobg btn-view-cstm" (click)="view(wosummpn)" matTooltip="View WO"
+                                        <span>
+                                            <a class="btn nobg btn-view-cstm" (click)="view(viewWorkOrder,wosummpn)" matTooltip="View WO"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </a>
@@ -1884,11 +1898,7 @@
                         <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
                     </div>
                 </ng-template>
-
-                <div id="viewWorkOrder" class="modal fade" role="dialog" style="z-index: 10000;" data-backdrop="static" data-keyboard="false">
-                    <div class="modal-dialog modal-xlg">
-                        <!-- Modal content-->
-                        <div class="modal-content">
+                 <ng-template #viewWorkOrder let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
                             <div class="modal-header">
                                 <button type="button" class="close" 
                                     (click)="closeViewModel(); workOrderId = 0;">
@@ -1897,15 +1907,27 @@
                                 <h4 class="modal-title">Work Order View</h4>
                             </div>
                 
-                            <div class="card-body" *ngIf="workOrderId">
+                            <div class="card-body" *ngIf="isOpenViewWO">
+                                <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                                    <div class="loading">
+                                        <div class="lds-roller">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <app-work-view-component [workOrderId]="workOrderId"></app-work-view-component>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" 
-                                    (click)="closeViewModel(); workOrderId = 0;">
+                                    (click)="closeViewModel();">
                                     Close
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                </div>
+</ng-template>
