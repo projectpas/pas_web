@@ -376,6 +376,8 @@ export class EntityContactComponent implements OnInit {
 	onAddContactInfo() {
 		this.isEditButton = false;
 		this.contactInformation = new CustomerContactModel()
+		this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
 	}
 
 	ismemohideOnSave: boolean = false;

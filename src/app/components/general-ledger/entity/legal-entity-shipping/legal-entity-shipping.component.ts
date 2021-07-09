@@ -366,6 +366,8 @@ export class EntityShippingComponent implements OnInit {
         this.editisPrimary = false;
         this.isEditDomestic = false;
         this.domesticShippingInfo = new legalEntityShippingModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     addInternationalShipping() {

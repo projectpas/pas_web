@@ -584,6 +584,8 @@ export class VendorShippingInformationComponent {
         this.sourceVendor = {};
         this.isEditShippingInfo = false;
         this.isSiteNameAlreadyExists = false;
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     openEdit(row) {
