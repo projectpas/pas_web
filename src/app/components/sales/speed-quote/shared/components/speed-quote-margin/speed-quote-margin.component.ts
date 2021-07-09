@@ -60,7 +60,7 @@ export class SpeedQuoteMarginComponent implements OnInit {
   }
 
   getPercents() {
-    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue',this.currentUserMasterCompanyId).subscribe(res => {
       this.percentage = res;
     })
   }
