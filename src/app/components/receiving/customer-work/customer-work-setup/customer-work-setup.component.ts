@@ -675,14 +675,12 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
     workScopeObjDetails:any={};
 getWorkScopeDataByIds(){
-    console.log("form",this.receivingForm)
+    if(this.receivingForm && (this.receivingForm.itemMasterId!=null || this.receivingForm.itemMasterId!=0) && this.receivingForm.workScopeId !=null){
     this.commonService.getDataWorkScopeByItemMasterCaps(this.receivingForm,'rc').subscribe(res => {
-        console.log('res',res);
+
         this.workScopeObjDetails={};
         this.workScopeObjDetails=res;
         if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){
-            // let modelName2="confirmWorkScopeInfo";
-            // this.modal = this.modalService.open(modelName2, { size: 'sm' });hide
             this.workScopeList.forEach(element => {
          if(element.value==this.receivingForm.workScopeId){
              this.receivingForm.workScopeName=element.label;
@@ -692,6 +690,7 @@ getWorkScopeDataByIds(){
             $('#confirmWorkScopeInfo').modal('show');
         }
     });
+}
     
 }
 dismissWorkSocpe(){
@@ -1224,7 +1223,6 @@ allowtoSaveWO(){
         // this.router.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${this.receivingCustomerWorkId}`);
         this.isgotoWO = true;
         this.customerWarningListId = this.customerWOWaringListId;
-        console.log("wo Changes", this.customerWOWaringListId);
 
         this.customerResctrictions(this.customerId);
 
@@ -1282,7 +1280,6 @@ allowtoSaveWO(){
 
     customerResctrictions(customerId) {
         this.restrictMessage = '';
-        console.log("wo Changes", customerId, this.customerWarningListId);
         if (customerId && this.customerWarningListId) {
             this.commonService.customerResctrictions(customerId, this.customerWarningListId).subscribe((res: any) => {
                 if (res) {
