@@ -1737,7 +1737,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     openCapes(content) {
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
 
     saverange(selectedRow) {
@@ -2469,7 +2469,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.auditHisory = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
 
     deleteItemAndCloseModel() {
@@ -5936,7 +5936,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         this.sourceViewforDocumentAudit = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
        
     }
     private saveFailedHelper(error: any) {
@@ -5963,7 +5963,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     private onHistoryOfPurchaseandSalesSuccess(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         this.sourceViewforPurchaseandSalesAudit = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
     getColorCodeForHistoryForDoc(i, field, value) {
         const data = this.sourceViewforDocumentAudit;

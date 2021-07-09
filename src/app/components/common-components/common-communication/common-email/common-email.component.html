@@ -171,7 +171,7 @@
 </div>
 <div id="contentHistDocs" #contentHistDocs class="modal fade" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">History of Email</h4>
@@ -182,15 +182,15 @@
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" style="white-space:nowrap">
                             <thead>
                                 <tr>
-                                    <th>Email Type</th>
-                                    <th>To Email</th>
+                                    <th>Email Type <span class="clr-red">*</span></th>
+                                    <th>To Email <span class="clr-red">*</span></th>
                                     <th>CC </th>
                                     <th>BCC </th>
-                                    <th>Subject</th>
-                                    <th>Contacted By</th>
+                                    <th>Subject <span class="clr-red">*</span></th>
+                                    <th>Contacted By <span class="clr-red">*</span></th>
                                     <th>Contact Date</th>
                                     <th><span *ngIf="type==1">Customer</span> <span *ngIf="type==2">Vendor</span>
                                         Contact

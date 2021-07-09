@@ -108,7 +108,7 @@
               }}
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
-              <p class="m-0 p-0 p_textEditor float-left text-capital truncate-text" matTooltipPosition="above"
+              <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
               [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'createdBy' || col.field == 'updatedBy'">{{rowData[col.field]}} </td>
