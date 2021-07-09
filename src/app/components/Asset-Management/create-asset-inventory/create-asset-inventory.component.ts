@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { VendorService } from '../../../services/vendor.service';
 import { Location } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-create-asset-inventory',
     templateUrl: './create-asset-inventory.component.html',
@@ -123,22 +124,27 @@ export class CreateAssetInventoryComponent implements OnInit {
     intangiblemoduleName = 'AssetInventoryIntangibleFile';
     modalIsMaintannce: NgbModalRef;
     modalWarrenty: NgbModalRef;
+
+    isView:boolean=true;
+    isAdd:boolean=true;
+    isUpdate:boolean=true;
     constructor(private commonService: CommonService, private location: Location, private vendorService: VendorService, private assetService: AssetService, private assetLocationService: AssetLocationService, private alertService: AlertService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private route: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe) {
         this.currentAsset.entryDate = this.currentDate;
         this.currentAsset.isTangible = 1;
         this.currentAsset.assetLocationId = 0;
         this.currentAsset.warrantyStatusId = 0;
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_Inventory_List+'.'+PermissionConstants.View]);
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Add]);
+        this.isUpdate=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
     }
 
     ngOnInit() {
         if (this.assetService.isEditMode == false) {
-
             this.breadcrumbs = [
                 { label: 'Asset Inventory' },
                 { label: 'Create Asset Inventory' },
             ];
         } else {
-
             this.breadcrumbs = [
                 { label: 'Asset Inventory' },
                 { label: 'Edit Asset Inventory' },

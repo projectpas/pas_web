@@ -78,6 +78,8 @@ export class ModuleConstants
         static Asset_Capes :string  = "Asset_Capes";
         static Asset_Calibration :string  = "Asset_Calibration";
         static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
+        static Asset_Inventory_List :string  = "Asset_Inventory_List";
+        static Asset_Inventory_Create :string  = "Asset_Inventory_Create";
 }
 
 export class PermissionConstants

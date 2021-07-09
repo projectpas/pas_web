@@ -10,8 +10,7 @@
                                   <button
                                     type="button"
                                     class="btn-sm header-button"
-                                    (click)="navigateTogeneralInfo()"                                
-                                  >
+                                    (click)="navigateTogeneralInfo()" *ngIf="isAdd">
                                   Add Asset Inventory 
                                   </button>
                                 </div>
@@ -61,12 +60,12 @@
                             </div>
                             <div class="row">
                               <div class="col">
-                                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                                <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                                 pButton icon="fa-download" iconPos="left" label="Export All Data"
                                   data-toggle="modal"
                                 (click)="selectedOnly = false; targetData = dt;" 
                                 data-target="#downloadConfirmation"></button>
-                                 <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
+                                 <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
                                 pButton icon="fa-download" iconPos="left"
                                  label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
                                 ></button>
@@ -170,27 +169,27 @@
                                     </td>
                                     <td class="action-icons-cstm" style="width:164px;position:sticky" *ngIf="selectedColumns.length> 0">
                                         <div *ngIf="currentDeletedstatus==false">
-                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                        <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                                            <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                            <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                            <span><a class="btn nobg btn-edit-cstm" data-toggle="modal" data-target="#assetInventoryStatus" (click)="editInventoryStatus(rowData)" matTooltip="Asset Inventory Status" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                            <span *ngIf="isEdit" ><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                            <span *ngIf="isEdit" ><a class="btn nobg btn-edit-cstm" data-toggle="modal" data-target="#assetInventoryStatus" (click)="editInventoryStatus(rowData)" matTooltip="Asset Inventory Status" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                      
                                           
                                           
                                           
-                                            <span><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
-                                            <span data-toggle="modal" data-target="#AssetAdjAudit"><a class="btn nobg btn-adjhist-cstm" (click)="openAssetInventoryAdj(rowData)" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                            <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
-                                            <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                            <span *ngIf="isEdit" ><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
+                                            <span *ngIf="isView"  data-toggle="modal" data-target="#AssetAdjAudit"><a class="btn nobg btn-adjhist-cstm" (click)="openAssetInventoryAdj(rowData)" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                            <span *ngIf="isView"  data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
+                                            <span  *ngIf="isDelete" ><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
                                         </div>
                                         <div *ngIf="currentDeletedstatus==true">
-                                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                            <p-inputSwitch *ngIf="isEdit"  [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
-                                            <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                            <span ><a class="btn nobg btn-restore-cstm" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
-                                            <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
+                                            <span *ngIf="isView"><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                            <span *ngIf="isEdit"><a class="btn nobg btn-restore-cstm" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                            <span *ngIf="isView" data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                         </div>
                                  </td> 
 
@@ -1411,7 +1410,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" (click)="closeStatusModel()">Cancel</button>
-				<button type="button" class="btn btn-primary" [disabled]="disabledInventoryStatus" (click)="updateInventoryStatus(); closeStatusModel();">Update</button>
+				<button type="button" class="btn btn-primary" [disabled]="disabledInventoryStatus" (click)="updateInventoryStatus(); closeStatusModel();" *ngIf="isEdit">Update</button>
 			</div>
 		</div>
 	</div>
