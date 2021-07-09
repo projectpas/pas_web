@@ -854,7 +854,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     async getDiscountTableData(){
-       // await this.commonService.smartDropDownList('Discount', 'DiscountId', 'DiscontValue').subscribe(res => {
         await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
             this.itemQuantitys = res;
             this.itemQuantitys.sort(function(a, b) {
@@ -871,7 +870,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     async getPercentTableData(){
-        //await this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
           await this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
             this.itemQuantity = res;
             this.itemQuantity.sort(function(a, b) {
@@ -888,7 +886,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     getItemMasterPurchaseSaleMaster() {
         this.isSpinnerVisible = true;
-        //this.commonService.smartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name').subscribe(response => {
           this.commonService.autoSuggestionSmartDropDownList('ItemMasterPurchaseSaleMaster', 'ItemMasterPurchaseSaleMasterId', 'Name','', false, 0,'0',0).subscribe(response => {
             this.allPurchaseAndSaleMasterList = response;
             this.allPurchaseAndSaleMasterList = this.allPurchaseAndSaleMasterList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -1232,7 +1229,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     private loadSiteData() {
-        //this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
           this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {               
             this.allSites = res;
         })
@@ -1252,7 +1248,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
 
         if(this.sourceItemMaster.siteId) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', this.sourceItemMaster.siteId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', this.authService.currentUser.masterCompanyId,'SiteId', this.sourceItemMaster.siteId,0).subscribe(res => {
 				this.wareHouseData = res;
 			})
 		}
@@ -1269,7 +1265,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }        
 
         if(this.sourceItemMaster.warehouseId) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', this.sourceItemMaster.warehouseId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', this.sourceItemMaster.warehouseId,0).subscribe(res => {
 				this.locationData = res;
 			})
 		}
@@ -1284,7 +1280,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }        
 
         if(this.sourceItemMaster.locationId) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', this.sourceItemMaster.locationId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name' ,this.authService.currentUser.masterCompanyId, 'LocationId', this.sourceItemMaster.locationId,0).subscribe(res => {
 				this.shelfData = res;
 			})
 		}
@@ -1296,7 +1292,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceItemMaster.binId = null;
         }
         if(this.sourceItemMaster.shelfId) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', this.sourceItemMaster.shelfId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', this.sourceItemMaster.shelfId,0).subscribe(res => {
 				this.binData = res;
 			})
 		}
@@ -1338,7 +1334,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     // get All Aircraft 
     private aircraftManfacturerData() {
         this.isSpinnerVisible = true;
-        //this.commonService.smartDropDownList('AircraftType', 'AircraftTypeId', 'Description').subscribe(res => {
           this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'AircraftTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allaircraftInfo = res;
             this.manufacturerData = res;
@@ -1742,7 +1737,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     openCapes(content) {
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
 
     saverange(selectedRow) {
@@ -2474,7 +2469,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.auditHisory = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
 
     deleteItemAndCloseModel() {
@@ -3132,7 +3127,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.newValue = value.originalEvent.target.textContent;
 
         if (this.newValue) {
-            this.commonService.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', this.selectedAircraftId).subscribe(res => {
+            this.commonService.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName' ,this.authService.currentUser.masterCompanyId, 'AircraftTypeId', this.selectedAircraftId).subscribe(res => {
                 this.LoadValues = res;
             })
            
@@ -3163,7 +3158,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         
 
         if (this.newValue) {
-            this.commonService.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', this.editAirCraftData.aircraftTypeId).subscribe(res => {
+            this.commonService.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId, 'AircraftTypeId', this.editAirCraftData.aircraftTypeId).subscribe(res => {
                 this.LoadModelsIds = res;
             })
                       
@@ -3232,7 +3227,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             //        });
             //    });
 
-            this.commonService.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', this.aircraftManfacturerIdsUrl).subscribe(res => {
+            this.commonService.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId, 'AircraftTypeId', this.aircraftManfacturerIdsUrl).subscribe(res => {
                 this.aircraftModelList = res;
             })
 
@@ -3932,17 +3927,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     async getItemTypesList() {
-        // await this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').subscribe(res => {
-        //     this.itemTypesList = res;
-        // });
-        //await this.commonService.smartDropDownWithStatusList('ItemType', 'ItemTypeId', 'Description',20, 1, 0).subscribe(res => {
          await this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {   
             this.itemTypesList = res;
         });
     }
 
     getCapabilityType() {
-        //this.commonService.smartDropDownList("CapabilityType", "CapabilityTypeId", "Description",20,1,0).subscribe(data => {
          this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {  
             this.capabilityTypeList = res;
         });
@@ -5198,12 +5188,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.aircraftList = allACList;
     }
 
-    // private countrylist() {
-    //     //this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
-    //         this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {  
-    //         this.allCountryinfo = res;
-    //     })
-    // }
     arrayCountrylist: any[] = [];
     countryListOriginal: any[] = [];
     editCountryId: number;
@@ -5952,7 +5936,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         this.sourceViewforDocumentAudit = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
        
     }
     private saveFailedHelper(error: any) {
@@ -5979,7 +5963,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     private onHistoryOfPurchaseandSalesSuccess(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         this.sourceViewforPurchaseandSalesAudit = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
     getColorCodeForHistoryForDoc(i, field, value) {
         const data = this.sourceViewforDocumentAudit;
@@ -6012,14 +5996,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
     private getConditionListAll() {
-        //this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(response => {
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(response => {
 			this.allConditionsList = response;
 		});
     }
 
     private getUOMListAll() {
-        //this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'shortname').subscribe(res => {
         this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allPurchaseInfoListActiveandInactive = res;
         })

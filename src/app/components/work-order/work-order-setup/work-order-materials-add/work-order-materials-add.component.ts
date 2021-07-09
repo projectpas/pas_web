@@ -49,9 +49,9 @@ export class WorkOrderMaterialsAddComponent implements OnInit {
     this.showModalMargin = false;
   }
   ngOnInit() {
+    this.getConditions();
     this.isView=this.isView;
       this.getCustomerDetails();
-      this.getConditions();
       this.salesQuoteService.getSearchPartResult().subscribe(data => {
           this.parts = data;
         });

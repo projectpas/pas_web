@@ -552,6 +552,10 @@ label{
 .form-horizontal .control-label {
   font-weight: normal !important;
 }
+
+.min-width-90 tbody td{
+  min-width:90px !important;
+}
 .status-radio {
   padding: 10px;
 }

@@ -189,7 +189,6 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                             this.isSpinnerVisible = true;
                             this.loadData();
                             if (this.empModuleId == 0 || this.empModuleId == undefined || this.empModuleId == null) {
-                                //this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name').subscribe(response => { 		        
                                 this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', '', true, 0, this.arrayTrainingtypelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
                                     if (response) {
                                         response.forEach(x => {
@@ -256,15 +255,6 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
             error => { this.isSpinnerVisible = false; } //this.onDataLoadFailed(error)
         );
     }
-
-    // private loadTariningTypes() {
-    //     this.alertService.startLoadingMessage();
-    //     this.loadingIndicator = true;
-    //     this.commonService.smartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType').subscribe(
-    //         results => this.onTariningTypesData(results),
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
 
     private loadTariningTypes(strText = '') {
         this.alertService.stopLoadingMessage();
@@ -685,16 +675,6 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
             this.router.navigateByUrl('/employeesmodule/employeepages/app-employee-certification');
         }
     }
-
-    // async getAllFrequencyTrainingData() {
-    //     await this.commonService.smartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName').subscribe(res => {
-    //         this.getAllFrequencyTrainingInfodrpData = res;
-    //     },err => {
-    // 		this.isSpinnerVisible = false;
-    // 		const errorLog = err;
-    // 		this.errorMessageHandler(errorLog);		
-    // 	});
-    // }
 
     private getAllFrequencyTrainingData(strText = '') {
         if (this.arrayFrequencyTrainingInfolist.length == 0) {

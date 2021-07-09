@@ -944,7 +944,7 @@ export class ReceivngPoComponent implements OnInit {
         stockLine.BinList = [];
         stockLine.binId = 0;
         if (stockLine.siteId) {
-            this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', stockLine.siteId).subscribe(
+            this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', stockLine.siteId).subscribe(
                 results => {
                     for (let wareHouse of results) {
                         var dropdown = new DropDownData();
@@ -966,7 +966,7 @@ export class ReceivngPoComponent implements OnInit {
         stockLine.BinList = [];
         stockLine.binId = 0;
         if (stockLine.warehouseId) {
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', stockLine.warehouseId).subscribe(
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', stockLine.warehouseId).subscribe(
                 results => {
 
                     for (let loc of results) {
@@ -986,7 +986,7 @@ export class ReceivngPoComponent implements OnInit {
         stockLine.BinList = [];
         stockLine.binId = 0;
         if (stockLine.locationId) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', stockLine.locationId).subscribe(
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name',this.authService.currentUser.masterCompanyId, 'LocationId', stockLine.locationId).subscribe(
                 results => {
 
                     for (let shelf of results) {
@@ -1004,7 +1004,7 @@ export class ReceivngPoComponent implements OnInit {
         stockLine.BinList = [];
         stockLine.binId = 0;
         if (stockLine.shelfId) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', stockLine.shelfId).subscribe(
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', stockLine.shelfId).subscribe(
                 results => {
                     for (let bin of results) {
                         var dropdown = new DropDownData();
@@ -1894,7 +1894,7 @@ export class ReceivngPoComponent implements OnInit {
     }
     
     Purchaseunitofmeasure() {
-		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allPurchaseUnitOfMeasureinfo = res;
 		})
     }

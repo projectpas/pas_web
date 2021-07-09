@@ -263,11 +263,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         },err => {			
     })
 }
-    // getCarrierList() {
-    //     this.commonService.smartDropDownList('Carrier', 'CarrierId', 'Description').subscribe(res => {
-    //         this.carrierList = res;
-    //     })
-    // }
+
     getShipViaByCustomerId() {
      this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.subWorkOrderDetails ? this.subWorkOrderDetails.customerId : this.customerId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.shipViaList = res.map(x => {

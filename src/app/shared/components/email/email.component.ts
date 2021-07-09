@@ -380,7 +380,7 @@ export class EmailComponent implements OnInit, OnChanges {
     }
     async getAllEmployees() {
         this.isSpinnerVisible = true;
-        await this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').subscribe(res => {
+        await this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName', this.currentUserMasterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.employeesOriginalData = res.map(x => {
                 return {
@@ -432,9 +432,14 @@ export class EmailComponent implements OnInit, OnChanges {
             )
     }
 
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     getAllEmailType() {
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name')
+        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name', this.currentUserMasterCompanyId)
             .subscribe(
                 (res: any[]) => {
                     this.isSpinnerVisible = false;

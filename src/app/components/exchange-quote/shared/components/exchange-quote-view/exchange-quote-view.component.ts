@@ -101,8 +101,6 @@ export class ExchangeQuoteViewComponent implements OnInit {
     let probabilityId = this.exchangeQuote.probabilityId ? this.exchangeQuote.probabilityId : 0;
     forkJoin(
       this.customerService.getContacts(this.exchangeQuoteView.exchangeOrderQuote.customerId),
-      //this.commonservice.getManagementStructureNameandCodes(this.managementStructureId),
-      //this.commonservice.smartDropDownList("[Percent]", "PercentId", "PercentValue"),
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
       this.exchangequoteService.getExchangeQuoteMarginSummary(this.exchangeQuoteView.exchangeOrderQuote.exchangeQuoteId)).subscribe(result => {
         this.isSpinnerVisible = false;

@@ -836,8 +836,12 @@ export class AddCustomerPaymentComponent implements OnInit {
 
   getAllPartsToDisableOrNot() { }
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+}
+
   loadCardType() {
-    this.commonService.smartDropDownList('MasterCardType', 'Id', 'Name').subscribe(response => {
+    this.commonService.smartDropDownList('MasterCardType', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.cardTypeList = response;
         this.cardTypeList = this.cardTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -848,7 +852,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   }
 
   loadDiscType() {
-    this.commonService.smartDropDownList('MasterDiscountType', 'Id', 'Name').subscribe(response => {
+    this.commonService.smartDropDownList('MasterDiscountType', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.discTypeList = response;
         this.discTypeList = this.discTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -859,7 +863,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   }
 
   loadBankFeesType() {
-    this.commonService.smartDropDownList('MasterBankFeesType', 'Id', 'Name').subscribe(response => {
+    this.commonService.smartDropDownList('MasterBankFeesType', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.bankFeesTypeList = response;
         this.bankFeesTypeList = this.bankFeesTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -870,7 +874,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   }
 
   loadAdjustReason() {
-    this.commonService.smartDropDownList('MasterAdjustReason', 'Id', 'Name').subscribe(response => {
+    this.commonService.smartDropDownList('MasterAdjustReason', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
       if (response) {
         this.adjustReasonList = response;
         this.adjustReasonList = this.adjustReasonList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));

@@ -867,7 +867,7 @@
                             <div class="form-group">
                                 <label> Cert Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
-                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    (ngModelChange)="getActive()"  [maxDate]="currentDate" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.certifiedDate"></p-calendar>
                             </div>  
                             <div class="form-group">
@@ -885,7 +885,7 @@
                             <div class="form-group">
                                 <label> Inspected Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="inspectedDate"
-                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    (ngModelChange)="getActive()"  [maxDate]="currentDate" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.inspectedDate"></p-calendar>
                             </div>
                             <div class="form-group">
