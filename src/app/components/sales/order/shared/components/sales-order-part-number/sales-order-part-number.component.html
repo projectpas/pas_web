@@ -414,11 +414,12 @@
                                     <td>
                                         {{ part.idNumber }}
                                     </td>
-                                    <td class="width-120"
+                                    <td 
                                         *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                        <div class="form-group memo-popup-cstm mat_emo"
-                                            style="width: 120px; display: inline-flex; margin-bottom: 0;">
-                                            <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                                        <div class="form-group memo-popup-cstm mat_emo "
+                                            style="display: inline-flex; margin-bottom: 0;">
+                                            <div [innerHTML]="part.notes" style="min-width:250px !important" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(part.notes)" class="text_editor_box truncate-text"></div>
                                             <i class="fa fa-pencil" data-toggle="modal"
                                                 style="position: relative;top: 6px;padding-left:4px;"
                                                 data-target="#textarea-popupNotes" matTooltip="Notes"
@@ -575,10 +576,12 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">Part Number : {{part.partNumber}}</h6>
+        <strong>Part Number : 
+            <span class="new-label">{{part.partNumber}}</span>
+        </strong>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="deletePart()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="deletePart()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="onClosePartDelete()">No</button>
     </div>
 </ng-template>
@@ -599,10 +602,12 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">Part Number : {{selectedSummaryRow.partNumber}}</h6>
+        <strong>Part Number : 
+            <span class="new-label">{{selectedSummaryRow.partNumber}}</span>
+        </strong>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="deleteMultiplePart()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="deleteMultiplePart()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="onCloseParMultipletDelete()">No</button>
     </div>
 </ng-template>

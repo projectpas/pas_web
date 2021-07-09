@@ -391,7 +391,7 @@
 </form>
 
 <div class="modal fade" id="addStockLine" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -423,9 +423,9 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-1 column" style="text-align: right;">
+                    <label class="col-1 column control-label label-alignment" >
                         PN : <span class="clr-red">*</span>
-                    </div>
+                    </label>
                     <div class="col-2 column">
                         <div class="form-group">
                             <p-autoComplete field="label" class="autocomplete" [(ngModel)]="stocklinepartNumberId"
@@ -436,9 +436,9 @@
                         </div>
                     </div>
 
-                    <div class="col-1 column" style="text-align: right;">
+                    <label class="col-1 column control-label label-alignment">
                         Condtion : <span class="clr-red">*</span>
-                    </div>
+                    </label>
                     <div class="col-2 column">
                         <div class="form-group">
                             <p-multiSelect [(ngModel)]="stocklineconditionId" [options]="allconditioninfo"
@@ -473,7 +473,7 @@
                                             </span> -->
                                         </th>
                                         <th>PN</th>
-                                        <th>PN Description</th>
+                                        <th class="min-width-200">PN Description</th>
                                         <th>Condition</th>
                                         <th class="min-width-100">Stk Line Num</th>
                                         <th class="min-width-100">Ser Num</th>
@@ -511,7 +511,7 @@
                                         <td *ngIf="obj.disableStockline" class="obj-td">
                                         </td>
                                         <td>{{obj.partNumber === null ? '-':obj.partNumber}}</td>
-                                        <td>{{obj.partDescription === null ? '-':obj.partDescription}}</td>
+                                        <td >{{obj.partDescription === null ? '-':obj.partDescription}}</td>
                                         <td>{{obj.condition === null ? '-':obj.condition}}</td>
                                         <td>{{obj.stockLineNumber === null ? '-':obj.stockLineNumber}}</td>
                                         <td>{{obj.serialNumber === null ? '-':obj.srialNumber}}</td>
@@ -520,16 +520,17 @@
                                         <td>{{obj.stockType === null ? '-':obj.stockType}}</td>
                                         <td>{{obj.manufacturer === null ? '-':obj.manufacturer}}</td>
                                         <td>{{obj.unitOfMeasure === null ? '-':obj.unitOfMeasure}}</td>
-                                        <td>{{obj.quantityAvailable === null ? '-':obj.quantityAvailable}}</td>
-                                        <td>{{obj.quantityOnHand === null ? '-':obj.quantityOnHand}}</td>
-                                        <td>{{obj.purchaseOrderUnitCost === null ? '-':obj.purchaseOrderUnitCost}}</td>
+                                        <td class="text-right">{{obj.quantityAvailable === null ? '-':obj.quantityAvailable}}</td>
+                                        <td class="text-right">{{obj.quantityOnHand === null ? '-':obj.quantityOnHand}}</td>
+                                        <td class="text-right">{{obj.purchaseOrderUnitCost === null ? '-':obj.purchaseOrderUnitCost}}</td>
                                         <td>{{obj.traceableToName === null ? '-':obj.traceableToName}}</td>
                                         <td>{{obj.ownerName === null ? '-':obj.ownerName}}</td>
                                         <td>{{obj.obtainFromName === null ? '-':obj.obtainFromName}}</td>
                                         <td>{{obj.tagDate === null ? '-':obj.tagDate | date: 'MM/dd/yyyy'}}</td>
                                         <td>{{obj.certifiedBy === null ? '-':obj.certifiedBy}}</td>
                                         <td>{{obj.certifiedDate === null ? '-':obj.certifiedDate | date: 'MM/dd/yyyy'}}</td>                                        
-                                        <td><p class="p-0 m-0 p_textEditor" [innerHTML]="obj.memo"></p></td>
+                                        <td><p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                            [matTooltip]="parsedText(obj.memo)" [innerHTML]="obj.memo"></p></td>
                                     </tr>
                                     <tr *ngIf="stocklineData.length == 0">
                                         <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
@@ -1025,11 +1026,11 @@
                                                     value="{{department.value}}">{{department.label}}</option>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td class="min-width-250">
 
                                             <div [innerHTML]="partList.memo" [matTooltip]="parsedText(partList.memo)"
-                                                matTooltipPosition="above" class="form-control"
-                                                class="text_editor_box parts-memo"></div>
+                                                matTooltipPosition="above" class="form-control" style="width:93%"
+                                                class="text_editor_box truncate-text"></div>
                                             <!-- <i class="fa fa-info-circle fa-lg pull-right" style="margin-top:-16px"
                                            data-toggle="modal"
                                            data-target="#parts-memo-popup" matTooltip="Notes"
@@ -1597,7 +1598,7 @@
 
 
                                         <div [innerHTML]="approver['memo']" [matTooltip]="parsedText(approver['memo'])"
-                                            matTooltipPosition="above" class="form-control" class="parts-memo"></div>
+                                            matTooltipPosition="above" class="form-control truncate-text" class="parts-memo"></div>
                                         <!-- <i class="fa fa-info-circle fa-lg pull-right" style="margin-top:-16px"
                                        data-toggle="modal"
                                        data-target="#parts-memo-popup" matTooltip="Notes"

@@ -112,7 +112,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
       { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
       { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
       { field: "taxAmount", header: "Tax Amt", width: "120px" },
-      { field: "notes", header: "Notes", width: "120px" }
+      { field: "notes", header: "Notes", width: "250px" }
       // { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
       // { field: "grossSalePrice", header: "Gross Sales Amt", width: "120px" },
       // { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
@@ -154,7 +154,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
       { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
       { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
       { field: "taxAmount", header: "Tax Amt", width: "120px" },
-      { field: "notes", header: "Notes", width: "120px" }
+      { field: "notes", header: "Notes", width: "250px" }
       // { field: "markupPerUnit", header: "MarkUp Amt", width: "80px" },
       // { field: "grossSalePricePerUnit", header: "Gross Price/Unit", width: "80px" },
       // { field: "discountAmount", header: "Disc. Amt", width: "80px" },
@@ -180,7 +180,15 @@ export class SalesOrderAnalysisComponent implements OnInit {
     this.salesOrderId = id;
     this.onSearch();
   }
-
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
   loadData(event, globalFilter = "") {
     event.filters.statusId = this.currentStatus;
     this.searchParameters.first = parseInt(event.first) / event.rows;
