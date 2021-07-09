@@ -71,6 +71,7 @@ export class ModuleConstants
         static Stockline:string = "Stockline";
         static Stockline_Adjustment:string = "Stockline_Adjustment";
         static GLAccount:string = "GLAccount";
+        static Workflow:string = "Workflow";
 }
 
 export class PermissionConstants

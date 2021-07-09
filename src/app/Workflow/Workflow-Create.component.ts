@@ -1,3 +1,4 @@
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 import { Component, OnInit, ViewChild, Input, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { ActionService } from "./ActionService";
 import { ITask } from "./Action";
@@ -175,6 +176,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     expertisePercentValue:any;
     chargesPercentValue:any;
     othersPercentValue:any;
+    isAdd:boolean=true;
+	isEditSEc:boolean=true;
     constructor(private actionService: ActionService,
         private authService: AuthService,
         private router: ActivatedRoute,
@@ -188,6 +191,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         private alertService: AlertService,
         private datePipe: DatePipe,
         private commonService: CommonService) {
+
+            this.isAdd=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Add]);
+            this.isEditSEc=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Update]);
     }
     public ngOnDestroy() {
         this._workflowService.listCollection = null
