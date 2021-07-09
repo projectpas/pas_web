@@ -28,14 +28,17 @@ td strong {
 }
 .mat_emo3{
   display: inline-flex;
+  width: 100% !important;
 }
 .wd_user{
-  width: 120px !important;
-  min-width: 174px !important;
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
 }
 .wd_cond{
-  width: 170px !important;
-  min-width: 170px !important;
+  width: 100px !important;
+  min-width: 100px !important;
+  max-width: 100px !important;
 }
 .wd_Na{
   width: 56px !important;
@@ -56,7 +59,7 @@ td strong {
   position: relative;
   top: 1px;
 }
-.wd-200{
+.wd-2001{
   width: 200px !important;
   min-width: 200px !important;
 }
@@ -84,4 +87,15 @@ td strong {
 }
 .redColor{
   color: red !important;
+}
+.width_fixAct{
+  max-width: 60px !important;
+  width: 60px !important;
+}
+.width_task{
+   max-width:200px !important;
+    width: 200px !important;
+}
+.wdth_90{
+
 }

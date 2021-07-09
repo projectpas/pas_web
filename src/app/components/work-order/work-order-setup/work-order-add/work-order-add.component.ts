@@ -3489,16 +3489,19 @@ createQuote() {
     onSelectCustomerContact(value) {
         this.workOrderGeneralInformation.customerPhoneNo = value.workPhone;
         this.myCustomerContact = value;
-    }
-
-    onClickQuoteTab() {
+    } 
+    onClickQuoteTab() { 
         this.isQuoteAction = true;
         this.hideWOHeader = true;
         const element = document.querySelector('mat-sidenav-content') || window;
         element.scrollTo(0, 0);
+
+        this.router.navigateByUrl(
+            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}&isView=true`
+        );
     }
 
-    enableBackToWO(event) {
+    enableBackToWO(event) { 
         this.hideWOHeader = false;
         this.gridActiveTab = 'workFlow';
         this.gridTabChange('materialList');
