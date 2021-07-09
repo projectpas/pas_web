@@ -465,14 +465,9 @@ export class CommonTeardownComponent implements OnInit {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
-    // getTearDownReasons(): void {
-    //     this.commonService.smartDropDownList('TeardownReason', 'TeardownReasonId', 'Reason').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.tearDownReasonList = res;
-    //     })
-    // }
+
     setEditArray: any = []
     getTeardownServicesList() {
-        // this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name').subscribe(res => {
             const strText = '';
             this.setEditArray.push(0);
             this.commonService.autoSuggestionSmartDropDownList('TeardownType', 'TeardownTypeId', 'Name', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {

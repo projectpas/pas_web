@@ -3,6 +3,7 @@ import { PartDetail } from "../../models/part-detail";
 import { CommonService } from '../../../../../services/common.service';
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import { formatStringToNumber } from "../../../../../generic/autocomplete";
+import { AuthService } from "../../../../../services/auth.service";
 
 @Component({
   selector: "app-sales-margin",
@@ -23,7 +24,7 @@ export class SalesMarginComponent implements OnInit {
   markUpPercentage: any;
   salesDiscount: any;
 
-  constructor(private commonservice: CommonService,) {
+  constructor(private commonservice: CommonService,private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class SalesMarginComponent implements OnInit {
   }
 
   getPercents() {
-    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue',this.authService.currentUser.masterCompanyId).subscribe(res => {
       this.percentage = res;
     })
   }

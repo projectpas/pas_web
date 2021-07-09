@@ -20,13 +20,13 @@
                       <table class="table table-bordered header-table-width1 warnings-table">
                         <thead class="warning-head">
                           <tr align="center">
-                            <th class="th-warning-name">Task</th>
-                            <th class="th-warning-name wd_cond"> </th>
+                            <th class="th-warning-name width_task">Task</th>
+                            <th class="th-warning-name wd_cond"> Condition</th>
                             <th class="th-font wd_Na">NA</th>
                             <th class="th-font wd_user">User</th>
                             <th class="th-font wd_user">Date/Time</th>
                             <th class="th-font wd-200">Memo</th>
-                            <th class="th-font">Action</th>
+                            <th class="th-font width_fixAct">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -52,7 +52,7 @@
             </p-dropdown>
                             </td>
                             <td class="th-font"><input type="checkbox" name="ballow{{i}}" [(ngModel)]="wData.isvalue_NA"
-                                (change)="bSectionClick($event,wData)" [disabled]="wData && wData.isenableUpdate==false" (ngModelChange)="enableSave()" class="form-control" />
+                                (change)="bSectionClick($event,wData)" [disabled]="wData && wData.isenableUpdate==false" (ngModelChange)="enableSave()" class="form-control mat_r" />
                             </td>
                            
                             <td>
@@ -77,7 +77,7 @@
                             </td>
                             <td>
                               <div class="form-group memo-popup-cstm mat_emo3">
-                                <div [innerHTML]="wData.memo" matTooltipPosition="above" [matTooltip]="parsedText(wData.memo)" style="width: 290px !important;"
+                                <div [innerHTML]="wData.memo" matTooltipPosition="above" [matTooltip]="parsedText(wData.memo)" style="min-width: 90% !important;;"
                                   class="text_editor_box"></div>
                                 <i *ngIf="!isView" class="fa fa-pencil fa-lg ci_cls" [ngClass]="{'btn_disabled pointerEvents':wData && wData.isenableUpdate==false && wData.workOrderSettlementName !='Mat Required = Mat Issued'}" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo" style="    margin-top: 4px;"
                                   matTooltipPosition="above" (click)="onAddTextAreaInfo(wData,i)"></i>

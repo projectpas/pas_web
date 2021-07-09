@@ -394,6 +394,8 @@ export class CustomerBillingInformationComponent {
         this.selectedSitename = "";
         this.arrayCountrylist = [];
         this.billingInfo = new CustomerBillingAddressModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     selectedItems: any;

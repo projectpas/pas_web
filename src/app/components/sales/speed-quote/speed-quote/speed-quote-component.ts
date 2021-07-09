@@ -181,7 +181,7 @@ export class SpeedQuoteComponent implements OnInit {
 
   getTypesOfWarnings(customerId) {
     this.isSpinnerVisible = true;
-    this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name').subscribe(data => {
+    this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(data => {
       this.isSpinnerVisible = false;
       if (data.length > 0) {
         data.filter(i => {

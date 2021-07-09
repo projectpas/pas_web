@@ -3490,7 +3490,7 @@ export class NTAEAlternateComponent implements OnInit, AfterViewInit {
 
 
     getConditionsList(){
-        this.commonService.smartDropDownList('Condition', 'ConditionId' , 'Description'  ).subscribe(res => {
+        this.commonService.smartDropDownList('Condition', 'ConditionId' , 'Description',this.authService.currentUser.masterCompanyId  ).subscribe(res => {
             this.conditionList = res;
         })
     }

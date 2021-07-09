@@ -147,7 +147,6 @@ currentDate=  new Date();
     }
 
     getCapabilityTypesList() {
-        //this.commonService.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc','','', 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
         this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', '', 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
             this.capabalityTypeList = res;
         })
@@ -539,14 +538,14 @@ currentDate=  new Date();
 
     // Not in Use
     getAtAChapters() {
-        this.commonService.smartDropDownList('ATAChapter', 'ATAChapterId', 'ATAChapterName').subscribe(res => {
+        this.commonService.smartDropDownList('ATAChapter', 'ATAChapterId', 'ATAChapterName',this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.ataChapters = res;
         })
     }
 
     // Not in Use
     getIntergationWithList() {
-        this.commonService.smartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description').subscribe(res => {
+        this.commonService.smartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description',this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.intergationList = res;
         })
     }

@@ -277,11 +277,13 @@ export class WorkOrderAddComponent implements OnInit {
     currentDate = new Date();
     taskName: any;
     isAllowLaberSave: boolean = false;
-    currentStatusWOSummary : any = 1;
+    currentStatusWOSummary : any = "1";
     expriryarray: any = [];
     selectedMPNItemMasterId: any;
     woSummaryMPNData: any = [];
     woSummaryCustData: any = [];
+    paramsData: any = {};
+    SummaryMonths: number = 12;
 
     constructor(
         private alertService: AlertService,
@@ -709,7 +711,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.arrayCustomerIdList.push(0);
         }
         if (this.isRecCustomer) {
-            this.commonService.getReceivingCustomers(value, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getReceivingCustomers(value,     ).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
             },
                 err => {
@@ -1006,6 +1008,7 @@ export class WorkOrderAddComponent implements OnInit {
     {
         this.selectedMPNItemMasterId = workOrderPartNumber.itemMasterId;
         this.currentIndex = index;
+        this.getWOSummaryDetails(this.SummaryMonths)
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
@@ -1015,11 +1018,27 @@ export class WorkOrderAddComponent implements OnInit {
             this.isSpinnerVisible = true;
             this.workOrderService.GetWorkOrderSummarisedHistoryByMPN(this.selectedMPNItemMasterId, monthtatus == 1 || monthtatus == "1" ? true : false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
-                this.woSummaryMPNData = res;
+                if(res != undefined && res.mpnSummaryModel != undefined)
+                {
+                    this.woSummaryMPNData = res.mpnSummaryModel;
+                }
+                if(res != undefined && res.custSummaryModel != undefined)
+                {
+                    this.woSummaryCustData = res.custSummaryModel;
+                }
             },err => {
                     this.handleError(err);
                 });
         }
+    }
+
+    async view(rowData) {
+        this.paramsData['workOrderId'] = rowData.workOrderId;
+        this.workOrderId = rowData.workOrderId;
+    }
+
+    closeViewModel(){
+        $('#viewWorkOrder').modal("hide");
     }
 
     dismissModel() {
@@ -3470,16 +3489,19 @@ createQuote() {
     onSelectCustomerContact(value) {
         this.workOrderGeneralInformation.customerPhoneNo = value.workPhone;
         this.myCustomerContact = value;
-    }
-
-    onClickQuoteTab() {
+    } 
+    onClickQuoteTab() { 
         this.isQuoteAction = true;
         this.hideWOHeader = true;
         const element = document.querySelector('mat-sidenav-content') || window;
         element.scrollTo(0, 0);
+
+        this.router.navigateByUrl(
+            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}&isView=true`
+        );
     }
 
-    enableBackToWO(event) {
+    enableBackToWO(event) { 
         this.hideWOHeader = false;
         this.gridActiveTab = 'workFlow';
         this.gridTabChange('materialList');

@@ -181,7 +181,7 @@
                                         matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                 </span>
                                 <span >
-                                    <a class="btn nobg btn-delete-cstm"  [ngClass]="{'disabled ' :rowData.workOrderStatus=='Closed'}" data-toggle="modal" data-target="#woDelete"  (click)="delete(rowData)" matTooltip="Delete"
+                                    <a class="btn nobg btn-delete-cstm"  [ngClass]="{'disabled ' :rowData.workOrderStatus=='Closed'}" data-toggle="modal" data-target="#woDelete"  (click)="delete(rowData)" matTooltip="Remove"
                                         matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                 </span>
                                 <!-- <span data-toggle="modal" data-target="#woHistory">
@@ -314,7 +314,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
-                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                <h4 class="modal-title">Are you sure want to Remove?</h4>
             </div>
             <div class="modal-body">
                 <strong>

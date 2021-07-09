@@ -437,7 +437,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <label style="margin-left:10px">Qty Actually Received</label>
+                                                <label style="margin-left:10px">Qty Actually Received <span class="clr-red">*</span></label>
                                                 <input type="text" maxlength="12"
                                                     *ngIf="part.stockLineCount < part.quantityOrdered"
                                                     value="{{part.quantityActuallyReceived}}" pInputText
@@ -1268,7 +1268,7 @@
                                             <div class="form-row" *ngIf="part.itemMaster.isSerialized">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Serial Num</label>
+                                                        <label>Serial Num <span *ngIf="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided == false" class="clr-red">*</span></label>
                                                         <input class="form-control" (keyup)="moveByKey($event, part)"
                                                             disabled="{{part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided}}"
                                                             [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumber"

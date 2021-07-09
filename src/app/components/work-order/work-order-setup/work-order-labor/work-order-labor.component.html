@@ -453,7 +453,7 @@
                
                 </td>
                 <td  class="text-center">
-                    <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
+                    <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Remove" matTooltipPosition="above"
                       (click)="showDeleteLabourPopup(task.description,rec, i)" [disabled]="laborForm.workFloworSpecificTaskorWorkOrder== 'workOrder'"><i class="fa fa-trash"></i></button> </span>
                      </td>
               </tr>
@@ -546,7 +546,7 @@
       <div class="modal-dialog modal-sm">
    <div class="modal-content">
               <div class="modal-header">
-                  <h4 class="modal-title">Are You Sure Want to Remove the record?</h4>
+                  <h4 class="modal-title">Are you sure want to remove the record?</h4>
                   <button type="button" class="close" aria-label="Close" data-dismiss="modal">
                       <span aria-hidden="true">&times;</span>
                   </button>
@@ -574,7 +574,7 @@
       <div class="modal-dialog modal-sm">
      <div class="modal-content">
               <div class="modal-header">
-                  <h4 class="modal-title">Are You Sure Want to Delete the existing records?</h4>
+                  <h4 class="modal-title">Are you sure want to remove the existing records?</h4>
                   <button type="button" class="close" aria-label="Close" (click)="dismissModelTask()">
                       <span aria-hidden="true">&times;</span>
                   </button>

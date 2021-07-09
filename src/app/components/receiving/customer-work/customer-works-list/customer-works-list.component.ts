@@ -524,16 +524,6 @@ export class CustomerWorksListComponent implements OnInit {
         window.location.assign(url);
     }
 
-    // getCustomerWarningsList(): void {
-    //     this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
-    //         res.forEach(element => {
-    //         if(element.label=='Create WO for MPN'){
-    //             this.customerWarningListId=element.value;
-    //             return;
-    //         }
-    //         });
-    //     })
-    // } 
     setEditArray: any = []
     getCustomerWarningsList(): void {
         // const strText='Receive MPN'; 
