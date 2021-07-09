@@ -9,7 +9,7 @@
             </div>
             <div>
                 <button type="button" class="btn-sm header-button"
-                    [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+                    [routerLink]="['/assetmodule/assetpages/app-asset-listing']" *ngIf="isView">
                     Asset List
                 </button>
             </div>
@@ -24,21 +24,21 @@
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div class="md-step" *ngIf="active1" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
+            <div class="md-step" *ngIf="active1 && isShowTab('Capes')" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
                 (click)="changeOfTab('Capes')">
                 <div class="md-step-circle"><span>2</span></div>
                 <div class="md-step-title">Capes</div>
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div class="md-step" *ngIf="active2" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
+            <div class="md-step" *ngIf="active2 && isShowTab('Calibration')" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
                 (click)="changeOfTab('Calibration')">
                 <div class="md-step-circle"><span>3</span></div>
                 <div class="md-step-title">Calibration</div>
                 <div class="md-step-bar-left"></div>
                 <div class="md-step-bar-right"></div>
             </div>
-            <div class="md-step" *ngIf="active3" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
+            <div class="md-step" *ngIf="active3 && isShowTab('Maintenance & Warranty')" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
                 (click)="changeOfTab('Maintenance')">
                 <div class="md-step-circle"><span>4</span></div>
                 <div class="md-step-title">Maintenance & Warranty</div>
@@ -450,28 +450,28 @@
                 <div class="col-md-12 asset-buttons-div">
                     <div class="margintop">
                         <button
-                        *ngIf="currentAsset && currentAsset.isTangible != true && isEditMode==true"          
+                        *ngIf="currentAsset && currentAsset.isTangible != true && isEditMode==true && isGeneralInfoAdd"      
                         type="submit" class="btn btn-primary pull-right submit-btn"
                         (click)="addNew()">
                        Add New
                     </button> 
                         <button type="button" [disabled]="!allowNextTab"
-                            *ngIf="currentAsset && currentAsset.isTangible == true"
+                            *ngIf="currentAsset && currentAsset.isTangible == true && isNextVisible"
                             class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
                        
-                            <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && currentAsset.isTangible"
+                            <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && currentAsset.isTangible && isGeneralInfoAdd"
                             [disabled]="!currentAsset.assetId || !currentAsset.name || !currentAsset.assetLocationId || !currentAsset.assetAcquisitionTypeId || !currentAsset.tangibleClassId || !currentAsset.unitOfMeasureId || !currentAsset.currencyId || !currentAsset.companyId || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
                             Save
                         </button>
-                        <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && !currentAsset.isTangible"
+                        <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && !currentAsset.isTangible && isGeneralInfoAdd"
                         [disabled]=" !currentAsset.assetId || !currentAsset.name  || !currentAsset.assetIntangibleTypeId || showExistMsg" (click)="saveAsset()">
                         Save
                     </button>
-                        <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==true && currentAsset.isTangible"
+                        <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==true && currentAsset.isTangible && isGeneralInfoUpdate"
                             [disabled]="!currentAsset.assetId || !currentAsset.name || !currentAsset.assetAcquisitionTypeId || !currentAsset.tangibleClassId || !currentAsset.unitOfMeasureId || !currentAsset.currencyId || !currentAsset.companyId || !generalForm.valid || disableSaveForEdit || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
                            Update
                          </button>
-                         <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==true && !currentAsset.isTangible"
+                         <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==true && !currentAsset.isTangible && isGeneralInfoUpdate"
                          [disabled]=" !currentAsset.assetId || !currentAsset.name  || !currentAsset.assetIntangibleTypeId || !currentAsset.companyId || !generalForm.valid || disableSaveForEdit || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
                         Update
                       </button>

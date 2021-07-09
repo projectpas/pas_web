@@ -9,7 +9,7 @@
           <button
             type="button"
             class="btn-sm header-button"
-            [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+            [routerLink]="['/assetmodule/assetpages/app-asset-listing']" *ngIf="isAssetView">
             Asset List
           </button>
         </div>
@@ -24,21 +24,21 @@
         <div class="md-step-bar-left"></div>
         <div class="md-step-bar-right"></div>
     </div>
-    <div class="md-step" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
+    <div *ngIf="isShowTab('Capes')" class="md-step" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
          (click)="changeOfTab('Capes')">
         <div class="md-step-circle"><span>2</span></div>
         <div class="md-step-title">Capes</div>
         <div class="md-step-bar-left"></div>
         <div class="md-step-bar-right"></div>
     </div>
-    <div class="md-step" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
+    <div *ngIf="isShowTab('Calibration')" class="md-step" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
          (click)="changeOfTab('Calibration')">
         <div class="md-step-circle"><span>3</span></div>
         <div class="md-step-title">Calibration</div>
         <div class="md-step-bar-left"></div>
         <div class="md-step-bar-right"></div>
     </div>
-    <div class="md-step" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
+    <div *ngIf="isShowTab('Maintenance & Warranty')" class="md-step" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
          (click)="changeOfTab('Maintenance')">
         <div class="md-step-circle"><span>4</span></div>
         <div class="md-step-title">Maintenance & Warranty</div>
@@ -220,7 +220,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            <button *ngIf="isCapeAdd" type="button" class="btn btn-primary" data-dismiss="modal"
                                     (click)="saveCapabilities(aircraftData,'add')" [disabled]="aircraftData && aircraftData.length == 0">
                                 Save
                             </button>
@@ -355,7 +355,7 @@
                                       
 
                                         <div class="col-md-1">
-                                            <button type="button" class="btn btn-primary m-t-20"
+                                            <button type="button" class="btn btn-primary m-t-20" *ngIf="isCapeUpdate"
                                                     (click)="saveCapabilities(capabilityForm,'edit')" [disabled]="disableSaveForEdit">
                                                 Update
                                             </button> 
@@ -436,7 +436,7 @@
                   <div>
                     <button
                       type="button"
-                      class="btn-sm header-button"  matTooltip="Add Capability" matTooltipPosition="above"
+                      class="btn-sm header-button" *ngIf="isCapeAdd" matTooltip="Add Capability" matTooltipPosition="above"
                       data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
                       Add  Capability
                     </button>
@@ -475,14 +475,14 @@
                       </div>
                       <div class="row" >
                         <div class="col">
-                    <button  *ngIf="isView==false" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                    <button  *ngIf="isView==false && isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                             pButton icon="fa-download" iconPos="left"  label="Export All Data"
                             
                             data-toggle="modal" 
                             (click)="selectedOnly = false; targetData = dt;"
                              data-target="#downloadConfirmation"></button>
                              <!-- (click)="exportCSV(dt)" -->
-                    <button  *ngIf="isView==false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+                    <button  *ngIf="isView==false && isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
                             matTooltipPosition="above"
                             pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                             (click)="dt.exportCSV({selectionOnly:true})"></button>
@@ -609,16 +609,16 @@
                             <p-inputSwitch [disabled]="isView==true" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above" (onChange)="toggleActiveStatus(rowData)"></p-inputSwitch> 
 
-                             <span *ngIf="isView==false">
+                             <span *ngIf="isView==false && isCapeUpdate">
                                 <a class="btn nobg" (click)="opencapesToEdit(editcontent,rowData)" matTooltip="Edit"
                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
-                            <span *ngIf="isView==false">
+                            <span *ngIf="isView==false && isCapeDelete">
                                 <a class="btn nobg"
                                    (click)="openDelete(content2,rowData)"
                                    matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                             </span>
-                               <span data-toggle="modal" data-target="#contentHist">
+                               <span data-toggle="modal" data-target="#contentHist" *ngIf="isCapView">
                                 <a class="btn nobg"
                                    (click)="getAuditHistoryById(rowData)" matTooltip="History"
                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
@@ -626,9 +626,9 @@
 
                         </div>
                         <div *ngIf="currentDeletedstatus==true"> 
-                            <p-inputSwitch  [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            <p-inputSwitch  *ngIf="isCapeUpdate"  [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch>
-                            <span data-toggle="modal" data-target="#contentHist">
+                            <span data-toggle="modal" data-target="#contentHist" *ngIf="isCapView">
                                 <a class="btn nobg" 
                                    (click)="getAuditHistoryById(rowData)" matTooltip="History"
                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
@@ -686,7 +686,7 @@
             (click)="saveCapes()">
         Save
     </button> -->
-    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()">Next</button>
+    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()" *ngIf="isCapeNextVisible">Next</button>
     <!--<button type="button" class="btn btn-success pull-right submit-btn" (click)="nextClick()">Next</button>-->
     <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">Previous</button>
 </div>

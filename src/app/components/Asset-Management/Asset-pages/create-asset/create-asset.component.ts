@@ -32,6 +32,7 @@ import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { Location } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-create-asset',
     templateUrl: './create-asset.component.html',
@@ -150,6 +151,22 @@ export class CreateAssetComponent implements OnInit {
     setDateValidetoExpire: any;
     isSpinnerEnable: any = false;
     errorDisplay: any;
+
+    isView:boolean=true;
+    isCapeAdd:boolean=true;
+    isDownload:boolean=true;
+    isCapeDelete:boolean=true;
+    isCapeUpdate:boolean=true;
+    isCalibrationDownload:boolean=true;
+    isMaintenanceDownload:boolean=true;
+    isGeneralInfoAdd:boolean=true;
+    isGeneralInfoUpdate:boolean=true;
+    isNextVisible:Boolean=true;
+    isCapeNextVisible: Boolean=true;
+    isCalibrationNext: Boolean=true;
+    isCalibrationPrev: Boolean=true;
+    isMaintenancePrev: Boolean=true;
+
     constructor(private router: ActivatedRoute, private glAccountService: GlAccountService, private modalService: NgbModal, private activeModal: NgbActiveModal, private intangibleTypeService: AssetIntangibleTypeService, private route: Router, public assetService: AssetService, private legalEntityServices: LegalEntityService, private alertService: AlertService, public itemMasterservice: ItemMasterService,
         public unitService: UnitOfMeasureService, private datePipe: DatePipe,
         private commonService: CommonService, private location: Location,
@@ -167,7 +184,27 @@ export class CreateAssetComponent implements OnInit {
         else {
             this.currentAsset.entryDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).toLocaleDateString();
         }
+
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_List+'.'+PermissionConstants.View]);
+        this.isCapeAdd=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Add]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Download]);
+        this.isCapeUpdate=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Update]);
+        this.isCapeDelete=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Delete]);
+        this.isCalibrationDownload=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Download]);
+        this.isMaintenanceDownload=this.authService.checkPermission([ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Download]);
+        this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Add]);
+        this.isGeneralInfoUpdate=this.authService.checkPermission([ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab('Create Asset','Capes');
+        this.isCapeNextVisible=this.authService.ShowTab('Create Asset','Calibration');
+        this.isCalibrationNext=this.authService.ShowTab('Create Asset','Maintenance & Warranty');
+        this.isCalibrationPrev=this.authService.ShowTab('Create Asset','Capes');
+        this.isMaintenancePrev=this.authService.ShowTab('Create Asset','Calibration');
     }
+
+    isShowTab(value){
+		var isShow=this.authService.ShowTab('Create Asset',value);
+		return isShow;
+	}
     ngOnInit() {
         if (this.assetService.isEditMode == false) {
 
@@ -1025,7 +1062,6 @@ export class CreateAssetComponent implements OnInit {
         }
     }
     saveAsset(): void {
-        
         if (this.currentAsset.isIntangible == false && this.currentAsset.expirationDate != null) {
             if (this.currentAsset.expirationDate < moment(this.currentDate).format('MM/DD/YYYY')) {
                 this.isSaving = false;
