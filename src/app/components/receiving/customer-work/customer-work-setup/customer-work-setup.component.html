@@ -793,7 +793,7 @@
                             </div>      -->
 
                             <div class="form-group">
-                                <label>Cert Type</label>
+                                <label>Cert By</label>
                                 <select [(ngModel)]="receivingForm.certifiedTypeId" name="certifiedTypeId"
                                     (change)="onSelectCertType(receivingForm.certifiedTypeId)" (ngModelChange)="getActive()">
                                     <option value="0">-- Select --</option>
@@ -802,7 +802,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label>
+                                <!-- <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label> -->
                                 <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
                                     <div class="col-sm-12">  
                                         <p-autoComplete field="name" class="pautocomp-cstm"
