@@ -212,7 +212,6 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     $("#textarea-popupexclusion").modal("hide");
     this.disabledMemo = true;
   }
-  //for memo text
   enableSaveMemo() {
     this.disabledMemo = false;
   }
