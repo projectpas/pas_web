@@ -22,114 +22,153 @@ export class AnalysisComponent implements OnInit, OnChanges {
     }
     ngOnInit(){
         if(this.value){
-            this.value.forEach(
-                (x) => {
-                    this.gridData.push({'data': x});
-                }
-            )
+            // this.value.forEach(
+            //     (x) => {
+            //         this.gridData.push({'data': x});
+            //     }
+            // )
+            this.gridData=  this.value.map(x => {
+                return {'data': x}
+            })
         }
     }
     ngOnChanges(){
         this.gridData = []
         if(this.value){
-            this.value.forEach(
-                (x) => {
-                    this.gridData.push({'data': x});
-                }
-            )
+            // this.value.forEach(
+            //     (x) => {
+            //         this.gridData.push({'data': x});
+            //     }
+            // )
+            this.gridData=  this.value.map(x => {
+                return {'data': x}
+            })
         }
         switch(this.type){
             case 'woAnalysis':{
                 this.fields = [
-                    {
-                        header: 'Part Number',
-                        field: 'partNumber'
-                    },
-                    {
-                        header: 'Part Description',
-                        field: 'partDescription'
-                    },
-                    {
-                        header: 'Revised PN',
-                        field: 'revisedPN'
-                    },
-                    {
-                        header: 'Workorder Num',
-                        field: 'workOrderNum'
-                    },
-                    {
-                        header: 'Stage',
-                        field: 'stage'
-                    },
-                    {
-                        header: 'Status',
-                        field: 'status'
-                    },
-                    {
-                        header: 'Customer Name',
-                        field: 'customerName'
-                    },
-                    {
-                        header: 'Revenue',
-                        field: 'revenue'
-                    },
-                    {
-                        header: 'Material Revenue',
-                        field: 'materialRevenue'
-                    },
-                    {
-                        header: 'Material Cost',
-                        field: 'materialCost'
-                    },
-                    {
-                        header: 'Material Revenue Percentage',
-                        field: 'materialRevenuePercentage'
-                    },
-                    {
-                        header: 'Total Labor Cost',
-                        field: 'totalLaborCost'
-                    },
-                    {
-                        header: 'Labor Revenue Percentage',
-                        field: 'laborRevenuePercentage'
-                    },
-                    {
-                        header: 'OverHead Cost',
-                        field: 'overHeadCost'
-                    },
-                    {
-                        header: 'OverHead Cost Revenue Percentage',
-                        field: 'overHeadCostRevenuePercentage'
-                    },
-                    {
-                        header: 'Charges Cost',
-                        field: 'chargesCost'
-                    },
-                    {
-                        header: 'Freight Cost',
-                        field: 'freightCost'
-                    },
-                    {
-                        header: 'Other Cost',
-                        field: 'otherCost'
-                    },
-                    {
-                        header: 'DirectCost',
-                        field: 'directCost'
-                    },
-                    {
-                        header: 'Direct Cost Revenue Percentage',
-                        field: 'directCostRevenuePercentage'
-                    },
-                    {
-                        header: 'Margin',
-                        field: 'margin'
-                    },
-                    {
-                        header: 'Margin Percentage',
-                        field: 'marginPercentage'
-                    }
-                ]
+                { field: 'partNumber', header: 'Part Number',width:"120px" },
+                { field: 'revisedPartNo', header: 'Revised PN',width:"100px" },
+                { field: 'partDescription', header: 'PN Description',width:"250px" },
+                { field: 'workOrderNum', header: 'WO Num',width:"100px" },
+                { field: 'stage', header: 'Stage',width:"100px" },
+                { field: 'revenue', header: 'Revenue',width:"100px" },
+                { field: 'materialCost', header: 'Parts Cost' ,width:"100px"},
+                { field: 'materialRevenuePercentage', header: 'Parts Rev %' ,width:"100px"},
+                { field: 'laborCost', header: 'Labor Cost',width:"100px" },
+                { field: 'laborRevenuePercentage', header: 'Labor Rev %',width:"100px" },
+                { field: 'overHeadCost', header: 'Overhead Cost',width:"110px" },
+                { field: 'overHeadCostRevenuePercentage', header: 'Overhead Cost %' ,width:"130px"},
+                { field: 'otherCost', header: 'Other Cost',width:"100px" },
+                { field: 'freightCost', header: 'Freight Cost',width:"100px" },
+                { field: 'directCost', header: 'Direct Cost',width:"100px" },
+                { field: 'directCostRevenuePercentage', header: 'Direct Cost Rev %',width:"120px" },
+                { field: 'margin', header: 'Margin',width:"100px" },
+                { field: 'marginPercentage', header: 'Margin %',width:"100px" },
+                { field: 'customerName', header: 'Customer',width:"120px" },
+                { field: 'status', header: 'Status',width:"100px" }
+            ]
+                // this.fields = [
+                //     {
+                //         header: 'Part Number',
+                //         field: 'partNumber'
+                //     },
+                //     {
+                //         header: 'Part Description',
+                //         field: 'partDescription'
+                //     },
+                //     {
+                //         header: 'Revised PN',
+                //         field: 'revisedPN'
+                //     },
+                //     {
+                //         header: 'Workorder Num',
+                //         field: 'workOrderNum'
+                //     },
+                //     {
+                //         header: 'Stage',
+                //         field: 'stage'
+                //     },
+                //     {
+                //         header: 'Status',
+                //         field: 'status',
+                //         width:"60px"
+                //     },
+                //     {
+                //         header: 'Customer Name',
+                //         field: 'customerName'
+                //     },
+                //     {
+                //         header: 'Revenue',
+                //         field: 'revenue',
+                //         width:"60px"
+                //     },
+                //     {
+                //         header: 'Material Revenue',
+                //         field: 'materialRevenue',
+                //         width:"100px"
+                //     },
+                //     {
+                //         header: 'Material Cost',
+                //         field: 'materialCost',
+                //         width:"70px",
+                //     },
+                //     {
+                //         header: 'Material Revenue Percentage',
+                //         field: 'materialRevenuePercentage'
+                //     },
+                //     {
+                //         header: 'Total Labor Cost',
+                //         field: 'totalLaborCost',
+                //         width:"70px"
+                //     },
+                //     {
+                //         header: 'Labor Revenue Percentage',
+                //         field: 'laborRevenuePercentage'
+                //     },
+                //     {
+                //         header: 'OverHead Cost',
+                //         field: 'overHeadCost',
+                //         width:"80px"
+                //     },
+                //     {
+                //         header: 'OverHead Cost Revenue Percentage',
+                //         field: 'overHeadCostRevenuePercentage'
+                //     },
+                //     {
+                //         header: 'Charges Cost',
+                //         field: 'chargesCost',
+                //         width:"70px"
+                //     },
+                //     {
+                //         header: 'Freight Cost',
+                //         field: 'freightCost',
+                //         width:"70px"
+                //     },
+                //     {
+                //         header: 'Other Cost',
+                //         field: 'otherCost',
+                //         width:"70px"
+                //     },
+                //     {
+                //         header: 'DirectCost',
+                //         field: 'directCost',
+                //         width:"70px"
+                //     },
+                //     {
+                //         header: 'Direct Cost Revenue Percentage',
+                //         field: 'directCostRevenuePercentage'
+                //     },
+                //     {
+                //         header: 'Margin',
+                //         field: 'margin',
+                //         width:"70px"
+                //     },
+                //     {
+                //         header: 'Margin Percentage',
+                //         field: 'marginPercentage'
+                //     }
+                // ] 
                 break;
             }
             case 'quoteAnalysis':{
@@ -164,7 +203,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Revenue',
-                        field: 'revenue'
+                        field: 'revenue',
+                        width:"70px"
                     },
                     {
                         header: 'Material Revenue',
@@ -172,7 +212,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Material Cost',
-                        field: 'materialCost'
+                        field: 'materialCost',
+                        width:"80px"
                     },
                     {
                         header: 'Material Revenue Percentage',
@@ -200,19 +241,23 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Charges Cost',
-                        field: 'chargesCost'
+                        field: 'chargesCost',
+                        width:"70px"
                     },
                     {
                         header: 'Freight Cost',
-                        field: 'freightCost'
+                        field: 'freightCost',
+                        width:"70px"
                     },
                     {
                         header: 'Other Cost',
-                        field: 'otherCost'
+                        field: 'otherCost',
+                        width:"70px"
                     },
                     {
                         header: 'DirectCost',
-                        field: 'directCost'
+                        field: 'directCost',
+                        width:"70px" 
                     },
                     {
                         header: 'Direct Cost Revenue Percentage',
@@ -220,7 +265,8 @@ export class AnalysisComponent implements OnInit, OnChanges {
                     },
                     {
                         header: 'Margin',
-                        field: 'margin'
+                        field: 'margin',
+                        width:"70px"
                     },
                     {
                         header: 'Margin Percentage',
@@ -327,7 +373,7 @@ export class AnalysisComponent implements OnInit, OnChanges {
     }
 
     globalizeAmount(data, field){
-        if(data && (field == 'adjustedHours' || field == 'hours' || field == 'directCost' || field == 'directCostRevenuePercentage' || field == 'freightCost' || field == 'chargesCost' || field == 'laborCost' || field == 'laborRevenuePercentage' || field == 'margin' || field == 'marginPercentage' || field == 'materialCost' || field == 'materialRevenue' || field == 'materialRevenuePercentage' || field == 'otherCost' || field == 'overHeadCost' || field == 'overHeadCostRevenuePercentage' || field == 'revenue' || field == 'totalLaborCost' || field == 'margin' || field == 'marginPercentage')){
+        if(data && (field == 'adjustedHours' || field =='directCostRevenuePercentage' || field == 'hours' || field == 'directCost' || field == 'directCostRevenuePercentage' || field == 'freightCost' || field == 'chargesCost' || field == 'laborCost' || field == 'laborRevenuePercentage' || field == 'margin' || field == 'marginPercentage' || field == 'materialCost' || field == 'materialRevenue' || field == 'materialRevenuePercentage' || field == 'otherCost' || field == 'overHeadCost' || field == 'overHeadCostRevenuePercentage' || field == 'revenue' || field == 'totalLaborCost' || field == 'margin' || field == 'marginPercentage')){
             return formatNumberAsGlobalSettingsModule(data, '0')+'.00'
         }
         return data;

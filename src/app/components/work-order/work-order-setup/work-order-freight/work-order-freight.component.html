@@ -194,7 +194,7 @@
             <div *ngIf="currentDeletedstatus == false">
             <span data-target="#addNewFreight" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"   matTooltipPosition="above" matTooltip="Remove"><i
                   class="fa fa-trash"></i></a> </span>
                   <span *ngIf="!isQuote">
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
@@ -298,7 +298,7 @@
             <div *ngIf="currentDeletedstatus == false">
             <span data-target="#addNewFreight" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"   matTooltipPosition="above" matTooltip="Remove"><i
                   class="fa fa-trash"></i></a> </span>
                   <span *ngIf="!isQuote">
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
@@ -515,7 +515,7 @@
                         class="form-control w50" required />H
                     </td> -->
                     <td>
-                      <input type="number" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
+                      <input type="tel" maxlength="10" name="weight{{ i }}" (keypress)="allowNumberOnly($event)"  (ngModelChange)="getActive()" #weight="ngModel" [(ngModel)]="f.weight"
                         class="form-control w50" />
                     </td>
                     <td>
@@ -523,11 +523,11 @@
                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                       </p-dropdown>
                     </td>
-                    <td><input type="number" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
+                    <td><input type="tel" maxlength="10" name="length{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" [(ngModel)]="f.length" #length="ngModel"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
+                    <td><input type="tel" maxlength="10" name="height{{ i }}"  (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #height="ngModel" [(ngModel)]="f.height"
                         class="form-control w50" /></td>
-                    <td><input type="number" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
+                    <td><input type="tel" maxlength="10" name="width{{ i }}" (keypress)="allowNumberOnly($event)" (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
                         class="form-control w50" /></td>
                     <td>
                       <p-dropdown placeholder="Select UOM"  [required]="f.width" appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
@@ -540,7 +540,7 @@
                       </p-dropdown>
                     </td>
                     <td>
-                      <input type="text"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
+                      <input type="text" maxlength="22"  (ngModelChange)="getActive()" InputText pKeyFilter="money" name="amount_{{ i }}"  [(ngModel)]="f.amount"
                         class="form-control w50 text_right" (change)="f.amount = formateCurrency(f.amount);" required />
                     </td>
                     <!-- <td>
@@ -565,7 +565,8 @@
                     </td>
                     <td *ngIf=" !isEdit">
                       <!-- [disabled]="!f.isShowDelete !isQuote &&" -->
-                      <button class="btn btn-danger nobg"  (click)="deleteRow(i)">
+                      <button class="btn btn-danger nobg" atTooltip="Remove"
+                      matTooltipPosition="above"  (click)="deleteRow(i)">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>
@@ -635,7 +636,7 @@
 
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+      <h4 class="modal-title">Are you sure want to Remove?</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
           <span aria-hidden="true">&times;</span>
       </button>

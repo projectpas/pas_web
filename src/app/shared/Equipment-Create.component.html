@@ -46,7 +46,7 @@
           {{ eqp.assetTypeName }}
         </td>
         <td class="text-center">
-          <input type="text" (ngModelChange)="getActive()" (keypress)="allowNumberOnly($event)" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
+          <input type="text" (ngModelChange)="getActive()" maxLength="12" (keypress)="allowNumberOnly($event)" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
         <td *ngIf="isWorkFlow">
@@ -58,7 +58,8 @@
           </div>
         </td>
         <td  class="text-center" *ngIf="!isEdit">
-          <button class="btn btn-danger nobg" (click)="openDelete(content,eqp,i)">
+          <button class="btn btn-danger nobg" matTooltip="Remove"
+          matTooltipPosition="above" (click)="openDelete(content,eqp,i)">
             <i class="fa fa-trash"></i>
           </button>
         </td>
@@ -111,7 +112,7 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">        
-      <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+      <h4 class="modal-title">Are you sure want to Remove?</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
           <span aria-hidden="true">&times;</span>
       </button>      

@@ -318,7 +318,7 @@ getAuditHistory(content, row){
     this.itemser.getnhatlaaltequparthistory(row.itemMappingId).subscribe(
         results => {
             this.nhaTlaHistory = results;
-            this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+            this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
             this.isSpinnerVisible = false;
         });
 }

@@ -462,7 +462,7 @@ export class NodeSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 10000, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.ledgerNameObjectData = res;
             }            
@@ -482,7 +482,7 @@ export class NodeSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 10000, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.entitiesObj = res;                
             }            

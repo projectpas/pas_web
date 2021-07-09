@@ -1166,14 +1166,14 @@
                                                 <div class="col-md-1 col-md-1-cstm">
                                                     <label class="item-master-search">Search :</label>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group ">
                                                         <label>Aircraft </label>
                                                         <p-multiSelect [options]="manufacturerData" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAircraftManfacturer" (onChange)="getAircraftModelByManfacturerType()"
                                                                         class="pub-multi"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>
                                                             Aircraft Model
@@ -1182,7 +1182,7 @@
                                                                         class="pub-multi" (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>DashNumber </label>
                                                         <p-multiSelect [maxSelectedLabels]="2" [options]="dashNumberList" [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{standalone: true}"
@@ -1194,7 +1194,7 @@
                                                         <button style="margin-top:20%;" class="btn btn-primary mtop20" type="button" (click)="searchAircraftInformation()">
                                                             <i class="pi pi-search pi-search"></i>
                                                         </button>
-                                                        <button type="button" matTooltip="Search" style="margin-top:20%" matTooltipPosition="above" (click)="clearSerchData()"
+                                                        <button type="button" matTooltip="Search" style="margin-top:20%;margin-left:-5px" matTooltipPosition="above" (click)="clearSerchDataAirInfo()"
                                                         class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
                                                           Clear
                                                        </button>
@@ -1653,7 +1653,7 @@
                         <form #purchaseSales="ngForm">
                             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                 <div class="tableFixHead">  
-                                <table class="table table-bordered header-table-width" id="mpn-list-table">
+                                <table class="table table-bordered min-width-90" id="mpn-list-table">
                                     <thead>
                                         <tr class="tableFixHead">
                                             <th colspan="10">Unit Purchase Price</th>
@@ -1730,11 +1730,11 @@
                                             </td>
                                             <!-- Last List Price Date -->
                                             <td>
-                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false" [ngModelOptions]="{standalone: true}" [ngModel]="field.PP_LastListPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.PP_LastListPriceDate = $event">
+                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false" [ngModelOptions]="{standalone: true}" [ngModel]="field.PP_LastListPriceDate | date:'MM/dd/yyy'" (ngModelChange)="field.PP_LastListPriceDate = $event">
                                             </td>
                                             <!-- Purchase Disc % -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-50px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field);setcurrentdate('',field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field);setcurrentdate('',field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
                                             </td>
                                             <!-- Purchase Disc Amount -->
                                             <td>
@@ -2119,27 +2119,39 @@
                                         </div>
                                         <label class="control-label">Classification  </label>
                                         <div class="inline-block display-flex">
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportUnspecified" [checked]="exportInfo.exportClassificationId == 1" value="1" [value]="1" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
-                                                    Unspecified
+                                            <div  class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"  class="form-control" id="IsExportUnspecified" 
+                                                    [checked]="exportInfo.exportClassificationId == 1" value="1" 
+                                                    [value]="1" name="exportClassificationId"
+                                                     [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
+                                                     <span class="checkmark"></span> Unspecified
                                                 </label>
                                             </div>
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportNONMilitary" [value]="2" value="2" [checked]="exportInfo.exportClassificationId == 2" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId"    (change)="btnChange()">NON-Military
+                                            <div class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"  class="form-control" id="IsExportNONMilitary" [value]="2" value="2" 
+                                                    [checked]="exportInfo.exportClassificationId == 2" name="exportClassificationId" 
+                                                    [(ngModel)]="exportInfo.exportClassificationId"    (change)="btnChange()">
+                                                    <span class="checkmark"></span>NON-Military
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="inline-block display-flex">
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportMilitary" value="3" [value]="3" [checked]="exportInfo.exportClassificationId == 3" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">Miltary
+                                            <div class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"   class="form-control" id="IsExportMilitary" value="3" [value]="3"
+                                                     [checked]="exportInfo.exportClassificationId == 3" name="exportClassificationId"
+                                                      [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
+                                                      <span class="checkmark"></span>Miltary
                                                 </label>
                                             </div>
-                                            <div>
-                                                <label class="control-label">
-                                                    <input type="radio" id="IsExportDual" value="4" [value]="4" [checked]="exportInfo.exportClassificationId == 4" name="exportClassificationId" [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">Dual
+                                            <div class="pull-left radio-buttons-align">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio"  class="form-control" id="IsExportDual" value="4" [value]="4"
+                                                     [checked]="exportInfo.exportClassificationId == 4" name="exportClassificationId" 
+                                                     [(ngModel)]="exportInfo.exportClassificationId" (change)="btnChange()">
+                                                     <span class="checkmark"></span>Dual
                                                 </label>
                                             </div>
                                         </div>
@@ -4071,7 +4083,7 @@
 
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">  
-            <table class="table table-bordered header-table-width">
+            <table class="table table-bordered min-width-100">
                 <thead>
                     <tr>
                         <th colspan="10">Unit Purchase Price</th>
@@ -4089,50 +4101,50 @@
                         <th colspan="1" style="position:static"></th>
                     </tr>
                     <tr>
-                        <th class="table-column-width">Cond <span class="clr-red">*</span></th>
-                        <th class="table-column-width">UOM <span class="clr-red">*</span></th>
-                        <th class="table-column-width">Currency <span class="clr-red">*</span></th>
-                        <th class="table-column-width">FX Rate <span class="clr-red">*</span></th>
-                        <th class="table-column-width">Vendor List Price</th>
-                        <th class="table-column-width">Last List Price Date</th>
-                        <th class="table-column-width">Purchase Disc %</th>
-                        <th class="table-column-width">Purchase Disc Amount</th>
-                        <th class="table-column-width">Last Purchase Disc Date</th>
-                        <th class="table-column-width">Unit Purchase Price</th>
-                        <th class="table-column-width" class="bg4">Sale Price <span class="clr-red">*</span></th>
-                        <th class="table-column-width" class="bg2">UOM <span class="clr-red">*</span></th>
-                        <th class="table-column-width" class="bg2">Currency <span class="clr-red">*</span></th>
-                        <th class="table-column-width" class="bg2">FX Rate <span class="clr-red">*</span></th>
-                        <th class="table-column-width" class="bg2">Flat Price Amount</th>
-                        <th class="table-column-width" class="bg2">Last Flat Price Date</th>
-                        <th class="table-column-width" class="bg3">Mark % on List Price</th>
-                        <th class="table-column-width" class="bg3">Mark Up Amount</th>
-                        <th class="table-column-width" class="bg3">Last Mark Up Date</th>
-                        <th class="table-column-width" class="bg3">Base Sale Price</th>
-                        <th class="table-column-width" class="bg3">Sale Disc %</th>
-                        <th class="table-column-width" class="bg3">Sale Disc Amount</th>
-                        <th class="table-column-width" class="bg3">Last Sales Disc Date</th>
-                        <th class="table-column-width" class="bg3">Unit Sale Price</th>                        
+                        <th >Cond <span class="clr-red">*</span></th>
+                        <th >UOM <span class="clr-red">*</span></th>
+                        <th >Currency <span class="clr-red">*</span></th>
+                        <th >FX Rate <span class="clr-red">*</span></th>
+                        <th >Vendor List Price</th>
+                        <th >Last List Price Date</th>
+                        <th >Purchase Disc %</th>
+                        <th >Purchase Disc Amount</th>
+                        <th >Last Purchase Disc Date</th>
+                        <th >Unit Purchase Price</th>
+                        <th  class="bg4">Sale Price <span class="clr-red">*</span></th>
+                        <th  class="bg2">UOM <span class="clr-red">*</span></th>
+                        <th  class="bg2">Currency <span class="clr-red">*</span></th>
+                        <th  class="bg2">FX Rate <span class="clr-red">*</span></th>
+                        <th  class="bg2">Flat Price Amount</th>
+                        <th  class="bg2">Last Flat Price Date</th>
+                        <th  class="bg3">Mark % on List Price</th>
+                        <th  class="bg3">Mark Up Amount</th>
+                        <th  class="bg3">Last Mark Up Date</th>
+                        <th  class="bg3">Base Sale Price</th>
+                        <th  class="bg3">Sale Disc %</th>
+                        <th  class="bg3">Sale Disc Amount</th>
+                        <th  class="bg3">Last Sales Disc Date</th>
+                        <th  class="bg3">Unit Sale Price</th>                        
                        
                         
-                        <th class="table-column-width">Created Date</th>
-                        <th class="table-column-width">Created By</th>
-                        <th class="table-column-width">Updated Date</th>
-                        <th class="table-column-width">Updated By</th>
-                        <th class="table-column-width" style="position:static">Is Deleted</th>
+                        <th >Created Date</th>
+                        <th >Created By</th>
+                        <th >Updated Date</th>
+                        <th >Updated By</th>
+                        <th  style="position:static">Is Deleted</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let audit of sourceViewforPurchaseandSalesAudit"></tr>
                     <tr *ngFor="let audit of sourceViewforPurchaseandSalesAudit; let i = index">
-                        <td [ngStyle]="{width: '100px',
+                        <td [ngStyle]="{
                 color: getColorCodeForHistoryForPandS(i, 'conditionName', audit.conditionName)
                   ? 'black'
                   : 'red'
               }">
-                           <p class="width-100"> {{ audit.conditionName }}</p>
+                          {{ audit.conditionName }}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td [ngStyle]="{
                 color: getColorCodeForHistoryForPandS(
                   i,
                   'pP_UOMName',
@@ -4141,169 +4153,169 @@
                   ? 'black'
                   : 'red'
               }">
-              <p class="width-100"> {{ audit.pP_UOMName }}</p>
+             {{ audit.pP_UOMName }}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td [ngStyle]="{
                 color: getColorCodeForHistoryForPandS(i, 'pP_CurrencyName', audit.pP_CurrencyName)
                   ? 'black'
                   : 'red'
               }">
-              <p class="width-100">  {{ audit.pP_CurrencyName }}</p>
+              {{ audit.pP_CurrencyName }}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                 color: getColorCodeForHistoryForPandS(i, 'pP_FXRatePerc', audit.pP_FXRatePerc)
                   ? 'black'
                   : 'red'
               }">
-              <p class="width-100">  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+              {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'pP_VendorListPrice', audit.pP_VendorListPrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                            {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td style="min-width:130px !important" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'pP_LastListPriceDate', audit.pP_LastListPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-120">    {{ audit.pP_LastListPriceDate  | date: 'MM/dd/yyyy h:mm a'}}</p>
+                            {{ audit.pP_LastListPriceDate  | date: 'MM/dd/yyyy h:mm a'}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
+                             {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscAmount', audit.pP_PurchaseDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
+                           {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}
                         </td>
                         
-                        <td [ngStyle]="{width: '100px',
+                        <td  style="min-width:130px !important" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'pP_LastPurchaseDiscDate', audit.pP_LastPurchaseDiscDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM/dd/yyyy h:mm a'}}</p>
+                          {{ audit.pP_LastPurchaseDiscDate | date: 'MM/dd/yyyy h:mm a'}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'salePriceSelectName', audit.salePriceSelectName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">  {{ audit.salePriceSelectName }}</p>
+                          {{ audit.salePriceSelectName }}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_UOMName', audit.sP_FSP_UOMName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_UOMName }}</p>
+                             {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_UOMName }}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_CurrencyName', audit.sP_FSP_CurrencyName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_CurrencyName }}</p>
+                             {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_CurrencyName }}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FXRatePerc', audit.sP_FSP_FXRatePerc)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+                             {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FlatPriceAmount', audit.sP_FSP_FlatPriceAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                             {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td style="min-width:130px !important" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_LastFlatPriceDate', audit.sP_FSP_LastFlatPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">      {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_LastFlatPriceDate | date: 'MM/dd/yyyy h:mm a'}}</p>
+                              {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_LastFlatPriceDate | date: 'MM/dd/yyyy h:mm a'}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                               {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpAmount', audit.sP_CalSPByPP_MarkUpAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                               {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td style="min-width:130px !important" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastMarkUpDate', audit.sP_CalSPByPP_LastMarkUpDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">       {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                               {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM/dd/yyyy h:mm a'}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                              {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscPercValue', audit.sP_CalSPByPP_SaleDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">      {{ audit.salePriceSelectName == 'Flat' ? '0.00' : audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                              {{ audit.salePriceSelectName == 'Flat' ? '0.00' : audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscAmount', audit.sP_CalSPByPP_SaleDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                               {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}
                         </td>
-                        <td [ngStyle]="{width: '100px',
+                        <td style="min-width:130px !important" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastSalesDiscDate', audit.sP_CalSPByPP_LastSalesDiscDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">   {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                           {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM/dd/yyyy h:mm a' }}
                         </td>
-                        <td class="text-right" [ngStyle]="{width: '100px',
+                        <td class="text-right" [ngStyle]="{
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                              {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}
                         </td>
                      
-                        <td><p class="width-120"> {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
+                        <td style="min-width:130px !important"> {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                       
-                        <td><p class="width-100"> {{ audit.createdBy }}</p></td>
-                        <td><p class="width-120"> {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
-                        <td><p class="width-100"> {{ audit.updatedBy }}</p></td>
+                        <td>{{ audit.createdBy }}</td>
+                        <td style="min-width:130px !important">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                        <td> {{ audit.updatedBy }}</td>
 
                         <td class="text-center width-60">
                             <span class="value">

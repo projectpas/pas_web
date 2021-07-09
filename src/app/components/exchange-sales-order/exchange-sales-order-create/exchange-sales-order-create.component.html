@@ -592,6 +592,12 @@
                           <p-tabPanel header="Pick Ticket">
                             <app-exchange-sales-order-pick-tickets></app-exchange-sales-order-pick-tickets>
                           </p-tabPanel>
+                          <p-tabPanel header="Shipping">
+                            <app-exchange-sales-order-shipping [parts]="selectedParts" [salesOrderId]="id"
+                                [customerDetails]="customerDetails" [salesOrder]="salesQuote"
+                                [managementStructureId]="managementStructureId">
+                            </app-exchange-sales-order-shipping>
+                          </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>
                               </app-sales-order-approve>

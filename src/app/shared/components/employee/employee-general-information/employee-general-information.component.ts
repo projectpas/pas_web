@@ -1350,13 +1350,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     //        error => this.onDataLoadFailed(error)
     //    );
     //}
-    // private loadJobtitlesData() {
-    //     this.alertService.startLoadingMessage();
-    //     this.loadingIndicator = true;
-    //     this.commonService.smartDropDownList('JobTitle', 'JobTitleId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.allJobTitlesinfo = res;
-    //     });
-    // }
+
 
 
     private loadJobtitlesData(strText = '') {

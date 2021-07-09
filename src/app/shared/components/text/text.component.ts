@@ -182,10 +182,14 @@ export class TextComponent implements OnInit, OnChanges {
 			return null;
 		}
     }
+    
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
 
     getAllEmployees(){
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').subscribe(res => {
+        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName', this.currentUserMasterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.employees = res.map(x => {
                 return {

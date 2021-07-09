@@ -309,7 +309,6 @@ export class ItemMasterNonStockComponent {
     }    
 
     async getDiscountTableData() {
-        //await this.commonService.smartDropDownList('Discount', 'DiscountId', 'DiscontValue').subscribe(res => {
           await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
             this.discDataList = res;
             this.discDataList.sort(function(a, b) {
@@ -324,7 +323,6 @@ export class ItemMasterNonStockComponent {
     }
 
     getItemTypeList() {
-        //this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description').subscribe(res => {
         this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             res.map(x => {
                 if(x.label == 'Non-Stock') {
@@ -362,7 +360,6 @@ export class ItemMasterNonStockComponent {
     private CurrencyData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        //this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(
             this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(
             results => this.oncurrencySuccessful(results),
             error => {this.loadingIndicator=false;}

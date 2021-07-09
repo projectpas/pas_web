@@ -153,6 +153,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
         this.receivingForm.receivedDate = new Date();
+        this.receivingForm.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
@@ -192,7 +193,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     loadModulesNamesForObtainOwnerTraceable() {
-        this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
             this.moduleListDropdown = res;
         })
     }
@@ -582,7 +583,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     private Purchaseunitofmeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', '', 0, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname',this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allPurchaseUnitOfMeasureinfo = res;
         })
     }
@@ -661,15 +662,47 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.arrayCustlist1.push(0);
         }
-        // this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-        //     this.workScopeList = res;
-        // }); 
-        
-        this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, this.receivingForm.itemMasterId.value, this.receivingForm.managementStructureId, 20, this.arrayCustlist1.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.workScopeList = res;
-        });
+        }); 
+        
+        // this.commonService.autoCompleteDropdownsWorkScopeByItemMasterCaps(strText, this.receivingForm.itemMasterId.value, this.receivingForm.managementStructureId, 20, this.arrayCustlist1.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        //     this.workScopeList = res;
+        // });
     }
-
+    onChangesWorkScope(form){
+        this.getWorkScopeDataByIds();
+    }
+    workScopeObjDetails:any={};
+getWorkScopeDataByIds(){
+    console.log("form",this.receivingForm)
+    this.commonService.getDataWorkScopeByItemMasterCaps(this.receivingForm,'rc').subscribe(res => {
+        console.log('res',res);
+        this.workScopeObjDetails={};
+        this.workScopeObjDetails=res;
+        if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){
+            // let modelName2="confirmWorkScopeInfo";
+            // this.modal = this.modalService.open(modelName2, { size: 'sm' });hide
+            this.workScopeList.forEach(element => {
+         if(element.value==this.receivingForm.workScopeId){
+             this.receivingForm.workScopeName=element.label;
+             return;
+         }
+        });
+            $('#confirmWorkScopeInfo').modal('show');
+        }
+    });
+    
+}
+dismissWorkSocpe(){
+    // this.modal.close();
+    $('#confirmWorkScopeInfo').modal('hide');
+    this.receivingForm.workScopeId=undefined;
+}
+allowtoSaveWO(){
+    // this.modal.close(); 
+    $('#confirmWorkScopeInfo').modal('hide');
+}
     filterCustCodes(event) {
         this.customerCodesInfo = this.allCustomersInfo;
 
@@ -736,7 +769,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
-        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
 
@@ -763,7 +796,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allBins = [];
         if (warehouseId != 0) {
 
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).subscribe(res => {
                 this.allLocations = res.map(x => {
                     return {
 
@@ -783,7 +816,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
 
@@ -802,7 +835,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     shelfValueChange(shelfId) {
         this.allBins = [];
         if (shelfId != 0) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).subscribe(res => {
                 this.allBins = res.map(x => {
                     return {
                         binId: x.value,

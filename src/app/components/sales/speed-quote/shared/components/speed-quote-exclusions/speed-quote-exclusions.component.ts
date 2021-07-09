@@ -346,11 +346,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     this.index = row_index;
     console.log(rowData);
     this.row_data=rowData;
-    if (this.selected == 0) {
-      this.partListData.splice(this.index, 1);
-    }else{
     this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
-    }
   }
   deleteExclusion(): void {
     this.isSpinnerVisible = true;
@@ -366,5 +362,10 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
       }, error => {
         this.isSpinnerVisible = false;
       });
+    }
+    getFormattedNotes(notes) {
+      if (notes != undefined) {
+        return notes.replace(/<[^>]*>/g, '');
+      }
     }
 }

@@ -15931,7 +15931,7 @@ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link.ui-state-active,
 }
 
 .p-dropdown-100px .ui-dropdown {
-  width: 100px !important;
+  min-width: 100px !important;
 }
 
 .p-dropdown-50px .ui-dropdown {
@@ -17373,3 +17373,6 @@ ng-multiselect-dropdown {
   white-space: nowrap;
   overflow: hidden;
 }
+// .cmmRequres  .ui-dropdown-label-container {
+//   border: 1px solid red !important;
+// }

@@ -402,25 +402,25 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	private loadSiteData() {
-		this.commonService.smartDropDownList('Site', 'SiteId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('Site', 'SiteId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allSites = res;
 		})
 	}
 
 	private Purchaseunitofmeasure() {
-		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allPurchaseUnitOfMeasureinfo = res;
 		})
 	}
 
 	loadManufacturerData() { 
-		this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 			this.allManufacturerInfo = res;
 		})
 	}
 
 	loadAssetAcquisitionTypeList() {
-		this.commonService.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name','','', 0,this.authService.currentUser.masterCompanyId ).subscribe(response => {
+		this.commonService.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(response => {
 			this.assetAcquisitionTypeList = response;
 		});
 	}
@@ -429,7 +429,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayEmployeelist.length == 0) {
 			this.arrayEmployeelist.push(0);
 		}
-		this.commonService.autoCompleteDropdownsCertifyEmployeeByMS(strText, true, 20, this.arrayEmployeelist.join(), this.currentUserManagementStructureId)
+		this.commonService.autoCompleteDropdownsCertifyEmployeeByMS(strText, true, 20, this.arrayEmployeelist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId)
 			.subscribe(response => {
 				this.allEmployeeList = response;
 				this.certifyByNames = this.allEmployeeList;
@@ -474,7 +474,7 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayModulelist.length == 0) {
 			this.arrayModulelist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, this.arrayModulelist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, this.arrayModulelist.join(), 0 ).subscribe(res => {
 			this.userTypes = res;
 			this.userTypes.map(x => {
 				if (x.label.toUpperCase() == 'COMPANY') {
@@ -494,13 +494,13 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	private loadTagTypes() {
-		this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+		this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(res => {
 			this.allTagTypes = res;
 		})
 	}
 
 	loadModulesNamesForObtainOwnerTraceable() {
-		this.commonService.getModuleListForObtainOwnerTraceable(this.authService.currentUser.masterCompanyId).subscribe(res => {
+		this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
 			this.moduleListDropdown = res;
 		})
 	}
@@ -1522,7 +1522,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (siteId != 0) {
-			await this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
@@ -1546,7 +1546,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (warehouseId != 0) {
-			await this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
@@ -1559,7 +1559,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (locationId != 0) {
-			await this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name',this.authService.currentUser.masterCompanyId, 'LocationId', locationId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
@@ -1570,7 +1570,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.binId = 0;
 
 		if (shelfId != 0) {
-			await this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			await this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}
@@ -1616,13 +1616,6 @@ export class StockLineSetupComponent implements OnInit {
 				this.disableVendor = false;
 			}
 		});
-
-		// this.commonService.smartDropDownList('PurchaseOrder', 'PurchaseOrderId', 'RequestedBy', 'PurchaseOrderId', selected.purchaseOrderId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-		// 	if (res.length > 0) {
-		// 		const empId = res[0].label;
-		// 		this.stockLineForm.requestorId = getObjectById('value', empId, this.allEmployeeList);
-		// 	}
-		// });
 	}
 
 	onChangeRONum(selected) {

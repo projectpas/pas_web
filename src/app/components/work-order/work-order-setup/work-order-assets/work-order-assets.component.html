@@ -106,7 +106,7 @@
       <ng-template #downloadConfirmation let-c="close" let-d="dismiss" data-backdrop="static">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                <h4 class="modal-title">Are you sure want to   Download?</h4>
                 <button type="button" class="close" aria-label="Close" (click)="closeModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -202,7 +202,7 @@
                   </span>
   
   
-                  <span><a class="btn nobg btn-delete-cstm" *ngIf="!isView" (click)="openDelete(content,rowData)" matTooltip="Delete"
+                  <span><a class="btn nobg btn-delete-cstm" *ngIf="!isView" (click)="openDelete(content,rowData)" matTooltip="Remove"
                       matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                       <span data-toggle="modal" data-target="#assetHistory">
                         <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"  matTooltipPosition="above" matTooltip="Check-in & Check-out History"><i
@@ -283,7 +283,7 @@
                 </span>
 
 
-                <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,asset)" matTooltip="Delete"
+                <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,asset)" matTooltip="Remove"
                     matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                 <span data-toggle="modal" data-target="#assetHistory">
                   <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(asset)" matTooltip="History"><i
@@ -500,7 +500,7 @@
                                appendTo='body' [baseZIndex]="9999" hourFormat="24"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
-                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy , h:mm a'}}</div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy h:mm a'}}</div>
                           </td>
                           <td>
                             <div class="align_adh">

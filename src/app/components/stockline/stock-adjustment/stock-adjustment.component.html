@@ -83,7 +83,7 @@
 											 
 												<div [innerHTML]="item.adjustmentMemo" 
 													[matTooltip]="parsedText(item.adjustmentMemo)" matTooltipPosition="above"
-													class="form-control " class="text_editor_box stock-memo-width"></div>
+													class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 													<i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 													data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 													matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -192,7 +192,7 @@
 										  <div  *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow">
 										  <div [innerHTML]="item.adjustmentMemo"
 													[matTooltip]="parsedText(item.adjustmentMemo)"  name="siteAdjustmentMemo" matTooltipPosition="above"
-													class="form-control " class="text_editor_box stock-memo-width"></div>
+													class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 													<i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 													data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 													matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -295,7 +295,7 @@
 											  <div  *ngIf="categoryAllow">
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)"  name="categoryAdjustmentMemo" matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -329,7 +329,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)"  name="partNumAdjustmentMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -361,7 +361,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)" name="serialNumAdjustmentMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -418,7 +418,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)" name="onHandAdjustmentMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -467,7 +467,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)" name="unitCostAdjustmentMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -516,7 +516,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)"  name="unitSalesPriceAdjustmentMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -565,7 +565,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)" name="lotCostAdjustmentMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"
@@ -681,7 +681,7 @@
 												<div [innerHTML]="item.adjustmentMemo"
 														  [matTooltip]="parsedText(item.adjustmentMemo)" name="timeLifeMemo"
 														   matTooltipPosition="above"
-														  class="form-control " class="text_editor_box stock-memo-width"></div>
+														  class="form-control " class="text_editor_box truncate-text stock-memo-width"></div>
 														  <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
 														  data-toggle="modal" data-target="#stock-adjustment-memo" matTooltip="Memo"
 														  matTooltipPosition="above" (click)="onAddStockMemo(item)"

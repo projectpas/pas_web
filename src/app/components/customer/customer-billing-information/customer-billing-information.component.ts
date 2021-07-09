@@ -369,6 +369,8 @@ export class CustomerBillingInformationComponent {
         this.selectedSitename = "";
         this.arrayCountrylist = [];
         this.billingInfo = new CustomerBillingAddressModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     selectedItems: any;
@@ -635,7 +637,7 @@ export class CustomerBillingInformationComponent {
             this.arrayShipingIdlist.push(0);
         }
         //this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName',strText,true,20,this.arrayShipingIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName', strText, 'CustomerId', this.id, 20, this.arrayShipingIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName', strText, 'CustomerId', this.id, 20, this.arrayShipingIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.billingSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value

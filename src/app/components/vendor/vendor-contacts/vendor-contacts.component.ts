@@ -757,6 +757,8 @@ export class VendorContactsComponent implements OnInit {
         this.islastNameAlreadyExists = false;
         this.ismiddleNameAlreadyExists = false;
         this.isEditContactInfo = false;
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     patternMobilevalidationWithSpl(event: any) {
@@ -937,7 +939,7 @@ export class VendorContactsComponent implements OnInit {
         if(this.add_SelectedModels != undefined && this.add_SelectedModels != null && this.add_SelectedModels != ''){
         const ataMappingData = this.add_SelectedModels.map(x => {
             return {
-                vendorId: vendorId,
+                VendorId: vendorId,
                 VendorContactId: this.selectedContact.vendorContactId,
                 ATAChapterId: getValueFromObjectByKey('ataChapterId', this.add_SelectedId),
                 ATASubChapterId: x.ataSubChapterId,
@@ -950,11 +952,11 @@ export class VendorContactsComponent implements OnInit {
                 CreatedDate: new Date(),
                 UpdatedDate: new Date(),
                 IsDeleted: false,
+                IsActive:true
             }
         })
         this.add_SelectedModels = undefined;
         this.add_SelectedId = undefined;
-
             this.vendorService.postVendorContactATAMapped(ataMappingData).subscribe(res => {
             setTimeout(() => {
                 this.alertService.showMessage(
@@ -967,7 +969,7 @@ export class VendorContactsComponent implements OnInit {
             },error => {this.isSpinnerVisible = false})//this.saveFailedHelper(error))
     }else{
             const ataMappingData = [{
-                vendorId: vendorId,
+                VendorId: vendorId,
                 VendorContactId: this.selectedContact.vendorContactId,
                 ATAChapterId: getValueFromObjectByKey('ataChapterId', this.add_SelectedId),
                 ATASubChapterId: null,
@@ -980,11 +982,12 @@ export class VendorContactsComponent implements OnInit {
                 CreatedDate: new Date(),
                 UpdatedDate: new Date(),
                 IsDeleted: false,
+                IsActive:true
             }
         ]
         this.add_SelectedModels = undefined;
         this.add_SelectedId = undefined;
-
+        
             this.vendorService.postVendorContactATAMapped(ataMappingData).subscribe(res => {
             setTimeout(() => {
                 this.alertService.showMessage(

@@ -134,7 +134,7 @@
                             data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, rowIndex)"
                                 matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false  && !isView"><a class="btn nobg btn-delete-cstm"
-                                (click)="showDeletePhoneConfirmation(rowData)" matTooltip="Delete"
+                                (click)="showDeletePhoneConfirmation(rowData)" matTooltip="Remove"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==true && !isView"><a class="btn nobg btn-users-cstm "
                                 (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
@@ -188,7 +188,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
-                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                <h4 class="modal-title">Are you sure want to Download?</h4>
             </div>
             <div class="modal-body" *ngIf="targetData">
                 <strong>
@@ -306,7 +306,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+                <h4 class="modal-title">Are you sure want to Remove ?</h4>
                 <button type="button" class="close" aria-label="Close" (click)="closeRestore()" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -356,9 +356,9 @@
                             <thead>
                                 <tr>
                                     <th><span *ngIf="type==1">Customer</span><span *ngIf="type==2">Vendor</span> Contact
-                                    </th>
-                                    <th>Phone</th>
-                                    <th>Contacted By</th>
+                                        <span class="clr-red">*</span></th>
+                                    <th>Phone <span class="clr-red">*</span></th>
+                                    <th>Contacted By <span class="clr-red">*</span></th>
                                     <th>Notes</th>
                                     <th>Created Date</th>
                                     <th class="min-width-70">Created By</th>

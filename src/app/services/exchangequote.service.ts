@@ -272,6 +272,8 @@ export class ExchangequoteService {
     partNumberObj.currency=selectedPart.currency;
     partNumberObj.depositeAmount=selectedPart.depositeAmount;
     partNumberObj.coreDueDate=selectedPart.coreDueDate;
+    partNumberObj.isRemark=selectedPart.isRemark;
+    partNumberObj.remarkText=selectedPart.remarkText;
     if(selectedPart.exchangeQuoteScheduleBilling.length>0)
     {
       for(let i=0;i<selectedPart.exchangeQuoteScheduleBilling.length;i++)

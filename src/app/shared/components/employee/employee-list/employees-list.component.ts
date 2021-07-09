@@ -838,7 +838,7 @@ export class EmployeesListComponent implements OnInit {
     }
 
     async getAllFrequencyTrainingData() {
-        await this.commonService.smartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName').subscribe(res => {
+        await this.commonService.smartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName', this.currentUserMasterCompanyId).subscribe(res => {
             this.getAllFrequencyTrainingInfodrpData = res;
 
         }, err => {
@@ -899,7 +899,7 @@ export class EmployeesListComponent implements OnInit {
     // }
 
     async getAllStationData() {
-        await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(res => {
+        await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', this.currentUserMasterCompanyId).subscribe(res => {
             this.getAllAllStationInfodrpData = res;
 
         }, err => {

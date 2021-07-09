@@ -570,8 +570,8 @@ export class VendorCapesComponent implements OnInit {
 
     private onHistoryOfVendorCapesSuccess(auditHistory, content) {
         this.isSpinnerVisible = false;
-        this.sourceViewforVendorCapesAudit = auditHistory;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.sourceViewforVendorCapesAudit = auditHistory;        
+        this.modal = this.modalService.open(content, { size: 'xlg', backdrop: 'static', keyboard: false });
     }
 
     getColorCodeForHistoryForPandS(i, field, value) {

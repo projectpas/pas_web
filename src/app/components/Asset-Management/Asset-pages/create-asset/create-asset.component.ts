@@ -899,7 +899,7 @@ export class CreateAssetComponent implements OnInit {
         }
     }
     getAmortizationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetAmortizationInterval', 'AssetAmortizationIntervalId', 'AssetAmortizationIntervalCode','','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonservice.smartDropDownList('AssetAmortizationInterval', 'AssetAmortizationIntervalId', 'AssetAmortizationIntervalCode',this.authService.currentUser.masterCompanyId,'','',0).subscribe(res => {
             this.amortizationFrequencyList = res;
         }, err => {
             const errorLog = err;
@@ -907,7 +907,7 @@ export class CreateAssetComponent implements OnInit {
         })
     }
     getDepreciationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name','','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name',this.authService.currentUser.masterCompanyId,'','',0).subscribe(res => {
             this.depreciationFrequencyList = res;
         }, err => {
             const errorLog = err;

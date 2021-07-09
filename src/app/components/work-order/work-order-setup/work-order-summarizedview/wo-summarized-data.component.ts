@@ -51,31 +51,31 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     materialListHeader = [
         {"header": "", "field": "plus",width:"30px"},
         {"header": "Task","field": "task"},
-        {"header": "MPN", "field": "partNumber"},
-        {"header": "Revised Part No","field": "revisedPartNo"},
-        {"header": "Part Description","field": "partDescription"},
-        {"header": "SN","field": "serialNo"},
-        {"header": "Stock Line No","field": "stockLineNo"},
-        {"header": "Stock Type","field": "stockType"},
-        {"header": "Control #", "field": "controllerId"},
-        {"header": "Control Num","field": "controllerNo"},
+        {"header": "MPN", "field": "partNumber",width:"150px"},
+        {"header": "Revised Part No","field": "revisedPartNo",width:"100px"},
+        {"header": "Part Description","field": "partDescription",width:"180px"},
+        {"header": "SN","field": "serialNo",width:"100px"},
+        {"header": "Stock Line No","field": "stockLineNo",width:"100px"},
+        {"header": "Stock Type","field": "stockType",width:"100px"},
+        {"header": "Control #", "field": "controllerId",width:"100px"},
+        {"header": "Control Num","field": "controllerNo",width:"100px"},
         {"header": "Cond #","field": "condition"},
-        {"header": "Item Type","field": "itemType"},
-        {"header": "Qty Required","field": "quantityReq"},
-        {"header": "Qty On Hand","field": "quantityOnHand"},
-        {"header": "Qty Available","field": "quantityAvailable"},
-        {"header": "QTY Issued","field": "qtyssued"},
-        {"header": "Unit Cost", "field": "unitCost"},
-        { "header": "Extended Cost", "field": "extendedCost"},
-        {"header": "Warehouse","field": "warehouse"},
-        {'header': 'Location','field': 'location'},
-        {'header': 'Receiver','field': 'receiver'},
-        {'header': 'Site','field': 'site'},
-        {"header": 'Shelf',"field": "shelf"}
+        {"header": "Item Type","field": "itemType",width:"100px"},
+        {"header": "Qty Required","field": "quantityReq",width:"80px"},
+        {"header": "Qty On Hand","field": "quantityOnHand",width:"80px"},
+        {"header": "Qty Available","field": "quantityAvailable",width:"80px"},
+        {"header": "QTY Issued","field": "qtyssued",width:"80px"},
+        {"header": "Unit Cost", "field": "unitCost",width:"80px"},
+        { "header": "Extended Cost", "field": "extendedCost",width:"90px"},
+        {"header": "Warehouse","field": "warehouse",width:"100px"},
+        {'header': 'Location','field': 'location',width:"100px"},
+        {'header': 'Receiver','field': 'receiver',width:"100px"},
+        {'header': 'Site','field': 'site',width:"100px"},
+        {"header": 'Shelf',"field": "shelf",width:"100px"}
     ]
 
     labourListHeader = [
-        {"header": "", "field": "plus"},
+        {"header": "", "field": "plus",width:"30px"},
         {
             "header": "WO Num",
             "field": "workOrderNum"
@@ -204,6 +204,7 @@ this.getWorkOrderWorkFlowNos();
     emailNumberList:any=[];
     phoneNumberList:any=[];
     textNumberList:any=[];
+    woAnalisisListParent:any=[];
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
             this.isSpinnerVisible = true;
@@ -218,7 +219,7 @@ this.getWorkOrderWorkFlowNos();
                 this.emailNumberList=[...res]; 
                 this.phoneNumberList=[...res]; 
                 this.textNumberList=[...res]; 
-                
+                this.woAnalisisListParent=[...res];
             },
                 err => { 
                 })
@@ -561,15 +562,15 @@ this.getWorkOrderWorkFlowNos();
             
             case 'woAnalysis': {
                 this.gridActiveTab = 'woAnalysis';
-                this.isSpinnerVisible = true;
-                this.workOrderService.getWOAnalysisMPNs(this.workOrderId).subscribe((res: any[]) => {
-                    this.isSpinnerVisible = false;
-                    this.woAnalysisMPNs = res;
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                    this.errorHandling(err);
-                })
+                // this.isSpinnerVisible = true;
+                // this.workOrderService.getWOAnalysisMPNs(this.workOrderId).subscribe((res: any[]) => {
+                //     this.isSpinnerVisible = false;
+                //     this.woAnalysisMPNs = res; 
+                // },
+                // err => {
+                //     this.isSpinnerVisible = false;
+                //     this.errorHandling(err);
+                // })
                 break;
             }
 
@@ -578,7 +579,33 @@ this.getWorkOrderWorkFlowNos();
                 this.isSpinnerVisible = true;
                 this.workOrderService.getQuoteAnalysisMPNs(this.workOrderId).subscribe((res: any[]) => {
                     this.isSpinnerVisible = false;
-                    this.quoteAnalysisMPNs = res;
+                    // this.quoteAnalysisMPNs = res;
+                    const data = res.map(x => {
+                        return {
+
+
+
+                            ...x,
+                            revenue: formatNumberAsGlobalSettingsModule(x.revenue,2),
+                            overHeadCostRevenuePercentage: formatNumberAsGlobalSettingsModule(x.overHeadCostRevenuePercentage,2),
+                            materialRevenuePercentage: formatNumberAsGlobalSettingsModule(x.materialRevenuePercentage,2),
+                            materialCost: formatNumberAsGlobalSettingsModule(x.materialCost,2),
+                            materialRevenue: formatNumberAsGlobalSettingsModule(x.materialRevenue,2),
+                            totalLaborCost: formatNumberAsGlobalSettingsModule(x.totalLaborCost,2),
+                            laborCost: formatNumberAsGlobalSettingsModule(x.laborCost,2),
+                            laborRevenuePercentage: formatNumberAsGlobalSettingsModule(x.laborRevenuePercentage,2),
+                            overHeadCost: formatNumberAsGlobalSettingsModule(x.overHeadCost,2),
+                            otherCost: formatNumberAsGlobalSettingsModule(x.otherCost,2),
+                            directCost: formatNumberAsGlobalSettingsModule(x.directCost,2),
+                            chargesCost: formatNumberAsGlobalSettingsModule(x.chargesCost,2),
+                            freightCost: formatNumberAsGlobalSettingsModule(x.freightCost,2),
+                            directCostRevenuePercentage: formatNumberAsGlobalSettingsModule(x.directCostRevenuePercentage,2),
+                            revenuePercentage: formatNumberAsGlobalSettingsModule(x.revenuePercentage,2),
+                            margin: formatNumberAsGlobalSettingsModule(x.margin,2),
+                            marginPercentage: formatNumberAsGlobalSettingsModule(x.marginPercentage,2)
+                        }
+                    }); 
+                    this.quoteAnalysisMPNs = data;
                 },
                 err => {
                     this.isSpinnerVisible = false;
@@ -687,6 +714,49 @@ this.getWorkOrderWorkFlowNos();
             this.isSpinnerVisible = false;
             this.errorHandling(err);
         })
+    }
+
+    getWoAnalisisData(currentRecord){
+        const id= currentRecord.workOrderPartNumberId;
+        this.isSpinnerVisible = true;
+                this.workOrderService.workOrderAnalysisData(this.workOrderId, id, false,this.authService.currentUser.masterCompanyId).subscribe(
+                        (res: any) => {
+                            this.woAnalisisListParent.forEach(element => {
+                                element.isShowPlus=true;
+                            });
+                            currentRecord.isShowPlus=false;
+                            this.isShowChild=true;
+                            this.isSpinnerVisible=false;
+                            if (res) {
+                                const data = res.map(x => {
+                                    return {
+                                        ...x,
+                                        revenue: formatNumberAsGlobalSettingsModule(x.revenue,2),
+                                        materialCost: formatNumberAsGlobalSettingsModule(x.materialCost,2),
+                                        materialRevenuePercentage: formatNumberAsGlobalSettingsModule(x.materialRevenuePercentage,2),
+                                        laborCost: formatNumberAsGlobalSettingsModule(x.laborCost,2),
+                                        laborRevenuePercentage: formatNumberAsGlobalSettingsModule(x.laborRevenuePercentage,2),
+                                        overHeadCost: formatNumberAsGlobalSettingsModule(x.overHeadCost,2),
+                                        otherCost: formatNumberAsGlobalSettingsModule(x.otherCost,2),
+                                        directCost: formatNumberAsGlobalSettingsModule(x.directCost,2),
+                                        freightCost: formatNumberAsGlobalSettingsModule(x.freightCost,2),
+                                        directCostRevenuePercentage: formatNumberAsGlobalSettingsModule(x.directCostRevenuePercentage,2),
+                                        revenuePercentage: formatNumberAsGlobalSettingsModule(x.revenuePercentage,2),
+                                        margin: formatNumberAsGlobalSettingsModule(x.margin,2),
+                                        marginPercentage: formatNumberAsGlobalSettingsModule(x.marginPercentage,2)
+                                    }
+                                }); 
+                                this.woAnalysisMPNs=[];
+                                this.woAnalysisMPNs=data;
+                                currentRecord.woAnalysisMPNs =[];
+                                currentRecord.woAnalysisMPNs=this.woAnalysisMPNs;
+                               
+                                console.log('fff',currentRecord.woAnalysisMPNs)
+                            }
+                        }, error => {
+                            this.isSpinnerVisible = false;
+                        }
+                    )
     }
     getUniqueParts(myArr, prop1, prop2, prop3) {
         let uniqueParts = JSON.parse(JSON.stringify(myArr));
