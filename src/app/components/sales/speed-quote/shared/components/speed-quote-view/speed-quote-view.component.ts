@@ -129,7 +129,6 @@ export class SpeedQuoteViewComponent implements OnInit {
     forkJoin(
       this.customerService.getContacts(this.salesQuoteView.speedQuote.customerId),
       this.commonservice.getManagementStructureNameandCodes(this.managementStructureId),
-      //this.commonservice.smartDropDownList("[Percent]", "PercentId", "PercentValue"),
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
       ).subscribe(result => {
         this.isSpinnerVisible = false;

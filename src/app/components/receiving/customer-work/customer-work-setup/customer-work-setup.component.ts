@@ -583,7 +583,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     private Purchaseunitofmeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', '', 0, this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname',this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allPurchaseUnitOfMeasureinfo = res;
         })
     }
@@ -769,7 +769,7 @@ allowtoSaveWO(){
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
-        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
 
@@ -796,7 +796,7 @@ allowtoSaveWO(){
         this.allBins = [];
         if (warehouseId != 0) {
 
-            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).subscribe(res => {
                 this.allLocations = res.map(x => {
                     return {
 
@@ -816,7 +816,7 @@ allowtoSaveWO(){
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
 
@@ -835,7 +835,7 @@ allowtoSaveWO(){
     shelfValueChange(shelfId) {
         this.allBins = [];
         if (shelfId != 0) {
-            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).subscribe(res => {
                 this.allBins = res.map(x => {
                     return {
                         binId: x.value,

@@ -258,7 +258,7 @@ export class CreateAssetInventoryComponent implements OnInit {
     setEditArray: any = [];
     getLocationList() {
 
-        this.commonService.smartDropDownGetNamaWithCode('AssetLocation', 'AssetLocationId', 'Name').subscribe(res => {
+        this.commonService.smartDropDownGetNamaWithCode('AssetLocation', 'AssetLocationId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allLocationList = res.map(x => {
                 return {
                     ...x,
@@ -274,7 +274,7 @@ export class CreateAssetInventoryComponent implements OnInit {
 
     }
     getWarrantyStatusList() {
-        this.commonService.smartDropDownList('AssetWarrantyStatus', 'AssetWarrantyStatusId', 'warrantyStatus').subscribe(response => {
+        this.commonService.smartDropDownList('AssetWarrantyStatus', 'AssetWarrantyStatusId', 'warrantyStatus', this.currentUserMasterCompanyId).subscribe(response => {
             this.allWarrantyStatusList = response;
         }, err => {
             const errorLog = err;
@@ -1886,7 +1886,7 @@ export class CreateAssetInventoryComponent implements OnInit {
                 this.errorMessageHandler(errorLog);
             });
         } else {
-            this.commonService.smartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status').subscribe(res => {
+            this.commonService.smartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', this.currentUserMasterCompanyId).subscribe(res => {
                 this.assetInventoryStatusList = res;
             }, err => {
                 const errorLog = err;

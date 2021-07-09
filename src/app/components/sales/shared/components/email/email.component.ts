@@ -345,7 +345,7 @@ export class EmailComponent implements OnInit, OnChanges {
 
 
     getAllEmployees() {
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').subscribe(res => {
+        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName',this.authService.currentUser.masterCompanyId).subscribe(res => {
             console.log("Employee details:", res);
             this.employeesOriginalData = res.map(x => {
                 return {
@@ -387,8 +387,12 @@ export class EmailComponent implements OnInit, OnChanges {
             )
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     getAllEmailType() {
-        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name')
+        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name', this.currentUserMasterCompanyId)
             .subscribe(
                 (res: any[]) => {
                     this.emailTypes = res;

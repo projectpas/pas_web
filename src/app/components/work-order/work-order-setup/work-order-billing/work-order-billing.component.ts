@@ -412,7 +412,7 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     getCurrencyList() {
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
+        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'code',this.authService.currentUser.masterCompanyId, '', '').subscribe(
             results => {
                 this.currencyList = results
             },
@@ -424,7 +424,7 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     getEmployeeList(woId) {
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName')
+        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName',this.authService.currentUser.masterCompanyId, this.currentUserMasterCompanyId)
             .subscribe(
                 (employeeList: any[]) => {
                     this.employeeList = employeeList;
@@ -437,7 +437,7 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     getPercentageList() {
-        this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+        this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue',this.authService.currentUser.masterCompanyId, this.currentUserMasterCompanyId).subscribe(res => {
             this.markUpList = res;
         },
             err => {
@@ -446,7 +446,7 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     getInvoiceList() {
-        this.commonService.smartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description').subscribe(res => {
+        this.commonService.smartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description',this.authService.currentUser.masterCompanyId, this.currentUserMasterCompanyId).subscribe(res => {
             this.invoiceTypeList = res;
         },
             err => {
@@ -455,7 +455,7 @@ export class WorkOrderBillingComponent implements OnInit {
     }
 
     getShipViaByCustomerId() {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
+        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name', this.currentUserMasterCompanyId)
             .subscribe(
                 (res) => {
                     this.shipViaList = res;

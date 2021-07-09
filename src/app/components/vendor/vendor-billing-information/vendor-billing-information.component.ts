@@ -695,6 +695,8 @@ export class VendorBillingInformationComponent {
         this.editSiteName = '';
         this.isSiteNameAlreadyExists = false;
         this.getAllSiteSmartDropDown();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     sampleExcelDownload() {

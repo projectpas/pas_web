@@ -512,7 +512,7 @@ checkedToGenerate(evt, ship) {
     }
 
     getShipVia() {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
+        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name', this.currentUserMasterCompanyId)
             .subscribe(
                 (res) => {
                     this.shipViaList = res;
@@ -522,7 +522,7 @@ checkedToGenerate(evt, ship) {
     }
 
     getUnitOfMeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName').subscribe((res) => {
+        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', this.currentUserMasterCompanyId).subscribe((res) => {
             this.allWeightUnitOfMeasureInfo = res;
         }, err => {
         });
@@ -571,7 +571,7 @@ checkedToGenerate(evt, ship) {
     }
 
     getCountriesList() {
-        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name')
+        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name', this.currentUserMasterCompanyId)
             .subscribe(
                 res => {
                     this.countryList = res;

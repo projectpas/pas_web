@@ -18,8 +18,8 @@ export class CommonService extends EndpointFactory {
     super(http, configurations, injector);
   }
 
-  smartDropDownList(tableName, primaryKeyColumn, labelColumn, parentName?, parentId?, count?,masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&count=${count !== undefined ? count : 0}&textColumn1=${parentName != undefined ? parentName : ''}&textColumn2=${parentId != undefined ? parentId : ''}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+  smartDropDownList(tableName, primaryKeyColumn, labelColumn, masterCompanyId, parentName?, parentId?, count?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&masterCompanyId=${masterCompanyId}&count=${count !== undefined ? count : 0}&textColumn1=${parentName != undefined ? parentName : ''}&textColumn2=${parentId != undefined ? parentId : ''}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.smartDropDownList(tableName, primaryKeyColumn, labelColumn, parentName, parentId, count,masterCompanyId));
     });
   }
@@ -30,8 +30,8 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn, parentName?, parentId?, count?,masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&count=${count !== undefined ? count : 0}&textColumn1=Code&textColumn2=${parentId != undefined ? parentId : ''}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+  smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn,masterCompanyId, parentName?, parentId?, count?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/binddropdowns?tableName=${tableName}&primaryColumn=${primaryKeyColumn}&textColumn=${labelColumn}&masterCompanyId=${masterCompanyId}&count=${count !== undefined ? count : 0}&textColumn1=Code&textColumn2=${parentId != undefined ? parentId : ''}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.smartDropDownGetNamaWithCode(tableName, primaryKeyColumn, labelColumn, parentName, parentId, count,masterCompanyId));
     });
   }

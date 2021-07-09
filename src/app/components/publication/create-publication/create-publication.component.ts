@@ -1594,7 +1594,7 @@ export class CreatePublicationComponent implements OnInit {
     this.getAircraftInformationByPublicationId();
   }
   getFileTagTypesList() {
-    this.commonService.smartDropDownList('TagType', 'TagTypeID', 'Name').subscribe(res => {
+    this.commonService.smartDropDownList('TagType', 'TagTypeID', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
       this.fileTagTypesList = res;
     });
   }

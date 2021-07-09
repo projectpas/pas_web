@@ -516,10 +516,14 @@ export class EmployeeEndpoint extends EndpointFactory {
 			});
 	}
 
-	forgotPasswordEndpoint<T>(userObject: any): Observable<T> {
-		return this.http.post<T>(this.forgotpasswordUrl, JSON.stringify(userObject), this.getRequestHeaders())
+	forgotPasswordEndpoint<T>(email: any, masterCompanyId: number): Observable<T> {
+		var data = {
+			"email": email,
+			"masterCompanyId": masterCompanyId
+		}
+		return this.http.post<T>(this.forgotpasswordUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.forgotPasswordEndpoint(userObject));
+				return this.handleError(error, () => this.forgotPasswordEndpoint(email, masterCompanyId));
 			});
 	}
 

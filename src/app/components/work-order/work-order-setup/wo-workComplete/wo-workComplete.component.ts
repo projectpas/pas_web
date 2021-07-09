@@ -152,8 +152,8 @@ upDateSettlemts( ){
   this.isSpinnerVisible=true;
   this.workOrderService.updateWoSettlements(newData,this.isWOClose).subscribe(res => {
   if(this.isWOClose==true){
+    this.refreshMpnGrid.emit(true);
   }
-  this.refreshMpnGrid.emit(true)
     this.woSettlements.forEach(element => {
       element.userId=this.authService.currentEmployee;
       element.isenableUpdate=false;
