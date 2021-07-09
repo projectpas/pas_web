@@ -47,7 +47,7 @@
                 (completeMethod)="filterpartItems($event,partList.pn)" [size]="32" [minLength]="1" [dropdown]="true"
                 class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
-                name="pn_{{row_index}}">
+                name="pn_{{row_index}}" [disabled]="partList['isEditPart'] == true">
               </p-autoComplete>
               <!-- class="wf-header-select" -->
             </td>
@@ -60,7 +60,7 @@
                         name="condition{{row_index}}" [resetFilterOnHide]="true" 
                         placeholder="-- Select --" [showClear]="true" 
                         appendTo="body" (onChange)="onConditionChange(partList,row_index)"
-                        required></p-dropdown>
+                        [disabled]="partList['isEditPart'] == true" required></p-dropdown>
             </td>
             <td style="width:50px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"

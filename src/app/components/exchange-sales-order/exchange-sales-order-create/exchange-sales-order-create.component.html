@@ -4,7 +4,7 @@
           <div class="card-header header">
               <div class="row">
                   <div class="col">
-                      <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order
+                      <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Exchange Sales Order
                           <button class="btn-sm header-button header-button-alignment"
                               (click)="toggle_po_header=!toggle_po_header">
                               {{toggle_po_header ? 'Collapse' : 'Expand'}}
@@ -698,7 +698,7 @@
 <ng-template #updateConfirmationModal let-c="close" let-d="dismiss">
   <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
-      <h4 class="modal-title">Do you want to create new version or update existing sales order ?</h4>
+      <h4 class="modal-title">Do you want to create new version or update existing echange sales order ?</h4>
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-danger" data-dismiss="modal"

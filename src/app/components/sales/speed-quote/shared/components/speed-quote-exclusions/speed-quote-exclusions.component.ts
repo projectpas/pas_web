@@ -54,8 +54,14 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     this.bindPartsDroppdown('', '');
     this.getExclusionList();
   }
+  defaultcondition: any;
   addPartNumber(rowdata) {
     let newParentObject = new SpeedQuoteExclusion();
+    for (let i = 0; i < this.conditionList.length; i++) {
+      if (this.conditionList[i].label == "New") {
+        this.defaultcondition = this.conditionList[i].value;
+      }
+    }
     newParentObject = {
       ...newParentObject,
       itemMasterId: rowdata.itemMasterId,
@@ -65,10 +71,16 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
       speedQuotePartId: rowdata.speedQuotePartId,
       itemNo: rowdata.itemNo,
       isEditPart: false,
+      conditionId: this.defaultcondition,
     }
     this.partListData.push(newParentObject);
   }
   addNewPartNumber(rowdata) {
+    for (let i = 0; i < this.conditionList.length; i++) {
+      if (this.conditionList[i].label == "New") {
+        this.defaultcondition = this.conditionList[i].value;
+      }
+    }
     let newParentObject = new SpeedQuoteExclusion();
     newParentObject = {
       ...newParentObject,
@@ -80,14 +92,15 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
       speedQuotePartId: rowdata.speedQuotePartId,
       itemNo: rowdata.itemNo,
       isEditPart: false,
+      conditionId: this.defaultcondition,
     }
     this.partListData.push(newParentObject);
   }
   getConditionsList() {
-      this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
-        this.conditionList = res;
+    this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', false, 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
+      this.conditionList = res;
     })
-}
+  }
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : "";
   }
@@ -118,11 +131,13 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   onPartSelect(event, row_index) {
     console.log("event", event);
     console.log("evenrow_indext", row_index);
-    this.partListData[row_index].exitemMasterId = event.partId;
+    //this.partListData[row_index].exitemMasterId = event.partId;
+    this.partListData[row_index].exItemMasterId = event.partId;
     this.partListData[row_index].exPartNumber = event.partNumber;
     this.partListData[row_index].exPartDescription = event.partDescription;
     this.partListData[row_index].exStockType = event.stockType;
     console.log("this.partListData", this.partListData);
+    this.onConditionChange(this.partListData[row_index], row_index);
   }
 
   bindPartsDroppdown(query, pn) {
@@ -207,6 +222,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     }
     $("#textarea-popupexclusion").modal("hide");
     this.disabledMemo = true;
+    this.disabledSave = false;
   }
   parentObject: any = {};
   parentObjectArray: any[] = [];
@@ -217,17 +233,20 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
     console.log(this.partListData);
     for (let i = 0; i < this.partListData.length; i++) {
       this.alertService.resetStickyMessage();
-      if (this.partListData[i].exitemMasterId == 0) {
+      //if (this.partListData[i].exitemMasterId == 0) {
+      if (this.partListData[i].exItemMasterId == 0) {
         this.isSpinnerVisible = false;
         errmessage = errmessage + '<br />' + "PN is required."
         //this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         //return;
       }
+      if (this.partListData[i].conditionId == 0 || this.partListData[i].conditionId == undefined) {
+        this.isSpinnerVisible = false;
+        errmessage = errmessage + '<br />' + "Condition is required."
+      }
       if (this.partListData[i].exQuantity == 0) {
         this.isSpinnerVisible = false;
         errmessage = errmessage + '<br />' + "Qty must be greater than 0."
-        //this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        //return;
       }
       if (errmessage != '') {
         this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, 'Please select PN');
@@ -241,7 +260,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
         itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
         pn: this.partListData[i].pn ? this.partListData[i].pn : null,
         description: this.partListData[i].description,
-        exitemMasterId: this.partListData[i].exitemMasterId,
+        exItemMasterId: this.partListData[i].exItemMasterId,
         exPartNumber: this.partListData[i].exPartNumber,
         exPartDescription: this.partListData[i].exPartDescription,
         exStockType: this.partListData[i].exStockType,
@@ -255,10 +274,11 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
         createdBy: this.userName,
         updatedBy: this.userName,
         itemNo: this.partListData[i].itemNo,
+        conditionId: this.partListData[i].conditionId,
       }
       this.parentObjectArray.push(this.parentObject);
     }
-    console.log(this.parentObjectArray);
+    console.log("this.parentObjectArray", this.parentObjectArray);
     this.speedQuoteService.saveExclusionPart(this.parentObjectArray).subscribe(res => {
       // if (res) {
       // 	this.BindAllParts(res);
@@ -335,51 +355,62 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
   }
   selected: any;
   selectedExclusionToDelete: any;
-  index:number;
-  row_data:any;
-  openDelete(content, rowData,row_index) {
+  index: number;
+  row_data: any;
+  openDelete(content, rowData, row_index) {
     this.selected = rowData.exclusionPartId;
     this.selectedExclusionToDelete = rowData.pn;
     this.index = row_index;
     if (this.selected == 0) {
       this.partListData.splice(this.index, 1);
-    }else{
-    this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+    } else {
+      this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
     }
   }
-  openView(content, rowData,row_index) {
+  openView(content, rowData, row_index) {
     this.selected = rowData.exclusionPartId;
     this.selectedExclusionToDelete = rowData.pn;
     this.index = row_index;
     console.log(rowData);
-    this.row_data=rowData;
+    this.row_data = rowData;
     this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
   }
   deleteExclusion(): void {
     this.isSpinnerVisible = true;
-      this.speedQuoteService.deleteExclusion(this.selected).subscribe(response => {
-        this.isSpinnerVisible = false;
-        this.modal.close();
-        this.alertService.showMessage(
-          "Success",
-          `Exclusion removed successfully.`,
-          MessageSeverity.success
-        );
-        this.getExclusionList();
-      }, error => {
-        this.isSpinnerVisible = false;
-      });
+    this.speedQuoteService.deleteExclusion(this.selected).subscribe(response => {
+      this.isSpinnerVisible = false;
+      this.modal.close();
+      this.alertService.showMessage(
+        "Success",
+        `Exclusion removed successfully.`,
+        MessageSeverity.success
+      );
+      this.getExclusionList();
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+  getFormattedNotes(notes) {
+    if (notes != undefined) {
+      return notes.replace(/<[^>]*>/g, '');
     }
-    getFormattedNotes(notes) {
-      if (notes != undefined) {
-        return notes.replace(/<[^>]*>/g, '');
-      }
+  }
+  onConditionChange(data, index) {
+    if (data.exItemMasterId > 0 && data.conditionId > 0) {
+      this.speedQuoteService.getItemMasterUnitPrice(data.exItemMasterId, data.conditionId).subscribe(
+        results => {
+          if (results[0]) {
+            this.partListData[index].exUnitPrice = this.formateCurrency(results[0].unitSalesPrice);
+            this.calculateExtendedCost(this.partListData[index]);
+          }
+          this.isSpinnerVisible = false;
+        }, error => {
+          this.isSpinnerVisible = false;
+        }
+      );
+    }else{
+      this.partListData[index].exUnitPrice = 0;
+      this.calculateExtendedCost(this.partListData[index]);
     }
-    onConditionChange(data,index)
-    {
-      alert();
-      console.log(data);
-      console.log(index);
-    }
-
+  }
 }

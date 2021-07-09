@@ -6,7 +6,7 @@
         <h4 class="header-name">Search Customer</h4>
       </div>
       <div>
-        <button type="button" class="btn-sm header-button" matTooltipPosition="above" matTooltip="Sales Order List"
+        <button type="button" class="btn-sm header-button" matTooltipPosition="above" matTooltip="Exchange Quote List"
           [routerLink]="['/exchangemodule/exchangepages/exchange-quote-list']">
           Exchange Quote List
         </button>
@@ -96,7 +96,7 @@
               </span>
               <button class="btn-add" mat-icon-button (click)="createOrder(rowData)"
                 [disabled]="!rowData.isActive || rowData.isDeleted">
-                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Sales Order' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
+                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Exchange Sales Order' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
               </button>
             </div>
           </td>

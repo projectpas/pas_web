@@ -746,7 +746,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       .getNewSalesOrderInstance(customerId)
       .subscribe(data => {
         this.salesQuote = data && data.length ? data[0] : null;
-
+        this.salesQuote.quoteTypeId = "1";
         this.load(this.managementStructureId);
         if (this.salesQuote) {
           this.status = this.salesQuote.status && this.salesQuote.status.length > 0 ? this.salesQuote.status.slice(0) : [];
@@ -798,7 +798,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
 
       if (settingsObject) {
         if (!isEditMode) {
-          this.salesQuote.quoteTypeId = settingsObject.typeId;
+          this.salesQuote.quoteTypeId = settingsObject.typeid.toString();
           this.salesQuote.statusId = settingsObject.defaultStatusId;
           this.salesQuote.statusName = settingsObject.defaultStatusName;
         }
@@ -1040,7 +1040,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
               "Success",
-              `Sales Order updated successfully.`,
+              `Exchange Sales Order updated successfully.`,
               MessageSeverity.success
             );
             this.getSalesOrderInstance(this.id, true);
@@ -1066,7 +1066,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
           this.isSpinnerVisible = false;
           this.alertService.showMessage(
             "Success",
-            `Sales Order created successfully.`,
+            `Exchange Sales Order created successfully.`,
             MessageSeverity.success
           );
           this.toggle_po_header = false;
@@ -1534,7 +1534,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     popupWin.document.write(`
       <html>
         <head>
-           <title>Sales Order</title>
+           <title>Exchange Sales Order</title>
            <style>
            div {
             white-space: normal;
