@@ -40,7 +40,7 @@ export class SpeedQuoteMarginComponent implements OnInit {
     console.log("psrt",this.part);
 
     
-
+    //get bench check, ovarhul and repai condition data.....
     this.speedQuoteService.getItemMasterDataConditionWise(this.part.partId,this.currentUserMasterCompanyId).subscribe(
       results => {
         console.log("results",results);
