@@ -138,12 +138,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group memo-popup-cstm">
-                                    <label>Notes
-                                        <!-- <span class="editor-span"><a class="btn nobg" data-toggle="modal"
-                                                data-target="#add-notes" (click)="onAddNotes()"
-                                                matTooltipPosition="above" matTooltip="Notes"><i
-                                                    class="fa fa-pencil"></i></a>
-                                        </span> -->
+                                    <label>Notes                                      
                                     </label>
                                     <span>
                                         <div [innerHTML]="repairOrderHeaderData.notes"
@@ -156,11 +151,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group memo-popup-cstm">
-                                    <label>Memo
-                                        <!-- <span class="editor-span"><a class="btn nobg" data-toggle="modal"
-                                                data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo"
-                                                disabled="true" (click)="onAddMemo()"><i class="fa fa-pencil"></i></a>
-                                        </span> -->
+                                    <label>Memo                                       
                                     </label>
                                     <span>
                                         <div [innerHTML]="repairOrderHeaderData.roMemo"
@@ -972,6 +963,14 @@
 
                                                         <div class="form-group">
                                                             <label>Cert Type</label>
+                                                            <p-multiSelect [options]="CertTypeList"
+                                                                [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certTypeobject"
+                                                                name="certType{{part.currentSLIndex}}">
+                                                            </p-multiSelect>                                                        
+                                                        </div> 
+
+                                                        <div class="form-group">
+                                                            <label>Cert By</label>
                                                             <select class="form-control"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedTypeId"
                                                                 #selects="ngModel" [ngModelOptions]="{standalone: true}"
@@ -984,7 +983,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group" *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId != undefined && part.stocklineListObj[part.currentSLIndex].certifiedTypeId > 0">
-                                                            <label *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId > 0">Cert By</label>
+                                                            <!-- <label *ngIf="part.stocklineListObj[part.currentSLIndex].certifiedTypeId > 0">Cert By</label> -->
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">
                                                                     <p-autoComplete
@@ -1029,8 +1028,6 @@
                                                                 </div>                                                           
                                                             </div>
                                                         </div>
-
-
                                                         <!-- <div class="form-group">
                                                             <label>Cert By</label>
                                                             <input class="form-control"
@@ -1063,10 +1060,14 @@
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label>Tag Type</label>
-                                                            <p-multiSelect [options]="TagTypeList"
+                                                            <!-- <p-multiSelect [options]="TagTypeList"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagTypeobject"
                                                                 name="tagType{{part.currentSLIndex}}">
-                                                            </p-multiSelect>
+                                                            </p-multiSelect> -->
+                                                            <select class="form-control" name="tagType{{part.currentSLIndex}}" [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagTypeId">
+                                                                <option value="0">--Select--</option>
+                                                                <option *ngFor="let tagType of TagTypeList" [value]="tagType.Key">{{tagType.Value}}</option>
+                                                            </select>
                                                         </div>
                                                         
                                                         <div class="form-group">

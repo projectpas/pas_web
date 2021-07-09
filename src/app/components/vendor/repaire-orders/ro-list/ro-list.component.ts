@@ -195,7 +195,7 @@ export class RoListComponent implements OnInit {
     }
 
     loadROStatus() {
-		this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description', this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description','','',0,0).subscribe(response => {
 			this.roStatusList = response;
 			this.roStatusList = this.roStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         },err => {const errorLog = err;

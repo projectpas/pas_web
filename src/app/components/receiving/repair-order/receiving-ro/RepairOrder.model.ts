@@ -272,7 +272,10 @@ export class StockLine {
     tagDate: Date;
     tagType: any;
     tagTypeId:any;
+    certTypeId:any;
+    certType :any;
     tagTypeobject:any;
+    certTypeobject:any;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;

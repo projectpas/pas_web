@@ -255,7 +255,7 @@ export class PolistComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
     loadPOStatus() {
-        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description', this.authService.currentUser.masterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description','','',0, 0).subscribe(response => {
             this.poStatusList = response;
             this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         }, err => {
