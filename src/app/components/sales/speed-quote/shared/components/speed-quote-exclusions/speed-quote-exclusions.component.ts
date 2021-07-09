@@ -395,6 +395,7 @@ export class SpeedQuoteExclusionsComponent implements OnInit {
       return notes.replace(/<[^>]*>/g, '');
     }
   }
+  //on change condition....
   onConditionChange(data, index) {
     if (data.exItemMasterId > 0 && data.conditionId > 0) {
       this.speedQuoteService.getItemMasterUnitPrice(data.exItemMasterId, data.conditionId).subscribe(
