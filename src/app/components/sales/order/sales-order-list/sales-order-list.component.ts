@@ -328,7 +328,7 @@ export class SalesOrderListComponent implements OnInit {
     if (this.arrayStatuslist.length == 0) {
       this.arrayStatuslist.push(0);
     }
-    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
+    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("MasterSalesOrderStatus", "Id", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
       this.salesService.getAllSalesOrderSettings(this.currentUserMasterCompanyId)).subscribe(res => {
         this.statusList = res[0];
         this.settingsList = res[1];

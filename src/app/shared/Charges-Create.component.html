@@ -95,7 +95,8 @@
         </td>
 
         <td *ngIf="!isQuote &&  !isEdit" class="text-center">
-          <button class="btn btn-danger nobg"  (click)="openDelete(content,charge,i)">
+          <button class="btn btn-danger nobg" atTooltip="Remove"
+          matTooltipPosition="above" (click)="openDelete(content,charge,i)">
             <i class="fa fa-trash"></i>
           </button>
         </td>

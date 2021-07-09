@@ -137,7 +137,7 @@
 				  </p-dropdown>
 					</td>
 					<td>
-						<p-calendar
+						<p-calendar [maxDate]="currentDate"
 							class="pcal-item-capes"
 							[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
 						  [(ngModel)]="rowData.addedDate"

@@ -140,7 +140,13 @@ export class WoPartDetailsComponent implements OnChanges {
      }
     this.search();
    }else{
+    // formObject.conditionIds
    }
+   this.isSpinnerVisible=true;
+
+   setTimeout(() => {
+     this.isSpinnerVisible=false;
+   }, 2000);
   }
   hideStockline(rowIndex) {
     this.hideme[rowIndex] = !this.hideme[rowIndex];
@@ -160,7 +166,19 @@ export class WoPartDetailsComponent implements OnChanges {
       }
     }
     this.isView=this.isView;
+    if(!this.editData){
+    setTimeout(() => {
+      if(this.allConditionInfo && this.allConditionInfo.length !=0){
+        this.allConditionInfo.forEach(element => {
+          if(element.label=='New'){
+            this.formObject.conditionIds=[element.value];
+            return;
+          }
+        });
+      }
+    }, 1000);
   }
+}
   initColumns() {
     this.columns = [
       { field: 'select', header: '', width: '30px', textalign: 'center' },

@@ -300,7 +300,6 @@ export class CustomerShippingInformationComponent implements OnInit {
 
     getshipvialistList() {
         this.isSpinnerVisible = true;
-        //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             const data = res.map(x => {
                 return {
@@ -678,6 +677,8 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.selectedSitename = "";
         this.isEditDomestic = false;
         this.domesticShippingInfo = new CustomerShippingModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
     addInternationalShipping() {
         this.isEditInternational = false;

@@ -133,6 +133,7 @@ export class WorkOrderAddComponent implements OnInit {
     workFlowId: any = null;
     editWorkFlowData: any;
     modal: NgbModalRef;
+    modalView: NgbModalRef;
     modalRef: NgbModalRef;
     modalRefCreate: NgbModalRef;
     modalWorkScopeModel:NgbModalRef
@@ -277,11 +278,13 @@ export class WorkOrderAddComponent implements OnInit {
     currentDate = new Date();
     taskName: any;
     isAllowLaberSave: boolean = false;
-    currentStatusWOSummary : any = 1;
+    currentStatusWOSummary : any = "1";
     expriryarray: any = [];
     selectedMPNItemMasterId: any;
     woSummaryMPNData: any = [];
     woSummaryCustData: any = [];
+    paramsData: any = {};
+    SummaryMonths: number = 12;
 
     constructor(
         private alertService: AlertService,
@@ -709,7 +712,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.arrayCustomerIdList.push(0);
         }
         if (this.isRecCustomer) {
-            this.commonService.getReceivingCustomers(value, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getReceivingCustomers(value,     ).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
             },
                 err => {
@@ -1006,20 +1009,46 @@ export class WorkOrderAddComponent implements OnInit {
     {
         this.selectedMPNItemMasterId = workOrderPartNumber.itemMasterId;
         this.currentIndex = index;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.getWOSummaryDetails(this.SummaryMonths)
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false ,windowClass: 'assetMange'});
     }
-
+    isSpinnerVisibleHistory:boolean=false;
     getWOSummaryDetails(monthtatus)
     {
         if (this.selectedMPNItemMasterId > 0) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisibleHistory = true;
             this.workOrderService.GetWorkOrderSummarisedHistoryByMPN(this.selectedMPNItemMasterId, monthtatus == 1 || monthtatus == "1" ? true : false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.woSummaryMPNData = res;
+                this.isSpinnerVisibleHistory = false;
+                if(res != undefined && res.mpnSummaryModel != undefined)
+                {
+                    this.woSummaryMPNData = res.mpnSummaryModel;
+                }
+                if(res != undefined && res.custSummaryModel != undefined)
+                {
+                    this.woSummaryCustData = res.custSummaryModel;
+                }
             },err => {
+                this.isSpinnerVisibleHistory = false;
                     this.handleError(err);
                 });
         }
+    }
+    isOpenViewWO:boolean=false;
+    async view(content,rowData) {
+        this.modalView = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.paramsData['workOrderId'] = rowData.workOrderId;
+        this.workOrderId = rowData.workOrderId;
+        this.isOpenViewWO=true;
+        this.isSpinnerVisibleHistory = true;
+        setTimeout(() => {
+            this.isSpinnerVisibleHistory = false;
+        }, 1000);
+    }
+
+    closeViewModel(){
+        // $('#viewWorkOrder').modal("hide");
+        this.modalView.close();
+        this.isOpenViewWO=false;
     }
 
     dismissModel() {
@@ -3470,16 +3499,19 @@ createQuote() {
     onSelectCustomerContact(value) {
         this.workOrderGeneralInformation.customerPhoneNo = value.workPhone;
         this.myCustomerContact = value;
-    }
-
-    onClickQuoteTab() {
+    } 
+    onClickQuoteTab() { 
         this.isQuoteAction = true;
         this.hideWOHeader = true;
         const element = document.querySelector('mat-sidenav-content') || window;
         element.scrollTo(0, 0);
+
+        this.router.navigateByUrl(
+            `workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}&isView=true`
+        );
     }
 
-    enableBackToWO(event) {
+    enableBackToWO(event) { 
         this.hideWOHeader = false;
         this.gridActiveTab = 'workFlow';
         this.gridTabChange('materialList');
@@ -4071,7 +4103,7 @@ createQuote() {
     //     this.refreshGrid.emit(true)
     // }
 
-    refreshMpnList(){ 
+    refreshMpnList(data){ 
         // this.workOrderId = this.acRouter.snapshot.params['id'];
         this.recCustomerId=0;
         this.triggerWorkOrderData();

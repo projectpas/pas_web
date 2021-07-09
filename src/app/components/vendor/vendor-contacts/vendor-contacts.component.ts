@@ -757,6 +757,8 @@ export class VendorContactsComponent implements OnInit {
         this.islastNameAlreadyExists = false;
         this.ismiddleNameAlreadyExists = false;
         this.isEditContactInfo = false;
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     patternMobilevalidationWithSpl(event: any) {

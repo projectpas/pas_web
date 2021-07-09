@@ -368,37 +368,33 @@ export class AssetAttributeTypeComponent implements OnInit {
         return this.allmgmtData.filter(c => c.parentId == parentid);
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     getAllPercentage() {
-        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
-            //////console.log('res: '+res);
+        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue', this.currentUserMasterCompanyId).subscribe(res => {
             this.percentageList = res;
         });
-        //////console.log('percentge list : ', this.percentageList);
     }
 
     getAllFrequency() {
-        this.commonservice.smartDropDownList('[AssetDepreciationFrequency]', 'AssetDepreciationFrequencyId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('[AssetDepreciationFrequency]', 'AssetDepreciationFrequencyId', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
             this.depreciationFreq = res;
             this.loadSelectedNames();
         })
     }
 
     getAllConventionTypes() {
-        this.commonservice.smartDropDownList('[ConventionType]', 'ConventionTypeId', 'Name').subscribe(res => {
+        this.commonservice.smartDropDownList('[ConventionType]', 'ConventionTypeId', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
             this.conventionTypeList = res;
-            ////console.log('conventionTypeList', this.conventionTypeList);
             this.loadSelectedNames();
         });
-        //console.log('itemList',this.itemList);
     }
 
     filterPercentage(event) {
-        ////console.log(parseInt(event.query));
         this.filteredPercentageList = this.percentageList;
-
         this.filteredPercentageList = [...this.percentageList.filter(x => {
-            ////console.log(x);
-
             return x.percentValue.includes(parseInt(event.query))
         })]
     }

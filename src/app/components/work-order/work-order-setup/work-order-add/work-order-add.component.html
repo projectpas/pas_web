@@ -398,7 +398,7 @@
                     <div *ngIf="!isSubWorkOrder">
                         <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                                <table class="table table-bordered lastcol-fix mpn-list-table header-table-width"
+                                <table class="table table-bordered mpn-list-table header-table-width"
                                     id="mpn-list-table">
                                     <thead>
                                         <tr>
@@ -1645,7 +1645,7 @@
 
             </p>
         <strong>
-            Do you want to create Receceiving Customer?
+            Do you want to create Work Order?
         </strong>
     </div>
     <div class="modal-footer">
@@ -1742,6 +1742,20 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                            <div class="loading">
+                                <div class="lds-roller">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col">
                             <div class="">
                                 <div class="col" style="padding:3px 0 0;">
@@ -1827,12 +1841,12 @@
                                         <th>WO Date</th>
                                         <th>Stage</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="table-actions-column">Action</th>
                                     </tr>
                                 </thead>
-                                <tr *ngFor="let wosummpn of woSummaryMPNData;">
+                                <tr *ngFor="let wosummpn of woSummaryCustData;">
                                     <td >
-                                        {{wosummpn.partNumber}}
+                                        {{wosummpn.customerName}}
                                     </td>
                                     <td >
                                         {{wosummpn.workScope}}
@@ -1855,6 +1869,26 @@
                                     <td >
                                         {{wosummpn.tatdays}}
                                     </td>
+                                    <td >
+                                        {{wosummpn.workOrderNum}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.openDate | date: 'MM/dd/yyyy h:mm a '}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.stage}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.workOrderStatus}}
+                                    </td>
+                                    <td >
+                                        <span>
+                                            <a class="btn nobg btn-view-cstm" (click)="view(viewWorkOrder,wosummpn)" matTooltip="View WO"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                    </td>
                                 </tr>
                             </table>
                             </div>
@@ -1864,3 +1898,36 @@
                         <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
                     </div>
                 </ng-template>
+                 <ng-template #viewWorkOrder let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
+                            <div class="modal-header">
+                                <button type="button" class="close" 
+                                    (click)="closeViewModel(); workOrderId = 0;">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">Work Order View</h4>
+                            </div>
+                
+                            <div class="card-body" *ngIf="isOpenViewWO">
+                                <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                                    <div class="loading">
+                                        <div class="lds-roller">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <app-work-view-component [workOrderId]="workOrderId"></app-work-view-component>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" 
+                                    (click)="closeViewModel();">
+                                    Close
+                                </button>
+                            </div>
+</ng-template>

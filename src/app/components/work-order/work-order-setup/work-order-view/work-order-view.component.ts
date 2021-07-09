@@ -182,13 +182,6 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         })
     }
 
-    // getAllCreditTerms(): void {
-    //     this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.creditTerms = res;
-    //     })
-    // }
-
-
     getJobTitles() {
         this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
@@ -197,21 +190,6 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
     employeesOriginalData: any = [];
-
-
-    // async getAllTecStations() {
-    //     await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.techStationList = res.map(x => {
-    //             return {
-    //                 ...x,
-    //                 techStationId: x.value,
-    //                 name: x.label
-    //             }
-    //         });
-    //     })
-    // }
-
-
 
     getAllWorkOrderStages(): void {
         this.workOrderService.getWorkOrderStageAndStatus(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -244,7 +222,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 
 
     getConditionsList() {
-        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description', this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.conditionList = res;
 
             const conditionId = res.find(x => x.label.includes('As Removed'));

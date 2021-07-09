@@ -129,7 +129,6 @@ export class SalesQuoteViewComponent implements OnInit {
     forkJoin(
       this.customerService.getContacts(this.salesQuoteView.salesOrderQuote.customerId),
       this.commonservice.getManagementStructureNameandCodes(this.managementStructureId),
-      //this.commonservice.smartDropDownList("[Percent]", "PercentId", "PercentValue"),
       this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
       this.salesQuoteService.getSOQMarginSummary(this.salesQuoteView.salesOrderQuote.salesOrderQuoteId)).subscribe(result => {
         this.isSpinnerVisible = false;

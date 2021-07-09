@@ -62,7 +62,6 @@ export class CustomerWarningsComponent implements OnInit {
 
 	getTypesOfWarnings() {
 		this.isSpinnerVisible = true;
-		//this.commonService.smartDropDownList('CustomerWarningType','CustomerWarningTypeId', 'Name').subscribe(data => {
 		this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, '', 0).subscribe(data => {
 			this.types = data;
 			if (!this.editMode) {

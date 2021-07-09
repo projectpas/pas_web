@@ -160,13 +160,13 @@ export class StockAdjustmentComponent implements OnInit {
 	}
 
 	loadSiteData() {
-		this.commonService.smartDropDownList('Site', 'SiteId', 'Name','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('Site', 'SiteId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allSites = res;
         })
 	}
 
 	getItemTypes() {
-		this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.itemTypesList = res;
         })
 	}
@@ -224,7 +224,7 @@ this.currentItem=currentItem;
 	}
  
 	getCurrencyData() {
-		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code','','', 0,this.authService.currentUser.masterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(response => {
 			this.allCurrencyInfo = response;
 		});
 	}
@@ -234,13 +234,13 @@ this.currentItem=currentItem;
 	}
 
 	getAdjReasonData() {
-		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(response => {
 			this.allAdjReasonInfo = response;
 		});
 	}	
 
 	getStocklineAdjustmentDataType() {
-		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description','','', 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.stocklineAdjustmentData = res.map(x => {
 				return {
 					adjustmentDataTypeId: x.value,
@@ -626,7 +626,7 @@ this.currentItem=currentItem;
 		this.allShelfs = [];
 		this.allBins = [];
 		if(this.sourceStockLineSetup.siteId != 0) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', this.sourceStockLineSetup.siteId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', this.sourceStockLineSetup.siteId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
@@ -664,7 +664,7 @@ this.currentItem=currentItem;
 		this.allShelfs = [];
 		this.allBins = [];
 		if(this.sourceStockLineSetup.warehouseId != 0) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', this.sourceStockLineSetup.warehouseId, 0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', this.sourceStockLineSetup.warehouseId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
@@ -698,7 +698,7 @@ this.currentItem=currentItem;
 
 		this.allBins = [];
 		if(this.sourceStockLineSetup.locationId != 0) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', this.sourceStockLineSetup.locationId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name',this.authService.currentUser.masterCompanyId, 'LocationId', this.sourceStockLineSetup.locationId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
@@ -716,7 +716,7 @@ this.currentItem=currentItem;
 		}
 		item.binId = 0;
 		if(this.sourceStockLineSetup.shelfId != 0) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', this.sourceStockLineSetup.shelfId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', this.sourceStockLineSetup.shelfId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}
@@ -800,7 +800,7 @@ this.currentItem=currentItem;
 		});
 		
 		if(siteId != 0) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
@@ -823,7 +823,7 @@ this.currentItem=currentItem;
 		});
 
 		if(warehouseId != 0) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
@@ -845,7 +845,7 @@ this.currentItem=currentItem;
 		});
 		
 		if(locationId != 0) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name' ,this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
@@ -866,7 +866,7 @@ this.currentItem=currentItem;
 		});
 
 		if(shelfId != 0) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId,  0,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}

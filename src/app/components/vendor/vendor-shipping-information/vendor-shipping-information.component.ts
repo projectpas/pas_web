@@ -396,7 +396,6 @@ export class VendorShippingInformationComponent {
     }
    
     getshipvialistList(){
-        //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
           this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
               this.shipViaDropdownList = res.map(x => {
                   return {
@@ -585,6 +584,8 @@ export class VendorShippingInformationComponent {
         this.sourceVendor = {};
         this.isEditShippingInfo = false;
         this.isSiteNameAlreadyExists = false;
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     openEdit(row) {
