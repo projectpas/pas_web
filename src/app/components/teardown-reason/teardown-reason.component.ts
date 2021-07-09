@@ -100,7 +100,7 @@ export class TeardownReasonComponent implements OnInit {
         this.modal.close();
     }
     async getTearDowntypes() {
-        await this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name').subscribe(res => {
+        await this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
           console.log("tearodown types list",res);
         //   this.teadownTypesList=res;
             this.teadownTypesList = res.map(x => {

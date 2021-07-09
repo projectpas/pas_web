@@ -115,7 +115,7 @@ export class ExchangeSalesOrderListComponent implements OnInit {
   }
 
   getStatusList() {
-    forkJoin(this.commonservice.smartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name"),
+    forkJoin(this.commonservice.smartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name",this.authService.currentUser.masterCompanyId),
       //this.salesService.getAllSalesOrderSettings()
       ).subscribe(res => {
         this.statusList = res[0];

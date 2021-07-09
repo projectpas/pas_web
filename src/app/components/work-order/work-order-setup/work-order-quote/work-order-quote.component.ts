@@ -424,6 +424,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     constructor(private router: ActivatedRoute, private arouter: Router,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     
     ngOnInit() {
+
         this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
         this.woqsettingModel.IsApprovalRule = false;
@@ -468,6 +469,17 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
            
         }
+        this.router.queryParams.subscribe((params: Params) => {
+         
+            console.log('App params', params);
+    
+            if(params['isview']){
+                this.isView=true;
+                
+            console.log('id', params.isView);
+            }
+          }); 
+      
     }
     get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
@@ -861,6 +873,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             .subscribe(
                 res => {
                     this.isSpinnerVisible = false;
+                    this.isDetailedViewQuote=true;
                     this.quotationHeader = res;
                     this.quoteCreated=true;
                     this.quoteForm.quoteNumber = res['quoteNumber'];
@@ -2219,13 +2232,10 @@ const data={...newdata};
     getMarkup(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
-            // this.setEditArray.push(this.currentAsset.tangibleClassId ? this.currentAsset.tangibleClassId : 0);
-
         } else {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) { 
                 this.markupList = res;
@@ -2632,7 +2642,7 @@ const data={...newdata};
     }
     
     getCustomerWarningsList(): void {
-        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
+        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create WO Quote for MPN') {
                     this.createQuoteListID = element.value;
@@ -3334,20 +3344,10 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
 
     getAllEmailType() {
         this.setEditArray = [];
-        const strText = '';
-     
-            this.setEditArray.push(0);
-
+        const strText = '';     
+        this.setEditArray.push(0);
         this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
-           
-
-
-        // this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name')
-        // .subscribe((res: any[])=>{
-
-
                 this.emailTypes = res;
-
                 this.emailTypes.forEach(
                     (x)=>{
                         if(x.label == 'Manual'){

@@ -398,7 +398,7 @@
                     <div *ngIf="!isSubWorkOrder">
                         <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                                <table class="table table-bordered lastcol-fix mpn-list-table header-table-width"
+                                <table class="table table-bordered mpn-list-table header-table-width"
                                     id="mpn-list-table">
                                     <thead>
                                         <tr>
@@ -1645,7 +1645,7 @@
 
             </p>
         <strong>
-            Do you want to create Receceiving Customer?
+            Do you want to create Work Order?
         </strong>
     </div>
     <div class="modal-footer">
@@ -1827,12 +1827,12 @@
                                         <th>WO Date</th>
                                         <th>Stage</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="table-actions-column">Action</th>
                                     </tr>
                                 </thead>
-                                <tr *ngFor="let wosummpn of woSummaryMPNData;">
+                                <tr *ngFor="let wosummpn of woSummaryCustData;">
                                     <td >
-                                        {{wosummpn.partNumber}}
+                                        {{wosummpn.customerName}}
                                     </td>
                                     <td >
                                         {{wosummpn.workScope}}
@@ -1855,6 +1855,26 @@
                                     <td >
                                         {{wosummpn.tatdays}}
                                     </td>
+                                    <td >
+                                        {{wosummpn.workOrderNum}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.openDate | date: 'MM/dd/yyyy h:mm a '}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.stage}}
+                                    </td>
+                                    <td >
+                                        {{wosummpn.workOrderStatus}}
+                                    </td>
+                                    <td >
+                                        <span data-toggle="modal" data-target="#viewWorkOrder">
+                                            <a class="btn nobg btn-view-cstm" (click)="view(wosummpn)" matTooltip="View WO"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                    </td>
                                 </tr>
                             </table>
                             </div>
@@ -1864,3 +1884,28 @@
                         <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
                     </div>
                 </ng-template>
+
+                <div id="viewWorkOrder" class="modal fade" role="dialog" style="z-index: 10000;" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog modal-xlg">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" 
+                                    (click)="closeViewModel(); workOrderId = 0;">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">Work Order View</h4>
+                            </div>
+                
+                            <div class="card-body" *ngIf="workOrderId">
+                                <app-work-view-component [workOrderId]="workOrderId"></app-work-view-component>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" 
+                                    (click)="closeViewModel(); workOrderId = 0;">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>

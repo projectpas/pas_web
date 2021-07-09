@@ -19,6 +19,7 @@ import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { RepairOrderService } from '../../../../services/repair-order.service';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
+import { AuthService } from "../../../../services/auth.service";
 
 @Component({
     selector: 'app-view-ro',
@@ -92,6 +93,7 @@ export class ViewRoComponent {
         private _actRoute: ActivatedRoute,
         private commonService: CommonService,
         private repairOrderService: RepairOrderService,
+        private authService: AuthService
     ) {
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
@@ -304,7 +306,7 @@ export class ViewRoComponent {
 
     private getStatus() {
         this.roStatus = [];
-        this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description').subscribe(response => {
+        this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description',this.authService.currentUser.masterCompanyId).subscribe(response => {
             this.roStatus = response;
             this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         });

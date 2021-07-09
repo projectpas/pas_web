@@ -1324,6 +1324,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.editSiteName = '';
 		this.isSiteNameAlreadyExists = false;
 		this.isEditPaymentInfo = false;
+		this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
 	}
 
 	getPageCount(totalNoofRecords, pageSize) {

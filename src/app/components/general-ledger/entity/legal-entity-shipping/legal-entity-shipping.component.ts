@@ -475,11 +475,13 @@ export class EntityShippingComponent implements OnInit {
     }
   }
 
-  addDomesticShipping() {
-    this.editisPrimary = false;
-    this.isEditDomestic = false;
-    this.domesticShippingInfo = new legalEntityShippingModel();
-  }
+    addDomesticShipping() {
+        this.editisPrimary = false;
+        this.isEditDomestic = false;
+        this.domesticShippingInfo = new legalEntityShippingModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
+    }
 
   addInternationalShipping() {
     this.editisPrimary2 = false;
@@ -1418,53 +1420,30 @@ export class EntityShippingComponent implements OnInit {
     this.CountryData(value);
   }
 
-  CountryData(value) {
-    if (this.isViewMode == false) {
-      this.setEditArray = [];
-      if (this.isEditDomestic == true) {
-        this.setEditArray.push(
-          this.domesticShippingInfo.countryId
-            ? this.domesticShippingInfo.countryId
-            : 0
-        );
-      } else if (this.isEditInternational == true) {
-        this.setEditArray.push(
-          this.internationalShippingInfo.shipToCountryId
-            ? this.internationalShippingInfo.shipToCountryId
-            : 0
-        );
-      } else {
-        this.setEditArray.push(0);
-      }
-      const strText = value ? value : "";
-      //this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
-      this.commonService
-        .autoSuggestionSmartDropDownList(
-          "Countries",
-          "countries_id",
-          "nice_name",
-          strText,
-          true,
-          20,
-          this.setEditArray.join(),
-          this.currentUserMasterCompanyId
-        )
-        .subscribe(
-          (res) => {
-            this.countryListOriginal = res.map((x) => {
-              return {
-                ...x,
-                countryId: x.value,
-                nice_name: x.label,
-              };
+    CountryData(value) {
+        if (this.isViewMode == false) {
+            this.setEditArray = [];
+            if (this.isEditDomestic == true) {
+                this.setEditArray.push(this.domesticShippingInfo.countryId ? this.domesticShippingInfo.countryId : 0);
+            } else if (this.isEditInternational == true) {
+                this.setEditArray.push(this.internationalShippingInfo.shipToCountryId ? this.internationalShippingInfo.shipToCountryId : 0);
+            } else {
+                this.setEditArray.push(0);
+            }
+            const strText = value ? value : '';
+            this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                this.countryListOriginal = res.map(x => {
+                    return {
+                        ...x,
+                        countryId: x.value,
+                        nice_name: x.label
+                    }
+                });;
+            }, err => {
+                this.isSpinnerVisible = false;
             });
-          },
-          (err) => {
-            this.isSpinnerVisible = false;
-          }
-        );
+        }
     }
-  }
 
   //Domestic shipping
 

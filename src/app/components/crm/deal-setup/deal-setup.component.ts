@@ -266,7 +266,7 @@ export class DealSetupComponent implements OnInit {
         })
 	}
 	loadcustomerData() {
-		this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(response => {
+		this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allCustomers = response;
 		});
 	}

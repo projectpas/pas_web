@@ -29,6 +29,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     @Input() isModal = false;
     userId: string;
     token: string;
+    companyId: string;
 
     constructor(
         private alertService: AlertService,
@@ -103,7 +104,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         var data = {
             password: this.resetPasswordForm.value.password,
             userId: this.userId,
-            code: this.token
+            code: this.token,
+            masterCompanyId: this.companyId
         }
 
         this.alertService.startLoadingMessage();

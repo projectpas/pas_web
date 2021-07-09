@@ -1453,7 +1453,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	loadApprovalProcessStatus() {
-		this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name').subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
 			if (response) {
 				response.forEach(x => {
 					if (x.label.toUpperCase() == "APPROVED") {
@@ -2344,7 +2344,7 @@ export class RoSetupComponent implements OnInit {
 	getApproversListById(roId) {
 		this.isSpinnerVisible = true;
 		if (this.roApprovaltaskId == 0) {
-			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => {
+			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
 				if (response) {
 					response.forEach(x => {
 						if (x.label.toUpperCase() == "RO APPROVAL") {
@@ -2574,7 +2574,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	getCountriesList() {
-		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name', this.currentUserMasterCompanyId).subscribe(res => {
 			this.allCountriesList = res;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -3438,7 +3438,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	loadROApproverStatus() {
-		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
 			this.roApproverStatusList = response;
 			this.roApproverStatusList = this.roApproverStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		}, err => {
@@ -4066,7 +4066,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	private loadPercentData() {
-		this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+		this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue', this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
 					percentId: x.value,

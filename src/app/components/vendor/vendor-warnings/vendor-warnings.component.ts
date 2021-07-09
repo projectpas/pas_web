@@ -138,9 +138,8 @@ export class VendorWarningsComponent implements OnInit {
         }
     }
 
-    async getTypesOfWarnings() {
-        // await	this.commonService.smartDropDownList('VendorWarningList','vendorWarningListId', 'Name').subscribe(data => {
-        this.commonService.autoSuggestionSmartDropDownList('VendorWarningList', 'vendorWarningListId', 'Name', '', true, 200, '', this.currentUserMasterCompanyId).subscribe(res => {
+    async getTypesOfWarnings(){
+        this.commonService.autoSuggestionSmartDropDownList('VendorWarningList', 'vendorWarningListId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
             this.types = res;
             this.allowAll(true)
             if (this.isView) {

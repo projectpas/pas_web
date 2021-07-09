@@ -264,8 +264,8 @@ export class EmployeeService {
         return this.employeeEndpoint.getUpdateEmployeePasswordEndpoint(password, employeeID, currentpassword);
     }
 
-    forgotPassword(user: any) {
-        return this.employeeEndpoint.forgotPasswordEndpoint<any>(user);
+    forgotPassword(email: any, masterCompanyId) {
+        return this.employeeEndpoint.forgotPasswordEndpoint<any>(email, masterCompanyId);
     }
 
     resetPassword(user: any) {

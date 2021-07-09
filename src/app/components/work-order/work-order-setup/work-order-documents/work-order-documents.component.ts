@@ -337,9 +337,13 @@ data.subWorkOrderId=this.subWorkOrderDetails.subWorkOrderId;
         this.modal.close();
     }
 
+    get currentUserMasterCompanyId(): number {
+      return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
      getAllDocumentTypeList() {
 
-        this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name').subscribe(res => {
+        this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name', this.currentUserMasterCompanyId).subscribe(res => {
             this.documentTypeList = res;
         })
     }

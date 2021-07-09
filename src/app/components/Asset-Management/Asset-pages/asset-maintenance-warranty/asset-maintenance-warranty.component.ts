@@ -10,6 +10,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 // declare var $ : any;
 declare var $ : any;
 import { MenuItem } from 'primeng/api';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-asset-maintenance-warranty',
     templateUrl: './asset-maintenance-warranty.component.html',
@@ -37,12 +38,40 @@ export class AssetMaintenanceWarrantyComponent implements OnInit {
     formData = new FormData()
     nextOrPreviousTab: any;
     /** asset-maintenance-warranty ctor */
+
+    isAssetView:boolean=true;
+    isView:boolean=true;
+    isAssetAdd:boolean=true;
+    isMaintenanceAdd:boolean=true;
+    isMaintenanceUpdate:boolean=true;
+    isNextVisible:Boolean=true;
+    isCapeNextVisible: Boolean=true;
+    isCalibrationNext: Boolean=true;
+    isMaintenancePrev: Boolean=true;
+    permissionAddCheck=[ModuleConstants.Asset_Create+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_Capes+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Add];
+
     constructor(private router: ActivatedRoute, public assetService: AssetService, private vendorService: VendorService, private route: Router,
         private authService: AuthService,
         private modalService: NgbModal, private alertService: AlertService, private glAccountService: GlAccountService, private commonservice: CommonService, ) {
         this.AssetId = this.router.snapshot.params['id'];
         this.activeIndex = 3;
+        this.isAssetAdd=this.authService.checkPermission(this.permissionAddCheck);
+        this.isAssetView=this.authService.checkPermission([ModuleConstants.Asset_List+'.'+PermissionConstants.View]);
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.View]);
+        this.isMaintenanceAdd=this.authService.checkPermission([ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Add]);
+        this.isMaintenanceUpdate=this.authService.checkPermission([ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab('Create Asset','Capes');
+        this.isMaintenancePrev=this.authService.ShowTab('Create Asset','Calibration');
     }
+    isShowTab(value){
+		var isShow=this.authService.ShowTab('Create Asset',value);
+		return isShow;
+	
+	}
     ngOnInit(): void {
         if( this.assetService.isEditMode == false){
 
