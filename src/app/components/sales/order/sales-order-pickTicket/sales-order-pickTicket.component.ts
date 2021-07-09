@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, EventEmitter } from "@angular/core";
+﻿import { Component, OnInit, Input, EventEmitter, ViewChild, ElementRef, HostListener } from "@angular/core";
 import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { NavigationExtras } from "@angular/router";
 import { SalesOrderService } from "../../../../services/salesorder.service";
@@ -6,66 +6,74 @@ import { SalesOrderPickTicketView } from "../../../../models/sales/SalesOrderPic
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
 import { environment } from "../../../../../environments/environment";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
-    selector: "app-sales-order-pickTicket",
-    templateUrl: "./sales-order-pickTicket.component.html",
-    styleUrls: ["./sales-order-pickTicket.component.scss"]
+  selector: "app-sales-order-pickTicket",
+  templateUrl: "./sales-order-pickTicket.component.html",
+  styleUrls: ["./sales-order-pickTicket.component.scss"]
 })
 export class SalesOrderpickTicketComponent implements OnInit {
-    @Input('modal-reference') modalReference: NgbModalRef;
-    @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
-    @Input() salesOrderoView: SalesOrderPickTicketView;
-    salesOrderCopyParameters: ISalesOrderCopyParameters;
-    salesOrder: any = [];
-    todayDate: Date = new Date();
-    parts: any = [];
-    management: any = {};
-    salesOrderpartConditionDescription: any;
-    salesOrderId: number;
-    salesOrderPartId: number;
-    soPickTicketId: number;
-    endPointURL: any;
-    constructor(private salesOrderService: SalesOrderService) {
-        this.salesOrderCopyParameters = new SalesOrderCopyParameters();
-    }
+  @Input('modal-reference') modalReference: NgbModalRef;
+  @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
+  @Input() salesOrderoView: SalesOrderPickTicketView;
+  salesOrderCopyParameters: ISalesOrderCopyParameters;
+  salesOrder: any = [];
+  todayDate: Date = new Date();
+  parts: any = [];
+  management: any = {};
+  salesOrderpartConditionDescription: any;
+  salesOrderId: number;
+  salesOrderPartId: number;
+  soPickTicketId: number;
+  endPointURL: any;
+  pdfPath: any;
 
-    ngOnInit() {
-        this.endPointURL = environment.baseUrl;
-        this.getSalesPickTicketView();
-    }
+  constructor(private salesOrderService: SalesOrderService, private sanitizer: DomSanitizer) {
+    this.salesOrderCopyParameters = new SalesOrderCopyParameters();
+  }
 
-    getSalesPickTicketView() {
-        this.salesOrderService.getPickTicketPrint(this.salesOrderId,this.salesOrderPartId,this.soPickTicketId).subscribe(res => {
-            this.salesOrderoView = res[0];
-            this.salesOrder = res[0].soPickTicketViewModel;
-            this.parts = res[0].soPickTicketPartViewModel;
-            this.management = res[0].managementStructureHeaderData;
-        })
-    }
+  ngOnInit() {
+    this.endPointURL = environment.baseUrl;
+    this.salesOrderService.getPickTicketPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId).subscribe(res => {
+      let pickTicketPDFUrl = res;
+      this.pdfPath = this.sanitizer.bypassSecurityTrustResourceUrl(pickTicketPDFUrl);
+    })
+    //this.pdfPath = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:5091/SalesOrder/Invoice/SO-001080_2021-07-06%2006-21-47.pdf');
+    //this.getSalesPickTicketView();
+  }
 
-    close() {
-        if (this.modalReference) {
-            this.modalReference.close();
-        }
-    }
+  getSalesPickTicketView() {
+    this.salesOrderService.getPickTicketPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId).subscribe(res => {
+      this.salesOrderoView = res[0];
+      this.salesOrder = res[0].soPickTicketViewModel;
+      this.parts = res[0].soPickTicketPartViewModel;
+      this.management = res[0].managementStructureHeaderData;
+    })
+  }
 
-    copy() {
-        let navigationExtras: NavigationExtras = {
-            queryParams: {
-                cp: this.salesOrderCopyParameters.copyParts,
-                cia: this.salesOrderCopyParameters.copyInternalApprovals
-            }
-        };
-        this.onConfirm.emit(navigationExtras);
+  close() {
+    if (this.modalReference) {
+      this.modalReference.close();
     }
+  }
 
-    print(): void {
-        let printContents, popupWin;
-        printContents = document.getElementById('soPickTicket').innerHTML;
-        popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-        popupWin.document.open();
-        popupWin.document.write(`
+  copy() {
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        cp: this.salesOrderCopyParameters.copyParts,
+        cia: this.salesOrderCopyParameters.copyInternalApprovals
+      }
+    };
+    this.onConfirm.emit(navigationExtras);
+  }
+
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('soPickTicket').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
           <html>
             <head>
                <title>Print tab</title>        
@@ -405,7 +413,7 @@ table, thead, th {
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
           </html>`
-        );
-        popupWin.document.close();
-    }
+    );
+    popupWin.document.close();
+  }
 }
