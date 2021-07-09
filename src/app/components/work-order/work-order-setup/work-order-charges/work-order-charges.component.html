@@ -235,7 +235,7 @@
               <div *ngIf="currentDeletedstatus == false">
               <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Remove"  matTooltipPosition="above"><i
                   class="fa fa-trash"></i></a> </span> 
                   <span *ngIf="!isQuote">
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
@@ -313,7 +313,7 @@
               <div *ngIf="currentDeletedstatus == false">
               <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Remove"  matTooltipPosition="above"><i
                   class="fa fa-trash"></i></a> </span> 
                   <span *ngIf="!isQuote">
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
@@ -435,7 +435,7 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+      <h4 class="modal-title">Are you sure want to Remove?</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
           <span aria-hidden="true">&times;</span>
       </button>

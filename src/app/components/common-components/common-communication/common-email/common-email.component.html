@@ -114,7 +114,7 @@
                                     class="fa fa-eye"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false && !isView" data-toggle="modal"
                             data-target="#deleteRowConfirmation"><a class="btn nobg btn-delete-cstm"
-                                (click)="showDeleteConfirmation(rowData)" matTooltip="Delete"
+                                (click)="showDeleteConfirmation(rowData)" matTooltip="Remove"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                         <!-- <button class="btn btn-danger nobg" > (click)="data.splice(i, 1)"
                                 <a href="#" data-toggle="modal" data-target="#viewEmail" (click)="emailView(rowData)">
@@ -274,7 +274,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
-                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                <h4 class="modal-title">Are you sure want to Download?</h4>
             </div>
             <div class="modal-body" *ngIf="targetData">
                 <strong>
@@ -416,7 +416,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+                <h4 class="modal-title">Are you sure want to Remove ?</h4>
                 <button type="button" class="close" aria-label="Close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>

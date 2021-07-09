@@ -931,7 +931,7 @@
                                      </td>
                                  <td >
                                      <span *ngIf="!isView" data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                     <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                     <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Remove" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                  </td>  
                              </tr>
                          </ng-container>
@@ -1899,7 +1899,7 @@
              <!-- Modal content-->
              <div class="modal-content">
                  <div class="modal-header">
-                     <h4 class="modal-title">Are You Sure Want to Delete the record?</h4>
+                     <h4 class="modal-title">Are you sure want to Remove the record?</h4>
                      <button type="button" class="close" aria-label="Close" data-dismiss="modal">
                          <span aria-hidden="true">&times;</span>
                      </button>

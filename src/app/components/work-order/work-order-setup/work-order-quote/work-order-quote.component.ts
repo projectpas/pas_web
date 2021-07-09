@@ -424,6 +424,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     constructor(private router: ActivatedRoute, private arouter: Router,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     
     ngOnInit() {
+
         this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
         this.woqsettingModel.IsApprovalRule = false;
@@ -468,6 +469,17 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
            
         }
+        this.router.queryParams.subscribe((params: Params) => {
+         
+            console.log('App params', params);
+    
+            if(params['isview']){
+                this.isView=true;
+                
+            console.log('id', params.isView);
+            }
+          }); 
+      
     }
     get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
@@ -861,6 +873,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             .subscribe(
                 res => {
                     this.isSpinnerVisible = false;
+                    this.isDetailedViewQuote=true;
                     this.quotationHeader = res;
                     this.quoteCreated=true;
                     this.quoteForm.quoteNumber = res['quoteNumber'];
