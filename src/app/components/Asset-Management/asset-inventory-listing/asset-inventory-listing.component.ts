@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-asset-inventory-listing',
     templateUrl: './asset-inventory-listing.component.html',
@@ -182,10 +183,20 @@ export class AssetInventoryListingComponent implements OnInit {
     maintanancemoduleName='AssetInventoryMaintenanceFile';
     warrantymoduleName='AssetInventoryWarrantyFile';
     intangiblemoduleName='AssetInventoryIntangibleFile';
+    public isActive: boolean = false;
+    public isActiveView: boolean = false;
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isView:boolean=true;
+    isDownload:boolean=true;
     constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,public assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
-        // this.assetService.isEditMode = false;
-        // this.assetService.listCollection = null;
-        // this.currentAsset.isTangible = 1;
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_Inventory_List+'.'+PermissionConstants.View]);
+        this.isActive=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Asset_Inventory_List+'.'+PermissionConstants.Download])
     }
 
     ngOnInit(): void {
