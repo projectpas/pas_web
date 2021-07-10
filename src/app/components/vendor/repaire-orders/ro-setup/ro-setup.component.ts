@@ -5470,7 +5470,9 @@ tfoot { display:table-footer-group }
 			 .label{
 			   font-weight:500;
 			 }
-			 
+			 .text-right{
+				 text-align:right !important;
+			 }
 			 .second-block-label {
 			   position: relative;
 			   min-height: 1px;
