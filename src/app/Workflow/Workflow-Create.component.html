@@ -511,11 +511,11 @@
                 <div class="pull-right"> 
                     <div class="form-row pull-right" *ngIf="!isWorkOrder">
                         <div class="form-group col-md-4 m-t-15">
-                            <button class="btn btn-primary" *ngIf="!UpdateMode"
+                            <button class="btn btn-primary" *ngIf="!UpdateMode && this.isAdd"
                                 (click)="addWorkFlow(true)"
                                 [disabled]=" !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
                                 !sourceWorkFlow.part || !sourceWorkFlow.workScopeId">Save</button>
-                            <button class="btn btn-primary" *ngIf="UpdateMode"
+                            <button class="btn btn-primary" *ngIf="UpdateMode && this.isEditSEc"
                                 [disabled]="disableUpdateButton || !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
                                 !sourceWorkFlow.part || !sourceWorkFlow.workScopeId"
                                 (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
