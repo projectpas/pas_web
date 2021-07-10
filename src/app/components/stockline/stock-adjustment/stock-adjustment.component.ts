@@ -173,7 +173,7 @@ export class StockAdjustmentComponent implements OnInit {
 	onAddStockMemo(currentItem){
 this.currentItem=currentItem;
 		// this.stockMemoInfo=this.stocklineAdjustmentData.item.adjustmentMemo;
-		
+		this.stockMemoInfo='';
 	}
 	onSaveStockMemo(){
 	
