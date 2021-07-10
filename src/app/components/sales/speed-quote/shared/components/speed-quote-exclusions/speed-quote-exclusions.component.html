@@ -21,6 +21,7 @@
           <th>PN<span class="clr-red">*</span></th>
           <th>PN Description</th>
           <th style="width:85px">Item Type</th>
+          <th class="text-center">Cond<span class="clr-red">*</span></th>
           <th class="text-center">Qty<span class="clr-red">*</span></th>
           <th style="width:100px" class="text-center">Unit Price</th>
           <th style="width:100px" class="text-center">Est Price</th>
@@ -46,12 +47,21 @@
                 (completeMethod)="filterpartItems($event,partList.pn)" [size]="32" [minLength]="1" [dropdown]="true"
                 class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
                 (onSelect)="onPartSelect($event,row_index)" [forceSelection]="true" title="PN" required
-                name="pn_{{row_index}}">
+                name="pn_{{row_index}}" [disabled]="partList['isEditPart'] == true">
               </p-autoComplete>
               <!-- class="wf-header-select" -->
             </td>
             <td class="parts-des-td" style="width:230px;">{{partList.exPartDescription}}</td>
             <td class="parts-des-td" style="width:80px;">{{partList.exStockType}}</td>
+            <td style="width:50px;">
+              <p-dropdown class="p-dropdown-100px"
+                       [options]="conditionList" filter="true"
+                        [(ngModel)]="partList.conditionId" 
+                        name="condition{{row_index}}" [resetFilterOnHide]="true" 
+                        placeholder="-- Select --" [showClear]="true" 
+                        appendTo="body" (onChange)="onConditionChange(partList,row_index)"
+                        [disabled]="partList['isEditPart'] == true" required></p-dropdown>
+            </td>
             <td style="width:50px;">
               <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15"
                 (keyup)="calculateExtendedCost(partList)" [(ngModel)]="partList.exQuantity"

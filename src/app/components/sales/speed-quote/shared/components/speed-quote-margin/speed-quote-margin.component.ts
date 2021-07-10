@@ -4,8 +4,7 @@ import { CommonService } from '../../../../../../services/common.service';
 import { ItemMasterSearchQuery } from "../../../models/item-master-search-query";
 import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 import { SpeedQuoteService } from "../../../../../../services/speedquote.service";
-import { AuthService } from "../../../../../../services/auth.service";
-
+import { AuthService } from '../../../../../../services/auth.service';
 @Component({
   selector: 'app-speed-quote-margin',
   templateUrl: './speed-quote-margin.component.html',
@@ -24,9 +23,15 @@ export class SpeedQuoteMarginComponent implements OnInit {
   invalidQuantityenteredForQuantityFromThis: boolean = false;
   prevQntity = 0;
   partData:any[];
-  constructor(private commonservice: CommonService,private speedQuoteService: SpeedQuoteService,private authService: AuthService) {
-    
+  constructor(private commonservice: CommonService,private speedQuoteService: SpeedQuoteService,
+    private authService: AuthService) {
    }
+
+   get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : null;
+  }
 
   ngOnInit() {
     this.prevQntity = this.part.quantityFromThis;
@@ -35,8 +40,8 @@ export class SpeedQuoteMarginComponent implements OnInit {
     console.log("psrt",this.part);
 
     
-
-    this.speedQuoteService.getItemMasterDataConditionWise(this.part.partId).subscribe(
+    //get bench check, ovarhul and repai condition data.....
+    this.speedQuoteService.getItemMasterDataConditionWise(this.part.partId,this.currentUserMasterCompanyId).subscribe(
       results => {
         console.log("results",results);
         this.partData =  results;
@@ -55,7 +60,7 @@ export class SpeedQuoteMarginComponent implements OnInit {
   }
 
   getPercents() {
-    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue',this.authService.currentUser.masterCompanyId).subscribe(res => {
+    this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue',this.currentUserMasterCompanyId).subscribe(res => {
       this.percentage = res;
     })
   }

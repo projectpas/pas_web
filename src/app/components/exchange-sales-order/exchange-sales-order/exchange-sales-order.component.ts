@@ -68,7 +68,7 @@ export class ExchangeSalesOrderComponent implements OnInit {
     this.query = new CustomerSearchQuery();
     this.breadcrumbs = [
       { label: 'Exchange Sales Order' },
-      { label: 'Exchange Create Sales Order' },
+      { label: 'Create Exchange Sales Order' },
     ];
   }
   get currentUserMasterCompanyId(): number {
