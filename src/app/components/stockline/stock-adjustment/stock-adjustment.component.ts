@@ -298,9 +298,6 @@ export class StockAdjustmentComponent implements OnInit {
 					this.sourceStockLineSetup.quantityOnHand = this.sourceStockLineSetup.quantityOnHand ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.quantityOnHand, 0) : '0';
 				}
 				if(x.adjustmentDataTypeId == 11) {
-					// x.beforeValue = this.sourceStockLineSetup.coreUnitCost ? this.sourceStockLineSetup.coreUnitCost : 0;
-					// this.sourceStockLineSetup.coreUnitCost = this.sourceStockLineSetup.coreUnitCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.coreUnitCost, 2) : '0.00';
-
 					x.beforeValue = this.sourceStockLineSetup.unitCost ? this.sourceStockLineSetup.unitCost : 0;
 					this.sourceStockLineSetup.unitCost = this.sourceStockLineSetup.unitCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.unitCost, 2) : '0.00';
 				}
