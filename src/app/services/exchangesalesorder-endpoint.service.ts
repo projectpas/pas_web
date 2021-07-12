@@ -14,14 +14,17 @@ import { ISalesOrderCustomerApproval } from "../components/sales/order/models/is
 import { ISOFreight } from "../models/sales/ISOFreight";
 import { ISalesOrderCharge } from "../models/sales/ISalesOrderCharge";
 import { MarginSummary } from "../models/sales/MarginSummaryForSalesorder";
-import { SalesOrderBillingAndInvoicing } from "../models/sales/salesOrderBillingAndInvoicing";
-import { SalesOrderShipping } from "../models/sales/salesOrderShipping";
+//import { SalesOrderBillingAndInvoicing } from "../models/sales/salesOrderBillingAndInvoicing";
+//import { SalesOrderShipping } from "../models/sales/salesOrderShipping";
 //import { SOPickTicket } from "../models/sales/SOPickTicket";
 import { environment } from "../../environments/environment";
 import { IExchangeSalesSearchParameters } from "../models/exchange/IExchangeSalesSearchParameters";
 import { IExchangeSalesOrderListView } from "../models/exchange/IExchangeSalesOrderListView";
 import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
 import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrderShipping";
+import { IExchangeSalesOrderFreight } from '../models/exchange/IExchangeSalesOrderFreight';
+import { IExchangeSalesOrderCharge } from '../models/exchange/IExchangeSalesOrderCharge';
+import { ExchangeSalesOrderBillingAndInvoicing } from "../models/exchange/exchangeSalesOrderBillingAndInvoicing";
 @Injectable()
 export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getNewSalesOrderInstanceUrl: string = environment.baseUrl + "/api/exchangesalesorder/new";
@@ -50,6 +53,22 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getPackagingSlipForPrint: string = environment.baseUrl + "/api/exchangesalesorder/printPackagingSlip";
     private readonly getMultiPackagingSlipForPrint: string = environment.baseUrl + "/api/exchangesalesorder/printMultiplePackagingSlip";
     private readonly getMultiShipingLabelForPrint: string = environment.baseUrl + "/api/exchangesalesorder/getMultiShipingLabelForPrint";
+    private readonly _geExchangeQuoteFreights: string = environment.baseUrl + "/api/exchangesalesorder/exchangesalesorderfreightlist";
+    private readonly exchangeQuoteFreightsSave: string = environment.baseUrl + "/api/exchangesalesorder/createexchangesalesorderfreight";
+    private readonly _getExchangeQuoteCharges: string = environment.baseUrl + "/api/exchangesalesorder/getexchangesalesorderchargeslist";
+    private readonly _deleteExchangeQuoteCharge: string = environment.baseUrl + "/api/exchangesalesorder/deleteexchangesalesordercharge";
+    private readonly _deleteExchangeQuoteFrignt: string = environment.baseUrl + "/api/exchangesalesorder/deleteexchangesalesorderfreight";
+    private readonly getFreightAudihistory: string = environment.baseUrl + '/api/exchangesalesorder/quote-freight-history';
+    private readonly getChargesAudihistory: string = environment.baseUrl + '/api/exchangesalesorder/quote-charges-history';
+    private readonly exchangeQuoteChargesSave: string = environment.baseUrl + "/api/exchangesalesorder/createexchangesalesordercharges";
+    private readonly getBillingInvoiceListUrl: string = environment.baseUrl + "/api/exchangesalesorder/exchangeSalesorderBillingInvoicelist";
+    private readonly salesorderBillingByShipping: string = environment.baseUrl + "/api/exchangesalesorder/billinginvoicingdetailsbyshippingId";
+    private readonly salesorderBillingSave: string = environment.baseUrl + "/api/exchangesalesorder/createbillinginvoicing";
+    private readonly GetSalesOrderBillingInvoicingByIdURL: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderBillingInvoicingById";
+    private readonly updateSalesOrderBillingInvoicingURL: string = environment.baseUrl + "/api/exchangesalesorder/updateExchangeSalesOrderBillingInvoicing";
+    private readonly getSalesOrderBillingInvoicingDataURL: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderBillingInvoicingData";
+    private readonly _getChargesById: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderChargesBySOId";
+    private readonly _getFreightsById: string = environment.baseUrl + "/api/exchangesalesorder/getExchangeSalesOrderFreightsBySOId";
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -273,6 +292,134 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
         .post<any>(URL, JSON.stringify(multiShippingLabel), this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getMultiShippingLabelPrint(multiShippingLabel));
+        });
+    }
+    getExchangeSalesOrderFreights(id, isDeleted) {
+      return this.http.get<any>(`${this._geExchangeQuoteFreights}?ExchangeSalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderFreights(id, isDeleted));
+        });
+    }
+    createFreight(sexchangeQuoteFreights: IExchangeSalesOrderFreight[]): Observable<any> {
+      return this.http
+        .post(
+          this.exchangeQuoteFreightsSave,
+          JSON.stringify(sexchangeQuoteFreights),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createFreight(sexchangeQuoteFreights));
+        });
+    }
+    getExchangeSalesOrderCharges(id, isDeleted) {
+      return this.http.get<any>(`${this._getExchangeQuoteCharges}?ExchangeSalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderCharges(id, isDeleted));
+        });
+    }
+    createExchangeSalesOrderCharge(exchangeQuoteCharges: IExchangeSalesOrderCharge[]): Observable<any> {
+      return this.http
+        .post(
+          this.exchangeQuoteChargesSave,
+          JSON.stringify(exchangeQuoteCharges),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createExchangeSalesOrderCharge(exchangeQuoteCharges));
+        });
+    }
+
+    deleteexchangeSalesOrderChargesList(chargeId, userName): Observable<boolean> {
+      let endpointUrl = `${this._deleteExchangeQuoteCharge}/${chargeId}?updatedBy=${userName}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.deleteexchangeSalesOrderChargesList(chargeId, userName));
+        });
+    }
+
+    deleteexchangeSalesOrderFreightList(frieghtId, userName): Observable<boolean> {
+      let endpointUrl = `${this._deleteExchangeQuoteFrignt}/${frieghtId}?updatedBy=${userName}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.deleteexchangeSalesOrderFreightList(frieghtId, userName));
+        });
+    }
+
+    getExchangeSalesOrderFreightsHistory(id) {
+      return this.http.get<any>(`${this.getFreightAudihistory}/?ExchangeSalesOrderFreightId=${id}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderFreightsHistory(id));
+        });
+    }
+    getExchangeSalesOrderChargesHistory(id) {
+      return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderChargesHistory(id));
+        });
+    }
+    getBillingInvoiceList(exchangeSalesOrderId: number): Observable<any> {
+      const URL = `${this.getBillingInvoiceListUrl}/${exchangeSalesOrderId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getBillingInvoiceList(exchangeSalesOrderId));
+        });
+    }
+    getExchangeSalesOrderBillingByShipping(exchangeSalesOrderId: number, partId, exchangeSalesOrderShippingId: number): Observable<ExchangeSalesOrderBillingAndInvoicing> {
+      const URL = `${this.salesorderBillingByShipping}?exchangeSalesOrderId=${exchangeSalesOrderId}&exchangeSalesOrderPartId=${partId}&exchangeSalesOrderShippingId=${exchangeSalesOrderShippingId}`;
+      return this.http
+        .get<ExchangeSalesOrderBillingAndInvoicing>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderBillingByShipping(exchangeSalesOrderId, partId, exchangeSalesOrderShippingId));
+        });
+    }
+    createBilling(billingAndInvoicing: ExchangeSalesOrderBillingAndInvoicing) {
+      return this.http
+        .post(this.salesorderBillingSave, JSON.stringify(billingAndInvoicing), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createBilling(billingAndInvoicing));
+        });
+    }
+    GetExchangeSalesOrderBillingInvoicingById(sobillingInvoicingId: number): Observable<any> {
+      const URL = `${this.GetSalesOrderBillingInvoicingByIdURL}/${sobillingInvoicingId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.GetExchangeSalesOrderBillingInvoicingById(sobillingInvoicingId));
+        });
+    }
+    updateExchangeSalesOrderBillingInvoicing(sobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+      let url: string = `${this.updateSalesOrderBillingInvoicingURL}/${sobillingInvoicingId}`;
+      return this.http
+        .put(url, JSON.stringify(billingInvoicing), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.updateExchangeSalesOrderBillingInvoicing(sobillingInvoicingId, billingInvoicing));
+        });
+    }
+    getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId: number): Observable<any> {
+      const URL = `${this.getSalesOrderBillingInvoicingDataURL}/${sobillingInvoicingId}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId));
+        });
+    }
+    getExchangeSalesOrderChargesById(id, isDeleted) {
+      const URL = `${this._getChargesById}?ExchangeSalesOrderId=${id}&isDeleted=${isDeleted}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderChargesById(id, isDeleted));
+        });
+    }
+    getExchangeSalesOrderFreightsById(id, isDeleted) {
+      const URL = `${this._getFreightsById}?ExchangeSalesOrderId=${id}&isDeleted=${isDeleted}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderFreightsById(id, isDeleted));
         });
     }
 }

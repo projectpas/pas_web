@@ -4,20 +4,20 @@ import { AlertService, MessageSeverity } from '../../../../../services/alert.ser
 import { AuthService } from '../../../../../services/auth.service';
 import { CommonService } from '../../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition, formatStringToNumber } from '../../../../../generic/autocomplete';
-import { ExchangequoteService } from "../../../../../services/exchangequote.service";
-import { ExchangeQuoteCharge } from '../../../../../models/exchange/ExchangeQuoteCharge';
+import { ExchangeSalesOrderService } from "../../../../../services/exchangesalesorder.service";
+import { ExchangeSalesOrderCharge } from '../../../../../models/exchange/ExchangeSalesOrderCharge';
 import { ActionService } from '../../../../../Workflow/ActionService';
 import { VendorService } from '../../../../../services/vendor.service';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from "@angular/forms";
 @Component({
-  selector: 'app-exchange-quote-charges',
-  templateUrl: './exchange-quote-charges.component.html',
-  styleUrls: ['./exchange-quote-charges.component.scss'],
+  selector: 'app-exchange-sales-order-charges',
+  templateUrl: './exchange-sales-order-charges.component.html',
+  styleUrls: ['./exchange-sales-order-charges.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
+export class ExchangeSalesOrderChargesComponent implements OnChanges, OnInit {
   @Input() exchangeQuoteChargesList = [];
   @Input() chargeForm;
   @Input() customerId;
@@ -55,7 +55,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   frieghtsCreateForm: any;
   storedData: any = [];
   chargesFlatExtendedCost: any;
-  constructor(private exchangequoteService: ExchangequoteService,
+  constructor(private exchangeSalesOrderService: ExchangeSalesOrderService,
     private authService: AuthService,
     private alertService: AlertService,
     private commonService: CommonService,
@@ -65,10 +65,10 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     if (this.chargeForm) {
-      let newFreight = new ExchangeQuoteCharge();
+      let newFreight = new ExchangeSalesOrderCharge();
       newFreight.unitCost = this.formateCurrency(newFreight.unitCost);
-      newFreight.exchangeQuoteId = this.exchangeQuoteId;
-      this.chargeForm = [...this.chargeForm, new ExchangeQuoteCharge()];
+      newFreight.exchangeSalesOrderId = this.exchangeQuoteId;
+      this.chargeForm = [...this.chargeForm, new ExchangeSalesOrderCharge()];
     }
     if (this.exchangeQuoteChargesList && this.exchangeQuoteChargesList.length > 0 && this.exchangeQuoteChargesList[0].headerMarkupId) {
       this.costPlusType = this.exchangeQuoteChargesList[0].markupFixedPrice;
@@ -90,7 +90,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   }
   refresh(isView) {
     this.isSpinnerVisible = true;
-    forkJoin(this.exchangequoteService.getExchangeQuoteCharges(this.exchangeQuoteId, this.deletedStatusInfo),
+    forkJoin(this.exchangeSalesOrderService.getExchangeSalesOrderCharges(this.exchangeQuoteId, this.deletedStatusInfo),
       this.actionService.getCharges()
     ).subscribe(res => {
       this.isSpinnerVisible = false;
@@ -164,10 +164,10 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
     this.chargeForm = [newFreight];
   }
   getNewChargeObject() {
-    let newFreight = new ExchangeQuoteCharge();
+    let newFreight = new ExchangeSalesOrderCharge();
     newFreight.unitCost = this.formateCurrency(newFreight.unitCost);
     newFreight.extendedCost = this.formateCurrency(newFreight.extendedCost);
-    newFreight.exchangeQuoteId = this.exchangeQuoteId;
+    newFreight.exchangeSalesOrderId = this.exchangeQuoteId;
     newFreight.billingMethodId = this.costPlusType;
     newFreight.createdBy = this.userName;
     newFreight.createdDate = new Date();
@@ -274,11 +274,11 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
     })
     let result = { 'data': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
     this.isSpinnerVisible = true;
-    this.exchangequoteService.createExchangeQuoteCharge(sendData).subscribe(result => {
+    this.exchangeSalesOrderService.createExchangeSalesOrderCharge(sendData).subscribe(result => {
       this.isSpinnerVisible = false;
       this.alertService.showMessage(
         '',
-        'Created Exchange Quote Charge Successfully',
+        'Created Exchange Sales Order Charge Successfully',
         MessageSeverity.success
       );
       this.refreshOnDataSaveOrEditORDelete();
@@ -414,8 +414,8 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
 
   chargesAudiHistory: any = [];
   openInterShipViaHistory(content, rowData) {
-    if (rowData && rowData.exchangeQuoteChargesId) {
-      this.exchangequoteService.getExchangeQuoteChargesHistory(rowData.exchangeQuoteChargesId).subscribe(
+    if (rowData && rowData.exchangeSalesOrderChargesId) {
+      this.exchangeSalesOrderService.getExchangeSalesOrderChargesHistory(rowData.exchangeSalesOrderChargesId).subscribe(
         results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
           this.isSpinnerVisible = false;
         });
@@ -513,14 +513,14 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   refreshOnDataSaveOrEditORDelete(fromDelete = false) {
     this.isSpinnerVisible = true;
     this.exchangeQuoteChargesList = [];
-    this.exchangequoteService.getExchangeQuoteCharges(this.exchangeQuoteId, this.deletedStatusInfo).subscribe(res => {
+    this.exchangeSalesOrderService.getExchangeSalesOrderCharges(this.exchangeQuoteId, this.deletedStatusInfo).subscribe(res => {
       this.isSpinnerVisible = false;
       //Handeling offline Records also
       if (this.storedData && this.storedData.length != 0) {
         if (this.deletedStatusInfo == true) {
           this.deletedStatusInfo = true;
           this.storedData.forEach(element => {
-            if (element.isDeleted == true && element.exchangeQuoteChargesId == 0) {
+            if (element.isDeleted == true && element.exchangeSalesOrderChargesId == 0) {
               res.push(element);
             }
           });
@@ -528,7 +528,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
         else {
           this.deletedStatusInfo = false;
           this.storedData.forEach(element => {
-            if (element.isDeleted == false && element.exchangeQuoteChargesId == 0) {
+            if (element.isDeleted == false && element.exchangeSalesOrderChargesId == 0) {
               res.push(element)
             }
           });
@@ -551,7 +551,7 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   delete() {
     this.deleteModal.close();
     this.isSpinnerVisible = true;
-    if (!this.selectedRowForDelete.exchangeQuoteChargesId) {
+    if (!this.selectedRowForDelete.exchangeSalesOrderChargesId) {
       this.selectedRowForDelete.isDeleted = true;
       this.isSpinnerVisible = false;
       if (this.storedData && this.storedData.length != 0) {
@@ -570,15 +570,15 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
       this.storedData = [...this.storedData];
       this.alertService.showMessage(
         '',
-        'Deleted Exchange Quote Charge Successfully',
+        'Deleted Exchange Sales Order Charge Successfully',
         MessageSeverity.success
       );
     } else {
-      let exchangeQuoteChargesId = this.selectedRowForDelete.exchangeQuoteChargesId;
-      this.exchangequoteService.deleteexchangeQuoteChargesList(exchangeQuoteChargesId, this.userName).subscribe(res => {
+      let exchangeSalesOrderChargesId = this.selectedRowForDelete.exchangeQuoteSalesOrderChargesId;
+      this.exchangeSalesOrderService.deleteexchangeSalesOrderChargesList(exchangeSalesOrderChargesId, this.userName).subscribe(res => {
         this.alertService.showMessage(
           '',
-          'Deleted Exchange Quote Charge Successfully',
+          'Deleted Exchange Sales Order Charge Successfully',
           MessageSeverity.success
         );
         this.isSpinnerVisible = false;
@@ -595,8 +595,8 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
   }
 
   restoreRecord() {
-    if (this.restorerecord && this.restorerecord.exchangeQuoteChargesId > 0) {
-      this.commonService.updatedeletedrecords('ExchangeQuoteCharges', 'ExchangeQuoteChargesId', this.restorerecord.exchangeQuoteChargesId).subscribe(res => {
+    if (this.restorerecord && this.restorerecord.exchangeSalesOrderChargesId > 0) {
+      this.commonService.updatedeletedrecords('ExchangeSalesOrderCharges', 'ExchangeSalesOrderChargesId', this.restorerecord.exchangeSalesOrderChargesId).subscribe(res => {
         this.refreshOnDataSaveOrEditORDelete();
         this.modal.close();
         this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);

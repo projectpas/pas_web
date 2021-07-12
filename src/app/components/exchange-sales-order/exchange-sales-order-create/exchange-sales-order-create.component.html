@@ -592,12 +592,33 @@
                           <p-tabPanel header="Pick Ticket">
                             <app-exchange-sales-order-pick-tickets></app-exchange-sales-order-pick-tickets>
                           </p-tabPanel>
+                          <p-tabPanel header="Freight">
+                            <app-exchange-sales-order-freight [freightForm]="freight" [customerId]="customerId"
+                              [exchangeQuoteId]="SalesOrderId"
+                              (saveFreightListForSO)="saveExchangeQuoteFreightsList($event)"
+                              (updateFreightListForSO)="updateExchangeQuoteFreightsList($event)" (refreshData)="getFreightList()"
+                              [markupList]="markupList" [isView]="false" [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
+                            </app-exchange-sales-order-freight>
+                          </p-tabPanel>
+                          <p-tabPanel header="Charges">
+                            <app-exchange-sales-order-charges [chargeForm]="charge" [customerId]="customerId"
+                              [exchangeQuoteId]="SalesOrderId"
+                              (saveChargesListForSO)="saveExchangeQuoteChargesList($event)"
+                              (updateChargesListForSO)="updateExchangeQuoteChargesList($event)" [markupList]="markupList"
+                              [isView]="false" [isQuote]="true">
+                            </app-exchange-sales-order-charges>
+                          </p-tabPanel>
                           <p-tabPanel header="Shipping">
                             <app-exchange-sales-order-shipping [parts]="selectedParts" [salesOrderId]="id"
                                 [customerDetails]="customerDetails" [salesOrder]="salesQuote"
                                 [managementStructureId]="managementStructureId">
                             </app-exchange-sales-order-shipping>
                           </p-tabPanel>
+                          <p-tabPanel header="Billing/Invoicing">
+                            <app-exchange-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
+                                [customerDetails]="customerDetails" [salesOrder]="salesQuote">
+                            </app-exchange-sales-order-billing>
+                        </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>
                               </app-sales-order-approve>

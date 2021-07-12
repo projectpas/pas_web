@@ -1,4 +1,4 @@
-export interface IExchangeQuoteCharge {
+export interface IExchangeSalesOrderCharge {
     chargesTypeId: number;
     vendorId: number;
     quantity: number;
@@ -9,9 +9,9 @@ export interface IExchangeQuoteCharge {
     markupFixedPrice: string;
     billingMethodId: number;
     headerMarkupId: number;
-    exchangeQuoteChargesId: number;
-    exchangeQuoteId: number;
-    exchangeQuotePartId: string;
+    exchangeSalesOrderChargesId: number;
+    exchangeSalesOrderId: number;
+    exchangeSalesOrderPartId: string;
     billingRate: number;
     billingAmount: number;
     refNum: number;

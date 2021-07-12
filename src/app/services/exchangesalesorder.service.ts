@@ -20,6 +20,9 @@ import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
 import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
 import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrderShipping";
+import { IExchangeSalesOrderFreight } from '../models/exchange/IExchangeSalesOrderFreight';
+import { IExchangeSalesOrderCharge } from '../models/exchange/IExchangeSalesOrderCharge';
+import { ExchangeSalesOrderBillingAndInvoicing } from "../models/exchange/exchangeSalesOrderBillingAndInvoicing";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -369,5 +372,75 @@ export class ExchangeSalesOrderService {
     return Observable.forkJoin(
       this.exchangeSalesOrderEndpointService.getMultiShippingLabelPrint(salesOrderPackagingSlips)
     );
+  }
+  getExchangeSalesOrderFreights(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreights(id, isDeleted);
+  }
+
+  createFreight(freightsList: IExchangeSalesOrderFreight[]): Observable<IExchangeSalesOrder[]> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.createFreight(freightsList)
+    );
+  }
+
+  getExchangeSalesOrderCharges(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderCharges(id, isDeleted);
+  }
+  createExchangeSalesOrderCharge(chargesList: IExchangeSalesOrderCharge[]): Observable<IExchangeSalesOrder[]> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.createExchangeSalesOrderCharge(chargesList)
+    );
+  }
+  deleteexchangeSalesOrderChargesList(chargesId, userName) {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.deleteexchangeSalesOrderChargesList(chargesId, userName)
+    );
+  }
+
+  deleteexchangeSalesOrderFreightList(friegntId, userName) {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.deleteexchangeSalesOrderFreightList(friegntId, userName)
+    );
+  }
+
+  getExchangeSalesOrderFreightsHistory(id) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreightsHistory(id);
+  }
+  getExchangeSalesOrderChargesHistory(id) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderChargesHistory(id);
+  }
+  getBillingInvoiceList(exchangeSalesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.getBillingInvoiceList(exchangeSalesOrderId)
+    );
+  }
+  getExchangeSalesOrderBillingByShipping(exchangeSalesOrderId, partId, exchangeSalesOrderShippingId) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderBillingByShipping(exchangeSalesOrderId, partId, exchangeSalesOrderShippingId);
+  }
+  createBilling(salesOrderBilling: ExchangeSalesOrderBillingAndInvoicing): any {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.createBilling(salesOrderBilling)
+    );
+  }
+  getExchangeSalesOrderBillingInvoicingById(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.GetExchangeSalesOrderBillingInvoicingById(sobillingInvoicingId)
+    );
+  }
+  updateExchangeSalesOrderBillingInvoicing(sobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.updateExchangeSalesOrderBillingInvoicing(sobillingInvoicingId, billingInvoicing)
+    );
+  }
+  getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId)
+    );
+  }
+  getExchangeSalesOrderChargesById(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderChargesById(id, isDeleted);
+  }
+  getExchangeSalesOrderFreightsById(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreightsById(id, isDeleted);
   }
 }
