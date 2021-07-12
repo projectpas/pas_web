@@ -930,8 +930,15 @@
                                 <input class="form-control" type="text" name="certifiedBy"
                                     [(ngModel)]="stockLineForm.certifiedBy" (ngModelChange)="enableSave()" />
                             </div> -->
+                            
                             <div class="form-group">
                                 <label>Cert Type</label>
+                                <p-multiSelect [options]="CertTypeList" (ngModelChange)="enableSave()" name="certTypeobject"
+                                    [(ngModel)]="stockLineForm.certTypeobject">
+                                </p-multiSelect>  
+                            </div> 
+                            <div class="form-group">
+                                <label>Cert By</label>
                                 <select [(ngModel)]="stockLineForm.certifiedTypeId" name="certifiedTypeId"
                                     (change)="onSelectCertype()" (ngModelChange)="enableSave()">
                                     <option value="0">-- Select --</option>
@@ -941,7 +948,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label *ngIf="stockLineForm.certifiedTypeId > 0">Cert By</label>
+                                <!-- <label *ngIf="stockLineForm.certifiedTypeId > 0">Cert By</label> -->
                                 <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 1">
                                     <div class="col-sm-12">
                                         <p-autoComplete field="label" class="pautocomp-cstm"
@@ -1019,9 +1026,13 @@
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
+                                <!-- <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
                                     name="tagType" (ngModelChange)="enableSave()">
-                                </p-multiSelect>
+                                </p-multiSelect> -->
+                                <select class="form-control" (ngModelChange)="enableSave()" name="tagType" [(ngModel)]="stockLineForm.tagTypeId">
+                                    <option value="0">--Select--</option>
+                                    <option *ngFor="let tagType of allTagTypes" [value]="tagType.Key">{{tagType.Value}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>Tag By</label>

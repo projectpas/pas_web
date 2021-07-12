@@ -28,7 +28,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { masterCompanyId } from '../../../common-masterData/mastercompany-details';
 import { timePattern } from '../../../validations/validation-pattern';
 import { any } from 'underscore';
-import { TimeLifeDraftData } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
+import { TimeLifeDraftData , DropDownData} from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 
 
 @Component({
@@ -196,6 +196,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.purchaseOrderId = 0;
 		this.stockLineForm.repairOrderId = 0;
 		this.stockLineForm.conditionId = 0;
+		this.stockLineForm.certTypeobject = null;
 		this.stockLineForm.nha = 0;
 		this.stockLineForm.tla = 0;
 		this.stockLineForm.quantityOnHand = null;
@@ -203,9 +204,9 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.isCustomerStock = false;
 		this.stockLineForm.isCustomerstockType = false;
 		this.stockLineForm.unitCost='0.00';
-		
+		this.stockLineForm.tagTypeId=0;
 		this.stockLineForm.customerId = 0;
-		this.stockLineForm.tagType = [];
+		//this.stockLineForm.tagType = [];
 		this.stockLineForm.stockLineNumber = 'Creating';
 		this.stockLineForm.controlNumber = 'Creating';
 		this.stockLineForm.idNumber = 'Creating';
@@ -225,8 +226,7 @@ export class StockLineSetupComponent implements OnInit {
 		// this.getLegalEntity();
 		this.loadConditionData();
 		this.loadSiteData();
-		this.Purchaseunitofmeasure();
-		this.loadTagTypes();
+		this.Purchaseunitofmeasure();		
 		this.loadModuleTypes();
 		this.loadModulesNamesForObtainOwnerTraceable();
 		this.loadAssetAcquisitionTypeList();
@@ -242,6 +242,8 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadVendorData();
 			this.loadCompanyData();
 			this.loadPartNumData();
+			this.loadTagTypes();	
+			this.getCertType();
 			this.loadRevicePnPartNumData('',0);
 			this.loadEmployeeData();
 			this.loadWorkOrderList();
@@ -500,11 +502,64 @@ export class StockLineSetupComponent implements OnInit {
 		})
 	}
 
-	private loadTagTypes() {
-		this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(res => {
-			this.allTagTypes = res;
+	setEditArray: any = [];
+	private loadTagTypes(strText = '') {
+		this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.stockLineForm.tagTypeId ? this.stockLineForm.tagTypeId : 0);
+
+        } else {
+            this.setEditArray.push(0);
+        }
+		// this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(res => {		
+		this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 0, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {        	
+			const data = res.map(x => {
+                return {
+                    Key: x.value.toString(),
+                    Value: x.label
+                }
+			});			
+			this.allTagTypes = data;
+			if (this.isEditMode == true) {     
+                if (this.stockLineForm.tagTypeId != null) {                                           
+                    var tagtype = this.allTagTypes.find(temp => temp.Key == this.stockLineForm.tagTypeId)
+                    if (!tagtype || tagtype == undefined) {
+                        var tag = new DropDownData();
+                        tag.Key = this.stockLineForm.tagTypeId.toString();
+                        tag.Value = this.stockLineForm.tagType.toString();
+                        this.allTagTypes.push(tag);
+                    }
+                    this.stockLineForm.tagTypeId = this.stockLineForm.tagTypeId;                     
+                } 
+             }
 		})
 	}
+
+	CertTypeList: any = [];
+    arraycerttypelist: any[] = [];
+    getCertType(strText = '') { 
+		
+		if (this.isEditMode == true) {  
+            this.arraycerttypelist.push(this.stockLineForm.certTypeId ? this.stockLineForm.certTypeId : 0);
+        }
+        if (this.arraycerttypelist.length == 0) {
+            this.arraycerttypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('CertificationType', 'CertificationTypeId', 'CertificationName', strText,true, 0, this.arraycerttypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.CertTypeList = res;			
+            if (this.isEditMode == true) {                
+                this.stockLineForm.certTypeobject = [];
+                if (this.stockLineForm.certType!="" && this.stockLineForm.certType!=null) {                                                  
+                    this.stockLineForm.certType = this.stockLineForm.certType.split(',');                                  
+                    for (let i = 0; i < this.stockLineForm.certType.length; i++) {                        
+                        this.stockLineForm.certTypeobject[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.stockLineForm.certType[i], this.CertTypeList);
+                    }  
+                } else {
+                    this.stockLineForm.certTypeobject = [];
+                }   
+            }
+        })
+    }
 
 	loadModulesNamesForObtainOwnerTraceable() {
 		this.commonService.getModuleListForObtainOwnerTraceable(0).subscribe(res => {
@@ -865,14 +920,17 @@ export class StockLineSetupComponent implements OnInit {
 					this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
 					this.sourceTimeLife.timeLife = true;
 				}
-				if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
-					this.stockLineForm.tagType = this.stockLineForm.tagType.split(',');
-					for (let i = 0; i < this.stockLineForm.tagType.length; i++) {
-						this.stockLineForm.tagType[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.stockLineForm.tagType[i], this.allTagTypes);
-					}
-				} else {
-					this.stockLineForm.tagType = [];
-				}
+
+				// if (this.stockLineForm.tagType && this.stockLineForm.tagType != '0') {
+				// 	this.stockLineForm.tagType = this.stockLineForm.tagType.split(',');
+				// 	for (let i = 0; i < this.stockLineForm.tagType.length; i++) {
+				// 		this.stockLineForm.tagType[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.stockLineForm.tagType[i], this.allTagTypes);
+				// 	}
+				// } else {
+				// 	this.stockLineForm.tagType = [];
+				// }
+				this.loadTagTypes('');
+				this.getCertType('');
 				if (this.stockLineForm.purchaseOrderId) {
 					this.disableVendor = true;
 				}
@@ -1810,16 +1868,29 @@ export class StockLineSetupComponent implements OnInit {
 			createdby: this.authService.currentUser ? this.authService.currentUser.userName : "",
 			updatedby: this.authService.currentUser ? this.authService.currentUser.userName : "",
 			timeLifeCyclesId: this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
-			managementStructureId: this.headerInfo.managementStructureId
+			managementStructureId: this.headerInfo.managementStructureId,
+			tagTypeId : this.stockLineForm.tagTypeId > 0 ? this.stockLineForm.tagTypeId : null    
 		}
 
-		if (this.stockLineForm.tagType.length > 0) {
-			for (let i = 0; i < this.stockLineForm.tagType.length; i++) {
-				this.saveStockLineForm.tagType[i] = getValueFromArrayOfObjectById('label', 'value', this.stockLineForm.tagType[i], this.allTagTypes);
+		// if (this.stockLineForm.tagType.length > 0) {
+		// 	for (let i = 0; i < this.stockLineForm.tagType.length; i++) {
+		// 		this.saveStockLineForm.tagType[i] = getValueFromArrayOfObjectById('label', 'value', this.stockLineForm.tagType[i], this.allTagTypes);
+		// 	}
+		// 	this.saveStockLineForm.tagType = this.saveStockLineForm.tagType.join();
+		// } else {
+		// 	this.saveStockLineForm.tagType = "";
+		// }
+		this.saveStockLineForm.certType = []
+		if (this.stockLineForm.certTypeobject && this.stockLineForm.certTypeobject.length > 0) {
+			this.stockLineForm.certTypeId = this.stockLineForm.certTypeobject.join();                
+			this.stockLineForm.certType = this.stockLineForm.certTypeId.split(',');
+			for (let i = 0; i < this.stockLineForm.certType.length; i++) {
+				this.saveStockLineForm.certType[i] = getValueFromArrayOfObjectById('label', 'value', this.stockLineForm.certType[i], this.CertTypeList);
 			}
-			this.saveStockLineForm.tagType = this.saveStockLineForm.tagType.join();
+			this.saveStockLineForm.certType = this.saveStockLineForm.certType.join()
 		} else {
-			this.saveStockLineForm.tagType = "";
+			this.saveStockLineForm.certType = "";
+			this.saveStockLineForm.certTypeId = "";
 		}
 
 		var errmessage = '';

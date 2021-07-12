@@ -4,7 +4,7 @@
           <div class="card-header header">
               <div class="row">
                   <div class="col">
-                      <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order
+                      <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Exchange Sales Order
                           <button class="btn-sm header-button header-button-alignment"
                               (click)="toggle_po_header=!toggle_po_header">
                               {{toggle_po_header ? 'Collapse' : 'Expand'}}
@@ -592,12 +592,33 @@
                           <p-tabPanel header="Pick Ticket">
                             <app-exchange-sales-order-pick-tickets></app-exchange-sales-order-pick-tickets>
                           </p-tabPanel>
+                          <p-tabPanel header="Freight">
+                            <app-exchange-sales-order-freight [freightForm]="freight" [customerId]="customerId"
+                              [exchangeQuoteId]="SalesOrderId"
+                              (saveFreightListForSO)="saveExchangeQuoteFreightsList($event)"
+                              (updateFreightListForSO)="updateExchangeQuoteFreightsList($event)" (refreshData)="getFreightList()"
+                              [markupList]="markupList" [isView]="false" [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
+                            </app-exchange-sales-order-freight>
+                          </p-tabPanel>
+                          <p-tabPanel header="Charges">
+                            <app-exchange-sales-order-charges [chargeForm]="charge" [customerId]="customerId"
+                              [exchangeQuoteId]="SalesOrderId"
+                              (saveChargesListForSO)="saveExchangeQuoteChargesList($event)"
+                              (updateChargesListForSO)="updateExchangeQuoteChargesList($event)" [markupList]="markupList"
+                              [isView]="false" [isQuote]="true">
+                            </app-exchange-sales-order-charges>
+                          </p-tabPanel>
                           <p-tabPanel header="Shipping">
                             <app-exchange-sales-order-shipping [parts]="selectedParts" [salesOrderId]="id"
                                 [customerDetails]="customerDetails" [salesOrder]="salesQuote"
                                 [managementStructureId]="managementStructureId">
                             </app-exchange-sales-order-shipping>
                           </p-tabPanel>
+                          <p-tabPanel header="Billing/Invoicing">
+                            <app-exchange-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
+                                [customerDetails]="customerDetails" [salesOrder]="salesQuote">
+                            </app-exchange-sales-order-billing>
+                        </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>
                               </app-sales-order-approve>
@@ -698,7 +719,7 @@
 <ng-template #updateConfirmationModal let-c="close" let-d="dismiss">
   <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
-      <h4 class="modal-title">Do you want to create new version or update existing sales order ?</h4>
+      <h4 class="modal-title">Do you want to create new version or update existing echange sales order ?</h4>
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-danger" data-dismiss="modal"

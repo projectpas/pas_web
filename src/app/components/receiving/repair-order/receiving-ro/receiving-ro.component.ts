@@ -95,6 +95,7 @@ export class ReceivingRoComponent implements OnInit {
     traceabletovendor: boolean = false;
     disableParentSpace: boolean = false;
     TagTypeList: any = [];
+    CertTypeList: any = [];
     quantityreceivebtn: boolean = false;
     quantityreceive: boolean = false;
     legalEntityList: any = [];
@@ -109,6 +110,7 @@ export class ReceivingRoComponent implements OnInit {
     arrayglaccountlist: any[] = [];
     arrayshipvialist: any[] = [];
     arraytagtypelist: any[] = [];
+    arraycerttypelist: any[] = [];
     arrayLegalEntitylsit: any[] = [];
     customerModuleId: number = 0;
     companyModuleId: number = 0;
@@ -152,6 +154,7 @@ export class ReceivingRoComponent implements OnInit {
         this.getAllGLAccount();
         this.getShippingVia();
         this.getTagType();
+        this.getCertType();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
         this.Purchaseunitofmeasure();
@@ -296,10 +299,24 @@ export class ReceivingRoComponent implements OnInit {
         if (this.arraytagtypelist.length == 0) {
             this.arraytagtypelist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,
-            true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-                this.TagTypeList = res;
-            })
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            //this.TagTypeList = res;
+            for (let tag of res) {
+                var dropdown = new DropDownData();
+                dropdown.Key = tag.value.toLocaleString();
+                dropdown.Value = tag.label
+                this.TagTypeList.push(dropdown);
+            }
+        })
+    }
+
+    getCertType(strText = '') {
+        if (this.arraycerttypelist.length == 0) {
+            this.arraycerttypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('CertificationType', 'CertificationTypeId', 'CertificationName', strText,true, 0, this.arraycerttypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.CertTypeList = res;
+        })
     }
 
     getLegalEntity(strText = '') {
@@ -754,7 +771,7 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString()); 
             stockLine.taggedByObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString()); 
             stockLine.certByObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString()); 
-
+            stockLine.tagTypeId =  0 ; 
             stockLine.revisedPartId = part.revisedPartId > 0 ? this.revisedPartNumCollection.find(x =>x.itemMasterId == part.revisedPartId) : 0;   
             stockLine.aircraftTailNumber = part.acTailNum;
             if (part.itemMaster != undefined) {
@@ -1505,20 +1522,33 @@ export class ReceivingRoComponent implements OnInit {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;
-                if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
-                    sl.tagTypeId = sl.tagTypeobject.join();                
-                    sl.tagType = sl.tagTypeId.split(',');
-                    for (let i = 0; i < sl.tagType.length; i++) {
-                        sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                    }
-                    sl.tagType = sl.tagType.join();
-                } else {
-                    sl.tagType = "";
-                    sl.tagTypeId = "";
-                }
+                // if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
+                //     sl.tagTypeId = sl.tagTypeobject.join();                
+                //     sl.tagType = sl.tagTypeId.split(',');
+                //     for (let i = 0; i < sl.tagType.length; i++) {
+                //         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
+                //     }
+                //     sl.tagType = sl.tagType.join();
+                // } else {
+                //     sl.tagType = "";
+                //     sl.tagTypeId = "";
+                // }
+                sl.tagTypeId = sl.tagTypeId > 0 ? sl.tagTypeId : null;         
                 //sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
                 sl.revisedPartId = sl.revisedPartId ? editValueAssignByCondition('itemMasterId', sl.revisedPartId) : null;
+
+                if (sl.certTypeobject && sl.certTypeobject.length > 0) {
+                    sl.certTypeId = sl.certTypeobject.join();                
+                    sl.certType = sl.certTypeId.split(',');
+                    for (let i = 0; i < sl.certType.length; i++) {
+                        sl.certType[i] = getValueFromArrayOfObjectById('label', 'value', sl.certType[i], this.CertTypeList);
+                    }
+                    sl.certType = sl.certType.join();
+                } else {
+                    sl.certType = "";
+                    sl.certTypeId = "";
+                }
             }
             if (part.isSameDetailsForAllParts) {
                 // var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };

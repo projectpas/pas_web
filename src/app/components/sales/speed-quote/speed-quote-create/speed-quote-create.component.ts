@@ -2298,6 +2298,21 @@ export class SpeedQuoteCreateComponent implements OnInit {
     window.location.assign(url);
   }
 
+  saveAsPDF(){
+    this.isSpinnerVisible = true;
+    this.speedQuoteService.getSQsendmailpdfpreview(this.id)
+        .subscribe(
+            (res: any) => {
+                this.isSpinnerVisible = false;
+                this.pdfPath = res;
+                this.commonService.toDownLoadFile(this.pdfPath);
+            }, err => {
+            }
+        )
+    // const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${this.pdfPath}`;
+    // window.location.assign(url);
+  }
+
   arrayCustlist: any[] = [];
   allCustomers: any = [];
   splitcustomersList: any = [];

@@ -118,9 +118,10 @@ export class WorkOrderSmartComponent implements OnInit {
         this.onDestroy$.next();
     }
     refreshWo(){ 
-        this.workOrderId = this.acRouter.snapshot.params['id'];
-        this.recCustomerId=0;
-        this.triggerWorkOrderData();
+        console.log("refresh Api")
+        // this.workOrderId = this.acRouter.snapshot.params['id'];
+        // this.recCustomerId=0;
+        // this.triggerWorkOrderData();
     }
     triggerWorkOrderData(){
         
