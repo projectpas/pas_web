@@ -74,11 +74,11 @@ export class BulkEmailComponent implements OnInit {
     sourceViewforListColumns = [{ field: 'fileName', header: 'File Name' }]
 
     constructor(private communicationService: CommunicationService,
-        private commonService: CommonService, 
+        private commonService: CommonService,
         private datePipe: DatePipe,
-        private authService: AuthService, 
+        private authService: AuthService,
         private modalService: NgbModal,
-        private alertService: AlertService, 
+        private alertService: AlertService,
         private configurations: ConfigurationService,
         private salesOrderQuoteService: SalesQuoteService,
         private salesOrderService: SalesOrderService) { }
@@ -560,7 +560,7 @@ export class BulkEmailComponent implements OnInit {
         this.setEditArray = [];
         this.setEditArray.push(0);
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(), 0).subscribe(res => {
             this.emailTypes = res;
         }, err => {
             this.errorMessageHandler();

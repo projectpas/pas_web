@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ViewChild, Input, OnChanges, ElementRef, ViewEncapsulation } from '@angular/core';
 import { NgbModal, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-declare var $ : any;
+declare var $: any;
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
@@ -24,7 +24,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     @Input() CurrentModuleName;
     @Input() referenceId;
     @Input() isSummarizedView: any = false;
-    @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+    @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
     @Input() workOrderId: any;
     @Input() isView: boolean = false;
     @Input() selectedPartNumber: any = {};
@@ -51,11 +51,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     emailType: number;
     data: any = [];
     headers = [
-        { field: 'emailType', header: 'Email Type',width:"90px" },
-        { field: 'toEmail', header: 'To Email',width:"200px" },
-        { field: 'subject', header: 'Subject' ,width:"200px"},
-        { field: 'contactBy', header: 'Contacted By',width:"90px" },
-        { field: 'contactDate', header: 'Contact Date',width:"90px" }
+        { field: 'emailType', header: 'Email Type', width: "90px" },
+        { field: 'toEmail', header: 'To Email', width: "200px" },
+        { field: 'subject', header: 'Subject', width: "200px" },
+        { field: 'contactBy', header: 'Contacted By', width: "90px" },
+        { field: 'contactDate', header: 'Contact Date', width: "90px" }
     ]
     selectedColumns = this.headers;
     addList: any = [];
@@ -64,7 +64,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     employeeList: any = [];
     employeesOriginalData: any = [];
     emailViewData: any = {};
-    @ViewChild("emailQuotePopup",{static:false}) public emailQuotePopup: ElementRef;
+    @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
     pdfPath: any;
     customerContact: any;
     cusContactList: any;
@@ -78,17 +78,17 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     constructor(private activeModal: NgbActiveModal,
         private communicationService: CommunicationService,
         private commonService: CommonService, private datePipe: DatePipe,
-        private authService: AuthService, private modalService: NgbModal, 
+        private authService: AuthService, private modalService: NgbModal,
         private alertService: AlertService, private configurations: ConfigurationService,
         private salesOrderQuoteService: SalesQuoteService,
         private salesOrderService: SalesOrderService) { }
 
     ngOnInit(): void {
         if (this.type == 1) {
-            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact',width:"100px" })
+            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact', width: "100px" })
         } else {
 
-            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact' ,width:"100px"})
+            this.headers.unshift({ field: 'vendorContact', header: 'Vendor Contact', width: "100px" })
         }
     }
 
@@ -132,7 +132,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.setEditArray = [];
         this.setEditArray.push(0);
         const strText = value ? value : '';
-        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.ContactList = res.map(x => {
                 return {
                     ...x,
@@ -171,13 +171,13 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     }
     parsedText(text) {
         if (text) {
-          const dom = new DOMParser().parseFromString(
-            '<!doctype html><body>' + text,
-            'text/html');
-          const decodedString = dom.body.textContent;
-          return decodedString;
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
         }
-      }
+    }
     addMemo() {
         this.isEditMode = false;
         this.formData = new FormData();
@@ -213,7 +213,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         else {
             this.subject = '';
         }
-        
+
         this.emailTypes.forEach(
             (x) => {
                 if (x.label == 'Manual') {
@@ -228,11 +228,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     contactSelected(event) {
         this.toEmail = event.email ? event.email : '';
     }
-    
+
     showDeleteConfirmation(rowData) {
         this.deletingRecord = rowData;
     }
-    
+
     delete(rowData) {
         this.isSpinnerVisible = true;
         this.communicationService.deleteCommonEmailList(rowData.emailId, this.userName).subscribe(() => {
@@ -271,7 +271,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                 this.getSOPDF();
                 this.modal = this.modalService.open(content, { size: "sm" });
 
-            } else { 
+            } else {
                 this.triggerMail();
             }
         }
@@ -392,7 +392,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             }
         )
     }
-    attachmentDetails=[];
+    attachmentDetails = [];
     emailView(data) {
         this.isSpinnerVisible = true;
         this.communicationService.getEmailDataByEmailId(data.emailId)
@@ -412,19 +412,19 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         window.location.assign(url);
     }
 
-    exportCSV(dt){
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                contactDate: x.contactDate ?  this.datePipe.transform(x.contactDate, 'MMM-dd-yyyy hh:mm a'): '',
-            
+                contactDate: x.contactDate ? this.datePipe.transform(x.contactDate, 'MMM-dd-yyyy hh:mm a') : '',
+
             }
         });
         dt.exportCSV();
     }
     closeDeleteModal() {
-		$("#emaildownloadConfirmation").modal("hide");
-	}
+        $("#emaildownloadConfirmation").modal("hide");
+    }
     getQuotePDF() {
         this.isSpinnerVisible = true;
         this.communicationService.soqsendmailpdfpreview(this.referenceId)
@@ -454,19 +454,19 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     getAllEmployees(strText = '') {
         this.arrayContactlist.push(0);
         //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
-            this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
-			true, 0, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
+            true, 0, this.arrayContactlist.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
 
-            this.employeeList = res.map(x => {
-                return {
-                    ...x,
-                    employeeId: x.value,
-                    name: x.label
-                }
-            });
-        }, err => {
-            this.errorMessageHandler();
-        })
+                this.employeeList = res.map(x => {
+                    return {
+                        ...x,
+                        employeeId: x.value,
+                        name: x.label
+                    }
+                });
+            }, err => {
+                this.errorMessageHandler();
+            })
     }
     filterEmployee(event): void {
         if (event.query !== undefined && event.query !== null) {
@@ -476,8 +476,8 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         }
     }
     closePopupmodel(divid) {
-		$("#"+divid+"").modal("hide");
-	}
+        $("#" + divid + "").modal("hide");
+    }
     filterEmployee1(event): void {
         this.employeeList = this.employeesOriginalData;
         if (event.query !== undefined && event.query !== null) {
@@ -525,20 +525,20 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     dismissModelRestore() {
         this.modal.close();
     }
-    getDeleteListByStatus(value) {        
+    getDeleteListByStatus(value) {
         this.deletedStatusInfo = value ? value : false;
         this.getAllEmail();
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
-    dataOriginal:any=[];
+    dataOriginal: any = [];
     getAllEmail() {
         this.data = [];
         this.isSpinnerVisible = true;
-        this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type,this.authService.currentUser.masterCompanyId)
+        this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type, this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res: any[]) => {
-                    console.log("res" , res);
+                    console.log("res", res);
                     this.isSpinnerVisible = false;
                     if (res && res.length != 0) {
                         this.data = res.map(x => {
@@ -549,7 +549,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                             }
                         });
-                    }            
+                    }
                     this.dataOriginal = this.data;
                 }, err => {
                     this.errorMessageHandler();
@@ -560,7 +560,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.setEditArray = [];
         this.setEditArray.push(0);
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(), 0).subscribe(res => {
             this.emailTypes = res;
         }, err => {
             this.errorMessageHandler();
@@ -627,7 +627,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = false;
     }
 
-    downloadFile(x) {}
+    downloadFile(x) { }
 
     dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {

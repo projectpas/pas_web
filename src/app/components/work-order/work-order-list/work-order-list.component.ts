@@ -54,19 +54,19 @@ export class WorkOrderListComponent implements OnInit {
     lazyLoadEventData: any;
     workFlowWorkOrderId: any
     headers = [
-        { field: 'workOrderNum', header: 'WO NO', width: "100px"},
-        { field: 'partNoType', header: 'MPN',width:"160px" },
-        { field: 'pnDescriptionType', header: 'MPN Description',width:"250px " },
-        { field: 'customerName', header: 'Customer Name',width:"200px" },
+        { field: 'workOrderNum', header: 'WO NO', width: "100px" },
+        { field: 'partNoType', header: 'MPN', width: "160px" },
+        { field: 'pnDescriptionType', header: 'MPN Description', width: "250px " },
+        { field: 'customerName', header: 'Customer Name', width: "200px" },
         { field: 'workOrderType', header: 'WO Type', width: "90px" },
         { field: 'customerType', header: 'Cust. Type', width: "90px" },
-        { field: 'workScopeType', header: 'Work Scope',  width: "100px"},
+        { field: 'workScopeType', header: 'Work Scope', width: "100px" },
         { field: 'priorityType', header: 'Priority', width: "70px" },
         { field: 'openDate', header: 'Open Date', width: "125px" },
         { field: 'customerRequestDateType', header: 'Cust Req Date', width: "125px" },
-        { field: 'promisedDateType', header: 'Promise Date' , width: "125px"},
-        { field: 'estimatedShipDateType', header: 'Est. Ship Date',  width: "125px"},
-        { field: 'estimatedCompletionDateType', header: 'Shipped Date',  width: "125px"},
+        { field: 'promisedDateType', header: 'Promise Date', width: "125px" },
+        { field: 'estimatedShipDateType', header: 'Est. Ship Date', width: "125px" },
+        { field: 'estimatedCompletionDateType', header: 'Shipped Date', width: "125px" },
         { field: 'stageType', header: 'Stage Code', width: "150px" },
         { field: 'workOrderStatusType', header: 'Status', width: "70px" },
         { field: 'techName', header: 'Tech Name', width: "125px" },
@@ -154,9 +154,9 @@ export class WorkOrderListComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
     getWorkOrderDefaultSetting() {
         this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, 1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -272,14 +272,14 @@ export class WorkOrderListComponent implements OnInit {
             }
         }
 
-        if (!this.isGlobalFilter) {   
-            this.getAllWorkOrderList(event);         
+        if (!this.isGlobalFilter) {
+            this.getAllWorkOrderList(event);
         } else {
             this.globalSearch(this.filterText)
         }
     }
 
-    changeOfStatus(status, viewType) {        
+    changeOfStatus(status, viewType) {
         const lazyEvent = this.lazyLoadEventData;
         this.currentStatus = status === '' ? this.currentStatus : status;
         this.viewType = viewType === '' ? this.viewType : viewType;
@@ -305,13 +305,12 @@ export class WorkOrderListComponent implements OnInit {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete;
-        data.filters.masterCompanyId= this.currentUserMasterCompanyId;
-        data.filters.employeeId= this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
+        data.filters.employeeId = this.employeeId;
 
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.workOrderService.getWorkOrderList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            if(this.viewType == 'mpn')
-            {
+            if (this.viewType == 'mpn') {
                 this.workOrderData = res['results'].map(x => {
                     return {
                         ...x,
@@ -325,23 +324,22 @@ export class WorkOrderListComponent implements OnInit {
                         promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
                         promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                        updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
             }
-            else
-            {
+            else {
                 this.workOrderData = res['results'].map(x => {
                     return {
                         ...x,
-    
+
                         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                        updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
             }
-            
+
 
             if (res.results.length > 0) {
                 this.totalRecords = res.totalRecordsCount;
@@ -370,10 +368,9 @@ export class WorkOrderListComponent implements OnInit {
         if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
             this.isGlobalFilter = true;
         }
-        else
-        {
+        else {
             this.isGlobalFilter = false;
-        }        
+        }
         const pageIndex = parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows;;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventData.rows;
@@ -411,16 +408,16 @@ export class WorkOrderListComponent implements OnInit {
         this.editMode = true;
         // this.isSpinnerVisible = true;
         // this.workOrderService.getWorkOrderById(workOrderId, 0).subscribe(res => {
-            // this.isSpinnerVisible = false;
-            this.route.navigate([`workordersmodule/workorderspages/app-work-order-edit/${workOrderId}`]);
+        // this.isSpinnerVisible = false;
+        this.route.navigate([`workordersmodule/workorderspages/app-work-order-edit/${workOrderId}`]);
         // },
-            // err => {
-            //     this.isSpinnerVisible = false;
-            // })
+        // err => {
+        //     this.isSpinnerVisible = false;
+        // })
     }
-    
+
     getCustomerWarningsList(): void {
-        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create WO for MPN') {
                     this.customerWarningListId = element.value;
@@ -437,7 +434,7 @@ export class WorkOrderListComponent implements OnInit {
         if (customerId && this.customerWarningListId) {
             this.warningMessage = '';
             this.isSpinnerVisible = true;
-            this.commonService.customerWarnings(customerId, this.customerWarningListId,this.currentUserMasterCompanyId).subscribe((res: any) => {
+            this.commonService.customerWarnings(customerId, this.customerWarningListId, this.currentUserMasterCompanyId).subscribe((res: any) => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     this.warningMessage = res.warningMessage;
@@ -456,7 +453,7 @@ export class WorkOrderListComponent implements OnInit {
         this.restrictMessage = '';
         if (customerId && this.customerWarningListId) {
             this.isSpinnerVisible = true;
-            this.commonService.customerResctrictions(customerId, this.customerWarningListId,this.currentUserMasterCompanyId).subscribe((res: any) => {
+            this.commonService.customerResctrictions(customerId, this.customerWarningListId, this.currentUserMasterCompanyId).subscribe((res: any) => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     this.restrictID = res.customerWarningId;
@@ -480,7 +477,7 @@ export class WorkOrderListComponent implements OnInit {
     showAlertMessage(warningMessage, restrictMessage) {
         $('#warnRestrictMesg').modal("show");
     }
-    closeViewModel(){
+    closeViewModel() {
         $('#viewWorkOrderr').modal("hide");
     }
     WarnRescticModel() {
@@ -504,7 +501,7 @@ export class WorkOrderListComponent implements OnInit {
     }
 
     exportCSV(dt) {
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "workOrderStatus": this.currentStatus,"masterCompanyId":this.currentUserMasterCompanyId }, "globalFilter": "" }
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "workOrderStatus": this.currentStatus, "masterCompanyId": this.currentUserMasterCompanyId }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
@@ -542,14 +539,14 @@ export class WorkOrderListComponent implements OnInit {
 
     deleteWO() {
         this.isSpinnerVisible = false;
-        this.workOrderService.deleteActionforWorkOrder(this.rowDataToDelete.workOrderId,this.userName).subscribe(res => {
+        this.workOrderService.deleteActionforWorkOrder(this.rowDataToDelete.workOrderId, this.userName).subscribe(res => {
             this.getAllWorkOrderList(this.lazyLoadEventData);
             this.isSpinnerVisible = false;
             this.alertService.showMessage("Success", `Records Was Deleted Successfully.`, MessageSeverity.success);
 
-        },err => {
-                this.isSpinnerVisible = false;
-            })
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     closeDeleteModal() {
@@ -587,4 +584,4 @@ export class WorkOrderListComponent implements OnInit {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-} 
+}

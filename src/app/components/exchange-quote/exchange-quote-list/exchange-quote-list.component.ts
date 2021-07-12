@@ -115,22 +115,22 @@ export class ExchangeQuoteListComponent implements OnInit {
     if (this.arrayStatuslist.length == 0) {
       this.arrayStatuslist.push(0);
     }
-    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
+    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", '', true, 20, this.arrayStatuslist.join(), 0),
       //this.salesService.getAllSalesOrderSettings()
-      ).subscribe(res => {
-        this.statusList = res[0];
-        this.currentStatus = "1";
-        this.searchParameters.filters = {
-          ...this.searchParameters.filters,
-          isDeleted: this.currentDeletedstatus,
-          //viewType: this.viewType
-        }
-        //this.isSettingsReceived = true;
-        this.changeOfStatus(this.currentStatus);
-      }, error => {
-        //this.isSettingsReceived = true;
-        this.isSpinnerVisible = false;
-      });
+    ).subscribe(res => {
+      this.statusList = res[0];
+      this.currentStatus = "1";
+      this.searchParameters.filters = {
+        ...this.searchParameters.filters,
+        isDeleted: this.currentDeletedstatus,
+        //viewType: this.viewType
+      }
+      //this.isSettingsReceived = true;
+      this.changeOfStatus(this.currentStatus);
+    }, error => {
+      //this.isSettingsReceived = true;
+      this.isSpinnerVisible = false;
+    });
   }
 
   loadData(event, globalFilter = "") {
@@ -158,7 +158,7 @@ export class ExchangeQuoteListComponent implements OnInit {
     this.searchParameters.filters.masterCompanyId = this.currentUserMasterCompanyId;
     this.searchParameters.globalFilter = globalFilter;
     //if (this.isSettingsReceived) {
-      this.onSearch();
+    this.onSearch();
     //}
   }
 
@@ -276,16 +276,16 @@ export class ExchangeQuoteListComponent implements OnInit {
   deleteQuote(): void {
     this.isSpinnerVisible = true;
     this.exchangequoteService.delete(this.selected).subscribe(response => {
-        this.isSpinnerVisible = false;
-        this.modal.close();
-        this.alertService.showMessage(
-            "Success",
-            `Quote removed successfully.`,
-            MessageSeverity.success
-        );
-        this.onSearch();
+      this.isSpinnerVisible = false;
+      this.modal.close();
+      this.alertService.showMessage(
+        "Success",
+        `Quote removed successfully.`,
+        MessageSeverity.success
+      );
+      this.onSearch();
     }, error => {
-        this.isSpinnerVisible = false;
+      this.isSpinnerVisible = false;
     });
   }
 
@@ -296,31 +296,31 @@ export class ExchangeQuoteListComponent implements OnInit {
     this.searchParameters.first = this.pageIndex;
 
     if (this.currentDeletedstatus == true) {
-        this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
-        this.isSpinnerVisible = true;
-        this.onSearch();
+      this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
+      this.isSpinnerVisible = true;
+      this.onSearch();
     } else {
-        this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
-        this.isSpinnerVisible = true;
-        this.onSearch();
+      this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
+      this.isSpinnerVisible = true;
+      this.onSearch();
     }
   }
 
   restorerecord: any = {}
 
-    restoreRecord() {
-        this.commonservice.updatedeletedrecords('ExchangeQuote', 'ExchangeQuoteId', this.restorerecord.exchangeQuoteId).subscribe(res => {
-            this.getDeleteListByStatus(true)
-            this.modal.close();
-            this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-        }, err => {
-            this.isSpinnerVisible = false;
-        });
-    }
-    restore(content, rowData) {
-        this.restorerecord = rowData;
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-    }
+  restoreRecord() {
+    this.commonservice.updatedeletedrecords('ExchangeQuote', 'ExchangeQuoteId', this.restorerecord.exchangeQuoteId).subscribe(res => {
+      this.getDeleteListByStatus(true)
+      this.modal.close();
+      this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+  restore(content, rowData) {
+    this.restorerecord = rowData;
+    this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+  }
 
   exportCSV(dt) {
     this.isSpinnerVisible = true;
@@ -329,27 +329,27 @@ export class ExchangeQuoteListComponent implements OnInit {
     PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "StatusId": this.currentStatus, "isDeleted": isdelete, "ViewType": '', "masterCompanyId": this.currentUserMasterCompanyId }, "globalFilter": "" }
     let filters = Object.keys(dt.filters);
     filters.forEach(x => {
-        PagingData.filters[x] = dt.filters[x].value;
+      PagingData.filters[x] = dt.filters[x].value;
     });
 
     this.exchangequoteService
-        .search(PagingData).subscribe(res => {
-            const vList = res[0]['results'].map(x => {
-                return {
-                    ...x,
-                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
-                }
-            });
-
-            dt._value = vList;
-            dt.exportCSV();
-            dt.value = this.exchanges;
-            this.modal.close();
-            this.isSpinnerVisible = false;
-        }, err => {
-            this.isSpinnerVisible = false;
+      .search(PagingData).subscribe(res => {
+        const vList = res[0]['results'].map(x => {
+          return {
+            ...x,
+            createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+            updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+          }
         });
+
+        dt._value = vList;
+        dt.exportCSV();
+        dt.value = this.exchanges;
+        this.modal.close();
+        this.isSpinnerVisible = false;
+      }, err => {
+        this.isSpinnerVisible = false;
+      });
   }
 
   closeHistoryModal() {
@@ -359,10 +359,10 @@ export class ExchangeQuoteListComponent implements OnInit {
   getAuditHistoryById(rowData) {
     this.isSpinnerVisible = true;
     this.exchangequoteService.getExchangeQuoteHistory(rowData.exchangeQuoteId).subscribe(res => {
-        this.auditHistory = res;
-        this.isSpinnerVisible = false;
+      this.auditHistory = res;
+      this.isSpinnerVisible = false;
     }, err => {
-        this.isSpinnerVisible = false;
+      this.isSpinnerVisible = false;
     });
   }
 
@@ -373,11 +373,11 @@ export class ExchangeQuoteListComponent implements OnInit {
     const data = this.auditHistory;
     const dataLength = data.length;
     if (i >= 0 && i <= dataLength) {
-        if ((i + 1) === dataLength) {
-            return true;
-        } else {
-            return data[i + 1][field] === value
-        }
+      if ((i + 1) === dataLength) {
+        return true;
+      } else {
+        return data[i + 1][field] === value
+      }
     }
   }
   dismissModel() {
@@ -387,11 +387,11 @@ export class ExchangeQuoteListComponent implements OnInit {
   viewSelectedRow(content, row) {
     this.isSpinnerVisible = true;
     this.exchangequoteService.getview(row.exchangeQuoteId).subscribe(res => {
-        this.exchangeQuoteView = res[0];
-        this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-        this.isSpinnerVisible = false;
+      this.exchangeQuoteView = res[0];
+      this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+      this.isSpinnerVisible = false;
     }, error => {
-        this.isSpinnerVisible = false;
+      this.isSpinnerVisible = false;
     });
-}
+  }
 }
