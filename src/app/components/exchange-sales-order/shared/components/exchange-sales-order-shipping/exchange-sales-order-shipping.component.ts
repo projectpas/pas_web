@@ -111,7 +111,7 @@ export class ExchangeSalesOrderShippingComponent {
       { field: "partDescription", header: "PN Description", width: "100px" },
       { field: "qtyToShip", header: "Qty Picked", width: "65px" },
       { field: "qtyShipped", header: "Qty Shipped", width: "65px" },
-      { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+      { field: "qtyRemaining", header: "Qty Rem", width: "90px" },
       { field: "status", header: "Status", width: "90px" },
     ];
     this.selectedColumns = this.headers;

@@ -57,7 +57,7 @@ export class WorkOrderListComponent implements OnInit {
         { field: 'workOrderNum', header: 'WO NO', width: "100px"},
         { field: 'partNoType', header: 'MPN',width:"160px" },
         { field: 'pnDescriptionType', header: 'MPN Description',width:"250px " },
-        { field: 'customerName', header: 'Customer Name',width:"200px" },
+        { field: 'customerName', header: 'Cust Name',width:"200px" },
         { field: 'workOrderType', header: 'WO Type', width: "90px" },
         { field: 'customerType', header: 'Cust. Type', width: "90px" },
         { field: 'workScopeType', header: 'Work Scope',  width: "100px"},

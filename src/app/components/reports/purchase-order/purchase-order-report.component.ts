@@ -58,7 +58,7 @@ export class PurchaseOrderReportComponent implements OnInit {
         { field: 'quantity', header: 'Quantity' },
         { field: 'unitPrice', header: 'Unit Price' },
         { field: 'currency', header: 'Currency' },
-        { field: 'extendedCost', header: 'Extended Cost' },
+        { field: 'extendedCost', header: 'Ext. Cost' },
         { field: 'Request Date', header: 'Request Date' },
         { field: 'Promise Date', header: 'Promise Date' },
 

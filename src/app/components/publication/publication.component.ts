@@ -220,7 +220,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'publishedBy', header: 'Published By' },
             { field: 'revisionDate', header: 'Revision Date',width:"110px" },
             { field: 'nextReviewDate', header: 'Next Review Date' },
-            { field: 'expirationDate', header: 'Expiration Date' },
+            { field: 'expirationDate', header: 'Exp Date' },
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },

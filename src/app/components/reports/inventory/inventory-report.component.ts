@@ -60,7 +60,7 @@ export class InventoryReportComponent implements OnInit {
         { field: 'qtyAdjusted', header: 'Qty Adjusted' },
         { field: 'poUnitCost', header: 'PO Unit Cost' },
 
-        { field: 'extendedCost', header: 'Extended Cost' },
+        { field: 'extendedCost', header: 'Ext. Cost' },
         { field: 'obtainFrom', header: 'Obtain From' },
         { field: 'owner', header: 'Owner' },
         { field: 'tracebleTo', header: 'Traceble To' },

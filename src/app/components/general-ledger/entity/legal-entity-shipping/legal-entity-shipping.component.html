@@ -1014,7 +1014,7 @@
 
                         <div class="col-sm-12">
                             <div class="col-sm-4">
-                                <label>Expiration Date</label>
+                                <label>Exp Date</label>
                             </div>
                             <div class="col-sm-5">
                                 <p-calendar class="p-calendar-cstm" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [minDate]="internationalShippingInfo.startDate" [showIcon]="true" name="expirationDate" [(ngModel)]="internationalShippingInfo.expirationDate " (ngModelChange)="enableSave()"></p-calendar>
@@ -1100,7 +1100,7 @@
                     <p><span class="label"><b>Export License#: </b></span><span class="value">{{sourceViewforInterShipping.exportLicense}}</span></p>
                     <p><span class="label"><b>Description: </b></span><span class="value">{{sourceViewforInterShipping.description}}</span></p>
                     <p><span class="label"><b>Start Date: </b></span><span class="value">{{sourceViewforInterShipping.startDate | date:'MM/dd/yyyy h:mm a'}}</span></p>
-                    <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{sourceViewforInterShipping.expirationDate | date:'MM/dd/yyyy h:mm a'}}</span></p>
+                    <p><span class="label"><b>Exp Date: </b></span><span class="value">{{sourceViewforInterShipping.expirationDate | date:'MM/dd/yyyy h:mm a'}}</span></p>
                     <p><span class="label"><b>Amount: </b></span><span class="value">{{sourceViewforInterShipping.amount}}</span></p>
                     <p><span class="label"><b>Country: <span class="text-danger">*</span></b></span><span class="value">{{sourceViewforInterShipping.country}}</span></p>
                     <!-- <p><span class="label"><b>Primary : </b></span><span class="value">{{sourceViewforInterShipping.isPrimary === true ? 'Yes' : 'No'}}</span></p> -->
@@ -1602,7 +1602,7 @@
                         <p><span class="label"><b>Export License#: </b></span><span class="value">{{sourceViewforInterShipping.exportLicense}}</span></p>
                         <p><span class="label"><b>Description: </b></span><span class="value">{{sourceViewforInterShipping.description}}</span></p>
                         <p><span class="label"><b>Start Date: </b></span><span class="value">{{sourceViewforInterShipping.startDate | date:'MM/dd/yyyy h:mm a'}}</span></p>
-                        <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{sourceViewforInterShipping.expirationDate | date:'MM/dd/yyyy h:mm a'}}</span></p>
+                        <p><span class="label"><b>Exp Date: </b></span><span class="value">{{sourceViewforInterShipping.expirationDate | date:'MM/dd/yyyy h:mm a'}}</span></p>
                         <p><span class="label"><b>Amount: <span class="clr-red">*</span></b></span><span class="value">{{sourceViewforInterShipping.amount}}</span></p>
                         <p><span class="label"><b>Country: <span class="clr-red">*</span></b></span><span class="value">{{sourceViewforInterShipping.shipToCountry}}</span></p>
 
@@ -2314,7 +2314,7 @@
                         <th>Export License</th>
                         <th>Description</th>
                         <th>Start Date</th>
-                        <th>Expiration Date</th>
+                        <th>Exp Date</th>
                         <th>Amount <span class="clr-red">*</span></th>
                         <th>Country <span class="clr-red">*</span></th>
                         <th>Is Active</th>                    

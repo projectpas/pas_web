@@ -219,7 +219,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'MPN',
             field: 'partNumber'
         }, {
-            header: 'MPN Desc',
+            header: 'MPN Description',
             field: 'partDescription'
         }, {
             header: 'Stage',
@@ -300,7 +300,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             field: 'partNumber'
         },
         {
-            header: 'MPN Desc',
+            header: 'MPN Description',
             field: 'partDescription'
         }, {
             header: 'Stage',

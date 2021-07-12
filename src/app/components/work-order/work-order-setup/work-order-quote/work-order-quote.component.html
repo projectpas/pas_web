@@ -35,7 +35,7 @@
                      <input class="form-control" type="text" required [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly />
                  </div>
                  <div class="form-group ">
-                     <label>Version Number <span class="clr-red">*</span></label>
+                     <label>Ver Num <span class="clr-red">*</span></label>
                      <input class="form-control" type="text" required [(ngModel)]="quoteForm.versionNo" name="quotenumber" readonly />
                  </div>
                  <div class="form-group ">
@@ -48,7 +48,7 @@
                      <input class="form-control text_start" (change)="calculateExpiryDate()"  (ngModelChange)="getValid()" required type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView" />
                  </div>
                  <div class="form-group ">
-                     <label> Expiration Date <span class="clr-red">*</span></label>
+                     <label> Exp Date <span class="clr-red">*</span></label>
                      <p-calendar [showIcon]="true" [(ngModel)]="expirationDate"  (ngModelChange)="getValid()"
                      [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" required name="ExpDate" [disabled]="true"></p-calendar>
                  </div>
@@ -111,7 +111,7 @@
                  </div>
                  <div class="form-group">
                      <label for="customerName">
-                         Customer Name
+                         Cust Name
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly />
                  </div>
@@ -208,14 +208,14 @@
              </div>
              <div class="col-md-3"> 
                  <div class="form-group ">
-                     <label>Version Number <span class="clr-red">*</span></label>
+                     <label>Ver Num <span class="clr-red">*</span></label>
                      <input class="form-control" type="text" required [(ngModel)]="quoteForm.versionNo" name="quotenumber" readonly />
                  </div>
              </div>
              <div class="col-md-3"> 
                  <div class="form-group">
                      <label for="customerName">
-                         Customer Name
+                         Cust Name
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly />
                  </div>
@@ -1095,7 +1095,7 @@
                                      <div class="panel-body">
                                          <div class="col-sm-6">
                                              <p><span class="label"><b>User Name: </b></span><span class="value">sha123</span></p>
-                                             <p><span class="label"><b>Customer Name: </b></span><span class="value">Shabbir Ahmad</span></p>
+                                             <p><span class="label"><b>Cust Name: </b></span><span class="value">Shabbir Ahmad</span></p>
                                              <p><span class="label"><b>Customer Code: </b></span><span class="value">Cust546</span></p>
                                              <p><span class="label"><b>Internal/External: </b></span><span class="value">Internal</span></p>
                                              <p><span class="label"><b>d/b/a: </b></span><span class="value">d/b/a</span></p>

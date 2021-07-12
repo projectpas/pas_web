@@ -124,7 +124,7 @@ export class RoListComponent implements OnInit {
             header: 'PN',
             field: 'partNumber'
         }, {
-            header: 'PN Desc',
+            header: 'PN Description',
             field: 'partDescription'
 		}, {
             header: 'Item Type',

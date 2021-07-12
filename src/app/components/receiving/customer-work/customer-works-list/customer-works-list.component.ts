@@ -72,7 +72,7 @@ export class CustomerWorksListComponent implements OnInit {
         { label: 'Customer Work List' }
     ];
     cols = [
-        { field: 'customerName', header: 'Customer Name' },
+        { field: 'customerName', header: 'Cust Name' },
         { field: 'partNumber', header: 'MPN' },
         { field: 'partDescription', header: 'MPN Description' },
         { field: 'serialNumber', header: 'Serial Num', width: "90px" },
