@@ -6,7 +6,7 @@ import { StocklineService } from '../../../services/stockline.service';
 import { Site } from '../../../models/site.model';
 import { CommonService } from '../../../services/common.service';
 import { Subject } from 'rxjs'
-declare var $ : any;
+declare var $: any;
 import { takeUntil } from 'rxjs/operators';
 import { formatNumberAsGlobalSettingsModule, getValueFromObjectByKey, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
@@ -25,7 +25,7 @@ export class StockAdjustmentComponent implements OnInit {
 	sourceStockLineSetup: any = {};
 	private onDestroy$: Subject<void> = new Subject<void>();
 	stockLineId: number;
-	legalEntityList: any;	
+	legalEntityList: any;
 	businessUnitList: any;
 	timePattern = timePattern();
 	departmentList: any;
@@ -36,16 +36,16 @@ export class StockAdjustmentComponent implements OnInit {
 		level4: ''
 	};
 	managementStructure = {
-        companyId: 0,
-        buId: 0,
-        divisionId: 0,
-        departmentId: 0,
+		companyId: 0,
+		buId: 0,
+		divisionId: 0,
+		departmentId: 0,
 	}
 	managementStructureOnLoad = {
-        companyId: 0,
-        buId: 0,
-        divisionId: 0,
-        departmentId: 0,
+		companyId: 0,
+		buId: 0,
+		divisionId: 0,
+		departmentId: 0,
 	}
 	defaultDate: Date = new Date('Fri Sep 1 2009 00:00:00');
 	companyAllow: boolean = false;
@@ -57,7 +57,7 @@ export class StockAdjustmentComponent implements OnInit {
 	showDivision: boolean = false;
 	showDepartment: boolean = false;
 	allWareHouses: any;
-    allLocations: any;
+	allLocations: any;
 	allShelfs: any;
 	allBins: any;
 	allSites: Site[];
@@ -67,8 +67,8 @@ export class StockAdjustmentComponent implements OnInit {
 	shelfAllow: boolean = false;
 	binAllow: boolean = false;
 	showSite: boolean = false;
-	stockMemoInfo:string;
-	stockMemoLabel:string;
+	stockMemoInfo: string;
+	stockMemoLabel: string;
 	showWarehouse: boolean = false;
 	showLocation: boolean = false;
 	showShelf: boolean = false;
@@ -79,7 +79,7 @@ export class StockAdjustmentComponent implements OnInit {
 	itemTypesList: any = [];
 	stocklineAdjustmentData: any = [];
 	allPartnumbersList: any = [];
-	arrayItemMasterlist:any[] = [];
+	arrayItemMasterlist: any[] = [];
 	partNumbersCollection: any = [];
 	allCurrencyInfo: any = [];
 	allAdjReasonInfo: any = [];
@@ -92,7 +92,7 @@ export class StockAdjustmentComponent implements OnInit {
 	lotCostAllow: boolean = false;
 	timeLifeAllow: boolean = false;
 	sourceTimeLife: any = {};
-	currentItem:any={};
+	currentItem: any = {};
 	timeLifeCyclesId: number;
 	legalEntityId: number;
 	defaultCurrencyId: number;
@@ -125,106 +125,107 @@ export class StockAdjustmentComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.getDefaultCurrency();						
+		this.getDefaultCurrency();
 		this.getCurrencyData();
 		this.getAdjReasonData();
 		this.getStocklineAdjustmentDataType();
 
 		this.stockLineId = this._actRoute.snapshot.params['id'];
-		if(this.stockLineId) {
+		if (this.stockLineId) {
 			this.getStockLineAdjDetailsById(this.stockLineId);
 		}
 	}
 
 	getDefaultCurrency() {
-        this.legalEntityId = 19;
-        this.commonService.getDefaultCurrency(this.legalEntityId,this.authService.currentUser.masterCompanyId).subscribe(res => {
-            this.defaultCurrencyId = res.currencyId;
-        })
+		this.legalEntityId = 19;
+		this.commonService.getDefaultCurrency(this.legalEntityId, this.authService.currentUser.masterCompanyId).subscribe(res => {
+			this.defaultCurrencyId = res.currencyId;
+		})
 	}
-	
+
 	get userName(): string {
-        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+		return this.authService.currentUser ? this.authService.currentUser.userName : "";
 	}
-	
+
 	get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+			? this.authService.currentUser.masterCompanyId
+			: null;
 	}
 
 	getLegalEntity() {
-        this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.legalEntityList = res;
-        })
+		this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.legalEntityList = res;
+		})
 	}
 
 	loadSiteData() {
-		this.commonService.smartDropDownList('Site', 'SiteId', 'Name',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.allSites = res;
-        })
+		this.commonService.smartDropDownList('Site', 'SiteId', 'Name', this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.allSites = res;
+		})
 	}
 
 	getItemTypes() {
-		this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.itemTypesList = res;
-        })
+		this.commonService.smartDropDownList('ItemType', 'ItemTypeId', 'Description', 0, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.itemTypesList = res;
+		})
 	}
-	onAddStockMemo(currentItem){
-this.currentItem=currentItem;
+	onAddStockMemo(currentItem) {
+		this.currentItem = currentItem;
 		// this.stockMemoInfo=this.stocklineAdjustmentData.item.adjustmentMemo;
-		
-	}
-	onSaveStockMemo(){
-	
-				this.currentItem.adjustmentMemo=this.stockMemoInfo;
-		
-			}
 
-	onClickMemo(value,row_no, obj) {
-            this.memoPopupContent = obj;
-            this.addrawNo = row_no;
-    }
+	}
+	onSaveStockMemo() {
+
+		this.currentItem.adjustmentMemo = this.stockMemoInfo;
+
+	}
+
+	onClickMemo(value, row_no, obj) {
+		this.memoPopupContent = obj;
+		this.addrawNo = row_no;
+	}
 
 	onClickMemoOld() {
-        this.memoPopupContent = this.stocklineAdjustmentData.adjustmentMemo;
-	}   
-
-    onClickPopupSave() {
-        this.stocklineAdjustmentData.adjustmentMemo = this.memoPopupContent;
-        this.memoPopupContent = '';
-        $('#memo-popup-Doc').modal("hide");
-	}
-	
-    closeMemoModel() {
-        $('#memo-popup-Doc').modal("hide");
+		this.memoPopupContent = this.stocklineAdjustmentData.adjustmentMemo;
 	}
 
-    parsedText(text) {
-        if (text) {
-            const dom = new DOMParser().parseFromString(
-                '<!doctype html><body>' + text,
-                'text/html');
-            const decodedString = dom.body.textContent;
-            return decodedString;
-        }
+	onClickPopupSave() {
+		this.stocklineAdjustmentData.adjustmentMemo = this.memoPopupContent;
+		this.memoPopupContent = '';
+		$('#memo-popup-Doc').modal("hide");
+	}
+
+	closeMemoModel() {
+		$('#memo-popup-Doc').modal("hide");
+	}
+
+	parsedText(text) {
+		if (text) {
+			const dom = new DOMParser().parseFromString(
+				'<!doctype html><body>' + text,
+				'text/html');
+			const decodedString = dom.body.textContent;
+			return decodedString;
+		}
 	}
 
 	private saveFailedHelper(error: any) {
 		this.isSpinnerVisible = false;
 	}
-	
+
 	loadPartNumData(strText = '') {
-		if(this.arrayItemMasterlist.length == 0) {			
-            this.arrayItemMasterlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join(),this.authService.currentUser.masterCompanyId).subscribe(response => {
+		if (this.arrayItemMasterlist.length == 0) {
+			this.arrayItemMasterlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join(), this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.allPartnumbersList = response;
 			this.partNumbersCollection = this.allPartnumbersList;
 		}, error => this.saveFailedHelper(error));
 	}
- 
+
 	getCurrencyData() {
-		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(response => {
+		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code', this.authService.currentUser.masterCompanyId, '', '', 0).subscribe(response => {
 			this.allCurrencyInfo = response;
 		});
 	}
@@ -234,33 +235,34 @@ this.currentItem=currentItem;
 	}
 
 	getAdjReasonData() {
-		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).subscribe(response => {
+		this.commonService.smartDropDownList('StocklineAdjustmentReason', 'AdjustmentReasonId', 'Description', this.authService.currentUser.masterCompanyId, '', '', 0).subscribe(response => {
 			this.allAdjReasonInfo = response;
 		});
-	}	
+	}
 
 	getStocklineAdjustmentDataType() {
-		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.stocklineAdjustmentData = res.map(x => {
+		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description', this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+			this.stocklineAdjustmentData = res.map(x => {
 				return {
 					adjustmentDataTypeId: x.value,
 					stocklineAdjustmentDataType: x.label
 				}
 			});
-			this.stocklineAdjustmentData = this.stocklineAdjustmentData.sort((a,b) => (a.adjustmentDataTypeId > b.adjustmentDataTypeId) ? 1 : ((b.adjustmentDataTypeId > a.adjustmentDataTypeId) ? -1 : 0));
-			
+			this.stocklineAdjustmentData = this.stocklineAdjustmentData.sort((a, b) => (a.adjustmentDataTypeId > b.adjustmentDataTypeId) ? 1 : ((b.adjustmentDataTypeId > a.adjustmentDataTypeId) ? -1 : 0));
+
 			this.stocklineAdjustmentData.map(x => {
-				if(x.adjustmentDataTypeId == 2 || x.adjustmentDataTypeId == 3 || x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6 || x.adjustmentDataTypeId == 7) {
+				if (x.adjustmentDataTypeId == 2 || x.adjustmentDataTypeId == 3 || x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6 || x.adjustmentDataTypeId == 7) {
 					x.afterValue = 0;
 				}
-				if(x.adjustmentDataTypeId == 10 || x.adjustmentDataTypeId == 11 || x.adjustmentDataTypeId == 12 || x.adjustmentDataTypeId == 13) {
+				if (x.adjustmentDataTypeId == 10 || x.adjustmentDataTypeId == 11 || x.adjustmentDataTypeId == 12 || x.adjustmentDataTypeId == 13) {
 					x.adjustmentReasonId = 0;
 				}
-				if(x.adjustmentDataTypeId == 11 || x.adjustmentDataTypeId == 12 || x.adjustmentDataTypeId == 13) {
+				if (x.adjustmentDataTypeId == 11 || x.adjustmentDataTypeId == 12 || x.adjustmentDataTypeId == 13) {
 					x.currencyId = this.defaultCurrencyId;
 				}
 				this.isSpinnerVisible = false;
 			});
+			this.isSpinnerVisible = false;
         })
 	}
 
@@ -269,52 +271,52 @@ this.currentItem=currentItem;
 			this.sourceStockLineSetup = res;
 			this.sourceStockLineSetup.isTimeLife = this.sourceStockLineSetup.isTimeLife ? this.sourceStockLineSetup.isTimeLife : false;
 			this.stocklineAdjustmentData.map(x => {
-				if(x.adjustmentDataTypeId == 1) {
-					x.beforeValue = this.sourceStockLineSetup.managementStructureId;					
+				if (x.adjustmentDataTypeId == 1) {
+					x.beforeValue = this.sourceStockLineSetup.managementStructureId;
 				}
-				if(x.adjustmentDataTypeId == 2) {
+				if (x.adjustmentDataTypeId == 2) {
 					x.beforeValue = this.sourceStockLineSetup.siteId ? this.sourceStockLineSetup.siteId : null;
 				}
-				if(x.adjustmentDataTypeId == 3) {
+				if (x.adjustmentDataTypeId == 3) {
 					x.beforeValue = this.sourceStockLineSetup.warehouseId ? this.sourceStockLineSetup.warehouseId : null;
 				}
-				if(x.adjustmentDataTypeId == 4) {
+				if (x.adjustmentDataTypeId == 4) {
 					x.beforeValue = this.sourceStockLineSetup.locationId ? this.sourceStockLineSetup.locationId : null;
 				}
-				if(x.adjustmentDataTypeId == 5) {
+				if (x.adjustmentDataTypeId == 5) {
 					x.beforeValue = this.sourceStockLineSetup.shelfId ? this.sourceStockLineSetup.shelfId : null;
 				}
-				if(x.adjustmentDataTypeId == 6) {
+				if (x.adjustmentDataTypeId == 6) {
 					x.beforeValue = this.sourceStockLineSetup.binId ? this.sourceStockLineSetup.binId : null;
 				}
-				if(x.adjustmentDataTypeId == 7) {
+				if (x.adjustmentDataTypeId == 7) {
 					x.beforeValue = this.sourceStockLineSetup.itemCategory ? this.sourceStockLineSetup.itemCategory : null;
 				}
-				if(x.adjustmentDataTypeId == 8) {
+				if (x.adjustmentDataTypeId == 8) {
 					x.beforeValue = this.sourceStockLineSetup.itemMasterId ? this.sourceStockLineSetup.itemMasterId : null;
 				}
-				if(x.adjustmentDataTypeId == 9) {
+				if (x.adjustmentDataTypeId == 9) {
 					x.beforeValue = this.sourceStockLineSetup.serialNumber ? this.sourceStockLineSetup.serialNumber : null;
 				}
-				if(x.adjustmentDataTypeId == 10) {
+				if (x.adjustmentDataTypeId == 10) {
 					x.beforeValue = this.sourceStockLineSetup.quantityOnHand ? this.sourceStockLineSetup.quantityOnHand : 0;
 					this.sourceStockLineSetup.quantityOnHand = this.sourceStockLineSetup.quantityOnHand ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.quantityOnHand, 0) : '0';
 				}
 				if(x.adjustmentDataTypeId == 11) {
-					x.beforeValue = this.sourceStockLineSetup.coreUnitCost ? this.sourceStockLineSetup.coreUnitCost : 0;
-					this.sourceStockLineSetup.coreUnitCost = this.sourceStockLineSetup.coreUnitCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.coreUnitCost, 2) : '0.00';
+					x.beforeValue = this.sourceStockLineSetup.unitCost ? this.sourceStockLineSetup.unitCost : 0;
+					this.sourceStockLineSetup.unitCost = this.sourceStockLineSetup.unitCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.unitCost, 2) : '0.00';
 				}
-				if(x.adjustmentDataTypeId == 12) {
+				if (x.adjustmentDataTypeId == 12) {
 					x.beforeValue = this.sourceStockLineSetup.unitSalesPrice ? this.sourceStockLineSetup.unitSalesPrice : 0;
 					this.sourceStockLineSetup.unitSalesPrice = this.sourceStockLineSetup.unitSalesPrice ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.unitSalesPrice, 2) : '0.00';
 				}
-				if(x.adjustmentDataTypeId == 13) {
+				if (x.adjustmentDataTypeId == 13) {
 					x.beforeValue = this.sourceStockLineSetup.lotCost ? this.sourceStockLineSetup.lotCost : 0;
 					this.sourceStockLineSetup.lotCost = this.sourceStockLineSetup.lotCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.lotCost, 2) : '0.00';
 				}
 			});
 			this.getManagementStructureCodes(this.sourceStockLineSetup.managementStructureId);
-			if (this.sourceStockLineSetup.timelIfeData != undefined && this.sourceStockLineSetup.timelIfeData != null   ) {
+			if (this.sourceStockLineSetup.timelIfeData != undefined && this.sourceStockLineSetup.timelIfeData != null) {
 				this.timeLifeCyclesId = this.sourceStockLineSetup.timelIfeData.timeLifeCyclesId;
 				//this.sourceTimeLife = this.sourceStockLineSetup.timelIfeData;
 				this.sourceTimeLife = this.getTimeLifeDetails(res.timelIfeData);
@@ -322,23 +324,23 @@ this.currentItem=currentItem;
 		});
 	}
 
-	getManagementStructureCodes(id,empployid=0,editMSID=0) {
-		empployid = empployid == 0 ? this.employeeId : empployid ;
-		this.commonService.getManagmentStrctureData(id,empployid,editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
-			if(response) {
+	getManagementStructureCodes(id, empployid = 0, editMSID = 0) {
+		empployid = empployid == 0 ? this.employeeId : empployid;
+		this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
+			if (response) {
 				const result = response;
-				if(result[0] && result[0].level == 'Level1') {
-					for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
-						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+				if (result[0] && result[0].level == 'Level1') {
+					for (let i = 0; i < result[0].lstManagmentStrcture.length; i++) {
+						if (result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
 							this.existingMgmentStuc.level1 = result[0].lstManagmentStrcture[i].label;
 						}
 					}
-					this.maincompanylist =  result[0].lstManagmentStrcture;	
+					this.maincompanylist = result[0].lstManagmentStrcture;
 					this.headerInfo.companyId = result[0].managementStructureId;
-					this.headerInfo.managementStructureId = result[0].managementStructureId;				
+					this.headerInfo.managementStructureId = result[0].managementStructureId;
 					this.headerInfo.buId = 0;
 					this.headerInfo.divisionId = 0;
-					this.headerInfo.departmentId = 0;	
+					this.headerInfo.departmentId = 0;
 					this.bulist = [];
 					this.divisionListOriginal = [];
 					this.departmentListOriginal = [];
@@ -347,16 +349,16 @@ this.currentItem=currentItem;
 					this.headerInfo.companyId = 0;
 					this.headerInfo.buId = 0;
 					this.headerInfo.divisionId = 0;
-					this.headerInfo.departmentId = 0;	
+					this.headerInfo.departmentId = 0;
 					this.maincompanylist = [];
 					this.bulist = [];
 					this.divisionListOriginal = [];
 					this.departmentListOriginal = [];
 				}
-				
-				if(result[1] && result[1].level == 'Level2') {	
-					for(let i = 0; i < result[1].lstManagmentStrcture.length; i++){
-						if(result[1].lstManagmentStrcture[i].value == result[1].managementStructureId) {
+
+				if (result[1] && result[1].level == 'Level2') {
+					for (let i = 0; i < result[1].lstManagmentStrcture.length; i++) {
+						if (result[1].lstManagmentStrcture[i].value == result[1].managementStructureId) {
 							this.existingMgmentStuc.level2 = result[1].lstManagmentStrcture[i].label;
 						}
 					}
@@ -368,53 +370,54 @@ this.currentItem=currentItem;
 					this.divisionListOriginal = [];
 					this.departmentListOriginal = [];
 				} else {
-					if(result[1] && result[1].level == 'NEXT') {
+					if (result[1] && result[1].level == 'NEXT') {
 						this.bulist = result[1].lstManagmentStrcture;
 					}
 					this.existingMgmentStuc.level2 = '';
 					this.headerInfo.buId = 0;
 					this.headerInfo.divisionId = 0;
-					this.headerInfo.departmentId = 0;					
+					this.headerInfo.departmentId = 0;
 					this.divisionListOriginal = [];
-					this.departmentListOriginal = []; 
+					this.departmentListOriginal = [];
 				}
 
-				if(result[2] && result[2].level == 'Level3') {		
-					for(let i = 0; i < result[2].lstManagmentStrcture.length; i++){
-						if(result[2].lstManagmentStrcture[i].value == result[2].managementStructureId) {
+				if (result[2] && result[2].level == 'Level3') {
+					for (let i = 0; i < result[2].lstManagmentStrcture.length; i++) {
+						if (result[2].lstManagmentStrcture[i].value == result[2].managementStructureId) {
 							this.existingMgmentStuc.level3 = result[2].lstManagmentStrcture[i].label;
 						}
 					}
-					this.divisionListOriginal =  result[2].lstManagmentStrcture;		
-					this.headerInfo.divisionId = result[2].managementStructureId;		
-					this.headerInfo.managementStructureId = result[2].managementStructureId;			
-					this.headerInfo.departmentId = 0;						
-					this.departmentListOriginal = [];			
+					this.divisionListOriginal = result[2].lstManagmentStrcture;
+					this.headerInfo.divisionId = result[2].managementStructureId;
+					this.headerInfo.managementStructureId = result[2].managementStructureId;
+					this.headerInfo.departmentId = 0;
+					this.departmentListOriginal = [];
 				} else {
-					if(result[2] && result[2].level == 'NEXT') {
-						this.divisionListOriginal = result[2].lstManagmentStrcture;						
+					if (result[2] && result[2].level == 'NEXT') {
+						this.divisionListOriginal = result[2].lstManagmentStrcture;
 					}
 					this.existingMgmentStuc.level3 = '';
-					this.headerInfo.divisionId = 0; 
-					this.headerInfo.departmentId = 0;	
-					this.departmentListOriginal = [];}
+					this.headerInfo.divisionId = 0;
+					this.headerInfo.departmentId = 0;
+					this.departmentListOriginal = [];
+				}
 
-				if(result[3] && result[3].level == 'Level4') {		
-					for(let i = 0; i < result[3].lstManagmentStrcture.length; i++){
-						if(result[3].lstManagmentStrcture[i].value == result[3].managementStructureId) {
+				if (result[3] && result[3].level == 'Level4') {
+					for (let i = 0; i < result[3].lstManagmentStrcture.length; i++) {
+						if (result[3].lstManagmentStrcture[i].value == result[3].managementStructureId) {
 							this.existingMgmentStuc.level4 = result[3].lstManagmentStrcture[i].label;
 						}
 					}
-					this.departmentListOriginal = result[3].lstManagmentStrcture;;			
-					this.headerInfo.departmentId = result[3].managementStructureId;	
-					this.headerInfo.managementStructureId = result[3].managementStructureId;				
+					this.departmentListOriginal = result[3].lstManagmentStrcture;;
+					this.headerInfo.departmentId = result[3].managementStructureId;
+					this.headerInfo.managementStructureId = result[3].managementStructureId;
 				} else {
 					this.existingMgmentStuc.level4 = '';
-					this.headerInfo.departmentId = 0; 
-					if(result[3] && result[3].level == 'NEXT') {
-						this.departmentListOriginal = result[3].lstManagmentStrcture;						
+					this.headerInfo.departmentId = 0;
+					if (result[3] && result[3].level == 'NEXT') {
+						this.departmentListOriginal = result[3].lstManagmentStrcture;
 					}
-				}	
+				}
 
 				this.managementStructureOnLoad = {
 					companyId: result[1].managementStructureId !== undefined ? result[1].managementStructureId : 0,
@@ -424,19 +427,18 @@ this.currentItem=currentItem;
 				}
 				this.isSpinnerVisible = false;
 			}
-			else
-			{
+			else {
 				this.isSpinnerVisible = false;
-			}			
-		},err => {
+			}
+		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;			
+			const errorLog = err;
 		});
 	}
 
-	isCompanyEnable(item) {				
-		if(this.companyAllow) {
-			this.legalEntityList = this.maincompanylist ;
+	isCompanyEnable(item) {
+		if (this.companyAllow) {
+			this.legalEntityList = this.maincompanylist;
 			this.showCompany = true;
 			this.showBusiness = true;
 			this.showDivision = true;
@@ -467,7 +469,7 @@ this.currentItem=currentItem;
 	}
 
 	isBusinessEnable(item) {
-		if(this.businessAllow) {
+		if (this.businessAllow) {
 			this.showBusiness = true;
 			this.showDivision = true;
 			this.showDepartment = true;
@@ -490,8 +492,8 @@ this.currentItem=currentItem;
 		this.divisionList = [];
 		this.departmentList = [];
 		this.businessUnitList = this.bulist;
-		
-		if(this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
+
+		if (this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
 			item.checkedItem = true;
 		} else {
 			item.checkedItem = false;
@@ -499,7 +501,7 @@ this.currentItem=currentItem;
 	}
 
 	isDivisionEnable(item) {
-		if(this.divisionAllow) {
+		if (this.divisionAllow) {
 			this.showDivision = true;
 			this.showDepartment = true;
 			this.deptAllow = true;
@@ -518,7 +520,7 @@ this.currentItem=currentItem;
 
 		this.divisionList = this.divisionListOriginal;
 
-		if(this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
+		if (this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
 			item.checkedItem = true;
 		} else {
 			item.checkedItem = false;
@@ -526,7 +528,7 @@ this.currentItem=currentItem;
 	}
 
 	isDeptEnable(item) {
-		if(this.deptAllow) {
+		if (this.deptAllow) {
 			this.showDepartment = true;
 			item.checkedItem = true;
 			this.disableLevel4 = true;
@@ -536,17 +538,17 @@ this.currentItem=currentItem;
 			this.disableLevel4 = false;
 		}
 		this.managementStructure.departmentId = 0;
-		this.departmentList =  this.departmentListOriginal;
+		this.departmentList = this.departmentListOriginal;
 
-		if(this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
+		if (this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
 			item.checkedItem = true;
 		} else {
 			item.checkedItem = false;
 		}
 	}
 
-	isSiteEnable(item) {		
-		if(this.siteAllow) {
+	isSiteEnable(item) {
+		if (this.siteAllow) {
 			this.loadSiteData();
 			this.showSite = true;
 			this.showWarehouse = true;
@@ -574,9 +576,9 @@ this.currentItem=currentItem;
 		}
 		item.afterValue = 0;
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 3 || x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 3 || x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
-				if(this.siteAllow) {
+				if (this.siteAllow) {
 					x.checkedItem = true;
 				} else {
 					x.checkedItem = false;
@@ -590,7 +592,7 @@ this.currentItem=currentItem;
 	}
 
 	iswarehouseEnable(item) {
-		if(this.warehouseAllow) {
+		if (this.warehouseAllow) {
 			this.showWarehouse = true;
 			this.showLocation = true;
 			this.showShelf = true;
@@ -613,9 +615,9 @@ this.currentItem=currentItem;
 		}
 		item.afterValue = 0;
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
-				if(this.warehouseAllow) {
+				if (this.warehouseAllow) {
 					x.checkedItem = true;
 				} else {
 					x.checkedItem = false;
@@ -625,15 +627,15 @@ this.currentItem=currentItem;
 		this.allLocations = [];
 		this.allShelfs = [];
 		this.allBins = [];
-		if(this.sourceStockLineSetup.siteId != 0) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', this.sourceStockLineSetup.siteId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		if (this.sourceStockLineSetup.siteId != 0) {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', this.authService.currentUser.masterCompanyId, 'SiteId', this.sourceStockLineSetup.siteId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
 	}
 
 	isLocationEnable(item) {
-		if(this.locationAllow) {
+		if (this.locationAllow) {
 			this.showLocation = true;
 			this.showShelf = true;
 			this.showBin = true;
@@ -652,9 +654,9 @@ this.currentItem=currentItem;
 		}
 		item.afterValue = 0;
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
-				if(this.locationAllow) {
+				if (this.locationAllow) {
 					x.checkedItem = true;
 				} else {
 					x.checkedItem = false;
@@ -663,15 +665,15 @@ this.currentItem=currentItem;
 		});
 		this.allShelfs = [];
 		this.allBins = [];
-		if(this.sourceStockLineSetup.warehouseId != 0) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', this.sourceStockLineSetup.warehouseId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		if (this.sourceStockLineSetup.warehouseId != 0) {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', this.sourceStockLineSetup.warehouseId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
 	}
 
 	isShelfEnable(item) {
-		if(this.shelfAllow) {
+		if (this.shelfAllow) {
 			this.showShelf = true;
 			this.showBin = true;
 			this.binAllow = true;
@@ -686,9 +688,9 @@ this.currentItem=currentItem;
 		}
 		item.afterValue = 0;
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
-				if(this.shelfAllow) {
+				if (this.shelfAllow) {
 					x.checkedItem = true;
 				} else {
 					x.checkedItem = false;
@@ -697,15 +699,15 @@ this.currentItem=currentItem;
 		});
 
 		this.allBins = [];
-		if(this.sourceStockLineSetup.locationId != 0) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name',this.authService.currentUser.masterCompanyId, 'LocationId', this.sourceStockLineSetup.locationId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		if (this.sourceStockLineSetup.locationId != 0) {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', this.sourceStockLineSetup.locationId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
 	}
 
 	isBinEnable(item) {
-		if(this.binAllow) {
+		if (this.binAllow) {
 			this.showBin = true;
 			item.checkedItem = true;
 			this.disableBin = true;
@@ -715,12 +717,12 @@ this.currentItem=currentItem;
 			this.disableBin = false;
 		}
 		item.binId = 0;
-		if(this.sourceStockLineSetup.shelfId != 0) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', this.sourceStockLineSetup.shelfId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		if (this.sourceStockLineSetup.shelfId != 0) {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', this.sourceStockLineSetup.shelfId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}
-	}	
+	}
 
 	selectedLegalEntity(legalEntityId, item) {
 		this.businessUnitList = [];
@@ -730,13 +732,13 @@ this.currentItem=currentItem;
 		this.managementStructure.divisionId = 0;
 		this.managementStructure.departmentId = 0;
 
-        if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
+		if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
 			item.afterValue = legalEntityId;
-            this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.businessUnitList = res;
+			this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+				this.businessUnitList = res;
 			});
 		}
-		if (legalEntityId != "0" && legalEntityId != 0) {            
+		if (legalEntityId != "0" && legalEntityId != 0) {
 			this.disableLevel1 = false;
 		} else {
 			this.disableLevel1 = true;
@@ -749,39 +751,39 @@ this.currentItem=currentItem;
 		this.managementStructure.divisionId = 0;
 		this.managementStructure.departmentId = 0;
 
-        if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
+		if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
 			item.afterValue = businessUnitId;
-            this.commonService.getDivisionListByBU(businessUnitId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.divisionList = res;
-            })
+			this.commonService.getDivisionListByBU(businessUnitId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+				this.divisionList = res;
+			})
 		}
-		if (businessUnitId != "0" && businessUnitId != 0) {            
+		if (businessUnitId != "0" && businessUnitId != 0) {
 			this.disableLevel2 = false;
 		} else {
 			this.disableLevel2 = true;
 		}
-    }
-    selectedDivision(divisionUnitId, item) {
+	}
+	selectedDivision(divisionUnitId, item) {
 		this.departmentList = [];
 		this.managementStructure.departmentId = 0;
 
-        if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
+		if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
 			item.afterValue = divisionUnitId;
-            this.commonService.getDepartmentListByDivisionId(divisionUnitId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.departmentList = res;
-            })
+			this.commonService.getDepartmentListByDivisionId(divisionUnitId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+				this.departmentList = res;
+			})
 		}
-		if (divisionUnitId != "0" && divisionUnitId != 0) {            
+		if (divisionUnitId != "0" && divisionUnitId != 0) {
 			this.disableLevel3 = false;
 		} else {
 			this.disableLevel3 = true;
 		}
-    }
-    selectedDepartment(departmentId, item) {
-        if (departmentId != 0 && departmentId != null && departmentId != undefined) {
+	}
+	selectedDepartment(departmentId, item) {
+		if (departmentId != 0 && departmentId != null && departmentId != undefined) {
 			item.afterValue = departmentId;
 		}
-		if (departmentId != "0" && departmentId != 0) {            
+		if (departmentId != "0" && departmentId != 0) {
 			this.disableLevel4 = false;
 		} else {
 			this.disableLevel4 = true;
@@ -794,18 +796,18 @@ this.currentItem=currentItem;
 		this.allShelfs = [];
 		this.allBins = [];
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 3 || x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 3 || x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
 			}
 		});
-		
-		if(siteId != 0) {
-			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+
+		if (siteId != 0) {
+			this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allWareHouses = res;
 			})
 		}
 
-		if (siteId != "0" && siteId != 0) {            
+		if (siteId != "0" && siteId != 0) {
 			this.disableSite = false;
 		} else {
 			this.disableSite = true;
@@ -817,18 +819,18 @@ this.currentItem=currentItem;
 		this.allShelfs = [];
 		this.allBins = [];
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 4 || x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
 			}
 		});
 
-		if(warehouseId != 0) {
-			this.commonService.smartDropDownList('Location', 'LocationId', 'Name',this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		if (warehouseId != 0) {
+			this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allLocations = res;
 			})
 		}
 
-		if (warehouseId != "0" && warehouseId != 0) {            
+		if (warehouseId != "0" && warehouseId != 0) {
 			this.disableWarehouse = false;
 		} else {
 			this.disableWarehouse = true;
@@ -839,18 +841,18 @@ this.currentItem=currentItem;
 		this.allShelfs = [];
 		this.allBins = [];
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 5 || x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
 			}
 		});
-		
-		if(locationId != 0) {
-			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name' ,this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+
+		if (locationId != 0) {
+			this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allShelfs = res;
 			})
 		}
 
-		if (locationId != "0" && locationId != 0) {            
+		if (locationId != "0" && locationId != 0) {
 			this.disableLocation = false;
 		} else {
 			this.disableLocation = true;
@@ -860,18 +862,18 @@ this.currentItem=currentItem;
 	getBinList(shelfId) {
 		this.allBins = [];
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 6) {
+			if (x.adjustmentDataTypeId == 6) {
 				x.afterValue = 0;
 			}
 		});
 
-		if(shelfId != 0) {
-			this.commonService.smartDropDownList('Bin', 'BinId', 'Name',this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId,  0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		if (shelfId != 0) {
+			this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 				this.allBins = res;
 			})
 		}
 
-		if (shelfId != "0" && shelfId != 0) {            
+		if (shelfId != "0" && shelfId != 0) {
 			this.disableShelf = false;
 		} else {
 			this.disableShelf = true;
@@ -879,7 +881,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangeBin(binId) {
-		if (binId != "0" && binId != 0) {            
+		if (binId != "0" && binId != 0) {
 			this.disableBin = false;
 		} else {
 			this.disableBin = true;
@@ -888,13 +890,13 @@ this.currentItem=currentItem;
 
 	onChangeCategory(item) {
 		item.afterValue = 0;
-		if(this.categoryAllow) {
+		if (this.categoryAllow) {
 			this.getItemTypes();
 			item.checkedItem = true;
 			this.disableCategory = true;
 			this.partNumberAllow = true;
 			this.stocklineAdjustmentData.map(x => {
-				if(x.adjustmentDataTypeId == 8) {
+				if (x.adjustmentDataTypeId == 8) {
 					this.onChangePartNum(x);
 				}
 			});
@@ -903,7 +905,7 @@ this.currentItem=currentItem;
 			this.disableCategory = false;
 			this.partNumberAllow = false;
 			this.stocklineAdjustmentData.map(x => {
-				if(x.adjustmentDataTypeId == 8) {
+				if (x.adjustmentDataTypeId == 8) {
 					this.onChangePartNum(x);
 				}
 			});
@@ -911,7 +913,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangeCategorySelect(value) {
-		if (value != "0" && value != 0) {            
+		if (value != "0" && value != 0) {
 			this.disableCategory = false;
 		} else {
 			this.disableCategory = true;
@@ -919,7 +921,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangeQtyOnHandAdjReason(value) {
-		if (value != "0" && value != 0) {            
+		if (value != "0" && value != 0) {
 			this.disableQtyOnHandAdj = false;
 		} else {
 			this.disableQtyOnHandAdj = true;
@@ -927,7 +929,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangeUnitCostAdjReason(value) {
-		if (value != "0" && value != 0) {            
+		if (value != "0" && value != 0) {
 			this.disableUnitCostAdj = false;
 		} else {
 			this.disableUnitCostAdj = true;
@@ -935,7 +937,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangeSalesPriceAdjReason(value) {
-		if (value != "0" && value != 0) {            
+		if (value != "0" && value != 0) {
 			this.disableSalesPriceAdj = false;
 		} else {
 			this.disableSalesPriceAdj = true;
@@ -943,7 +945,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangelotCostAdjReason(value) {
-		if (value != "0" && value != 0) {            
+		if (value != "0" && value != 0) {
 			this.disablelotCostAdj = false;
 		} else {
 			this.disablelotCostAdj = true;
@@ -958,8 +960,8 @@ this.currentItem=currentItem;
 	}
 
 	onChangePartNum(item) {
-		item.afterValue = undefined;	
-		if(this.partNumberAllow) {
+		item.afterValue = undefined;
+		if (this.partNumberAllow) {
 			this.loadPartNumData();
 			item.checkedItem = true;
 		} else {
@@ -968,8 +970,8 @@ this.currentItem=currentItem;
 	}
 
 	onChangeSerialNum(item) {
-		item.afterValue = '';	
-		if(this.serialNumAllow) {
+		item.afterValue = '';
+		if (this.serialNumAllow) {
 			item.checkedItem = true;
 		} else {
 			item.checkedItem = false;
@@ -977,12 +979,12 @@ this.currentItem=currentItem;
 	}
 
 	onChangePrices(item) {
-		item.afterValue = '';	
-		item.adjustmentValue = '';	
+		item.afterValue = '';
+		item.adjustmentValue = '';
 	}
 
 	onChangeQtyOnHand(item) {
-		if(this.quantityOnHandAllow) {
+		if (this.quantityOnHandAllow) {
 			item.checkedItem = true;
 			this.disableQtyOnHandAdj = true;
 		} else {
@@ -990,8 +992,9 @@ this.currentItem=currentItem;
 			this.disableQtyOnHandAdj = false;
 		}
 	}
+
 	onChangeUnitCost(item) {
-		if(this.unitCostAllow) {
+		if (this.unitCostAllow) {
 			item.checkedItem = true;
 			this.disableUnitCostAdj = true;
 		} else {
@@ -1001,7 +1004,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangeSalesPrice(item) {
-		if(this.unitSalesPriceAllow) {
+		if (this.unitSalesPriceAllow) {
 			item.checkedItem = true;
 			this.disableSalesPriceAdj = true;
 		} else {
@@ -1011,7 +1014,7 @@ this.currentItem=currentItem;
 	}
 
 	onChangelotCost(item) {
-		if(this.lotCostAllow) {
+		if (this.lotCostAllow) {
 			item.checkedItem = true;
 			this.disablelotCostAdj = true;
 		} else {
@@ -1021,19 +1024,19 @@ this.currentItem=currentItem;
 	}
 
 	onCheckTimeLife(item) {
-		if(this.timeLifeAllow) {
+		if (this.timeLifeAllow) {
 			item.checkedItem = true;
 		} else {
 			item.checkedItem = false;
 		}
 	}
 
-	onChangeQtyOnHandAdj(item) {		
+	onChangeQtyOnHandAdj(item) {
 		item.adjustmentValue = item.adjustmentValue ? formatNumberAsGlobalSettingsModule(item.adjustmentValue, 0) : '0';
-		const beforeValue = this.sourceStockLineSetup.quantityOnHand ? parseFloat(this.sourceStockLineSetup.quantityOnHand.toString().replace(/\,/g,'')) : 0;
-		let adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g,'')) : 0;		
+		const beforeValue = this.sourceStockLineSetup.quantityOnHand ? parseFloat(this.sourceStockLineSetup.quantityOnHand.toString().replace(/\,/g, '')) : 0;
+		let adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g, '')) : 0;
 		const afterValue = beforeValue + adjValue;
-		if(afterValue < 0) {
+		if (afterValue < 0) {
 			item.adjustmentValue = 0;
 			item.afterValue = 0;
 			this.alertService.showMessage(
@@ -1047,10 +1050,10 @@ this.currentItem=currentItem;
 
 	onChangeUnitCostAdj(item) {
 		item.adjustmentValue = item.adjustmentValue ? formatNumberAsGlobalSettingsModule(item.adjustmentValue, 2) : '0.00';
-		const beforeValue = this.sourceStockLineSetup.coreUnitCost ? parseFloat(this.sourceStockLineSetup.coreUnitCost.toString().replace(/\,/g,'')) : 0;
+		const beforeValue = this.sourceStockLineSetup.unitCost ? parseFloat(this.sourceStockLineSetup.unitCost.toString().replace(/\,/g,'')) : 0;
 		const adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g,'')) : 0;
 		const afterValue = beforeValue + adjValue;
-		if(afterValue < 0) {
+		if (afterValue < 0) {
 			item.adjustmentValue = '0.00';
 			item.afterValue = '0.00';
 			this.alertService.showMessage(
@@ -1068,10 +1071,10 @@ this.currentItem=currentItem;
 
 	onChangeLotCostAdj(item) {
 		item.adjustmentValue = item.adjustmentValue ? formatNumberAsGlobalSettingsModule(item.adjustmentValue, 2) : '0.00';
-		const beforeValue = this.sourceStockLineSetup.lotCost ? parseFloat(this.sourceStockLineSetup.lotCost.toString().replace(/\,/g,'')) : 0;
-		const adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g,'')) : 0;
+		const beforeValue = this.sourceStockLineSetup.lotCost ? parseFloat(this.sourceStockLineSetup.lotCost.toString().replace(/\,/g, '')) : 0;
+		const adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g, '')) : 0;
 		const afterValue = beforeValue + adjValue;
-		if(afterValue < 0) {
+		if (afterValue < 0) {
 			item.adjustmentValue = '0.00';
 			item.afterValue = '0.00';
 			this.alertService.showMessage(
@@ -1084,39 +1087,23 @@ this.currentItem=currentItem;
 	}
 
 
-	onSaveStockLineAdj() {		
+	onSaveStockLineAdj() {
 		const timeLife = this.getTimeLife(this.sourceTimeLife);
-		// const timeLife = {
-		// 	timeLifeCyclesId : this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
-		// 	cyclesRemaining: typeof(this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
-		// 	timeRemaining: typeof(this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
-		// 	cyclesSinceNew: typeof(this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
-		// 	timeSinceNew: typeof(this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
-		// 	lastSinceNew: typeof(this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
-		// 	cyclesSinceOVH: typeof(this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
-		// 	timeSinceOVH: typeof(this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
-		// 	lastSinceOVH: typeof(this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
-		// 	cyclesSinceInspection: typeof(this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
-		// 	timeSinceInspection: typeof(this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
-		// 	lastSinceInspection: typeof(this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
-		// 	cyclesSinceRepair: typeof(this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
-		// 	timeSinceRepair: typeof(this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
-		// }
 		this.tempStockData = [];
 		this.stocklineAdjustmentData.map(x => {
-			if(x.adjustmentDataTypeId == 8) {
+			if (x.adjustmentDataTypeId == 8) {
 				x.afterValue = x.afterValue ? getValueFromObjectByKey('value', x.afterValue) : null;
 			}
-			if(x.adjustmentDataTypeId == 10 || x.adjustmentDataTypeId == 11 || x.adjustmentDataTypeId == 12 || x.adjustmentDataTypeId == 13) {
-				x.afterValue = x.afterValue ? parseFloat(x.afterValue.toString().replace(/\,/g,'')) : 0;
+			if (x.adjustmentDataTypeId == 10 || x.adjustmentDataTypeId == 11 || x.adjustmentDataTypeId == 12 || x.adjustmentDataTypeId == 13) {
+				x.afterValue = x.afterValue ? parseFloat(x.afterValue.toString().replace(/\,/g, '')) : 0;
 				x.adjustmentReason = x.adjustmentReasonId ? getValueFromArrayOfObjectById('label', 'value', x.adjustmentReasonId, this.allAdjReasonInfo) : '';
 			}
-			if(x.adjustmentDataTypeId == 14) {
+			if (x.adjustmentDataTypeId == 14) {
 				x.afterValue = this.timeLifeCyclesId ? this.timeLifeCyclesId : null;
 				x.beforeValue = this.timeLifeCyclesId ? this.timeLifeCyclesId : null;
-				x.timeLifes = {...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date()}
+				x.timeLifes = { ...timeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() }
 			}
-			if(x.checkedItem) {
+			if (x.checkedItem) {
 				const data = {
 					...x,
 					stockLineId: this.stockLineId,
@@ -1135,41 +1122,41 @@ this.currentItem=currentItem;
 		});
 	}
 
-	getTimeLifeDetails(x) {		
-		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();                      
+	getTimeLifeDetails(x) {
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();
 		timeLife.timeLifeCyclesId = x.timeLifeCyclesId;
-        timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
-		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;				
-        timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
-		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;				
-        timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
-		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;				
-        timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
-		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;				
-        timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
-		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;			
-        timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingHrs = x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null;
+		timeLife.cyclesRemainingMin = x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null;
+		timeLife.cyclesSinceInspectionHrs = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null;
+		timeLife.cyclesSinceInspectionMin = x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null;
+		timeLife.cyclesSinceNewHrs = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null;
+		timeLife.cyclesSinceNewMin = x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null;
+		timeLife.cyclesSinceOVHHrs = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null;
+		timeLife.cyclesSinceOVHMin = x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null;
+		timeLife.cyclesSinceRepairHrs = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null;
+		timeLife.cyclesSinceRepairMin = x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null;
+		timeLife.timeRemainingHrs = x.timeRemaining ? x.timeRemaining.split(':')[0] : null;
 		timeLife.timeRemainingMin = x.timeRemaining ? x.timeRemaining.split(':')[1] : null;
-        timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
-		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;				
-        timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
-		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;				
-        timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
-		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;				
-        timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
-		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;	
-        timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
-		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;				
-        timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
-		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;				
-        timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
-        timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;           
-        return timeLife;
+		timeLife.timeSinceInspectionHrs = x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null;
+		timeLife.timeSinceInspectionMin = x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null;
+		timeLife.timeSinceNewHrs = x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null;
+		timeLife.timeSinceNewMin = x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null;
+		timeLife.timeSinceOVHHrs = x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null;
+		timeLife.timeSinceOVHMin = x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null;
+		timeLife.timeSinceRepairHrs = x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null;
+		timeLife.timeSinceRepairMin = x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null;
+		timeLife.lastSinceInspectionHrs = x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null;
+		timeLife.lastSinceInspectionMin = x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null;
+		timeLife.lastSinceNewHrs = x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null;
+		timeLife.lastSinceNewMin = x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null;
+		timeLife.lastSinceOVHHrs = x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null;
+		timeLife.lastSinceOVHMin = x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null;
+		return timeLife;
 	}
 
 	getTimeLife(x) {
-		let timeLife: TimeLifeDraftData = new TimeLifeDraftData(); 
-		timeLife.timeLifeCyclesId = this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null;   
+		let timeLife: TimeLifeDraftData = new TimeLifeDraftData();
+		timeLife.timeLifeCyclesId = this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null;
 		timeLife.cyclesRemaining = ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00'));
 		timeLife.timeRemaining = ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00'));
 		timeLife.cyclesSinceNew = ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00'));
@@ -1182,55 +1169,55 @@ this.currentItem=currentItem;
 		timeLife.timeSinceInspection = ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00'));
 		timeLife.lastSinceInspection = ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00'));
 		timeLife.cyclesSinceRepair = ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00'));
-		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));				
-        return timeLife;
+		timeLife.timeSinceRepair = ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00'));
+		return timeLife;
 	}
 
-	onChangeTimeLifeMin(name,value) {  	
-        if (value > 59) {           
-			this.alertService.showMessage('Error','Minutes can\'t be greater than 59', MessageSeverity.error);
+	onChangeTimeLifeMin(name, value) {
+		if (value > 59) {
+			this.alertService.showMessage('Error', 'Minutes can\'t be greater than 59', MessageSeverity.error);
 			this.timeLifeMinNames(name);
-        }       
+		}
 	}
-	
-	timeLifeMinNames(name){
-		if(name == 'cyclesRemainingMin'){
+
+	timeLifeMinNames(name) {
+		if (name == 'cyclesRemainingMin') {
 			this.sourceTimeLife.cyclesRemainingMin = '00';
 		}
-		else if (name == 'timeRemainingMin'){
+		else if (name == 'timeRemainingMin') {
 			this.sourceTimeLife.timeRemainingMin = '00';
 		}
-		else if (name == 'lastSinceNewMin'){
+		else if (name == 'lastSinceNewMin') {
 			this.sourceTimeLife.lastSinceNewMin = '00';
 		}
-		else if (name == 'cyclesSinceNewMin'){
+		else if (name == 'cyclesSinceNewMin') {
 			this.sourceTimeLife.cyclesSinceNewMin = '00';
 		}
-		else if (name == 'timeSinceNewMin'){
+		else if (name == 'timeSinceNewMin') {
 			this.sourceTimeLife.timeSinceNewMin = '00';
 		}
-		else if (name == 'lastSinceOVHMin'){
+		else if (name == 'lastSinceOVHMin') {
 			this.sourceTimeLife.lastSinceOVHMin = '00';
 		}
-		else if (name == 'cyclesSinceOVHMin'){
+		else if (name == 'cyclesSinceOVHMin') {
 			this.sourceTimeLife.cyclesSinceOVHMin = '00';
 		}
-		else if (name == 'timeSinceOVHMin'){
+		else if (name == 'timeSinceOVHMin') {
 			this.sourceTimeLife.timeSinceOVHMin = '00';
 		}
-		else if (name == 'lastSinceInspectionMin'){
+		else if (name == 'lastSinceInspectionMin') {
 			this.sourceTimeLife.lastSinceInspectionMin = '00';
 		}
-		else if (name == 'cyclesSinceInspectionMin'){
+		else if (name == 'cyclesSinceInspectionMin') {
 			this.sourceTimeLife.cyclesSinceInspectionMin = '00';
 		}
-		else if (name == 'timeSinceInspectionMin'){
+		else if (name == 'timeSinceInspectionMin') {
 			this.sourceTimeLife.timeSinceInspectionMin = '00';
 		}
-		else if (name == 'cyclesSinceRepairMin'){
+		else if (name == 'cyclesSinceRepairMin') {
 			this.sourceTimeLife.cyclesSinceRepairMin = '00';
 		}
-		else if (name == 'timeSinceRepairMin'){
+		else if (name == 'timeSinceRepairMin') {
 			this.sourceTimeLife.timeSinceRepairMin = '00';
 		}
 	}

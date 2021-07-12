@@ -1217,7 +1217,7 @@ export class AddressComponentComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			} else {
 				this.isEditModeAdd = false;
-				if (this.ModuleID == AppModuleEnum.SalesOrder || this.ModuleID == AppModuleEnum.SalesQuate || this.ModuleID == AppModuleEnum.ExchangeQuote) {
+				if (this.ModuleID == AppModuleEnum.SalesOrder || this.ModuleID == AppModuleEnum.SalesQuate || this.ModuleID == AppModuleEnum.ExchangeQuote || this.ModuleID == AppModuleEnum.ExchangeSalesOrder) {
 					this.sourcePoApproval.shipToUserTypeId = 1;
 					this.sourcePoApproval.billToUserTypeId = 1;
 				}

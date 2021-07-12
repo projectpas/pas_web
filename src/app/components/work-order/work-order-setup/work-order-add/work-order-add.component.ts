@@ -133,6 +133,7 @@ export class WorkOrderAddComponent implements OnInit {
     workFlowId: any = null;
     editWorkFlowData: any;
     modal: NgbModalRef;
+    modalView: NgbModalRef;
     modalRef: NgbModalRef;
     modalRefCreate: NgbModalRef;
     modalWorkScopeModel:NgbModalRef
@@ -1009,15 +1010,15 @@ export class WorkOrderAddComponent implements OnInit {
         this.selectedMPNItemMasterId = workOrderPartNumber.itemMasterId;
         this.currentIndex = index;
         this.getWOSummaryDetails(this.SummaryMonths)
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false ,windowClass: 'assetMange'});
     }
-
+    isSpinnerVisibleHistory:boolean=false;
     getWOSummaryDetails(monthtatus)
     {
         if (this.selectedMPNItemMasterId > 0) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisibleHistory = true;
             this.workOrderService.GetWorkOrderSummarisedHistoryByMPN(this.selectedMPNItemMasterId, monthtatus == 1 || monthtatus == "1" ? true : false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
+                this.isSpinnerVisibleHistory = false;
                 if(res != undefined && res.mpnSummaryModel != undefined)
                 {
                     this.woSummaryMPNData = res.mpnSummaryModel;
@@ -1027,18 +1028,27 @@ export class WorkOrderAddComponent implements OnInit {
                     this.woSummaryCustData = res.custSummaryModel;
                 }
             },err => {
+                this.isSpinnerVisibleHistory = false;
                     this.handleError(err);
                 });
         }
     }
-
-    async view(rowData) {
+    isOpenViewWO:boolean=false;
+    async view(content,rowData) {
+        this.modalView = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
         this.paramsData['workOrderId'] = rowData.workOrderId;
         this.workOrderId = rowData.workOrderId;
+        this.isOpenViewWO=true;
+        this.isSpinnerVisibleHistory = true;
+        setTimeout(() => {
+            this.isSpinnerVisibleHistory = false;
+        }, 1000);
     }
 
     closeViewModel(){
-        $('#viewWorkOrder').modal("hide");
+        // $('#viewWorkOrder').modal("hide");
+        this.modalView.close();
+        this.isOpenViewWO=false;
     }
 
     dismissModel() {
@@ -4093,7 +4103,7 @@ createQuote() {
     //     this.refreshGrid.emit(true)
     // }
 
-    refreshMpnList(){ 
+    refreshMpnList(data){ 
         // this.workOrderId = this.acRouter.snapshot.params['id'];
         this.recCustomerId=0;
         this.triggerWorkOrderData();

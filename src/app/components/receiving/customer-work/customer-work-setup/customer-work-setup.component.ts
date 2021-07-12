@@ -473,6 +473,11 @@ export class CustomerWorkSetupComponent implements OnInit {
                 traceableToTypeId: res.traceableToTypeId == null ? 0 : res.traceableToTypeId,
                 taggedById: res.taggedById == null ? 0 : res.taggedById,
                 certifiedById: res.certifiedById == null ? 0 : res.certifiedById,
+                siteId: res.siteId == null ? 0 : res.siteId,
+                warehouseId: res.warehouseId == null ? 0 : res.warehouseId,
+                locationId: res.locationId == null ? 0 : res.locationId,
+                shelfId: res.shelfId == null ? 0 : res.shelfId,
+                binId: res.binId == null ? 0 : res.binId,
                 purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             }; 
             this.getManagementStructureDetails(this.receivingForm
@@ -507,6 +512,7 @@ export class CustomerWorkSetupComponent implements OnInit {
 
 
     getSiteDetailsOnEdit(res) {
+      
         this.getInactiveObjectOnEdit('value', res.siteId, this.allSites, 'Site', 'SiteId', 'Name');
         this.getInactiveObjectOnEdit('value', res.warehouseId, this.allWareHouses, 'Warehouse', 'WarehouseId', 'Name');
         this.getInactiveObjectOnEdit('value', res.locationId, this.allLocations, 'Location', 'LocationId', 'Name');
@@ -725,14 +731,12 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
     workScopeObjDetails:any={};
 getWorkScopeDataByIds(){
-    console.log("form",this.receivingForm)
+    if(this.receivingForm && (this.receivingForm.itemMasterId!=null || this.receivingForm.itemMasterId!=0) && this.receivingForm.workScopeId !=null){
     this.commonService.getDataWorkScopeByItemMasterCaps(this.receivingForm,'rc').subscribe(res => {
-        console.log('res',res);
+
         this.workScopeObjDetails={};
         this.workScopeObjDetails=res;
         if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){
-            // let modelName2="confirmWorkScopeInfo";
-            // this.modal = this.modalService.open(modelName2, { size: 'sm' });hide
             this.workScopeList.forEach(element => {
          if(element.value==this.receivingForm.workScopeId){
              this.receivingForm.workScopeName=element.label;
@@ -742,6 +746,7 @@ getWorkScopeDataByIds(){
             $('#confirmWorkScopeInfo').modal('show');
         }
     });
+}
     
 }
 dismissWorkSocpe(){
@@ -819,6 +824,10 @@ allowtoSaveWO(){
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
+        this.receivingForm.warehouseId=0;
+        this.receivingForm.locationId=0;
+        this.receivingForm.shelfId=0;
+        this.receivingForm.binId=0;
         this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
@@ -844,6 +853,9 @@ allowtoSaveWO(){
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
+        this.receivingForm.locationId=0;
+        this.receivingForm.shelfId=0;
+        this.receivingForm.binId=0;
         if (warehouseId != 0) {
 
             this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).subscribe(res => {
@@ -865,6 +877,8 @@ allowtoSaveWO(){
     locationValueChange(locationId) {
         this.allShelfs = [];
         this.allBins = [];
+        this.receivingForm.shelfId=0;
+        this.receivingForm.binId=0;
         if (locationId != 0) {
             this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).subscribe(res => {
                 this.allShelfs = res.map(x => {
@@ -884,6 +898,7 @@ allowtoSaveWO(){
 
     shelfValueChange(shelfId) {
         this.allBins = [];
+        this.receivingForm.binId=0;
         if (shelfId != 0) {
             this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).subscribe(res => {
                 this.allBins = res.map(x => {
@@ -1103,7 +1118,7 @@ allowtoSaveWO(){
             updatedBy: this.userName,
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             warehouseId: this.receivingForm.warehouseId != 0 ? this.receivingForm.warehouseId : null,
-            locationId: this.receivingForm.locationId ? this.receivingForm.locationId : null,
+            locationId: this.receivingForm.locationId != 0 ? this.receivingForm.locationId : null,
             binId: this.receivingForm.binId != 0 ? this.receivingForm.binId : null,
             shelfId: this.receivingForm.shelfId != 0 ? this.receivingForm.shelfId : null,
             workScopeId: this.receivingForm.workScopeId,
@@ -1301,7 +1316,6 @@ allowtoSaveWO(){
         // this.router.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${this.receivingCustomerWorkId}`);
         this.isgotoWO = true;
         this.customerWarningListId = this.customerWOWaringListId;
-        console.log("wo Changes", this.customerWOWaringListId);
 
         this.customerResctrictions(this.customerId);
 
@@ -1359,7 +1373,6 @@ allowtoSaveWO(){
 
     customerResctrictions(customerId) {
         this.restrictMessage = '';
-        console.log("wo Changes", customerId, this.customerWarningListId);
         if (customerId && this.customerWarningListId) {
             this.commonService.customerResctrictions(customerId, this.customerWarningListId).subscribe((res: any) => {
                 if (res) {

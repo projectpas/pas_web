@@ -1,5 +1,6 @@
 import { Component, OnInit,Input, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { ExchangeSalesOrderService } from "../../../../../services/exchangesalesorder.service";
+import { ExchangequoteService } from "../../../../../services/exchangequote.service";
 declare var $: any;
 import { SummaryPart } from "../../../../../models/exchange/SummaryPart";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -61,6 +62,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   salesReserveModal: NgbModalRef;
   columns: any[];
   constructor(private exchangeSalesOrderService: ExchangeSalesOrderService,
+    private exchangequoteService: ExchangequoteService,
     private authService: AuthService,
     private modalService: NgbModal,
     private alertService: AlertService,) {
@@ -70,10 +72,10 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
 
   ngOnInit() {
     //this.getDefaultCurrency();
-    this.exchangeSalesOrderService.getSearchPartObject().subscribe(data => {
+    this.exchangequoteService.getSearchPartObject().subscribe(data => {
       this.query = data;
     });
-    this.exchangeSalesOrderService.getSelectedParts().subscribe(data => {
+    this.exchangequoteService.getSelectedParts().subscribe(data => {
       if (data) {
         this.selectedParts = data;
       } else {
@@ -93,7 +95,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   }
 
   refresh() {
-    this.exchangeSalesOrderService.getSelectedParts().subscribe(data => {
+    this.exchangequoteService.getSelectedParts().subscribe(data => {
       if (data) {
         this.selectedParts = data;
       } else {

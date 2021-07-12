@@ -29,7 +29,7 @@ export class WorkOrderSmartComponent implements OnInit {
     workOrderStagesList: any;
     priorityList: any;
     workOrderTypes: any;
-    workOrderStatusList: any=[];
+    workOrderStatusList: any = [];
     partNumberOriginalData: Object;
     workOrderId: any;
     recCustomerId: any = 0;
@@ -98,7 +98,7 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.recCustomerId = 0;
             }
             this.isSpinnerEnable = true;
-  this.triggerWorkOrderData();
+            this.triggerWorkOrderData();
         } else {
             this.ishowEditDiv = false;
             this.getWorkOrderDefaultSetting();
@@ -117,13 +117,14 @@ export class WorkOrderSmartComponent implements OnInit {
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
-    refreshWo(){ 
-        this.workOrderId = this.acRouter.snapshot.params['id'];
-        this.recCustomerId=0;
-        this.triggerWorkOrderData();
+    refreshWo() {
+        console.log("refresh Api")
+        // this.workOrderId = this.acRouter.snapshot.params['id'];
+        // this.recCustomerId=0;
+        // this.triggerWorkOrderData();
     }
-    triggerWorkOrderData(){
-        
+    triggerWorkOrderData() {
+
         this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             setTimeout(() => {
                 this.isSpinnerEnable = false;
@@ -209,13 +210,13 @@ export class WorkOrderSmartComponent implements OnInit {
     }
     getJobTitles() {
         // getJobTitles
-        
+
         this.commonService.getSalesExpertise(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
             this.getAllSalesEmployeeListByJobTitle(this.jobTitles)
         })
     }
-    arayExpTitleIds:any[] = [];
+    arayExpTitleIds: any[] = [];
     getAllSalesEmployeeListByJobTitle(jobTitles) {
         // const CSRid = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
         // const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
@@ -224,8 +225,8 @@ export class WorkOrderSmartComponent implements OnInit {
 
         const CSRid = getValueByFieldFromArrayofObject('empExpCode', 'CSR', this.jobTitles);
         const Salesid = getValueByFieldFromArrayofObject('empExpCode', 'SALES', this.jobTitles);
-       const Agentsid = getValueByFieldFromArrayofObject('empExpCode', 'AGENT', this.jobTitles);
-       const Technicianid = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
+        const Agentsid = getValueByFieldFromArrayofObject('empExpCode', 'AGENT', this.jobTitles);
+        const Technicianid = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
         // if (CSRid && CSRid[0] && CSRid[0].jobTitleId > 0)
         //     this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
@@ -234,14 +235,14 @@ export class WorkOrderSmartComponent implements OnInit {
 
         // if (Agentsid && Agentsid[0] && Agentsid[0].jobTitleId > 0)
         //     this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
-        if(CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
-        this.arayExpTitleIds.push(CSRid[0].employeeExpertiseId);
-    
-    if(Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
-        this.arayExpTitleIds.push(Salesid[0].employeeExpertiseId);
+        if (CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
+            this.arayExpTitleIds.push(CSRid[0].employeeExpertiseId);
 
-    if(Agentsid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
-        this.arayExpTitleIds.push(Agentsid[0].employeeExpertiseId);
+        if (Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+            this.arayExpTitleIds.push(Salesid[0].employeeExpertiseId);
+
+        if (Agentsid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
+            this.arayExpTitleIds.push(Agentsid[0].employeeExpertiseId);
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayExpTitleIds, this.currentUserMasterCompanyId).subscribe(res => {
             if (res) {
 
@@ -267,35 +268,33 @@ export class WorkOrderSmartComponent implements OnInit {
             }
 
 
-            if(res){
-                this.salesAgentsOriginalList=[];
-                this.salesAgentsOriginalList=[];
-                if( CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0)
-                {
-                this.csrOriginalList = res.filter(x => {
-                    if (CSRid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
-                        return x;
-                    } 
-                })}
-                
-                if( Agentsid[0] && Agentsid[0].employeeExpertiseId && Agentsid[0].employeeExpertiseId > 0)
-                {
-                this.agentsOriginalList = res.filter(x => {
-                    if (Agentsid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
-                        return x;
-                    }
-                })
-                this.salesAgentsOriginalList = [...this.agentsOriginalList];
+            if (res) {
+                this.salesAgentsOriginalList = [];
+                this.salesAgentsOriginalList = [];
+                if (CSRid[0] && CSRid[0].employeeExpertiseId && CSRid[0].employeeExpertiseId > 0) {
+                    this.csrOriginalList = res.filter(x => {
+                        if (CSRid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
+                            return x;
+                        }
+                    })
                 }
 
-                if( Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0)
-                {
-                this.salesPersonOriginalList = res.filter(x => {
-                    if (Salesid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
-                        return x;
-                    }
-                })
-                this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
+                if (Agentsid[0] && Agentsid[0].employeeExpertiseId && Agentsid[0].employeeExpertiseId > 0) {
+                    this.agentsOriginalList = res.filter(x => {
+                        if (Agentsid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
+                            return x;
+                        }
+                    })
+                    this.salesAgentsOriginalList = [...this.agentsOriginalList];
+                }
+
+                if (Salesid[0] && Salesid[0].employeeExpertiseId && Salesid[0].employeeExpertiseId > 0) {
+                    this.salesPersonOriginalList = res.filter(x => {
+                        if (Salesid[0].employeeExpertiseId == x.EmployeeExpertiseId) {
+                            return x;
+                        }
+                    })
+                    this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
                 }
 
                 // if (this.id) {
@@ -364,7 +363,7 @@ export class WorkOrderSmartComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join(), 0).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }

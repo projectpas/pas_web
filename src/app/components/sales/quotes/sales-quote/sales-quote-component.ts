@@ -180,7 +180,7 @@ export class SalesQuoteComponent implements OnInit {
 
   getTypesOfWarnings(customerId) {
     this.isSpinnerVisible = true;
-    this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(data => {
+    this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', 0).subscribe(data => {
       if (data.length > 0) {
         data.filter(i => {
           if (i.label == DBkeys.GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_QUOTE) {
