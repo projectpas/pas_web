@@ -35,12 +35,10 @@ export class SalesOrderpickTicketComponent implements OnInit {
 
   ngOnInit() {
     this.endPointURL = environment.baseUrl;
-    this.salesOrderService.getPickTicketPrint(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId).subscribe(res => {
-      let pickTicketPDFUrl = res;
-      this.pdfPath = this.sanitizer.bypassSecurityTrustResourceUrl(pickTicketPDFUrl);
-    })
-    //this.pdfPath = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:5091/SalesOrder/Invoice/SO-001080_2021-07-06%2006-21-47.pdf');
-    //this.getSalesPickTicketView();
+    this.salesOrderService.getPickTicketPDF(this.salesOrderId, this.salesOrderPartId, this.soPickTicketId).subscribe(res => {
+      let pickTicketPDFUrl = res[0];
+      this.pdfPath = this.sanitizer.bypassSecurityTrustResourceUrl(this.endPointURL + pickTicketPDFUrl);
+    });
   }
 
   getSalesPickTicketView() {
