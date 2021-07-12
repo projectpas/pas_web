@@ -570,7 +570,7 @@ export class AllApprovalRuleComponent implements OnInit {
 
     async getTaskNames() {
         this.isSpinnerVisible = true;
-        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId)
+        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0)
             .subscribe(
                 (res) => {
                     this.taskNameList = res;
@@ -609,15 +609,15 @@ export class AllApprovalRuleComponent implements OnInit {
     }
 
     async getRuleNumber() {
-        await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo', this.currentUserMasterCompanyId)
+        await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo', 0)
             .subscribe(
                 (res) => {
                     this.ruleNumList = res;
-                }, 
+                },
             )
     }
     async getPoAmountList() {
-        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', this.currentUserMasterCompanyId)
+        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', 0)
             .subscribe(
                 (res) => {
                     this.approvalAmountList = res;

@@ -189,7 +189,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                             this.isSpinnerVisible = true;
                             this.loadData();
                             if (this.empModuleId == 0 || this.empModuleId == undefined || this.empModuleId == null) {
-                                this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', '', true, 0, this.arrayTrainingtypelist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+                                this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', '', true, 0, this.arrayTrainingtypelist.join(), 0).subscribe(response => {
                                     if (response) {
                                         response.forEach(x => {
                                             if (x.label.toUpperCase() == "EMPLOYEE") {
