@@ -172,7 +172,7 @@ export class WorkFlowEndpoint extends EndpointFactory {
 
 
 	workflowAuditHistoryList(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workflow/GetWorkFlowAuditList?wfwoId=${id}`).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workflow/GetWorkFlowAuditList?wfwoId=${id}`,this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.workflowAuditHistoryList(id));
         });
     }

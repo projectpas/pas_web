@@ -1,4 +1,5 @@
-﻿import { Component, OnInit,  Input, SimpleChanges } from '@angular/core';
+﻿import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { Component, OnInit,  Input, SimpleChanges } from '@angular/core';
 import {  MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
@@ -147,6 +148,14 @@ export class WorkflowListComponent implements OnInit {
         { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
       ]
 
+      isAdd:boolean=true;
+      isEdit:boolean=true;
+      isDelete:boolean=true;
+      isView:boolean=true;
+      isDownload:boolean=true;
+      isActive:boolean=true;
+      isworkflowmaterialView:boolean=true;
+
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
@@ -172,6 +181,12 @@ export class WorkflowListComponent implements OnInit {
     ) {
         this.workFlowGridSource = new MatTableDataSource();
         this.workFlowtService.listCollection = null;
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Update]);
+        this.isView=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.View]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Download])
+        this.isworkflowmaterialView=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.View]);
     }
 
     ngOnInit() { 
