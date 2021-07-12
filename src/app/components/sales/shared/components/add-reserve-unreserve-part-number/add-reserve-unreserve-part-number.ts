@@ -248,9 +248,9 @@ export class SalesReserveUnreserveComponent implements OnInit {
 
     savereserveissuesparts(parts) {
         let invalidQty = false;
+        var errmessage = '';
         for (let i = 0; i < parts.length; i++) {
             let selectedItem = parts[i];
-            var errmessage = '';
             if (this.selectedPartActionType == "Reserve" && selectedItem.qtyToReserve > selectedItem.quantityAvailable) {
                 this.isSpinnerVisible = false;
                 invalidQty = true;

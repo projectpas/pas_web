@@ -17,6 +17,8 @@ import { ISalesOrderQuotePart } from "../../../../../models/sales/ISalesOrderQuo
 declare var $: any;
 import { SummaryPart } from "../../../../../models/sales/SummaryPart";
 import { StocklineViewComponent } from "../../../../../shared/components/stockline/stockline-view/stockline-view.component";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-sales-part-number",
@@ -74,6 +76,11 @@ export class SalesPartNumberComponent {
   priorities = [];
   saveButton = false;
   isApprovedPartUpdated: boolean = false;
+  currentStatusSOQSummary: any = "1";
+  selectedMPNItemMasterId: any;
+  SummaryMonths: number = 12;
+  soqSummaryPNData: any = [];
+  private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private modalService: NgbModal,
@@ -125,6 +132,10 @@ export class SalesPartNumberComponent {
     });
     this.columns = [];
     this.initColumns();
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
   }
 
   onPaging(event) {
@@ -1115,5 +1126,32 @@ export class SalesPartNumberComponent {
       const decodedString = dom.body.textContent;
       return decodedString;
     }
+  }
+
+  openSOQSummary(content, salesOrderQuotePartNumber) {
+    this.selectedMPNItemMasterId = salesOrderQuotePartNumber.partId;
+    this.getSOQSummaryDetails(this.SummaryMonths)
+    this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+  }
+
+  getSOQSummaryDetails(monthtatus) {
+    if (this.selectedMPNItemMasterId > 0) {
+      this.isSpinnerVisible = true;
+      this.salesQuoteService.getSalesOrderQuoteSummarisedHistoryByPN(this.selectedMPNItemMasterId, monthtatus == 1 || monthtatus == "1" ? true : false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.isSpinnerVisible = false;
+        if (res != undefined && res.mpnSummaryModel != undefined) {
+          this.soqSummaryPNData = res.mpnSummaryModel;
+        }
+        if (res != undefined && res.custSummaryModel != undefined) {
+          this.soqSummaryPNData = res.custSummaryModel;
+        }
+      }, err => {
+        this.isSpinnerVisible = false;
+      });
+    }
+  }
+
+  dismissModel() {
+    this.modal.close();
   }
 }
