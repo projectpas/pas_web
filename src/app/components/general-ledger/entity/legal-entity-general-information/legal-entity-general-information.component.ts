@@ -870,7 +870,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
 
     getAllentityCapabilities(): void {
 
-        this.commonService.smartDropDownList('entityCapabiliy', 'entityCapabilityId', 'capabilityDescription').subscribe(res => {
+        this.commonService.smartDropDownList('entityCapabiliy', 'entityCapabilityId', 'capabilityDescription',this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.dropDownentityCapabilitiesList = res;
         })
     }

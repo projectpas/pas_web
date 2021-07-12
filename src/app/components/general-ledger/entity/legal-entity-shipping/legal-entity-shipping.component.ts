@@ -475,11 +475,13 @@ export class EntityShippingComponent implements OnInit {
     }
   }
 
-  addDomesticShipping() {
-    this.editisPrimary = false;
-    this.isEditDomestic = false;
-    this.domesticShippingInfo = new legalEntityShippingModel();
-  }
+    addDomesticShipping() {
+        this.editisPrimary = false;
+        this.isEditDomestic = false;
+        this.domesticShippingInfo = new legalEntityShippingModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
+    }
 
   addInternationalShipping() {
     this.editisPrimary2 = false;
@@ -1418,53 +1420,30 @@ export class EntityShippingComponent implements OnInit {
     this.CountryData(value);
   }
 
-  CountryData(value) {
-    if (this.isViewMode == false) {
-      this.setEditArray = [];
-      if (this.isEditDomestic == true) {
-        this.setEditArray.push(
-          this.domesticShippingInfo.countryId
-            ? this.domesticShippingInfo.countryId
-            : 0
-        );
-      } else if (this.isEditInternational == true) {
-        this.setEditArray.push(
-          this.internationalShippingInfo.shipToCountryId
-            ? this.internationalShippingInfo.shipToCountryId
-            : 0
-        );
-      } else {
-        this.setEditArray.push(0);
-      }
-      const strText = value ? value : "";
-      //this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
-      this.commonService
-        .autoSuggestionSmartDropDownList(
-          "Countries",
-          "countries_id",
-          "nice_name",
-          strText,
-          true,
-          20,
-          this.setEditArray.join(),
-          this.currentUserMasterCompanyId
-        )
-        .subscribe(
-          (res) => {
-            this.countryListOriginal = res.map((x) => {
-              return {
-                ...x,
-                countryId: x.value,
-                nice_name: x.label,
-              };
+    CountryData(value) {
+        if (this.isViewMode == false) {
+            this.setEditArray = [];
+            if (this.isEditDomestic == true) {
+                this.setEditArray.push(this.domesticShippingInfo.countryId ? this.domesticShippingInfo.countryId : 0);
+            } else if (this.isEditInternational == true) {
+                this.setEditArray.push(this.internationalShippingInfo.shipToCountryId ? this.internationalShippingInfo.shipToCountryId : 0);
+            } else {
+                this.setEditArray.push(0);
+            }
+            const strText = value ? value : '';
+            this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                this.countryListOriginal = res.map(x => {
+                    return {
+                        ...x,
+                        countryId: x.value,
+                        nice_name: x.label
+                    }
+                });;
+            }, err => {
+                this.isSpinnerVisible = false;
             });
-          },
-          (err) => {
-            this.isSpinnerVisible = false;
-          }
-        );
+        }
     }
-  }
 
   //Domestic shipping
 
@@ -2248,79 +2227,52 @@ export class EntityShippingComponent implements OnInit {
       : "0.00";
   }
 
-  restoreTypeId: any;
-  restore(content, rowData, type) {
-    this.restoreTypeId = type;
-    this.restorerecord = rowData;
-    this.modal = this.modalService.open(content, {
-      size: "sm",
-      backdrop: "static",
-      keyboard: false,
-    });
-  }
-
-  filterSiteNamesDomestic(event) {
-    this.sitesNamesListDomestic = this.sitesOriginalDomestic
-      ? this.sitesOriginalDomestic
-      : [];
-    if (event.query != undefined && event.query != "") {
-      this.getAllSites(event.query);
-    } else {
-      this.getAllSites("");
+    restoreTypeId: any;
+    restore(content, rowData, type) {
+        this.restoreTypeId = type;
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-  }
-  // setEditArray: any = [];
-  sitesOriginalDomestic: any = [];
-  sitesNamesListDomestic: any = [];
-  getAllSites(value) {
-    if (this.isViewMode == false) {
-      this.setEditArray = [];
-      const strText = value ? value : "";
-      if (this.isEditDomestic == true) {
-        this.setEditArray.push(
-          this.legalEntityShippingAddressId
-            ? this.legalEntityShippingAddressId
-            : 0
-        );
-      } else {
-        this.setEditArray.push(0);
-      }
-      if (this.id != undefined) {
-        this.commonService
-          .autoSuggestionSmartDropDownListWtihColumn(
-            "LegalEntityShippingAddress",
-            "LegalEntityShippingAddressId",
-            "SiteName",
-            strText,
-            "LegalEntityId",
-            this.id,
-            20,
-            this.setEditArray.join()
-          )
-          .subscribe(
-            (res) => {
-              this.sitesOriginalDomestic = res;
-              this.sitesNamesListDomestic = [];
-              this.sitesNamesListDomestic = [...this.sitesOriginalDomestic];
-              if (
-                this.isEditDomestic == true &&
-                this.sitesNamesListDomestic &&
-                this.sitesNamesListDomestic.length != 0
-              ) {
-                this.sitesNamesListDomestic.forEach((element) => {
-                  if (element.label == this.domesticShippingInfo.siteName) {
-                    this.domesticShippingInfo.siteName = element;
-                  }
-                });
-              }
-            },
-            (err) => {
-              this.isSpinnerVisible = false;
+    
+    filterSiteNamesDomestic(event) {
+        this.sitesNamesListDomestic = this.sitesOriginalDomestic ? this.sitesOriginalDomestic : [];
+        if (event.query != undefined && event.query != "") {
+            this.getAllSites(event.query)
+        } else {
+            this.getAllSites('')
+        }
+    }
+    // setEditArray: any = [];
+    sitesOriginalDomestic: any = [];
+    sitesNamesListDomestic: any = [];
+    getAllSites(value) {
+        if (this.isViewMode == false) {
+            this.setEditArray = [];
+            const strText = value ? value : '';
+            if (this.isEditDomestic == true) {
+                this.setEditArray.push(this.legalEntityShippingAddressId ? this.legalEntityShippingAddressId : 0);
+            } else {
+                this.setEditArray.push(0);
             }
-          );
-      }
+            if (this.id != undefined) {
+                this.commonService.autoSuggestionSmartDropDownListWtihColumn('LegalEntityShippingAddress', 'LegalEntityShippingAddressId', 'SiteName', strText, 'LegalEntityId', this.id, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                    this.sitesOriginalDomestic = res;
+                    this.sitesNamesListDomestic = [];
+                    this.sitesNamesListDomestic = [...this.sitesOriginalDomestic];
+                    if (this.isEditDomestic == true && this.sitesNamesListDomestic && this.sitesNamesListDomestic.length != 0) {
+                        this.sitesNamesListDomestic.forEach(element => {
+                            if (element.label == this.domesticShippingInfo.siteName) {
+                                this.domesticShippingInfo.siteName = element
+                            }
+                        });
+                    }
+
+                }, err => {
+                    this.isSpinnerVisible = false;
+                });
+            }
+        }
     }
-  }
 
   showExistMsg: any = false;
   onSiteNameSelectedDomestic() {

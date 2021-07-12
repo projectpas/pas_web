@@ -20,6 +20,7 @@ export class SpeedQuoteExclusion {
     isEditPart:boolean;
     itemNo:number;
     // partNumberObj: {};
+    conditionId:number;
 
 
     constructor() {
@@ -43,5 +44,6 @@ export class SpeedQuoteExclusion {
         this.exNotes = null;
         this.isEditPart = false;
         this.itemNo = 0;
+        this.conditionId = 0;
     }
 }

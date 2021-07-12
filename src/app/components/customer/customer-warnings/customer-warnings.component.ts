@@ -126,47 +126,31 @@ export class CustomerWarningsComponent implements OnInit {
     }
   }
 
-  getTypesOfWarnings() {
-    this.isSpinnerVisible = true;
-    //this.commonService.smartDropDownList('CustomerWarningType','CustomerWarningTypeId', 'Name').subscribe(data => {
-    this.commonService
-      .autoSuggestionSmartDropDownList(
-        "CustomerWarningType",
-        "CustomerWarningTypeId",
-        "Name",
-        "",
-        true,
-        200,
-        "",
-        this.currentUserMasterCompanyId
-      )
-      .subscribe(
-        (data) => {
-          this.types = data;
-          if (!this.editMode) {
-            this.warningMessages = this.types.map((x) => {
-              return {
-                sourceModule: x.label,
-                sourseModuleId: x.value,
-                allow: true,
-                warning: false,
-                restrict: false,
-                warningMessage: "",
-                restrictMessage: "",
-                customerWarningTypeId: x.value,
-              };
-            });
-            this.allowAll(true);
-          } else {
-            this.initWarningData();
-          }
-          this.isSpinnerVisible = false;
-        },
-        (error) => {
-          this.isSpinnerVisible = false;
-        }
-      );
-  }
+	getTypesOfWarnings() {
+		this.isSpinnerVisible = true;
+		this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, '', 0).subscribe(data => {
+			this.types = data;
+			if (!this.editMode) {
+				this.warningMessages = this.types.map(x => {
+					return {
+						sourceModule: x.label,
+						sourseModuleId: x.value,
+						allow: true,
+						warning: false,
+						restrict: false,
+						warningMessage: '',
+						restrictMessage: '',
+						customerWarningTypeId: x.value
+					}
+				})
+				this.allowAll(true);
+			}
+			else {
+				this.initWarningData();
+			}
+			this.isSpinnerVisible = false;
+		}, error => { this.isSpinnerVisible = false; })
+	}
 
   onRestrictClick($event, i) {
     if ($event.target.checked == true) {

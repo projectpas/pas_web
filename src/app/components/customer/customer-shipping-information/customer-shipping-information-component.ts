@@ -325,7 +325,6 @@ export class CustomerShippingInformationComponent implements OnInit {
 
     getshipvialistList() {
         this.isSpinnerVisible = true;
-        //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 0, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             const data = res.map(x => {
                 return {
@@ -659,7 +658,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if (this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName', '', 'CustomerId', this.id, 0, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName', '', 'CustomerId', this.id, 0, this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             //this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName','',true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
@@ -703,6 +702,8 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.selectedSitename = "";
         this.isEditDomestic = false;
         this.domesticShippingInfo = new CustomerShippingModel();
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
     addInternationalShipping() {
         this.isEditInternational = false;
@@ -1505,7 +1506,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if (this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName', strText, 'CustomerId', this.id, 0, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName', strText, 'CustomerId', this.id, 0, this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             // this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName',strText,true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {

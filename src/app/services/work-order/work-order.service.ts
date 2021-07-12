@@ -659,8 +659,8 @@ export class WorkOrderService {
     transferWorkflow(data) {
         return this.workOrderEndpointService.transferWorkflow(data);
     }
-    getPickTicketList(workOrderId) {
-        return this.workOrderEndpointService.getPickTicketList(workOrderId);
+    getPickTicketList(workOrderId,wfwoId) {
+        return this.workOrderEndpointService.getPickTicketList(workOrderId,wfwoId);
     }
     GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId) {
         return this.workOrderEndpointService.GetWorkorderReleaseFromData(workOrderId,workOrderPartNumberId);
@@ -821,4 +821,7 @@ export class WorkOrderService {
         return this.workOrderEndpointService.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy);
     }
 
+    GetWorkOrderSummarisedHistoryByMPN(itemMasterId,isTwelveMonth) {
+        return this.workOrderEndpointService.GetWorkOrderSummarisedHistoryByMPN(itemMasterId,isTwelveMonth);
     }
+}

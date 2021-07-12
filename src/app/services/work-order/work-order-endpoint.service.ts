@@ -1350,9 +1350,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
-    getPickTicketList(workOrderId): Observable<any> {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getpickticketapprovelist?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getPickTicketList(workOrderId));
+    getPickTicketList(workOrderId,wfwoId): Observable<any> {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getpickticketapprovelist?workOrderId=${workOrderId}&wfwoId=${wfwoId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getPickTicketList(workOrderId,wfwoId));
         });
     }
 
@@ -1585,6 +1585,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
     closeWoSettlements(WorkorderId: number,workOrderPartNoId : number,updatedBy : string) {
         return this.http.post(`${this.configurations.baseUrl}/api/workOrder/SaveworkorderPartclose?WorkorderId=${WorkorderId}&workOrderPartNoId=${workOrderPartNoId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.closeWoSettlements(WorkorderId,workOrderPartNoId,updatedBy));
+        });
+    }
+
+    GetWorkOrderSummarisedHistoryByMPN(itemMasterId: number,isTwelveMonth : boolean) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/GetWorkOrderSummarisedHistoryByMPN?ItemMasterId=${itemMasterId}&IsTwelveMonth=${isTwelveMonth}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.GetWorkOrderSummarisedHistoryByMPN(itemMasterId,isTwelveMonth));
         });
     }
 }

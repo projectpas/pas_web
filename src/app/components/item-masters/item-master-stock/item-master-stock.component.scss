@@ -2,6 +2,9 @@
 .modal-body select {
   width: 90px !important;
 }
+.padding-top-20{
+  padding-top: 20px !important;
+}
 .isDisabled {
   pointer-events: none;
 }
@@ -542,12 +545,16 @@ input[type='date']::-webkit-outer-spin-button {
 }
 label{
   text-align: left;
-  width: auto;
-  margin-right: 0;
-  font-weight: normal;
+  // width: auto;
+  // margin-right: 0;
+  // font-weight: normal;
 }
 .form-horizontal .control-label {
   font-weight: normal !important;
+}
+
+.min-width-90 tbody td{
+  min-width:90px !important;
 }
 .status-radio {
   padding: 10px;

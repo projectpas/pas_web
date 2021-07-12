@@ -311,7 +311,7 @@
                                                 Serial Number <span *ngIf="receivingForm.isSerialized"
                                                     class="text-danger">*</span>
                                             </label>
-                                            <input class="form-control" type="text" name="serialNumber"
+                                            <input class="form-control" type="text" maxlength="100" name="serialNumber"
                                                 [(ngModel)]="receivingForm.serialNumber" (ngModelChange)="getActive()"
                                                 [required]="receivingForm.isSerialized">
                                         </div>
@@ -867,7 +867,7 @@
                             <div class="form-group">
                                 <label> Cert Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
-                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    (ngModelChange)="getActive()"  [maxDate]="currentDate" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.certifiedDate"></p-calendar>
                             </div>  
                             <div class="form-group">
@@ -885,7 +885,7 @@
                             <div class="form-group">
                                 <label> Inspected Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="inspectedDate"
-                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    (ngModelChange)="getActive()"  [maxDate]="currentDate" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [(ngModel)]="receivingForm.inspectedDate"></p-calendar>
                             </div>
                             <div class="form-group">
@@ -1396,7 +1396,7 @@
     <div class="modal-body">
         <!-- {{receivingForm.workScopeName}} -->
         <!-- {{receivingForm.itemMasterId.label} -->
-        <p>There is no  capability for MPN }.
+        <p>There is no  capability for MPN .
 
             </p>
         <strong>
@@ -1415,17 +1415,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissWorkSocpe()">&times;</button>
-                    <h4 class="modal-title"> Alert Message !</h4>
+                    <h4 class="modal-title">Warning</h4>
                 </div>
                 <div class="modal-body">
                     <!-- {{receivingForm.workScopeName}} -->
                     <!-- {{receivingForm.itemMasterId.label} -->
                     <p>There is no  <span class="new-label" *ngIf="receivingForm && receivingForm.workScopeName"> {{receivingForm.workScopeName}}</span> capability for MPN
-                        <span class="new-label" *ngIf="receivingForm && receivingForm.itemMasterId"> {{receivingForm.itemMasterId.label}} </span>.
+                        <span class="new-label" *ngIf="receivingForm && receivingForm.itemMasterId"> {{receivingForm.itemMasterId.label}} </span>
             
                         </p>
                     <strong>
-                        Do you want to create Receceiving Customer?
+                        Do you still want to  {{isEditMode ? 'update' :'create'}} Receiving Customer?
                     </strong>
                 </div>
                 <div class="modal-footer">

@@ -16,7 +16,7 @@ export class ModuleConstants
     static Customers_Warnings:string = "Customers_Warnings";
     static Customers_Documents:string = "Customers_Documents";
 
-    static Employees:string = "Employees";
+        static Employees:string = "Employees";
        static EmployeesList:string = "EmployeesList";
         static Employees_GeneralInformation:string = "Employees_GeneralInformation";
         static Employees_Certification:string = "Employees_Certification";
@@ -38,7 +38,7 @@ export class ModuleConstants
         static Vendors_Documents:string="Vendors_Documents";
 
         static Publications:string = "Publications";
-       static PublicationsList:string = "PublicationsList";
+        static PublicationsList:string = "PublicationsList";
         static Publications_GeneralInformation:string = "Publications_GeneralInformation";
         static Publications_PNMapping:string = "Publications_PNMapping";
         static Publications_ViewAircraftInformation:string = "Publications_ViewAircraftInformation";
@@ -69,7 +69,17 @@ export class ModuleConstants
         static Item_ExchangeLoan:string = "Item_ExchangeLoan";
         static Item_ExportInformation:string = "Item_ExportInformation";
         static Stockline:string = "Stockline";
+        static Stockline_Adjustment:string = "Stockline_Adjustment";
         static GLAccount:string = "GLAccount";
+        static Workflow:string = "Workflow";
+        static Asset_List :string  = "Asset_List";
+        static Asset_Create :string  = "Asset_Create";
+        static Asset_GeneralInformation :string  = "Asset_GeneralInformation";
+        static Asset_Capes :string  = "Asset_Capes";
+        static Asset_Calibration :string  = "Asset_Calibration";
+        static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
+        static Asset_Inventory_List :string  = "Asset_Inventory_List";
+        static Asset_Inventory_Create :string  = "Asset_Inventory_Create";
 
         static PurchaseOrder:string = "PurchaseOrder";
         static POList:string = "POList";

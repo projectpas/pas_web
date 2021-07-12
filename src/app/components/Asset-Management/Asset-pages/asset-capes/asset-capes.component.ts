@@ -22,6 +22,7 @@ import { ConfigurationService } from '../../../../services/configuration.service
 declare var $ : any;
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-asset-capes',
     templateUrl: './asset-capes.component.html',
@@ -146,6 +147,22 @@ export class AssetCapesComponent implements OnInit {
     filterText: string = '';
     errorDisplay: any;
     selectedRows: any = [];
+    isCapView:boolean=true;
+    isAssetView:boolean=true;
+    isCapeAdd:boolean=true;
+    isDownload:boolean=true;
+    isCapeDelete:boolean=true;
+    isCapeUpdate:boolean=true;
+    isCalibrationDownload:boolean=true;
+    isMaintenanceDownload:boolean=true;
+    isGeneralInfoAdd:boolean=true;
+    isGeneralInfoUpdate:boolean=true;
+    isNextVisible:Boolean=true;
+    isCapeNextVisible: Boolean=true;
+    isCalibrationNext: Boolean=true;
+    isCalibrationPrev: Boolean=true;
+    isMaintenancePrev: Boolean=true;
+
     constructor(private router: ActivatedRoute, private modalService: NgbModal, private alertService: AlertService, public itemMasterService: ItemMasterService, private route: Router,
         public assetServices: AssetService, private dashnumberservices: DashNumberService, private authService: AuthService, private formBuilder: FormBuilder, private commonservice: CommonService
         , private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private configurations: ConfigurationService, private datePipe: DatePipe) {
@@ -188,7 +205,21 @@ export class AssetCapesComponent implements OnInit {
                 this.aircraftManfacturerData('');
             }
         }
-
+        this.isAssetView=this.authService.checkPermission([ModuleConstants.Asset_List+'.'+PermissionConstants.View]);
+        this.isCapView=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.View]);
+        this.isCapeAdd=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Add]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Download]);
+        this.isCapeUpdate=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Update]);
+        this.isCapeDelete=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.Delete]);
+        this.isCalibrationDownload=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Download]);
+        this.isMaintenanceDownload=this.authService.checkPermission([ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Download]);
+        this.isGeneralInfoAdd=this.authService.checkPermission([ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Add]);
+        this.isGeneralInfoUpdate=this.authService.checkPermission([ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Update]);
+        this.isNextVisible=this.authService.ShowTab('Create Asset','Capes');
+        this.isCapeNextVisible=this.authService.ShowTab('Create Asset','Calibration');
+        this.isCalibrationNext=this.authService.ShowTab('Create Asset','Maintenance & Warranty');
+        this.isCalibrationPrev=this.authService.ShowTab('Create Asset','Capes');
+        this.isMaintenancePrev=this.authService.ShowTab('Create Asset','Calibration');
     }
 
     capabilityForm: any = {
@@ -196,6 +227,13 @@ export class AssetCapesComponent implements OnInit {
         selectedAircraftModelTypes: [], selectedAircraftTypes: [], selectedManufacturer: [], selectedModel: [], selectedDashNumbers: [], selectedDashNumbers2: [],
         modelUnknown: false
     };
+
+    isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Asset',value);
+		return isShow;
+	
+	}
     ngOnInit(): void {
         if (this.assetServices.isEditMode == false) {
 
@@ -686,7 +724,7 @@ export class AssetCapesComponent implements OnInit {
     loadModalsForExistingRecords(capData) {
         if (capData.selectedAircraftTypes) {
            
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId,'AircraftTypeId', capData.selectedAircraftTypes,0).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -704,7 +742,7 @@ export class AssetCapesComponent implements OnInit {
 
     loadModalsForExistingRecords_1(capData, aircrafttypeid) {
         if (aircrafttypeid) {
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', aircrafttypeid,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId, 'AircraftTypeId', aircrafttypeid,0).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -781,7 +819,7 @@ export class AssetCapesComponent implements OnInit {
         if (this.itemMasterService.isEditMode == false) {
             if (capData.selectedAircraftTypes) {
             
-                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes,0,this.authService.currentUser.masterCompanyId).subscribe(results => {
+                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName',this.authService.currentUser.masterCompanyId, 'AircraftTypeId', capData.selectedAircraftTypes,0).subscribe(results => {
                     const newResp = results.map(x => {
                         return {
                             ...x,

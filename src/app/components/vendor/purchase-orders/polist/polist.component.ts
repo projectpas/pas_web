@@ -285,7 +285,7 @@ export class PolistComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
     loadPOStatus() {
-        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description').subscribe(response => {
+        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description', this.authService.currentUser.masterCompanyId).subscribe(response => {
             this.poStatusList = response;
             this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         }, err => {
@@ -367,7 +367,7 @@ export class PolistComponent implements OnInit {
     }
 
     loadApprovalProcessStatus() {
-        this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name').subscribe(response => {
+        this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
             response.forEach(x => {
                 if (x.label.toUpperCase() == "APPROVED") {
                     this.ApprovedstatusId = x.value;
@@ -766,7 +766,7 @@ export class PolistComponent implements OnInit {
     WarningsList: any;
     WarningListId: any;
     getWarningsList(): void {
-        this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name').subscribe(res => {
+        this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create Purchase Order') {
                     this.WarningListId = element.value;

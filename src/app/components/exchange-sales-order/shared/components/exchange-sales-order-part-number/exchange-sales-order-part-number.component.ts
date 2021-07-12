@@ -59,6 +59,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   selectedPartActionType: any;
   @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
   salesReserveModal: NgbModalRef;
+  columns: any[];
   constructor(private exchangeSalesOrderService: ExchangeSalesOrderService,
     private authService: AuthService,
     private modalService: NgbModal,
@@ -68,6 +69,20 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
     }
 
   ngOnInit() {
+    //this.getDefaultCurrency();
+    this.exchangeSalesOrderService.getSearchPartObject().subscribe(data => {
+      this.query = data;
+    });
+    this.exchangeSalesOrderService.getSelectedParts().subscribe(data => {
+      if (data) {
+        this.selectedParts = data;
+      } else {
+        this.selectedParts = [];
+      }
+    });
+    this.filterParts();
+
+    this.columns = [];
     this.initColumns();
   }
   initColumns() {
@@ -568,5 +583,24 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
     this.show = false;
     this.salesReserveModal.close();
     //this.refreshParts();
+  }
+  salesOrderObj: any;
+  refreshParts() {
+    this.exchangeSalesOrderService.getSalesOrder(this.exchangeSalesOrderId).subscribe(res => {
+      this.salesOrderObj = res[0].salesOrder;
+      let partList: any[] = res[0].parts;
+
+      if (this.selectedParts.length > 0)
+        this.selectedParts = [];
+
+      for (let i = 0; i < partList.length; i++) {
+        let selectedPart = partList[i];
+        let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToView(selectedPart);
+        this.selectedParts.push(partNumberObj);
+      }
+
+      this.exchangeSalesOrderService.selectedParts = this.selectedParts;
+      this.refresh();
+    });
   }
 }

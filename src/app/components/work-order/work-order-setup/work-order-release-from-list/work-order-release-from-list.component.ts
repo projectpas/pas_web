@@ -49,7 +49,7 @@ export class WorkOrderReleaseFromListComponent implements OnInit, OnChanges {
         { field: 'partNumber', header: 'PartNumber' },
         { field: 'eligibility', header: 'Eligibility',width:"80px" },
         { field: 'quantity', header: 'Quantity' ,width:"80px"},
-        { field: 'batchnumber', header: 'Batch Number' ,width:"100px"},
+        { field: 'batchnumber', header: 'Batch Number' ,width:"120px"},
         { field: 'status', header: 'Status',width:"80px" }
         
     ]

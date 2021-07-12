@@ -429,7 +429,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group">
-                                                    <label>Qty Actually Received</label>
+                                                    <label>Qty Actually Received <span class="clr-red">*</span></label>
                                                     <input type="text"
                                                         *ngIf="part.quantityRepaired < part.quantityToRepair"
                                                         value="{{part.quantityActuallyReceived}}" maxlength="12"

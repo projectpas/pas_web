@@ -17,7 +17,7 @@
                                   <button
                                     type="button"
                                     class="btn-sm header-button"
-                                    (click)="navigateTogeneralInfo()">
+                                    (click)="navigateTogeneralInfo()" *ngIf="isAdd">
                                   Add Asset
                                   </button>
                                 </div>
@@ -53,12 +53,12 @@
                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                 label="Export All Data"  data-toggle="modal"
                                 (click)="selectedOnly = false; targetData = dt;" 
-                                data-target="#downloadConfirmation"></button>
+                                data-target="#downloadConfirmation" *ngIf="isDownload"></button>
                         <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
                                 matTooltipPosition="above" matTooltip="Download Selected Data"
                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                 label="Export Selected Data"
-                                (click)="dt.exportCSV({selectionOnly:true})"
+                                (click)="dt.exportCSV({selectionOnly:true})" *ngIf="isDownload"
                                ></button>
                                <!-- data-toggle="modal"
                                data-target="#downloadConfirmation"
@@ -183,7 +183,7 @@
                                     <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length> 0">
                                         <div *ngIf="currentDeletedstatus==false">
                                          <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                                                           matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
+                                                           matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)" *ngIf="isActive" ></p-inputSwitch> 
                                                            <!-- (onChange)="openView(view,rowData)" -->
                                                            <span > 
                                                 <a class="btn nobg btn-view-cstm"
@@ -191,7 +191,7 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a> 
                                             </span>
-                                            <span>
+                                            <span *ngIf="isEdit">
                                                 <a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)"
                                                    matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                             </span>
@@ -201,7 +201,7 @@
                                                     <i class="fa fa-history"></i>
                                                 </a>
                                             </span>
-                                            <span>
+                                            <span *ngIf="isDelete">
                                                 <a class="btn nobg btn-delete-cstm"
                                                    (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above">
                                                     <i class="fa fa-trash"></i>
@@ -210,7 +210,7 @@
 
                                         </div>
                                         <div *ngIf="currentDeletedstatus==true">
-                                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                            <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" ></p-inputSwitch> 
                                             <span data-toggle="modal" data-target="#view">
                                                 <a class="btn nobg btn-view-cstm" (onChange)="openView(view,rowData)"
@@ -218,7 +218,7 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a> 
                                             </span>
-                                          <span ><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                          <span *ngIf="isEdit"><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                           <span>
                                             <a data-toggle="modal" data-target="#assetInvAudit" class="btn nobg btn-delete-cstm"
                                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
@@ -315,13 +315,13 @@
 
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="" data-toggle="collapse" href="#step1" aria-expanded="true">
+                                    <a *ngIf="isGeneralInformation" class="" data-toggle="collapse" href="#step1" aria-expanded="true">
                                         General
                                         Information
                                     </a>
                                 </h4>
                             </div>
-                            <div id="step1" class="panel-collapse collapse in show">
+                            <div id="step1" class="panel-collapse collapse in show" *ngIf="isGeneralInformation">
                                 <div class="panel-body">
                                     <div class="col-sm-6">
                                         <div>
@@ -593,10 +593,10 @@
                         <div class="panel panel-default" *ngIf="assetViewList.isIntangible==false"> 
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" href="#step2">Capes</a>
+                                    <a *ngIf="isCapes"  class="collapsed" data-toggle="collapse" href="#step2">Capes</a>
                                 </h4>
                             </div>
-                            <div id="step2" class="panel-collapse collapse">
+                            <div id="step2" class="panel-collapse collapse" *ngIf="isCapes">
                                 <div class="panel-body">
                                     <app-asset-capes [isView]="true" [viewassetRecordId]="assetViewList.assetRecordId"></app-asset-capes>
                                 </div>
@@ -605,10 +605,10 @@
                         <div class="panel panel-default" *ngIf="assetViewList.isIntangible==false">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" href="#step3">Calibration</a>
+                                    <a *ngIf="isCalibration" class="collapsed" data-toggle="collapse" href="#step3">Calibration</a>
                                 </h4>
                             </div>
-                            <div id="step3" class="panel-collapse collapse">
+                            <div id="step3" class="panel-collapse collapse" *ngIf="isCalibration">
                                 <div class="panel-body">
 
                                        <div class="form-row calibration-body">
@@ -794,13 +794,13 @@
                         <div class="panel panel-default" *ngIf="assetViewList.isIntangible==false">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" href="#step4">
+                                    <a *ngIf="isMaintenance" class="collapsed" data-toggle="collapse" href="#step4">
                                         Maintenance &amp;
                                         Warranty
                                     </a>
                                 </h4>
                             </div>
-                            <div id="step4" class="panel-collapse collapse">
+                            <div id="step4" class="panel-collapse collapse" *ngIf="isMaintenance">
                                 <div class="panel-body">
                                     <div class="form-row calibration-body">
                                   <div class="col-sm-3 asset_border" style="padding:6px;">

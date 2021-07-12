@@ -666,6 +666,8 @@ export class CustomerContactsComponent implements OnInit {
 		this.islastNameAlreadyExists = false;
 		this.isEditButton = false;
 		this.contactInformation = new CustomerContactModel()
+		this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
 	}
 
 

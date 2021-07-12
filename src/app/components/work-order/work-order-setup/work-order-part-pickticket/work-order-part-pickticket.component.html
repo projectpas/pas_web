@@ -297,7 +297,8 @@
                 </p-checkbox>
               </span>
             </td>
-            <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+            <td *ngFor="let col of pickTicketItemInterfaceheader"
+            [ngClass]="(col.field == 'qtyAvailable' ||col.field == 'qtyOnHand') ? 'text-right' : ''" pReorderableRowHandle>
               <ng-container *ngIf="col.field != 'qtyToShip'">
                 {{part[col.field]}}
               </ng-container>

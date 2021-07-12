@@ -108,7 +108,7 @@
               }}
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'docMemo'">
-              <p class="m-0 p-0 p_textEditor float-left text-capital truncate-text" matTooltipPosition="above"
+              <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
               [matTooltip]="parsedText(rowData[col.field])" [innerHTML]="rowData[col.field]"></p>
             </td>
             <td class="table-column-width text-capital" *ngIf="col.field == 'createdBy' || col.field == 'updatedBy'">{{rowData[col.field]}} </td>
@@ -146,7 +146,7 @@
               <a class="btn nobg" (click)="openEdit(rowData,content)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a> </span>
             <span *ngIf="isViewMode == false">
-              <a class="btn nobg" (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Delete"
+              <a class="btn nobg" (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Remove"
                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
             <span><a class="btn nobg greyHistory" 
@@ -203,7 +203,7 @@
 </div>
 <ng-template #deleteContent id="deleteContent" let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
-    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <h4 class="modal-title">Are you sure want to Remove?</h4>
     <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="dismissModeldelete()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -278,7 +278,7 @@
             </div>
             <div class="form-group">
               <label>Document Name <span class="clr-red">*</span></label>
-              <input class="form-control" type="text" name="name-Docs" [(ngModel)]="documentInformation.docName"
+              <input class="form-control" maxlength="100" type="text" name="name-Docs" [(ngModel)]="documentInformation.docName"
                 (ngModelChange)="enableSave()" required />
             </div>
             <div class="form-group">

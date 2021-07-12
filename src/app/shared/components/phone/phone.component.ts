@@ -251,8 +251,12 @@ export class PhoneComponent implements OnInit, OnChanges {
 		}
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     getAllEmployees(){
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').subscribe(res => {
+        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName', this.currentUserMasterCompanyId).subscribe(res => {
             console.log("REs",res);
             this.employees = res.map(x => {
                 return {

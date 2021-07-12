@@ -27,6 +27,7 @@ import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-asset-listing',
     templateUrl: './asset-listing.component.html',
@@ -133,6 +134,29 @@ export class AssetListingComponent implements OnInit {
         { field: 'modelname', header: 'Models' },
         { field: 'dashnumber', header: 'Dash Number' },
     ];
+    public isActive: boolean = false;
+    public isActiveView: boolean = false;
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isView:boolean=true;
+    isDownload:boolean=true;
+    isMaintenance:boolean=true;
+    isCalibration:boolean=true;
+    isCapes:boolean=true;
+    isGeneralInformation:boolean=true;
+    permissionAddCheck=[ModuleConstants.Asset_Create+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_Capes+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Add,
+                        ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Add];
+    permissionUpdateCheck=[ModuleConstants.Asset_Create+'.'+PermissionConstants.Update,
+                           ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.Update,
+                           ModuleConstants.Asset_Capes+'.'+PermissionConstants.Update,
+                           ModuleConstants.Asset_Calibration+'.'+PermissionConstants.Update,
+                           ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.Update];
+
+
     constructor(private alertService: AlertService, public assetService: AssetService, private _route: Router,
         private modalService: NgbModal, private glAccountService: GlAccountService,
         public assetattrService1: AssetAttributeTypeService, private vendorService: VendorService, public assetIntangibleService: AssetIntangibleAttributeTypeService,
@@ -142,6 +166,17 @@ export class AssetListingComponent implements OnInit {
     ) {
         this.assetService.isEditMode = false;
         this.assetService.listCollection = null;
+        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_List+'.'+PermissionConstants.View]);
+        this.isActive=this.authService.checkPermission([ModuleConstants.Asset_Create+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Asset_Create+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Asset_List+'.'+PermissionConstants.Download])
+        this.isGeneralInformation=this.authService.checkPermission([ModuleConstants.Asset_GeneralInformation+'.'+PermissionConstants.View]);
+        this.isCapes=this.authService.checkPermission([ModuleConstants.Asset_Capes+'.'+PermissionConstants.View]);
+        this.isCalibration=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.View]);
+        this.isMaintenance=this.authService.checkPermission([ModuleConstants.Asset_MaintenanceAndWarranty+'.'+PermissionConstants.View]);
+       
     }
     ngOnInit(): void {
         this.breadcrumbs = [
@@ -614,7 +649,7 @@ export class AssetListingComponent implements OnInit {
         $('#step4').collapse('hide');
     }
     getAssetAcquisitionTypeList() {
-        this.commonservice.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId','Name' ,'','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonservice.smartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId','Name' ,this.authService.currentUser.masterCompanyId,'','',0).subscribe(res => {
             this.assetAcquisitionTypeList = res;
         }, err => {
             const errorLog = err;
@@ -622,7 +657,7 @@ export class AssetListingComponent implements OnInit {
         })
     }
     getDepreciationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId','Name' ,'','',0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId','Name',this.authService.currentUser.masterCompanyId ,'','',0).subscribe(res => {
             this.depreciationFrequencyList = res;
         }, err => {
             const errorLog = err;

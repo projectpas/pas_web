@@ -387,7 +387,6 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllcreditTermList() {
-    //this.commonservice.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.creditTermsListOriginal = res;
     }, error => { this.isSpinnerVisible = false });
@@ -420,7 +419,6 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllPercentage() {
-    //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.percentageList = res;
       this.percentageList.sort(function (a, b) {
@@ -430,7 +428,6 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllTaxRates() {
-    //this.commonservice.smartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.taxRatesList = res;
       this.taxRatesList.sort(function (a, b) {
@@ -440,7 +437,6 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllTaxTypes() {
-    //this.commonservice.smartDropDownList('TaxType', 'TaxTypeId', 'Description').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('TaxType', 'TaxTypeId', 'Description', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.taxTypeList = res;
     }, error => { this.isSpinnerVisible = false });
@@ -578,7 +574,6 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllDiscountList1() {
-    //this.commonservice.smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.discountList1 = res;
       this.discountList1.sort(function (a, b) {

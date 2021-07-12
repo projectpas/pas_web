@@ -89,7 +89,7 @@
                                 <!-- {{saveTearDownData.isPmaDerBulletins}} -->
                                 <label>Airworthiness Directives <span class="clr-red"
                                         *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                                <input class="form-control" name="Airworthine" #Airworthiness="ngModel"
+                                <input class="form-control" maxlength="256" name="Airworthine" #Airworthiness="ngModel"
                                     [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.airworthinessDirecetives"
                                     [disabled]="!saveTearDownData.isPmaDerBulletins" type="text"
                                     id="AirworthinessDirecetives" name="AirworthinessDirecetives" required />
@@ -103,7 +103,7 @@
                             <div>
                                 <label>Mandatory Service Bulletins <span class="clr-red"
                                         *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                                <input class="form-control" name="MandatoryS" #MandatoryServ="ngModel"
+                                <input class="form-control" maxlength="256" name="MandatoryS" #MandatoryServ="ngModel"
                                     [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.mandatoryService"
                                     [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="MandatoryService"
                                     name="MandatoryService" required />
@@ -117,7 +117,7 @@
                             <div>
                                 <label>Requested Service Bulletins <span class="clr-red"
                                         *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                                <input class="form-control" name="Requesteds" #reqServic="ngModel"
+                                <input class="form-control" maxlength="256" name="Requesteds" #reqServic="ngModel"
                                     [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.requestedService"
                                     [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="RequestedService"
                                     name="RequestedService" required />
@@ -131,7 +131,7 @@
                             <div>
                                 <label>Service Letters <span class="clr-red"
                                         *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                                <input class="form-control" name="Servicel" #ServiceLetters="ngModel"
+                                <input class="form-control" maxlength="256" name="Servicel" #ServiceLetters="ngModel"
                                     [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.serviceLetters"
                                     [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="ServiceLetters"
                                     name="ServiceLetters" required />
@@ -145,7 +145,7 @@
                             <div>
                                 <label>Pma Parts <span class="clr-red"
                                         *ngIf="saveTearDownData.isPmaDerBulletins">*</span> </label>
-                                <input class="form-control" name="Pma" #PmaPart="ngModel"
+                                <input class="form-control" maxlength="256" name="Pma" #PmaPart="ngModel"
                                     [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.pmaParts"
                                     [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="PMAParts"
                                     name="PMAParts" required />
@@ -158,7 +158,7 @@
                             <div>
                                 <label>Der Repairs <span class="clr-red"
                                         *ngIf="saveTearDownData.isPmaDerBulletins">*</span></label>
-                                <input class="form-control" name="Der" #DerRepair="ngModel"
+                                <input class="form-control" maxlength="256" name="Der" #DerRepair="ngModel"
                                     [(ngModel)]="saveTearDownData.workOrderPmaDerBulletins.derRepairs"
                                     [disabled]="!saveTearDownData.isPmaDerBulletins" type="text" id="DERRepairs4"
                                     name="DERRepairs6" required />

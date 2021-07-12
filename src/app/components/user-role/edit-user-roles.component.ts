@@ -121,11 +121,11 @@ export class EditUserRolesComponent implements OnInit {
             if (target.classList.contains('fa-caret-down')) {
                 target.classList.remove('fa-caret-down');
                 target.classList.add('fa-caret-right');
-                visible = true;
             }
             else {
                 target.classList.remove('fa-caret-right');
                 target.classList.add('fa-caret-down');
+                visible = true;
             }
             if (visible) {
                 var selectedModule = this.sortedHierarchy.filter(function (filteredModule: ModuleHierarchyMaster) {
@@ -143,8 +143,8 @@ export class EditUserRolesComponent implements OnInit {
                     var k=document.getElementsByClassName('cls'+currentModule.id);
                     for (let index = 0; index < k.length; index++) {
                         const element = k[index];
-                        element.classList.remove('fa-caret-right');
-                        element.classList.add('fa-caret-down');
+                        element.classList.remove('fa-caret-down');
+                        element.classList.add('fa-caret-right');
                     }
                 });
             }
@@ -321,13 +321,11 @@ export class EditUserRolesComponent implements OnInit {
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
         var value = event.target.checked;   
-        this.enableDisableViewPermission(currentModule,value);  
             if (value == false) {
                 this.setPermissionByType(currentModule, type, value);
                 if (currentModule.parentId != null)
                     this.uncheckAllParentModule(currentModule.parentId, type);
             }
-            
             if (currentModule.hasChildren) {
                 this.setPermissionByType(currentModule, type, value);
                 this.pages = [];
@@ -382,12 +380,10 @@ export class EditUserRolesComponent implements OnInit {
                 }
          });
        }
-
        this.sortedHierarchy.filter(function (module) {
                 if(genInfoCount >0){
                     if(module.parentId != null && (currentModule.parentId == module.parentId)){
                         if(module.displayOrder != null && module.displayOrder == 0 && value){
-                            module.rolePermission.canAdd = true;
                             module.rolePermission.canView = true;
                         }
                     }
@@ -512,6 +508,7 @@ export class EditUserRolesComponent implements OnInit {
 
     UpdateUserRole(): void {
     this.isSpinnerVisible=true;
+    debugger;
         let userRoleID = this.currentUserRole.id
         this.currentUserRole.rolePermissions = [];
         let arrayData :any = [];
@@ -626,8 +623,7 @@ export class EditUserRolesComponent implements OnInit {
           }
      });
 
-     this.currentUserRole.rolePermissions = arrayData;
-        this.isSpinnerVisible=false;
+     this.currentUserRole.rolePermissions = arrayData;        
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);

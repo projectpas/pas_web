@@ -410,18 +410,17 @@ export class VendorShippingInformationComponent {
         this.disableEditor = false;
         this.disableShipVia = false;
     }
-
-    getshipvialistList() {
-        //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
-        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 200, '', this.currentUserMasterCompanyId).subscribe(res => {
-            this.shipViaDropdownList = res.map(x => {
-                return {
-                    ...x,
-                    id: x.value,
-                    name: x.label
-                }
-            });
-        }, error => { this.isSpinnerVisible = false; }) // this.onDataLoadFailed(error))
+   
+    getshipvialistList(){
+          this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
+              this.shipViaDropdownList = res.map(x => {
+                  return {
+                      ...x,
+                      id: x.value,
+                      name: x.label
+                  }
+              });
+        }, error => {this.isSpinnerVisible = false;}) // this.onDataLoadFailed(error))
     }
 
     private loadData() {
@@ -602,6 +601,8 @@ export class VendorShippingInformationComponent {
         this.sourceVendor = {};
         this.isEditShippingInfo = false;
         this.isSiteNameAlreadyExists = false;
+        this.arrayTagNamelist = [];
+		this.getAllTagNameSmartDropDown('');
     }
 
     openEdit(row) {
@@ -616,10 +617,9 @@ export class VendorShippingInformationComponent {
             this.getAllTagNameSmartDropDown('', row.contactTagId);
         }
 
-        if (this.arrayDomesricShipIdlist.length == 0) {
-            this.arrayDomesricShipIdlist.push(row.vendorShippingAddressId);
-        }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName', '', 'VendorId', this.vendorId, 20, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        if(this.arrayDomesricShipIdlist.length == 0) {
+            this.arrayDomesricShipIdlist.push(row.vendorShippingAddressId); }
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -1791,10 +1791,9 @@ export class VendorShippingInformationComponent {
 
     getAllDomesticSiteSmartDropDown(strText = '') {
         //this.isSpinnerVisible = true;
-        if (this.arrayDomesricShipIdlist.length == 0) {
-            this.arrayDomesricShipIdlist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName', '', 'VendorId', this.vendorId, 20, this.arrayDomesricShipIdlist.join()).subscribe(response => {
+		if(this.arrayDomesricShipIdlist.length == 0) {
+            this.arrayDomesricShipIdlist.push(0); }
+        this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
