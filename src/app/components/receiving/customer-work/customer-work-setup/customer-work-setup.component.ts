@@ -17,7 +17,7 @@ import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timePattern } from '../../../../validations/validation-pattern';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
-import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
+import { TimeLifeDraftData, DropDownData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 // import { time } from 'console';
 import * as moment from 'moment';
 import { Location } from '@angular/common';
@@ -149,7 +149,8 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.traceableToTypeId = 1;
         this.receivingForm.taggedByType = 1;
         this.receivingForm.certifiedTypeId = 1;
-        this.receivingForm.tagType = null;
+        this.receivingForm.tagTypeIds = 0;
+        this.receivingForm.certTypeobject = [];
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
         this.receivingForm.receivedDate = new Date();
@@ -183,9 +184,9 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.getWorkOrderDefaultSetting();
             this.getEmployeeData();
             this.loadTagTypes('');
+            this.getCertType('');
             this.loadEmployeeData('');
-            this.loadConditionData('');
-          
+            this.loadConditionData('');          
             this.getManagementStructureDetails(this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
@@ -362,29 +363,77 @@ export class CustomerWorkSetupComponent implements OnInit {
     loadTagTypes(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
-            this.setEditArray.push(this.receivingForm.tagTypeId ? this.receivingForm.tagTypeId : 0);
+            this.setEditArray.push(this.receivingForm.tagTypeIds ? this.receivingForm.tagTypeIds : 0);
 
         } else {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
-            if (res && res.length != 0) {
-                this.allTagTypes = res;
-            }
-            if (this.isEditMode == true) {
-                if (this.receivingForm.tagType && this.receivingForm.tagType != '0') {
-                    this.receivingForm.tagType = this.receivingForm.tagType.split(',').filter(function (el) {
-                        return (el != null && el != '');
-                    });
-                    for (let i = 0; i < this.receivingForm.tagType.length; i++) {
-                        this.receivingForm.tagType[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.receivingForm.tagType[i], this.allTagTypes);
-                    }
-                } else {
-                    this.receivingForm.tagType = [];
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 0, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            // if (res && res.length != 0) {
+            //     this.allTagTypes = res;
+            // }
+            const data = res.map(x => {
+                return {
+                    Key: x.value.toString(),
+                    Value: x.label
                 }
+            });
+            this.allTagTypes = data;
+            if (this.isEditMode == true) {     
+                if (this.receivingForm.tagTypeIds != null) {                                           
+                    var tagtype = this.allTagTypes.find(temp => temp.Key == this.receivingForm.tagTypeIds)
+                    if (!tagtype || tagtype == undefined) {
+                        var tag = new DropDownData();
+                        tag.Key = this.receivingForm.tagTypeIds.toString();
+                        tag.Value = this.receivingForm.tagType.toString();
+                        this.allTagTypes.push(tag);
+                    }
+                    this.receivingForm.tagTypeIds = this.receivingForm.tagTypeIds;                     
+                } 
+             }
+            // if (this.isEditMode == true) {                
+            //     if (this.receivingForm.tagType && this.receivingForm.tagType != '0') {
+            //         this.receivingForm.tagType = this.receivingForm.tagType.split(',').filter(function (el) {
+            //             return (el != null && el != '');
+            //         });
+            //         for (let i = 0; i < this.receivingForm.tagType.length; i++) {
+            //             this.receivingForm.tagType[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.receivingForm.tagType[i], this.allTagTypes);
+            //         }
+            //     } else {
+            //         this.receivingForm.tagType = [];
+            //     }
+            // }
+        })
+    }
+
+    CertTypeList: any = [];
+    arraycerttypelist: any[] = [];
+    getCertType(strText = '') {   
+        if (this.isEditMode == true) {  
+            this.arraycerttypelist.push(this.receivingForm.certTypeId ? this.receivingForm.certTypeId : 0);
+        }             
+        if (this.arraycerttypelist.length == 0) {
+            this.arraycerttypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('CertificationType', 'CertificationTypeId', 'CertificationName', strText,true, 0, this.arraycerttypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.CertTypeList = res;
+            if (this.isEditMode == true) {                
+                this.receivingForm.certTypeobject = [];
+                if (this.receivingForm.certType!="" && this.receivingForm.certType!=null) {                                                  
+                    this.receivingForm.certType = this.receivingForm.certType.split(',');                                  
+                    for (let i = 0; i < this.receivingForm.certType.length; i++) {                        
+                        this.receivingForm.certTypeobject[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.receivingForm.certType[i], this.CertTypeList);
+                    }  
+                } else {
+                    this.receivingForm.certTypeobject = [];
+                }   
             }
         })
+    }
+
+    onFilterCertType(value) {
+        this.loadTagTypes(value);
     }
 
     getReceivingCustomerDataonEdit(id) {
@@ -436,6 +485,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             }, 1000);
             this.getObtainOwnerTraceOnEdit(res);
             this.loadTagTypes('');
+            this.getCertType('');
             if (res.obtainFromType == 'Vendor' || res.ownerType == 'Vendor' || res.tracableToType == 'Vendor' || res.taggedByTypeName == 'Vendor' || res.certifiedType == 'Vendor') {
                 this.loadVendorData('');
             }
@@ -1114,21 +1164,35 @@ allowtoSaveWO(){
             receivingInfo.taggedById = this.receivingForm.taggedById ? editValueAssignByCondition('value', this.receivingForm.taggedById) : null;
             receivingInfo.certifiedById = this.receivingForm.certifiedById ? editValueAssignByCondition('value', this.receivingForm.certifiedById) : null;
 
-            if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
-                this.allTagTypes.forEach(element1 => {
-                    receivingInfo.tagType.forEach(element2 => {
-                        if (element1.value == element2) {
-                            this.gettagTypeIds.push(element1.value);
-                        }
-                    });
-                });
-                receivingInfo.tagTypeIds = this.gettagTypeIds.join();
-                for (let i = 0; i < receivingInfo.tagType.length; i++) {
-                    receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            // if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
+            //     this.allTagTypes.forEach(element1 => {
+            //         receivingInfo.tagType.forEach(element2 => {
+            //             if (element1.value == element2) {
+            //                 this.gettagTypeIds.push(element1.value);
+            //             }
+            //         });
+            //     });
+            //     receivingInfo.tagTypeIds = this.gettagTypeIds.join();
+            //     for (let i = 0; i < receivingInfo.tagType.length; i++) {
+            //         receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            //     }
+            //     receivingInfo.tagType = receivingInfo.tagType.join();
+            // } else {
+            //     receivingInfo.tagType = "";
+            // }
+
+            receivingInfo.tagTypeIds = receivingInfo.tagTypeIds > 0 ? receivingInfo.tagTypeIds : null;  
+
+            if (receivingInfo.certTypeobject && receivingInfo.certTypeobject.length > 0) {
+                receivingInfo.certTypeId = receivingInfo.certTypeobject.join();                
+                receivingInfo.certType = receivingInfo.certTypeId.split(',');
+                for (let i = 0; i < receivingInfo.certType.length; i++) {
+                    receivingInfo.certType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.certType[i], this.CertTypeList);
                 }
-                receivingInfo.tagType = receivingInfo.tagType.join();
+                receivingInfo.certType = receivingInfo.certType.join();
             } else {
-                receivingInfo.tagType = "";
+                receivingInfo.certType = "";
+                receivingInfo.certTypeId = "";
             }
 
 
@@ -1186,21 +1250,34 @@ allowtoSaveWO(){
             }
 
 
-            if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
-                this.allTagTypes.forEach(element1 => {
-                    receivingInfo.tagType.forEach(element2 => {
-                        if (element1.value == element2) {
-                            this.gettagTypeIds.push(element1.value);
-                        }
-                    });
-                });
-                receivingInfo.tagTypeIds = this.gettagTypeIds.join();
-                for (let i = 0; i < receivingInfo.tagType.length; i++) {
-                    receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            // if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
+            //     this.allTagTypes.forEach(element1 => {
+            //         receivingInfo.tagType.forEach(element2 => {
+            //             if (element1.value == element2) {
+            //                 this.gettagTypeIds.push(element1.value);
+            //             }
+            //         });
+            //     });
+            //     receivingInfo.tagTypeIds = this.gettagTypeIds.join();
+            //     for (let i = 0; i < receivingInfo.tagType.length; i++) {
+            //         receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            //     }
+            //     receivingInfo.tagType = receivingInfo.tagType.join();
+            // } else {
+            //     receivingInfo.tagType = "";
+            // }
+            receivingInfo.tagTypeIds = receivingInfo.tagTypeIds > 0 ? receivingInfo.tagTypeIds : null;     
+
+            if (receivingInfo.certTypeobject && receivingInfo.certTypeobject.length > 0) {
+                receivingInfo.certTypeId = receivingInfo.certTypeobject.join();                
+                receivingInfo.certType = receivingInfo.certTypeId.split(',');
+                for (let i = 0; i < receivingInfo.certType.length; i++) {
+                    receivingInfo.certType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.certType[i], this.CertTypeList);
                 }
-                receivingInfo.tagType = receivingInfo.tagType.join();
+                receivingInfo.certType = receivingInfo.certType.join();
             } else {
-                receivingInfo.tagType = "";
+                receivingInfo.certType = "";
+                receivingInfo.certTypeId = "";
             }
 
 
