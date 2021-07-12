@@ -106,7 +106,7 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'select', header: '', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: '40px', textalign: 'left' },
       { field: 'description', header: 'PN Description', width: '200px', textalign: 'left' },
-      { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
+      { field: 'conditionDescription', header: 'Cond', width: '200px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
       { field: 'manufacturer', header: 'Mfr', width: '90px', textalign: 'left' },
       { field: 'itemClassificationCode', header: 'Classification', width: '90px', textalign: 'left' },
@@ -228,7 +228,15 @@ export class PartDetailsComponent implements OnChanges {
 
   getStocklineAccess() {
   }
-
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+}
   viewSelectedRow(part, rowindex) {
     // if (this.parts.length > 0) {
     //   this.parts.forEach((part, index) => {

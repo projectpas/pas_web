@@ -54,10 +54,10 @@ import { MarginSummary } from "../../../models/sales/MarginSummaryForSalesorder"
 import { SalesOrderApproveComponent } from "../../sales/order/shared/components/sales-approve/sales-approve.component";
 import { SalesOrderCustomerApprovalComponent } from "../../sales/order/shared/components/sales-order-customer-approval/sales-order-customer-approval.component";
 import { forkJoin } from "rxjs/observable/forkJoin";
-// import { SalesOrderFreightComponent } from "../../sales/order/shared/components/sales-order-freight/sales-order-freight.component";
-// import { SalesOrderChargesComponent } from "../../sales/order/shared/components/sales-order-charges/sales-order-charges.component";
+import { ExchangeSalesOrderFreightComponent } from "../shared/components/exchange-sales-order-freight/exchange-sales-order-freight.component";
+import { ExchangeSalesOrderChargesComponent } from "../shared/components/exchange-sales-order-charges/exchange-sales-order-charges.component";
 // import { SalesOrderPartNumberComponent } from "../../sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
-// import { SalesOrderBillingComponent } from "../../sales/order/shared/components/sales-order-billing/sales-order-billing.component";
+import { ExchangeSalesOrderBillingComponent } from "../shared/components/exchange-sales-order-billing/exchange-sales-order-billing.component";
 // import { SalesOrderAnalysisComponent } from "../../sales/order/sales-order-analysis/sales-order-analysis.component";
  import { ExchangeSalesOrderShippingComponent } from "../shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
 // import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
@@ -149,6 +149,9 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   // @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
   // @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
   @ViewChild(ExchangeSalesOrderShippingComponent, { static: false }) public exchangeSalesOrderShippingComponent: ExchangeSalesOrderShippingComponent;
+  @ViewChild(ExchangeSalesOrderFreightComponent, { static: false }) public exchangeSalesOrderFreightComponent: ExchangeSalesOrderFreightComponent;
+  @ViewChild(ExchangeSalesOrderChargesComponent, { static: false }) public exchangeSalesOrderChargesComponent: ExchangeSalesOrderChargesComponent;
+  @ViewChild(ExchangeSalesOrderBillingComponent, { static: false }) public exchangeSalesOrderBillingComponent: ExchangeSalesOrderBillingComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
@@ -204,7 +207,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadSOStatus();
-    this.loadSOType();
+    //this.loadSOType();
 
     this.controlSettings.showViewQuote = false;
     this.customerId = +this.route.snapshot.paramMap.get("customerId");
@@ -301,7 +304,6 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
           this.soSettingsList = settingList;
         }
         this.customerDetails = result[0];
-        debugger;
         this.getCustomerDetails();
         this.setTypesOfWarnings(result[2]);
         this.setAccountTypes(result[3]);
@@ -627,23 +629,23 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     });
   }
 
-  copySalesOrderInstance(salesOrderId: number) {
-    this.isSpinnerVisible = true;
-    this.salesOrderService.copy(salesOrderId).subscribe(data => {
-      this.getSOMarginSummary();
-      this.load(this.managementStructureId);
-      //this.salesOrderView = data && data.length ? data[0] : null;
-      if (this.salesOrderCopyParameters) {
-        if (!this.salesOrderCopyParameters.copyParts) {
-          this.salesOrderView.parts = [];
-        }
-      }
-      this.bindData(this.salesOrderView);
-      this.isSpinnerVisible = false;
-    }, error => {
-      this.isSpinnerVisible = false;
-    });
-  }
+  // copySalesOrderInstance(salesOrderId: number) {
+  //   this.isSpinnerVisible = true;
+  //   this.salesOrderService.copy(salesOrderId).subscribe(data => {
+  //     this.getSOMarginSummary();
+  //     this.load(this.managementStructureId);
+  //     //this.salesOrderView = data && data.length ? data[0] : null;
+  //     if (this.salesOrderCopyParameters) {
+  //       if (!this.salesOrderCopyParameters.copyParts) {
+  //         this.salesOrderView.parts = [];
+  //       }
+  //     }
+  //     this.bindData(this.salesOrderView);
+  //     this.isSpinnerVisible = false;
+  //   }, error => {
+  //     this.isSpinnerVisible = false;
+  //   });
+  // }
 
   bindData(salesOrderView: IExchangeSalesOrderView, initialCall = false) {
     this.salesOrderObj = salesOrderView.salesOrder;
@@ -747,7 +749,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       .getNewSalesOrderInstance(customerId)
       .subscribe(data => {
         this.salesQuote = data && data.length ? data[0] : null;
-
+        this.salesQuote.quoteTypeId = "1";
         this.load(this.managementStructureId);
         if (this.salesQuote) {
           this.status = this.salesQuote.status && this.salesQuote.status.length > 0 ? this.salesQuote.status.slice(0) : [];
@@ -799,7 +801,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
 
       if (settingsObject) {
         if (!isEditMode) {
-          this.salesQuote.quoteTypeId = settingsObject.typeId;
+          this.salesQuote.quoteTypeId = settingsObject.typeid.toString();
           this.salesQuote.statusId = settingsObject.defaultStatusId;
           this.salesQuote.statusName = settingsObject.defaultStatusName;
         }
@@ -1041,7 +1043,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
               "Success",
-              `Sales Order updated successfully.`,
+              `Exchange Sales Order updated successfully.`,
               MessageSeverity.success
             );
             this.getSalesOrderInstance(this.id, true);
@@ -1067,7 +1069,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
           this.isSpinnerVisible = false;
           this.alertService.showMessage(
             "Success",
-            `Sales Order created successfully.`,
+            `Exchange Sales Order created successfully.`,
             MessageSeverity.success
           );
           this.toggle_po_header = false;
@@ -1206,7 +1208,24 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.exchangeSalesOrderPickTicketsComponent.refresh(this.id);
     }
     if (event.index == 3) {
+      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
+        this.exchangeSalesOrderFreightComponent.refresh(false);
+      } else {
+        this.exchangeSalesOrderFreightComponent.refresh(true);
+      }
+    }
+    if (event.index == 4) {
+      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+        this.exchangeSalesOrderChargesComponent.refresh(false);
+      } else {
+        this.exchangeSalesOrderChargesComponent.refresh(true);
+      }
+    }
+    if (event.index == 5) {
       this.exchangeSalesOrderShippingComponent.refresh(this.selectedParts);
+    }
+    if (event.index == 6) {
+      this.exchangeSalesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
     }
   }
 
@@ -1535,7 +1554,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     popupWin.document.write(`
       <html>
         <head>
-           <title>Sales Order</title>
+           <title>Exchange Sales Order</title>
            <style>
            div {
             white-space: normal;
@@ -1895,4 +1914,42 @@ tfoot { display:table-footer-group }
 
   getChargesList() { }
   getFreightList() { }
+  saveExchangeQuoteFreightsList(e) {
+     this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.exchangequoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+
+  updateExchangeQuoteFreightsList(e) {
+     this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.exchangequoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+  saveExchangeQuoteChargesList(e) {
+    this.modelcharges = e;
+    // this.totalCharges = this.modelcharges.amount;
+    // this.totalcost = this.modelcharges.cost;
+    // this.marginSummary.otherCharges = this.totalCharges;
+    // this.marginSummary.otherCost = this.totalcost;
+    // this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    // this.exchangequoteService.setTotalcost(this.modelcharges.cost);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+  public modelcharges = { amount: 0, cost: 0 };
+  updateExchangeQuoteChargesList(e) {
+    this.modelcharges = e;
+    // this.totalCharges = this.modelcharges.amount;
+    // this.totalcost = this.modelcharges.cost;
+    // this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    // this.exchangequoteService.setTotalcost(this.modelcharges.cost);
+    // this.marginSummary.otherCharges = this.totalCharges;
+    // this.marginSummary.otherCost = this.totalcost;
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
 }
