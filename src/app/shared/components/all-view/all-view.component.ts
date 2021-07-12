@@ -188,10 +188,10 @@ export class AllViewComponent implements OnInit {
       if(this.isPOPartlistView){
         this.getPOPartsViewById(OrderId);
       }
-      if(this.isPOApproverProcessView){
-        this.getApproversListById(OrderId);
-        this.getApprovalProcessListById(OrderId);
-      }
+      // if(this.isPOApproverProcessView){
+      //   this.getApproversListById(OrderId);
+      //   this.getApprovalProcessListById(OrderId);
+      // }
       this.tabindex = 0;
     }
     else if (this.OrderTypes == 'Repair Order') {
@@ -210,83 +210,143 @@ export class AllViewComponent implements OnInit {
 
   onChangeTabView(event) {
 
-    if (event.index == 0) {
+    var a = event.originalEvent.target;
+    var tabName = a.innerText;
+    console.log(tabName)
+    if (tabName == 'Parts List') {
       //this.showPartListtab = true;
       //this.getPOPartsViewById(this.OrderId);      
     }
-    if (event.index == 1) {
+    if (tabName == 'Address') {
     }
-    if (event.index == 2) {
+    if (tabName == 'Internal Approvers') {     
+      this.getApproversListById(this.OrderId);
+    }
+    if (tabName == 'Approver Process') {
+      this.getApproversListById(this.OrderId);
+      this.getApprovalProcessListById(this.OrderId);
+      //	this.enableApproverSaveBtn = false;     
+      this.showVendorCaptab = true;
+      //const id = editValueAssignByCondition('vendorId', this.vendorId);
+    }
+    if (tabName == 'Vendor Capes') {
+      //this.showVendorCaptab = true;
+      //const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+      //this.showAddresstab = true;
+      this.id = this.OrderId;
+    }
+    if (tabName == 'Documents') {
       //this.getApproversListById(this.OrderId);
     }
-    if (event.index == 3) {
+    if (tabName == 'Communication') {
+      //this.getApproversListById(this.OrderId);
+    }
+    if (tabName == 'Receiving Draft') {
+      this.showreceiveddraftpo = true;
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
+    }
+    if (tabName == 'Receiving') {
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
+    }
+
+    // if (event.index == 5 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {     
+    //   this.showreceiveddraftpo = true;
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 6 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {    
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
+    //   this.repairOrderId = this.id;
+    //   this.showreceiveddraft = true;
+    //   if (this.repairOrderData.length == 0) {
+    //     this.viewRepairOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
+    //   this.showreceived = true;
+    //   this.repairOrderId = this.id;
+    // }
+    // if (event.index == 7 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {    
+    //   this.showreceiveddraftpo = true;
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 8 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {    
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 7 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {          
+    //   this.repairOrderId = this.id;
+    //   this.showreceiveddraft = true;
+    //   if (this.repairOrderData.length == 0) {
+    //     this.viewRepairOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 8 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {     
+    //   this.showreceived = true;
+    //   this.repairOrderId = this.id;     
+    // }
+
+  }
+
+  onChangeROTabView(event) {
+
+    var a = event.originalEvent.target;
+    var tabName = a.innerText;
+    
+    if (tabName == 'Parts List') {
+      //this.showPartListtab = true;
+      //this.getPOPartsViewById(this.OrderId);      
+    }
+    if (tabName == 'Address') {
+    }
+    if (tabName == 'Internal Approvers') {
+      //this.getApproversListById(this.OrderId);
+    }
+    if (tabName == 'Approver Process') {
       //	this.getApproversListById(this.OrderId);
       //  this.getApprovalProcessListById(this.OrderId);
       //	this.enableApproverSaveBtn = false;     
       this.showVendorCaptab = true;
-      const id = editValueAssignByCondition('vendorId', this.vendorId);
+      //const id = editValueAssignByCondition('vendorId', this.vendorId);
     }
-    if (event.index == 4) {
+    if (tabName == 'Vendor Capes') {
       //this.showVendorCaptab = true;
       //const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
-      this.showAddresstab = true;
+      //this.showAddresstab = true;
       this.id = this.OrderId;
     }
-    if (event.index == 5 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
-      //this.showDocumenttab = true;
-      this.showreceiveddraftpo = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
+    if (tabName == 'Documents') {
+      //this.getApproversListById(this.OrderId);
     }
-    if (event.index == 6 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
-      //this.showComunicationtab = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
+    if (tabName == 'Communication') {
+      //this.getApproversListById(this.OrderId);
     }
-    if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
-      this.repairOrderId = this.id;
-      this.showreceiveddraft = true;
-      if (this.repairOrderData.length == 0) {
-        this.viewRepairOrder(this.id);
-      }
+    if (tabName == 'Receiving Draft') {
+        this.repairOrderId = this.id;
+        this.showreceiveddraft = true;
+        if (this.repairOrderData.length == 0) {
+          this.viewRepairOrder(this.id);
+        }
     }
-    if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
-      this.showreceived = true;
-      this.repairOrderId = this.id;
+    if (tabName == 'Receiving') {
+        this.showreceived = true;
+        this.repairOrderId = this.id;
     }
-    if (event.index == 7 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;
-      this.showreceiveddraftpo = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
-    }
-    if (event.index == 8 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
-    }
-    if (event.index == 7 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){          
-      this.repairOrderId = this.id;
-      this.showreceiveddraft = true;
-      if (this.repairOrderData.length == 0) {
-        this.viewRepairOrder(this.id);
-      }
-    }
-    if (event.index == 8 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){   
-      this.showreceived = true;
-      this.repairOrderId = this.id;
-      //this.viewRepairOrder(this.id);
-    }
-    //} 
   }
+
+
   parsedText(text) {
     if (text) {
       const dom = new DOMParser().parseFromString(
