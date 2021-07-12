@@ -33,6 +33,7 @@ import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StatusEnum } from '../../../../enum/status.enum';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -397,7 +398,15 @@ export class PurchaseSetupComponent implements OnInit {
 	descriptionStatusId: number = 0
 	closingStatusId: number = 0
 	@ViewChild("purchaseOrderPrintPopup", { static: false }) public purchaseOrderPrintPopup: ElementRef;
-
+	isView:boolean=true;
+    isAddPOheader:boolean=true;
+	isEditPOheader:boolean=true;
+	isViewPopartlist:boolean=true;
+	isAddPopartlist:boolean=true;
+	isUpdatePopartlist:boolean=true;
+	isPrintPopartlist:boolean=true;
+	isNextVisible:Boolean=true;
+	
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -457,6 +466,15 @@ export class PurchaseSetupComponent implements OnInit {
 		this.canceledStatusId = StatusEnum.Canceled;
 		this.descriptionStatusId = StatusEnum.Description;
 		this.closingStatusId = StatusEnum.Closing;
+
+		this.isAddPOheader=this.authService.checkPermission([ModuleConstants.PO_Header+'.'+PermissionConstants.Add]);
+		this.isEditPOheader=this.authService.checkPermission([ModuleConstants.PO_Header+'.'+PermissionConstants.Update]);
+		this.isViewPopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.View]);
+		this.isAddPopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.Add]);
+		this.isUpdatePopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.Update]);
+		this.isPrintPopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.ReportPrint]);
+		this.isNextVisible=this.authService.ShowTab('Create Vendor','Capabilities');
+		
 	}
 
 	ngOnInit() {
@@ -2291,41 +2309,44 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	onChangeTabView(event) {
-		if (event.index == 0) {
+		var a = event.originalEvent.target;
+        var tabName = a.innerText;
+        debugger
+		if (tabName == 'Parts List') {
 			this.getPurchaseOrderAllPartsById(this.poId);
 			this.enablePartSaveBtn = false;
 		}
-		if (event.index == 1) {
+		if (tabName == 'Address') {
 			this.showAddresstab = true;
 		}
-		if (event.index == 2 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Internal Approvers' && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 		}
-		if (event.index == 3 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Approver Process' && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 			this.getApprovalProcessListById(this.poId);
 			this.enableApproverSaveBtn = false;
 		}
-		if (event.index == 4 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Vendor Capes') {
 			this.showVendorCaptab = true;
 			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
 		}
-		if (event.index == 5 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Documents') {
 			this.showDocumenttab = true;
 		}
-		if (event.index == 6 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Communication') {
 			this.showComunicationtab = true;
 		}
-		if (event.index == 2 && !this.posettingModel.IsEnforceApproval) {
-			this.showVendorCaptab = true;
-			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
-		}
-		if (event.index == 3 && !this.posettingModel.IsEnforceApproval) {
-			this.showDocumenttab = true;
-		}
-		if (event.index == 4 && !this.posettingModel.IsEnforceApproval) {
-			this.showComunicationtab = true;
-		}
+		// if (event.index == 2 && !this.posettingModel.IsEnforceApproval) {
+		// 	this.showVendorCaptab = true;
+		// 	const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+		// }
+		// if (event.index == 3 && !this.posettingModel.IsEnforceApproval) {
+		// 	this.showDocumenttab = true;
+		// }
+		// if (event.index == 4 && !this.posettingModel.IsEnforceApproval) {
+		// 	this.showComunicationtab = true;
+		// }
 
 	}
 

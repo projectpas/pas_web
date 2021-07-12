@@ -383,9 +383,13 @@
                 </div>
                 <div *ngIf="toggle_po_header">
 
-                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
-                        [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
-                        : 'Save'}}</button>
+                    <button *ngIf="isAddPOheader && !isEditModeHeader" class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
+                        [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">Save
+                    </button>
+
+                    <button *ngIf="isEditPOheader && isEditModeHeader" class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
+                        [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">Update
+                    </button>
                 </div>
             </div>
         </div>
@@ -395,12 +399,12 @@
 
 <ng-container *ngIf="isEditModeHeader">
     <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">
-        <p-tabPanel header="Parts List">
+        <p-tabPanel header="Parts List" *ngIf="isViewPopartlist">
             <form #createPOPartsForm="ngForm">
-                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>                
-                <button data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
+                <button *ngIf="isAddPopartlist" (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>                
+                <button *ngIf="isAddPopartlist" data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
                     (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple PN</button>
-                <button (click)="initiatePOPrintProcess()" class="btn btn-primary">Print</button>
+                <button  *ngIf="isPrintPopartlist" (click)="initiatePOPrintProcess()" class="btn btn-primary">Print</button>
                 <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
                     style="min-height: 130px !important;">
                     <div class="tableFixHead">
