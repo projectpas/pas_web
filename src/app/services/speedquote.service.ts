@@ -313,8 +313,8 @@ export class SpeedQuoteService {
       observer.complete();
     });
   }
-  getItemMasterDataConditionWise(id) {
-    return this.speedQuoteEndPointSevice.getItemMasterDataConditionWise(id);
+  getItemMasterDataConditionWise(id,mastercompanyid) {
+    return this.speedQuoteEndPointSevice.getItemMasterDataConditionWise(id,mastercompanyid);
   }
   search(
     speedQuoteSearchParameters
@@ -375,6 +375,11 @@ export class SpeedQuoteService {
   getSQsendmailpdfpreview(speedQuoteId: number): Observable<any> {
     return Observable.forkJoin(
       this.speedQuoteEndPointSevice.getSQsendmailpdfpreview(speedQuoteId)
+    );
+  }
+  getItemMasterUnitPrice(itemMasterId: number, conditionId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.speedQuoteEndPointSevice.getItemMasterUnitPrice(itemMasterId, conditionId)
     );
   }
 }
