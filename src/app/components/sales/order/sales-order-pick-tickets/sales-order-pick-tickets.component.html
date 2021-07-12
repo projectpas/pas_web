@@ -34,11 +34,14 @@
             <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
               <tbody>
                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                  <td *ngFor="let summaryColumn of headers" style="width:auto; background-color: #EAF2C5 !important;"
+                  <td *ngFor="let summaryColumn of headers"   
+                  [ngClass]="( summaryColumn.field == 'qty' ||summaryColumn.field == 'qtyToShip' ||summaryColumn.field == 'qtyToPick' 
+                  ||summaryColumn.field == 'quantityAvailable' ||summaryColumn.field == 'readyToPick')?'text-right':''  " style="width:auto; background-color: #EAF2C5 !important;"
                     pReorderableRowHandle>
                     <span>
                       {{summaryPart[summaryColumn.field]}}
                     </span>
+                
                   </td>
                   <td *ngIf="isView == false" style="min-width: 120px; position: sticky !important">
                     <span>
@@ -81,7 +84,7 @@
                   <td>
                     {{ part.stockLineNumber }}
                   </td>
-                  <td>
+                  <td class="text-right">
                     {{ part.qtyToShip }}
                   </td>
                   <td>

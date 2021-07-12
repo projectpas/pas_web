@@ -794,6 +794,19 @@
 
                             <div class="form-group">
                                 <label>Cert Type</label>
+                                <p-multiSelect [options]="CertTypeList" (input)="onFilterCertType($event)" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.certTypeobject"
+                                    name="certType">
+                                </p-multiSelect>  
+                                
+                                <!-- <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
+                                </p-multiSelect> -->
+
+                            </div> 
+
+                            <div class="form-group">
+                                <label>Cert By</label>
                                 <select [(ngModel)]="receivingForm.certifiedTypeId" name="certifiedTypeId"
                                     (change)="onSelectCertType(receivingForm.certifiedTypeId)" (ngModelChange)="getActive()">
                                     <option value="0">-- Select --</option>
@@ -802,7 +815,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label>
+                                <!-- <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label> -->
                                 <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
                                     <div class="col-sm-12">  
                                         <p-autoComplete field="name" class="pautocomp-cstm"
@@ -845,25 +858,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             <div class="form-group">
                                 <label> Cert Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
@@ -890,9 +884,13 @@
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                <!-- <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
-                                </p-multiSelect>
+                                </p-multiSelect> -->
+                                <select class="form-control" (ngModelChange)="getActive()" name="tagType" [(ngModel)]="receivingForm.tagTypeIds">
+                                    <option value="0">--Select--</option>
+                                    <option *ngFor="let tagType of allTagTypes" [value]="tagType.Key">{{tagType.Value}}</option>
+                                </select>
                             </div>                             
                             <div class="form-group">
                                 <label>Tag By</label>

@@ -17,7 +17,7 @@ import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timePattern } from '../../../../validations/validation-pattern';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
-import { TimeLifeDraftData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
+import { TimeLifeDraftData, DropDownData } from '../../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 // import { time } from 'console';
 import * as moment from 'moment';
 import { Location } from '@angular/common';
@@ -149,7 +149,8 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.receivingForm.traceableToTypeId = 1;
         this.receivingForm.taggedByType = 1;
         this.receivingForm.certifiedTypeId = 1;
-        this.receivingForm.tagType = null;
+        this.receivingForm.tagTypeIds = 0;
+        this.receivingForm.certTypeobject = [];
         this.receivingForm.quantity = 1;
         this.receivingForm.isCustomerStock = true;
         this.receivingForm.receivedDate = new Date();
@@ -183,9 +184,9 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.getWorkOrderDefaultSetting();
             this.getEmployeeData();
             this.loadTagTypes('');
+            this.getCertType('');
             this.loadEmployeeData('');
-            this.loadConditionData('');
-          
+            this.loadConditionData('');          
             this.getManagementStructureDetails(this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
@@ -362,29 +363,77 @@ export class CustomerWorkSetupComponent implements OnInit {
     loadTagTypes(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
-            this.setEditArray.push(this.receivingForm.tagTypeId ? this.receivingForm.tagTypeId : 0);
+            this.setEditArray.push(this.receivingForm.tagTypeIds ? this.receivingForm.tagTypeIds : 0);
 
         } else {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
-            if (res && res.length != 0) {
-                this.allTagTypes = res;
-            }
-            if (this.isEditMode == true) {
-                if (this.receivingForm.tagType && this.receivingForm.tagType != '0') {
-                    this.receivingForm.tagType = this.receivingForm.tagType.split(',').filter(function (el) {
-                        return (el != null && el != '');
-                    });
-                    for (let i = 0; i < this.receivingForm.tagType.length; i++) {
-                        this.receivingForm.tagType[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.receivingForm.tagType[i], this.allTagTypes);
-                    }
-                } else {
-                    this.receivingForm.tagType = [];
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 0, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            // if (res && res.length != 0) {
+            //     this.allTagTypes = res;
+            // }
+            const data = res.map(x => {
+                return {
+                    Key: x.value.toString(),
+                    Value: x.label
                 }
+            });
+            this.allTagTypes = data;
+            if (this.isEditMode == true) {     
+                if (this.receivingForm.tagTypeIds != null) {                                           
+                    var tagtype = this.allTagTypes.find(temp => temp.Key == this.receivingForm.tagTypeIds)
+                    if (!tagtype || tagtype == undefined) {
+                        var tag = new DropDownData();
+                        tag.Key = this.receivingForm.tagTypeIds.toString();
+                        tag.Value = this.receivingForm.tagType.toString();
+                        this.allTagTypes.push(tag);
+                    }
+                    this.receivingForm.tagTypeIds = this.receivingForm.tagTypeIds;                     
+                } 
+             }
+            // if (this.isEditMode == true) {                
+            //     if (this.receivingForm.tagType && this.receivingForm.tagType != '0') {
+            //         this.receivingForm.tagType = this.receivingForm.tagType.split(',').filter(function (el) {
+            //             return (el != null && el != '');
+            //         });
+            //         for (let i = 0; i < this.receivingForm.tagType.length; i++) {
+            //             this.receivingForm.tagType[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.receivingForm.tagType[i], this.allTagTypes);
+            //         }
+            //     } else {
+            //         this.receivingForm.tagType = [];
+            //     }
+            // }
+        })
+    }
+
+    CertTypeList: any = [];
+    arraycerttypelist: any[] = [];
+    getCertType(strText = '') {   
+        if (this.isEditMode == true) {  
+            this.arraycerttypelist.push(this.receivingForm.certTypeId ? this.receivingForm.certTypeId : 0);
+        }             
+        if (this.arraycerttypelist.length == 0) {
+            this.arraycerttypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('CertificationType', 'CertificationTypeId', 'CertificationName', strText,true, 0, this.arraycerttypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.CertTypeList = res;
+            if (this.isEditMode == true) {                
+                this.receivingForm.certTypeobject = [];
+                if (this.receivingForm.certType!="" && this.receivingForm.certType!=null) {                                                  
+                    this.receivingForm.certType = this.receivingForm.certType.split(',');                                  
+                    for (let i = 0; i < this.receivingForm.certType.length; i++) {                        
+                        this.receivingForm.certTypeobject[i] = this.getIdFromArrayOfObjectByValue('value', 'label', this.receivingForm.certType[i], this.CertTypeList);
+                    }  
+                } else {
+                    this.receivingForm.certTypeobject = [];
+                }   
             }
         })
+    }
+
+    onFilterCertType(value) {
+        this.loadTagTypes(value);
     }
 
     getReceivingCustomerDataonEdit(id) {
@@ -424,6 +473,11 @@ export class CustomerWorkSetupComponent implements OnInit {
                 traceableToTypeId: res.traceableToTypeId == null ? 0 : res.traceableToTypeId,
                 taggedById: res.taggedById == null ? 0 : res.taggedById,
                 certifiedById: res.certifiedById == null ? 0 : res.certifiedById,
+                siteId: res.siteId == null ? 0 : res.siteId,
+                warehouseId: res.warehouseId == null ? 0 : res.warehouseId,
+                locationId: res.locationId == null ? 0 : res.locationId,
+                shelfId: res.shelfId == null ? 0 : res.shelfId,
+                binId: res.binId == null ? 0 : res.binId,
                 purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             }; 
             this.getManagementStructureDetails(this.receivingForm
@@ -436,6 +490,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             }, 1000);
             this.getObtainOwnerTraceOnEdit(res);
             this.loadTagTypes('');
+            this.getCertType('');
             if (res.obtainFromType == 'Vendor' || res.ownerType == 'Vendor' || res.tracableToType == 'Vendor' || res.taggedByTypeName == 'Vendor' || res.certifiedType == 'Vendor') {
                 this.loadVendorData('');
             }
@@ -457,6 +512,7 @@ export class CustomerWorkSetupComponent implements OnInit {
 
 
     getSiteDetailsOnEdit(res) {
+      
         this.getInactiveObjectOnEdit('value', res.siteId, this.allSites, 'Site', 'SiteId', 'Name');
         this.getInactiveObjectOnEdit('value', res.warehouseId, this.allWareHouses, 'Warehouse', 'WarehouseId', 'Name');
         this.getInactiveObjectOnEdit('value', res.locationId, this.allLocations, 'Location', 'LocationId', 'Name');
@@ -675,14 +731,12 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
     workScopeObjDetails:any={};
 getWorkScopeDataByIds(){
-    console.log("form",this.receivingForm)
+    if(this.receivingForm && (this.receivingForm.itemMasterId!=null || this.receivingForm.itemMasterId!=0) && this.receivingForm.workScopeId !=null){
     this.commonService.getDataWorkScopeByItemMasterCaps(this.receivingForm,'rc').subscribe(res => {
-        console.log('res',res);
+
         this.workScopeObjDetails={};
         this.workScopeObjDetails=res;
         if(this.workScopeObjDetails && this.workScopeObjDetails.isVerified==false){
-            // let modelName2="confirmWorkScopeInfo";
-            // this.modal = this.modalService.open(modelName2, { size: 'sm' });hide
             this.workScopeList.forEach(element => {
          if(element.value==this.receivingForm.workScopeId){
              this.receivingForm.workScopeName=element.label;
@@ -692,6 +746,7 @@ getWorkScopeDataByIds(){
             $('#confirmWorkScopeInfo').modal('show');
         }
     });
+}
     
 }
 dismissWorkSocpe(){
@@ -769,6 +824,10 @@ allowtoSaveWO(){
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
+        this.receivingForm.warehouseId=0;
+        this.receivingForm.locationId=0;
+        this.receivingForm.shelfId=0;
+        this.receivingForm.binId=0;
         this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name',this.authService.currentUser.masterCompanyId, 'SiteId', siteId, 0).subscribe(res => {
             this.allWareHouses = res.map(x => {
                 return {
@@ -794,6 +853,9 @@ allowtoSaveWO(){
         this.allLocations = [];
         this.allShelfs = [];
         this.allBins = [];
+        this.receivingForm.locationId=0;
+        this.receivingForm.shelfId=0;
+        this.receivingForm.binId=0;
         if (warehouseId != 0) {
 
             this.commonService.smartDropDownList('Location', 'LocationId', 'Name', this.authService.currentUser.masterCompanyId, 'WarehouseId', warehouseId, 0).subscribe(res => {
@@ -815,6 +877,8 @@ allowtoSaveWO(){
     locationValueChange(locationId) {
         this.allShelfs = [];
         this.allBins = [];
+        this.receivingForm.shelfId=0;
+        this.receivingForm.binId=0;
         if (locationId != 0) {
             this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).subscribe(res => {
                 this.allShelfs = res.map(x => {
@@ -834,6 +898,7 @@ allowtoSaveWO(){
 
     shelfValueChange(shelfId) {
         this.allBins = [];
+        this.receivingForm.binId=0;
         if (shelfId != 0) {
             this.commonService.smartDropDownList('Bin', 'BinId', 'Name', this.authService.currentUser.masterCompanyId, 'ShelfId', shelfId, 0).subscribe(res => {
                 this.allBins = res.map(x => {
@@ -1053,7 +1118,7 @@ allowtoSaveWO(){
             updatedBy: this.userName,
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             warehouseId: this.receivingForm.warehouseId != 0 ? this.receivingForm.warehouseId : null,
-            locationId: this.receivingForm.locationId ? this.receivingForm.locationId : null,
+            locationId: this.receivingForm.locationId != 0 ? this.receivingForm.locationId : null,
             binId: this.receivingForm.binId != 0 ? this.receivingForm.binId : null,
             shelfId: this.receivingForm.shelfId != 0 ? this.receivingForm.shelfId : null,
             workScopeId: this.receivingForm.workScopeId,
@@ -1114,21 +1179,35 @@ allowtoSaveWO(){
             receivingInfo.taggedById = this.receivingForm.taggedById ? editValueAssignByCondition('value', this.receivingForm.taggedById) : null;
             receivingInfo.certifiedById = this.receivingForm.certifiedById ? editValueAssignByCondition('value', this.receivingForm.certifiedById) : null;
 
-            if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
-                this.allTagTypes.forEach(element1 => {
-                    receivingInfo.tagType.forEach(element2 => {
-                        if (element1.value == element2) {
-                            this.gettagTypeIds.push(element1.value);
-                        }
-                    });
-                });
-                receivingInfo.tagTypeIds = this.gettagTypeIds.join();
-                for (let i = 0; i < receivingInfo.tagType.length; i++) {
-                    receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            // if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
+            //     this.allTagTypes.forEach(element1 => {
+            //         receivingInfo.tagType.forEach(element2 => {
+            //             if (element1.value == element2) {
+            //                 this.gettagTypeIds.push(element1.value);
+            //             }
+            //         });
+            //     });
+            //     receivingInfo.tagTypeIds = this.gettagTypeIds.join();
+            //     for (let i = 0; i < receivingInfo.tagType.length; i++) {
+            //         receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            //     }
+            //     receivingInfo.tagType = receivingInfo.tagType.join();
+            // } else {
+            //     receivingInfo.tagType = "";
+            // }
+
+            receivingInfo.tagTypeIds = receivingInfo.tagTypeIds > 0 ? receivingInfo.tagTypeIds : null;  
+
+            if (receivingInfo.certTypeobject && receivingInfo.certTypeobject.length > 0) {
+                receivingInfo.certTypeId = receivingInfo.certTypeobject.join();                
+                receivingInfo.certType = receivingInfo.certTypeId.split(',');
+                for (let i = 0; i < receivingInfo.certType.length; i++) {
+                    receivingInfo.certType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.certType[i], this.CertTypeList);
                 }
-                receivingInfo.tagType = receivingInfo.tagType.join();
+                receivingInfo.certType = receivingInfo.certType.join();
             } else {
-                receivingInfo.tagType = "";
+                receivingInfo.certType = "";
+                receivingInfo.certTypeId = "";
             }
 
 
@@ -1186,21 +1265,34 @@ allowtoSaveWO(){
             }
 
 
-            if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
-                this.allTagTypes.forEach(element1 => {
-                    receivingInfo.tagType.forEach(element2 => {
-                        if (element1.value == element2) {
-                            this.gettagTypeIds.push(element1.value);
-                        }
-                    });
-                });
-                receivingInfo.tagTypeIds = this.gettagTypeIds.join();
-                for (let i = 0; i < receivingInfo.tagType.length; i++) {
-                    receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            // if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
+            //     this.allTagTypes.forEach(element1 => {
+            //         receivingInfo.tagType.forEach(element2 => {
+            //             if (element1.value == element2) {
+            //                 this.gettagTypeIds.push(element1.value);
+            //             }
+            //         });
+            //     });
+            //     receivingInfo.tagTypeIds = this.gettagTypeIds.join();
+            //     for (let i = 0; i < receivingInfo.tagType.length; i++) {
+            //         receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+            //     }
+            //     receivingInfo.tagType = receivingInfo.tagType.join();
+            // } else {
+            //     receivingInfo.tagType = "";
+            // }
+            receivingInfo.tagTypeIds = receivingInfo.tagTypeIds > 0 ? receivingInfo.tagTypeIds : null;     
+
+            if (receivingInfo.certTypeobject && receivingInfo.certTypeobject.length > 0) {
+                receivingInfo.certTypeId = receivingInfo.certTypeobject.join();                
+                receivingInfo.certType = receivingInfo.certTypeId.split(',');
+                for (let i = 0; i < receivingInfo.certType.length; i++) {
+                    receivingInfo.certType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.certType[i], this.CertTypeList);
                 }
-                receivingInfo.tagType = receivingInfo.tagType.join();
+                receivingInfo.certType = receivingInfo.certType.join();
             } else {
-                receivingInfo.tagType = "";
+                receivingInfo.certType = "";
+                receivingInfo.certTypeId = "";
             }
 
 
@@ -1224,7 +1316,6 @@ allowtoSaveWO(){
         // this.router.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${this.receivingCustomerWorkId}`);
         this.isgotoWO = true;
         this.customerWarningListId = this.customerWOWaringListId;
-        console.log("wo Changes", this.customerWOWaringListId);
 
         this.customerResctrictions(this.customerId);
 
@@ -1282,7 +1373,6 @@ allowtoSaveWO(){
 
     customerResctrictions(customerId) {
         this.restrictMessage = '';
-        console.log("wo Changes", customerId, this.customerWarningListId);
         if (customerId && this.customerWarningListId) {
             this.commonService.customerResctrictions(customerId, this.customerWarningListId).subscribe((res: any) => {
                 if (res) {

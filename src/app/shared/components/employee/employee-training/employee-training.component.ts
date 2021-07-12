@@ -688,7 +688,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         if (this.arrayFrequencyTrainingInfolist.length == 0) {
             this.arrayFrequencyTrainingInfolist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName', strText, true, 0, this.arrayFrequencyTrainingInfolist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName', strText, true, 0, this.arrayFrequencyTrainingInfolist.join(), 0).subscribe(response => {
             this.getAllFrequencyTrainingInfodrpData = response;
         }, err => {
             this.isSpinnerVisible = false;

@@ -74,6 +74,10 @@ import { ExchangeSalesOrderShippingComponent } from "../components/exchange-sale
 // import { ExchangeSalesOrderPackagingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-Packaging-Label/exchange-sales-order-Packaging-Label.component";
 // import { ExchangeSalesOrderMultiPackagingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-Packaging-Label/exchange-sales-order-multi-Packaging-Label.component";
 // import { ExchangeSalesOrderMultiShippingLabelComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-multi-shipping-label/exchange-sales-order-multi-shipping-label.component";
+import { ExchangeSalesOrderFreightComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-freight/exchange-sales-order-freight.component";
+import { ExchangeSalesOrderChargesComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-charges/exchange-sales-order-charges.component";
+import { ExchangeSalesOrderBillingComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-billing/exchange-sales-order-billing.component";
+import { ExchangeSalesOrderPrintInvoiceComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-print-invoice/exchange-sales-order-print-invoice.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -149,6 +153,10 @@ import { ExchangeSalesOrderShippingComponent } from "../components/exchange-sale
     // ExchangeSalesOrderPackagingLabelComponent,
     // ExchangeSalesOrderMultiPackagingLabelComponent,
     // ExchangeSalesOrderMultiShippingLabelComponent
+    ExchangeSalesOrderFreightComponent,
+    ExchangeSalesOrderChargesComponent,
+    ExchangeSalesOrderBillingComponent,
+    ExchangeSalesOrderPrintInvoiceComponent,
   ],
   providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
   //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]

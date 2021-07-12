@@ -31,6 +31,7 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
   private readonly sendSpeedQuoteEmailURL: string = environment.baseUrl + "/api/speedquote/sendspeedquoteemail"
   private readonly exclusionDeletePart: string = environment.baseUrl + "/api/speedquote/deleteexclusionpart";
   private readonly getSQsendemailpdfpreview: string = environment.baseUrl + "/api/speedquote/sqsendmailpdfpreview";
+  private readonly getitemMasterUnitPriceEndointUrl: string = environment.baseUrl + "/api/speedquote/getitemmasterunitprice";
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -129,12 +130,12 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  getItemMasterDataConditionWise(itemMasterId: number): Observable<any> {
-    const URL = `${this.getItemMasterDataConditionWiseURL}/${itemMasterId}`;
+  getItemMasterDataConditionWise(itemMasterId: number,mastercompanyid:number): Observable<any> {
+    const URL = `${this.getItemMasterDataConditionWiseURL}/${itemMasterId}?mastercompanyid=${mastercompanyid}`;
     return this.http
       .get(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getItemMasterDataConditionWise(itemMasterId));
+        return this.handleErrorCommon(error, () => this.getItemMasterDataConditionWise(itemMasterId,mastercompanyid));
       });
   }
   search(
@@ -244,6 +245,14 @@ export class SpeedQuoteEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getExclusionPrintview(speedQuoteId));
+      });
+  }
+  getItemMasterUnitPrice(itemMasterId: number, conditionId: number): Observable<any> {
+    const URL = `${this.getitemMasterUnitPriceEndointUrl}/${itemMasterId}?conditionId=${conditionId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getItemMasterUnitPrice(itemMasterId, conditionId));
       });
   }
 }

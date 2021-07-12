@@ -106,7 +106,7 @@ export class ExchangeSalesOrderShippingComponent {
 
   initColumns() {
     this.headers = [
-      { field: "salesOrderNumber", header: "SO Num", width: "100px" },
+      { field: "exchangeSalesOrderNumber", header: "Exch SO Num", width: "100px" },
       { field: "partNumber", header: "PN", width: "100px" },
       { field: "partDescription", header: "PN Description", width: "100px" },
       { field: "qtyToShip", header: "Qty Picked", width: "65px" },
@@ -136,7 +136,7 @@ export class ExchangeSalesOrderShippingComponent {
     this.commonService.getAddressById(this.salesOrderId, AddressTypeEnum.ExchangeSalesOrder, AppModuleEnum.ExchangeSalesOrder).subscribe(res => {
       if (res[0].ShipToSiteId == 0 && res[0].BillToSiteId == 0) {
         this.alertService.resetStickyMessage();
-        this.alertService.showMessage('Sales Order Shipping', "Please Save 'Bill To' and 'Ship To' address from address tab", MessageSeverity.default);
+        this.alertService.showMessage('Exchange Sales Order Shipping', "Please Save 'Bill To' and 'Ship To' address from address tab", MessageSeverity.default);
       }
       else {
         this.initColumns();
