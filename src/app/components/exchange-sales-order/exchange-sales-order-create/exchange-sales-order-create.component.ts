@@ -57,7 +57,7 @@ import { forkJoin } from "rxjs/observable/forkJoin";
 import { ExchangeSalesOrderFreightComponent } from "../shared/components/exchange-sales-order-freight/exchange-sales-order-freight.component";
 import { ExchangeSalesOrderChargesComponent } from "../shared/components/exchange-sales-order-charges/exchange-sales-order-charges.component";
 // import { SalesOrderPartNumberComponent } from "../../sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
-// import { SalesOrderBillingComponent } from "../../sales/order/shared/components/sales-order-billing/sales-order-billing.component";
+import { ExchangeSalesOrderBillingComponent } from "../shared/components/exchange-sales-order-billing/exchange-sales-order-billing.component";
 // import { SalesOrderAnalysisComponent } from "../../sales/order/sales-order-analysis/sales-order-analysis.component";
  import { ExchangeSalesOrderShippingComponent } from "../shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
 // import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
@@ -151,6 +151,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   @ViewChild(ExchangeSalesOrderShippingComponent, { static: false }) public exchangeSalesOrderShippingComponent: ExchangeSalesOrderShippingComponent;
   @ViewChild(ExchangeSalesOrderFreightComponent, { static: false }) public exchangeSalesOrderFreightComponent: ExchangeSalesOrderFreightComponent;
   @ViewChild(ExchangeSalesOrderChargesComponent, { static: false }) public exchangeSalesOrderChargesComponent: ExchangeSalesOrderChargesComponent;
+  @ViewChild(ExchangeSalesOrderBillingComponent, { static: false }) public exchangeSalesOrderBillingComponent: ExchangeSalesOrderBillingComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
@@ -1222,6 +1223,9 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     }
     if (event.index == 5) {
       this.exchangeSalesOrderShippingComponent.refresh(this.selectedParts);
+    }
+    if (event.index == 6) {
+      this.exchangeSalesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
     }
   }
 

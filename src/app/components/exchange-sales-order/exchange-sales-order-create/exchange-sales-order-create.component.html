@@ -614,6 +614,11 @@
                                 [managementStructureId]="managementStructureId">
                             </app-exchange-sales-order-shipping>
                           </p-tabPanel>
+                          <p-tabPanel header="Billing/Invoicing">
+                            <app-exchange-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
+                                [customerDetails]="customerDetails" [salesOrder]="salesQuote">
+                            </app-exchange-sales-order-billing>
+                        </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>
                               </app-sales-order-approve>
