@@ -81,7 +81,7 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         let defaultPriorityId = this.receivingForm.defaultPriorityId ? this.receivingForm.defaultPriorityId : 0;
         let defaultStatus = this.receivingForm.soListStatusId ? this.receivingForm.soListStatusId : 0;
         this.isSpinnerVisible = true;
-        forkJoin(this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [typeId].join(), this.masterCompanyId),
+        forkJoin(this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 0, [typeId].join(), 0),
             this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join(), this.masterCompanyId),
             this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join(), this.masterCompanyId)).subscribe(result => {
                 this.isSpinnerVisible = false;
@@ -96,7 +96,7 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
     getAllsalesOrderTypes(): void {
         this.isSpinnerVisible = true;
         let typId = this.receivingForm.typeId ? this.receivingForm.typeId : 0;
-        this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [typId].join(), this.masterCompanyId).subscribe(
+        this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 0, [typId].join(), 0).subscribe(
             result => {
                 this.salesOrderTypes = result[0];
                 this.isSpinnerVisible = false;

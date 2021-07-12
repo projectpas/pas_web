@@ -2344,7 +2344,7 @@ export class RoSetupComponent implements OnInit {
 	getApproversListById(roId) {
 		this.isSpinnerVisible = true;
 		if (this.roApprovaltaskId == 0) {
-			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
 				if (response) {
 					response.forEach(x => {
 						if (x.label.toUpperCase() == "RO APPROVAL") {
