@@ -106,7 +106,7 @@ export class ExchangeSalesOrderShippingComponent {
 
   initColumns() {
     this.headers = [
-      { field: "salesOrderNumber", header: "SO Num", width: "100px" },
+      { field: "exchangeSalesOrderNumber", header: "Exch SO Num", width: "100px" },
       { field: "partNumber", header: "PN", width: "100px" },
       { field: "partDescription", header: "PN Description", width: "100px" },
       { field: "qtyToShip", header: "Qty Picked", width: "65px" },

@@ -1,4 +1,4 @@
-export interface IExchangeQuoteFreight {
+export interface IExchangeSalesOrderFreight {
     shipViaId: number;
     length: number;
     width: number;
@@ -9,9 +9,9 @@ export interface IExchangeQuoteFreight {
     uomId: number;
     dimensionUOMId: number;
     currencyId: number;
-    exchangeQuoteFreightId: number;
-    exchangeQuoteId: number;
-    exchangeQuoteePartId: string;
+    exchangeSalesOrderFreightId: number;
+    exchangeSalesOrderId: number;
+    exchangeSalesOrderPartId: string;
     markupPercentageId: number;
     markupFixedPrice: number;
     masterCompanyId: number;

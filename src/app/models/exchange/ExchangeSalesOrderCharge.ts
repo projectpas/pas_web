@@ -1,4 +1,6 @@
-export interface IExchangeQuoteCharge {
+import { IExchangeSalesOrderCharge } from "./IExchangeSalesOrderCharge";
+
+export class ExchangeSalesOrderCharge implements IExchangeSalesOrderCharge {
     chargesTypeId: number;
     vendorId: number;
     quantity: number;
@@ -9,9 +11,9 @@ export interface IExchangeQuoteCharge {
     markupFixedPrice: string;
     billingMethodId: number;
     headerMarkupId: number;
-    exchangeQuoteChargesId: number;
-    exchangeQuoteId: number;
-    exchangeQuotePartId: string;
+    exchangeSalesOrderChargesId: number;
+    exchangeSalesOrderId: number;
+    exchangeSalesOrderPartId: string;
     billingRate: number;
     billingAmount: number;
     refNum: number;
@@ -23,4 +25,9 @@ export interface IExchangeQuoteCharge {
     updatedDate?: Date;
     createdDate?: Date;
     headerMarkupPercentageId: number;
+    constructor() {
+        this.exchangeSalesOrderChargesId = 0;
+        this.isDeleted = false;
+        this.isActive = true;
+    }
 }

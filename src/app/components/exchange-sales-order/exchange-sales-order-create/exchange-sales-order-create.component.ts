@@ -54,8 +54,8 @@ import { MarginSummary } from "../../../models/sales/MarginSummaryForSalesorder"
 import { SalesOrderApproveComponent } from "../../sales/order/shared/components/sales-approve/sales-approve.component";
 import { SalesOrderCustomerApprovalComponent } from "../../sales/order/shared/components/sales-order-customer-approval/sales-order-customer-approval.component";
 import { forkJoin } from "rxjs/observable/forkJoin";
-// import { SalesOrderFreightComponent } from "../../sales/order/shared/components/sales-order-freight/sales-order-freight.component";
-// import { SalesOrderChargesComponent } from "../../sales/order/shared/components/sales-order-charges/sales-order-charges.component";
+import { ExchangeSalesOrderFreightComponent } from "../shared/components/exchange-sales-order-freight/exchange-sales-order-freight.component";
+import { ExchangeSalesOrderChargesComponent } from "../shared/components/exchange-sales-order-charges/exchange-sales-order-charges.component";
 // import { SalesOrderPartNumberComponent } from "../../sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
 // import { SalesOrderBillingComponent } from "../../sales/order/shared/components/sales-order-billing/sales-order-billing.component";
 // import { SalesOrderAnalysisComponent } from "../../sales/order/sales-order-analysis/sales-order-analysis.component";
@@ -149,6 +149,8 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   // @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
   // @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
   @ViewChild(ExchangeSalesOrderShippingComponent, { static: false }) public exchangeSalesOrderShippingComponent: ExchangeSalesOrderShippingComponent;
+  @ViewChild(ExchangeSalesOrderFreightComponent, { static: false }) public exchangeSalesOrderFreightComponent: ExchangeSalesOrderFreightComponent;
+  @ViewChild(ExchangeSalesOrderChargesComponent, { static: false }) public exchangeSalesOrderChargesComponent: ExchangeSalesOrderChargesComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
@@ -204,7 +206,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadSOStatus();
-    this.loadSOType();
+    //this.loadSOType();
 
     this.controlSettings.showViewQuote = false;
     this.customerId = +this.route.snapshot.paramMap.get("customerId");
@@ -1205,6 +1207,20 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.exchangeSalesOrderPickTicketsComponent.refresh(this.id);
     }
     if (event.index == 3) {
+      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
+        this.exchangeSalesOrderFreightComponent.refresh(false);
+      } else {
+        this.exchangeSalesOrderFreightComponent.refresh(true);
+      }
+    }
+    if (event.index == 4) {
+      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+        this.exchangeSalesOrderChargesComponent.refresh(false);
+      } else {
+        this.exchangeSalesOrderChargesComponent.refresh(true);
+      }
+    }
+    if (event.index == 5) {
       this.exchangeSalesOrderShippingComponent.refresh(this.selectedParts);
     }
   }
@@ -1894,4 +1910,42 @@ tfoot { display:table-footer-group }
 
   getChargesList() { }
   getFreightList() { }
+  saveExchangeQuoteFreightsList(e) {
+     this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.exchangequoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+
+  updateExchangeQuoteFreightsList(e) {
+     this.totalFreights = e;
+    // this.marginSummary.freightAmount = this.totalFreights;
+    // this.exchangequoteService.setTotalFreights(e);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+  saveExchangeQuoteChargesList(e) {
+    this.modelcharges = e;
+    // this.totalCharges = this.modelcharges.amount;
+    // this.totalcost = this.modelcharges.cost;
+    // this.marginSummary.otherCharges = this.totalCharges;
+    // this.marginSummary.otherCost = this.totalcost;
+    // this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    // this.exchangequoteService.setTotalcost(this.modelcharges.cost);
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
+  public modelcharges = { amount: 0, cost: 0 };
+  updateExchangeQuoteChargesList(e) {
+    this.modelcharges = e;
+    // this.totalCharges = this.modelcharges.amount;
+    // this.totalcost = this.modelcharges.cost;
+    // this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    // this.exchangequoteService.setTotalcost(this.modelcharges.cost);
+    // this.marginSummary.otherCharges = this.totalCharges;
+    // this.marginSummary.otherCost = this.totalcost;
+    // this.setFreightsOrCharges();
+    // this.updateMarginSummary();
+  }
 }
