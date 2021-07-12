@@ -237,7 +237,7 @@ export class StockAdjustmentComponent implements OnInit {
 	}	
 
 	getStocklineAdjustmentDataType() {
-		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description',this.authService.currentUser.masterCompanyId,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+		this.commonService.smartDropDownList('StocklineAdjustmentDataType', 'StocklineAdjustmentDataTypeId', 'Description',0,'','', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.stocklineAdjustmentData = res.map(x => {
 				return {
 					adjustmentDataTypeId: x.value,
@@ -258,6 +258,7 @@ export class StockAdjustmentComponent implements OnInit {
 				}
 				this.isSpinnerVisible = false;
 			});
+			this.isSpinnerVisible = false;
         })
 	}
 
