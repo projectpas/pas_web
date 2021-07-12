@@ -171,7 +171,7 @@
 					<td >
 						<!-- [required]="rowData.isVerified==true" -->
 						<!-- [minDate]="rowData.addedDate" -->
-					  <p-calendar [minDate]="rowData.addedDate" [maxDate]="currentDate"
+					  <p-calendar [minDate]="rowData.addedDate == undefined ? currentDate : rowData.addedDate" [maxDate]="currentDate"
 					  	class="pcal-item-capes"
 						[(ngModel)]="rowData.verifiedDate" 
 						[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
