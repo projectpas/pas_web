@@ -80,6 +80,10 @@ export class ModuleConstants
         static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
         static Asset_Inventory_List :string  = "Asset_Inventory_List";
         static Asset_Inventory_Create :string  = "Asset_Inventory_Create";
+        static ReceivingCustomerList :string  = "ReceivingCustomerList";
+        static ReceivingCustomer :string  = "ReceivingCustomer";
+        static ReceivingCustomer_GeneralInformation :string  = "ReceivingCustomer_GeneralInformation";
+        static ReceivingCustomer_Document :string  = "ReceivingCustomer_Document";
 }
 
 export class PermissionConstants
