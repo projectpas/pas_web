@@ -31,7 +31,7 @@
                                 </span>
                             </label>
                             <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
-                                class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
+                                class="form-control" [disabled]="true" id="customerName" required #customerName="ngModel" />
                             <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                                 class="alert alert-danger alert-danger-cstm">
                                 <div *ngIf="customerName.errors.required">
@@ -52,7 +52,7 @@
                             <label>SO Num <span class="clr-red">*</span></label>
                             <input type="text" class="form-control" name="salesOrderNumber"
                                 [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true" #accountTypeId="ngModel"
-                                id="salesOrderNumber" #salesOrderNumber="ngModel" />
+                                id="salesOrderNumber" #salesOrderNumber="ngModel" required />
                             <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
                                 class="alert alert-danger alert-danger-cstm">
                                 <div *ngIf="salesOrderNumber.errors.required">
@@ -99,7 +99,7 @@
                                                 <input type="text" class="form-control" name="salesOrderNumber"
                                                     [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true"
                                                     #accountTypeId="ngModel" id="salesOrderNumber"
-                                                    #salesOrderNumber="ngModel" />
+                                                    #salesOrderNumber="ngModel" required />
                                                 <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="salesOrderNumber.errors.required">
@@ -205,7 +205,7 @@
                                                 </label>
                                                 <input type="text" [(ngModel)]="salesQuote.customerName"
                                                     name="customerName" class="form-control" [disabled]="true"
-                                                    id="customerName" #customerName="ngModel" />
+                                                    id="customerName" #customerName="ngModel" required />
                                                 <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="customerName.errors.required">

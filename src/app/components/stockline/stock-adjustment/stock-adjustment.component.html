@@ -432,7 +432,7 @@
 									<tr>
 										<td><input type="checkbox" name="unitCostAllow" [(ngModel)]="unitCostAllow" (change)="onChangePrices(item); onChangeUnitCost(item);"></td>
 										<td>{{item.stocklineAdjustmentDataType}}</td>
-										<td class="text-right">{{sourceStockLineSetup.coreUnitCost}}</td>
+										<td class="text-right">{{sourceStockLineSetup.unitCost}}</td>
 										<td>
 											<div *ngIf="unitCostAllow">
 												<input type="text" pKeyFilter="num" class="form-control text-right" name="unitCostAdjustmentValue" [(ngModel)]="item.adjustmentValue" (change)="onChangeUnitCostAdj(item)" required />

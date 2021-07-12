@@ -138,8 +138,9 @@ export class VendorWarningsComponent implements OnInit {
         }
     }
 
-    async getTypesOfWarnings(){
-        this.commonService.autoSuggestionSmartDropDownList('VendorWarningList', 'vendorWarningListId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
+    async getTypesOfWarnings() {
+        // await	this.commonService.smartDropDownList('VendorWarningList','vendorWarningListId', 'Name').subscribe(data => {
+        this.commonService.autoSuggestionSmartDropDownList('VendorWarningList', 'vendorWarningListId', 'Name', '', true, 0, '', 0).subscribe(res => {
             this.types = res;
             this.allowAll(true)
             if (this.isView) {
@@ -459,11 +460,11 @@ export class VendorWarningsComponent implements OnInit {
 
     previousOrNextTab(previousOrNext) {
         this.nextOrPreviousTab = previousOrNext;
-        if(!this.disableUpdate){
+        if (!this.disableUpdate) {
             let content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: "sm" });
         } else {
-            if(this.nextOrPreviousTab == "Previous"){
+            if (this.nextOrPreviousTab == "Previous") {
                 this.activeIndex = 8;
                 this.vendorService.changeofTab(this.activeIndex);
             } else {

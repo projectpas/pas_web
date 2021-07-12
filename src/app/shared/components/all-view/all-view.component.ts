@@ -73,13 +73,13 @@ export class AllViewComponent implements OnInit {
   id: number;
 
   //showPartListtab: boolean = false;
-  showreceiveddraftpo : boolean = false;
-  showreceived : boolean = false;
-  showreceiveddraft : boolean = false;
+  showreceiveddraftpo: boolean = false;
+  showreceived: boolean = false;
+  showreceiveddraft: boolean = false;
   showVendorCaptab: boolean = false;
   purchaseOrderData: PurchaseOrder;
   repairOrderData: RepairOrderPart[] = [];
-  repairOrderId:number = 0;
+  repairOrderId: number = 0;
 
   approvalProcessHeader = [
     {
@@ -209,7 +209,7 @@ export class AllViewComponent implements OnInit {
   }
 
   onChangeTabView(event) {
-    
+
     if (event.index == 0) {
       //this.showPartListtab = true;
       //this.getPOPartsViewById(this.OrderId);      
@@ -232,9 +232,9 @@ export class AllViewComponent implements OnInit {
       this.showAddresstab = true;
       this.id = this.OrderId;
     }
-    if (event.index == 5  && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
+    if (event.index == 5 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
       //this.showDocumenttab = true;
-      this.showreceiveddraftpo = true;  
+      this.showreceiveddraftpo = true;
       if (!this.purchaseOrderData) {
         this.viewPurchaseOrder(this.id);
       }
@@ -245,20 +245,20 @@ export class AllViewComponent implements OnInit {
         this.viewPurchaseOrder(this.id);
       }
     }
-    if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {              
-      this.repairOrderId = this.id;   
-      this.showreceiveddraft = true;  
-      if(this.repairOrderData.length == 0){         
-        this.viewRepairOrder(this.id);   
-      }   
+    if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
+      this.repairOrderId = this.id;
+      this.showreceiveddraft = true;
+      if (this.repairOrderData.length == 0) {
+        this.viewRepairOrder(this.id);
+      }
     }
-    if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {     
-        this.showreceived = true;
-        this.repairOrderId = this.id; 
+    if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
+      this.showreceived = true;
+      this.repairOrderId = this.id;
     }
     if (event.index == 7 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
       //this.isSpinnerVisible = true;
-      this.showreceiveddraftpo = true;  
+      this.showreceiveddraftpo = true;
       if (!this.purchaseOrderData) {
         this.viewPurchaseOrder(this.id);
       }
@@ -272,30 +272,30 @@ export class AllViewComponent implements OnInit {
     if (event.index == 7 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
       //this.isSpinnerVisible = true;      
       //if(this.repairOrderData.length>0){          
-      this.repairOrderId = this.id;   
-      this.showreceiveddraft = true;  
-      if(this.repairOrderData.length == 0){         
-        this.viewRepairOrder(this.id);   
-      }   
+      this.repairOrderId = this.id;
+      this.showreceiveddraft = true;
+      if (this.repairOrderData.length == 0) {
+        this.viewRepairOrder(this.id);
+      }
     }
     if (event.index == 8 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
       //this.isSpinnerVisible = true;      
       //if(this.repairOrderData.length>0){   
-        this.showreceived = true;
-        this.repairOrderId = this.id;      
+      this.showreceived = true;
+      this.repairOrderId = this.id;
       //this.viewRepairOrder(this.id);
     }
     //} 
   }
-	parsedText(text) {
-		if (text) {
-			const dom = new DOMParser().parseFromString(
-				'<!doctype html><body>' + text,
-				'text/html');
-			const decodedString = dom.body.textContent;
-			return decodedString;
-		}
-	}
+  parsedText(text) {
+    if (text) {
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
+    }
+  }
 
   getPOViewById(poId) {
     this.purchaseOrderService.getPOViewById(poId).subscribe(res => {
@@ -334,8 +334,8 @@ export class AllViewComponent implements OnInit {
   viewPurchaseOrder(purchaseOrderId: number): void {
     this.isSpinnerVisible = true;
     this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
-      results => {        
-        this.purchaseOrderData = results[0];        
+      results => {
+        this.purchaseOrderData = results[0];
         this.purchaseOrderData.openDate = new Date(results[0].openDate).toLocaleDateString();
         this.purchaseOrderData.needByDate = new Date(results[0].needByDate);
         this.purchaseOrderData.dateApproved = new Date(results[0].dateApproved).toLocaleDateString();
@@ -400,7 +400,7 @@ export class AllViewComponent implements OnInit {
   viewRepairOrder(repairOrderId: number): void {
     this.isSpinnerVisible = true;
     this.receivingService.getReceivingROPartsForViewById(repairOrderId).subscribe(
-      results => {       
+      results => {
         this.repairOrderData = results;
         var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
@@ -435,8 +435,8 @@ export class AllViewComponent implements OnInit {
             for (var SL of part.stockLine) {
               SL.isEnabled = false;
             }
-          }          
-        }        
+          }
+        }
         //this.getStatus();               
         this.isSpinnerVisible = false;
       }, error => {
@@ -452,7 +452,7 @@ export class AllViewComponent implements OnInit {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
-      };      
+      };
     }, err => { });
   }
 
@@ -508,7 +508,7 @@ export class AllViewComponent implements OnInit {
   getApproversListById(poId) {
     this.isSpinnerVisible = true;
     if (this.poApprovaltaskId == 0) {
-      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
         if (response) {
           response.forEach(x => {
             if (x.label.toUpperCase() == "PO APPROVAL") {
@@ -529,7 +529,7 @@ export class AllViewComponent implements OnInit {
   getRoApproversListById(roId) {
     this.isSpinnerVisible = true;
     if (this.roApprovaltaskId == 0) {
-      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => {
+      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
         if (response) {
           response.forEach(x => {
             if (x.label.toUpperCase() == "RO APPROVAL") {

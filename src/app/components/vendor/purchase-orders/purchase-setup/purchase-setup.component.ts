@@ -1435,7 +1435,7 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	loadApprovalProcessStatus() {
-		this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', this.authService.currentUser.masterCompanyId).subscribe(response => {
 			if (response) {
 				response.forEach(x => {
 					if (x.label.toUpperCase() == "APPROVED") {
@@ -2220,7 +2220,7 @@ export class PurchaseSetupComponent implements OnInit {
 	getApproversListById(poId) {
 		this.isSpinnerVisible = true;
 		if (this.poApprovaltaskId == 0) {
-			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => {
+			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
 				if (response) {
 					response.forEach(x => {
 						if (x.label.toUpperCase() == "PO APPROVAL") {
@@ -3246,7 +3246,7 @@ export class PurchaseSetupComponent implements OnInit {
 			});
 	}
 	loadPOApproverStatus() {
-		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, 0).subscribe(response => {
 			this.poApproverStatusList = response;
 			this.poApproverStatusList = this.poApproverStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		}, err => {

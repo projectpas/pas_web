@@ -64,7 +64,7 @@ export class CommonCommunicationComponent implements OnInit, OnChanges {
     moduleId:any;
     attachmoduleList: any = [];
     getModuleList(): void {
-        this.commonService.smartDropDownList('Module', 'ModuleId', 'ModuleName', this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('Module', 'ModuleId', 'ModuleName', 0).subscribe(res => {
             this.attachmoduleList = res;
             this.attachmoduleList.forEach(element => {
                 if (element.label == this.moduleName) {

@@ -85,7 +85,7 @@ export class CreateARSettingsComponent implements OnInit {
     }
 
     getAllsalesOrderTypes(): void {
-        this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description", this.currentUserMasterCompanyId).subscribe(
+        this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description", 0).subscribe(
             result => {
                 this.salesOrderTypes = result[0];
             }, error => {

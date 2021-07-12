@@ -21,61 +21,61 @@ import { SOQuoteMarginSummary } from "../../../../../../models/sales/SoQuoteMarg
 
 
 @Component({
-  selector: "app-sales-approve",
-  templateUrl: "./sales-approve.component.html",
-  styleUrls: ["./sales-approve.component.css"]
+	selector: "app-sales-approve",
+	templateUrl: "./sales-approve.component.html",
+	styleUrls: ["./sales-approve.component.css"]
 })
 export class SalesApproveComponent {
-  approvers: any[] = [];
-  isSpinnerVisible: boolean= false;
-  internalApproversList: any = [];
-  apporoverEmailList: string;
-  apporoverNamesList: any = [];
-  poApprovaltaskId = 6;
-  constructor(public salesQuoteService: SalesQuoteService
-    ,private commonService: CommonService,private authService: AuthService) {
+	approvers: any[] = [];
+	isSpinnerVisible: boolean = false;
+	internalApproversList: any = [];
+	apporoverEmailList: string;
+	apporoverNamesList: any = [];
+	poApprovaltaskId = 6;
+	constructor(public salesQuoteService: SalesQuoteService
+		, private commonService: CommonService, private authService: AuthService) {
 
-  }
+	}
 
-  refresh(marginSummary: SOQuoteMarginSummary) {
-        this.getApproversListById(marginSummary.salesOrderQuoteId);
-  }
+	refresh(marginSummary: SOQuoteMarginSummary) {
+		this.getApproversListById(marginSummary.salesOrderQuoteId);
+	}
 
-  getApproversListById(poId) {	
+	getApproversListById(poId) {
 		this.isSpinnerVisible = true;
-		if(this.poApprovaltaskId == 0) {
-		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(response => { 		        
-		if(response) {					
-            response.forEach(x => {
-                if (x.label.toUpperCase() == "Sales Quote Approval") {
-                    this.poApprovaltaskId = x.value;
-                }              
+		if (this.poApprovaltaskId == 0) {
+			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
+				if (response) {
+					response.forEach(x => {
+						if (x.label.toUpperCase() == "Sales Quote Approval") {
+							this.poApprovaltaskId = x.value;
+						}
+					});
+					this.getApproversByTask(poId)
+				}
+			}, err => {
+				this.isSpinnerVisible = false;
+				const errorLog = err;
+				//this.errorMessageHandler(errorLog);		
 			});
-			this.getApproversByTask(poId)
-		}
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			//this.errorMessageHandler(errorLog);		
-		});
 		}
 		else {
 			this.getApproversByTask(poId)
 		}
-		
+
 	}
-	getApproversByTask(poId) {		
+	getApproversByTask(poId) {
 		this.isSpinnerVisible = true;
 		this.salesQuoteService.approverslistbyTaskId(this.poApprovaltaskId, poId).subscribe(res => {
-						 this.internalApproversList = res;
-						 this.internalApproversList.map(x => {
-							this.apporoverEmailList = x.approverEmails;
-							this.apporoverNamesList.push(x.approverName);
-						})
-						 this.isSpinnerVisible = false;
-						},
-						err =>{
-							 this.isSpinnerVisible = false;
-						 });
+			this.internalApproversList = res;
+			this.internalApproversList.map(x => {
+				this.apporoverEmailList = x.approverEmails;
+				this.apporoverNamesList.push(x.approverName);
+			})
+			this.isSpinnerVisible = false;
+		},
+			err => {
+				this.isSpinnerVisible = false;
+			});
 	}
 }
