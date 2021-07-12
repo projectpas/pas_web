@@ -154,7 +154,7 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.loadDiscType();
     this.loadBankFeesType();
     this.loadAdjustReason();
-    
+
     setTimeout(() => {
       this.bankNameList();
     }, 2200);
@@ -838,10 +838,10 @@ export class AddCustomerPaymentComponent implements OnInit {
 
   get currentUserMasterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
-}
+  }
 
   loadCardType() {
-    this.commonService.smartDropDownList('MasterCardType', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+    this.commonService.smartDropDownList('MasterCardType', 'Id', 'Name', 0).subscribe(response => {
       if (response) {
         this.cardTypeList = response;
         this.cardTypeList = this.cardTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));

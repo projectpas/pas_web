@@ -248,7 +248,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.arrayExchangestatuslist.push(0);
     }
     this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus', 'ExchangeStatusId', 'Name', '',
-      true, 0, this.arrayExchangestatuslist.join(), this.currentUserMasterCompanyId)
+      true, 0, this.arrayExchangestatuslist.join(), 0)
       .subscribe(res => {
         this.exchangeStatusList = res;
         this.exchangeStatusList = this.exchangeStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
@@ -318,7 +318,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangequoteService.getAllExchangeQuoteSettings(this.masterCompanyId),
       this.commonservice.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', '', true, 0, [warningTypeId].join(), 0),
       this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 0, [leadSourceId].join(), this.masterCompanyId),
-      this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join(), this.masterCompanyId),).subscribe(result => {
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join(), this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];

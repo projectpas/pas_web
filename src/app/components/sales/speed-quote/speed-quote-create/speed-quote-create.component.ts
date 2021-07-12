@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole,OnChanges } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole, OnChanges } from "@angular/core";
 import {
   NgForm,
   FormGroup
@@ -370,7 +370,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(), this.masterCompanyId),
 
       this.speedQuoteService.getAllSpeedQuoteSettings(this.masterCompanyId),
-      this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.masterCompanyId),).subscribe(result => {
+      this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -2163,7 +2163,7 @@ export class SpeedQuoteCreateComponent implements OnInit {
   emailType: number;
   employeeList: any = [];
   employeesOriginalData: any = [];
-  @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+  @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
   addList: any = [];
   pdfPath: any;
   addMemo() {
@@ -2172,33 +2172,33 @@ export class SpeedQuoteCreateComponent implements OnInit {
     //this.isEditMode = false;
     this.formData = new FormData();
     if (this.ContactList.length > 0) {
-        this.ContactList.forEach(
-            (cc) => {
-                this.customerContact = cc;
-                this.contactSelected(cc)
-                return;
-            }
-        )
+      this.ContactList.forEach(
+        (cc) => {
+          this.customerContact = cc;
+          this.contactSelected(cc)
+          return;
+        }
+      )
     }
     this.bcc = "";
     this.cc = '';
     this.emailBody = '';
     this.contactBy = this.authService.currentEmployee;
-    
-        this.speedQuoteService.getSpeedQuote(this.id).subscribe(data => {
-            if (data) {
-                let quote = data && data.length ? data[0] : null;
-                this.subject = quote.speedQuote.customerName + ', Speed Quote Number: ' + quote.speedQuote.speedQuoteNumber;
-            }
-        });
-    
-    
+
+    this.speedQuoteService.getSpeedQuote(this.id).subscribe(data => {
+      if (data) {
+        let quote = data && data.length ? data[0] : null;
+        this.subject = quote.speedQuote.customerName + ', Speed Quote Number: ' + quote.speedQuote.speedQuoteNumber;
+      }
+    });
+
+
     this.emailTypes.forEach(
-        (x) => {
-            if (x.label == 'Manual') {
-                this.emailType = x.value;
-            }
+      (x) => {
+        if (x.label == 'Manual') {
+          this.emailType = x.value;
         }
+      }
     );
     this.fileUploadInput.clear();
     this.addList.push({ memoId: '', memo: '' })
@@ -2222,76 +2222,76 @@ export class SpeedQuoteCreateComponent implements OnInit {
     this.setEditArray = [];
     this.setEditArray.push(0);
     const strText = value ? value : '';
-    this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-        this.emailTypes = res;
+    this.commonService.autoSuggestionSmartDropDownList('EmailType', 'EmailTypeId', 'Name', strText, true, 20, this.setEditArray.join(), 0).subscribe(res => {
+      this.emailTypes = res;
     }, err => {
     });
   }
   arrayContactlist: any = []
-    getAllEmployees(strText = '') {
-        this.arrayContactlist.push(0);
-        //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
-            this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
-			true, 0, this.arrayContactlist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+  getAllEmployees(strText = '') {
+    this.arrayContactlist.push(0);
+    //this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('Employee', 'EmployeeId', 'FirstName', strText,
+      true, 0, this.arrayContactlist.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
 
-            this.employeeList = res.map(x => {
-                return {
-                    ...x,
-                    employeeId: x.value,
-                    name: x.label
-                }
-            });
-        }, err => {
-        })
-    }
-    filterEmployee(event): void {
-        if (event.query !== undefined && event.query !== null) {
-            this.getAllEmployees(event.query);
-        } else {
-            this.getAllEmployees('');
-        }
-    }
-    
-    customerContacts(value) {
-        this.setEditArray = [];
-        this.setEditArray.push(0);
-        const strText = value ? value : '';
-        this.commonService.autoDropListCustomerContacts(this.customerId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-            this.ContactList = res.map(x => {
-                return {
-                    ...x,
-                    contactId: x.contactId,
-                    firstName: x.customerContactName
-                }
-            });
-            this.cusContactList = this.ContactList;
-        }, err => {
-        });
-    }
-    filterCustomerContact(event): void {
-          if (event.query !== undefined && event.query !== null) {
-              this.customerContacts(event.query);
-          } else {
-              this.customerContacts('');
+        this.employeeList = res.map(x => {
+          return {
+            ...x,
+            employeeId: x.value,
+            name: x.label
           }
+        });
+      }, err => {
+      })
+  }
+  filterEmployee(event): void {
+    if (event.query !== undefined && event.query !== null) {
+      this.getAllEmployees(event.query);
+    } else {
+      this.getAllEmployees('');
+    }
+  }
+
+  customerContacts(value) {
+    this.setEditArray = [];
+    this.setEditArray.push(0);
+    const strText = value ? value : '';
+    this.commonService.autoDropListCustomerContacts(this.customerId, strText, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+      this.ContactList = res.map(x => {
+        return {
+          ...x,
+          contactId: x.contactId,
+          firstName: x.customerContactName
+        }
+      });
+      this.cusContactList = this.ContactList;
+    }, err => {
+    });
+  }
+  filterCustomerContact(event): void {
+    if (event.query !== undefined && event.query !== null) {
+      this.customerContacts(event.query);
+    } else {
+      this.customerContacts('');
+    }
   }
   send(isFormValid) {
     if (isFormValid) {
-            let content = this.emailSendQuotePopup;
-            this.getQuotePDF();
-            this.modal = this.modalService.open(content, { size: "sm" });
+      let content = this.emailSendQuotePopup;
+      this.getQuotePDF();
+      this.modal = this.modalService.open(content, { size: "sm" });
     }
   }
   getQuotePDF() {
     this.isSpinnerVisible = true;
     this.speedQuoteService.getSQsendmailpdfpreview(this.id)
-        .subscribe(
-            (res: any) => {
-                this.isSpinnerVisible = false;
-                this.pdfPath = res;
-            }, err => {
-            }
-        )
+      .subscribe(
+        (res: any) => {
+          this.isSpinnerVisible = false;
+          this.pdfPath = res;
+        }, err => {
+        }
+      )
   }
   downloadFileUpload(link) {
     const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${link}`;
@@ -2302,48 +2302,48 @@ export class SpeedQuoteCreateComponent implements OnInit {
   allCustomers: any = [];
   splitcustomersList: any = [];
   loadcustomerData(strText = '') {
-		if (this.arrayCustlist.length == 0) {
-			this.arrayCustlist.push(0);
+    if (this.arrayCustlist.length == 0) {
+      this.arrayCustlist.push(0);
     }
     this.arrayCustlist.push(this.customerId);
-		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.masterCompanyId).subscribe(response => {
-			this.allCustomers = response;
-			this.customerNames = response;
-			this.splitcustomersList = response;
-		}, err => {
-			this.isSpinnerVisible = false;
-		});
+    this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.masterCompanyId).subscribe(response => {
+      this.allCustomers = response;
+      this.customerNames = response;
+      this.splitcustomersList = response;
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
   }
-  
+
   filterCustomersSplit(event): void {
-		if (event.query !== undefined && event.query !== null) {
-			this.loadcustomerData(event.query);
-		}
+    if (event.query !== undefined && event.query !== null) {
+      this.loadcustomerData(event.query);
+    }
   }
-  
+
   selectedCustomerName(value) {
-		this.loadCustomerDataById(value.value);
+    this.loadCustomerDataById(value.value);
   }
-  
+
   loadCustomerDataById(customerId) {
-		if (customerId) {
-			this.customerContactList = [];
-			// this.getVendorContactsListByID(vendorId);
-			// this.getVendorCreditTermsByID(vendorId);
+    if (customerId) {
+      this.customerContactList = [];
+      // this.getVendorContactsListByID(vendorId);
+      // this.getVendorCreditTermsByID(vendorId);
       // this.warningsandRestriction(vendorId);
       this.salesQuote.customerId = customerId;
       this.customerId = customerId;
       this.getCustomerContactsListByID(customerId);
-			if (this.arrayCustlist.length == 0) {
-				this.arrayCustlist.push(0);
-			}
-			this.arrayCustlist.push(customerId);
+      if (this.arrayCustlist.length == 0) {
+        this.arrayCustlist.push(0);
+      }
+      this.arrayCustlist.push(customerId);
       this.isSpinnerVisible = true;
       this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', '', true, 20, this.arrayCustlist.join(), this.masterCompanyId).subscribe(response => {
         this.allCustomers = response;
         this.customerNames = response;
         this.splitcustomersList = response;
-        
+
         //this.speedQuote.customerId = getObjectById('value', customerId, this.allCustomers);
         //this.speedQuote.customerName = getValueFromArrayOfObjectById('label', 'value', customerId, this.allCustomers);
         this.salesQuote.customerName = getObjectById('value', customerId, this.splitcustomersList);
@@ -2351,11 +2351,11 @@ export class SpeedQuoteCreateComponent implements OnInit {
       }, err => {
         this.isSpinnerVisible = false;
       });
-		}
+    }
   }
   customerContactListdata = [];
   async getCustomerContactsListByID(customerId) {
-		await this.customerService.getCustomerCommonDataWithContactsById(customerId, '').subscribe(data => {
+    await this.customerService.getCustomerCommonDataWithContactsById(customerId, '').subscribe(data => {
       this.customerDetails = data;
       //this.getInitialDataForSOQ()
       this.getCustomerDetails();
@@ -2363,27 +2363,26 @@ export class SpeedQuoteCreateComponent implements OnInit {
       this.getDefaultContact();
       this.getSalesPersonAndCSR();
       this.isSpinnerVisible = false;
-		}, err => {
-			this.isSpinnerVisible = false;
-		});
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
   }
-  getSalesPersonAndCSR(){
+  getSalesPersonAndCSR() {
     this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId).subscribe(data => {
       this.setCSRAndSalesPersonOrAgentList(data);
       this.setCSR();
       this.setSalesPerson();
       this.isSpinnerVisible = false;
-		}, err => {
-			this.isSpinnerVisible = false;
-		});
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
   }
-  onChangeCustomerContact(event)
-  {
-    for(let i=0;i<this.customerContactList.length;i++){
-      if(this.customerContactList[i].customerContactId == event){
+  onChangeCustomerContact(event) {
+    for (let i = 0; i < this.customerContactList.length; i++) {
+      if (this.customerContactList[i].customerContactId == event) {
         this.salesQuote.customerEmail = this.customerContactList[i].email;
       }
     }
   }
-  
+
 }

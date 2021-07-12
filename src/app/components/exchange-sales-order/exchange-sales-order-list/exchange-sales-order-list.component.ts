@@ -115,22 +115,22 @@ export class ExchangeSalesOrderListComponent implements OnInit {
   }
 
   getStatusList() {
-    forkJoin(this.commonservice.smartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name",this.authService.currentUser.masterCompanyId),
+    forkJoin(this.commonservice.smartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", 0),
       //this.salesService.getAllSalesOrderSettings()
-      ).subscribe(res => {
-        this.statusList = res[0];
-        this.currentStatus = "1";
-        this.searchParameters.filters = {
-          ...this.searchParameters.filters,
-          isDeleted: this.currentDeletedstatus,
-          //viewType: this.viewType
-        }
-        //this.isSettingsReceived = true;
-        this.changeOfStatus(this.currentStatus);
-      }, error => {
-        //this.isSettingsReceived = true;
-        this.isSpinnerVisible = false;
-      });
+    ).subscribe(res => {
+      this.statusList = res[0];
+      this.currentStatus = "1";
+      this.searchParameters.filters = {
+        ...this.searchParameters.filters,
+        isDeleted: this.currentDeletedstatus,
+        //viewType: this.viewType
+      }
+      //this.isSettingsReceived = true;
+      this.changeOfStatus(this.currentStatus);
+    }, error => {
+      //this.isSettingsReceived = true;
+      this.isSpinnerVisible = false;
+    });
   }
 
   loadData(event, globalFilter = "") {
@@ -158,7 +158,7 @@ export class ExchangeSalesOrderListComponent implements OnInit {
     this.searchParameters.filters.masterCompanyId = this.currentUserMasterCompanyId;
     this.searchParameters.globalFilter = globalFilter;
     //if (this.isSettingsReceived) {
-      this.onSearch();
+    this.onSearch();
     //}
   }
 

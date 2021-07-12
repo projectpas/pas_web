@@ -1453,7 +1453,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	loadApprovalProcessStatus() {
-		this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', 0).subscribe(response => {
 			if (response) {
 				response.forEach(x => {
 					if (x.label.toUpperCase() == "APPROVED") {
@@ -2344,7 +2344,7 @@ export class RoSetupComponent implements OnInit {
 	getApproversListById(roId) {
 		this.isSpinnerVisible = true;
 		if (this.roApprovaltaskId == 0) {
-			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
 				if (response) {
 					response.forEach(x => {
 						if (x.label.toUpperCase() == "RO APPROVAL") {
@@ -3438,7 +3438,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	loadROApproverStatus() {
-		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', 0).subscribe(response => {
 			this.roApproverStatusList = response;
 			this.roApproverStatusList = this.roApproverStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		}, err => {
