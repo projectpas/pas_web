@@ -110,9 +110,12 @@ export class ExchangeQuoteListComponent implements OnInit {
     ];
     this.selectedColumns = this.headers;
   }
-
+  arrayStatuslist: any[] = [];
   getStatusList() {
-    forkJoin(this.commonservice.smartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", 0),
+    if (this.arrayStatuslist.length == 0) {
+      this.arrayStatuslist.push(0);
+    }
+    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", '', true, 20, this.arrayStatuslist.join(), 0),
       //this.salesService.getAllSalesOrderSettings()
     ).subscribe(res => {
       this.statusList = res[0];

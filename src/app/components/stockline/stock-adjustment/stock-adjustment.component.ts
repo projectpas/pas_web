@@ -262,7 +262,8 @@ export class StockAdjustmentComponent implements OnInit {
 				}
 				this.isSpinnerVisible = false;
 			});
-		})
+			this.isSpinnerVisible = false;
+        })
 	}
 
 	getStockLineAdjDetailsById(id) {
@@ -301,9 +302,9 @@ export class StockAdjustmentComponent implements OnInit {
 					x.beforeValue = this.sourceStockLineSetup.quantityOnHand ? this.sourceStockLineSetup.quantityOnHand : 0;
 					this.sourceStockLineSetup.quantityOnHand = this.sourceStockLineSetup.quantityOnHand ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.quantityOnHand, 0) : '0';
 				}
-				if (x.adjustmentDataTypeId == 11) {
-					x.beforeValue = this.sourceStockLineSetup.coreUnitCost ? this.sourceStockLineSetup.coreUnitCost : 0;
-					this.sourceStockLineSetup.coreUnitCost = this.sourceStockLineSetup.coreUnitCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.coreUnitCost, 2) : '0.00';
+				if(x.adjustmentDataTypeId == 11) {
+					x.beforeValue = this.sourceStockLineSetup.unitCost ? this.sourceStockLineSetup.unitCost : 0;
+					this.sourceStockLineSetup.unitCost = this.sourceStockLineSetup.unitCost ? formatNumberAsGlobalSettingsModule(this.sourceStockLineSetup.unitCost, 2) : '0.00';
 				}
 				if (x.adjustmentDataTypeId == 12) {
 					x.beforeValue = this.sourceStockLineSetup.unitSalesPrice ? this.sourceStockLineSetup.unitSalesPrice : 0;
@@ -991,6 +992,7 @@ export class StockAdjustmentComponent implements OnInit {
 			this.disableQtyOnHandAdj = false;
 		}
 	}
+
 	onChangeUnitCost(item) {
 		if (this.unitCostAllow) {
 			item.checkedItem = true;
@@ -1048,8 +1050,8 @@ export class StockAdjustmentComponent implements OnInit {
 
 	onChangeUnitCostAdj(item) {
 		item.adjustmentValue = item.adjustmentValue ? formatNumberAsGlobalSettingsModule(item.adjustmentValue, 2) : '0.00';
-		const beforeValue = this.sourceStockLineSetup.coreUnitCost ? parseFloat(this.sourceStockLineSetup.coreUnitCost.toString().replace(/\,/g, '')) : 0;
-		const adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g, '')) : 0;
+		const beforeValue = this.sourceStockLineSetup.unitCost ? parseFloat(this.sourceStockLineSetup.unitCost.toString().replace(/\,/g,'')) : 0;
+		const adjValue = item.adjustmentValue ? parseFloat(item.adjustmentValue.toString().replace(/\,/g,'')) : 0;
 		const afterValue = beforeValue + adjValue;
 		if (afterValue < 0) {
 			item.adjustmentValue = '0.00';
@@ -1087,22 +1089,6 @@ export class StockAdjustmentComponent implements OnInit {
 
 	onSaveStockLineAdj() {
 		const timeLife = this.getTimeLife(this.sourceTimeLife);
-		// const timeLife = {
-		// 	timeLifeCyclesId : this.timeLifeCyclesId > 0 ? this.timeLifeCyclesId : null,
-		// 	cyclesRemaining: typeof(this.sourceTimeLife.cyclesRemaining) == 'string' ? this.sourceTimeLife.cyclesRemaining : this.sourceTimeLife.cyclesRemaining ? this.datePipe.transform(this.sourceTimeLife.cyclesRemaining, "HH:mm") : null,
-		// 	timeRemaining: typeof(this.sourceTimeLife.timeRemaining) == 'string' ? this.sourceTimeLife.timeRemaining : this.sourceTimeLife.timeRemaining ? this.datePipe.transform(this.sourceTimeLife.timeRemaining, "HH:mm") : null,
-		// 	cyclesSinceNew: typeof(this.sourceTimeLife.cyclesSinceNew) == 'string' ? this.sourceTimeLife.cyclesSinceNew : this.sourceTimeLife.cyclesSinceNew ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceNew, "HH:mm") : null,
-		// 	timeSinceNew: typeof(this.sourceTimeLife.timeSinceNew) == 'string' ? this.sourceTimeLife.timeSinceNew : this.sourceTimeLife.timeSinceNew ? this.datePipe.transform(this.sourceTimeLife.timeSinceNew, "HH:mm") : null,
-		// 	lastSinceNew: typeof(this.sourceTimeLife.lastSinceNew) == 'string' ? this.sourceTimeLife.lastSinceNew : this.sourceTimeLife.lastSinceNew ? this.datePipe.transform(this.sourceTimeLife.lastSinceNew, "HH:mm") : null,
-		// 	cyclesSinceOVH: typeof(this.sourceTimeLife.cyclesSinceOVH) == 'string' ? this.sourceTimeLife.cyclesSinceOVH : this.sourceTimeLife.cyclesSinceOVH ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceOVH, "HH:mm") : null,
-		// 	timeSinceOVH: typeof(this.sourceTimeLife.timeSinceOVH) == 'string' ? this.sourceTimeLife.timeSinceOVH : this.sourceTimeLife.timeSinceOVH ? this.datePipe.transform(this.sourceTimeLife.timeSinceOVH, "HH:mm") : null,
-		// 	lastSinceOVH: typeof(this.sourceTimeLife.lastSinceOVH) == 'string' ? this.sourceTimeLife.lastSinceOVH : this.sourceTimeLife.lastSinceOVH ? this.datePipe.transform(this.sourceTimeLife.lastSinceOVH, "HH:mm") : null,
-		// 	cyclesSinceInspection: typeof(this.sourceTimeLife.cyclesSinceInspection) == 'string' ? this.sourceTimeLife.cyclesSinceInspection : this.sourceTimeLife.cyclesSinceInspection ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceInspection, "HH:mm") : null,
-		// 	timeSinceInspection: typeof(this.sourceTimeLife.timeSinceInspection) == 'string' ? this.sourceTimeLife.timeSinceInspection : this.sourceTimeLife.timeSinceInspection ? this.datePipe.transform(this.sourceTimeLife.timeSinceInspection, "HH:mm") : null,
-		// 	lastSinceInspection: typeof(this.sourceTimeLife.lastSinceInspection) == 'string' ? this.sourceTimeLife.lastSinceInspection : this.sourceTimeLife.lastSinceInspection ? this.datePipe.transform(this.sourceTimeLife.lastSinceInspection, "HH:mm") : null,
-		// 	cyclesSinceRepair: typeof(this.sourceTimeLife.cyclesSinceRepair) == 'string' ? this.sourceTimeLife.cyclesSinceRepair : this.sourceTimeLife.cyclesSinceRepair ? this.datePipe.transform(this.sourceTimeLife.cyclesSinceRepair, "HH:mm") : null,
-		// 	timeSinceRepair: typeof(this.sourceTimeLife.timeSinceRepair) == 'string' ? this.sourceTimeLife.timeSinceRepair : this.sourceTimeLife.timeSinceRepair ? this.datePipe.transform(this.sourceTimeLife.timeSinceRepair, "HH:mm") : null,
-		// }
 		this.tempStockData = [];
 		this.stocklineAdjustmentData.map(x => {
 			if (x.adjustmentDataTypeId == 8) {

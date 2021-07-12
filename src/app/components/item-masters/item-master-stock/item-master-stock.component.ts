@@ -5165,7 +5165,16 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             let saleDiscAmount: any;
             let unitSalePrice: any;
             if (baseSalePrice) {
-                saleDiscAmount = ((baseSalePrice * field.SP_CalSPByPP_SaleDiscPerc) / 100);
+
+                let SP_CalSPByPP_SaleDiscPerc=0;
+                this.itemQuantitys.forEach((saledis) => {
+                if (saledis.value == field.SP_CalSPByPP_SaleDiscPerc) 
+                {
+                    SP_CalSPByPP_SaleDiscPerc = saledis.label;
+                }
+                })
+
+                saleDiscAmount = ((baseSalePrice * SP_CalSPByPP_SaleDiscPerc) / 100);
                 saleDiscAmount = saleDiscAmount ? saleDiscAmount : 0;
                 unitSalePrice = baseSalePrice - saleDiscAmount;
             }

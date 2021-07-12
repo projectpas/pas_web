@@ -756,7 +756,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
           this.isSpinnerVisible = false;
           this.alertService.showMessage(
             "Success",
-            `Sales Order updated successfully.`,
+            `Exchange Sales Order updated successfully.`,
             MessageSeverity.success
           );
           this.getExchQuoteInstance(this.id, true);

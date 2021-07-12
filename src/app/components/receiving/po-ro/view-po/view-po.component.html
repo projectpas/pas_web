@@ -20,24 +20,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="form-row">
-                        <!-- <div class="col-md-8 ro-status-radios">
-                        <div class="form-group">
-                            <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
-                            <div>
-                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;"
-                                     *ngFor="let status of poStatus">
-                                    <label class="radio-cstm wauto">
-                                        <input type="radio" [checked]="status.value == purchaseOrderData.statusId"
-                                               name="postatus" class="form-control" value="{{status.value}}" disabled
-                                               required>
-                                        <span class="checkmark"></span>
-                                        {{status.label}}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+                    <div class="form-row">                       
                         <div class="col-md-9">
                             <div class="form-row" *ngIf="poDataHeader">
                                 <div class="col-md-4">
@@ -248,7 +231,7 @@
                         <th>SO</th>
                         <th>Sub-WO</th>
                         <th colspan="4" style="text-align: center;">Management Structure</th>
-                        <th colspan="46"></th>
+                        <th colspan="47"></th>
                     </tr>
                 </thead>
                 <tbody *ngIf="purchaseOrderData != undefined">
@@ -287,7 +270,7 @@
                                 <!-- <label style="width:90px;">Dept:</label> -->
                                 {{part.departmentText}}
                             </td>
-                            <td colspan="46"></td>
+                            <td colspan="47"></td>
                         </tr>
 
                         <ng-container>
@@ -326,9 +309,10 @@
                                 <th>Mfg Lot Num</th>                                
                                 <th>Mfg Date</th>
                                 <th>Mfg Batch Num</th>
-                                <th>Part Cert Num </th>
-                                <th>Cert Type</th>
+                                <th>Part Cert Num </th>     
+                                <th>Cert Type</th>                     
                                 <th>Cert By</th>
+                                <th></th>
                                 <th>Certified Date</th>
                                 <th class="date">Certified Due Date</th>
                                 <th>Tag Type</th>
@@ -419,6 +403,7 @@
                                     </td>
                                     <td>{{SL.manufacturingBatchNumber}}</td>                                    
                                     <td>{{SL.partCertificationNumber}}</td>
+                                    <td>{{SL.certType}}</td>
                                     <td>{{SL.certifiedType}}</td>
                                     <td>{{SL.certifiedBy}}</td>
                                     <td>
