@@ -6142,5 +6142,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.selectedDashNumbers=undefined;
         this.selectedAircraftModel=undefined;
         this.selectAircraftManfacturer=undefined; 
+        this.getAircraftMappedDataByItemMasterId();
     }
 }
