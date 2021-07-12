@@ -240,7 +240,7 @@
                                     <th>Location</th>
                                     <th>Shelf</th>
                                     <th>Bin</th>
-                                    <th colspan="43"></th>
+                                    <th colspan="44"></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -258,7 +258,7 @@
                                             <select class="form-control" [(ngModel)]="part.conditionId"
                                                 #selects="ngModel" [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!part.isEnabled" (change)="conditionChange(part)" required>
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let condition of ConditionList" [value]="condition.Key">
                                                     {{condition.Value}}</option>
                                             </select>
@@ -290,7 +290,7 @@
                                                 #selects="ngModel" [disabled]="!part.isEnabled"
                                                 [ngModelOptions]="{standalone: true}"
                                                 (change)="selectedLegalEntity(part.parentCompanyId, part);" required>
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let company of part.maincompanylist"
                                                     [value]="company.value">
                                                     {{company.label}}
@@ -302,7 +302,7 @@
                                                 [(ngModel)]="part.parentbuId" #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 (change)="selectedBusinessUnit(part.parentbuId, part)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option [value]="businessUnit.value"
                                                     *ngFor="let businessUnit of part.parentBulist">
                                                     {{businessUnit.label}}
@@ -314,7 +314,7 @@
                                                 [(ngModel)]="part.parentDivisionId" #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 (change)="selectedDivision(part.parentDivisionId, part)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let division of part.parentDivisionlist"
                                                     [value]="division.value">
                                                     {{division.label}}
@@ -326,7 +326,7 @@
                                                 [(ngModel)]="part.parentDeptId" #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 (change)="selectedDepartment(part.parentDeptId, part)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let department of part.parentDepartmentlist"
                                                     [value]="department.value">
                                                     {{department.label}}
@@ -337,7 +337,7 @@
                                             <select class="form-control" [(ngModel)]="part.siteId" #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}" [disabled]="!part.isEnabled"
                                                 (change)="getPartWareHouse(part, true)" required>
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let site of part.SiteList" [value]="site.Key">
                                                     {{site.Value}}
                                                 </option>
@@ -347,7 +347,7 @@
                                             <select class="form-control" [(ngModel)]="part.warehouseId"
                                                 #selects="ngModel" [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!part.isEnabled" (change)="getPartLocation(part, true)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let warehouse of part.WareHouseList"
                                                     [value]="warehouse.Key">{{warehouse.Value}}</option>
                                             </select>
@@ -356,7 +356,7 @@
                                             <select class="form-control" [(ngModel)]="part.locationId"
                                                 #selects="ngModel" [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!part.isEnabled" (change)="getPartShelf(part, true)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let loc of part.LocationList" [value]="loc.Key">
                                                     {{loc.Value}}</option>
                                             </select>
@@ -365,7 +365,7 @@
                                             <select class="form-control" [(ngModel)]="part.shelfId" #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}" [disabled]="!part.isEnabled"
                                                 (change)="getPartBin(part, true)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let shelf of part.ShelfList" [value]="shelf.Key">
                                                     {{shelf.Value}}</option>
                                             </select>
@@ -374,15 +374,16 @@
                                             <select class="form-control" [(ngModel)]="part.binId" #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}" [disabled]="!part.isEnabled"
                                                 (change)="setPartBinIdToStockline(part)">
-                                                <option value="0">Select</option>
+                                                <option value="0">--Select--</option>
                                                 <option *ngFor="let bin of part.BinList" [value]="bin.Key">{{bin.Value}}
                                                 </option>
                                             </select>
                                         </td>
-                                        <td colspan="43"></td>
+                                        <td colspan="44"></td>
                                         <td><a matTooltip="Edit" matTooltipPosition="above"
                                                 class="btn boxed-float-btn nobg edit"><i class="fa fa-edit"
-                                                    (click)="editPart(part)"></i></a></td>
+                                                    (click)="editPart(part)"></i></a>
+                                        </td>
                                     </tr>
 
                                     <ng-container>
@@ -425,6 +426,7 @@
                                             <th>Part Cert Num </th>
                                             <th>Cert Type</th>
                                             <th>Cert By</th>
+                                            <th></th>
                                             <th>Certified Date</th>
                                             <th class="date">Certified Due Date</th>
                                             <th>Tag Type</th>
@@ -457,7 +459,7 @@
                                                     <select class="form-control" [(ngModel)]="SL.conditionId"
                                                         #selects="ngModel" [ngModelOptions]="{standalone: true}"
                                                         [disabled]="!SL.isEnabled" required>
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let condition of ConditionList"
                                                             [value]="condition.Key">{{condition.Value}}
                                                         </option>
@@ -487,7 +489,7 @@
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="selectedLegalEntitySL(SL.parentCompanyId, SL);"
                                                         required>
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let company of SL.maincompanylist"
                                                             [value]="company.value">
                                                             {{company.label}}
@@ -499,7 +501,7 @@
                                                         [(ngModel)]="SL.parentbuId" #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="selectedBusinessUnitSL(SL.parentbuId, SL)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option [value]="businessUnit.value"
                                                             *ngFor="let businessUnit of SL.parentBulist">
                                                             {{businessUnit.label}}
@@ -511,7 +513,7 @@
                                                         [(ngModel)]="SL.parentDivisionId" #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="selectedDivisionSL(SL.parentDivisionId, SL)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let division of SL.parentDivisionlist"
                                                             [value]="division.value">
                                                             {{division.label}}
@@ -523,7 +525,7 @@
                                                         [(ngModel)]="SL.parentDeptId" #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="selectedDepartmentSL(SL.parentDeptId, SL)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let department of SL.parentDepartmentlist"
                                                             [value]="department.value">
                                                             {{department.label}}
@@ -542,7 +544,7 @@
                                                 <td>
                                                     <select class="form-control" [disabled]="!SL.isEnabled"
                                                         (change)="onOwnerChange($event, SL)" [(ngModel)]="SL.ownerType">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let item of moduleListDropdown"
                                                             [ngValue]="item.moduleId">{{item.moduleName}}</option>
                                                     </select>
@@ -597,7 +599,7 @@
                                                         #selects="ngModel" [disabled]="!SL.isEnabled"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="onObtainFromChange($event, SL)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let item of moduleListDropdown"
                                                             [ngValue]="item.moduleId">{{item.moduleName}}</option>
                                                     </select>
@@ -655,7 +657,7 @@
                                                     <select class="form-control" [disabled]="!SL.isEnabled"
                                                         (change)="onTraceableToChange($event, SL)"
                                                         [(ngModel)]="SL.traceableToType">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let item of moduleListDropdown"
                                                             [ngValue]="item.moduleId">{{item.moduleName}}</option>
                                                     </select>
@@ -714,7 +716,7 @@
                                                         [(ngModel)]="SL.siteId" #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}" [disabled]="!SL.isEnabled"
                                                         (change)="getStockLineWareHouse(SL, false)" required>
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let site of SL.SiteList" [value]="site.Key">
                                                             {{site.Value}}</option>
                                                     </select>
@@ -725,7 +727,7 @@
                                                         [(ngModel)]="SL.warehouseId" #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}" [disabled]="!SL.isEnabled"
                                                         (change)="getStockLineLocation(SL, false)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let warehouse of SL.WareHouseList"
                                                             [value]="warehouse.Key">{{warehouse.Value}}</option>
                                                     </select>
@@ -736,7 +738,7 @@
                                                         [(ngModel)]="SL.locationId" #selects="ngModel"
                                                         [disabled]="!SL.isEnabled" [ngModelOptions]="{standalone: true}"
                                                         (change)="getStockLineShelf(SL, false)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let loc of SL.LocationList" [value]="loc.Key">
                                                             {{loc.Value}}</option>
                                                     </select>
@@ -746,7 +748,7 @@
                                                         [(ngModel)]="SL.shelfId" #selects="ngModel"
                                                         [disabled]="!SL.isEnabled" [ngModelOptions]="{standalone: true}"
                                                         (change)="getStockLineBin(SL, false)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let shelf of SL.ShelfList" [value]="shelf.Key">
                                                             {{shelf.Value}}</option>
                                                     </select>
@@ -756,7 +758,7 @@
                                                         [(ngModel)]="SL.binId" #selects="ngModel"
                                                         [disabled]="!SL.isEnabled"
                                                         [ngModelOptions]="{standalone: true}">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let bin of SL.BinList" [value]="bin.Key">
                                                             {{bin.Value}}</option>
                                                     </select>
@@ -770,7 +772,7 @@
                                                 <td>
                                                     <select class="form-control" [(ngModel)]="SL.manufacturerId"
                                                         disabled>
-                                                        <option [value]="0">Select</option>
+                                                        <option [value]="0">--Select--</option>
                                                         <option [value]="manufacturer.Key"
                                                             *ngFor="let manufacturer of ManufacturerList">
                                                             {{manufacturer.Value}}</option>
@@ -802,13 +804,21 @@
                                                         [disabled]="!SL.isEnabled"
                                                         [(ngModel)]="SL.partCertificationNumber" [maxLength]="200">
                                                 </td>
-
+                                                <td>
+                                                    <p-multiSelect [options]="CertTypeList"
+                                                    [(ngModel)]="SL.certType"
+                                                    appendTo="body"
+                                                    id="certType{{stockline_row_index}}"
+                                                    name="certType{{stockline_row_index}}"
+                                                    [disabled]="!SL.isEnabled">
+                                                    </p-multiSelect>
+                                                </td>
                                                 <td>
                                                     <select class="form-control" [(ngModel)]="SL.certifiedTypeId"
                                                         #selects="ngModel" [disabled]="!SL.isEnabled"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="onCertTypeChange($event, SL)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let item of moduleListDropdown"
                                                             [ngValue]="item.moduleId">{{item.moduleName}}</option>
                                                     </select>
@@ -858,12 +868,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <!-- <p-calendar class="pas-clder pas-clder-po-table"
-                                                        [maxDate]="currentDate" [disabled]="!SL.isEnabled"
-                                                        [showIcon]="true" [ngModelOptions]="{standalone: true}"
-                                                        [(ngModel)]="SL.certifiedDate"></p-calendar> -->
-
+                                                <td>  
                                                     <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                         [monthNavigator]="true" yearRange="1900:2100"
                                                         [maxDate]="currentDate" [disabled]="!SL.isEnabled"
@@ -873,12 +878,7 @@
                                                         [(ngModel)]="SL.certifiedDate">
                                                     </p-calendar>
                                                 </td>
-                                                <td>
-                                                    <!-- <p-calendar class="pas-clder pas-clder-po-table"
-                                                        [maxDate]="currentDate" [disabled]="!SL.isEnabled"
-                                                        [showIcon]="true" [ngModelOptions]="{standalone: true}"
-                                                        [(ngModel)]="SL.certifiedDueDate"></p-calendar> -->
-
+                                                <td> 
                                                     <p-calendar class="calendar-grid" [yearNavigator]="true"
                                                         [monthNavigator]="true" yearRange="1900:2100"
                                                         [disabled]="!SL.isEnabled"
@@ -889,18 +889,22 @@
                                                     </p-calendar>
                                                 </td>
                                                 <td>
-                                                    <p-multiSelect [options]="TagTypeList" [(ngModel)]="SL.tagType"
+                                                    <!-- <p-multiSelect [options]="TagTypeList" [(ngModel)]="SL.tagType"
                                                         id="tagType{{stockline_row_index}}"
                                                         name="tagType{{stockline_row_index}}"
                                                         [disabled]="!SL.isEnabled">
-                                                    </p-multiSelect>
+                                                    </p-multiSelect> -->
+                                                    <select class="form-control" [disabled]="!SL.isEnabled" name="tagType{{stockline_row_index}}" [(ngModel)]="SL.tagTypeId">
+                                                        <option value="0">--Select--</option>
+                                                        <option *ngFor="let tagType of TagTypeList" [value]="tagType.Key">{{tagType.Value}}</option>
+                                                    </select>
                                                 </td>
                                                 <td>
                                                     <select class="form-control" [(ngModel)]="SL.taggedByType"
                                                         #selects="ngModel" [disabled]="!SL.isEnabled"
                                                         [ngModelOptions]="{standalone: true}"
                                                         (change)="onTaggedTypeChange($event, SL)">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let item of moduleListDropdown"
                                                             [ngValue]="item.moduleId">{{item.moduleName}}</option>
                                                     </select>
@@ -997,7 +1001,7 @@
                                                 <td>
                                                     <select class="form-control" required [(ngModel)]="SL.shippingViaId"
                                                         [disabled]="!SL.isEnabled">
-                                                        <option value="0">Select</option>
+                                                        <option value="0">--Select--</option>
                                                         <option *ngFor="let shippingVia of ShippingViaList"
                                                             [value]="shippingVia.Key">{{shippingVia.Value}}</option>
                                                     </select>

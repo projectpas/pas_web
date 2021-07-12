@@ -99,6 +99,7 @@ export class EditRoComponent implements OnInit {
     arrayglaccountlist: any[] = [];
     arrayshipvialist: any[] = [];
     arraytagtypelist: any[] = [];
+    arraycerttypelist: any[] = [];
     arrayrostatuslist: any[] = [];
     companyModuleId: number = 0;
     vendorModuleId: number = 0;
@@ -239,6 +240,7 @@ export class EditRoComponent implements OnInit {
                             this.Purchaseunitofmeasure();
                             this.getAllrevisedPart();
                             this.getTagType();
+                            this.getCertType();
                             this.isSpinnerVisible = false;
                             if (this.repairOrderData) {
                                 for (let i = 0; i < this.repairOrderData.length; i++) {
@@ -1894,17 +1896,30 @@ export class EditRoComponent implements OnInit {
                             timeLife.push(tl);
                         }
                     }
-                    if (stockLine.tagType && stockLine.tagType.length > 0) {
-                        stockLine.tagTypeId = stockLine.tagType.join();
-                        stockLine.tagType = stockLine.tagTypeId.split(',');
-                        for (let i = 0; i < stockLine.tagType.length; i++) {
-                            stockLine.tagType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.tagType[i], this.TagTypeList);
+                    // if (stockLine.tagType && stockLine.tagType.length > 0) {
+                    //     stockLine.tagTypeId = stockLine.tagType.join();
+                    //     stockLine.tagType = stockLine.tagTypeId.split(',');
+                    //     for (let i = 0; i < stockLine.tagType.length; i++) {
+                    //         stockLine.tagType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.tagType[i], this.TagTypeList);
+                    //     }
+                    //     stockLine.tagType = stockLine.tagType.join();
+                    // } else {
+                    //     stockLine.tagType = "";
+                    //     stockLine.tagTypeId = "";
+                    // }
+                    stockLine.tagTypeId = stockLine.tagTypeId > 0 ? stockLine.tagTypeId : null;   
+                    if (stockLine.certType && stockLine.certType.length > 0) {
+                        stockLine.certTypeId = stockLine.certType.join();                
+                        stockLine.certType = stockLine.certTypeId.split(',');
+                        for (let i = 0; i < stockLine.certType.length; i++) {
+                            stockLine.certType[i] = getValueFromArrayOfObjectById('label', 'value', stockLine.certType[i], this.CertTypeList);
                         }
-                        stockLine.tagType = stockLine.tagType.join();
+                        stockLine.certType = stockLine.certType.join();
                     } else {
-                        stockLine.tagType = "";
-                        stockLine.tagTypeId = "";
+                        stockLine.certType = "";
+                        stockLine.certTypeId = "";
                     }
+
                     index += 1;
                 }
 
@@ -2261,18 +2276,57 @@ export class EditRoComponent implements OnInit {
             this.arraytagtypelist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-            this.TagTypeList = res;
+            const data = res.map(x => {
+                return {
+                    Key: x.value.toString(),
+                    Value: x.label
+                }
+            });
+            this.TagTypeList = data;
             for (let part of this.repairOrderData) {
                 for (let SL of part.stockLine) {
-                    if (SL.tagType && SL.tagType.length > 0) {
-                        SL.tagType = SL.tagTypeId.split(',');
-                        for (let i = 0; i < SL.tagType.length; i++) {
-                            SL.tagType[i] = parseInt(SL.tagType[i]);
+                    if (SL.tagTypeId != null) {                       
+                        var tagtype = this.TagTypeList.find(temp => temp.value == SL.tagTypeId)
+                        if (!tagtype || tagtype == undefined) {
+                            var tag = new DropDownData();
+                            tag.Key = SL.tagTypeId.toString();
+                            tag.Value = SL.tagType.toString();
+                            this.TagTypeList.push(tag);
                         }
+                        SL.tagTypeId = SL.tagTypeId;                     
+                    } 
+                    // if (SL.tagType && SL.tagType.length > 0) {
+                    //     SL.tagType = SL.tagTypeId.split(',');
+                    //     for (let i = 0; i < SL.tagType.length; i++) {
+                    //         SL.tagType[i] = parseInt(SL.tagType[i]);
+                    //     }
+                    // } else {
+                    //     SL.tagType = "";
+                    //     SL.tagTypeId = "";
+                    // }
+                }
+            }
+        })
+    }
+
+    CertTypeList: any = [];
+    getCertType(strText = '') {
+        if (this.arraycerttypelist.length == 0) {
+            this.arraycerttypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('CertificationType', 'CertificationTypeId', 'CertificationName', strText,true, 0, this.arraycerttypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.CertTypeList = res;            
+            for (let part of this.repairOrderData) {
+                for (let SL of part.stockLine) {    
+                    if (SL.certType && SL.certType.length > 0) {                                                  
+                        SL.certType = SL.certTypeId.split(',');
+                        for (let i = 0; i < SL.certType.length; i++) { 
+                            SL.certType[i] = parseInt(SL.certType[i]);
+                        }  
                     } else {
-                        SL.tagType = "";
-                        SL.tagTypeId = "";
-                    }
+                        SL.certType = "";
+                        SL.certTypeId = "";
+                    }                      
                 }
             }
         })
