@@ -623,6 +623,7 @@ export class StockLineDraft {
     certifiedDate: Date = null;
     tagDate: Date = null;
     tagType: any = null;
+    certType:any = null;
     certifiedDueDate: Date = null;
     calibrationMemo: string = null;
     orderDate: Date = null;
@@ -769,12 +770,13 @@ export class StockLineDraft {
     WorkOrder: string = null;
     WorkOrderMaterialsName: string = null;
     tagTypeId: any = null;
+    certTypeId:any = null;
     taggedBy:number = null;         
     taggedByName: string = null;
     unitOfMeasureId:any = null;
     unitOfMeasure: string = null;
     tagTypeobject:any=null;
-
+    certTypeobject:any=null;
     certifiedById:number = null;    // ---------------------------------------   
 }
 

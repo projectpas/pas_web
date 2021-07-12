@@ -3438,7 +3438,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	loadROApproverStatus() {
-		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name','','',0,0 ).subscribe(response => {
 			this.roApproverStatusList = response;
 			this.roApproverStatusList = this.roApproverStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		}, err => {
@@ -5470,7 +5470,9 @@ tfoot { display:table-footer-group }
 			 .label{
 			   font-weight:500;
 			 }
-			 
+			 .text-right{
+				 text-align:right !important;
+			 }
 			 .second-block-label {
 			   position: relative;
 			   min-height: 1px;

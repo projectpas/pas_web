@@ -3225,7 +3225,7 @@ export class PurchaseSetupComponent implements OnInit {
 			});
 	}
 	loadPOApproverStatus() {
-		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, 0).subscribe(response => {
 			this.poApproverStatusList = response;
 			this.poApproverStatusList = this.poApproverStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		}, err => {

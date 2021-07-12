@@ -111,7 +111,7 @@
 
             <div class="second-block col-sm-4">
               <h3
-                style="margin-top:1px;margin-bottom:-2px;border-bottom:1px solid black !important;text-align:center;width:100%">
+                style="margin-top:1px;margin-bottom:-2px;margin-left:-2px;border-bottom:1px solid black !important;text-align:center;width:102%">
                 REPAIR ORDER</h3>
               <div class="second-block-div">
                 <label class="col-sm-6 second-block-label" style="width:100%">RO Num</label>
@@ -226,13 +226,13 @@
                   <tr>
                     <td class="border-bottom"></td>
                     <td class="border-bottom"></td>
-                    <td class="border-bottom">{{partList?.quantityOrdered}}</td>
+                    <td class="border-bottom text-right">{{partList?.quantityOrdered}}</td>
                     <td class="border-bottom">{{partList?.unitOfMeasure}}</td>
-                    <td class="border-bottom">{{partList?.unitCost}}</td>
-                    <td class="border-bottom">{{partList?.extendedCost}}</td>
-                    <td class="border-bottom">{{partList?.discountAmount}}</td>
+                    <td class="border-bottom text-right">{{partList?.unitCost}}</td>
+                    <td class="border-bottom text-right">{{partList?.extendedCost}}</td>
+                    <td class="border-bottom text-right">{{partList?.discountAmount}}</td>
                     <td class="border-bottom"></td>
-                    <td class="border-bottom">{{partList?.extendedCost}}</td>
+                    <td class="border-bottom text-right">{{partList?.extendedCost}}</td>
                   </tr>
                 </ng-container>
                 <tr>
@@ -244,31 +244,31 @@
                 </tr>
                 <tr>
                   <td class="text-right border-top"><b>SUBTOTAL</b></td>
-                  <td class="border-bottom border-top">{{totalExtCost}}</td>
+                  <td class="border-bottom border-top text-right">{{totalExtCost}}</td>
                 </tr>
                 <tr>
                   <td class="text-right">Tax(Rate 8.25%)</td>
-                  <td class="border-bottom"></td>
+                  <td class="border-bottom text-right"></td>
                 </tr>
                 <tr>
                   <td class="text-right">Other Tax</td>
-                  <td class="border-bottom"></td>
+                  <td class="border-bottom text-right"></td>
                 </tr>
                 <tr>
                   <td class="text-right">Shipping & Handling</td>
-                  <td class="border-bottom">{{roHeaderAdd.shippingandhandlingCost}}</td>
+                  <td class="border-bottom text-right">{{roHeaderAdd.shippingandhandlingCost}}</td>
                 </tr>
                 <tr>
                   <td class="text-right">Freight</td>
-                  <td class="border-bottom"></td>
+                  <td class="border-bottom text-right"></td>
                 </tr>
                 <tr>
                   <td class="text-right">Misc Charges</td>
-                  <td class="border-bottom"></td>
+                  <td class="border-bottom text-right"></td>
                 </tr>
                 <tr>
                   <td class="text-right"><b>Total</b></td>
-                  <td class="border-bottom">{{finaltotal}}</td>
+                  <td class="border-bottom text-right">{{finaltotal}}</td>
                 </tr>
               </tbody>
             </table>
@@ -338,7 +338,7 @@
               </table>
             </div>
           <!-- </div> -->
-          <div class="col-sm-12">
+          <div class="col-sm-12" style="margin-bottom: -3px;">
             <table rules=none class="parttable table-border-right print-table print-friendly table-margins">
               <tbody>
                 <tr>                  

@@ -1,9 +1,8 @@
 
 
 export function emailPattern() {
-    return "[a-zA-Z0-9.-_]{1,}@[a-zA-Z0-9.-]{2,}[.]{1}[a-zA-Z0-9]{2,}";
+    return"[a-zA-Z0-9.-\._\w.-]{1,}@[a-zA-Z0-9.-]{2,}[.]{1}[a-zA-Z0-9]{2,}";
 }
-
 
 export function urlPattern() {
     return "^([hH][tT]{2}[pP][sS]?:\\/\\/){0,1}(www\\.){0,1}[a-zA-Z0-9\\.\\-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}"
