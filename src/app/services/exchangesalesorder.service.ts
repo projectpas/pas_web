@@ -437,4 +437,10 @@ export class ExchangeSalesOrderService {
       this.exchangeSalesOrderEndpointService.getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId)
     );
   }
+  getExchangeSalesOrderChargesById(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderChargesById(id, isDeleted);
+  }
+  getExchangeSalesOrderFreightsById(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreightsById(id, isDeleted);
+  }
 }

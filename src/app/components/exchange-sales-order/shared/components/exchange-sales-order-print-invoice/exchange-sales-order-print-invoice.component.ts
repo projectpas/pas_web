@@ -28,46 +28,45 @@ export class ExchangeSalesOrderPrintInvoiceComponent implements OnInit {
   getSalesInvoiceView() {
     this.isSpinnerVisible = true;
     this.exchangeSalesOrderService.getExchangeSalesOrderBillingInvoicingData(this.salesOrderbillingInvoicingId).subscribe(res => {
-        this.salesOrderInvoice = res[0];
-        this.getSalesOrderCharges();
-        this.getSalesOrderFreights();
-        this.onInvoiceLoad.emit(this.salesOrderInvoice.invoiceStatus);
-        this.isSpinnerVisible = false;
+      this.salesOrderInvoice = res[0];
+      this.getSalesOrderCharges();
+      this.getSalesOrderFreights();
+      this.onInvoiceLoad.emit(this.salesOrderInvoice.invoiceStatus);
+      this.isSpinnerVisible = false;
     }, error => {
-        this.isSpinnerVisible = false;
+      this.isSpinnerVisible = false;
     })
-}
+  }
 
-getSalesOrderCharges() {
+  getSalesOrderCharges() {
     this.isSpinnerVisible = true;
-    // this.salesOrderService.getSalesOrderChargesById(this.salesOrderId, false).subscribe(res => {
-    //     this.salesOrderCharges = res;
-    //     this.isSpinnerVisible = false;
-    // }, error => {
-    //     this.isSpinnerVisible = false;
-    // })
-}
+    this.exchangeSalesOrderService.getExchangeSalesOrderChargesById(this.salesOrderId, false).subscribe(res => {
+      this.salesOrderCharges = res;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
+  }
 
-getSalesOrderFreights() {
+  getSalesOrderFreights() {
     this.isSpinnerVisible = true;
-    // this.salesOrderService.getSalesOrderFreightsById(this.salesOrderId, false).subscribe(res => {
-    //     this.salesOrderFreights = res;
-    //     this.isSpinnerVisible = false;
-    // }, error => {
-    //     this.isSpinnerVisible = false;
-    // })
-}
+    this.exchangeSalesOrderService.getExchangeSalesOrderFreightsById(this.salesOrderId, false).subscribe(res => {
+      this.salesOrderFreights = res;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
+  }
 
-close() {
+  close() {
     if (this.modalReference) {
-        this.modalReference.close();
+      this.modalReference.close();
     }
-}
+  }
 
-getFormattedNotes(notes) {
+  getFormattedNotes(notes) {
     if (notes != undefined) {
-        return notes.replace(/<[^>]*>/g, '');
+      return notes.replace(/<[^>]*>/g, '');
     }
-}
-
+  }
 }

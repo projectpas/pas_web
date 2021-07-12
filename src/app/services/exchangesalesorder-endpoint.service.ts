@@ -67,6 +67,8 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly GetSalesOrderBillingInvoicingByIdURL: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderBillingInvoicingById";
     private readonly updateSalesOrderBillingInvoicingURL: string = environment.baseUrl + "/api/exchangesalesorder/updateExchangeSalesOrderBillingInvoicing";
     private readonly getSalesOrderBillingInvoicingDataURL: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderBillingInvoicingData";
+    private readonly _getChargesById: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderChargesBySOId";
+    private readonly _getFreightsById: string = environment.baseUrl + "/api/exchangesalesorder/getExchangeSalesOrderFreightsBySOId";
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -402,6 +404,22 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
         .get<any>(URL, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId));
+        });
+    }
+    getExchangeSalesOrderChargesById(id, isDeleted) {
+      const URL = `${this._getChargesById}?ExchangeSalesOrderId=${id}&isDeleted=${isDeleted}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderChargesById(id, isDeleted));
+        });
+    }
+    getExchangeSalesOrderFreightsById(id, isDeleted) {
+      const URL = `${this._getFreightsById}?ExchangeSalesOrderId=${id}&isDeleted=${isDeleted}`;
+      return this.http
+        .get<any>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderFreightsById(id, isDeleted));
         });
     }
 }
