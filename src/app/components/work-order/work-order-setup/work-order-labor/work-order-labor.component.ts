@@ -158,7 +158,7 @@ Scan:3
       }
     }
     if (this.laborForm.costPlusType) {
-      this.laborForm.costPlusType = this.laborForm['markupFixedPrice'];
+      this.laborForm.costPlusType = this.laborForm['markupFixedPrice']; 
       this.overAllMarkup = Number(this.laborForm['headerMarkupId']);
     }
     if (this.buildMethodDetails) {
@@ -344,6 +344,7 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
         (res) => {
           if (res.length > 0) {
             this.basicLabourDetail = res[0];
+            this.basicLabourDetail.wOQuoteAverageRate=22;
             this.populateDefaultData();
           }
           else {
@@ -1459,7 +1460,7 @@ if(this.isQuote){
     this.laborForm.laborFlatBillingAmount = this.laborForm.laborFlatBillingAmount ? formatNumberAsGlobalSettingsModule(this.laborForm.laborFlatBillingAmount, 2) : '0.00';
     this.flatAmount=this.laborForm.laborFlatBillingAmount;
   }
-  formateCurrency(value) {
+  formateCurrency(value) { 
     if (value) {
       value = (Number(value.toString().split(',').join(''))).toFixed(2);
       let result = formatNumberAsGlobalSettingsModule(value, 2);

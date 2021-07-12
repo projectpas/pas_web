@@ -8,7 +8,7 @@
                             <li class="breadcrumb-item" aria-current="page">Direct Labor and Overhead Cost</li>
                             <li class="breadcrumb-item active" aria-current="page">{{ isEditMode ? 'Edit' : 'Create' }}
                                 Direct Labor and Overhead Cost</li>
-                        </ol>
+                        </ol> 
                     </nav>
                     <div class="clear"></div>
                     <div class="card new-card">
@@ -191,6 +191,15 @@
                                                                 value="{{item.value}}">{{item.label}}</option>
                                                         </select>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group"  >
+                                                <div class="col-md-6">
+                                                    <input type="number" style="width: 120px;" pKeyFilter="num"
+                                                        name="averageRate"
+                                                        (focusout)="onChangeCostWoq($event.target.value)"
+                                                        class="form-control text-right" (ngModelChange)="getActive()"
+                                                        [(ngModel)]="directLaborData.wOQuoteAverageRate" required>
                                                 </div>
                                             </div>
                                         </div>
