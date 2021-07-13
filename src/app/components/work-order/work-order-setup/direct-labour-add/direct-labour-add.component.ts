@@ -79,10 +79,11 @@ export class DirectLabourAddComponent implements OnInit {
                 laborHoursId: res.laborHoursId.toString(),
                 burdenRateId: res.burdenRateId.toString(),
                 averageRate: this.onChangeCost(res.averageRate),
-                wOQuoteAverageRate: this.onChangeCostWoq(res.wOQuoteAverageRate),
+                quoteAverageRate: this.onChangeCostWoq(res.quoteAverageRate),
                 
                 // flatAmount: this.onChangeBurdenCost(res.flatAmount)
             }; 
+            console.log("this.directLaborData",this.directLaborData)
             this.currencyData();
             this.percentData();
 setTimeout(() => {
@@ -189,8 +190,8 @@ setTimeout(() => {
             if (isNaN(val) == true) {
                 val = Number(val.replace(/[^0-9.-]+/g, ""));
             }
-            this.directLaborData.wOQuoteAverageRate = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
-            return this.directLaborData.wOQuoteAverageRate;
+            this.directLaborData.quoteAverageRate = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
+            return this.directLaborData.quoteAverageRate;
         }
     }
     onChangeFlatCost(val) {

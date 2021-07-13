@@ -1923,7 +1923,7 @@
           class="modal fade"
           role="dialog"
           data-backdrop="static">
-         <div class="modal-dialog modal-xl"> 
+         <div class="modal-dialog modal-xlg"> 
              <!-- Modal content-->
              <div class="modal-content">
                  <div class="modal-header">
@@ -1931,7 +1931,10 @@
                          &times;
                      </button>
                  </div> 
-                 <div class="modal-body table-responsive" *ngIf="selectedHistoricalWorkOrder">
+                 <div class="modal-body table-responsive" *ngIf="selectedHistoricalWorkOrder && displayType == 'use historical wos'">
+                    <app-work-view-component [workOrderId]="selectedHistoricalWorkOrder"></app-work-view-component>
+                 </div>
+                 <div class="modal-body table-responsive" *ngIf="selectedHistoricalWorkOrder && displayType == 'historical WO quotes'"> 
                     <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [fromWoqList]="true" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                  </div>
                  <div >

@@ -346,6 +346,7 @@ this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'Pe
             this.basicLabourDetail = res[0];
             this.basicLabourDetail.wOQuoteAverageRate=22;
             this.populateDefaultData();
+            
           }
           else {
             this.basicLabourDetail = undefined;
@@ -395,9 +396,61 @@ setTimeout(() => {
       }
     }
   }
+  getExpertiseEmployeeByExpertiseIdForHeader(value) {
+    this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
+      this.employeesOriginalData = res.map(x => {
+        return {
+          ...x,
+          value: x.employeeId,
+          label: x.name
+        }
+      });
+      this.laborForm.employeeId = undefined;
+    },
+      err => {
+      })
+  }
+  getExpertiseEmployeeByExpertiseId(value, index, object) {
+ 
+    // if (!this.isQuote) {
+      object.employeeId = null;
+      if (value !=0) {
+        this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
+        object.totalHours=0;
+        object.totalMinutes=0;
+        object.adjtotalHours=0;
+        object.ajdtotalMinutes=0;
+        object.directLaborOHCost=0.00;
+        object.totalCostPerHour=0.00;
+        object.totalCost=0;
+          this['expertiseEmployeeOriginalData' + index] = res.map(x => {
+            return {
+              ...x,
+              value: x.employeeId,
+              label: x.name
+            }
+          });
+          if(this.isQuote){
+            object.directLaborOHCost=this.basicLabourDetail.quoteAverageRate; 
+             this.calculateBurderRate(object);
+          }
+        },
+          err => {
+          })
+      }else{
+        this['expertiseEmployeeOriginalData' + index]=[];
+        object.totalHours=0;
+        object.totalMinutes=0;
+        object.adjtotalHours=0;
+        object.ajdtotalMinutes=0;
+        object.directLaborOHCost=0.00;
+        object.totalCostPerHour=0.00;
+        object.totalCost=0;
+      }
+  }
   onPartSelect(event, currentRecord) {  
+   if(!this.isQuote){
     if(this.basicLabourDetail){
-      // currentRecord.burdaenRatePercentageId=
       if(this.basicLabourDetail.laborRateId==2){
         currentRecord.directLaborOHCost=this.basicLabourDetail.averageRate; 
       }else{
@@ -407,11 +460,17 @@ setTimeout(() => {
     }else{
       currentRecord.directLaborOHCost=event.isHourly? event.hourlyPay:0; 
     }
+   }else{
+    currentRecord.directLaborOHCost=this.basicLabourDetail.quoteAverageRate; 
+   }
     // currentRecord.burdaenRatePercentageId = this.basicLabourDetail['flatAmount'];
     currentRecord.directLaborOHCost= currentRecord.directLaborOHCost ? formatNumberAsGlobalSettingsModule(currentRecord.directLaborOHCost, 2) : '0.00';
     // if(this.basicLabourDetail){
     this.calculateBurderRate(currentRecord);
     // }
+  }
+  editRow(currentRecord){
+currentRecord.isEditCondition=true;
   }
   modifyDirectLoaborFormat(ev){ 
     ev.directLaborOHCost= ev.directLaborOHCost ? formatNumberAsGlobalSettingsModule(ev.directLaborOHCost, 2) : '0.00';
@@ -653,53 +712,8 @@ setTimeout(() => {
       }
     })
   }
-  getExpertiseEmployeeByExpertiseId(value, index, object) {
-    // if (!this.isQuote) {
-      object.employeeId = null;
-      if (value !=0) {
-        this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
-        object.totalHours=0;
-        object.totalMinutes=0;
-        object.adjtotalHours=0;
-        object.ajdtotalMinutes=0;
-        object.directLaborOHCost=0.00;
-        object.totalCostPerHour=0.00;
-        object.totalCost=0;
-          this['expertiseEmployeeOriginalData' + index] = res.map(x => {
-            return {
-              ...x,
-              value: x.employeeId,
-              label: x.name
-            }
-          });
-        },
-          err => {
-          })
-      }else{
-        this['expertiseEmployeeOriginalData' + index]=[];
-        object.totalHours=0;
-        object.totalMinutes=0;
-        object.adjtotalHours=0;
-        object.ajdtotalMinutes=0;
-        object.directLaborOHCost=0.00;
-        object.totalCostPerHour=0.00;
-        object.totalCost=0;
-      }
-  }
-  getExpertiseEmployeeByExpertiseIdForHeader(value) {
-    this.commonService.getExpertiseEmployeesByCategory(value, this.currentUserMasterCompanyId).subscribe(res => {
-      this.employeesOriginalData = res.map(x => {
-        return {
-          ...x,
-          value: x.employeeId,
-          label: x.name
-        }
-      });
-      this.laborForm.employeeId = undefined;
-    },
-      err => {
-      })
-  }
+
+
   getDynamicVariableData(variable, index) {
     return this[variable + index]
   }
@@ -727,6 +741,7 @@ setTimeout(() => {
         }
       }
     ) 
+    taskData.isEditCondition=true;
     // this.isQuote && 
     if (this.basicLabourDetail) {
       // burdenRateId
@@ -848,6 +863,7 @@ setTimeout(() => {
 for (let task in this.laborForm.workOrderLaborList[0]) {
   this.laborForm.workOrderLaborList[0][task].forEach(
     data => {
+      data.isEditCondition=false;
      if (data.isDeleted==false && (Number(data.directLaborOHCost.toString().split(',').join(''))== 0 || data.directLaborOHCost == undefined || data.directLaborOHCost == null || data.directLaborOHCost == '')) {
       // && !this.isQuote
          this.restrictUserToSave=false;
@@ -1660,7 +1676,10 @@ if(this.isQuote){
       // obj.hours = obj.adjtotalHours + '.' + obj.ajdtotalMinutes;
       var totalHours = 0;
     }
+    this.calculateBurderRate(obj);
     this.calculateTotalWorkHours();
+    if(this.isQuote){
+    }
   }
   calculateTotalWorkHours() {
     if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks') {

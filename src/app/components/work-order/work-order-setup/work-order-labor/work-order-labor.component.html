@@ -152,23 +152,23 @@
             <!-- <th style="min-width: 76px;">
               Direct Labor
             </th> -->
-            <th>
+            <th class="wd_100">
               Burden Rate %
             </th>
-            <th>
+            <th class="wd_100">
               Burden Rate Amount
             </th>
-            <th>
+            <th class="wd_100">
               Labor Cost/Hr
             </th>
-            <th>
+            <th class="wd_100">
               Total Direct Cost
             </th>
-            <th>
+            <th class="wd_90">
               Billing Method
             </th>
-            <th>Markup %</th>
-            <th>
+            <th class="wd_90">Markup %</th>
+            <th class="wd_100">
               Billing Rate/hr
             </th>
             <th style="width: 100px;">
@@ -193,7 +193,7 @@
           <th class="text-center memo-th memo-width" *ngIf="!isQuote">
             Memo
           </th>
-          <th class="width-70" *ngIf="!isView">Actions</th>
+          <th class="width-90" *ngIf="!isView">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -258,24 +258,32 @@
                   <select class="check-valid-td" [(ngModel)]="rec.expertiseId" (ngModelChange)="checkValid(15)"
                    (change)="
                       getExpertiseEmployeeByExpertiseId($event.target.value, i, rec)
-                    " [disabled]="isView " required>
+                    " [disabled]="isView || !rec.isEditCondition" required>
                     <option value="0">Select</option>
                     <ng-container *ngFor="let exp of expertiseTypeList">
                       <option [value]="exp.value">{{ exp.label }}</option>
                     </ng-container>
                   </select>
                 </td>
-                <td >
+                <td *ngIf="!isQuote">
                   <p-autoComplete field="label" (ngModelChange)="checkValid(16)" (onSelect)="onPartSelect($event, rec,i)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
                     errorMessage="Records not found" [forceSelection]="true" [dropdown]="true" [suggestions]="
                       getDynamicVariableData('expertiseEmployee', i) " (onClear)="clearautoCompleteInput(rec)" 
                       (completeMethod)="filterExpertiseEmployee($event, i)" emptyMessage="No Match Found" [size]="30"
-                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" [required]="!isQuote" [disabled]="isView " appendTo="body">
+                    [minLength]="1" [dropdown]="true" required class="p-autoComplete-ctsm"  [disabled]="isView || !rec.isEditCondition " appendTo="body">
+                  </p-autoComplete>
+                </td> 
+                <td *ngIf="isQuote">
+                  <p-autoComplete field="label" (ngModelChange)="checkValid(16)" (onSelect)="onPartSelect($event, rec,i)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
+                    errorMessage="Records not found" [forceSelection]="true" [dropdown]="true" [suggestions]="
+                      getDynamicVariableData('expertiseEmployee', i) " (onClear)="clearautoCompleteInput(rec)" 
+                      (completeMethod)="filterExpertiseEmployee($event, i)" emptyMessage="No Match Found" [size]="30"
+                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm"  [disabled]="isView || !rec.isEditCondition " appendTo="body">
                   </p-autoComplete>
                 </td> 
                 <td> 
                   <p-dropdown placeholder="Select Billing Type" (ngModelChange)="checkValid(17)" [options]="billableList" class="p-dropdown-1001"
-                  [(ngModel)]="rec.billableId" [disabled]="isView " appendTo="body"></p-dropdown>
+                  [(ngModel)]="rec.billableId" [disabled]="isView || !rec.isEditCondition" appendTo="body"></p-dropdown>
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
@@ -283,7 +291,7 @@
                     laborForm.hoursorClockorScan !== laborMethods.Scan
                   " class="text-center">
                   <button class="btn btn-primary start-btn" (click)="startandStop(rec);calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="
-                      (rec.startDate && rec.endDate) !== null || isView ">
+                      (rec.startDate && rec.endDate) !== null || isView || !rec.isEditCondition">
                     {{(!rec.startDate)?'Start':'Stop'}}
                   </button>
                  </td>
@@ -297,7 +305,7 @@
                   </p-calendar> -->
                   <p-calendar [(ngModel)]="rec.startDate" 
                   (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);"
-                    (ngModelChange)="checkValid(18)" appendTo="body" [showIcon]="true" showTime="showTime" hourFormat="24" [utc]="true" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate"></p-calendar>
+                    (ngModelChange)="checkValid(18)" appendTo="body" [showIcon]="true" showTime="showTime" hourFormat="24" [utc]="true" class="w150 pcalendar-wo-labor model_view" [disabled]="isView || !rec.startDate || !rec.isEditCondition"></p-calendar>
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
@@ -305,7 +313,7 @@
                   <!-- (ngModelChange)="checkValid(19)"  [minDate]="rec.startDate"-->
                   <p-calendar [(ngModel)]="rec.endDate" [showIcon]="true"   appendTo="body"
                     showTime="true"  class="w150 pcalendar-wo-labor model_view" (ngModelChange)="checkValid(19)"
-                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" [disabled]="isView || !rec.endDate"></p-calendar>
+                    (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);calculateBurderRate(rec);calculateTotalCost(rec);" [disabled]="isView || !rec.endDate || !rec.isEditCondition"></p-calendar>
                 </td>
                 <td style="width:70px !important;text-align:right !important" *ngIf="
                     laborForm.hoursorClockorScan &&
@@ -323,14 +331,14 @@
                     calculateTaskHours(task); 
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;" required/>
+                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView || !rec.isEditCondition" style="width: 50px !important;" required/>
                     <span style="font-size: 17px; margin: 0 5px;">:</span>
                     <input type="number" class="form-control" (blur)="
                     calculateHoursDifference(rec);
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalMinutes"   max="60"   (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
+                    " [(ngModel)]="rec.totalMinutes"   max="60"   (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView || !rec.isEditCondition" style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
                   </div>
                  
                 </td>
@@ -345,14 +353,14 @@
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
                         markupChanged(rec, 'row') 
-                        " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px !important;"  />
+                        " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView || !rec.isEditCondition " style="width: 50px !important;"  />
                         <span style="font-size: 17px; margin: 0 5px;">:</span>
                         <input maxlength="2" type="tel" class="form-control" (blur)="
                         calculateHoursDifference(rec);
                         calculateTaskHours(task);
                         calculateTotalCost(rec);
                         markupChanged(rec, 'row')
-                        " [(ngModel)]="rec.ajdtotalMinutes"   max="60"  (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''"  />
+                        " [(ngModel)]="rec.ajdtotalMinutes"   max="60"  (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);calculateBurderRate(rec)"  [disabled]="isView || !rec.isEditCondition" style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''"  />
                       </div>
                     </td>
                   <td class="content-to-end" style="width:70px !important;text-align:right !important">
@@ -393,7 +401,7 @@
                   <td>
                     <select class="form-control min-width-130" (ngModelChange)="checkValid(25)" (change)="billingChanged(rec, 'row')"  [(ngModel)]="rec.billingMethodId"
                      
-                      [disabled]="isView || laborForm.costPlusType == 3">
+                      [disabled]="isView || laborForm.costPlusType == 3 || !rec.isEditCondition">
                       <option value="">Select</option>
                       <option *ngFor="
                           let bm of [
@@ -404,15 +412,15 @@
                     </select>
                   </td>
                   <td>
-                   <select [ngClass]="{setRequiredSelect : (rec.billingMethodId ==billingMethod.tm)}" class="form-control select-markup min-width-100" (ngModelChange)="checkValid(26)" (change)="markupChanged(rec, 'row')" [(ngModel)]="rec.markupPercentageId"
-                      [disabled]="isView || rec.billingMethodId != 1">
+                   <select [ngClass]="{setRequiredSelect : (rec.billingMethodId ==billingMethod.tm)}" class="form-control select-markup min-width-130" (ngModelChange)="checkValid(26)" (change)="markupChanged(rec, 'row')" [(ngModel)]="rec.markupPercentageId"
+                      [disabled]="isView || rec.billingMethodId != 1 || !rec.isEditCondition">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>
                   </td>
                   <td class="content-to-end" style="text-align:right !important">{{ formateCurrency(rec.billingRate) }}</td>
                   <td>
-                    <input class="form-control text-right" type="text" (ngModelChange)="checkValid(27)" pInputText pKeyFilter="money" (change)="rec.billingAmount = formateCurrency(rec.billingAmount)" [(ngModel)]="rec.billingAmount" [disabled]="isView || rec.billingMethodId != 2"/> <!--class="width-unset"-->
+                    <input class="form-control text-right" type="text" (ngModelChange)="checkValid(27)" pInputText pKeyFilter="money" (change)="rec.billingAmount = formateCurrency(rec.billingAmount)" [(ngModel)]="rec.billingAmount" [disabled]="isView || rec.billingMethodId != 2 || !rec.isEditCondition"/> <!--class="width-unset"-->
                   </td>
                 </ng-container> 
                 <ng-container *ngIf="!isQuote">
@@ -445,14 +453,16 @@
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box col-sm-10"></div>
                         <!-- data-target="#textarea-popup5"  data-toggle="modal" -->
-                    <i class="fa fa-pencil contoel_v col-sm-2" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
+                    <i class="fa fa-pencil contoel_v col-sm-2" [ngStyle]="{'pointerEvents':(isView)? 'none' : 'inherent'}"
                         matTooltip="Memo"
                         matTooltipPosition="above" 
                         (click)="onAddTextAreaInfo(contentMemo,rec.memo,task.description,i,taskIndex)"></i>
                 </div>
                
                 </td>
-                <td  class="text-center">
+                <td  class="text-center" *ngIf="!isView">
+                  <button  *ngIf="!isView" class="btn nobg btn-edit-cstm1" (click)="editRow(rec)" matTooltip="Edit"
+                  matTooltipPosition="above" ><i class="fa fa-pencil edit_ico contoel_v"></i></button>
                     <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Remove" matTooltipPosition="above"
                       (click)="showDeleteLabourPopup(task.description,rec, i)" [disabled]="laborForm.workFloworSpecificTaskorWorkOrder== 'workOrder'"><i class="fa fa-trash"></i></button> </span>
                      </td>

@@ -220,6 +220,7 @@ export class SubWorkOrderComponent implements OnInit {
             this.isSpinnerVisible=false;
             res.workOrderMaterialsId = this.workOrderMaterialsId;
             res.conditionId = res.conditionCodeId;
+            res.managementStructureId= this.authService.currentUser.managementStructureId
             res.createdBy = "admin",
                 res.updatedBy = "admin",
                 res.subWorkOrderId = this.subWorkOrderId;
@@ -736,6 +737,7 @@ export class SubWorkOrderComponent implements OnInit {
             workScopeIndex:any;
             triggherWorkScopeData(workOrderPart,index){
                 workOrderPart.masterCompanyId=this.currentUserMasterCompanyId;
+                workOrderPart.managementStructureId= this.authService.currentUser.managementStructureId
                 this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isSubWO').subscribe(res => {
                     // console.log('res',res);
                     this.workScopeObjDetails={};

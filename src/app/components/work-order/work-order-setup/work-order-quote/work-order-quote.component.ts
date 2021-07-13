@@ -470,13 +470,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
            
         }
         this.router.queryParams.subscribe((params: Params) => {
-         
-            console.log('App params', params);
-    
-            if(params['isview']){
+          if(params['isview']){
                 this.isView=true;
-                
-            console.log('id', params.isView);
             }
           }); 
       
@@ -1665,15 +1660,15 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
 
 
-                if(element.employeeId ==undefined || element.employeeId ==null || element.employeeId ==''){
-                    this.alertService.showMessage(
-                        this.taskName,
-                        'Add Employee Name',
-                        MessageSeverity.warn
-                    );
-                    this.isAllowLaberSave=true;
-                    return;
-                }
+                // if(element.employeeId ==undefined || element.employeeId ==null || element.employeeId ==''){
+                //     this.alertService.showMessage(
+                //         this.taskName,
+                //         'Add Employee Name',
+                //         MessageSeverity.warn
+                //     );
+                //     this.isAllowLaberSave=true;
+                //     return;
+                // }
                 // if( Number(element.hours.toString().split(',').join('')) ==undefined || Number(element.hours.toString().split(',').join('')) ==null ||  element.hours ==''   || Number(element.hours.toString().split(',').join('')) <=0){
                 //     this.alertService.showMessage(
                 //         this.taskName,
@@ -1974,7 +1969,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "WorkOrderQuoteLaborId": (labor.workOrderQuoteLaborId) ? labor.workOrderQuoteLaborId : 0,
                     "WorkOrderQuoteLaborHeaderId": (labor.workOrderQuoteLaborHeaderId) ? labor.workOrderQuoteLaborHeaderId : 0,
                     "ExpertiseId": labor.expertiseId,
-                    "EmployeeId": labor.employeeId,
+                    "EmployeeId": labor.employeeId ? labor.employeeId :null,
                     "BillableId": labor.billableId,
                     "Hours": labor.hours,
                     "Adjustments": labor.adjustments,
@@ -3300,11 +3295,11 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
 
     errorHandling(err){
         this.isSpinnerVisible=false;
-        this.alertService.showStickyMessage(
-            this.moduleName,
-            err.error.errors[0].message,
-            MessageSeverity.error
-        );
+        // this.alertService.showStickyMessage(
+        //     this.moduleName,
+        //     err.error.errors[0].message,
+        //     MessageSeverity.error
+        // );
     }
 
     checkValidEmails(){
@@ -3938,7 +3933,8 @@ if(this.quotationHeader  && this.quotationHeader['workOrderQuoteId']){
                                         rt.totalHours = hours.toString().split('.')[0];
                                         rt.totalMinutes = hours.toString().split('.')[1];
                                     }
-                                    labor = { ...rt, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
+                                    rt['isEditCondition']=false,
+                                    labor = { ...rt,employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
                                     this.labor.workOrderLaborList[0][tl['description'].toLowerCase()].push(labor);
                                 }
                             })

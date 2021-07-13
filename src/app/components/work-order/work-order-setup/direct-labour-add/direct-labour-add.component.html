@@ -195,11 +195,12 @@
                                             </div>
                                             <div class="form-group"  >
                                                 <div class="col-md-6">
+                                                    <label>Quote Average Rate <span class="clr-red">*</span></label>
                                                     <input type="number" style="width: 120px;" pKeyFilter="num"
-                                                        name="averageRate"
+                                                        name="quoteaverageRate"
                                                         (focusout)="onChangeCostWoq($event.target.value)"
                                                         class="form-control text-right" (ngModelChange)="getActive()"
-                                                        [(ngModel)]="directLaborData.wOQuoteAverageRate" required>
+                                                        [(ngModel)]="directLaborData.quoteAverageRate" required>
                                                 </div>
                                             </div>
                                         </div>
