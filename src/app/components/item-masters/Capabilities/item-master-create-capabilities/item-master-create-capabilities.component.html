@@ -137,7 +137,7 @@
 				  </p-dropdown>
 					</td>
 					<td>
-						<p-calendar [maxDate]="currentDate"
+						<p-calendar [maxDate]="currentDate" (onSelect)="onAddedDateSelect(rowData.addedDate,row_no)"
 							class="pcal-item-capes"
 							[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
 						  [(ngModel)]="rowData.addedDate"
@@ -167,11 +167,12 @@
 						[(ngModel)]="rowData.verifiedById"
 						filter="true" [resetFilterOnHide]="true"
 					  ></p-dropdown>
-					</td>
+					</td> 
 					<td >
 						<!-- [required]="rowData.isVerified==true" -->
 						<!-- [minDate]="rowData.addedDate" -->
-					  <p-calendar [minDate]="rowData.addedDate == undefined ? currentDate : rowData.addedDate" [maxDate]="currentDate"
+					
+					  <p-calendar [minDate]="rowData.addedDate" [maxDate]="currentDate"
 					  	class="pcal-item-capes"
 						[(ngModel)]="rowData.verifiedDate" 
 						[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"

@@ -645,10 +645,10 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
 
         const capesData = [
             ...this.aircraftData.map(x => {
-                if (x.verifiedDate || x.addedDate) {
-                    x.verifiedDate = this.datePipe.transform(x.verifiedDate, DBkeys.GLOBAL_DATE_FORMAT),
-                        x.addedDate = this.datePipe.transform(x.addedDate, DBkeys.GLOBAL_DATE_FORMAT)
-                }
+                // if (x.verifiedDate || x.addedDate) {
+                //     x.verifiedDate = this.datePipe.transform(x.verifiedDate, DBkeys.GLOBAL_DATE_FORMAT),
+                //         x.addedDate = this.datePipe.transform(x.addedDate, DBkeys.GLOBAL_DATE_FORMAT)
+                // }
                 return {
                     ...x,
                     aircraftDashNumberId: x.DashNumberId,
@@ -687,10 +687,14 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
                     this._router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list');
                 }
             }
+            
+            this.mapAircraftInformation();
         },
             error => this.saveFailedHelper(error))
     }
+    onAddedDateSelect(value,index){
 
+    }
     resetFormData() {
         this.itemMasterIDFromPartNumberSelection = null;
         this.capabilityTypeId = [];
