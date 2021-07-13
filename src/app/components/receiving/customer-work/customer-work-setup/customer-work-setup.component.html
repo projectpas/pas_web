@@ -1294,11 +1294,11 @@
                 </div>
             </div>
             <div class="form-row pull-right m-t-10">
-                <button *ngIf="!isEditMode" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
+                <button *ngIf="!isEditMode && isAdd" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
                     [disabled]="!customerWorkForm.valid || disableMagmtStruct ||  disableCondition || disableSite">
                     Save 
                 </button>
-                <button *ngIf="isEditMode" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
+                <button *ngIf="isEditMode && isEdit" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
                     [disabled]="!customerWorkForm.valid  || disableUpdateButton">
                     Update 
                 </button>
@@ -1307,7 +1307,7 @@
        
     </div>
 </p-tabPanel>
-<p-tabPanel header="Documents"   [disabled]="receivingCustomerWorkId ==0 || receivingCustomerWorkId ==null  || receivingCustomerWorkId ==undefined ">
+<p-tabPanel header="Documents" *ngIf="isDocumentInfo"  [disabled]="receivingCustomerWorkId ==0 || receivingCustomerWorkId ==null  || receivingCustomerWorkId ==undefined ">
     <div>
         <app-common-documents [moduleName]="moduleName"  [referenceId]="receivingCustomerWorkId"
             [isViewMode]="false" [offLineUpload]="false"></app-common-documents> 

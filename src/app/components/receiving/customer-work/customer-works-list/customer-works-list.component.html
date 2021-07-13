@@ -6,7 +6,7 @@
                   <h4 class="header-name">Receiving - Customer Work List</h4>
                 </div>
                 <div>
-                  <button
+                  <button *ngIf="isAdd"
                     type="button"
                     class="btn-sm header-button"
                     [routerLink]="['/receivingmodule/receivingpages/app-customer-work-setup']">
@@ -54,12 +54,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
+                        <button *ngIf="isDownload" class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
                             label="Export  Data" matTooltip="Download Data" matTooltipPosition="above"
                             data-toggle="modal"
                             (click)="selectedOnly = false; targetData = dt;" 
                             data-target="#downloadConfirmation"></button>
-                        <button class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
+                        <button *ngIf="isDownload" class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
                             label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                             (click)="dt.exportCSV({selectionOnly:true})">
                         </button>
@@ -149,7 +149,7 @@
                                 <a class="btn nobg" (click)="openView(rowData)"
                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                             </span>
-                            <span> 
+                            <span *ngIf="isEdit"> 
                                 <button class="btn  nobg padding-0" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="openEdits(rowData)"
                                  matTooltip="Edit" matTooltipPosition="above" >
                                     <i class="fa fa-pencil" ></i>
@@ -741,7 +741,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 tableview" *ngIf="rcId">
+                <div class="col-md-12 tableview" *ngIf="rcId && isDocumentInfo">
                     <app-common-documents [moduleName]="moduleName" [referenceId]="rcId" [isViewMode]="true"
                     [offLineUpload]="true"></app-common-documents>
                 </div>
