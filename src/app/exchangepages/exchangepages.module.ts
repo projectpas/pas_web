@@ -78,6 +78,8 @@ import { ExchangeSalesOrderFreightComponent } from "../components/exchange-sales
 import { ExchangeSalesOrderChargesComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-charges/exchange-sales-order-charges.component";
 import { ExchangeSalesOrderBillingComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-billing/exchange-sales-order-billing.component";
 import { ExchangeSalesOrderPrintInvoiceComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-print-invoice/exchange-sales-order-print-invoice.component";
+import { ExchangeSalesOrderAnalysisComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-analysis/exchange-sales-order-analysis.component";
+import { ExchangeSalesOrderHypoAnalysisComponent } from "../components/exchange-sales-order/shared/components/exchange-sales-order-hypo-analysis/exchange-sales-order-hypo-analysis.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -157,6 +159,8 @@ import { ExchangeSalesOrderPrintInvoiceComponent } from "../components/exchange-
     ExchangeSalesOrderChargesComponent,
     ExchangeSalesOrderBillingComponent,
     ExchangeSalesOrderPrintInvoiceComponent,
+    ExchangeSalesOrderAnalysisComponent,
+    ExchangeSalesOrderHypoAnalysisComponent
   ],
   providers: [CommonService, DatePipe, ExchangequoteService, ExchangeQuoteEndpointService, ActionService, ActionEndpoint, ExchangeSalesOrderService, ExchangeSalesOrderEndpointService],
   //entryComponents: [ExchangeSalesOrderPickTicketComponent, ExchangeSalesOrderMultiPickTicketComponent]
