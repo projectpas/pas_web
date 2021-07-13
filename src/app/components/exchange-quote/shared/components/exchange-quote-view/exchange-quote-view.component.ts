@@ -12,14 +12,14 @@ import { EmployeeService } from "../../../../../services/employee.service";
 import { CustomerService } from "../../../../../services/customer.service";
 import { CommonService } from "../../../../../services/common.service";
 import { AuthService } from "../../../../../services/auth.service";
-import{ExchangeQUoteMarginSummary} from '../../../../../models/exchange/ExchangeQUoteMarginSummary';
+import { ExchangeQUoteMarginSummary } from '../../../../../models/exchange/ExchangeQUoteMarginSummary';
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { ExchangeQuotePartNumberComponent } from "../../../shared/components/exchange-quote-part-number/exchange-quote-part-number.component";
 import { ExchangeQuoteApproveComponent } from "../../../shared/components/exchange-quote-approve/exchange-quote-approve.component";
 import { ExchangeQuoteCustomerApprovalComponent } from "../../../shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
-import{ExchangeQuoteAnalysisComponent} from '../../../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
-import {ExchangeQuoteChargesComponent} from "../../../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
-import {ExchangeQuoteFreightComponent} from "../../../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
+import { ExchangeQuoteAnalysisComponent } from '../../../../exchange-quote/exchange-quote-analysis/exchange-quote-analysis.component';
+import { ExchangeQuoteChargesComponent } from "../../../../exchange-quote/shared/components/exchange-quote-charges/exchange-quote-charges.component";
+import { ExchangeQuoteFreightComponent } from "../../../../exchange-quote/shared/components/exchange-quote-freight/exchange-quote-freight.component";
 @Component({
   selector: 'app-exchange-quote-view',
   templateUrl: './exchange-quote-view.component.html',
@@ -59,15 +59,15 @@ export class ExchangeQuoteViewComponent implements OnInit {
   freight = [];
   charge = [];
   salesOrderFreightList = [];
-  markupList:any = [];
+  markupList: any = [];
   buildMethodDetails = [];
   isSpinnerVisible = false;
-  @ViewChild(ExchangeQuoteApproveComponent,{static:false}) public exchangeQuoteApproveComponent: ExchangeQuoteApproveComponent;
-  @ViewChild(ExchangeQuoteCustomerApprovalComponent,{static:false}) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
-  @ViewChild(ExchangeQuoteFreightComponent,{static:false}) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
-  @ViewChild(ExchangeQuoteChargesComponent,{static:false}) public exchangeQuoteChargesComponent: ExchangeQuoteChargesComponent;
+  @ViewChild(ExchangeQuoteApproveComponent, { static: false }) public exchangeQuoteApproveComponent: ExchangeQuoteApproveComponent;
+  @ViewChild(ExchangeQuoteCustomerApprovalComponent, { static: false }) public exchangeQuoteCustomerApprovalComponent: ExchangeQuoteCustomerApprovalComponent;
+  @ViewChild(ExchangeQuoteFreightComponent, { static: false }) public exchangeQuoteFreightComponent: ExchangeQuoteFreightComponent;
+  @ViewChild(ExchangeQuoteChargesComponent, { static: false }) public exchangeQuoteChargesComponent: ExchangeQuoteChargesComponent;
   //@ViewChild(SalesQuoteDocumentsComponent,{static:false}) public salesQuoteDocumentsComponent: SalesQuoteDocumentsComponent;
-  @ViewChild(ExchangeQuoteAnalysisComponent,{static:false}) public exchangeQuoteAnalysisComponent: ExchangeQuoteAnalysisComponent;
+  @ViewChild(ExchangeQuoteAnalysisComponent, { static: false }) public exchangeQuoteAnalysisComponent: ExchangeQuoteAnalysisComponent;
   constructor(private exchangequoteService: ExchangequoteService,
     private alertService: AlertService,
     private modalService: NgbModal,
@@ -101,7 +101,7 @@ export class ExchangeQuoteViewComponent implements OnInit {
     let probabilityId = this.exchangeQuote.probabilityId ? this.exchangeQuote.probabilityId : 0;
     forkJoin(
       this.customerService.getContacts(this.exchangeQuoteView.exchangeOrderQuote.customerId),
-      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 0, [probabilityId].join(), this.masterCompanyId),
       this.exchangequoteService.getExchangeQuoteMarginSummary(this.exchangeQuoteView.exchangeOrderQuote.exchangeQuoteId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);

@@ -46,7 +46,7 @@
     <div class="col-md-12 col-sm-12 col-12">
       <div class="col-3 column">
         <div class="form-group">
-          <label>Qty Requested</label>
+          <label>Qty Req</label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
             name="quantityRequest" disabled="true" [ngModel]="part.quantityRequested  | globalNmberFormat"
             (ngModelChange)="part.quantityRequested=formatStringToNumberGlobal($event)" />

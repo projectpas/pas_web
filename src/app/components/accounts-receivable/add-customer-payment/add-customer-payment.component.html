@@ -391,7 +391,7 @@
                 </div>
               </div>
               <div class="form-group col-sm-12">
-                <label>Expiry Date<span class="clr-red">*</span></label>
+                <label>Exp Date<span class="clr-red">*</span></label>
                 <p-calendar name="expiryDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                   [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.expirationDate" [showIcon]="true"
                   id="expiryDate" #expiryDate="ngModel" required>
@@ -528,7 +528,7 @@
         <div class="col-md-12 col-sm-12 col-12">
           <div class="col-2 column">
             <div class="form-group">
-              <label>Customer Name <span class="clr-red">*</span></label>
+              <label>Cust Name <span class="clr-red">*</span></label>
               <div class="inner-addon right-addon inline-block">
                 <p-autoComplete class="autocomp-customer-cstm" name="customerName" [(ngModel)]="objInvoicePayment.name"
                   (onKeyUp)=" checkCustomerNameExist($event.target.value)"

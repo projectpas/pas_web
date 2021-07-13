@@ -11,7 +11,7 @@ import { CustomerViewComponent } from '../../../../shared/components/customer/cu
 import { CommonService } from "../../../../services/common.service";
 import { DBkeys } from "../../../../services/db-Keys";
 import { MenuItem } from "primeng/api";
-declare var $ : any;
+declare var $: any;
 import { DatePipe } from '@angular/common';
 import { AuthService } from "../../../../services/auth.service";
 
@@ -54,10 +54,10 @@ export class SalesOrderComponent implements OnInit {
   ]
   selectedColumns = this.headers;
   customerWarning: any = {};
-  targetData: any ;
+  targetData: any;
   selectedOnly: boolean = false;
-  @ViewChild("warningPopup",{static:false}) public warningPopup: ElementRef;
-  @ViewChild("restrictionPopup",{static:false}) public restrictionPopup: ElementRef;
+  @ViewChild("warningPopup", { static: false }) public warningPopup: ElementRef;
+  @ViewChild("restrictionPopup", { static: false }) public restrictionPopup: ElementRef;
 
   constructor(
     private customerService: CustomerService,
@@ -78,17 +78,17 @@ export class SalesOrderComponent implements OnInit {
   }
 
   get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-	}
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : null;
+  }
 
   getList(data) {
     this.isSpinnerVisible = true;
     const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) };
-    PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId; 
-    PagingData.filters.status = "Active"; 
-    PagingData.filters.isDeleted = false; 
+    PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
+    PagingData.filters.status = "Active";
+    PagingData.filters.isDeleted = false;
     this.customerService.getCustomerAll(PagingData).subscribe(res => {
       this.isSpinnerVisible = false;
       this.data = res.results;
@@ -162,7 +162,7 @@ export class SalesOrderComponent implements OnInit {
 
   getTypesOfWarnings(customerId) {
     this.isSpinnerVisible = true;
-    this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(data => {
+    this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', 0).subscribe(data => {
       if (data.length > 0) {
         this.isSpinnerVisible = false;
         data.filter(i => {
@@ -172,7 +172,7 @@ export class SalesOrderComponent implements OnInit {
         })
       }
     }, error => {
-      this.isSpinnerVisible =false;
+      this.isSpinnerVisible = false;
     })
   }
 
@@ -190,7 +190,7 @@ export class SalesOrderComponent implements OnInit {
           this.modal = this.modalService.open(this.restrictionPopup, { size: 'lg', backdrop: 'static', keyboard: false });
         }
       }, error => {
-        this.isSpinnerVisible =false;
+        this.isSpinnerVisible = false;
       });
   }
 
@@ -208,7 +208,7 @@ export class SalesOrderComponent implements OnInit {
           this.modal = this.modalService.open(this.warningPopup, { size: 'lg', backdrop: 'static', keyboard: false });
         }
       }, error => {
-        this.isSpinnerVisible =false;
+        this.isSpinnerVisible = false;
       });
   }
 
@@ -218,7 +218,7 @@ export class SalesOrderComponent implements OnInit {
       `salesmodule/salespages/sales-order-create/${customerId}`
     );
   }
-  
+
   closeModal() {
     if (this.modal) {
       this.modal.close();
@@ -268,12 +268,12 @@ export class SalesOrderComponent implements OnInit {
           updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
         }
       });
-      
+
       dt.exportCSV();
       dt.value = this.data;
       this.isSpinnerVisible = false;
-    },error => {
-      this.isSpinnerVisible =false;
+    }, error => {
+      this.isSpinnerVisible = false;
     });
   }
 }

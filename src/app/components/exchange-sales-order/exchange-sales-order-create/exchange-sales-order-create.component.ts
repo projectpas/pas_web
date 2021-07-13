@@ -59,7 +59,7 @@ import { ExchangeSalesOrderChargesComponent } from "../shared/components/exchang
 // import { SalesOrderPartNumberComponent } from "../../sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
 import { ExchangeSalesOrderBillingComponent } from "../shared/components/exchange-sales-order-billing/exchange-sales-order-billing.component";
 // import { SalesOrderAnalysisComponent } from "../../sales/order/sales-order-analysis/sales-order-analysis.component";
- import { ExchangeSalesOrderShippingComponent } from "../shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
+import { ExchangeSalesOrderShippingComponent } from "../shared/components/exchange-sales-order-shipping/exchange-sales-order-shipping.component";
 // import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { ExchangeSalesOrderPartNumberComponent } from '../shared/components/exchange-sales-order-part-number/exchange-sales-order-part-number.component';
 import { ExchangeSalesOrderPickTicketsComponent } from '../shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component';
@@ -1551,7 +1551,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.arraySOStatuslist.push(0);
     }
     this.isSpinnerVisible = true;
-    this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus', 'ExchangeStatusId', 'Name', '', true, 20, this.arraySOStatuslist.join(), this.masterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus', 'ExchangeStatusId', 'Name', '', true, 0, this.arraySOStatuslist.join(), 0).subscribe(res => {
       this.soStatusList = res;
       this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       this.isSpinnerVisible = false;
@@ -1566,7 +1566,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.arraySOTypelist.push(0);
     }
     this.isSpinnerVisible = true;
-    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 20, this.arraySOTypelist.join(), this.masterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 0, this.arraySOTypelist.join(), 0).subscribe(res => {
       this.soTypeList = res;
       this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       this.isSpinnerVisible = false;

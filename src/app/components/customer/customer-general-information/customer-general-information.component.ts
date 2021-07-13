@@ -16,6 +16,7 @@ import { ItemMasterService } from '../../../services/itemMaster.service';
 import { CommonService } from '../../../services/common.service';
 import { emailPattern, urlPattern, phonePattern } from '../../../validations/validation-pattern';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AppModuleEnum } from '../../../enum/appmodule.enum';
 declare var $: any;
 
 @Component({
@@ -153,8 +154,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
         this.id = this.editCustomerId;
         this.isEdit = this.editMode;
 
-        this.getAllPartListSmartDropDownForPma('','IsPma');
-        this.getAllPartListSmartDropDownForDer('','IsDer');
+        this.getAllPartListSmartDropDownForPma('', 'IsPma');
+        this.getAllPartListSmartDropDownForDer('', 'IsDer');
         this.getAllIntegrations();
 
         if (this.isEdit) {
@@ -257,7 +258,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     async getCustomerIntegrationTypesByCustomerId() {
         if (this.id > 0) {
-            await this.commonService.getIntegrationMapping(this.id, 1).subscribe(res => {
+            await this.commonService.getIntegrationMapping(this.id, AppModuleEnum.Customer).subscribe(res => {
                 this.generalInformation.integrationPortalId = res.map(x => x.integrationPortalId);
                 this.arrayIntegrationlist.push(this.generalInformation.integrationPortalId);
                 this.getAllIntegrations();
@@ -267,7 +268,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     async getCustomerRestrictedPMAByCustomerId() {
         this.isSpinnerVisible = true;
-        await this.commonService.getRestrictedPartsWithDesc(1, this.id, 'PMA', this.currantDeletedStatusPMA).subscribe(res => {
+        await this.commonService.getRestrictedPartsWithDesc(AppModuleEnum.Customer, this.id, 'PMA', this.currantDeletedStatusPMA).subscribe(res => {
             this.generalInformation.restrictedPMAParts = res;
             if (res) {
                 if (this.generalInformation.restrictedPMAParts.length > 0) {
@@ -305,7 +306,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     async getCustomerRestrictedDERByCustomerId() {
         this.isSpinnerVisible = true;
-        await this.commonService.getRestrictedPartsWithDesc(1, this.id, 'DER', this.currantDeletedStatusDER).subscribe(res => {
+        await this.commonService.getRestrictedPartsWithDesc(AppModuleEnum.Customer, this.id, 'DER', this.currantDeletedStatusDER).subscribe(res => {
             if (res) {
                 this.generalInformation.restrictedDERParts = res;
                 if (this.generalInformation.restrictedDERParts.length > 0) {
@@ -343,13 +344,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
         //             partNumber: x.label, itemMasterId: x.value
         //         }
         //     })
-        this.commonService.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId,ispmaorIsder).subscribe(response => {              
+        this.commonService.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId, ispmaorIsder).subscribe(response => {
             this.partListOriginalPma = response.map(x => {
                 return {
                     partNumber: x.label,
                     itemMasterId: x.value
                 };
-            });                      
+            });
 
             if (this.generalInformation.restrictedPMAParts != undefined && this.generalInformation.restrictedPMAParts.length > 0) {
                 this.partListForPMA = this.generalInformation.restrictedPMAParts.reduce((acc, obj) => {
@@ -377,14 +378,14 @@ export class CustomerGeneralInformationComponent implements OnInit {
     getAllPartListSmartDropDownForDer(strText = '', ispmaorIsder) {
         if (this.arrayItemMasterlist.length == 0) {
             this.arrayItemMasterlist.push(0);
-        }       
-        this.commonService.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId,ispmaorIsder).subscribe(response => {              
+        }
+        this.commonService.autoCompleteSmartDropDownItemMasterIsPmaOrIsDerList(strText, true, 20, this.arrayItemMasterlist.join(), this.currentUserMasterCompanyId, ispmaorIsder).subscribe(response => {
             this.partListOriginalDer = response.map(x => {
                 return {
                     partNumber: x.label,
                     itemMasterId: x.value
                 };
-            }); 
+            });
             if (this.generalInformation.restrictedDERParts != undefined && this.generalInformation.restrictedDERParts.length > 0) {
                 this.partListForDER = this.generalInformation.restrictedDERParts.reduce((acc, obj) => {
                     return acc.filter(x => x.itemMasterId !== obj.itemMasterId)
@@ -401,14 +402,14 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     filterpartListForPMA(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getAllPartListSmartDropDownForPma(event.query,'IsPma');
+            this.getAllPartListSmartDropDownForPma(event.query, 'IsPma');
         }
     }
 
 
     filterpartListForDER(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getAllPartListSmartDropDownForDer(event.query,'IsDer');
+            this.getAllPartListSmartDropDownForDer(event.query, 'IsDer');
         }
     }
 

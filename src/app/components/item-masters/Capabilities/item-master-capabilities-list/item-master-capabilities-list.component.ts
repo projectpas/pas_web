@@ -139,7 +139,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     disableIsVerified: boolean = false;
     disableMagmtStruct: boolean = true;
     allItemMasterCapsListOriginal: any[];
-
+    currentDate=  new Date();
     /** item-master-capabilities-list ctor */
     constructor(private itemMasterService: ItemMasterService,
         private cdRef: ChangeDetectorRef,
@@ -436,6 +436,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     openEdits(row) //this is for Edit Data get
     {
+        this.isEditMode=true;
         const capData = row;
         this.arraylistCapabilityTypeId.push(row.capabilityTypeId);
         this.getCapabilityTypesList();
@@ -1205,9 +1206,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             );
         })
     }
-
+    isCreate:boolean=false;
     onAddCapes() {
         this.showCapes = true;
+        this.isCreate=true;
     }
 
     onViewCapes(rowData) {
@@ -1217,6 +1219,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     closeCapes() {
+        this.isCreate=false;
         this.showCapes = false;
         this.isCapViewMode = false;
 

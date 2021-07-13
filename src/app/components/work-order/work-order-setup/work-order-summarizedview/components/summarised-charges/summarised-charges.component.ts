@@ -67,7 +67,7 @@ export class SummarizedChargesComponent implements OnInit, OnChanges {
             "field": "unitCost"
         },
         {
-            "header": "Extended Cost",
+            "header": "Ext. Cost",
             "field": "extendedCost"
         }
     ]

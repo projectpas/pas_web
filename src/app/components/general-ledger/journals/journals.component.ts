@@ -91,7 +91,7 @@ export class JournalsComponent {
                 if ($(this).val() != '') { $('.obtain-inputs').show(); } else { $('.obtain-inputs').hide(); }
             });
             $('#obtain-selection').change(function () {
-                if ($(this).val() === 'Customer') $('.obtain-placeholder').prop('placeholder', 'Customer Name');
+                if ($(this).val() === 'Customer') $('.obtain-placeholder').prop('placeholder', 'Cust Name');
                 if ($(this).val() === 'Vendor') $('.obtain-placeholder').prop('placeholder', 'Vendor Name');
                 if ($(this).val() === 'Other') $('.obtain-placeholder').prop('placeholder', 'Other Name');
             });
