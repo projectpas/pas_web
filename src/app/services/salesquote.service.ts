@@ -610,4 +610,8 @@ export class SalesQuoteService {
   getSalesQuoteParts(id, isDeleted) {
     return this.salesQuoteEndPointSevice.getSalesQuoteParts(id, isDeleted);
   }
+
+  getSalesOrderQuoteSummarisedHistoryByPN(itemMasterId, isTwelveMonth) {
+    return this.salesQuoteEndPointSevice.GetSalesOrderQuoteSummarisedHistoryByPN(itemMasterId, isTwelveMonth);
+  }
 }

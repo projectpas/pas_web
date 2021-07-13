@@ -78,7 +78,7 @@ export class CustomerViewComponent implements OnInit {
         { field: 'description', header: 'Description' },
         { field: 'isPrimary', header: 'IsDefault' },
         { field: 'startDate', header: 'Start Date' },
-        { field: 'expirationDate', header: 'Expiration Date' },
+        { field: 'expirationDate', header: 'Exp Date' },
         { field: 'amount', header: 'Amount' }
     ]
 

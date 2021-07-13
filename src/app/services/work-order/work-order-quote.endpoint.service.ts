@@ -123,15 +123,21 @@ export class QuoteEndpointService extends EndpointFactory {
     }
 
     sentForInternalApproval(data){
-        return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/workorderquoteapproval`, JSON.stringify(data), this.getRequestHeaders());
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/workorderquoteapproval`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
+          });
     }
 
     submitForApproval(data){
-        return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/createworkorderapproval`, JSON.stringify(data), this.getRequestHeaders());
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/createworkorderapproval`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.submitForApproval(data));
+          });
     }
 
     getTotals(workOrderQuoteId){
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/woquotationtotalvalues?workOrderQuoteId=${workOrderQuoteId}`);
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/woquotationtotalvalues?workOrderQuoteId=${workOrderQuoteId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getTotals(workOrderQuoteId));
+          });;
     }
 
     getWOQSettingMasterData(currentUserMasterCompanyId) {

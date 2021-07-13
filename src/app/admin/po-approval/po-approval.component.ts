@@ -158,7 +158,7 @@ export class PoApprovalComponent implements OnInit {
         })
     }
     async getPoAmountList() {
-        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', this.currentUserMasterCompanyId)
+        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', 0)
             .subscribe(
                 (res) => {
                     this.approvalAmountList = res;

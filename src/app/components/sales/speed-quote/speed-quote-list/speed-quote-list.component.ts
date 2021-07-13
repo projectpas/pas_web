@@ -129,7 +129,7 @@ export class SpeedQuoteListComponent implements OnInit {
 
     initColumns() {
         this.headers = [
-            { field: "customerName", header: "Customer Name", width: "160px" },
+            { field: "customerName", header: "Cust Name", width: "160px" },
             { field: "customerCode", header: "Customer Code", width: "130px" },
             //{ field: "accountTypeName", header: "Acct Type", width: "160px" },
             { field: "partNumberType", header: "PN", width: "130px" },

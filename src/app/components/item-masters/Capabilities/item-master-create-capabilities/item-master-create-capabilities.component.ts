@@ -81,7 +81,8 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     itemMasterListOriginal: any;
     partListItemMaster: any;
     managementStructureData: any = [];
-currentDate=  new Date();
+    currentDate=  new Date();
+    
     constructor(public itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,
@@ -644,10 +645,10 @@ currentDate=  new Date();
 
         const capesData = [
             ...this.aircraftData.map(x => {
-                if (x.verifiedDate || x.addedDate) {
-                    x.verifiedDate = this.datePipe.transform(x.verifiedDate, DBkeys.GLOBAL_DATE_FORMAT),
-                        x.addedDate = this.datePipe.transform(x.addedDate, DBkeys.GLOBAL_DATE_FORMAT)
-                }
+                // if (x.verifiedDate || x.addedDate) {
+                //     x.verifiedDate = this.datePipe.transform(x.verifiedDate, DBkeys.GLOBAL_DATE_FORMAT),
+                //         x.addedDate = this.datePipe.transform(x.addedDate, DBkeys.GLOBAL_DATE_FORMAT)
+                // }
                 return {
                     ...x,
                     aircraftDashNumberId: x.DashNumberId,
@@ -686,10 +687,14 @@ currentDate=  new Date();
                     this._router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list');
                 }
             }
+            
+            this.mapAircraftInformation();
         },
             error => this.saveFailedHelper(error))
     }
+    onAddedDateSelect(value,index){
 
+    }
     resetFormData() {
         this.itemMasterIDFromPartNumberSelection = null;
         this.capabilityTypeId = [];

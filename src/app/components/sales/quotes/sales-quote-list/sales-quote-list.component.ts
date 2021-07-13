@@ -122,7 +122,7 @@ export class SalesQuoteListComponent implements OnInit {
 
     initColumns() {
         this.headers = [
-            { field: "customerName", header: "Customer Name", width: "160px" },
+            { field: "customerName", header: "Cust Name", width: "160px" },
             { field: "salesOrderQuoteNumber", header: "Quote Num", width: "120px" },
             { field: "quoteDate", header: "Quote Date", width: "120px" },
             { field: "partNumberType", header: "PN", width: "130px" },

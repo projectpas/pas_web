@@ -25,6 +25,8 @@ import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrde
 import { IExchangeSalesOrderFreight } from '../models/exchange/IExchangeSalesOrderFreight';
 import { IExchangeSalesOrderCharge } from '../models/exchange/IExchangeSalesOrderCharge';
 import { ExchangeSalesOrderBillingAndInvoicing } from "../models/exchange/exchangeSalesOrderBillingAndInvoicing";
+import { ExchangeSalesOrderMarginSummary } from '../models/exchange/ExchangeSalesOrderMarginSummary';
+
 @Injectable()
 export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getNewSalesOrderInstanceUrl: string = environment.baseUrl + "/api/exchangesalesorder/new";
@@ -69,6 +71,10 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getSalesOrderBillingInvoicingDataURL: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderBillingInvoicingData";
     private readonly _getChargesById: string = environment.baseUrl + "/api/exchangesalesorder/GetExchangeSalesOrderChargesBySOId";
     private readonly _getFreightsById: string = environment.baseUrl + "/api/exchangesalesorder/getExchangeSalesOrderFreightsBySOId";
+    private readonly getSalesOrderAnalysis: string = environment.baseUrl + "/api/exchangesalesorder/togetexchangesoanalysis";
+    private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangesalesorder/get-exchange-sales-order-margin-data";
+    private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangesalesorder/create-exchange-sales-order-margin-data";
+    private readonly getExchangeSalesOrderHypothAnalysis: string = environment.baseUrl + "/api/exchangesalesorder/togetexchangesalesorderhypoanalysis";
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -420,6 +426,39 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
         .get<any>(URL, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getExchangeSalesOrderFreightsById(id, isDeleted));
+        });
+    }
+    getAllExchangeSalesOrderAnalysis<T>(id): Observable<T> {
+      let endPointUrl = `${this.getSalesOrderAnalysis}/${id}`;;
+      return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllExchangeSalesOrderAnalysis(id));
+        });
+    }
+    getExchangeSalesOrderMarginSummary(exchangeSalesOrderId: number): Observable<ExchangeSalesOrderMarginSummary> {
+      const URL = `${this.getExchangeQuoteMarginSummarydetails}/${exchangeSalesOrderId}`;
+      return this.http
+        .get<ExchangeSalesOrderMarginSummary>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderMarginSummary(exchangeSalesOrderId));
+        });
+    }
+    createExchangeSalesOrderMarginSummary(marginSummary: ExchangeSalesOrderMarginSummary) {
+      return this.http
+        .post(
+          this.exchangeQuoteqMarginSummary,
+          JSON.stringify(marginSummary),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createExchangeSalesOrderMarginSummary(marginSummary));
+        });
+    }
+    getExchangeSalesOrderHypoAnalysis<T>(id): Observable<T> {
+      let endPointUrl = `${this.getExchangeSalesOrderHypothAnalysis}/${id}`;
+      return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeSalesOrderHypoAnalysis(id));
         });
     }
 }

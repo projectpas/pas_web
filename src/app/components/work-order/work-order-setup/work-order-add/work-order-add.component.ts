@@ -2796,7 +2796,7 @@ createQuote() {
                                         taskData['adjustments'] = labList['adjustments'];
                                         taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
                                         taskData['memo'] = labList['memo'];
-
+                                        taskData['isEditCondition']=false;
                                         taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
                                         taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
                                         taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';

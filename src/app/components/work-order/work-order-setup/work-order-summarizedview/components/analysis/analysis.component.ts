@@ -198,7 +198,7 @@ export class AnalysisComponent implements OnInit, OnChanges {
                         field: 'status'
                     },
                     {
-                        header: 'Customer Name',
+                        header: 'Cust Name',
                         field: 'customerName'
                     },
                     {

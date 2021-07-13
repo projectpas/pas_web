@@ -17,7 +17,7 @@ import { DBkeys } from '../../../../services/db-Keys';
     styleUrls: ['./direct-labour-add.component.scss'],
     animations: [fadeInOut]
 }) 
-/** WorkOrderAdd component*/
+/** WorkOrderAdd component*/ 
 export class DirectLabourAddComponent implements OnInit {
     directLaborData: any = {};   
     allCurrencyData: any = [] ;
@@ -79,8 +79,11 @@ export class DirectLabourAddComponent implements OnInit {
                 laborHoursId: res.laborHoursId.toString(),
                 burdenRateId: res.burdenRateId.toString(),
                 averageRate: this.onChangeCost(res.averageRate),
+                quoteAverageRate: this.onChangeCostWoq(res.quoteAverageRate),
+                
                 // flatAmount: this.onChangeBurdenCost(res.flatAmount)
             }; 
+            console.log("this.directLaborData",this.directLaborData)
             this.currencyData();
             this.percentData();
 setTimeout(() => {
@@ -180,6 +183,15 @@ setTimeout(() => {
             }
             this.directLaborData.averageRate = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
             return this.directLaborData.averageRate;
+        }
+    }
+    onChangeCostWoq(val){
+        if (val) {
+            if (isNaN(val) == true) {
+                val = Number(val.replace(/[^0-9.-]+/g, ""));
+            }
+            this.directLaborData.quoteAverageRate = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
+            return this.directLaborData.quoteAverageRate;
         }
     }
     onChangeFlatCost(val) {

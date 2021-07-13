@@ -31,7 +31,8 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns" class="summary-column"
                                         pReorderableRowHandle>
-                                        <span class="text-center" style="display: block;" *ngIf="summaryColumn.field == 'itemNo'">
+                                        <span class="text-center" style="display: block;"
+                                            *ngIf="summaryColumn.field == 'itemNo'">
                                             {{summaryPart[summaryColumn.field] }}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
@@ -100,10 +101,16 @@
                                         <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
                                             class="btn nobg"
-                                            (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
+                                            (click)="openmultiplepartDelete(summaryPart, rowIndex, deletepartcontent)"
                                             matTooltip="Remove" matTooltipPosition="above">
                                             <i class="fa fa-trash"></i>
                                         </a>
+                                        <span>
+                                            <a class="btn nobg btn-hist-cstm view-part-eye"
+                                                (click)="openSOQSummary(contentSOQSummary, summaryPart)"
+                                                matTooltip="SOQ History" matTooltipPosition="above"><i
+                                                    class="fa fa-history"></i></a>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
@@ -119,7 +126,7 @@
                                     <th>Ser Num</th>
                                     <th>Quote Date</th>
                                     <th>Qty Avail</th>
-                                    <th>Qty on Hand</th>
+                                    <th>Qty OH</th>
                                     <th>Qty Qted</th>
                                     <th>Qty Prev Qted</th>
                                     <th>Status</th>
@@ -365,7 +372,8 @@
                                     </td>
                                     <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
                                         <span class="value">
-                                            <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above" [matTooltip]="parsedText(part.notes)" [innerHTML]="part.notes"></p>
+                                            <p class="p-0 m-0 p_textEditor truncate-text" matTooltipPosition="above"
+                                                [matTooltip]="parsedText(part.notes)" [innerHTML]="part.notes"></p>
                                         </span>
                                     </td>
                                     <td *ngIf="isViewMode == false" class="zui-sticky-col"
@@ -555,7 +563,170 @@
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="approve()">Save</button>
     </div>
 </ng-template>
-
+<ng-template #contentSOQSummary let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Sales Order Quote History</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+            <div class="loading">
+                <div class="lds-roller">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="">
+                <div class="col" style="padding:3px 0 0;">
+                    <div class="form-group float-right">
+                        <div class="pull-left radio-buttons-align">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="monthrange" class="form-control" value="1"
+                                    (click)="getSOQSummaryDetails('1')" [ngModel]="currentStatusSOQSummary" checked>
+                                <span class="checkmark"></span>Last 12 Months
+                            </label>
+                        </div>
+                        <div class="pull-left radio-buttons-align ">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="monthrange" class="form-control" value="2"
+                                    (click)="getSOQSummaryDetails('2')" [ngModel]="currentStatusSOQSummary">
+                                <span class="checkmark"></span>Last 18 Months
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+                <table class="table table-bordered header-table-width">
+                    <thead>
+                        <tr>
+                            <th>PN</th>
+                            <th>Cond</th>
+                            <th>Cust Appr?</th>
+                            <th>Curr</th>
+                            <th>Revenue</th>
+                            <th>Direct Cost</th>
+                            <th>Margin Amt</th>
+                            <th>Margin %</th>
+                        </tr>
+                    </thead>
+                    <tr *ngFor="let soqSummPN of soqSummaryPNData;">
+                        <td>
+                            {{soqSummPN.partNumber}}
+                        </td>
+                        <td>
+                            {{soqSummPN.condition}}
+                        </td>
+                        <td>
+                            {{soqSummPN.custApproved}}
+                        </td>
+                        <td>
+                            {{soqSummPN.currencyName}}
+                        </td>
+                        <td>
+                            {{soqSummPN.revenue}}
+                        </td>
+                        <td>
+                            {{soqSummPN.directCost}}
+                        </td>
+                        <td>
+                            {{soqSummPN.margin}}
+                        </td>
+                        <td>
+                            {{soqSummPN.marginPercentage}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+                <table class="table table-bordered header-table-width">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Cond</th>
+                            <th>Cust Appr?</th>
+                            <th>Curr</th>
+                            <th>Revenue</th>
+                            <th>Direct Cost</th>
+                            <th>Margin Amt</th>
+                            <th>Margin %</th>
+                            <th>SOQ Num</th>
+                            <th>SOQ Ver #n</th>
+                            <th>SOQ Date</th>
+                            <th>SO Num</th>
+                            <th>Trace</th>
+                            <th>Status</th>
+                            <th class="table-actions-column">Action</th>
+                        </tr>
+                    </thead>
+                    <!-- <tr *ngFor="let soqSummPN of soqSummaryCustData;">
+                    <td >
+                        {{soqSummPN.customerName}}
+                    </td>
+                    <td >
+                        {{soqSummPN.workScope}}
+                    </td>
+                    <td >
+                        {{soqSummPN.currencyName}}
+                    </td>
+                    <td >
+                        {{soqSummPN.revenue}}
+                    </td>
+                    <td >
+                        {{soqSummPN.directCost}}
+                    </td>
+                    <td >
+                        {{soqSummPN.margin}}
+                    </td>
+                    <td >
+                        {{soqSummPN.revenuePercentage}}
+                    </td>
+                    <td >
+                        {{soqSummPN.tatdays}}
+                    </td>
+                    <td >
+                        {{wosummpn.workOrderNum}}
+                    </td>
+                    <td >
+                        {{wosummpn.openDate | date: 'MM/dd/yyyy h:mm a '}}
+                    </td>
+                    <td >
+                        {{wosummpn.stage}}
+                    </td>
+                    <td >
+                        {{wosummpn.workOrderStatus}}
+                    </td>
+                    <td >
+                        <span>
+                            <a class="btn nobg btn-view-cstm" (click)="view(viewWorkOrder,wosummpn)" matTooltip="View WO"
+                                matTooltipPosition="above">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </span>
+                    </td>
+                </tr> -->
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+    </div>
+</ng-template>
 <div id="soqPartHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xlg">
 
@@ -588,7 +759,7 @@
                                 <th>Disc. Amt/Unit</th>
                                 <th>Disc. Amt</th>
                                 <th>Disc. %</th>
-                                <th>Extended Cost</th>
+                                <th>Ext. Cost</th>
                                 <th>Fix Rate</th>
                                 <th>UOM</th>
                                 <th>Product Margin</th>

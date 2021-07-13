@@ -93,7 +93,7 @@ export class ExchangeSalesOrderListComponent implements OnInit {
   initColumns() {
     this.headers = [
       { field: "exchangeSalesOrderNumber", header: "Exch SO Num", width: "120px" },
-      { field: "customerName", header: "Customer Name", width: "180px" },
+      { field: "customerName", header: "Cust Name", width: "180px" },
       { field: "customerReference", header: "Customer Ref", width: "130px" },
       { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
       //{ field: "quoteExpireDate", header: "Quote Exp Date", width: "130px" },
@@ -118,22 +118,22 @@ export class ExchangeSalesOrderListComponent implements OnInit {
     if (this.arrayStatuslist.length == 0) {
       this.arrayStatuslist.push(0);
     }
-    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", '', true, 20, this.arrayStatuslist.join(), this.currentUserMasterCompanyId),
+    forkJoin(this.commonservice.autoSuggestionSmartDropDownList("ExchangeStatus", "ExchangeStatusId", "Name", '', true, 20, this.arrayStatuslist.join(), 0),
       //this.salesService.getAllSalesOrderSettings()
-      ).subscribe(res => {
-        this.statusList = res[0];
-        this.currentStatus = "1";
-        this.searchParameters.filters = {
-          ...this.searchParameters.filters,
-          isDeleted: this.currentDeletedstatus,
-          //viewType: this.viewType
-        }
-        //this.isSettingsReceived = true;
-        this.changeOfStatus(this.currentStatus);
-      }, error => {
-        //this.isSettingsReceived = true;
-        this.isSpinnerVisible = false;
-      });
+    ).subscribe(res => {
+      this.statusList = res[0];
+      this.currentStatus = "1";
+      this.searchParameters.filters = {
+        ...this.searchParameters.filters,
+        isDeleted: this.currentDeletedstatus,
+        //viewType: this.viewType
+      }
+      //this.isSettingsReceived = true;
+      this.changeOfStatus(this.currentStatus);
+    }, error => {
+      //this.isSettingsReceived = true;
+      this.isSpinnerVisible = false;
+    });
   }
 
   loadData(event, globalFilter = "") {
@@ -161,7 +161,7 @@ export class ExchangeSalesOrderListComponent implements OnInit {
     this.searchParameters.filters.masterCompanyId = this.currentUserMasterCompanyId;
     this.searchParameters.globalFilter = globalFilter;
     //if (this.isSettingsReceived) {
-      this.onSearch();
+    this.onSearch();
     //}
   }
 

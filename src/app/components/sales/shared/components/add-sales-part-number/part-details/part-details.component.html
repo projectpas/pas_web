@@ -182,7 +182,7 @@
                         </span>
                         <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
                             {{ part.qtyAvailable | globalNmberFormat }}
-                            <span matTooltip="Qty Available" matTooltipPosition="above" class="
+                            <span matTooltip="Qty Avail" matTooltipPosition="above" class="
                                             alternate-part-label"
                                 *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
                             </span>
@@ -307,7 +307,7 @@
                                     <th>Acquisition Type</th>
                                     <th>Order Date</th>
                                     <th>Entry Date</th>
-                                    <th>Expiration Date</th>
+                                    <th>Exp Date</th>
                                     <th>Vendor</th>
                                     <th>PO Num</th>
                                     <th>RO Num</th>
@@ -324,9 +324,9 @@
                                     <th>Traceable To</th>
                                     <th>ECCN</th>
                                     <th>ITAR</th>
-                                    <th class="min-width-60">Qty On Hand <span class="clr-red">*</span></th>
-                                    <th class="min-width-60">Qty Reserved</th>
-                                    <th class="min-width-60">Qty Issued</th>
+                                    <th class="min-width-60">Qty OH<span class="clr-red">*</span></th>
+                                    <th class="min-width-60">Qty Res'd</th>
+                                    <th class="min-width-60">Qty Iss'd</th>
                                     <th class="min-width-60">Qty Avail <span class="clr-red">*</span></th>
                                     <th class="min-width-60">PO Unit Cost</th>
                                     <th class="min-width-60">RO Unit Cost</th>

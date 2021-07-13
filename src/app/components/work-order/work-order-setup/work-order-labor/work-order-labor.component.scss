@@ -87,7 +87,8 @@
   width: 50px !important;
 }
 .min-width-130{
-  min-width: 130px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
 }
 .min-width-100{
   min-width: 100px !important;
@@ -246,4 +247,15 @@ table thead tr th {
 }
 .text_sen{
   text-align: start;
+}
+.width-90{
+  min-width: 90px !important;
+}
+.wd_90{
+  width: 90px;
+  max-width: 90px;
+}
+.wd_100{
+  width: 100px;
+  max-width: 100px;
 }
