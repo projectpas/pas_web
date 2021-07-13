@@ -3,17 +3,16 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { POApprovalService } from "../../services/po-approval.service";
 import { CommonService } from "../../services/common.service";
 import { MenuItem } from 'primeng/api';
-import {MessageSeverity,  AlertService } from "../../services/alert.service";
+import { MessageSeverity, AlertService } from "../../services/alert.service";
 import { AuthService } from "../../services/auth.service";
-import { formatNumberAsGlobalSettingsModule,getValueFromObjectByKey, getObjectByValue } from "../../generic/autocomplete";
+import { formatNumberAsGlobalSettingsModule, getValueFromObjectByKey, getObjectByValue } from "../../generic/autocomplete";
 
 @Component({
     selector: "po-approvals",
     templateUrl: './po-approval.component.html',
     styleUrls: ['./po-approval.component.scss']
 })
-export class PoApprovalComponent implements OnInit
-{
+export class PoApprovalComponent implements OnInit {
     isView: any;
     pageSize: number = 10;
     pageIndex: number = 0;
@@ -25,33 +24,33 @@ export class PoApprovalComponent implements OnInit
     legalEntityList: any;
     approvalAmountList: any;
     approverList: any;
-    arrayLegalEntitylsit:any[] = [];
+    arrayLegalEntitylsit: any[] = [];
     newDataObject = {
-        "approvalRuleId":0,
-        "approvalTaskId":null,
-        "autoApproveId":null,
-        "actionId":null,
-        "ruleNumberId":null,
-        "entityId":null,
-        "operatorId":null,
-        "amountId":null,
-        "value":null,
-        "lowerValue":null,
-        "upperValue":null,
-        "approverId":null,
-        "memo":"",
-        "masterCompanyId":1,
-        "createdBy":"admin",
-        "updatedBy":"admin",
-        "createdDate":new Date(),
-        "updatedDate":new Date(),
-        "isActive":true,
-        "isDeleted":false
-         
-     };
-     dropdownSettings = {};
-     creatingData: any;     
-     headers = [
+        "approvalRuleId": 0,
+        "approvalTaskId": null,
+        "autoApproveId": null,
+        "actionId": null,
+        "ruleNumberId": null,
+        "entityId": null,
+        "operatorId": null,
+        "amountId": null,
+        "value": null,
+        "lowerValue": null,
+        "upperValue": null,
+        "approverId": null,
+        "memo": "",
+        "masterCompanyId": 1,
+        "createdBy": "admin",
+        "updatedBy": "admin",
+        "createdDate": new Date(),
+        "updatedDate": new Date(),
+        "isActive": true,
+        "isDeleted": false
+
+    };
+    dropdownSettings = {};
+    creatingData: any;
+    headers = [
         // { field: 'memoId', header: 'Memo Id' },
         { field: 'taskName', header: 'Task Name' },
         { field: 'ruleNo', header: 'Rule No' },
@@ -64,11 +63,11 @@ export class PoApprovalComponent implements OnInit
     ]
     selectedColumns = this.headers;
     isEdit: boolean = false;
-    
-    constructor(private poapprovalService: POApprovalService,  private authService: AuthService, private commonService: CommonService, private alertService: AlertService){       
+
+    constructor(private poapprovalService: POApprovalService, private authService: AuthService, private commonService: CommonService, private alertService: AlertService) {
     }
 
-    ngOnInit(){
+    ngOnInit() {
         this.dropdownSettings = {
             singleSelection: false,
             idField: 'value',
@@ -78,7 +77,7 @@ export class PoApprovalComponent implements OnInit
             itemsShowLimit: 1,
             allowSearchFilter: false
         };
-        this.getPOApprovalData(); 
+        this.getPOApprovalData();
         this.getTaskNames();
         this.getRuleNumber();
         this.getEnitityList();
@@ -88,104 +87,105 @@ export class PoApprovalComponent implements OnInit
         this.creatingData = Object.assign({}, this.newDataObject);
     }
 
-    addNewApproval(){
+    addNewApproval() {
         this.creatingData = Object.assign({}, this.newDataObject);
     }
-    
-    getPOApprovalData(){
+
+    getPOApprovalData() {
         this.poapprovalService.getAllPOApprovalData()
-        .subscribe(
-            (res)=>{
-                this.poApprovalData = res;
-            }
-        )
+            .subscribe(
+                (res) => {
+                    this.poApprovalData = res;
+                }
+            )
     }
 
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
 
-    async getTaskNames(){
-        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', this.currentUserMasterCompanyId)
-        .subscribe(
-            (res)=>{
-                this.taskNameList = res;
-            }
-        )
+    async getTaskNames() {
+        await this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0)
+            .subscribe(
+                (res) => {
+                    this.taskNameList = res;
+                }
+            )
     }
 
-    async getRuleNumber(){
-        await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo', this.currentUserMasterCompanyId)
-        .subscribe(
-            (res)=>{
-                this.ruleNumList = res;
-            }
-        )
+    async getRuleNumber() {
+        await this.commonService.smartDropDownList('ApprovalRuleNo', 'ApprovalRuleNoId', 'RuleNo', 0)
+            .subscribe(
+                (res) => {
+                    this.ruleNumList = res;
+                }
+            )
     }
 
     //     this.commonService.getLegalEntityIdByMangStrucId(this.authService.currentUser.managementStructureId).subscribe(res=>{
-           
+
     //         this.legalEntityList = res;
 
     //     })
     // }
     getEnitityList(strText = '') {
-		if(this.arrayLegalEntitylsit.length == 0) {			
-			this.arrayLegalEntitylsit.push(0); }	
-			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name',strText,true, 20,this.arrayLegalEntitylsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-			this.legalEntityList = res;
-		});
+        if (this.arrayLegalEntitylsit.length == 0) {
+            this.arrayLegalEntitylsit.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayLegalEntitylsit.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.legalEntityList = res;
+        });
     }
-    
+
     filterlegalEntityList(event) {
         if (event.query !== undefined && event.query !== null) {
-            this.getEnitityList(event.query); 
+            this.getEnitityList(event.query);
         }
     }
 
-    onEntitySelect()
-    {
-        this.getEntity(getValueFromObjectByKey('value',this.creatingData.entityId));   
+    onEntitySelect() {
+        this.getEntity(getValueFromObjectByKey('value', this.creatingData.entityId));
     }
-    getEntity(id){ 
-        this.commonService.employeesByLegalEntityandMS(id).subscribe(res=>{         
+    getEntity(id) {
+        this.commonService.employeesByLegalEntityandMS(id).subscribe(res => {
             this.approverList = res.map(x => {
                 return {
                     // ...x,
                     value: x.employeeId,
                     label: x.employeeName
-                }})
+                }
+            })
         })
     }
-    async getPoAmountList(){
-        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', this.currentUserMasterCompanyId)
-        .subscribe(
-            (res)=>{
-                this.approvalAmountList = res;
-            }
-        )
+    async getPoAmountList() {
+        await this.commonService.smartDropDownList('ApprovalAmount', 'ApprovalAmountId', 'Name', 0)
+            .subscribe(
+                (res) => {
+                    this.approvalAmountList = res;
+                }
+            )
     }
 
-    savePoApproval(){
-        this.creatingData.entityId = getValueFromObjectByKey('value',this.creatingData.entityId); 
+    savePoApproval() {
+        this.creatingData.entityId = getValueFromObjectByKey('value', this.creatingData.entityId);
         this.poapprovalService.createOrUpdatePOApproval(this.creatingData)
-        .subscribe(
-            res => {
-                this.alertService.showMessage("Success", `Record ${this.isEdit?'Updated':'Created'} successfully`, MessageSeverity.success);
-                this.getPoApprovalList()
-            }
-        )
+            .subscribe(
+                res => {
+                    this.alertService.showMessage("Success", `Record ${this.isEdit ? 'Updated' : 'Created'} successfully`, MessageSeverity.success);
+                    this.getPoApprovalList()
+                }
+            )
     }
 
-    getPoApprovalList(){
+    getPoApprovalList() {
         this.poapprovalService.getAllPOApprovalData()
-        .subscribe(
-            (res: any[]) => {
-                this.poApprovalData = res;
-                this.totalRecords = res.length;
-                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-            }
-        )
+            .subscribe(
+                (res: any[]) => {
+                    this.poApprovalData = res;
+                    this.totalRecords = res.length;
+                    this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                }
+            )
     }
 
     pageIndexChange(event) {
@@ -196,45 +196,45 @@ export class PoApprovalComponent implements OnInit
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
-    edit(data){
+    edit(data) {
         this.isEdit = true;
         this.creatingData = Object.assign({}, this.newDataObject);
         this.poapprovalService.getApprovalById(data.approvalRuleId)
-        .subscribe(
-            res => {
-               
-                this.creatingData = res;
-                this.arrayLegalEntitylsit.push(this.creatingData.entityId); 	
-                this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name','',true, 20,this.arrayLegalEntitylsit.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+            .subscribe(
+                res => {
+
+                    this.creatingData = res;
+                    this.arrayLegalEntitylsit.push(this.creatingData.entityId);
+                    this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', '', true, 20, this.arrayLegalEntitylsit.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
                         this.legalEntityList = res;
-                });
-                this.getEntity(this.creatingData.entityId);
-                this.creatingData.entityId =  getObjectByValue('value',this.creatingData.entityId ,this.legalEntityList);
-                this.creatingData.lowerValue = this.creatingData.lowerValue ? formatNumberAsGlobalSettingsModule(this.creatingData.lowerValue, 2) : '0.00';
-                this.creatingData.upperValue = this.creatingData.upperValue ? formatNumberAsGlobalSettingsModule(this.creatingData.upperValue, 2) : '0.00';
-                this.creatingData.value = this.creatingData.value ? formatNumberAsGlobalSettingsModule(this.creatingData.value, 2) : '0.00';
-               
-            }
-        )
+                    });
+                    this.getEntity(this.creatingData.entityId);
+                    this.creatingData.entityId = getObjectByValue('value', this.creatingData.entityId, this.legalEntityList);
+                    this.creatingData.lowerValue = this.creatingData.lowerValue ? formatNumberAsGlobalSettingsModule(this.creatingData.lowerValue, 2) : '0.00';
+                    this.creatingData.upperValue = this.creatingData.upperValue ? formatNumberAsGlobalSettingsModule(this.creatingData.upperValue, 2) : '0.00';
+                    this.creatingData.value = this.creatingData.value ? formatNumberAsGlobalSettingsModule(this.creatingData.value, 2) : '0.00';
+
+                }
+            )
     }
 
 
-    
-    onChangevalue(str) { 
-        
+
+    onChangevalue(str) {
+
         this.creatingData[str] = this.creatingData[str] ? formatNumberAsGlobalSettingsModule(this.creatingData[str], 2) : '0.00';
-	
-	}
-    
 
-    delete(data){
-        this.poapprovalService.deleteApprovalById(data.approvalRuleId,"admin")
-        .subscribe(
-            res => {
-                this.alertService.showMessage("Success", `Record Deleted successfully`, MessageSeverity.success);
-                this.getPoApprovalList();
-            }
-        )
     }
-    
+
+
+    delete(data) {
+        this.poapprovalService.deleteApprovalById(data.approvalRuleId, "admin")
+            .subscribe(
+                res => {
+                    this.alertService.showMessage("Success", `Record Deleted successfully`, MessageSeverity.success);
+                    this.getPoApprovalList();
+                }
+            )
+    }
+
 }

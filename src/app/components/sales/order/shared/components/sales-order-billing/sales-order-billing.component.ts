@@ -217,7 +217,7 @@ export class SalesOrderBillingComponent implements OnInit {
             this.arrayInvoiceTypelist.push(0);
         }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description', '', true, 100, this.arrayInvoiceTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description', '', true, 0, this.arrayInvoiceTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.invoiceTypeList = res;
             this.billingorInvoiceForm.invoiceTypeId = res[0].value;
             this.isSpinnerVisible = false;
