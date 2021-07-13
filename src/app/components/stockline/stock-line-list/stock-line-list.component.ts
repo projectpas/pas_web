@@ -168,7 +168,7 @@ export class StockLineListComponent implements OnInit {
         { field: 'unitOfMeasure', header: 'UOM' ,width:"60px"},
         { field: 'quantityOnHand', header: 'Qty OH',width:"100px" },
         { field: 'quantityAvailable', header: 'Qty Avail',width:"80px" },
-        { field: 'serialNumber', header: 'Serial Num' },
+        { field: 'serialNumber', header: 'Ser Num' },
         { field: 'isCustomerStock', header: 'C/S',width:"50px" },
         { field: 'stocklineNumber', header: 'SL Num',width:"100px"  },
         { field: 'controlNumber', header: 'Cntrl Num',width:"80px" },

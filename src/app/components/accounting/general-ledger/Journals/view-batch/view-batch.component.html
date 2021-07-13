@@ -15,11 +15,11 @@
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 271px;" aria-label="Financial Statement Mapping: activate to sort column ascending">Ledger</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Journel Type</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Period Name</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Currency</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Curr</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Debit</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Credit</th>
 
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Currency</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Curr</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Debit</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Credit</th>
 
@@ -33,7 +33,7 @@
                             </tr>
                         </thead>
                         <tbody>
-
+    
                             <tr *ngFor="let batch of batchList">
                                 <td>{{batch.journalBatchNumber}}</td>
                                 <td>
@@ -129,8 +129,8 @@
 
                 </div>
                 <div class="col-sm-6">
-                    <p><span class="label"><b>Local Currency: </b></span><span class="value">{{manualBatchData.localCurrencyId}}</span></p>
-                    <p><span class="label"><b>Reporting Currency: </b></span><span class="value">{{manualBatchData.reportingCurrencyId}}</span></p>
+                    <p><span class="label"><b>Local Curr: </b></span><span class="value">{{manualBatchData.localCurrencyId}}</span></p>
+                    <p><span class="label"><b>Reporting Curr: </b></span><span class="value">{{manualBatchData.reportingCurrencyId}}</span></p>
                     <p><span class="label"><b>Recurring: </b></span><span class="value">{{manualBatchData.isRecurring}}</span></p>
                     <p><span class="label"><b>Reversing: </b></span><span class="value">{{manualBatchData.isReversing}}</span></p>
                     <p><span class="label"><b>Created Date: </b></span><span class="value">{{manualBatchData.createdDate}}</span></p>

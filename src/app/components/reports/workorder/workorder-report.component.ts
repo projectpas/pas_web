@@ -52,7 +52,7 @@ export class WorkOrderReportComponent implements OnInit {
         { field: 'woType', header: 'WO Type' },
         { field: 'stage', header: 'Stage' },
         { field: 'status', header: 'Status' },
-        { field: 'receivedDate', header: 'Received Date' },
+        { field: 'receivedDate', header: "Rec'd Date" },
         { field: 'openDate', header: 'Open Date' },
         { field: 'originalValue', header: 'Original Value' },
         { field: 'partsAdded', header: 'Parts Added' },

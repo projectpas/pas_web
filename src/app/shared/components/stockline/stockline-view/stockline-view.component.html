@@ -108,15 +108,15 @@
                                 </div>
                             </div>
                             <div class="form-group stock-top-35"  *ngIf="viewSLInfo.isSerialized">
-                                <label>Serial Num <span class="clr-red">*</span></label>
+                                <label>Ser Num <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="serialNumber" [(ngModel)]="viewSLInfo.serialNumber" disabled>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.isSerialized">
-                                <label>Stockline Num</label>
+                                <label>Stk Line Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
                             </div>
                             <div class="form-group stock-top-35" *ngIf="!viewSLInfo.isSerialized">
-                                <label>Stockline Num</label>
+                                <label>Stk Line Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
                             </div>
                             <div class="form-group">
@@ -132,7 +132,7 @@
                                 <input class="form-control" type="text" name="nationalStockNumber" [(ngModel)]="viewSLInfo.nationalStockNumber" disabled>
                             </div>
                             <div class="form-group">
-                                <label matTooltip="Engine Serial Number" matTooltipPosition="above">ESN</label>
+                                <label matTooltip="Engine Serial Num" matTooltipPosition="above">ESN</label>
                                 <input class="form-control" type="text" name="engineSerialNumber" [(ngModel)]="viewSLInfo.engineSerialNumber" disabled>
                             </div>
                         </div>
@@ -274,7 +274,7 @@
                                 <input class="form-control" type="text" name="receiverNumber" [(ngModel)]="viewSLInfo.receiverNumber" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Received Date <span class="clr-red">*</span></label>
+                                <label>Rec'd Date <span class="clr-red">*</span></label>
                                 <input type="text" class="form-control" name="receivedDate" [(ngModel)]="viewSLInfo.receivedDate" disabled>
                             </div>
                            

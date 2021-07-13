@@ -111,7 +111,7 @@ export class AssetInventoryListingComponent implements OnInit {
         { field: 'assetId', header: 'Asset ID', colspan: '1' },
         { field: 'alternateAssetId', header: 'Alt Asset ID', colspan: '1' },
         { field: 'manufacturerName', header: 'Manufacturer', colspan: '1' },
-        { field: 'serialNumber', header: 'Serial Num', colspan: '1' },
+        { field: 'serialNumber', header: 'Ser Num', colspan: '1' },
         { field: 'calibrationRequiredNew', header: 'Calibrated', colspan: '1' },
         { field: 'assetStatus', header: 'Asset Status', colspan: '1' },
 

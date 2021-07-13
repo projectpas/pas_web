@@ -550,7 +550,7 @@
                                         <!--/Consume UOM-->
                                         <!--Purchase Currency-->
                                             <label class="control-label spacing-label">
-                                                Purchase Currency <strong class="clr-red">*</strong>
+                                                Purchase Curr <strong class="clr-red">*</strong>
                                             </label>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required (onChange)="SetSalesCurrency()"></p-dropdown>
@@ -559,7 +559,7 @@
                                         <div class="clear"></div>
                                         <!--Purchase Currency--> 
                                             <label class="control-label spacing-label">
-                                                Sales Currency <strong class="clr-red">*</strong>
+                                                Sales Curr <strong class="clr-red">*</strong>
                                             </label>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="salesCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.salesCurrencyId" name="salesCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
@@ -1671,7 +1671,7 @@
                                         <tr>
                                             <th style="z-index:1">Cond <span class="clr-red">*</span></th>
                                             <th style="z-index:1">UOM <span class="clr-red">*</span></th>
-                                            <th style="z-index:1">Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">Curr <span class="clr-red">*</span></th>
                                             <th>FX Rate <span class="clr-red">*</span></th>
                                             <th>Vendor List Price</th>
                                             <th>Last List Price Date</th>
@@ -1681,7 +1681,7 @@
                                             <th>Unit Purchase Price</th>
                                             <th style="z-index:1" class="bg4">Sale Price <span class="clr-red">*</span></th>
                                             <th style="z-index:1" class="bg2">UOM <span class="clr-red">*</span></th>
-                                            <th style="z-index:1" class="bg2">Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg2">Curr <span class="clr-red">*</span></th>
                                             <th class="bg2">FX Rate <span class="clr-red">*</span></th>
                                             <th class="bg2">Flat Price Amount</th>
                                             <th class="bg2">Last Flat Price Date</th>
@@ -2072,7 +2072,7 @@
                                         <label class="control-label">Value </label>
                                         <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="exportInfo.exportValue" (change)="onChangeExportVal()" name="exportValue" id="exportValue" title="Export Value" (keyup)="btnChange()" />
                                       
-                                        <label class="control-label">Currency </label>
+                                        <label class="control-label">Curr </label>
                                         <p-dropdown class="p-dropdown-100" [options]="allCurrencyInfo" filter="true" 
                                         [(ngModel)]="exportInfo.exportCurrencyId" name="exportCurrencyId" 
                                         [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
@@ -4103,7 +4103,7 @@
                     <tr>
                         <th >Cond <span class="clr-red">*</span></th>
                         <th >UOM <span class="clr-red">*</span></th>
-                        <th >Currency <span class="clr-red">*</span></th>
+                        <th >Curr <span class="clr-red">*</span></th>
                         <th >FX Rate <span class="clr-red">*</span></th>
                         <th >Vendor List Price</th>
                         <th >Last List Price Date</th>
@@ -4113,7 +4113,7 @@
                         <th >Unit Purchase Price</th>
                         <th  class="bg4">Sale Price <span class="clr-red">*</span></th>
                         <th  class="bg2">UOM <span class="clr-red">*</span></th>
-                        <th  class="bg2">Currency <span class="clr-red">*</span></th>
+                        <th  class="bg2">Curr <span class="clr-red">*</span></th>
                         <th  class="bg2">FX Rate <span class="clr-red">*</span></th>
                         <th  class="bg2">Flat Price Amount</th>
                         <th  class="bg2">Last Flat Price Date</th>

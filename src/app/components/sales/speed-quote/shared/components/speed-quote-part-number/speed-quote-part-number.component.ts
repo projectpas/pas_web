@@ -143,7 +143,7 @@ export class SpeedQuotePartNumberComponent {
       { field: 'conditionDescription', header: "Cond", width: "130px" },
       // { header: "Customer Ref", width: "100px" },
       { field: 'priorityName', header: "Priority", width: "100px" },
-      { field: 'openDate', header: "Quote Date", width: "100px" },
+      { field: 'openDate', header: "Qte Date", width: "100px" },
       // { header: "UOM", width: "70px" },
       { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
       { field: 'unitCostPerUnit', header: "Unit Cost", width: "90px" },

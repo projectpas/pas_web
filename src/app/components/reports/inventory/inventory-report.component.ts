@@ -48,8 +48,8 @@ export class InventoryReportComponent implements OnInit {
     headers = [
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
-        { field: 'serialNumber', header: 'Serial Num' },
-        { field: 'stockLineNumber', header: 'Stock Line Number' },
+        { field: 'serialNumber', header: 'Ser Num' },
+        { field: 'stockLineNumber', header: 'Stk Line Num' },
         { field: 'condition', header: 'Condition' },
         { field: 'vendorName', header: 'Vendor Name' },
         { field: 'vendorCode', header: 'Vendor Code' },
@@ -66,7 +66,7 @@ export class InventoryReportComponent implements OnInit {
         { field: 'tracebleTo', header: 'Traceble To' },
         { field: 'mfg', header: 'MFG' },
         { field: 'unitPrice', header: 'Unit Price' },
-        { field: 'extendedPrice', header: 'Extended Price' },
+        { field: 'extendedPrice', header: 'Ext. Price' },
 
         { field: 'site', header: 'Site' },
         { field: 'wareHouse', header: 'Ware House' },
@@ -77,7 +77,7 @@ export class InventoryReportComponent implements OnInit {
         { field: 'purchaseOrderNumber', header: 'PO Num' },
         { field: 'repairOrderNumber', header: 'RO Num' },
         { field: 'repairOrderUnitCost', header: 'RO Unit Cost' },
-        { field: 'receivedDate', header: 'Received Date' },
+        { field: 'receivedDate', header: "Rec'd Date" },
         { field: 'receiverNumber', header: 'Receiver Num' },
         { field: 'reconciliationNumber', header: 'Reconciliation No' },
 

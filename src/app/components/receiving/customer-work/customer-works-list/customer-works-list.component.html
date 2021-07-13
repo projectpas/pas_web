@@ -259,9 +259,9 @@
                         <th>Revised PN</th>
                         <th>Employee Name</th>
                         <th>Cust Name</th>
-                        <th>Customer Reference</th>
+                        <th>Cust Ref</th>
                         <th>Contact</th>
-                        <th>Contact Phone</th>
+                        <th>Phone</th>
                         <th>Manufacturer</th>
                         <th>Quantity</th>
                         <th>Condition</th>
@@ -375,7 +375,7 @@
                     Cust Name<span class="text-danger"> : {{viewCustWorkInfo.customerName}}</span>
                 </div>
                 <div class="col-sm-3 padding-top-5">
-                    Customer Code<span class="text-danger"> : {{viewCustWorkInfo.customerCode}}</span>
+                    Cust Code<span class="text-danger"> : {{viewCustWorkInfo.customerCode}}</span>
                 </div>
             </div>
             <div class="modal-body" *ngIf="viewCustWorkInfo">
@@ -385,16 +385,16 @@
                             <span class="label"><b>Receiving Num: </b></span><span class="value">{{ viewCustWorkInfo.receivingNumber }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Received Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.receivedDate | date: 'MM/dd/yyyy'}}</span>
+                            <span class="label"><b>Rec'd Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.receivedDate | date: 'MM/dd/yyyy'}}</span>
                         </p>
                         <p>
                             <span class="label"><b>Work Scope: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.workScopeName}}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Customer Request Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.custReqDate | date: 'MM/dd/yyyy'}}</span>
+                            <span class="label"><b>Cust Req Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.custReqDate | date: 'MM/dd/yyyy'}}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Customer Ref: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.reference }}</span>
+                            <span class="label"><b>Cust Ref: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.reference }}</span>
                         </p>
                         <p >
                             <span class="label"><b>Employee Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.employeeName }}</span>
@@ -420,13 +420,13 @@
                             <span class="label"><b>Cust Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerName }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Customer Code: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerCode }}</span>
+                            <span class="label"><b>Cust Code: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerCode }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Contact: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerContact }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Contact Phone: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.contactPhone }}</span>
+                            <span class="label"><b>Phone: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.contactPhone }}</span>
                         </p>
                         
                         <p>
@@ -621,7 +621,7 @@
                             </div>
                             <div class="col-md-4" *ngIf="viewCustWorkInfo.serialNumber">
                                 <p>
-                                    <span class="label"><b>Serial Number: </b></span><span class="value">{{ viewCustWorkInfo.serialNumber ? viewCustWorkInfo.serialNumber : '-' }}</span>
+                                    <span class="label"><b>Ser Num: </b></span><span class="value">{{ viewCustWorkInfo.serialNumber ? viewCustWorkInfo.serialNumber : '-' }}</span>
                                 </p>
                             </div>
                         </div>

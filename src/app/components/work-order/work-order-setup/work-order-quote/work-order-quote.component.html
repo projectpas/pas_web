@@ -31,7 +31,7 @@
          <div class="form-row" [hidden]="isDetailedViewQuote">
              <div class="col-md-3"> 
                  <div class="form-group ">
-                     <label>Quote Number <span class="clr-red">*</span></label>
+                     <label>Qte Num <span class="clr-red">*</span></label>
                      <input class="form-control" type="text" required [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly />
                  </div>
                  <div class="form-group ">
@@ -79,7 +79,7 @@
                                  [disabled]="isView"></p-calendar>
                  </div>
                  <div class="form-group">
-                     <label> Quote Status <span class="clr-red">*</span></label>
+                     <label> Qte Status <span class="clr-red">*</span></label>
          
                      <p-dropdown  [showClear]="true"  (ngModelChange)="getValid()" [disabled]="isView" class="p-dropdown-100" (input)="onFilterTangible($event)"  required [options]="quoteStatusList" filter="true" [(ngModel)]="quoteForm.expirationDateStatus"  name="ExpDateStatus" [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                  </div>
@@ -117,25 +117,25 @@
                  </div>
                  <div class="form-group ">
                      <label for="customerCode">
-                         Customer Code
+                         Cust Code
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerCode" name="customerCode" readonly />
                  </div>
                  <div class="form-group ">
                      <label for="customerContact">
-                         Customer Contact
+                         Cust Contact
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerContact" name="customerContact" readonly />
                  </div>
                  <div class="form-group ">
                      <label for="customerEmail">
-                         Customer email
+                         Cust Email
                      </label>
                      <input class="form-control" type="email" [(ngModel)]="customerEmail" name="customerEmail" readonly />
                  </div>
                  <div class="form-group ">
                      <label for="customerPhone">
-                         Customer phone
+                         Cust phone
                      </label>
                      <input class="form-control" type="text" [(ngModel)]="customerPhone" name="customerPhone" readonly />
                  </div>
@@ -202,7 +202,7 @@
          <div class="form-row" [hidden]="!isDetailedViewQuote">
              <div class="col-md-3"> 
                  <div class="form-group ">
-                     <label>Quote Number <span class="clr-red">*</span></label>
+                     <label>Qte Num <span class="clr-red">*</span></label>
                      <input class="form-control" type="text" required [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly />
                  </div>
              </div>
@@ -277,7 +277,7 @@
                                  <th rowspan="2" class="min-width-90">MPN <span class="clr-red">*</span></th>
                                  <th rowspan="2" class="min-width-180">MPN Description <span class="clr-red">*</span></th>
                                  <th rowspan="2" class="min-width-90">Revised MPN</th>
-                                 <th rowspan="2" class="min-width-100">Serial Num</th>
+                                 <th rowspan="2" class="min-width-100">Ser Num</th>
                                  <th rowspan="2">Qty</th>
                                  <th rowspan="2" class="min-width-90">Rec'd Date</th>
                                  <th rowspan="2" class="min-width-90">Cust Req Date <span class="clr-red">*</span></th>
@@ -862,7 +862,7 @@
                          <th>Qty</th>
                          <th>UOM</th>
                          <th>Cond </th>
-                         <th style="width: 70px;">Stock Type</th>
+                         <th style="width: 70px;">Stk Type</th>
                          <th style="width: 70px;">Unit Cost</th>
                          <th style="width: 70px;">Ext Cost</th>
                          <th style="width: 100px;">Billing Method</th>
@@ -1096,7 +1096,7 @@
                                          <div class="col-sm-6">
                                              <p><span class="label"><b>User Name: </b></span><span class="value">sha123</span></p>
                                              <p><span class="label"><b>Cust Name: </b></span><span class="value">Shabbir Ahmad</span></p>
-                                             <p><span class="label"><b>Customer Code: </b></span><span class="value">Cust546</span></p>
+                                             <p><span class="label"><b>Cust Code: </b></span><span class="value">Cust546</span></p>
                                              <p><span class="label"><b>Internal/External: </b></span><span class="value">Internal</span></p>
                                              <p><span class="label"><b>d/b/a: </b></span><span class="value">d/b/a</span></p>
                                              <p><span class="label"><b>Parent: </b></span><span class="value">Silverxis</span></p>
@@ -1710,7 +1710,7 @@
                               *ngIf="displayType == 'historical WO quotes'">
                          <ng-template pTemplate="header" let-columns>
                              <tr>
-                                 <th>Quote Num</th>
+                                 <th>Qte Num</th>
                                  <th>WO Num</th>
                                  <th>Cust Name</th>
                                  <th>Cust Code</th>
@@ -1719,7 +1719,7 @@
                                  <th>Promise Date</th>
                                  <th>Est. Comp Date</th>
                                  <th>Est. Ship Date</th>
-                                 <th>Quote Status</th>
+                                 <th>Qte Status</th>
                                  <th>Created Date</th>
                                  <th>Created By</th>
                                  <th>Updated Date</th>
@@ -1817,7 +1817,7 @@
                                      </select>
                                  </div>
                                  <div class="form-group col-md-12">
-                                     <label class="col-md-12">Customer Contact <span class="clr-red">*</span></label>
+                                     <label class="col-md-12">Cust Contact <span class="clr-red">*</span></label>
                                      <p-autoComplete field="name"
                                      [(ngModel)]="emailCustomerContact" required
                                      name="cusContact" #cusContact="ngModel"

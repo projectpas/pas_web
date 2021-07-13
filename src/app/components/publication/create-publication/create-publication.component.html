@@ -57,13 +57,13 @@
 
         <div class="col-md-4">
             <p class="fs12">
-                <label class="control-label labels-font-header wauto">Publication ID: </label>
+                <label class="control-label labels-font-header wauto">Pub ID: </label>
                 <span class="span-header-red"> {{this.sourcePublication.publicationId }} </span>
             </p>
         </div>
         <div class="col-md-4">
             <p class="fs12">
-                <label class="control-label labels-font-header wauto">Publication Type :</label>
+                <label class="control-label labels-font-header wauto">Pub Type :</label>
                 <span class="span-header-red"> {{publicationType}} </span>
             </p>
         </div>
@@ -87,14 +87,14 @@
                                     [(ngModel)]="sourcePublication.entryDate"></p-calendar>
                             </div>
                             <div class="form-group">
-                                <label for="publicationid">Publication ID <span class="clr-red">*</span></label>
+                                <label for="publicationid">Pub ID <span class="clr-red">*</span></label>
                                 <input class="form-control" #pubID="ngModel" type="text" autocomplete="off"
                                     [maxLength]="35" (change)="onChangeInput()" name="gPublicationid"
                                     [(ngModel)]="sourcePublication.publicationId" required />
                             </div>
 
                             <div class="form-group">
-                                <label for="PublicationDescription">Publication Description</label>
+                                <label for="PublicationDescription">Pub Description</label>
                                 <textarea pInputTextarea class="form-control" [maxLength]="256"
                                     #pubDescription="ngModel" type="text" name="gDescription" (change)="onChangeInput()"
                                     [(ngModel)]="sourcePublication.description"></textarea>
@@ -102,7 +102,7 @@
 
                             <div class="form-group">
                                 <label for="Publicationtype">
-                                    Publication Type<span class="clr-red"> *</span>
+                                    Pub Type<span class="clr-red"> *</span>
 
                                 </label>
                                 <select name="gPubType" (change)="onChangePublicationType()"

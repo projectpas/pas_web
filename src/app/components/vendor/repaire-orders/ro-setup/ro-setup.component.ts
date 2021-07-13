@@ -362,7 +362,7 @@ export class RoSetupComponent implements OnInit {
 			header: 'Item Type',
 			field: 'itemType'
 		}, {
-			header: 'Stock Type',
+			header: 'Stk Type',
 			field: 'stockType'
 		}, {
 			header: 'Qty',
