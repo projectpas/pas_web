@@ -713,4 +713,8 @@ export class SalesOrderService {
   getSalesOrderParts(id, isDeleted) {
     return this.salesOrderEndPointSevice.getSalesOrderParts(id, isDeleted);
   }
+
+  getSalesOrderSummarisedHistoryByPN(itemMasterId, isTwelveMonth) {
+    return this.salesOrderEndPointSevice.GetSalesOrderSummarisedHistoryByPN(itemMasterId, isTwelveMonth);
+  }
 }
