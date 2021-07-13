@@ -150,10 +150,13 @@
         <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
                 <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                  
-                    <ng-container *ngIf="col.field!='averageRate' &&  col.field !='laborHoursMedthodId' && col.field!='flatAmount'">
+                    <ng-container *ngIf="col.field!='quoteAverageRate' && col.field!='averageRate' &&  col.field !='laborHoursMedthodId' && col.field!='flatAmount'">
                         {{rowData[col.field]}}
                     </ng-container>
                     <ng-container *ngIf="col.field=='averageRate' || col.field=='flatAmount'">
+                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                    </ng-container> 
+                    <ng-container *ngIf="col.field=='quoteAverageRate' ">
                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                     </ng-container> 
                     <ng-container *ngIf="col.field == 'laborHoursMedthodId'">

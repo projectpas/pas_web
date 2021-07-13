@@ -116,7 +116,7 @@ export class SalesOrderListComponent implements OnInit {
   initColumns() {
     this.headers = [
       { field: "salesOrderNumber", header: "SO Num", width: "110px" },
-      { field: "customerName", header: "Customer Name", width: "180px" },
+      { field: "customerName", header: "Cust Name", width: "180px" },
       { field: "customerReference", header: "Customer Ref", width: "160px" },
       { field: "salesOrderQuoteNumber", header: "Quote Num", width: "110px" },
       { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
@@ -158,7 +158,7 @@ export class SalesOrderListComponent implements OnInit {
       { field: "salesDiscountPerUnit", header: "Disc Amount", width: "200px" },
       { field: "netSalesPriceExtended", header: "Net Sales", width: "200px" },
       { field: "unitCostPerUnit", header: "Unit Cost", width: "200px" },
-      { field: "unitCostExtended", header: "Extended Cost", width: "200px" },
+      { field: "unitCostExtended", header: "Ext. Cost", width: "200px" },
       { field: "marginAmountExtended", header: "Margin ($)", width: "200px" },
       {
         field: "marginPercentageExtended",
@@ -172,7 +172,7 @@ export class SalesOrderListComponent implements OnInit {
     { field: 'salesOrderQuoteNumber', header: 'Quote Num', isRequired: 0 },
     { field: 'status', header: 'Status', isRequired: 1 },
     { field: 'salesOrderNumber', header: 'SO Num', isRequired: 1 },
-    { field: 'customerName', header: 'Customer Name', isRequired: 1 },
+    { field: 'customerName', header: 'Cust Name', isRequired: 1 },
     { field: 'customerType', header: 'Customer Type', isRequired: 1 },
     { field: 'customerReference', header: 'Cust Ref', isRequired: 1 },
     { field: 'priority', header: 'Priority', isRequired: 0 },

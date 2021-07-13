@@ -107,7 +107,7 @@ export class SalesOrderBillingComponent implements OnInit {
             { field: "partDescription", header: "PN Description", width: "100px" },
             { field: "qtyToBill", header: "Qty Shipped", width: "110px" },
             { field: "qtyBilled", header: "Qty Billed", width: "90px" },
-            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Rem", width: "90px" },
             { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;
@@ -217,7 +217,7 @@ export class SalesOrderBillingComponent implements OnInit {
             this.arrayInvoiceTypelist.push(0);
         }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description', '', true, 100, this.arrayInvoiceTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description', '', true, 0, this.arrayInvoiceTypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.invoiceTypeList = res;
             this.billingorInvoiceForm.invoiceTypeId = res[0].value;
             this.isSpinnerVisible = false;

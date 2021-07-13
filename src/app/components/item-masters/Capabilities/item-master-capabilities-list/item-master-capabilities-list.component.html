@@ -253,7 +253,7 @@
                 <h4 class="modal-title">Add Capes</h4>
             </div>
             <div class="modal-body show-capes-height">
-                <div *ngIf="showCapes">
+                <div *ngIf="isCreate">
                     <app-item-master-create-capabilities [itemMasterId]="itemMasterId" [isCapViewMode]="isCapViewMode"
                         [isEnableCapesList]="isEnableCapesList" (loadCapesList)="loadCapesList($event)"
                         (closeCapesPopup)="closeCapesPopup($event)"></app-item-master-create-capabilities>
@@ -489,7 +489,7 @@
                 <h4 class="modal-title">Edit Capability</h4>
             </div>
             <form #capesForm="ngForm">
-                <div class="modal-body">
+                <div class="modal-body" *ngIf="isEditMode">
                     <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
                     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                         <div class="tableFixHead">  
@@ -550,7 +550,7 @@
                                         <td class="table-column-width">
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" 
-                                            yearRange="1900:2100"
+                                            yearRange="1900:2100" [maxDate]="currentDate"
                                                 [(ngModel)]="selectedItemMasterCapData.addedDate"
                                                 name="addedDate"
                                                 [showIcon]="true"
@@ -573,7 +573,7 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
                                         <td class="table-column-width">
-                                            <p-calendar class="pcal-item-capes"
+                                            <p-calendar class="pcal-item-capes"  [minDate]="selectedItemMasterCapData.addedDate" [maxDate]="currentDate"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedDate"
                                                 [disabled]="selectedItemMasterCapData.isVerified==true"
