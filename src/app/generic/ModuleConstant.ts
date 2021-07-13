@@ -91,6 +91,10 @@ export class ModuleConstants
         static PO_Documents:string = "PO_Documents";
         static PO_Communication:string = "PO_Communication";
 
+        static ReceivingCustomerList :string  = "ReceivingCustomerList";
+        static ReceivingCustomer :string  = "ReceivingCustomer";
+        static ReceivingCustomer_GeneralInformation :string  = "ReceivingCustomer_GeneralInformation";
+        static ReceivingCustomer_Document :string  = "ReceivingCustomer_Document";
 }
 
 export class PermissionConstants

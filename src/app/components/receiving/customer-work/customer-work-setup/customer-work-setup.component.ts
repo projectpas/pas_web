@@ -1,4 +1,5 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { Component, OnInit } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 // declare var $ : any;
 declare var $: any;
@@ -128,6 +129,9 @@ export class CustomerWorkSetupComponent implements OnInit {
     otherModuleId: number = 0;
     stockLineId: number = 0;
     customerTypeId: number = 1;
+    isAdd: boolean = true;
+    isEdit: boolean = true;
+    isDocumentInfo: boolean = true;
 
     constructor(private commonService: CommonService,
         private datePipe: DatePipe,private location: Location,
@@ -137,6 +141,10 @@ export class CustomerWorkSetupComponent implements OnInit {
         private router: Router, private modalService: NgbModal,
         private alertService: AlertService,
         private stocklineService: StocklineService) {
+
+        this.isAdd = this.authService.checkPermission([ModuleConstants.ReceivingCustomer_GeneralInformation + '.' + PermissionConstants.Add]);
+        this.isEdit = this.authService.checkPermission([ModuleConstants.ReceivingCustomer_GeneralInformation + '.' + PermissionConstants.Update]);
+        this.isDocumentInfo = this.authService.checkPermission([ModuleConstants.ReceivingCustomer_Document + '.' + PermissionConstants.View]);
         this.receivingForm.receivingNumber = 'Creating';
         this.receivingForm.conditionId = 0;
         this.receivingForm.siteId = 0;
