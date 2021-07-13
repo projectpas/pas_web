@@ -177,7 +177,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     getAllWorkOrderStatus(): void {
         this.setEditArray.push(0);
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join(), 0).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }

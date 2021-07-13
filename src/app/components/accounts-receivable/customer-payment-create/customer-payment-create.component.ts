@@ -602,10 +602,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   get currentUserMasterCompanyId(): number {
     return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
-}
+  }
 
   loadStatus() {
-    this.commonservice.smartDropDownList('MasterCustomerPaymentStatus', 'Id', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+    this.commonservice.smartDropDownList('MasterCustomerPaymentStatus', 'Id', 'Name', 0).subscribe(response => {
       if (response) {
         this.statusList = response;
         this.statusList = this.statusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));

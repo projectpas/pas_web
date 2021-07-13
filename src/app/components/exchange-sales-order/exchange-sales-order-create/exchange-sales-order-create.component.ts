@@ -63,6 +63,8 @@ import { ExchangeSalesOrderShippingComponent } from "../shared/components/exchan
 // import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { ExchangeSalesOrderPartNumberComponent } from '../shared/components/exchange-sales-order-part-number/exchange-sales-order-part-number.component';
 import { ExchangeSalesOrderPickTicketsComponent } from '../shared/components/exchange-sales-order-pick-tickets/exchange-sales-order-pick-tickets.component';
+import { ExchangeSalesOrderMarginSummary } from '../../../models/exchange/ExchangeSalesOrderMarginSummary';
+import { ExchangeSalesOrderHypoAnalysisComponent } from '../shared/components/exchange-sales-order-hypo-analysis/exchange-sales-order-hypo-analysis.component';
 @Component({
   selector: 'app-exchange-sales-order-create',
   templateUrl: './exchange-sales-order-create.component.html',
@@ -133,7 +135,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   isTextTabEnabled: boolean = false;
   selectedCommunicationTab: any = '';
   customerInfoFromSalesQuote: any = {};
-  marginSummary: MarginSummary = new MarginSummary();
+  marginSummary: ExchangeSalesOrderMarginSummary = new ExchangeSalesOrderMarginSummary();
   @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
@@ -152,6 +154,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   @ViewChild(ExchangeSalesOrderFreightComponent, { static: false }) public exchangeSalesOrderFreightComponent: ExchangeSalesOrderFreightComponent;
   @ViewChild(ExchangeSalesOrderChargesComponent, { static: false }) public exchangeSalesOrderChargesComponent: ExchangeSalesOrderChargesComponent;
   @ViewChild(ExchangeSalesOrderBillingComponent, { static: false }) public exchangeSalesOrderBillingComponent: ExchangeSalesOrderBillingComponent;
+  @ViewChild(ExchangeSalesOrderHypoAnalysisComponent, { static: false }) public exchangeSalesOrderHypoAnalysisComponent: ExchangeSalesOrderHypoAnalysisComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
@@ -187,6 +190,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   showAddresstab: boolean = false;
   isContactsLoaded: boolean = false;
   todayDate: Date = new Date();
+  totalcost = 0;
   constructor(private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
@@ -237,7 +241,9 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     });
 
     this.managementStructureId = this.currentUserManagementStructureId;
-
+    if (this.id) {
+      this.getMarginSummary();
+    }
     if (!this.isEdit) {
       this.load(this.managementStructureId);
     }
@@ -313,24 +319,24 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
         this.isSpinnerVisible = false;
       });
   }
-  getSOMarginSummary() {
-    this.isSpinnerVisible = true;
-    this.salesOrderService.getSOMarginSummary(this.id).subscribe(result => {
-      if (result) {
-        let summary: any = result;
-        this.marginSummary = summary;
-        this.totalCharges = this.marginSummary.misc;
-        this.totalFreights = this.marginSummary.freightAmount;
-        this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
-        this.salesOrderService.setTotalCharges(this.marginSummary.misc);
-      } else {
-        this.marginSummary = new MarginSummary();
-      }
-      this.isSpinnerVisible = false;
-    }, err => {
-      this.isSpinnerVisible = false;
-    })
-  }
+  // getSOMarginSummary() {
+  //   this.isSpinnerVisible = true;
+  //   this.salesOrderService.getSOMarginSummary(this.id).subscribe(result => {
+  //     if (result) {
+  //       let summary: any = result;
+  //       this.marginSummary = summary;
+  //       this.totalCharges = this.marginSummary.misc;
+  //       this.totalFreights = this.marginSummary.freightAmount;
+  //       this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
+  //       this.salesOrderService.setTotalCharges(this.marginSummary.misc);
+  //     } else {
+  //       this.marginSummary = new ExchangeSalesOrderMarginSummary();
+  //     }
+  //     this.isSpinnerVisible = false;
+  //   }, err => {
+  //     this.isSpinnerVisible = false;
+  //   })
+  // }
 
   getSoInstance(initialCall = false) {
     // if (this.copyMode) {
@@ -349,7 +355,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     }
     else {
       this.getNewSalesOrderInstance(this.customerId);
-      this.marginSummary = new MarginSummary();
+      this.marginSummary = new ExchangeSalesOrderMarginSummary();
       this.isEdit = false;
     }
   }
@@ -1227,67 +1233,95 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     if (event.index == 6) {
       this.exchangeSalesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
     }
+    if (event.index == 7) {
+      this.exchangeSalesOrderHypoAnalysisComponent.refresh(this.id);
+    }
+  }
+
+  getMarginSummary() {
+    this.exchangeSalesOrderService.getExchangeSalesOrderMarginSummary(this.id).subscribe(result => {
+      this.setExchangeQuoteMarginSummary(result);
+    }, error => {
+      const errorLog = error;
+    })
+  }
+  setExchangeQuoteMarginSummary(data) {
+    if (data) {
+      this.marginSummary = data;
+      this.totalCharges = this.marginSummary.otherCharges;
+      this.totalFreights = this.marginSummary.freightAmount;
+      this.totalcost = this.marginSummary.otherCost;
+      this.exchangeSalesOrderService.setTotalCharges(this.marginSummary.otherCharges);
+      this.exchangeSalesOrderService.setTotalFreights(this.marginSummary.freightAmount);
+      this.exchangeSalesOrderService.setTotalcost(this.marginSummary.otherCost);
+    } else {
+      this.marginSummary = new ExchangeSalesOrderMarginSummary;
+    }
   }
 
   updateMarginSummary() {
-    //this.isSpinnerVisible = true;
-    this.marginSummary.salesOrderId = this.id;
-    // this.salesOrderService.createSOMarginSummary(this.marginSummary).subscribe(result => {
-    //   this.marginSummary.soMarginSummaryId = result;
-    //   this.isSpinnerVisible = false;
-    // }, error => {
-    //   this.isSpinnerVisible = false;
-    // });
+    debugger;
+    this.isSpinnerVisible = true;
+    this.marginSummary.exchangeSalesOrderId = this.id;
+    this.exchangeSalesOrderService.createExchangeSalesOrderMarginSummary(this.marginSummary).subscribe(result => {
+      this.marginSummary.exchangeSalesOrderMarginSummaryId = result;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
   }
 
   onPartsSaveEvent(savedParts) {
     if (savedParts) {
-      // this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(savedParts, this.marginSummary);
-      // this.updateMarginSummary();
+      this.marginSummary = this.exchangeSalesOrderService.getExchangeQuoteHeaderMarginDetails(savedParts, this.marginSummary);
+      this.updateMarginSummary();
+      console.log("summarydata", this.marginSummary);
+      this.getSalesOrderInstance(this.id, true);
     }
   }
 
   setFreightsOrCharges() {
-    if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {
-      this.salesQuoteService.selectedParts.forEach((part, i) => {
-        this.salesQuoteService.selectedParts[i].freight = this.totalFreights;
-        this.salesQuoteService.selectedParts[i].misc = this.totalCharges;
+    debugger;
+    if (this.exchangeSalesOrderService.selectedParts && this.exchangeSalesOrderService.selectedParts.length > 0) {
+      this.exchangeSalesOrderService.selectedParts.forEach((part, i) => {
+        this.exchangeSalesOrderService.selectedParts[i].freight = this.totalFreights;
+        this.exchangeSalesOrderService.selectedParts[i].misc = this.totalCharges;
       });
     }
-    this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+    this.marginSummary = this.exchangeSalesOrderService.getExchangeQuoteHeaderMarginDetails(this.exchangeSalesOrderService.selectedParts, this.marginSummary);
   }
 
-  saveSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    //this.salesOrderService.setTotalFreights(e);
-    this.setFreightsOrCharges();
-    this.updateMarginSummary();
-  }
+  // saveSalesOrderFreightsList(e) {
+  //   this.totalFreights = e;
+  //   this.marginSummary.freightAmount = this.totalFreights;
+  //   //this.salesOrderService.setTotalFreights(e);
+  //   this.setFreightsOrCharges();
+  //   this.updateMarginSummary();
+  // }
 
-  updateSalesOrderFreightsList(e) {
-    this.totalFreights = e;
-    this.marginSummary.freightAmount = this.totalFreights;
-    //this.salesOrderService.setTotalFreights(e);
-    this.setFreightsOrCharges();
-    this.updateMarginSummary();
-  }
+  // updateSalesOrderFreightsList(e) {
+  //   this.totalFreights = e;
+  //   this.marginSummary.freightAmount = this.totalFreights;
+  //   //this.salesOrderService.setTotalFreights(e);
+  //   this.setFreightsOrCharges();
+  //   this.updateMarginSummary();
+  // }
 
-  saveSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    //this.salesOrderService.setTotalCharges(e);
-    this.marginSummary.misc = this.totalCharges;
-    this.setFreightsOrCharges();
-    this.updateMarginSummary();
-  }
+  // saveSalesOrderChargesList(e) {
+  //   this.totalCharges = e;
+  //   //this.salesOrderService.setTotalCharges(e);
+  //   //this.marginSummary.misc = this.totalCharges;
+  //   this.setFreightsOrCharges();
+  //   this.updateMarginSummary();
+  // }
 
-  updateSalesOrderChargesList(e) {
-    this.totalCharges = e;
-    //this.salesOrderService.setTotalCharges(e);
-    this.marginSummary.misc = this.totalCharges;
-    this.setFreightsOrCharges();
-    this.updateMarginSummary();
-  }
+  // updateSalesOrderChargesList(e) {
+  //   this.totalCharges = e;
+  //   //this.salesOrderService.setTotalCharges(e);
+  //   //this.marginSummary.misc = this.totalCharges;
+  //   this.setFreightsOrCharges();
+  //   this.updateMarginSummary();
+  // }
 
   load(managementStructureId: number) {
     this.managementStructureId = managementStructureId;
@@ -1517,7 +1551,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.arraySOStatuslist.push(0);
     }
     this.isSpinnerVisible = true;
-    this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus', 'ExchangeStatusId', 'Name', '', true, 20, this.arraySOStatuslist.join(), this.masterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('ExchangeStatus', 'ExchangeStatusId', 'Name', '', true, 0, this.arraySOStatuslist.join(), 0).subscribe(res => {
       this.soStatusList = res;
       this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       this.isSpinnerVisible = false;
@@ -1532,7 +1566,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
       this.arraySOTypelist.push(0);
     }
     this.isSpinnerVisible = true;
-    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 20, this.arraySOTypelist.join(), 0).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 0, this.arraySOTypelist.join(), 0).subscribe(res => {
       this.soTypeList = res;
       this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       this.isSpinnerVisible = false;
@@ -1915,41 +1949,41 @@ tfoot { display:table-footer-group }
   getChargesList() { }
   getFreightList() { }
   saveExchangeQuoteFreightsList(e) {
-     this.totalFreights = e;
-    // this.marginSummary.freightAmount = this.totalFreights;
-    // this.exchangequoteService.setTotalFreights(e);
-    // this.setFreightsOrCharges();
-    // this.updateMarginSummary();
+    this.totalFreights = e;
+    this.marginSummary.freightAmount = this.totalFreights;
+    this.exchangeSalesOrderService.setTotalFreights(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
   }
 
   updateExchangeQuoteFreightsList(e) {
-     this.totalFreights = e;
-    // this.marginSummary.freightAmount = this.totalFreights;
-    // this.exchangequoteService.setTotalFreights(e);
-    // this.setFreightsOrCharges();
-    // this.updateMarginSummary();
+    this.totalFreights = e;
+    this.marginSummary.freightAmount = this.totalFreights;
+    this.exchangeSalesOrderService.setTotalFreights(e);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
   }
   saveExchangeQuoteChargesList(e) {
     this.modelcharges = e;
-    // this.totalCharges = this.modelcharges.amount;
-    // this.totalcost = this.modelcharges.cost;
-    // this.marginSummary.otherCharges = this.totalCharges;
-    // this.marginSummary.otherCost = this.totalcost;
-    // this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
-    // this.exchangequoteService.setTotalcost(this.modelcharges.cost);
-    // this.setFreightsOrCharges();
-    // this.updateMarginSummary();
+    this.totalCharges = this.modelcharges.amount;
+    this.totalcost = this.modelcharges.cost;
+    this.marginSummary.otherCharges = this.totalCharges;
+    this.marginSummary.otherCost = this.totalcost;
+    this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    this.exchangequoteService.setTotalcost(this.modelcharges.cost);
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
   }
   public modelcharges = { amount: 0, cost: 0 };
   updateExchangeQuoteChargesList(e) {
     this.modelcharges = e;
-    // this.totalCharges = this.modelcharges.amount;
-    // this.totalcost = this.modelcharges.cost;
-    // this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
-    // this.exchangequoteService.setTotalcost(this.modelcharges.cost);
-    // this.marginSummary.otherCharges = this.totalCharges;
-    // this.marginSummary.otherCost = this.totalcost;
-    // this.setFreightsOrCharges();
-    // this.updateMarginSummary();
+    this.totalCharges = this.modelcharges.amount;
+    this.totalcost = this.modelcharges.cost;
+    this.exchangequoteService.setTotalCharges(this.modelcharges.amount);
+    this.exchangequoteService.setTotalcost(this.modelcharges.cost);
+    this.marginSummary.otherCharges = this.totalCharges;
+    this.marginSummary.otherCost = this.totalcost;
+    this.setFreightsOrCharges();
+    this.updateMarginSummary();
   }
 }

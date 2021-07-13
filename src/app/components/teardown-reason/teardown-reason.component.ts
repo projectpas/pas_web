@@ -33,7 +33,7 @@ import { CommonService } from '../../services/common.service';
 /** teardown-reason component*/
 export class TeardownReasonComponent implements OnInit {
 
-    originalData: any=[];
+    originalData: any = [];
     isEdit: boolean = false;
     totalRecords: any;
     pageIndex: number = 0;
@@ -46,7 +46,7 @@ export class TeardownReasonComponent implements OnInit {
     ]
     selectedColumns = this.headers;
     formData = new FormData()
-    @ViewChild('dt',{static:false})
+    @ViewChild('dt', { static: false })
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
@@ -58,7 +58,7 @@ export class TeardownReasonComponent implements OnInit {
     disableSaveForDescriptionmsg: boolean = false;
     currentstatus: string = 'Active';
     new = {
-        teardownTypeId:'',
+        teardownTypeId: '',
         reason: "",
         masterCompanyId: 1,
         isActive: true,
@@ -67,7 +67,7 @@ export class TeardownReasonComponent implements OnInit {
     addNew = { ...this.new };
     selectedRecordForEdit: any;
     viewRowData: any;
-    selectedRowforDelete: any;  
+    selectedRowforDelete: any;
     teadownTypesList: any;
     AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
@@ -78,7 +78,7 @@ export class TeardownReasonComponent implements OnInit {
         private alertService: AlertService,
         private commonService: CommonService,
         public teardownReasonService: TeardownReasonService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
-       
+
     }
 
 
@@ -87,7 +87,7 @@ export class TeardownReasonComponent implements OnInit {
         this.getTearDowntypes();
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-teardown-reason';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
-   
+
     }
 
     getPageCount(totalNoofRecords, pageSize) {
@@ -100,9 +100,9 @@ export class TeardownReasonComponent implements OnInit {
         this.modal.close();
     }
     async getTearDowntypes() {
-        await this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
-          console.log("tearodown types list",res);
-        //   this.teadownTypesList=res;
+        await this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name', 0).subscribe(res => {
+            console.log("tearodown types list", res);
+            //   this.teadownTypesList=res;
             this.teadownTypesList = res.map(x => {
                 return {
                     ...x,
@@ -162,8 +162,8 @@ export class TeardownReasonComponent implements OnInit {
             // const responseData = res[0];            
             // this.originalData = responseData;
 
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
 
             // this.totalRecords = responseData.length;
@@ -173,7 +173,7 @@ export class TeardownReasonComponent implements OnInit {
     changePage(event: { first: any; rows: number }) {
         console.log(event);
         const pageIndex = (event.first / event.rows);
-       
+
         this.pageSize = event.rows;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
@@ -183,8 +183,8 @@ export class TeardownReasonComponent implements OnInit {
         //     this.disableSaveForDescription = false;
         // }
 
-            this.disableSaveForEdit = false;
-     
+        this.disableSaveForEdit = false;
+
     }
     //checkGroupDescriptionExists(field, value) {
     //    console.log(this.selectedRecordForEdit);
@@ -216,16 +216,16 @@ export class TeardownReasonComponent implements OnInit {
     //         this.disableSaveForDescription = false;
     //         this.disableSaveForDescriptionmsg = false;
     //     }
-      
+
     // }
-    selectedDescription(rowData):void {
+    selectedDescription(rowData): void {
         const exists = selectedValueValidate('Reason', rowData, this.selectedRecordForEdit)
 
         this.disableSaveForDescriptionmsg = !exists;
     }
-       
+
     checkGroupDescriptionExists(value) {
-       // alert(value);
+        // alert(value);
         for (let i = 0; i < this.originalData.length; i++) {
 
             if (value == this.originalData[i].Reason) {
@@ -242,14 +242,14 @@ export class TeardownReasonComponent implements OnInit {
         }
 
     }
-  
+
 
     save() {
         const data = {
-            ...this.addNew, createdBy: this.userName, updatedBy: this.userName,           
+            ...this.addNew, createdBy: this.userName, updatedBy: this.userName,
             reason: editValueAssignByCondition('reason', this.addNew.reason)
         };
-        console.log("tearDown add",data);
+        console.log("tearDown add", data);
         if (!this.isEdit) {
             this.teardownReasonService.add(data).subscribe(() => {
                 this.resetForm();
@@ -286,15 +286,15 @@ export class TeardownReasonComponent implements OnInit {
     edit(rowData) {
         console.log(rowData);
         this.isEdit = true;
-       // this.disableSaveGroupId = false;
+        // this.disableSaveGroupId = false;
         this.disableSaveForEdit = true;
         this.disableSaveForDescriptionmsg = false;
 
 
         this.addNew = {
-            ...rowData,        
+            ...rowData,
             reason: getObjectByValue('reason', rowData.reason, this.originalData),
-        };       
+        };
         this.selectedRecordForEdit = { ...this.addNew }
 
     }
@@ -388,97 +388,97 @@ export class TeardownReasonComponent implements OnInit {
         //         // document.getElementById('duplicateRecords').click();
 
         //     })
-       //  }
+        //  }
 
     }
 
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.originalData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.originalData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.originalData = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.originalData = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.originalData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.originalData= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.originalData = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.originalData = newarry;
+            }
         }
-        this.totalRecords = this.originalData.length ;
+        this.totalRecords = this.originalData.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('TeardownReason',
-                'TeardownReasonId', this.restorerecord.teardownReasonId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('TeardownReason',
+            'TeardownReasonId', this.restorerecord.teardownReasonId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.getList();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
 }

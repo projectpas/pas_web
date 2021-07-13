@@ -83,13 +83,13 @@
                                           <div>
                                               <label>
                                                   <input type="checkbox" name="isExpirationDate" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.isExpirationDate">
-                                                  Expiration Date
+                                                  Exp Date
                                               </label>
                                           </div>
                                       </div>
                                        <div class="form-group" *ngIf="sourceEmployee.isExpirationDate">
                                         <!-- <div class="form-group"> -->
-                                           <label>Certification Expiration Date</label>                                         
+                                           <label>Certification Exp Date</label>                                         
                                           <p-calendar [showIcon]="true"  name="expirationDate"
                                           [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                            [(minDate)]="sourceEmployee.certificationDate && sourceEmployee.certificationDate != undefined && sourceEmployee.certificationDate != null  ? sourceEmployee.certificationDate : today"   (ngModelChange)="enableSave()"  [(ngModel)]="sourceEmployee.expirationDate"></p-calendar>

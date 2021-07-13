@@ -153,13 +153,13 @@ export class PolistComponent implements OnInit {
             header: 'PN',
             field: 'partNumber'
         }, {
-            header: 'PN Desc',
+            header: 'PN Description',
             field: 'partDescription'
         }, {
             header: 'ALT/Equiv PN',
             field: 'altEquiPartNumber'
         }, {
-            header: 'ALT/Equiv PN Desc',
+            header: 'ALT/Equiv PN Description',
             field: 'altEquiPartDescription'
         }, {
             header: 'Item Type',
@@ -283,7 +283,7 @@ export class PolistComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
     loadPOStatus() {
-        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description','','',0, 0).subscribe(response => {
+        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description', 0).subscribe(response => {
             this.poStatusList = response;
             this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         }, err => {
@@ -365,7 +365,7 @@ export class PolistComponent implements OnInit {
     }
 
     loadApprovalProcessStatus() {
-        this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', 0).subscribe(response => {
             response.forEach(x => {
                 if (x.label.toUpperCase() == "APPROVED") {
                     this.ApprovedstatusId = x.value;
@@ -764,7 +764,7 @@ export class PolistComponent implements OnInit {
     WarningsList: any;
     WarningListId: any;
     getWarningsList(): void {
-        this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name', 0).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create Purchase Order') {
                     this.WarningListId = element.value;

@@ -71,12 +71,12 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "condition", header: "Condition Type    ", width: "100px" },
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
                 { field: "quantity", header: "Qty Required ", width: "60px" },
-                { field: "quantityReserved", header: "Qty Reserved", width: "60px" },
-                { field: "qtyToBeReserved", header: "Qty To Be Reserved", width: "60px" },
+                { field: "quantityReserved", header: "Qty Resd", width: "60px" },
+                { field: "qtyToBeReserved", header: "Qty To Be Res'd", width: "60px" },
                 { field: "qtyToReserve", header: "Qty Actually Reserving", width: "80px" },
                 //{ field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
-                { field: "quantityOnHand", header: "Qty On Hand", width: "60px" },
-                { field: "quantityAvailable", header: "Qty Available   ", width: "60px" },
+                { field: "quantityOnHand", header: "Qty OH", width: "60px" },
+                { field: "quantityAvailable", header: "Qty Avail ", width: "60px" },
                 { field: "quantityOnOrder", header: "Qty On Order", width: "60px" },
                 { field: "reservedDate", header: "Reserved Date", width: "150px" },
                 { field: "reservedById", header: "Reserved By", width: "150px" }
@@ -91,11 +91,11 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "condition", header: "Condition Type    ", width: "100px" },
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
                 { field: "quantity", header: "Qty Required ", width: "60px" },
-                { field: "quantityReserved", header: "Qty Reserved", width: "60px" },
+                { field: "quantityReserved", header: "Qty Res'd", width: "60px" },
                 //{ field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
                 { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "80px" },
-                { field: "quantityOnHand", header: "Qty On Hand", width: "60px" },
-                { field: "quantityAvailable", header: "Qty Available   ", width: "60px" },
+                { field: "quantityOnHand", header: "Qty OH", width: "60px" },
+                { field: "quantityAvailable", header: "Qty Avail ", width: "60px" },
                 { field: "quantityOnOrder", header: "Qty On Order", width: "60px" },
                 { field: "reservedDate", header: "UnReserved Date", width: "150px" },
                 { field: "reservedById", header: "UnReserved By", width: "150px" }
@@ -248,9 +248,9 @@ export class SalesReserveUnreserveComponent implements OnInit {
 
     savereserveissuesparts(parts) {
         let invalidQty = false;
+        var errmessage = '';
         for (let i = 0; i < parts.length; i++) {
             let selectedItem = parts[i];
-            var errmessage = '';
             if (this.selectedPartActionType == "Reserve" && selectedItem.qtyToReserve > selectedItem.quantityAvailable) {
                 this.isSpinnerVisible = false;
                 invalidQty = true;

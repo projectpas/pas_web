@@ -122,9 +122,9 @@ export class ExchangePartNumberFilterComponent implements OnInit, OnDestroy {
       { field: 'partNumber', header: 'PN Description', width: '200px' },
       { field: 'conditionType', header: 'Condition Type', width: '200px' },
       { field: 'alternatePartNumber', header: 'Alternate PN', width: '200px' },
-      { field: 'qtyAvailable', header: 'Qty Available', width: '200px' },
-      { field: 'qtyOnHand', header: 'Qty On Hand', width: '200px' },
-      { field: 'qtyRequested', header: 'Qty Requested', width: '200px' },
+      { field: 'qtyAvailable', header: 'Qty Avail', width: '200px' },
+      { field: 'qtyOnHand', header: 'Qty OH', width: '200px' },
+      { field: 'qtyRequested', header: 'Qty Req', width: '200px' },
       { field: '', header: 'Actions', width: '100px' },
     ]
   }

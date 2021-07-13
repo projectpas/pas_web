@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Input, OnChanges, ElementRef, ViewEncapsulation } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-declare var $ : any;
+declare var $: any;
 import { CommunicationService } from '../../services/communication.service';
 import { EmployeeService } from '../../../services/employee.service';
 import { CommonService } from '../../../services/common.service'
@@ -19,7 +19,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 })
 
 export class EmailComponent implements OnInit, OnChanges {
-    @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+    @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
     @Input() customerInfoFromSalesQuote: any = {};
     @Input() workOrderId: any;
     @Input() salesQuoteId: any = null;
@@ -65,7 +65,7 @@ export class EmailComponent implements OnInit, OnChanges {
     emailViewData: any = {};
     moduleId: any = 0;
     referenceId: any = 0;
-    @ViewChild("emailQuotePopup",{static:false}) public emailQuotePopup: ElementRef;
+    @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
     pdfPath: any;
     customerContact: any;
     cusContactList: any;
@@ -186,7 +186,7 @@ export class EmailComponent implements OnInit, OnChanges {
                 let content = this.emailQuotePopup;
                 this.getQuotePDF()
                 this.modal = this.modalService.open(content, { size: "sm" });
-              
+
             }
             else if (this.SalesOrderId) {
                 let content = this.emailQuotePopup;
@@ -255,7 +255,7 @@ export class EmailComponent implements OnInit, OnChanges {
                     $('#addNewMemo').modal('hide');
                     this.getAllEmail();
                     // if (this.salesQuoteId) {
-                        this.closeModal();
+                    this.closeModal();
                     // }
                     if (this.fileUploadInput) {
                         this.fileUploadInput.clear();
@@ -419,7 +419,7 @@ export class EmailComponent implements OnInit, OnChanges {
     getAllEmail() {
         //
         this.isSpinnerVisible = true;
-        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.partNo,this.authService.currentUser.masterCompanyId)
+        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.partNo, this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res: any[]) => {
                     this.isSpinnerVisible = false;
@@ -439,7 +439,7 @@ export class EmailComponent implements OnInit, OnChanges {
 
     getAllEmailType() {
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name', this.currentUserMasterCompanyId)
+        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name', 0)
             .subscribe(
                 (res: any[]) => {
                     this.isSpinnerVisible = false;

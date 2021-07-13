@@ -111,13 +111,13 @@ export class AllViewComponent implements OnInit {
       header: 'PN',
       field: 'partNumber'
     }, {
-      header: 'PN Desc',
+      header: 'PN Description',
       field: 'partDescription'
     }, {
       header: 'ALT/Equiv PN',
       field: 'altEquiPartNumber'
     }, {
-      header: 'ALT/Equiv PN Desc',
+      header: 'ALT/Equiv PN Description',
       field: 'altEquiPartDescription'
     }, {
       header: 'Item Type',

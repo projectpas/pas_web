@@ -21,7 +21,7 @@
                 <input class="form-control" (change)="calculateExpiryDate()" type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView"/>
                 </div>
                 <div class="form-group ">
-                <label> Expiration Date <span class="clr-red">*</span></label>
+                <label> Exp Date <span class="clr-red">*</span></label>
                 <p-calendar [showIcon]="true" [(ngModel)]="expirationDate" name="ExpDate" [disabled]="true"></p-calendar>
                 </div>
     
@@ -41,7 +41,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                <label for="customerName">Customer Name
+                <label for="customerName">Cust Name
                 </label>
                 <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly/>
                 </div>

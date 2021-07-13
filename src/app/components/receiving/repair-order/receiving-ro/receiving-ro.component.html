@@ -215,7 +215,7 @@
                                 <!-- <th class="min-width-40"></th> -->
                                 <!-- <th class="min-width-60">Line Num</th> -->
                                 <th>PN <span class="clr-red">*</span></th>
-                                <th colspan="5">PN Desc</th>
+                                <th colspan="5">PN Description</th>
                                 <th>Alt/Equiv</th>
                                 <th>Item Type</th>
                                 <th>Stock Type</th>
@@ -919,7 +919,7 @@
                                                                 type="text" pInputText [maxLength]="200">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Expiration Date</label>
+                                                            <label>Exp Date</label>
                                                             <p-calendar
                                                                 [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
                                                                 class="calendar" [showIcon]="true" appendTo="body"
@@ -949,7 +949,7 @@
                                                                 required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Extended Cost</label>
+                                                            <label>Ext. Cost</label>
                                                             <input class="form-control text-right" type="text" disabled
                                                                 pInputText pKeyFilter="pnum"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost">
@@ -1071,7 +1071,7 @@
                                                         </div>
                                                         
                                                         <div class="form-group">
-                                                            <label>Tag By</label>
+                                                            <label>Tagged By</label>
                                                             <select class="form-control"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSLIndex].taggedByType"
                                                                 #selects="ngModel" [ngModelOptions]="{standalone: true}"
