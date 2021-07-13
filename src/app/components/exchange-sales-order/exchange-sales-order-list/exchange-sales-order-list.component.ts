@@ -93,7 +93,7 @@ export class ExchangeSalesOrderListComponent implements OnInit {
   initColumns() {
     this.headers = [
       { field: "exchangeSalesOrderNumber", header: "Exch SO Num", width: "120px" },
-      { field: "customerName", header: "Customer Name", width: "180px" },
+      { field: "customerName", header: "Cust Name", width: "180px" },
       { field: "customerReference", header: "Customer Ref", width: "130px" },
       { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
       //{ field: "quoteExpireDate", header: "Quote Exp Date", width: "130px" },

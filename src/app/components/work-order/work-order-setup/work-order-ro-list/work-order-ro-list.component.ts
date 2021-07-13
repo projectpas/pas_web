@@ -47,7 +47,7 @@ export class WorkOrderROListComponent implements OnInit {
         { field: 'controlNumber', header: 'Control #' },
         { field: 'controllerId', header: 'Control Id' },
         { field: 'unitCost', header: 'Unit Cost' },
-        { field: 'extendedCost', header: 'Extended Cost' },
+        { field: 'extendedCost', header: 'Ext. Cost' },
         { field: 'currency', header: 'Currency' },
         { field: 'vendorName', header: 'Vendor Name' },
         { field: 'status', header: 'Status' },

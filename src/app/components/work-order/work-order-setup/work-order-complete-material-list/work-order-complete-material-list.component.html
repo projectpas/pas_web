@@ -139,9 +139,9 @@
                                         <th class="text-center"> Cond Type</th>
                                         <th class="text-center width-50"> Stk Type</th>
                                         <th class="text-center width-50" style="width:60px !important">Qty Req</th>
-                                        <th class="text-center width-50" style="width:60px !important">Qty Res</th>
+                                        <th class="text-center width-50" style="width:60px !important">Qty Res'd</th>
                                         <th *ngIf="!isSubWorkOrder && statusId == 2 && enablePickTicket" class="text-center width-50" style="width:60px !important">Qty Picked</th>
-                                        <th class="text-center" style="width:60px !important"> Qty To Be Reserved</th>
+                                        <th class="text-center" style="width:60px !important"> Qty To Be Res'd</th>
                                         <th class="text-center" style="width:60px !important">
                                             <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
                                                 {{ statusId != 5 ? 'Qty Actually Reserving' : 'Qty Actually
@@ -152,14 +152,14 @@
                                             <span class="font-size-10" *ngIf="statusId == 3"> Qty Actually Resver &
                                                 Issue</span>
                                         </th>
-                                        <th class="text-center" style="width:60px !important"> Qty Issued </th>
+                                        <th class="text-center" style="width:60px !important"> Qty Iss'd </th>
                                         <th class="text-center" style="width:60px !important"
-                                            *ngIf="statusId !==2 && statusId !==4"> Qty To Be Issued
+                                            *ngIf="statusId !==2 && statusId !==4"> Qty To Be Iss'd
                                         </th>
                                         <th class="text-center" style="width:60px !important"
-                                            *ngIf="statusId === 2  || statusId === 4"> Qty To Be Issued
+                                            *ngIf="statusId === 2  || statusId === 4"> Qty To Be Iss'd
                                         </th>
-                                        <th class="text-center" style="width:60px !important"> Qty on Hand </th>
+                                        <th class="text-center" style="width:60px !important"> Qty OH </th>
                                         <th class="text-center width-50" style="width:60px !important"> Qty Avail </th>
                                         <th class="text-center" style="width:60px !important"> Qty on Order </th>
                                         <th class="text-center" style="width: 110px !important;"
@@ -665,8 +665,8 @@
                                         <th rowspan="2">Provision</th>
                                         <!-- <th rowspan="2">PO Num </th> -->
                                         <th rowspan="2" class="min-width-60">Qty Req</th>
-                                        <th rowspan="2" class="min-width-60">Qty Res </th>
-                                        <th rowspan="2" class="min-width-60">Qty Iss</th>
+                                        <th rowspan="2" class="min-width-60">Qty Res'd </th>
+                                        <th rowspan="2" class="min-width-60">Qty Iss'd</th>
                                         <th rowspan="2" class="min-width-70">Qty Turned In</th>
                                         <th rowspan="2" class="min-width-60">Qty OH</th>
                                         <th rowspan="2" class="min-width-60">Qty Avail</th>
@@ -681,7 +681,7 @@
                                         <th rowspan="2" class="min-width-70">Cntl ID</th>
                                         <th rowspan="2">Cur</th>
                                         <th rowspan="2" class="min-width-70">Unit Cost</th>
-                                        <th rowspan="2" class="min-width-90">Extended Cost </th>
+                                        <th rowspan="2" class="min-width-90">Ext. Cost </th>
                                         <th rowspan="2">Cost Date</th>
                                         <th rowspan="2" class="min-width-80">PO Num </th>
                                         <th rowspan="2" class="min-width-60">RO Num</th>

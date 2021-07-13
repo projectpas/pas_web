@@ -70,7 +70,7 @@ export class EntityShippingComponent implements OnInit {
         { field: 'exportLicense', header: 'Export License' },
         { field: 'description', header: 'Description' },
         { field: 'startDate', header: 'Start Date' },
-        { field: 'expirationDate', header: 'Expiration Date' },
+        { field: 'expirationDate', header: 'Exp Date' },
         { field: 'amount', header: 'Amount' },
         { field: 'country', header: 'Country' },
         { field: 'createdDate', header: 'Created Date' },

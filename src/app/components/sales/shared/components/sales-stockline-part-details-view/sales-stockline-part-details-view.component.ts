@@ -47,7 +47,7 @@ export class SalesStockLineDetailsViewComponent {
         { field: "controlId", header: "Control Id" },
         { field: "controlNumber", header: "Control Num" },
         { field: "condition", header: "Cond" },
-        { field: "quantityOnHand", header: "Qty On Hand" },
+        { field: "quantityOnHand", header: "Qty OH" },
         { field: "quantityAvailable", header: "Qty Avail" },
         { field: "glAccountName", header: "GL Acct" },
         { field: "unitSalesPrice", header: "Unit Sale Price" },

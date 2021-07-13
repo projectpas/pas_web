@@ -107,7 +107,7 @@ export class SalesOrderBillingComponent implements OnInit {
             { field: "partDescription", header: "PN Description", width: "100px" },
             { field: "qtyToBill", header: "Qty Shipped", width: "110px" },
             { field: "qtyBilled", header: "Qty Billed", width: "90px" },
-            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Rem", width: "90px" },
             { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;
