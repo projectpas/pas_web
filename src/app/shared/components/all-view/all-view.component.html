@@ -3,7 +3,7 @@
 <div class="modal-body">
   <div>
     <div class="card">
-      <div class="card-body" *ngIf="OrderTypes=='Purchase Order'">
+      <div class="card-body" *ngIf="OrderTypes=='Purchase Order' && isPOHeaderView" >
         <div>
           <div class="form-row">
             <div class="col-md-4">
@@ -220,7 +220,7 @@
       </div>
 
       <p-tabView class="pas-tabview" *ngIf="OrderTypes=='Purchase Order'" (onChange)="onChangeTabView($event)">       
-        <p-tabPanel header="Parts List">
+        <p-tabPanel header="Parts List" *ngIf="isPOPartlistView">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align"
           >
             <div class="tableFixHead">  
@@ -363,7 +363,8 @@
             </div>
           </div>
         </p-tabPanel>
-        <p-tabPanel header="Address">
+
+        <p-tabPanel header="Address" *ngIf="isPOAddressView">
           <div class="table-responsive default-bg clear">
             <div class="col-sm-4">
               <h5 class="po-head">Ship To</h5>
@@ -403,7 +404,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel header="Internal Approvers" *ngIf="!poHeaderAdd.isEnforce">
+        <p-tabPanel header="Internal Approvers" *ngIf="!poHeaderAdd.isEnforce && isInternalApproversView" >
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
             <table class="table table-bordered " id="po-table">
@@ -447,7 +448,7 @@
           </div>
         </p-tabPanel>   
 
-        <p-tabPanel header="Approver Process" *ngIf="!poHeaderAdd.isEnforce">
+        <p-tabPanel header="Approver Process" *ngIf="!poHeaderAdd.isEnforce && isPOApproverProcessView">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
                 <table class="table table-bordered">
@@ -566,19 +567,19 @@
           </div>           
         </p-tabPanel>
        
-        <p-tabPanel header="Vendor Capes">
+        <p-tabPanel header="Vendor Capes" *ngIf="isPOVendorCapesView">
            <app-vendor-capes *ngIf="capvendorId > 0 && showVendorCaptab"     
             [vendorId]= "capvendorId"            
             [isViewMode]="isViewMode">
           </app-vendor-capes>
         </p-tabPanel>    
 
-        <p-tabPanel header="Documents">
+        <p-tabPanel header="Documents" *ngIf="isPODocumentsView">
           <app-common-documents [isViewMode]="true" [moduleName]="moduleName" [offLineUpload]="true" [referenceId]="selectedPurchaseOrderId">      
           </app-common-documents>
         </p-tabPanel>
 
-        <p-tabPanel header="Communication">         
+        <p-tabPanel header="Communication" *ngIf="isPOCommunicationView">
           <app-communication [isViewMode]="true"  [idForContact]="vendorIdByParams ? vendorIdByParams :vendorId" [type]="2" [moduleName]="moduleName"  [referenceId]="selectedPurchaseOrderId">            
           </app-communication>
         </p-tabPanel>
@@ -593,7 +594,7 @@
 
       </p-tabView>
 
-      <p-tabView class="pas-tabview" *ngIf="OrderTypes=='Repair Order'" (onChange)="onChangeTabView($event)">       
+      <p-tabView class="pas-tabview" *ngIf="OrderTypes=='Repair Order'" (onChange)="onChangeROTabView($event)">       
         <p-tabPanel header="Parts List">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align"
           >

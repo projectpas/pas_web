@@ -33,6 +33,7 @@ import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StatusEnum } from '../../../../enum/status.enum';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -397,6 +398,22 @@ export class PurchaseSetupComponent implements OnInit {
 	descriptionStatusId: number = 0
 	closingStatusId: number = 0
 	@ViewChild("purchaseOrderPrintPopup", { static: false }) public purchaseOrderPrintPopup: ElementRef;
+	isView:boolean=true;
+    isAddPOheader:boolean=true;
+	isEditPOheader:boolean=true;
+	isViewPopartlist:boolean=true;
+	isAddPopartlist:boolean=true;
+	isUpdatePopartlist:boolean=true;
+	isPrintPopartlist:boolean=true;
+	isViewPoAddress:boolean=true;
+	isAddPoAddress:boolean=true;
+	isUpdatePoAddress:boolean=true;
+	isViewPOApproverProcess:boolean=true;
+	isAddPOApproverProcess:boolean=true;
+	isUpdatePOApproverProcess:boolean=true;
+	isViewVendorCapes:boolean=true;
+	isViewPODocuments:boolean=true;
+	isViewPOCommunication:boolean=true;
 
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
@@ -457,6 +474,23 @@ export class PurchaseSetupComponent implements OnInit {
 		this.canceledStatusId = StatusEnum.Canceled;
 		this.descriptionStatusId = StatusEnum.Description;
 		this.closingStatusId = StatusEnum.Closing;
+
+		this.isAddPOheader = this.authService.checkPermission([ModuleConstants.PO_Header+'.'+PermissionConstants.Add]);
+		this.isEditPOheader = this.authService.checkPermission([ModuleConstants.PO_Header+'.'+PermissionConstants.Update]);
+		this.isViewPopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.View]);
+		this.isAddPopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.Add]);
+		this.isUpdatePopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.Update]);
+		this.isPrintPopartlist = this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.ReportPrint]);
+		this.isViewPoAddress = this.authService.checkPermission([ModuleConstants.PO_Address+'.'+PermissionConstants.View]);
+		this.isAddPoAddress = this.authService.checkPermission([ModuleConstants.PO_Address+'.'+PermissionConstants.Add]);
+		this.isUpdatePoAddress = this.authService.checkPermission([ModuleConstants.PO_Address+'.'+PermissionConstants.Update]);
+		this.isViewPOApproverProcess = this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.View]);
+		this.isAddPOApproverProcess = this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.Add]);
+		this.isUpdatePOApproverProcess = this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.Update]);
+		this.isViewVendorCapes = this.authService.checkPermission([ModuleConstants.PO_Vendor_Capes+'.'+PermissionConstants.View]);
+		this.isViewPODocuments = this.authService.checkPermission([ModuleConstants.PO_Documents+'.'+PermissionConstants.View]);
+	    this.isViewPOCommunication = this.authService.checkPermission([ModuleConstants.PO_Communication+'.'+PermissionConstants.View]);	
+
 	}
 
 	ngOnInit() {
@@ -537,7 +571,9 @@ export class PurchaseSetupComponent implements OnInit {
 					setTimeout(() => {
 						this.isSpinnerVisible = true;
 						this.getVendorPOHeaderById(this.poId);
-						this.getPurchaseOrderAllPartsById(this.poId);
+						if(this.isViewPopartlist) {
+							this.getPurchaseOrderAllPartsById(this.poId);
+						}
 						this.enableHeaderSaveBtn = false;
 						this.isSpinnerVisible = false;
 						setTimeout(() => {
@@ -551,8 +587,6 @@ export class PurchaseSetupComponent implements OnInit {
 					}, 2200);
 				}
 			});
-
-
 		}
 		else {
 			if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
@@ -2202,7 +2236,7 @@ export class PurchaseSetupComponent implements OnInit {
 	getApproversListById(poId) {
 		this.isSpinnerVisible = true;
 		if (this.poApprovaltaskId == 0) {
-			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0).subscribe(response => {
+			this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name', 0,'','',0).subscribe(response => {
 				if (response) {
 					response.forEach(x => {
 						if (x.label.toUpperCase() == "PO APPROVAL") {
@@ -2291,41 +2325,43 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	onChangeTabView(event) {
-		if (event.index == 0) {
+		var a = event.originalEvent.target;
+        var tabName = a.innerText;        
+		if (tabName == 'Parts List') {
 			this.getPurchaseOrderAllPartsById(this.poId);
 			this.enablePartSaveBtn = false;
 		}
-		if (event.index == 1) {
+		if (tabName == 'Address') {
 			this.showAddresstab = true;
 		}
-		if (event.index == 2 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Internal Approvers' && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 		}
-		if (event.index == 3 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Approver Process' && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 			this.getApprovalProcessListById(this.poId);
 			this.enableApproverSaveBtn = false;
 		}
-		if (event.index == 4 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Vendor Capes') {
 			this.showVendorCaptab = true;
 			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
 		}
-		if (event.index == 5 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Documents') {
 			this.showDocumenttab = true;
 		}
-		if (event.index == 6 && this.posettingModel.IsEnforceApproval) {
+		if (tabName == 'Communication') {
 			this.showComunicationtab = true;
 		}
-		if (event.index == 2 && !this.posettingModel.IsEnforceApproval) {
-			this.showVendorCaptab = true;
-			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
-		}
-		if (event.index == 3 && !this.posettingModel.IsEnforceApproval) {
-			this.showDocumenttab = true;
-		}
-		if (event.index == 4 && !this.posettingModel.IsEnforceApproval) {
-			this.showComunicationtab = true;
-		}
+		// if (event.index == 2 && !this.posettingModel.IsEnforceApproval) {
+		// 	this.showVendorCaptab = true;
+		// 	const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+		// }
+		// if (event.index == 3 && !this.posettingModel.IsEnforceApproval) {
+		// 	this.showDocumenttab = true;
+		// }
+		// if (event.index == 4 && !this.posettingModel.IsEnforceApproval) {
+		// 	this.showComunicationtab = true;
+		// }
 
 	}
 
@@ -3225,7 +3261,7 @@ export class PurchaseSetupComponent implements OnInit {
 			});
 	}
 	loadPOApproverStatus() {
-		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, 0).subscribe(response => {
+		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name',0,'','', 0).subscribe(response => {
 			this.poApproverStatusList = response;
 			this.poApproverStatusList = this.poApproverStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		}, err => {

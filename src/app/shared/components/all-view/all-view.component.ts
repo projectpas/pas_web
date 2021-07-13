@@ -21,6 +21,7 @@ import { RepairOrderService } from '../../../services/repair-order.service';
 import { PurchaseOrder, PurchaseOrderPart, StockLine, StockLineDraft, DropDownData, TimeLife, ReceiveParts, TimeLifeDraft } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 import { ManagementStructure } from '../../../components/receiving/po-ro/receivng-po/managementstructure.model';
 import { RepairOrder, RepairOrderPart } from '../../../components/receiving/repair-order/receiving-ro/RepairOrder.model';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
   selector: 'app-all-view',
@@ -137,6 +138,14 @@ export class AllViewComponent implements OnInit {
   ];
   poApproverStatusList: any;
   roApproverStatusList: any;
+  isPOHeaderView:boolean=true;
+  isPOPartlistView:boolean=true;
+  isPOAddressView:boolean=true;
+  isInternalApproversView:boolean=true;
+  isPOApproverProcessView:boolean=true;
+  isPOVendorCapesView:boolean=true;
+  isPODocumentsView:boolean=true;
+  isPOCommunicationView:boolean=true;
 
   constructor(private commonService: CommonService,
     private activeModal: NgbActiveModal,
@@ -148,7 +157,16 @@ export class AllViewComponent implements OnInit {
     private receivingService: ReceivingService,
     private authService: AuthService,
     private route: Router,
-  ) { }
+  ) {
+      this.isPOHeaderView=this.authService.checkPermission([ModuleConstants.PO_Header+'.'+PermissionConstants.View])
+      this.isPOPartlistView=this.authService.checkPermission([ModuleConstants.PO_Partlist+'.'+PermissionConstants.View])  
+      this.isPOAddressView=this.authService.checkPermission([ModuleConstants.PO_Address+'.'+PermissionConstants.View]) 
+      this.isInternalApproversView=this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.View]) 
+      this.isPOApproverProcessView=this.authService.checkPermission([ModuleConstants.PO_Approver_Process+'.'+PermissionConstants.View]) 
+      this.isPOVendorCapesView=this.authService.checkPermission([ModuleConstants.PO_Vendor_Capes+'.'+PermissionConstants.View])
+      this.isPODocumentsView=this.authService.checkPermission([ModuleConstants.PO_Documents+'.'+PermissionConstants.View]) 
+      this.isPOCommunicationView=this.authService.checkPermission([ModuleConstants.PO_Communication+'.'+PermissionConstants.View])  
+   }
 
   ngOnInit() {
     this.selectedPurchaseOrderId = this.OrderId;
@@ -167,9 +185,13 @@ export class AllViewComponent implements OnInit {
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;
       this.getPOViewById(OrderId);
-      this.getPOPartsViewById(OrderId);
-      this.getApproversListById(OrderId);
-      this.getApprovalProcessListById(OrderId);
+      if(this.isPOPartlistView){
+        this.getPOPartsViewById(OrderId);
+      }
+      // if(this.isPOApproverProcessView){
+      //   this.getApproversListById(OrderId);
+      //   this.getApprovalProcessListById(OrderId);
+      // }
       this.tabindex = 0;
     }
     else if (this.OrderTypes == 'Repair Order') {
@@ -188,83 +210,143 @@ export class AllViewComponent implements OnInit {
 
   onChangeTabView(event) {
 
-    if (event.index == 0) {
+    var a = event.originalEvent.target;
+    var tabName = a.innerText;
+    console.log(tabName)
+    if (tabName == 'Parts List') {
       //this.showPartListtab = true;
       //this.getPOPartsViewById(this.OrderId);      
     }
-    if (event.index == 1) {
+    if (tabName == 'Address') {
     }
-    if (event.index == 2) {
+    if (tabName == 'Internal Approvers') {     
+      this.getApproversListById(this.OrderId);
+    }
+    if (tabName == 'Approver Process') {
+      this.getApproversListById(this.OrderId);
+      this.getApprovalProcessListById(this.OrderId);
+      //	this.enableApproverSaveBtn = false;     
+      this.showVendorCaptab = true;
+      //const id = editValueAssignByCondition('vendorId', this.vendorId);
+    }
+    if (tabName == 'Vendor Capes') {
+      //this.showVendorCaptab = true;
+      //const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+      //this.showAddresstab = true;
+      this.id = this.OrderId;
+    }
+    if (tabName == 'Documents') {
       //this.getApproversListById(this.OrderId);
     }
-    if (event.index == 3) {
+    if (tabName == 'Communication') {
+      //this.getApproversListById(this.OrderId);
+    }
+    if (tabName == 'Receiving Draft') {
+      this.showreceiveddraftpo = true;
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
+    }
+    if (tabName == 'Receiving') {
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
+    }
+
+    // if (event.index == 5 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {     
+    //   this.showreceiveddraftpo = true;
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 6 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {    
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
+    //   this.repairOrderId = this.id;
+    //   this.showreceiveddraft = true;
+    //   if (this.repairOrderData.length == 0) {
+    //     this.viewRepairOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
+    //   this.showreceived = true;
+    //   this.repairOrderId = this.id;
+    // }
+    // if (event.index == 7 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {    
+    //   this.showreceiveddraftpo = true;
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 8 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {    
+    //   if (!this.purchaseOrderData) {
+    //     this.viewPurchaseOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 7 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {          
+    //   this.repairOrderId = this.id;
+    //   this.showreceiveddraft = true;
+    //   if (this.repairOrderData.length == 0) {
+    //     this.viewRepairOrder(this.id);
+    //   }
+    // }
+    // if (event.index == 8 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {     
+    //   this.showreceived = true;
+    //   this.repairOrderId = this.id;     
+    // }
+
+  }
+
+  onChangeROTabView(event) {
+
+    var a = event.originalEvent.target;
+    var tabName = a.innerText;
+    
+    if (tabName == 'Parts List') {
+      //this.showPartListtab = true;
+      //this.getPOPartsViewById(this.OrderId);      
+    }
+    if (tabName == 'Address') {
+    }
+    if (tabName == 'Internal Approvers') {
+      //this.getApproversListById(this.OrderId);
+    }
+    if (tabName == 'Approver Process') {
       //	this.getApproversListById(this.OrderId);
       //  this.getApprovalProcessListById(this.OrderId);
       //	this.enableApproverSaveBtn = false;     
       this.showVendorCaptab = true;
-      const id = editValueAssignByCondition('vendorId', this.vendorId);
+      //const id = editValueAssignByCondition('vendorId', this.vendorId);
     }
-    if (event.index == 4) {
+    if (tabName == 'Vendor Capes') {
       //this.showVendorCaptab = true;
       //const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
-      this.showAddresstab = true;
+      //this.showAddresstab = true;
       this.id = this.OrderId;
     }
-    if (event.index == 5 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
-      //this.showDocumenttab = true;
-      this.showreceiveddraftpo = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
+    if (tabName == 'Documents') {
+      //this.getApproversListById(this.OrderId);
     }
-    if (event.index == 6 && this.isReceivingpo == true && this.poHeaderAdd.isEnforce == true) {
-      //this.showComunicationtab = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
+    if (tabName == 'Communication') {
+      //this.getApproversListById(this.OrderId);
     }
-    if (event.index == 5 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
-      this.repairOrderId = this.id;
-      this.showreceiveddraft = true;
-      if (this.repairOrderData.length == 0) {
-        this.viewRepairOrder(this.id);
-      }
+    if (tabName == 'Receiving Draft') {
+        this.repairOrderId = this.id;
+        this.showreceiveddraft = true;
+        if (this.repairOrderData.length == 0) {
+          this.viewRepairOrder(this.id);
+        }
     }
-    if (event.index == 6 && this.isReceivingro == true && this.roHeaderAdd.isEnforce == true) {
-      this.showreceived = true;
-      this.repairOrderId = this.id;
+    if (tabName == 'Receiving') {
+        this.showreceived = true;
+        this.repairOrderId = this.id;
     }
-    if (event.index == 7 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;
-      this.showreceiveddraftpo = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
-    }
-    if (event.index == 8 && this.isReceivingpo == true && !this.poHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;
-      if (!this.purchaseOrderData) {
-        this.viewPurchaseOrder(this.id);
-      }
-    }
-    if (event.index == 7 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){          
-      this.repairOrderId = this.id;
-      this.showreceiveddraft = true;
-      if (this.repairOrderData.length == 0) {
-        this.viewRepairOrder(this.id);
-      }
-    }
-    if (event.index == 8 && this.isReceivingro == true && !this.roHeaderAdd.isEnforce) {
-      //this.isSpinnerVisible = true;      
-      //if(this.repairOrderData.length>0){   
-      this.showreceived = true;
-      this.repairOrderId = this.id;
-      //this.viewRepairOrder(this.id);
-    }
-    //} 
   }
+
+
   parsedText(text) {
     if (text) {
       const dom = new DOMParser().parseFromString(
