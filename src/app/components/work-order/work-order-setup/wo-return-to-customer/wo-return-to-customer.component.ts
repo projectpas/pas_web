@@ -25,8 +25,8 @@ export class WOReturnToCustomerComponent implements OnInit {
         { field: 'stockLineNumber', header: 'Stock Line Number' },
         { field: 'serialNumber', header: 'Serial Number' },
         { field: 'controlId', header: 'Control Id' },
-        { field: 'qtyToReturn', header: 'QTY To Return' },
-        { field: 'qtyReserved', header: 'QTY Reserved' }
+        { field: 'qtyToReturn', header: 'Qty To Return' },
+        { field: 'qtyReserved', header: "Qty Res'd" }
     ];
     moduleName = "Return to customer";
     isView: boolean;

@@ -46,103 +46,103 @@ import {
 })
 /** item-master-capabilities-list component*/
 export class ItemMasterCapabilitiesListComponent implements OnInit {
-  @Input() itemMasterId;
-  @Input() selectedTab: string = "";
-  @Input() partData: any = {};
-  isSpinnerVisible: Boolean = false;
-  activeIndex: number;
-  selectedColumns: any[];
-  isDeleteMode: boolean;
-  isEditMode: boolean;
-  loadingIndicator: boolean;
-  auditHisory: any[];
-  selectedOnly: boolean = false;
-  targetData: any;
-  selectedreason: any;
-  disableSave: boolean = true;
-  allComapnies: MasterCompany[];
-  modal: any;
-  sourceAction: any;
-  isSaving: boolean;
-  allItemMasterCapsList: any[] = [];
-  allItemMasterCapsListDt: any[] = [];
-  selectedColumn: any;
-  getSelectedCollection: any;
-  colaircraft: any[] = [];
-  matSpinner: boolean;
-  local: any;
-  partCollection: any[];
-  itemclaColl: any[];
-  selectedActionName: any;
-  disableSavepartNumber: boolean;
-  sourceItemMasterCap: any = {};
-  disableSavepartDescription: boolean;
-  descriptionbyPart: any[] = [];
-  allPartnumbersInfo: any[];
-  alldashnumberinfo: any[];
-  allManagemtninfo: any[] = [];
-  maincompanylist: any[] = [];
-  //bulist: any[];
-  departmentList: any[];
-  divisionlist: any[] = [];
-  manufacturerData: any[] = [];
-  allAircraftinfo: any[];
-  selectedAircraftTypes: any;
-  selectedAircraftDataModels: any[] = [];
-  enablePopupData: boolean = false;
-  currentVendorModels: any[] = [];
-  selectedModels: any[] = [];
-  allDashnumberInfo: any[];
-  allATAMaininfo1: ATAMain[];
-  assetRecordId: number = 0;
-  selectedManufacturer: any = []; //To Store selected Aircraft Manufacturer Data
-  selectedModel: any = []; //To Store selected Aircraft Modal Data
-  capabilitiesForm: FormGroup;
-  onSelectedId: any;
-  parentManagementInfo: any[] = [];
-  childManagementInfo: any[] = [];
-  partListData: any[] = [];
-  integrationvalues: any[] = [];
-  cmmList: any[];
-  disableSaveMemo: boolean = true;
-  capabilityTypeData: any[];
-  managementStructureData: any = [];
-  isDeleteCapabilityPopupOpened: boolean = false;
-  selectedForDeleteCapabilityId: any;
-  selectedForDeleteContent: any;
-  restorerecord: any = {};
-  capabilityId: any;
-  showCapes: boolean = false;
-  isEnableCapesList: boolean = true;
-  globalSearchData: any = {};
-  pnData: any;
-  capabalityTypeList: any = [];
-  aircraftModelData: any;
-  ataChapterData: any;
-  entityList: any;
-  buData: any;
-  divisionData: any;
-  departmentData: any;
-  @Input() isEnableItemMaster: boolean = false;
-  @Input() isEnableItemMasterView: boolean = false;
-  @ViewChild("addCapabilityButton", { static: false })
-  addCapabilityButton: ElementRef;
-  selectedCapabilityType: any;
-  isCapViewMode: boolean = false;
-  itemMasterCapesPageSize: Number = 10;
-  selectedItemMasterCapData: any = {};
-  legalEntityList: any = [];
-  capabilityauditHisory: AuditHistory[] = [];
-  businessUnitList: any = [];
-  employeeList: any = [];
-  textAreaLabel: string;
-  textAreaInfo: string;
-  currentDeleteStatus: boolean = false;
-  arraylistCapabilityTypeId: any[] = [];
-  arrayEmplsit: any[] = [];
-  disableIsVerified: boolean = false;
-  disableMagmtStruct: boolean = true;
-  allItemMasterCapsListOriginal: any[];
+    @Input() itemMasterId;
+    @Input() selectedTab: string = "";
+    @Input() partData: any = {}
+    isSpinnerVisible: Boolean = false;
+    activeIndex: number;
+    selectedColumns: any[];
+    isDeleteMode: boolean;
+    isEditMode: boolean;
+    loadingIndicator: boolean;
+    auditHisory: any[];
+    selectedOnly: boolean = false;
+    targetData: any;
+    selectedreason: any;
+    disableSave: boolean = true;
+    allComapnies: MasterCompany[];
+    modal: any;
+    sourceAction: any;
+    isSaving: boolean;
+    allItemMasterCapsList: any[] = [];
+    allItemMasterCapsListDt: any[] = [];
+    selectedColumn: any;
+    getSelectedCollection: any;
+    colaircraft: any[] = [];
+    matSpinner: boolean;
+    local: any;
+    partCollection: any[];
+    itemclaColl: any[];
+    selectedActionName: any;
+    disableSavepartNumber: boolean;
+    sourceItemMasterCap: any = {};
+    disableSavepartDescription: boolean;
+    descriptionbyPart: any[] = [];
+    allPartnumbersInfo: any[];
+    alldashnumberinfo: any[];
+    allManagemtninfo: any[] = [];
+    maincompanylist: any[] = [];
+    //bulist: any[];
+    departmentList: any[];
+    divisionlist: any[] = [];
+    manufacturerData: any[] = [];
+    allAircraftinfo: any[];
+    selectedAircraftTypes: any;
+    selectedAircraftDataModels: any[] = [];
+    enablePopupData: boolean = false;
+    currentVendorModels: any[] = [];
+    selectedModels: any[] = [];
+    allDashnumberInfo: any[];
+    allATAMaininfo1: ATAMain[];
+    assetRecordId: number = 0;
+    selectedManufacturer: any = [];//To Store selected Aircraft Manufacturer Data
+    selectedModel: any = [];//To Store selected Aircraft Modal Data
+    capabilitiesForm: FormGroup;
+    onSelectedId: any;
+    parentManagementInfo: any[] = [];
+    childManagementInfo: any[] = [];
+    partListData: any[] = [];
+    integrationvalues: any[] = [];
+    cmmList: any[];
+    disableSaveMemo: boolean = true;
+    capabilityTypeData: any[];
+    managementStructureData: any = [];
+    isDeleteCapabilityPopupOpened: boolean = false;
+    selectedForDeleteCapabilityId: any;
+    selectedForDeleteContent: any;
+    restorerecord: any = {}
+    capabilityId: any;
+    showCapes: boolean = false;
+    isEnableCapesList: boolean = true;
+    globalSearchData: any = {};
+    pnData: any;
+    capabalityTypeList: any = [];
+    aircraftModelData: any;
+    ataChapterData: any;
+    entityList: any;
+    buData: any;
+    divisionData: any;
+    departmentData: any;
+    @Input() isEnableItemMaster: boolean = false;
+    @Input() isEnableItemMasterView: boolean = false;
+    @ViewChild("addCapabilityButton", { static: false }) addCapabilityButton: ElementRef;
+    selectedCapabilityType: any;
+    isCapViewMode: boolean = false;
+    itemMasterCapesPageSize: Number = 10;
+    selectedItemMasterCapData: any = {};
+    legalEntityList: any = [];
+    capabilityauditHisory: AuditHistory[] = [];
+    businessUnitList: any = [];
+    employeeList: any = [];
+    textAreaLabel: string;
+    textAreaInfo: string;
+    currentDeleteStatus: boolean = false;
+    arraylistCapabilityTypeId: any[] = [];
+    arrayEmplsit: any[] = [];
+    disableIsVerified: boolean = false;
+    disableMagmtStruct: boolean = true;
+    allItemMasterCapsListOriginal: any[];
+    currentDate = new Date();
   isAdd: boolean = true;
   isEdit: boolean = true;
   isDownload: boolean = true;
@@ -545,14 +545,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
   }
 
-  openEdits(
-    row //this is for Edit Data get
-  ) {
-    const capData = row;
-    this.arraylistCapabilityTypeId.push(row.capabilityTypeId);
-    this.getCapabilityTypesList();
-    this.arrayEmplsit.push(row.verifiedById == null ? 0 : row.verifiedById);
-    this.getManagementStructureDetails(row.managementStrId, this.employeeId);
+    openEdits(row) //this is for Edit Data get
+    {
+        this.isEditMode=true;
+        const capData = row;
+        this.arraylistCapabilityTypeId.push(row.capabilityTypeId);
+        this.getCapabilityTypesList();
+        this.arrayEmplsit.push(row.verifiedById == null ? 0 : row.verifiedById);
+        this.getManagementStructureDetails(row.managementStrId, this.employeeId);
 
     this.selectedItemMasterCapData = capData;
     this.selectedDepartment(row.levelId4);
@@ -1364,18 +1364,19 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     this.itemMasterService.updateItemMasterCapes(this.selectedItemMasterCapData.itemMasterCapesId, this.selectedItemMasterCapData).subscribe(res => {
       this.selectedItemMasterCapData = {};
 
-      this.loadData();
-      this.alertService.showMessage(
-        'Capes',
-        'Saved Capes Details Successfully',
-        MessageSeverity.success
-      );
-    })
-  }
-
-  onAddCapes() {
-    this.showCapes = true;
-  }
+            this.loadData();
+            this.alertService.showMessage(
+                'Capes',
+                'Saved Capes Details Successfully',
+                MessageSeverity.success
+            );
+        })
+    }
+    isCreate:boolean=false;
+    onAddCapes() {
+        this.showCapes = true;
+        this.isCreate=true;
+    }
 
   onViewCapes(rowData) {
     this.showCapes = true;
@@ -1383,9 +1384,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     //this.getItemMasterDetailsById(rowData.itemMasterId)
   }
 
-  closeCapes() {
-    this.showCapes = false;
-    this.isCapViewMode = false;
+    closeCapes() {
+        this.isCreate=false;
+        this.showCapes = false;
+        this.isCapViewMode = false;
 
     $('#capes1').modal('hide');
   }

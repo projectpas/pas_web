@@ -39,7 +39,7 @@ export class WorkOrderExclusionsComponent implements OnInit, OnChanges {
     { field: 'epnDescription', header: 'EPN Description' },
     { field: 'quantity', header: 'Qty' },
     { field: 'unitCost', header: 'Unit Cost' },
-    { field: 'extendedCost', header: 'Extended Cost' },
+    { field: 'extendedCost', header: 'Ext. Cost' },
     { field: 'memo', header: 'Memo' }
   ];
   exclusionsFlatBillingAmount: any;

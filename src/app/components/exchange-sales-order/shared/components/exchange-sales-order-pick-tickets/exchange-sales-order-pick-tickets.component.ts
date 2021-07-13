@@ -105,7 +105,7 @@ export class ExchangeSalesOrderPickTicketsComponent implements OnInit {
       { field: "status", header: "Status", width: "130px" },
       { field: "exchangeSalesOrderNumber", header: "SO Num", width: "130px" },
       { field: "exchangeQuoteNumber", header: "SOQ Num", width: "130px" },
-      { field: "customerName", header: "Customer Name", width: "130px" },
+      { field: "customerName", header: "Cust Name", width: "130px" },
       { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
     this.selectedColumns = this.headers;
@@ -113,7 +113,7 @@ export class ExchangeSalesOrderPickTicketsComponent implements OnInit {
     this.pickTicketItemInterfaceheader = [
       { field: "partNumber", header: "PN", width: "180px" },
       { field: "stockLineNumber", header: "Stk Line Num", width: "100px" },
-      { field: "qtyOnHand", header: "Qty On Hand", width: "90px" },
+      { field: "qtyOnHand", header: "Qty OH", width: "90px" },
       { field: "qtyAvailable", header: "Qty Avail", width: "70px" },
       { field: "qtyToShip", header: "Qty To Pick", width: "90px" },
       { field: "serialNumber", header: "Serial Num", width: "90px" },

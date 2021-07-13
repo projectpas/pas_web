@@ -173,7 +173,7 @@
                         <input type="text" class="form-control" required name="unitOfMeasureName" [(ngModel)]="currentAsset.unitOfMeasureName" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Expiration Date</label>
+                        <label>Exp Date</label>
                         <p-calendar [showIcon]="true" (ngModelChange)="getmemo($event)"
                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [minDate]="currentAsset.manufacturedDate" name="expirationDate" [(ngModel)]="currentAsset.expirationDate" [disabled]="!currentAsset.manufacturedDate"></p-calendar>
                     </div>

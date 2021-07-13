@@ -48,6 +48,7 @@ export class AllTasks {
   directLaborOHCost:any=0;
   isDeleted:boolean=false;
   markupPercentageId:any="";
+  isEditCondition:boolean=false;
 
   constructor() {
     this.workOrderLaborHeaderId = 0;
@@ -67,6 +68,7 @@ export class AllTasks {
     this.isDeleted=false;
     this.burdaenRatePercentageId=0;
 this.directLaborOHCost='0.00';
+this.isEditCondition=false;
   }
 }
 

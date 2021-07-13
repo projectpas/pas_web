@@ -23,7 +23,7 @@
               <div class="form-row body-alignment">
                   <div class="col-md-3">
                       <div class="form-group">
-                          <label style="height: 15px;">Customer Name
+                          <label style="height: 15px;">Cust Name
                               <span class="clr-red">*</span>
                               <span class="ng-star-inserted color-blue">
                                   <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
@@ -126,7 +126,7 @@
                                                   name="exchangeQuoteNumber" [disabled]="true" />
                                           </div>
                                           <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
-                                              <label>Version Num</label>
+                                              <label>Ver Num</label>
                                               <input type="text" [(ngModel)]="salesQuote.versionNumber"
                                                   name="versionNumber" class="form-control" [disabled]="true"
                                                   id="versionNumber" #versionNumber="ngModel" />
@@ -203,7 +203,7 @@
                                               </div>
                                           </div>
                                           <div class="form-group">
-                                              <label>Customer Name
+                                              <label>Cust Name
                                                   <span class="clr-red">*</span>
                                                   <span class="ng-star-inserted color-blue">
                                                       <a class="btn nobg" (click)="viewSelectedRow()"
@@ -618,6 +618,10 @@
                             <app-exchange-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
                                 [customerDetails]="customerDetails" [salesOrder]="salesQuote">
                             </app-exchange-sales-order-billing>
+                        </p-tabPanel>
+                        <p-tabPanel header="Hypothethical Analysis">
+                            <app-exchange-sales-order-hypo-analysis>
+                            </app-exchange-sales-order-hypo-analysis>
                         </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>

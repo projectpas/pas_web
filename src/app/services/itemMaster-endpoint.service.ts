@@ -1290,7 +1290,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterAltEquiMappingParts(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/getItemMasterAltEquiMappingParts?itemMasterId=${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/getItemMasterAltEquiMappingParts?itemMasterId=${id}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterAltEquiMappingParts(id));
             });
@@ -1305,7 +1305,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     }
 
     getItemMasterNonStockDataById(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/GetNonStockDataById/${id}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/GetNonStockDataById/${id}` , this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterNonStockDataById(id));
             });

@@ -58,39 +58,39 @@ import { formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplet
     selector: 'app-item-master-non-stock',
     templateUrl: './item-master-non-stock.component.html',
     styleUrls: ['./item-master-non-stock.component.scss'],
-	providers: [DatePipe]
+    providers: [DatePipe]
 })
 
 /** item-master-non-stock component*/
 export class ItemMasterNonStockComponent {
-	modelValue: boolean = false;
-	display: boolean = false;
-	disableSaveglAccount: boolean;
-	disableSaveItemClassficationCode: boolean;
-	selectedItemCode: any;
-	selectdescription: any;
-	disableSaveItemGroup: boolean;
-	selectedItemGroup: any;
-	disableSaveManufacturer: boolean;
-	public sourceActions: any = {};
-	selectedManufacturer: any;
-	disableSavePurchaseUOM: boolean;
-	disableSavepartNumber: boolean;
-	selectedPurchaseUOM: any;
-	disableSavePartName: boolean;
-	disableSaveCusCode: boolean;
-	selectedActionName: any;
+    modelValue: boolean = false;
+    display: boolean = false;
+    disableSaveglAccount: boolean;
+    disableSaveItemClassficationCode: boolean;
+    selectedItemCode: any;
+    selectdescription: any;
+    disableSaveItemGroup: boolean;
+    selectedItemGroup: any;
+    disableSaveManufacturer: boolean;
+    public sourceActions: any = {};
+    selectedManufacturer: any;
+    disableSavePurchaseUOM: boolean;
+    disableSavepartNumber: boolean;
+    selectedPurchaseUOM: any;
+    disableSavePartName: boolean;
+    disableSaveCusCode: boolean;
+    selectedActionName: any;
     showLable: boolean;
     collectionofItemMaster: any;
     partCollection: any[];
-	allPartnumbersInfo: any[];
-	itemdescription: any[] = [];
-	descriptionCollection: any[];
+    allPartnumbersInfo: any[];
+    itemdescription: any[] = [];
+    descriptionCollection: any[];
     partNumber: any;
     name: string;
     // itemValue= [];
-	glAccountcla: any[];
-	glAccountCollection: any[];
+    glAccountcla: any[];
+    glAccountCollection: any[];
     localmanufacturer: any[];
     sourcemanufacturer: any = {};
     allManufacturerInfo: any[];
@@ -98,15 +98,15 @@ export class ItemMasterNonStockComponent {
     localunit: any;
     sourceUOM: UnitOfMeasure;
     unitName: string;
-	allUnitOfMeasureinfo: any[];
+    allUnitOfMeasureinfo: any[];
     localCollection: any[];
-	itemNonStockClassificationCode: any; 
+    itemNonStockClassificationCode: any;
     purchaseUnitOfMeasureId: any;
     disabletypeSave: boolean;
     localNameCollection: any[];
-    classnamecolle: any[]=[];
+    classnamecolle: any[] = [];
     localtypeCollection: any[];
-    classificationtypecolle: any[]=[];
+    classificationtypecolle: any[] = [];
     disableClassdesc: boolean;
     className: string;
     itemTypeName: string;
@@ -121,7 +121,7 @@ export class ItemMasterNonStockComponent {
 
 
     /** item-master-non-stock ctor */
-    constructor(private router: Router, private glAccountService: GlAccountService,public unitService: UnitOfMeasureService, private authService: AuthService, private modalService: NgbModal, public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService, public currency: CurrencyService, public priority: PriorityService, public inteService: IntegrationService, public workFlowtService: ItemClassificationService, public itemservice: ItemGroupService, public proService: ProvisionService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService ,private _actRoute: ActivatedRoute, private commonService: CommonService, private datePipe: DatePipe) {
+    constructor(private router: Router, private glAccountService: GlAccountService, public unitService: UnitOfMeasureService, private authService: AuthService, private modalService: NgbModal, public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService, public currency: CurrencyService, public priority: PriorityService, public inteService: IntegrationService, public workFlowtService: ItemClassificationService, public itemservice: ItemGroupService, public proService: ProvisionService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private _actRoute: ActivatedRoute, private commonService: CommonService, private datePipe: DatePipe) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
         this.sourceAction = new ItemClassificationModel();
@@ -134,7 +134,7 @@ export class ItemMasterNonStockComponent {
     }
 
 
-	allglAccountInfo: any[];
+    allglAccountInfo: any[];
     allCurrencyInfo: any[];
     localpriority: any[];
     priorityName: string;
@@ -158,17 +158,17 @@ export class ItemMasterNonStockComponent {
     updatedDate: any = "";
     auditHisory: AuditHistory[];
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     displayedColumns = ['itemclassificationId', 'itemNonStockClassificationCode', 'description', 'memo'];
     dataSource: MatTableDataSource<ItemClassificationModel>;
     allComapnies: MasterCompany[] = [];
     allitemgroupobjInfo: any[] = [];
     private isSaving: boolean;
     public sourceAction: any;
-	descriptionbyPart: any[] = [];
+    descriptionbyPart: any[] = [];
     public sourceItem: Itemgroup;
-	public sourceprovision: Provision;
+    public sourceprovision: Provision;
     public sourcepriority: Priority;
     public sourceatamain: ATAMain;
     private bodyText: string;
@@ -193,7 +193,7 @@ export class ItemMasterNonStockComponent {
         this.CurrencyData();
         this.unitofmeasure();
         this.manufacturerdata();
-		this.ptnumberlistdata();
+        this.ptnumberlistdata();
         this.glList();
         this.itemNonStockclassification();
         this.getDefaultCurrency();
@@ -204,15 +204,15 @@ export class ItemMasterNonStockComponent {
         this.itemMasterId = this._actRoute.snapshot.params['id'];
         if (this.itemMasterId !== undefined) {
             this.isEdit = true;
-            this.getItemMasterDetailsById(this.itemMasterId);        
+            this.getItemMasterDetailsById(this.itemMasterId);
         }
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-	}
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
     getItemMasterDetailsById(id) {
         this.itemser.getItemMasterNonStockDataById(id).subscribe(res => {
@@ -230,7 +230,7 @@ export class ItemMasterNonStockComponent {
                 purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'description'),
                 currencyId: this.getInactiveObjectOnEdit('value', res.currencyId, this.allCurrencyInfo, 'Currency', 'CurrencyId', 'Code'),
             };
-            if(this.sourceItemMaster.currencyId == null || this.sourceItemMaster.currencyId == undefined) {
+            if (this.sourceItemMaster.currencyId == null || this.sourceItemMaster.currencyId == undefined) {
                 this.sourceItemMaster.currencyId = this.defaultCurrencyId;
             }
             this.isSpinnerVisible = false;
@@ -238,9 +238,9 @@ export class ItemMasterNonStockComponent {
             this.isSpinnerVisible = false;
         })
     }
-    
+
     getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
-        if(id) {
+        if (id) {
             if (originalData) {
                 for (let i = 0; i < originalData.length; i++) {
                     if (originalData[i][string] == id) {
@@ -249,32 +249,32 @@ export class ItemMasterNonStockComponent {
                 }
             }
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
-            obj = res[0];
-            if(tableName == 'ItemClassification') {
-                this.allitemNonStockclassificationInfo = [...originalData, obj];
-            }
-            else if(tableName == 'ItemGroup') {
-                this.allitemgroupobjInfo = [...originalData, obj];
-            }
-            else if(tableName == 'Manufacturer') {
-                this.allManufacturerInfo = [...originalData, obj];
-            }
-            else if(tableName == 'Discount') {
-                this.discDataList = [...originalData, obj];
-            }
-            else if(tableName == 'GLAccount') {
-                this.allGlInfo = [...originalData, obj];
-            }
-            else if(tableName == 'UnitOfMeasure') {
-                this.allUnitOfMeasureinfo = [...originalData, obj];
-            }            
-            else if(tableName == 'Currency') {
-                this.allCurrencyInfo = [...originalData, obj];
-            }
-        });
-        return id;
-    } else {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id, this.authService.currentUser.masterCompanyId).subscribe(res => {
+                obj = res[0];
+                if (tableName == 'ItemClassification') {
+                    this.allitemNonStockclassificationInfo = [...originalData, obj];
+                }
+                else if (tableName == 'ItemGroup') {
+                    this.allitemgroupobjInfo = [...originalData, obj];
+                }
+                else if (tableName == 'Manufacturer') {
+                    this.allManufacturerInfo = [...originalData, obj];
+                }
+                else if (tableName == 'Discount') {
+                    this.discDataList = [...originalData, obj];
+                }
+                else if (tableName == 'GLAccount') {
+                    this.allGlInfo = [...originalData, obj];
+                }
+                else if (tableName == 'UnitOfMeasure') {
+                    this.allUnitOfMeasureinfo = [...originalData, obj];
+                }
+                else if (tableName == 'Currency') {
+                    this.allCurrencyInfo = [...originalData, obj];
+                }
+            });
+            return id;
+        } else {
             return null;
         }
     }
@@ -295,7 +295,7 @@ export class ItemMasterNonStockComponent {
 
     getDefaultCurrency() {
         this.legalEntityId = 19;
-        this.commonService.getDefaultCurrency(this.legalEntityId,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getDefaultCurrency(this.legalEntityId, this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.defaultCurrencyId = res.currencyId;
             this.sourceItemMaster.currencyId = res.currencyId;
         })
@@ -303,19 +303,19 @@ export class ItemMasterNonStockComponent {
 
     private manufacturerdata() {
         //this.commonService.smartDropDownWithStatusList('Manufacturer', 'manufacturerId', 'name', '', 1, 0).subscribe(res => {
-        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'manufacturerId', 'name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
-            this.allManufacturerInfo= res;
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'manufacturerId', 'name', '', false, 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
+            this.allManufacturerInfo = res;
         })
-    }    
+    }
 
     async getDiscountTableData() {
-          await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('Discount', 'DiscountId', 'DiscontValue', '', '', 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
             this.discDataList = res;
-            this.discDataList.sort(function(a, b) {
+            this.discDataList.sort(function (a, b) {
                 return parseFloat(a.label) - parseFloat(b.label);
             });
-            for(let i = 0; i< this.discDataList.length; i++){
-                if(this.discDataList[i].label == 0.00){
+            for (let i = 0; i < this.discDataList.length; i++) {
+                if (this.discDataList[i].label == 0.00) {
                     this.discDataList[i].value = 0;
                 }
             }
@@ -323,13 +323,13 @@ export class ItemMasterNonStockComponent {
     }
 
     getItemTypeList() {
-        this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemType', 'ItemTypeId', 'Description', '', false, 0, '0', 0).subscribe(res => {
             res.map(x => {
-                if(x.label == 'Non-Stock') {
+                if (x.label == 'Non-Stock') {
                     this.currentItemTypeId = x.value;
                 }
             });
-            if(!this.isEdit) {
+            if (!this.isEdit) {
                 this.isSpinnerVisible = false;
             }
         }, err => {
@@ -338,31 +338,31 @@ export class ItemMasterNonStockComponent {
     }
 
     private ptnumberlistdata() {
-        this.itemser.getActivePartListByItemType('nonstock',this.currentUserMasterCompanyId).subscribe(res => {
+        this.itemser.getActivePartListByItemType('nonstock', this.currentUserMasterCompanyId).subscribe(res => {
             this.allPartnumbersInfo = res;
         })
     }
 
     filterUnitOfMeasures(event) {
 
-		this.localunit = [];
-		if (this.allUnitOfMeasureinfo) {
-			for (let i = 0; i < this.allUnitOfMeasureinfo.length; i++) {
-				let unitName = this.allUnitOfMeasureinfo[i].description;
-				if (unitName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-					this.localunit.push(unitName);
-				}
-			}
-		}
+        this.localunit = [];
+        if (this.allUnitOfMeasureinfo) {
+            for (let i = 0; i < this.allUnitOfMeasureinfo.length; i++) {
+                let unitName = this.allUnitOfMeasureinfo[i].description;
+                if (unitName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                    this.localunit.push(unitName);
+                }
+            }
+        }
     }
 
 
     private CurrencyData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', false, 0, '0', this.currentUserMasterCompanyId).subscribe(
             results => this.oncurrencySuccessful(results),
-            error => {this.loadingIndicator=false;}
+            error => { this.loadingIndicator = false; }
         );
     }
 
@@ -372,81 +372,81 @@ export class ItemMasterNonStockComponent {
         this.loadingIndicator = false;
         this.allCurrencyInfo = getList;
     }
-    
+
     private itemgroup() {
         //this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
-            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'ItemGroupCode','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
-                this.allitemgroupobjInfo = res;           
+        this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'ItemGroupCode', '', false, 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
+            this.allitemgroupobjInfo = res;
         })
     }
 
-	eventHandler(event) {
-		if (event.target.value != "") {
-			let value = event.target.value.toLowerCase();
-			if (this.selectedActionName) {
-				if (value == this.selectedActionName.toLowerCase()) {
-					this.disableSavePartName = true;
-				}
-				else {
-					this.disableSavePartName = false;
-				}
-			}
+    eventHandler(event) {
+        if (event.target.value != "") {
+            let value = event.target.value.toLowerCase();
+            if (this.selectedActionName) {
+                if (value == this.selectedActionName.toLowerCase()) {
+                    this.disableSavePartName = true;
+                }
+                else {
+                    this.disableSavePartName = false;
+                }
+            }
 
-		}
+        }
     }
 
     saveItemNonStockclass() {
 
-		this.isSaving = true;
+        this.isSaving = true;
 
-		if (this.isEditMode == false) {
-			this.sourceAction.createdBy = this.userName;
-			this.sourceAction.updatedBy = this.userName;
-			this.sourceAction.itemNonStockClassificationCode = this.itemName;
-			this.sourceAction.description = this.className;
-			this.sourceAction.itemType = this.itemTypeName;
-			this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
+        if (this.isEditMode == false) {
+            this.sourceAction.createdBy = this.userName;
+            this.sourceAction.updatedBy = this.userName;
+            this.sourceAction.itemNonStockClassificationCode = this.itemName;
+            this.sourceAction.description = this.className;
+            this.sourceAction.itemType = this.itemTypeName;
+            this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.itemser.newNonstockClass(this.sourceAction).subscribe(data => {
                 this.itemNonStockclassification();
                 this.sourceItemMaster.itemNonStockClassificationId = data.itemNonStockClassificationId;
-			})
+            })
         }
-	
+
         else {
 
             this.sourceAction.updatedBy = this.userName;
             this.sourceAction.itemNonStockClassificationCode = this.itemName;
-			this.sourceAction.description = this.className;
-			this.sourceAction.itemType = this.itemTypeName;
+            this.sourceAction.description = this.className;
+            this.sourceAction.itemType = this.itemTypeName;
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.itemser.updateNonstockClass(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error =>{this.isSpinnerVisible = false});
+                error => { this.isSpinnerVisible = false });
         }
 
         this.modal.close();
-	}
+    }
 
 
-	saveitemgroup() {
+    saveitemgroup() {
 
         this.isSaving = true;
 
         if (this.isEditMode == false) {
-			this.sourceItem.createdBy = this.userName;
-			this.sourceItem.updatedBy = this.userName;
-			this.sourceItem.itemGroupCode = this.itemGroupName;
-			this.sourceItem.masterCompanyId = this.currentUserMasterCompanyId;
-			this.itemservice.newAction(this.sourceItem).subscribe(data => { this.itemgroup()})
+            this.sourceItem.createdBy = this.userName;
+            this.sourceItem.updatedBy = this.userName;
+            this.sourceItem.itemGroupCode = this.itemGroupName;
+            this.sourceItem.masterCompanyId = this.currentUserMasterCompanyId;
+            this.itemservice.newAction(this.sourceItem).subscribe(data => { this.itemgroup() })
         }
         else {
 
-			this.sourceItem.updatedBy = this.userName;
-			this.sourceItem.itemGroupCode = this.itemGroupName;
-			this.sourceItem.masterCompanyId = this.currentUserMasterCompanyId;
-			this.itemservice.updateAction(this.sourceItem).subscribe(
-				response => this.saveCompleted(this.sourceItem),
-                error =>{this.isSpinnerVisible = false});
+            this.sourceItem.updatedBy = this.userName;
+            this.sourceItem.itemGroupCode = this.itemGroupName;
+            this.sourceItem.masterCompanyId = this.currentUserMasterCompanyId;
+            this.itemservice.updateAction(this.sourceItem).subscribe(
+                response => this.saveCompleted(this.sourceItem),
+                error => { this.isSpinnerVisible = false });
         }
 
         this.modal.close();
@@ -458,8 +458,8 @@ export class ItemMasterNonStockComponent {
 
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error =>{this.isSpinnerVisible = false});
-        
+            error => { this.isSpinnerVisible = false });
+
 
     }
 
@@ -488,16 +488,16 @@ export class ItemMasterNonStockComponent {
 
         this.isEditMode = false;
         this.isDeleteMode = false;
-		this.disabletypeSave = false;
-		this.disableClassdesc = false;
-		this.disableSaveItemClassficationCode = false;
+        this.disabletypeSave = false;
+        this.disableClassdesc = false;
+        this.disableSaveItemClassficationCode = false;
         this.isSaving = true;
         this.loadMasterCompanies();
         this.sourceAction = new ItemClassificationModel();
         this.sourceAction.isActive = true;
-		this.itemName = "";
-		this.className = "";
-		this.itemTypeName = "";
+        this.itemName = "";
+        this.className = "";
+        this.itemTypeName = "";
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -564,7 +564,7 @@ export class ItemMasterNonStockComponent {
         this.integrationName = "";
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-       
+
 
     openDelete(content, row) {
 
@@ -575,16 +575,16 @@ export class ItemMasterNonStockComponent {
     }
 
     openEdit(content, row) {
-		this.disabletypeSave = false;
-		this.disableClassdesc = false;
-		this.disableSaveItemClassficationCode = false;
+        this.disabletypeSave = false;
+        this.disableClassdesc = false;
+        this.disableSaveItemClassficationCode = false;
         this.isEditMode = true;
         this.isSaving = true;
         this.loadMasterCompanies();
         this.sourceAction = row;
-		this.itemName = this.sourceAction.itemNonStockClassificationCode;
-		this.className = this.sourceAction.description;
-		this.itemTypeName = this.sourceAction.itemType;
+        this.itemName = this.sourceAction.itemNonStockClassificationCode;
+        this.className = this.sourceAction.description;
+        this.itemTypeName = this.sourceAction.itemType;
         this.loadMasterCompanies();
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
@@ -601,197 +601,197 @@ export class ItemMasterNonStockComponent {
     }
 
 
-	ItemHandler(event) {
+    ItemHandler(event) {
         this.disableSaveItemClassficationCode = false;
-		if (event.target.value != "") {
+        if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
-            for(let i=0; i < this.allitemNonStockclassificationInfo.length; i++) {
-                if(this.allitemNonStockclassificationInfo[i].itemNonStockClassificationCode.toLowerCase() == value) {
+            for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
+                if (this.allitemNonStockclassificationInfo[i].itemNonStockClassificationCode.toLowerCase() == value) {
                     this.disableSaveItemClassficationCode = true;
                     break;
-                }else {
-					this.disableSaveItemClassficationCode = false;
-				}
+                } else {
+                    this.disableSaveItemClassficationCode = false;
+                }
             }
-		}
+        }
     }
 
 
-	ItemClassficationCode(event) {
+    ItemClassficationCode(event) {
         if (this.allitemNonStockclassificationInfo) {
 
             for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
                 if (event == this.allitemNonStockclassificationInfo[i].itemNonStockClassificationCode) {
                     this.sourceItemMaster.itemNonStockClassificationCode = this.allitemNonStockclassificationInfo[i].itemNonStockClassificationCode;
-					this.disableSaveItemClassficationCode = true;
+                    this.disableSaveItemClassficationCode = true;
 
-					this.selectedItemCode = event;
-				}
+                    this.selectedItemCode = event;
+                }
 
-			}
-		}
+            }
+        }
     }
 
 
     partdescriptionId(event) {
 
-		if (this.itemclaColl) {
+        if (this.itemclaColl) {
             for (let i = 0; i < this.itemclaColl.length; i++) {
 
-				if (event == this.itemclaColl[i][0].description) {
-					this.sourceItemMaster.description = this.itemclaColl[i][0].description;
-					this.disableSavepartDescription = true;
+                if (event == this.itemclaColl[i][0].description) {
+                    this.sourceItemMaster.description = this.itemclaColl[i][0].description;
+                    this.disableSavepartDescription = true;
                     this.selectdescription = event;
                 }
-			}
-		}
+            }
+        }
     }
 
 
-	descriptionHandler(event) {
-		if (event.target.value != "") {
-			let value = event.target.value.toLowerCase();
-			if (this.selectedActionName) {
-				if (value == this.selectedActionName.toLowerCase()) {
-					this.disableSavepartDescription = true;
-				}
-				else {
-					this.disableSavepartDescription = false;
-				}
-			}
-		}
+    descriptionHandler(event) {
+        if (event.target.value != "") {
+            let value = event.target.value.toLowerCase();
+            if (this.selectedActionName) {
+                if (value == this.selectedActionName.toLowerCase()) {
+                    this.disableSavepartDescription = true;
+                }
+                else {
+                    this.disableSavepartDescription = false;
+                }
+            }
+        }
     }
 
 
-	filterdescription(event) {
+    filterdescription(event) {
         this.descriptionCollection = [];
-		this.itemdescription = [];
-		if (this.allPartnumbersInfo) {
-			if (this.allPartnumbersInfo.length > 0) {
+        this.itemdescription = [];
+        if (this.allPartnumbersInfo) {
+            if (this.allPartnumbersInfo.length > 0) {
 
-				for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-					let partDescription = this.allPartnumbersInfo[i].partDescription;
-					if (partDescription) {
-						this.descriptionCollection.push(partDescription);
-					}
-				}
-			}
+                for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
+                    let partDescription = this.allPartnumbersInfo[i].partDescription;
+                    if (partDescription) {
+                        this.descriptionCollection.push(partDescription);
+                    }
+                }
+            }
         }
         this.descriptionCollection = this.descriptionCollection.filter((el, i, a) => i === a.indexOf(el));
     }
 
 
-	ItemGroupHandler(event) {
-       
+    ItemGroupHandler(event) {
+
     }
 
-	itemGroupCode(event) {
-		
-	}
+    itemGroupCode(event) {
 
-
-	ManufacturerHandler(event) {
-		if (event.target.value != "") {
-			let value = event.target.value.toLowerCase();
-			if (this.selectedManufacturer) {
-				if (value == this.selectedManufacturer.toLowerCase()) {
-					this.disableSaveManufacturer = true;
-
-				}
-				else {
-					this.disableSaveManufacturer = false;
-
-				}
-			}
-
-		}
     }
 
 
-	Manufacturerdescription(event) {
-		if (this.allManufacturerInfo) {
+    ManufacturerHandler(event) {
+        if (event.target.value != "") {
+            let value = event.target.value.toLowerCase();
+            if (this.selectedManufacturer) {
+                if (value == this.selectedManufacturer.toLowerCase()) {
+                    this.disableSaveManufacturer = true;
 
-			for (let i = 0; i < this.allManufacturerInfo.length; i++) {
-				if (event == this.allManufacturerInfo[i].name) {
-					this.sourcemanufacturer.name = this.allManufacturerInfo[i].name;
-					this.disableSaveManufacturer = true;
+                }
+                else {
+                    this.disableSaveManufacturer = false;
 
-					this.selectedManufacturer = event;
-				}
+                }
+            }
 
-			}
-		}
-	}
-    
-	PurchaseUOMHandler(event) {
-		if (event.target.value != "") {
-			let value = event.target.value.toLowerCase();
-			if (this.selectedPurchaseUOM) {
-				if (value == this.selectedPurchaseUOM.toLowerCase()) {
-					this.disableSavePurchaseUOM = true;
-				}
-				else {
-					this.disableSavePurchaseUOM = false;
-
-				}
-			}
-
-		}
+        }
     }
 
 
-	PurchaseUOMdescription(event) {
-		if (this.allUnitOfMeasureinfo) {
-			for (let i = 0; i < this.allUnitOfMeasureinfo.length; i++) {
-				if (event == this.allUnitOfMeasureinfo[i].description) {
-					this.sourcemanufacturer.description = this.allUnitOfMeasureinfo[i].description;
-					this.disableSavePurchaseUOM = true;
+    Manufacturerdescription(event) {
+        if (this.allManufacturerInfo) {
 
-					this.selectedPurchaseUOM = event;
-				}
+            for (let i = 0; i < this.allManufacturerInfo.length; i++) {
+                if (event == this.allManufacturerInfo[i].name) {
+                    this.sourcemanufacturer.name = this.allManufacturerInfo[i].name;
+                    this.disableSaveManufacturer = true;
 
-			}
-		}
+                    this.selectedManufacturer = event;
+                }
+
+            }
+        }
+    }
+
+    PurchaseUOMHandler(event) {
+        if (event.target.value != "") {
+            let value = event.target.value.toLowerCase();
+            if (this.selectedPurchaseUOM) {
+                if (value == this.selectedPurchaseUOM.toLowerCase()) {
+                    this.disableSavePurchaseUOM = true;
+                }
+                else {
+                    this.disableSavePurchaseUOM = false;
+
+                }
+            }
+
+        }
+    }
+
+
+    PurchaseUOMdescription(event) {
+        if (this.allUnitOfMeasureinfo) {
+            for (let i = 0; i < this.allUnitOfMeasureinfo.length; i++) {
+                if (event == this.allUnitOfMeasureinfo[i].description) {
+                    this.sourcemanufacturer.description = this.allUnitOfMeasureinfo[i].description;
+                    this.disableSavePurchaseUOM = true;
+
+                    this.selectedPurchaseUOM = event;
+                }
+
+            }
+        }
     }
 
 
     filterItems(event) {
-       
+
         this.localCollection = [];
         this.itemclaColl = [];
         if (this.allitemNonStockclassificationInfo) {
             for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
                 let itemName = this.allitemNonStockclassificationInfo[i].itemNonStockClassificationCode;
-				if (itemName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-					this.itemclaColl.push([{
+                if (itemName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                    this.itemclaColl.push([{
                         "itemNonStockClassificationId": this.allitemNonStockclassificationInfo[i].itemNonStockClassificationId,
-						"itemName": itemName
-					}]),
+                        "itemName": itemName
+                    }]),
 
-						this.localCollection.push(itemName);
-				}
-			}
-		}
-	}
+                        this.localCollection.push(itemName);
+                }
+            }
+        }
+    }
 
-	
+
 
     filterItemgroups(event) {
 
     }
-    
+
 
     filterintegrations(event) {
 
-		this.localintegration = [];
-		if (this.allIntegrationInfo) {
-			for (let i = 0; i < this.allIntegrationInfo.length; i++) {
-				let integrationName = this.allIntegrationInfo[i].description;
-				if (integrationName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-					this.localintegration.push(integrationName);
-				}
-			}
-		}
+        this.localintegration = [];
+        if (this.allIntegrationInfo) {
+            for (let i = 0; i < this.allIntegrationInfo.length; i++) {
+                let integrationName = this.allIntegrationInfo[i].description;
+                if (integrationName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                    this.localintegration.push(integrationName);
+                }
+            }
+        }
     }
 
 
@@ -803,7 +803,7 @@ export class ItemMasterNonStockComponent {
             this.sourceAction.isActive == false;
             this.workFlowtService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error =>{this.isSpinnerVisible = false});
+                error => { this.isSpinnerVisible = false });
         }
         else {
             this.sourceAction = rowData;
@@ -812,7 +812,7 @@ export class ItemMasterNonStockComponent {
             this.sourceAction.isActive == true;
             this.workFlowtService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error =>{this.isSpinnerVisible = false});
+                error => { this.isSpinnerVisible = false });
         }
     }
 
@@ -830,7 +830,7 @@ export class ItemMasterNonStockComponent {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
         //this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'description', '', 1, 0).subscribe(res => {
-        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', false, 0, '0', this.currentUserMasterCompanyId).subscribe(res => {
             this.allUnitOfMeasureinfo = res;
         })
     }
@@ -850,33 +850,33 @@ export class ItemMasterNonStockComponent {
     saveunitofmeasure() {
         this.isSaving = true;
         if (this.isEditMode == false) {
-			this.sourceUOM.createdBy = this.userName;
-			this.sourceUOM.updatedBy = this.userName;
-			this.sourceUOM.description = this.unitName;
-			this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
+            this.sourceUOM.createdBy = this.userName;
+            this.sourceUOM.updatedBy = this.userName;
+            this.sourceUOM.description = this.unitName;
+            this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
             this.unitService.newUnitOfMeasure(this.sourceUOM).subscribe(data => { this.unitofmeasure() })
         }
         else {
 
-			this.sourceUOM.updatedBy = this.userName;
-			this.sourceUOM.description = this.unitName;
-			this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
+            this.sourceUOM.updatedBy = this.userName;
+            this.sourceUOM.description = this.unitName;
+            this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
             this.unitService.updateUnitOfMeasure(this.sourceUOM).subscribe(
                 response => this.saveCompleted(this.itemgroup),
-                error =>{this.isSpinnerVisible = false});
+                error => { this.isSpinnerVisible = false });
         }
 
-         this.modal.close();
+        this.modal.close();
     }
 
 
     captureId(event) {
-		if (this.itemclaColl) {
-			for (let i = 0; i < this.itemclaColl.length; i++) {
-				if (event == this.itemclaColl[i][0].itemName) {
-					this.sourceItemMaster.itemClassificationId = this.itemclaColl[i][0].itemClassificationId;
-				}
-			}
+        if (this.itemclaColl) {
+            for (let i = 0; i < this.itemclaColl.length; i++) {
+                if (event == this.itemclaColl[i][0].itemName) {
+                    this.sourceItemMaster.itemClassificationId = this.itemclaColl[i][0].itemClassificationId;
+                }
+            }
         }
     }
 
@@ -894,33 +894,33 @@ export class ItemMasterNonStockComponent {
             this.sourceItemMaster.listPrice = this.sourceItemMaster.listPrice ? parseFloat(this.sourceItemMaster.listPrice.toString().replace(/\,/g, '')) : 0;
             this.sourceItemMaster.itemGroupId === undefined || this.sourceItemMaster.itemGroupId === null || this.sourceItemMaster.itemGroupId === '' ? this.sourceItemMaster.itemGroupId = 0 : this.sourceItemMaster.itemGroupId;
             this.sourceItemMaster.discountPurchasePercent = this.sourceItemMaster.discountPurchasePercent ? parseFloat(this.sourceItemMaster.discountPurchasePercent.toString().replace(/\,/g, '')) : 0;
-			if (!this.isEdit) {
-				this.sourceItemMaster.isActive = true;				
-				this.sourceItemMaster.itemNonStockClassificationCode = this.itemName;				
+            if (!this.isEdit) {
+                this.sourceItemMaster.isActive = true;
+                this.sourceItemMaster.itemNonStockClassificationCode = this.itemName;
                 //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
                 this.sourceItemMaster.itemTypeId = 2;
                 this.itemser.saveItemMasterNonStock(this.sourceItemMaster).subscribe(data => {
-					this.collectionofItemMaster = data;
-					this.itemser.listStock = true;
-					this.itemser.listNonstock = false;
-					this.itemser.listEquipment = false;
-					this.savesuccessCompleted(this.sourceItemMaster);
+                    this.collectionofItemMaster = data;
+                    this.itemser.listStock = true;
+                    this.itemser.listNonstock = false;
+                    this.itemser.listEquipment = false;
+                    this.savesuccessCompleted(this.sourceItemMaster);
                     this.router.navigate(['/itemmastersmodule/itemmasterpages/app-item-master-list'], { queryParams: { type: '2' } });
-				})
-			}
-			else {
+                })
+            }
+            else {
 
                 //this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
                 this.sourceItemMaster.itemTypeId = 2
-				this.sourceItemMaster.itemNonStockClassificationCode = this.itemName;                        
-				this.itemser.updateNonStockItemMaster(this.sourceItemMaster).subscribe(
-					response => {
+                this.sourceItemMaster.itemNonStockClassificationCode = this.itemName;
+                this.itemser.updateNonStockItemMaster(this.sourceItemMaster).subscribe(
+                    response => {
                         this.alertService.showMessage("Success", `Action was updated successfully`, MessageSeverity.success);
                         this.router.navigate(['/itemmastersmodule/itemmasterpages/app-item-master-list'], { queryParams: { type: '2' } });
                     },
-					error =>{this.isSpinnerVisible = false});
-			}
-		}      
+                    error => { this.isSpinnerVisible = false });
+            }
+        }
     }
 
 
@@ -929,7 +929,7 @@ export class ItemMasterNonStockComponent {
         this.sourceAction.updatedBy = this.userName;
         this.workFlowtService.deleteAcion(this.sourceAction.itemClassificationId).subscribe(
             response => this.saveCompleted(this.sourceAction),
-            error =>{this.isSpinnerVisible = false});
+            error => { this.isSpinnerVisible = false });
         this.modal.close();
     }
 
@@ -973,11 +973,11 @@ export class ItemMasterNonStockComponent {
     openHelpText(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    
 
-	private savesuccessCompleted(user?: any) {
-		this.isSaving = false;
-		this.alertService.showMessage("Success", `Action was saved successfully`, MessageSeverity.success);
+
+    private savesuccessCompleted(user?: any) {
+        this.isSaving = false;
+        this.alertService.showMessage("Success", `Action was saved successfully`, MessageSeverity.success);
     }
 
 
@@ -1001,16 +1001,16 @@ export class ItemMasterNonStockComponent {
             return 'by clicking on a backdrop';
         } else {
             return `with: ${reason}`;
-        }       
+        }
     }
 
     // Temporery Item Master Radiuo Route
-   public stock() {
+    public stock() {
         this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
     }
 
     public nonStock() {
-		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-non-stock');
+        this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-non-stock');
 
     }
     public equipment() {
@@ -1025,29 +1025,29 @@ export class ItemMasterNonStockComponent {
 
 
     saveManufacturer() {
-		this.isSaving = true;
-		if (this.isEditMode == false) {
-			this.sourcemanufacturer.masterCompanyId = this.currentUserMasterCompanyId;
-			this.sourceAction.updatedBy = this.userName;
-			this.sourceAction.description = this.integrationName;
-			this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
-			this.itemser.savemanufacutrer(this.sourcemanufacturer).subscribe(data => { this.manufacturerdata() })
+        this.isSaving = true;
+        if (this.isEditMode == false) {
+            this.sourcemanufacturer.masterCompanyId = this.currentUserMasterCompanyId;
+            this.sourceAction.updatedBy = this.userName;
+            this.sourceAction.description = this.integrationName;
+            this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
+            this.itemser.savemanufacutrer(this.sourcemanufacturer).subscribe(data => { this.manufacturerdata() })
 
-		}
-		else {
+        }
+        else {
 
-			this.sourceAction.updatedBy = this.userName;
-			this.sourceAction.description = this.integrationName;
-			this.inteService.updateAction(this.sourcemanufacturer).subscribe(
-				response => this.saveCompleted(this.sourceAction),
-				error =>{this.isSpinnerVisible = false});
-		}
+            this.sourceAction.updatedBy = this.userName;
+            this.sourceAction.description = this.integrationName;
+            this.inteService.updateAction(this.sourcemanufacturer).subscribe(
+                response => this.saveCompleted(this.sourceAction),
+                error => { this.isSpinnerVisible = false });
+        }
 
-		this.modal.close();
-	}
-    
+        this.modal.close();
+    }
 
-	
+
+
     filtermanufacturer(event) {
 
         this.localmanufacturer = [];
@@ -1074,46 +1074,46 @@ export class ItemMasterNonStockComponent {
     partnmId(event) {
         for (let i = 0; i < this.itemclaColl.length; i++) {
             if (event == this.itemclaColl[i][0].partName) {
-				this.sourceItemMaster.partId = this.itemclaColl[i][0].partId;
-				this.disableSavePartName = true;
-			
-				this.selectedActionName = event;
+                this.sourceItemMaster.partId = this.itemclaColl[i][0].partId;
+                this.disableSavePartName = true;
+
+                this.selectedActionName = event;
             }
-		}
-		this.itemser.getDescriptionbypart(event).subscribe(
-			results => this.onpartnumberloadsuccessfull(results[0]),
-            error =>{this.isSpinnerVisible = false}
-            );
-		
-		this.disableSavepartDescription = true;
+        }
+        this.itemser.getDescriptionbypart(event).subscribe(
+            results => this.onpartnumberloadsuccessfull(results[0]),
+            error => { this.isSpinnerVisible = false }
+        );
+
+        this.disableSavepartDescription = true;
     }
 
 
-	private onpartnumberloadsuccessfull(allWorkFlows: any[]) {
+    private onpartnumberloadsuccessfull(allWorkFlows: any[]) {
 
 
-		this.descriptionbyPart = allWorkFlows[0]
-		this.sourceActions = this.descriptionbyPart;
-		this.sourceItemMaster.partdescription = allWorkFlows[0].partDescription;
+        this.descriptionbyPart = allWorkFlows[0]
+        this.sourceActions = this.descriptionbyPart;
+        this.sourceItemMaster.partdescription = allWorkFlows[0].partDescription;
     }
 
     filterpartItems(event) {
         this.partCollection = [];
-		this.itemclaColl = [];
-		if (this.allPartnumbersInfo) {
-			for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-				let partName = this.allPartnumbersInfo[i].partNumber;
-				if (partName) {
-					if (partName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-						this.itemclaColl.push([{
-							"partId": this.allPartnumbersInfo[i].partId,
-							"partName": partName
-						}]),
+        this.itemclaColl = [];
+        if (this.allPartnumbersInfo) {
+            for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
+                let partName = this.allPartnumbersInfo[i].partNumber;
+                if (partName) {
+                    if (partName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                        this.itemclaColl.push([{
+                            "partId": this.allPartnumbersInfo[i].partId,
+                            "partName": partName
+                        }]),
 
-							this.partCollection.push(partName);
-					}
-				}
-			}
+                            this.partCollection.push(partName);
+                    }
+                }
+            }
         }
     }
 
@@ -1132,88 +1132,88 @@ export class ItemMasterNonStockComponent {
     // }
 
 
-	classificationId(event) {
+    classificationId(event) {
         if (this.allitemNonStockclassificationInfo) {
             for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
                 if (event == this.allitemNonStockclassificationInfo[i].description) {
-					this.disableClassdesc = true;
-					this.selectedActionName = event;
-				}
-			}
-		}
+                    this.disableClassdesc = true;
+                    this.selectedActionName = event;
+                }
+            }
+        }
     }
 
 
-	classificationtypeId(event) {
+    classificationtypeId(event) {
         if (this.allitemNonStockclassificationInfo) {
             for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
                 if (event == this.allitemNonStockclassificationInfo[i].itemType) {
-					this.disabletypeSave = true;
-					this.selectedActionName = event;
-				}
-			}
-		}
+                    this.disabletypeSave = true;
+                    this.selectedActionName = event;
+                }
+            }
+        }
     }
 
 
-	filterItemNames(event) {
+    filterItemNames(event) {
 
-		this.localNameCollection = [];
+        this.localNameCollection = [];
         if (this.allitemNonStockclassificationInfo) {
             for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
                 let className = this.allitemNonStockclassificationInfo[i].description;
-				if (className.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                if (className.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
                     this.classnamecolle.push([{
                         "itemNonStockClassificationId": this.allitemNonStockclassificationInfo[i].itemNonStockClassificationId,
-						"className": className
-					}]),
-						this.localNameCollection.push(className);
-				}
-			}
-		}
+                        "className": className
+                    }]),
+                        this.localNameCollection.push(className);
+                }
+            }
+        }
     }
 
 
-	filterItemtypes(event) {
+    filterItemtypes(event) {
 
-		this.localtypeCollection = [];
+        this.localtypeCollection = [];
         if (this.allitemNonStockclassificationInfo) {
             for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
                 let itemTypeName = this.allitemNonStockclassificationInfo[i].itemType;
-				if (itemTypeName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-					this.classificationtypecolle.push([{
+                if (itemTypeName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                    this.classificationtypecolle.push([{
                         "itemNonStockClassificationId": this.allitemNonStockclassificationInfo[i].itemNonStockClassificationId,
-						"itemTypeName": itemTypeName
-					}]),
-						this.localtypeCollection.push(itemTypeName);
-				}
-			}
-		}
+                        "itemTypeName": itemTypeName
+                    }]),
+                        this.localtypeCollection.push(itemTypeName);
+                }
+            }
+        }
     }
 
 
-	classeventHandler(event) {
+    classeventHandler(event) {
         this.disableClassdesc = false;
         let value = event.target.value.toLowerCase();
-        for(let i=0; i < this.allitemNonStockclassificationInfo.length; i++) {
-            if(this.allitemNonStockclassificationInfo[i].description.toLowerCase() == value) {
+        for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
+            if (this.allitemNonStockclassificationInfo[i].description.toLowerCase() == value) {
                 this.disableClassdesc = true;
                 break;
-            }else {
+            } else {
                 this.disableClassdesc = false;
             }
         }
     }
 
 
-	classeventtypeHandler(event) {
+    classeventtypeHandler(event) {
         this.disabletypeSave = false;
         let value = event.target.value.toLowerCase();
-        for(let i=0; i < this.allitemNonStockclassificationInfo.length; i++) {
-            if(this.allitemNonStockclassificationInfo[i].itemType.toLowerCase() == value) {
+        for (let i = 0; i < this.allitemNonStockclassificationInfo.length; i++) {
+            if (this.allitemNonStockclassificationInfo[i].itemType.toLowerCase() == value) {
                 this.disabletypeSave = true;
                 break;
-            }else {
+            } else {
                 this.disabletypeSave = false;
             }
         }
@@ -1222,7 +1222,7 @@ export class ItemMasterNonStockComponent {
     private itemNonStockclassification() {
         this.itemser.getItemMasterClassificationByType('nonstock', this.currentUserMasterCompanyId).subscribe(res => {
             this.allitemNonStockclassificationInfo = res;
-         })
+        })
     }
 
     onClearPN() {

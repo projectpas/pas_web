@@ -167,7 +167,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     getAllTearDownTypes() {
-        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name', this.authService.currentUser.masterCompanyId, '', '', 0)
+        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name', 0, '', '', 0)
             .subscribe(
                 res => {
                     this.tearDownTypes = res;
@@ -188,7 +188,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                 ...res[0]
             };
             this.isSpinnerVisible = false;
-         
+
             this.loadSiteData('');
             this.loadConditionData('');
             if (this.receivingForm.defaultSiteId) {
@@ -389,7 +389,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description', this.authService.currentUser.masterCompanyId, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description', 0, '', '', 0).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }
@@ -522,7 +522,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.allShelfs = [];
         this.allBins = [];
         if (locationId != 0) {
-            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name',this.authService.currentUser.masterCompanyId, 'LocationId',  locationId, 0).subscribe(res => {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', this.authService.currentUser.masterCompanyId, 'LocationId', locationId, 0).subscribe(res => {
                 this.allShelfs = res.map(x => {
                     return {
                         shelfId: x.value,

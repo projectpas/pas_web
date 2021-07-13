@@ -61,7 +61,7 @@ export class SalesCustomerApprovalsComponent {
         { field: 'customerApprovedDate', header: 'Customer Approved Date', width: "100px" },
         { field: 'customerApprovedBy', header: 'Customer Approved By', width: "100px" },
         { field: 'partNumber', header: 'PN', width: "100px" },
-        { field: 'partDescription', header: 'PN Desc', width: "110px" },
+        { field: 'partDescription', header: 'PN Description', width: "110px" },
         { field: 'qtyQuoted', header: 'Qty', width: "90px" },
         // { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
         // { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
@@ -79,7 +79,7 @@ export class SalesCustomerApprovalsComponent {
         { field: 'customerApprovedDate', header: 'Customer Approved Date', width: "100px" },
         { field: 'customerApprovedBy', header: 'Customer Approved By', width: "100px" },
         { field: 'partNumber', header: 'PN', width: "100px" },
-        { field: 'partDescription', header: 'PN Desc', width: "110px" },
+        { field: 'partDescription', header: 'PN Description', width: "110px" },
         { field: 'qtyQuoted', header: 'Qty', width: "90px" },
         { field: 'netSales', header: 'Net Sales', width: "90px" },
         { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
@@ -172,7 +172,7 @@ export class SalesCustomerApprovalsComponent {
         if (this.arrayApprovalStatuslst.length == 0) {
             this.arrayApprovalStatuslst.push(0);
         }
-        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0),
+        forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 0, this.arrayApprovalStatuslst.join(), 0),
             this.salesQuoteService.approverslistbyTaskId(ApprovalTaskEnum.SalesQuoteApproval, this.salesQuoteId),
             this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId),
             this.salesQuoteService.getAllSalesOrderQuoteSettings(this.masterCompanyId)).subscribe(response => {
@@ -236,7 +236,7 @@ export class SalesCustomerApprovalsComponent {
         if (this.arrayApprovalStatuslst.length == 0) {
             this.arrayApprovalStatuslst.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), 0).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 0, this.arrayApprovalStatuslst.join(), 0).subscribe(res => {
             this.statusList = res.map(x => {
                 return {
                     ...x,

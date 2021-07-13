@@ -383,9 +383,13 @@
                 </div>
                 <div *ngIf="toggle_po_header">
 
-                    <button class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
-                        [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">{{isEditModeHeader ? 'Update'
-                        : 'Save'}}</button>
+                    <button *ngIf="isAddPOheader && !isEditModeHeader" class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
+                        [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">Save
+                    </button>
+
+                    <button *ngIf="isEditPOheader && isEditModeHeader" class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader(poConfirm)"
+                        [disabled]="!createPOForm.valid" [disabled]="!enableHeaderSaveBtn">Update
+                    </button>
                 </div>
             </div>
         </div>
@@ -395,12 +399,12 @@
 
 <ng-container *ngIf="isEditModeHeader">
     <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">
-        <p-tabPanel header="Parts List">
+        <p-tabPanel header="Parts List" *ngIf="isViewPopartlist">
             <form #createPOPartsForm="ngForm">
-                <button (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>                
-                <button data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
+                <button *ngIf="isAddPopartlist" (click)="addPartNumber()" class="btn btn-primary" [disabled]="disableAddPart">Add PN</button>                
+                <button *ngIf="isAddPopartlist" data-toggle="modal" data-target="#add-multiple-partnum" class="btn btn-primary"
                     (click)="onAddMultParts()" [disabled]="disableAddPart">Add Multiple PN</button>
-                <button (click)="initiatePOPrintProcess()" class="btn btn-primary">Print</button>
+                <button  *ngIf="isPrintPopartlist" (click)="initiatePOPrintProcess()" class="btn btn-primary">Print</button>
                 <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
                     style="min-height: 130px !important;">
                     <div class="tableFixHead">
@@ -1129,16 +1133,19 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-primary pull-right" (click)="savePurchaseOrderPartsList(poQty)"
-                        [disabled]="!enablePartSaveBtn">{{isEditModePart ? 'Update' : 'Save'}}</button>
+                    <button *ngIf="!isEditModePart && isAddPopartlist" class="btn btn-primary pull-right" (click)="savePurchaseOrderPartsList(poQty)"
+                        [disabled]="!enablePartSaveBtn">Save</button>
+
+                    <button *ngIf="isEditModePart && isUpdatePopartlist" class="btn btn-primary pull-right" (click)="savePurchaseOrderPartsList(poQty)"
+                        [disabled]="!enablePartSaveBtn">Update</button>
                 </div>
             </form>
         </p-tabPanel>
-        <p-tabPanel header="Address">
+        <p-tabPanel header="Address" *ngIf="isViewPoAddress">
             <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="id">
             </app-address-component>
         </p-tabPanel>
-        <p-tabPanel *ngIf="posettingModel.IsEnforceApproval" header="Internal Approvers">
+        <p-tabPanel *ngIf="posettingModel.IsEnforceApproval && isViewPOApproverProcess" header="Internal Approvers">
             <div class="approver-tab-cstm">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
@@ -1182,7 +1189,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel *ngIf="posettingModel.IsEnforceApproval" class="pas-tabpanel-po" header="Approver Process">
+        <p-tabPanel *ngIf="posettingModel.IsEnforceApproval && isViewPOApproverProcess" class="pas-tabpanel-po" header="Approver Process">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                 <div class="tableFixHead">
                     <table class="table table-bordered">
@@ -1351,10 +1358,10 @@
                     </table>
                 </div>
             </div>
-            <button class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
+            <button class="btn btn-primary pull-right" *ngIf="isAddPOApproverProcess || isUpdatePOApproverProcess" (click)="saveApprovalProcess()"
                 [disabled]="!enableApproverSaveBtn">Submit</button>
         </p-tabPanel>
-        <p-tabPanel header="Vendor Capes">
+        <p-tabPanel header="Vendor Capes" *ngIf="isViewVendorCapes">
             <!-- <app-vendor-capabilities-list 
             *ngIf="capvendorId > 0 && showVendorCaptab"          
             [vendorId]="capvendorId"
@@ -1364,12 +1371,12 @@
                 [isViewMode]="isViewMode">
             </app-vendor-capes>
         </p-tabPanel>
-        <p-tabPanel header="Documents">
+        <p-tabPanel header="Documents" *ngIf="isViewPODocuments">
             <app-common-documents *ngIf="showDocumenttab" [isViewMode]="false" [moduleName]="moduleName"
                 [offLineUpload]="true" [referenceId]="id">
             </app-common-documents>
         </p-tabPanel>
-        <p-tabPanel header="Communication">
+        <p-tabPanel header="Communication" *ngIf="isViewPOCommunication">
             <app-communication [isViewMode]="false" *ngIf="showComunicationtab"
                 [idForContact]="vendorIdByParams ? vendorIdByParams :vendorId" [type]="2" [moduleName]="moduleName"
                 [referenceId]="id"></app-communication>

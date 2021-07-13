@@ -80,6 +80,21 @@ export class ModuleConstants
         static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
         static Asset_Inventory_List :string  = "Asset_Inventory_List";
         static Asset_Inventory_Create :string  = "Asset_Inventory_Create";
+
+        static PurchaseOrder:string = "PurchaseOrder";
+        static POList:string = "POList";
+        static PO_Header:string = "PO_Header";
+        static PO_Partlist:string = "PO_Partlist";
+        static PO_Address:string = "PO_Address";   
+        static PO_Approver_Process:string = "PO_Approver_Process";
+        static PO_Vendor_Capes:string = "PO_Vendor_Capes";
+        static PO_Documents:string = "PO_Documents";
+        static PO_Communication:string = "PO_Communication";
+
+        static ReceivingCustomerList :string  = "ReceivingCustomerList";
+        static ReceivingCustomer :string  = "ReceivingCustomer";
+        static ReceivingCustomer_GeneralInformation :string  = "ReceivingCustomer_GeneralInformation";
+        static ReceivingCustomer_Document :string  = "ReceivingCustomer_Document";
 }
 
 export class PermissionConstants
