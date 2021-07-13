@@ -132,8 +132,7 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     }
 
     getAllExchangeQuoteAnalysis<T>(id): Observable<T> {
-      let endPointUrl = `${this.getExchangeQuoteAnalysis}/${id}`;;
-  
+      let endPointUrl = `${this.getExchangeQuoteAnalysis}/${id}`;
       return this.http.get<T>(endPointUrl, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getAllExchangeQuoteAnalysis(id));
