@@ -103,8 +103,8 @@ export class ExchangeSalesOrderPickTicketsComponent implements OnInit {
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
       { field: "readyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
-      { field: "exchangeSalesOrderNumber", header: "SO Num", width: "130px" },
-      { field: "exchangeQuoteNumber", header: "SOQ Num", width: "130px" },
+      { field: "exchangeSalesOrderNumber", header: "Exch SO Num", width: "130px" },
+      { field: "exchangeQuoteNumber", header: "EQ Num", width: "130px" },
       { field: "customerName", header: "Customer Name", width: "130px" },
       { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
