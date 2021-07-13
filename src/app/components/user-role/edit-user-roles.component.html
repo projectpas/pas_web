@@ -113,8 +113,7 @@
                                                  <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
                                               </td>
                                               <td style="text-align:center;" *ngFor="let permission of permissionMaster; index as i">
-                                                 <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" [disabled]="permission.permissionID == 2 && module.rolePermission.isDisabled"/> 
-                                                 <!-- [ngClass]="permission.permissionID == 2 && module.rolePermission.isDisabled ?'disabled-pointer' :''" -->
+                                                 <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" [disabled]="(permission.permissionID == 2 && module.rolePermission.isDisabled) || (module.rolePermission.isAddDisabled && permission.permissionID == 1)"/> 
                                               </td>
                                              
                                            </tr>
