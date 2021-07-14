@@ -1412,7 +1412,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.allAircraftsGet = allWorkFlows;
         this.currentItemMasterModels = allWorkFlows;//All Models Data which has for Current Item Master Id
         this.allCurrentItemMasterModels = allWorkFlows;
-        if (this.allAircraftsGet.length > 0) {
+        if (this.allAircraftsGet && this.allAircraftsGet.length > 0) {
             this.enablePlus = true;
             this.allAircraftinfo = JSON.parse(JSON.stringify(this.allAircraftsGet));
             this.isDeleteMode = false;
@@ -6159,5 +6159,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.selectedAircraftModel=undefined;
         this.selectAircraftManfacturer=undefined; 
         this.getAircraftMappedDataByItemMasterId();
+    }
+    clearSerchData(){
+        this.selectedATAchapter=undefined;
+        this.selectedATASubChapter=undefined;
+        this.getATAMappedDataByItemMasterId();
     }
 }
