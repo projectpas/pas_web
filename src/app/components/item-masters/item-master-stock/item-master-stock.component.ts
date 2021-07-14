@@ -3174,7 +3174,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     searchByFieldUrlCreateforAircraftInformation() {
-        if (this.selectAircraftManfacturer.length > 0) {
+        if (this.selectAircraftManfacturer && this.selectAircraftManfacturer.length > 0) {
             const aircraftTypeIds = this.selectAircraftManfacturer.reduce(
                 (acc, value) => {
                     return `${acc},${value}`;
@@ -3186,7 +3186,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.aircraftManfacturerIdsUrl = '';
         }
 
-        if (this.selectedAircraftModel.length > 0) {
+        if (this.selectedAircraftModel && this.selectedAircraftModel.length > 0) {
             const aircraftModelIds = this.selectedAircraftModel.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
@@ -3194,7 +3194,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         } else {
             this.aircraftModelsIdUrl = '';
         }
-        if (this.selectedDashNumbers.length > 0) {
+        if (this.selectedDashNumbers && this.selectedDashNumbers.length > 0) {
             const dashNumberIds = this.selectedDashNumbers.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
