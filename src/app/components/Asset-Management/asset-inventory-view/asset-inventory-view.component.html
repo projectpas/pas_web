@@ -186,7 +186,7 @@
                     <input type="text" class="form-control" name="unitOfMeasureName" [(ngModel)]="currentAsset.unitOfMeasureName" disabled>
                 </div>
                 <div class="form-group">
-                    <label>Expiration Date</label>
+                    <label>Exp Date</label>
                     <p-calendar [showIcon]="true"  name="expirationDate" [(ngModel)]="currentAsset.expirationDate" [disabled]="true"></p-calendar>
                 </div>
                 <div class="form-group">
@@ -194,7 +194,7 @@
                     <input type="text" class="form-control" name="asset_LocationName" [(ngModel)]="currentAsset.asset_LocationName" disabled>
                 </div>
                 <div class="form-group">
-                    <label>Currency <span class="clr-red">*</span></label>
+                    <label>Curr <span class="clr-red">*</span></label>
                     <input type="text" class="form-control" name="currencyName" [(ngModel)]="currentAsset.currencyName" disabled>
                 </div>
                 <div class="form-group">
@@ -393,7 +393,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                    <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                     <input type="text" class="form-control" name="calibrationCurrencyName" [(ngModel)]="currentAsset.calibrationCurrencyName" disabled>
                 </div>
             </div>
@@ -508,7 +508,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                    <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                     <input type="text" class="form-control" name="certificationCurrencyName" [(ngModel)]="currentAsset.certificationCurrencyName" disabled>
                 </div>
             </div>
@@ -570,7 +570,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                    <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                     <input type="text" class="form-control" name="inspectionCurrencyName" [(ngModel)]="currentAsset.inspectionCurrencyName" disabled>
                 </div>
             </div>
@@ -632,7 +632,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                    <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                     <input type="text" class="form-control" name="verificationCurrencyName" [(ngModel)]="currentAsset.verificationCurrencyName" disabled>
                 </div>
             </div>

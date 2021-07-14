@@ -393,7 +393,7 @@
                                             <span class="label"><b>Manufactured Date: </b></span><span class="value">{{assetViewList.manufacturedDate | date: 'MM/dd/yyyy'}}</span>
                                         </p>
                                         <p>
-                                            <span class="label"><b>Expiration Date: </b></span><span class="value">{{assetViewList.expirationDate | date: 'MM/dd/yyyy'}}</span>
+                                            <span class="label"><b>Exp Date: </b></span><span class="value">{{assetViewList.expirationDate | date: 'MM/dd/yyyy'}}</span>
                                         </p>
                                         <p>
                                             <span class="label"><b>Model Number: </b></span><span class="value">{{assetViewList.model}}</span>
@@ -408,7 +408,7 @@
                                             <span class="label"><b>UOM: <span class="text-danger">*</span> </b></span><span class="value">{{assetViewList.unitOfMeasureName}}</span>
                                         </p>
                                         <p>
-                                            <span class="label"><b>Currency:  <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.currency}}</span>
+                                            <span class="label"><b>Curr:  <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.currency}}</span>
                                         </p>
                                         <p>
                                             <span class="label"><b>Unit Cost: </b></span><span class="value">{{assetViewList.unitCost}}</span>
@@ -630,7 +630,7 @@
                                             <span class="label"><b>Default Cost: </b></span><span class="value">&nbsp;{{assetViewList.calibrationDefaultCost}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.calibrationRequired">
-                                            <span class="label"><b>Currency: <span class="text-danger" *ngIf="assetViewList.calibrationDefaultCost !=0">*</span></b></span><span class="value">&nbsp;{{assetViewList.calibrationCurrencyName}}</span>
+                                            <span class="label"><b>Curr: <span class="text-danger" *ngIf="assetViewList.calibrationDefaultCost !=0">*</span></b></span><span class="value">&nbsp;{{assetViewList.calibrationCurrencyName}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.calibrationRequired">
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.calibrationRequired">*</span></b></span><span class="value">{{assetViewList.calibrationGlAccount}}</span>
@@ -716,7 +716,7 @@
                                             <span class="label"><b>Dafault Cost: </b></span><span class="value">&nbsp;{{assetViewList.certificationDefaultCost}}</span>
                                         </p>
                                         <p  *ngIf="assetViewList && assetViewList.certificationRequired">
-                                            <span class="label"><b>Currency:  <span class="text-danger" *ngIf="assetViewList.certificationDefaultCost !=0">*</span></b></span><span class="value">&nbsp;{{assetViewList.certificationCurrencyName}}</span>
+                                            <span class="label"><b>Curr:  <span class="text-danger" *ngIf="assetViewList.certificationDefaultCost !=0">*</span></b></span><span class="value">&nbsp;{{assetViewList.certificationCurrencyName}}</span>
                                         </p>
                                         <p  *ngIf="assetViewList && assetViewList.certificationRequired">
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.certificationRequired">*</span></b></span><span class="value">{{assetViewList.certificationGlAccount}}</span>
@@ -746,7 +746,7 @@
                                             <span class="label"><b>Dafault Cost: </b></span><span class="value">&nbsp;{{assetViewList.inspectionDefaultCost}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.inspectionRequired">
-                                            <span class="label"><b>Currency: <span class="text-danger" *ngIf="assetViewList.inspectionDefaultCost !=0">*</span></b></span><span class="value">&nbsp;{{assetViewList.inspectionCurrencyName}}</span>
+                                            <span class="label"><b>Curr: <span class="text-danger" *ngIf="assetViewList.inspectionDefaultCost !=0">*</span></b></span><span class="value">&nbsp;{{assetViewList.inspectionCurrencyName}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.inspectionRequired">
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.inspectionRequired">*</span></b></span><span class="value">{{assetViewList.inspectionGlAccount}}</span>
@@ -775,7 +775,7 @@
                                             <span class="label"><b>Dafault Cost: </b></span><span class="value">&nbsp;{{assetViewList.verificationDefaultCost}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.verificationRequired">
-                                            <span class="label"><b>Currency:<span class="text-danger" *ngIf="assetViewList.verificationDefaultCost !=0">*</span> </b></span><span class="value">&nbsp;{{assetViewList.verificationCurrencyName}}</span>
+                                            <span class="label"><b>Curr:<span class="text-danger" *ngIf="assetViewList.verificationDefaultCost !=0">*</span> </b></span><span class="value">&nbsp;{{assetViewList.verificationCurrencyName}}</span>
                                         </p>
                                         <p *ngIf="assetViewList && assetViewList.verificationRequired">
                                             <span class="label"><b>GL Account: <span class="text-danger" *ngIf="assetViewList.verificationRequired">*</span></b></span><span class="value">{{assetViewList.verificationGlAccount}}</span>

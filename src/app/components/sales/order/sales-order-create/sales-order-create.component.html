@@ -23,7 +23,7 @@
                 <div class="form-row body-alignment">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label style="height: 15px;">Customer Name
+                            <label style="height: 15px;">Cust Name
                                 <span class="clr-red">*</span>
                                 <span class="ng-star-inserted color-blue">
                                     <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
@@ -31,7 +31,7 @@
                                 </span>
                             </label>
                             <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
-                                class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
+                                class="form-control" [disabled]="true" id="customerName" required #customerName="ngModel" />
                             <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                                 class="alert alert-danger alert-danger-cstm">
                                 <div *ngIf="customerName.errors.required">
@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Customer Code</label>
+                            <label>Cust Code</label>
                             <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
                                 class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
                         </div>
@@ -52,7 +52,7 @@
                             <label>SO Num <span class="clr-red">*</span></label>
                             <input type="text" class="form-control" name="salesOrderNumber"
                                 [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true" #accountTypeId="ngModel"
-                                id="salesOrderNumber" #salesOrderNumber="ngModel" />
+                                id="salesOrderNumber" #salesOrderNumber="ngModel" required />
                             <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
                                 class="alert alert-danger alert-danger-cstm">
                                 <div *ngIf="salesOrderNumber.errors.required">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>SO Quote Num</label>
+                            <label>SO Qte Num</label>
                             <input type="text" class="form-control" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
                                 name="salesOrderQuoteNumber" [disabled]="true" />
                         </div>
@@ -99,7 +99,7 @@
                                                 <input type="text" class="form-control" name="salesOrderNumber"
                                                     [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true"
                                                     #accountTypeId="ngModel" id="salesOrderNumber"
-                                                    #salesOrderNumber="ngModel" />
+                                                    #salesOrderNumber="ngModel" required />
                                                 <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="salesOrderNumber.errors.required">
@@ -108,13 +108,13 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>SO Quote Num</label>
+                                                <label>SO Qte Num</label>
                                                 <input type="text" class="form-control"
                                                     [(ngModel)]="salesQuote.salesOrderQuoteNumber"
                                                     name="salesOrderQuoteNumber" [disabled]="true" />
                                             </div>
                                             <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
-                                                <label>Version Num</label>
+                                                <label>Ver Num</label>
                                                 <input type="text" [(ngModel)]="salesQuote.versionNumber"
                                                     name="versionNumber" class="form-control" [disabled]="true"
                                                     id="versionNumber" #versionNumber="ngModel" />
@@ -150,7 +150,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Customer Ref <span class="clr-red">*</span></label>
+                                                <label>Cust Ref <span class="clr-red">*</span></label>
                                                 <input type="text" class="form-control" name="customerReference"
                                                     [(ngModel)]="salesQuote.customerReferenceName"
                                                     (change)="onChangeInput()" required />
@@ -195,7 +195,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Customer Name
+                                                <label>Cust Name
                                                     <span class="clr-red">*</span>
                                                     <span class="ng-star-inserted color-blue">
                                                         <a class="btn nobg" (click)="viewSelectedRow()"
@@ -205,7 +205,7 @@
                                                 </label>
                                                 <input type="text" [(ngModel)]="salesQuote.customerName"
                                                     name="customerName" class="form-control" [disabled]="true"
-                                                    id="customerName" #customerName="ngModel" />
+                                                    id="customerName" #customerName="ngModel" required />
                                                 <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="customerName.errors.required">
@@ -214,7 +214,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Customer Contact<span class="clr-red">*</span></label>
+                                                <label>Cust Contact<span class="clr-red">*</span></label>
                                                 <select [(ngModel)]="salesQuote.customerContactId" required
                                                     (change)="onChangeInput()" [ngModelOptions]="{standalone: true}"
                                                     name="customerContactId" id="customerContactId"
@@ -683,7 +683,7 @@
     </div>
 </div>
 <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>

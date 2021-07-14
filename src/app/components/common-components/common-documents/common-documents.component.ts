@@ -22,7 +22,7 @@ import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByV
     providers: [DatePipe]
 })
 /** common component*/
-export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
+export class CommonDocumentsComponent implements OnInit, OnChanges, OnDestroy {
     disableSave: boolean = true;
     moduleId: any;
     targetData: any;
@@ -34,7 +34,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
     @Input() offLineUpload: any = false;
     @Input() isSummarizedView: any = false;
-    
+
     @Input() generalInformtionData;
     @Output() tab = new EventEmitter<any>();
     @Output() parentTrigger = new EventEmitter<any>();
@@ -46,7 +46,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         docDescription: '',
         attachmentDetailId: 0,
         attachmentId: 0,
-        name:''
+        name: ''
     }
     @ViewChild('documents', { static: false }) Table;
     customerDocumentsData: any = [];
@@ -79,9 +79,9 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     localCollection: any;
     selectedRowForDelete: any;
     modal: NgbModalRef;
-    commondocViewModel:NgbModalRef;
+    commondocViewModel: NgbModalRef;
     documentTypeModel: NgbModalRef;
-    auditHistModel:NgbModalRef;
+    auditHistModel: NgbModalRef;
     modalMemo: NgbModalRef;
     sourceViewforDocumentList: any = [];
     documentauditHisory: any[];
@@ -106,14 +106,14 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     formNames: any;
     generalCode: any;
     generalName: any;
-    storeVariable:any={};
+    storeVariable: any = {};
     tempAddDocumentTypeMemo: any = {};
     isDocumentrevnumAlreadyExists: boolean = false;
     isDocumenttypeAlreadyExists: boolean = false;
     lstfilterDocumentTypeRevNum = [];
     lstfilterDocumentType = [];
     commondocumentsList: any = []
-    setEditArray:any=[];
+    setEditArray: any = [];
     documentType: any = [];
     isEnableUpdateButton: any = true;
     newDocumentDetails: any = {};
@@ -124,7 +124,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     disabledMemo: boolean = false;
     attachmoduleList: any = [];
     arrayCustlist: any = [];
-    itemmasterIdReferenceId:number;
+    itemmasterIdReferenceId: number;
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
         private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
@@ -132,16 +132,16 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     ngOnInit() {
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         if (this.generalInformtionData) {
-            this.id = this.referenceId;           
+            this.id = this.referenceId;
             this.generalCode = this.generalInformtionData.companyCode;
             this.generalName = this.generalInformtionData.name;
         }
 
         if (this.uploadDocsToser != undefined || this.uploadDocsToser != null) {
-            this.id = this.referenceId;            
+            this.id = this.referenceId;
             this.uploadDocsToser.subscribe(v => {
                 this.hideUpoladThing = true;
-                setTimeout(() => { 
+                setTimeout(() => {
                     this.onUploadDocumentListToServer();
                 }, 2000);
             });
@@ -154,7 +154,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         // if (this.uploadDocsToser) this.uploadDocsToser.unsubscribe();
     }
     ngOnChanges(changes: SimpleChanges) {
-        
+
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
@@ -173,15 +173,15 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                 //   }, 1200);
             }
             if (property == 'moduleName') {
-                this.moduleName = this.moduleName; 
+                this.moduleName = this.moduleName;
+            }
         }
-    }
         this.id = this.referenceId;
-       
+
         this.getModuleList();
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
-        this.isSummarizedView=this.isSummarizedView;
+        this.isSummarizedView = this.isSummarizedView;
     }
 
 
@@ -192,7 +192,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         // ? this.authService.currentUser.masterCompanyId
         // : null;
         // const strText='';
-        this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', 0).subscribe(res => {
             // this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
             this.attachmoduleList = res;
             //   setTimeout(() => {
@@ -242,7 +242,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
             : null;
     }
 
-    openDocument(row,documentView) {
+    openDocument(row, documentView) {
         this.sourceViewforDocumentList = [];
         this.sourceViewforDocument = row;
         this.sourceViewforDocumentList = row.attachmentDetails;
@@ -252,14 +252,14 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
     docviewdblclick(data) {
         this.sourceViewforDocument = data;
-        this.openDocument(data,'documentView');
+        this.openDocument(data, 'documentView');
         $('#commondocView').modal('show');
     }
 
-    openEdit(rowdata,content) {
+    openEdit(rowdata, content) {
         this.selectedFileAttachment = [];
         this.isEditButton = true;
-        this.editMode=true
+        this.editMode = true
         this.documentInformation = rowdata;
         this.sourceViewforDocumentList = rowdata.attachmentDetails;
         this.disableSave = true;
@@ -370,7 +370,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         // $('#memo-popup-Doc-common').modal("hide");
         this.modalMemo.close();
         this.disabledMemo = true;
-        if(this.isEditButton){
+        if (this.isEditButton) {
             this.disableSave = false;
         }
     }
@@ -385,31 +385,31 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         this.formData.delete(event.file.name)
         this.uploadedFileLength--;
         this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
-        if(this.selectedFileAttachment.length == 0){
-        this.disableSave = true;
+        if (this.selectedFileAttachment.length == 0) {
+            this.disableSave = true;
         }
-       
+
     }
 
 
-    historyDismiss(){
+    historyDismiss() {
         this.auditHistModel.close()
     }
-    openHistory(rowData,commoncontentAuditHist) {        
+    openHistory(rowData, commoncontentAuditHist) {
         //this.alertService.startLoadingMessage();
         this.isSpinnerVisible = true;
         this.commonService.GetAttachmentCommonAudit(rowData.commonDocumentDetailId, this.referenceId, this.moduleId).subscribe((res) => {
             // results => this.onAuditHistoryLoadSuccessful(results),
             // error => {this.isSpinnerVisible = false});
             this.isSpinnerVisible = false;
-            this.documentauditHisory = res;  
-            this.auditHistModel = this.modalService.open(commoncontentAuditHist, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });      
+            this.documentauditHisory = res;
+            this.auditHistModel = this.modalService.open(commoncontentAuditHist, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
         })
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory) {
         //this.alertService.stopLoadingMessage();
-        
+
         this.documentauditHisory = auditHistory;
     }
 
@@ -521,19 +521,19 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
 
     onUploadDocumentListToServer() {
-            this.attachmoduleList.forEach(element => {
+        this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
             }
         });
-        
-        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile' || this.moduleName == 'CustomerReceipt' || this.moduleName == 'StockLine') {
+
+        if (this.moduleName == 'VendorCertified' || this.moduleName == 'ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile' || this.moduleName == 'CustomerReceipt' || this.moduleName == 'StockLine') {
             this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
             this.itemmasterIdReferenceId = this.referenceId;
         }
-        
+
         const vdata = {
-            referenceId:  this.referenceId,
+            referenceId: this.referenceId,
             masterCompanyId: this.currentUserMasterCompanyId,
             createdBy: this.userName,
             updatedBy: this.userName,
@@ -552,21 +552,21 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
-                    if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+                    if (this.moduleName == 'VendorCertified' || this.moduleName == 'ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
                         localStorage.removeItem('commonId');
-                        if(this.moduleName =='ItemMaster'){
+                        if (this.moduleName == 'ItemMaster') {
                             //this.uploadDocsToser.unsubscribe()
-                        }else{
+                        } else {
                             this.uploadDocsToser.unsubscribe()
                         }
                     }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
                     if (this.uploadDocsToser) {
-                        if(this.moduleName =='ItemMaster') {
+                        if (this.moduleName == 'ItemMaster') {
                             //this.uploadDocsToser.unsubscribe()
                         } else {
-                             this.uploadDocsToser.unsubscribe()
+                            this.uploadDocsToser.unsubscribe()
                         }
                         this.hideUpoladThing = false;
                     }
@@ -575,14 +575,14 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                 }, err => {
                     this.formData = new FormData();
                 });
-            } else {                
+            } else {
                 for (var i = 0; i < this.documentCollection.length; i++) {
                     docList.push(this.documentCollection[i])
                 }
                 this.updateCollection = this.documentCollection;
                 this.formData.append('attachmentdetais', JSON.stringify(docList));
                 this.commonService.uploadDocumentsCommonEndpoint(this.formData, this.updateCollection).subscribe(() => {
-                    if (this.moduleName != 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile' || this.moduleName != 'CustomerReceipt') {
+                    if (this.moduleName != 'VendorCertified' || this.moduleName == 'ItemMaster' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile' || this.moduleName != 'CustomerReceipt') {
                         this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     }
                     this.formData = new FormData();
@@ -590,7 +590,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                     this.commondocumentsList = [];
                     this.isEnableUpdateButton = true;
                     if (this.uploadDocsToser) {
-                        if(this.moduleName =='ItemMaster'){
+                        if (this.moduleName == 'ItemMaster') {
                             //this.uploadDocsToser.unsubscribe()
                         } else {
                             this.uploadDocsToser.unsubscribe()
@@ -606,7 +606,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     }
 
 
-    getList() { 
+    getList() {
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
@@ -615,14 +615,14 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
             }
         });
 
-        if (this.moduleName =='ItemMaster' || this.moduleName == 'CustomerReceipt') {
-            if(this.itemmasterIdReferenceId){
+        if (this.moduleName == 'ItemMaster' || this.moduleName == 'CustomerReceipt') {
+            if (this.itemmasterIdReferenceId) {
                 this.referenceId = this.itemmasterIdReferenceId;
             }
         }
 
-        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus,this.currentUserMasterCompanyId).subscribe(res => {
-            
+        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus, this.currentUserMasterCompanyId).subscribe(res => {
+
             this.commondocumentsDestructuredData = [];
             this.documentCollection = [];
             this.commondocumentsDestructuredData = res;
@@ -694,8 +694,8 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         documents._value = documents._value.map(x => {
             return {
                 ...x,
-                fileName: x.attachmentDetails ? x.attachmentDetails.map(e => e.fileName).join(","):'',
-                docMemo: x.docMemo ?  x.docMemo.replace(/<[^>]*>/g, ''):'',
+                fileName: x.attachmentDetails ? x.attachmentDetails.map(e => e.fileName).join(",") : '',
+                docMemo: x.docMemo ? x.docMemo.replace(/<[^>]*>/g, '') : '',
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
@@ -756,21 +756,19 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     }
 
 
-    saveDocumentInformation() { 
+    saveDocumentInformation() {
         if (this.documentInformation.documentTypeId == 0) {
             this.alertService.showMessage("Error", `Please select document type.`, MessageSeverity.error);
             return false;
         }
         this.newDocumentDetails = {};
         this.documentInformation;
-        var documenttypename ='';
+        var documenttypename = '';
 
-        for (var i = 0; i < this.documentType.length; i++) 
-        {
-           
-            if(this.documentInformation.documentTypeId == this.documentType[i].documentTypeId)
-            {
-                documenttypename=this.documentType[i].name;
+        for (var i = 0; i < this.documentType.length; i++) {
+
+            if (this.documentInformation.documentTypeId == this.documentType[i].documentTypeId) {
+                documenttypename = this.documentType[i].name;
             }
         }
         if (this.selectedFileAttachment != [] && !this.isEditButton) {
@@ -787,7 +785,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                 isDeleted: false,
                 attachmentDetails: this.selectedFileAttachment,
                 documentTypeId: this.documentInformation.documentTypeId,
-                name:documenttypename
+                name: documenttypename
             })
         }
         this.newDocumentDetails = { ...this.documentInformation };
@@ -834,7 +832,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
         this.commondocumentsDestructuredData = [...this.commondocumentsDestructuredData];
         this.documentCollection = this.commondocumentsDestructuredData;
-        this.documentCollectionOriginal=this.commondocumentsDestructuredData;
+        this.documentCollectionOriginal = this.commondocumentsDestructuredData;
         this.commondocumentsList = [...this.documentCollection];
         this.index = 0;
         this.disableSave == false;
@@ -864,7 +862,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         this.parentTrigger.emit(true)
     }
 
- 
+
     // getDocumentTypeList() {
     //     this.commonService.getDocumentType(this.currentUserMasterCompanyId).subscribe(res => {
     //         this.documentType = res;
@@ -875,27 +873,27 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
     getDocumentTypeList(): void {
         this.setEditArray = [];
         if (this.editMode == true) {
-    
-                    this.setEditArray.push(this.documentInformation.documentTypeId? this.documentInformation.documentTypeId :0)
-                } else {
-                    this.setEditArray.push(0);
-                }
-            
-            if (this.setEditArray && this.setEditArray.length == 0) {
-                this.setEditArray.push(0);
-            }
-        
+
+            this.setEditArray.push(this.documentInformation.documentTypeId ? this.documentInformation.documentTypeId : 0)
+        } else {
+            this.setEditArray.push(0);
+        }
+
+        if (this.setEditArray && this.setEditArray.length == 0) {
+            this.setEditArray.push(0);
+        }
+
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('DocumentType', 'DocumentTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-         if(res && res.length !=0){
-            this.documentType = res.map(x => {
-                return {
-                    ...x,
-                    documentTypeId: x.value,
-                    name: x.label
-                }
-            });
-         }
+        this.commonService.autoSuggestionSmartDropDownList('DocumentType', 'DocumentTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
+            if (res && res.length != 0) {
+                this.documentType = res.map(x => {
+                    return {
+                        ...x,
+                        documentTypeId: x.value,
+                        name: x.label
+                    }
+                });
+            }
         }, err => {
             this.isSpinnerVisible = false;
         });
@@ -974,10 +972,10 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
         // $('#createDocumentType').modal('hide');
         this.documentTypeModel.close();
     }
-    closeDocumentTypeModel(){
+    closeDocumentTypeModel() {
         this.documentTypeModel.close();
     }
-    onClickDocumentType(value,createDocumentType) {
+    onClickDocumentType(value, createDocumentType) {
         this.documentTypeModel = this.modalService.open(createDocumentType, { size: 'sm', backdrop: 'static', keyboard: false });
 
         this.resetDocumentTypeForm();
@@ -1023,7 +1021,7 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
 
     checkDocumentRevnumExist(value) {
-        if(this.validateInt(value)){
+        if (this.validateInt(value)) {
             this.isDocumentrevnumAlreadyExists = false;
             this.DocumentTypebutton = true;
             if (value != undefined && value != null) {
@@ -1041,10 +1039,10 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
                 }
             }
         }
-        else{
+        else {
             return;
         }
-       
+
     }
     validateInt(value) {
         return /(^-?\d\d*$)/g.test(value);
@@ -1083,8 +1081,8 @@ export class CommonDocumentsComponent implements OnInit,OnChanges, OnDestroy {
 
     resetAddressShipViaForm() { }
 
-    onDocumentTypeChange(documentTypeId){
-        let document=this.documentType.filter(x=>x.documentTypeId==documentTypeId);
-        this.documentInformation.docDescription=document[0].name;
+    onDocumentTypeChange(documentTypeId) {
+        let document = this.documentType.filter(x => x.documentTypeId == documentTypeId);
+        this.documentInformation.docDescription = document[0].name;
     }
 }

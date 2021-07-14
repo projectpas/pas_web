@@ -133,6 +133,7 @@ export class WorkOrderAddComponent implements OnInit {
     workFlowId: any = null;
     editWorkFlowData: any;
     modal: NgbModalRef;
+    modalView: NgbModalRef;
     modalRef: NgbModalRef;
     modalRefCreate: NgbModalRef;
     modalWorkScopeModel:NgbModalRef
@@ -1009,15 +1010,15 @@ export class WorkOrderAddComponent implements OnInit {
         this.selectedMPNItemMasterId = workOrderPartNumber.itemMasterId;
         this.currentIndex = index;
         this.getWOSummaryDetails(this.SummaryMonths)
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false ,windowClass: 'assetMange'});
     }
-
+    isSpinnerVisibleHistory:boolean=false;
     getWOSummaryDetails(monthtatus)
     {
         if (this.selectedMPNItemMasterId > 0) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisibleHistory = true;
             this.workOrderService.GetWorkOrderSummarisedHistoryByMPN(this.selectedMPNItemMasterId, monthtatus == 1 || monthtatus == "1" ? true : false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
+                this.isSpinnerVisibleHistory = false;
                 if(res != undefined && res.mpnSummaryModel != undefined)
                 {
                     this.woSummaryMPNData = res.mpnSummaryModel;
@@ -1027,18 +1028,27 @@ export class WorkOrderAddComponent implements OnInit {
                     this.woSummaryCustData = res.custSummaryModel;
                 }
             },err => {
+                this.isSpinnerVisibleHistory = false;
                     this.handleError(err);
                 });
         }
     }
-
-    async view(rowData) {
+    isOpenViewWO:boolean=false;
+    async view(content,rowData) {
+        this.modalView = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
         this.paramsData['workOrderId'] = rowData.workOrderId;
         this.workOrderId = rowData.workOrderId;
+        this.isOpenViewWO=true;
+        this.isSpinnerVisibleHistory = true;
+        setTimeout(() => {
+            this.isSpinnerVisibleHistory = false;
+        }, 1000);
     }
 
     closeViewModel(){
-        $('#viewWorkOrder').modal("hide");
+        // $('#viewWorkOrder').modal("hide");
+        this.modalView.close();
+        this.isOpenViewWO=false;
     }
 
     dismissModel() {
@@ -2162,6 +2172,7 @@ createQuote() {
     summaryParts: any = [];
     totalRecords: number;
     pageLinks: any;
+    totalStockLineSum:any;
     filterParts() {
         this.summaryParts = [];
         let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
@@ -2183,7 +2194,34 @@ createQuote() {
                     })
                 }
             })
+            debugger;
             this.workOrderMaterialList = uniqueParts;
+            this.workOrderMaterialList.forEach(x => {
+                x.totalStockLineArray=[];
+                x.childParts.forEach(y => {
+                    y.sumofStockLine= y.stocklineQtyReserved + y.stocklineQtyIssued
+                    // y.sumofStockRequired= +=
+                });
+            });
+            this.workOrderMaterialList.forEach(x => {
+                this.totalStockLineSum=undefined;
+                x.childParts.forEach(y => {
+x.totalStockLineArray.push(y.sumofStockLine);
+// console.log("x.totalStockLineSum",x)
+            })
+            // x.totalStockLineSum=this.totalStockLineSum
+            x.totalStockLineSum = x.totalStockLineArray.reduce(function(a, b){
+                return a + b;
+            }, 0);
+            // console.log("xxxxx. ",x)
+        });
+        this.workOrderMaterialList.forEach(x => {
+            // x.childParts.forEach(y => {
+// console.log("x.totalStockLineSum",y)
+x.allowbaleRequiredQty=Math.min(Number(x.totalStockLineSum),Number(x.totalStocklineQtyReq))
+        // })
+        // console.log("x.totalStockLineSum",x)
+    });
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(
@@ -2786,7 +2824,7 @@ createQuote() {
                                         taskData['adjustments'] = labList['adjustments'];
                                         taskData['adjustedHours'] = labList['adjustedHours'].toFixed(2);
                                         taskData['memo'] = labList['memo'];
-
+                                        taskData['isEditCondition']=false;
                                         taskData['burdaenRatePercentageId'] = labList['burdaenRatePercentageId'];
                                         taskData['burdenRateAmount'] = labList['burdenRateAmount'] ? formatNumberAsGlobalSettingsModule(labList['burdenRateAmount'], 2) : '0.00';
                                         taskData['directLaborOHCost'] = labList['directLaborOHCost'] ? formatNumberAsGlobalSettingsModule(labList['directLaborOHCost'], 2) : '0.00';
@@ -4093,7 +4131,7 @@ createQuote() {
     //     this.refreshGrid.emit(true)
     // }
 
-    refreshMpnList(){ 
+    refreshMpnList(data){ 
         // this.workOrderId = this.acRouter.snapshot.params['id'];
         this.recCustomerId=0;
         this.triggerWorkOrderData();

@@ -244,7 +244,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">SO Quote Number : {{restorerecord.salesOrderQuoteNumber}}</h6>
+    <h6 class="modal-body">SO Qte Num : {{restorerecord.salesOrderQuoteNumber}}</h6>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
@@ -286,7 +286,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <h6 class="modal-body">SO Quote Number : {{selectedQuoteToDelete}}</h6>
+    <h6 class="modal-body">SO Qte Num : {{selectedQuoteToDelete}}</h6>
   </div>
 
   <div class="modal-footer">
@@ -342,10 +342,10 @@
         <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
           <thead>
             <tr>
-              <th>Quote Num</th>
+              <th>Qte Num</th>
               <th>Status</th>
               <th>SO Num</th>
-              <th>Customer Name</th>
+              <th>Cust Name</th>
               <th>Customer Type</th>
               <th>Cust Ref</th>
               <th>Probability</th>

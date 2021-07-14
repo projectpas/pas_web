@@ -126,19 +126,19 @@ export class ViewRoComponent {
 
     getStockDetailsOnLoad() {
         this.receivingService.getReceivingROPartsForViewById(this.repairOrderId).subscribe(
-            results => {               
+            results => {
                 this.repairOrderData = results.map(x => {
                     return {
-                        ...x,  
+                        ...x,
                         unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
-                        extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '',                                        
+                        extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '',
                         stockLine: this.getStockLineDetails(x.stockLine),
                         timeLife: this.getTimeLifeDetails(x.timeLife)
                     }
-                });                 
+                });
                 var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
                 for (let parent of allParentParts) {
-                    var splitParts = this.repairOrderData.filter(x => !x.isParent && x.parentId == parent.repairOrderPartRecordId);  
+                    var splitParts = this.repairOrderData.filter(x => !x.isParent && x.parentId == parent.repairOrderPartRecordId);
                     if (splitParts.length > 0) {
                         parent.hasChildren = true;
                         parent.quantityOrdered = 0;
@@ -152,9 +152,9 @@ export class ViewRoComponent {
                     else {
                         parent.hasChildren = false;
                     }
-                }               
-                this.getStatus();               
-                this.isSpinnerVisible = false;                
+                }
+                this.getStatus();
+                this.isSpinnerVisible = false;
             },
             error => {
                 this.alertService.showMessage(this.pageTitle, "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
@@ -306,7 +306,7 @@ export class ViewRoComponent {
 
     private getStatus() {
         this.roStatus = [];
-        this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description',this.authService.currentUser.masterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description', 0).subscribe(response => {
             this.roStatus = response;
             this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         });
@@ -872,7 +872,7 @@ export class ViewRoComponent {
 
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
-    }  
+    }
 
     editStockLine(stockLine: StockLine) {
         stockLine.isEnabled = !stockLine.isEnabled;
@@ -880,14 +880,14 @@ export class ViewRoComponent {
     }
 
     CreateRepairOrderStockline() {
-        this.isSpinnerVisible = true;  
+        this.isSpinnerVisible = true;
         this.receivingService.CreateStockLineForRepairOrder(this.repairOrderId).subscribe(
             results => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.pageTitle, "Stockline created successfully.", MessageSeverity.success);
                 return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
             },
-            err=>{this.isSpinnerVisible = false;}  
+            err => { this.isSpinnerVisible = false; }
         );
     }
 

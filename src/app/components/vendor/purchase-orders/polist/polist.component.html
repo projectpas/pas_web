@@ -7,7 +7,7 @@
 				<h4 class="header-name">Purchase Order List</h4>
 			</div>
 			<div>
-				<button type="button" class="btn-sm header-button"
+				<button type="button" *ngIf="isAddpo" class="btn-sm header-button"
 					[routerLink]="['/vendorsmodule/vendorpages/app-purchase-setup']">
 					Add New Purchase Order
 				</button>
@@ -51,11 +51,11 @@
 
 				<div class="row">
 					<div class="col">
-						<button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+						<button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
 							matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
 							data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
 							data-target="#downloadConfirmation"></button>
-						<button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+						<button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
 							matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
 							label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"></button>
 						<!-- data-toggle="modal"
@@ -164,15 +164,15 @@
 									matTooltipPosition="above"><i class="fa fa-eye"></i></a>
 							</span>
 							<span>
-								<a *ngIf="(rowData['statusId'] == openStatusId || rowData['statusId'] == pendingStatusId) && isReceivingPolist == false"
+								<a *ngIf="(rowData['statusId'] == openStatusId || rowData['statusId'] == pendingStatusId) && isReceivingPolist == false && isEditpo"
 									class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
 									matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a>
 
-								<a *ngIf="rowData['statusId'] > pendingStatusId && isReceivingPolist == false"
+								<a *ngIf="rowData['statusId'] > pendingStatusId && isReceivingPolist == false && isEditpo"
 									class="btn nobg btn-edit-cstm" data-dismiss="modal"><i class="fa fa-pencil"
 										style="color:gray !important;"></i></a>
 							</span>
-							<span *ngIf="isReceivingPolist == false" data-toggle="modal" data-target="#poDelete">
+							<span *ngIf="isReceivingPolist == false && isDeletepo" data-toggle="modal" data-target="#poDelete">
 								<a class="btn nobg btn-delete-cstm" (click)="delete(rowData)" matTooltip="Delete"
 									matTooltipPosition="above"><i class="fa fa-trash"></i></a>
 							</span>
@@ -203,7 +203,7 @@
 								<a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
 									matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
 							</span>
-							<span *ngIf="isReceivingPolist == false">
+							<span *ngIf="isReceivingPolist == false && isEditpo">
 								<a class="btn nobg btn-users-cstm" (click)="restore(restoreIdPo,rowData);" matTooltip="Restore Record"
 									matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
 							</span>

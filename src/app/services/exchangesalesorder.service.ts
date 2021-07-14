@@ -20,6 +20,10 @@ import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
 import { ExchangeOrderQuote } from "../models/exchange/ExchangeOrderQuote";
 import { ExchangeSOPickTicket } from "../models/exchange/ExchangeSOPickTicket";
 import { ExchangeSalesOrderShipping } from "../models/exchange/exchangeSalesOrderShipping";
+import { IExchangeSalesOrderFreight } from '../models/exchange/IExchangeSalesOrderFreight';
+import { IExchangeSalesOrderCharge } from '../models/exchange/IExchangeSalesOrderCharge';
+import { ExchangeSalesOrderBillingAndInvoicing } from "../models/exchange/exchangeSalesOrderBillingAndInvoicing";
+import { ExchangeSalesOrderMarginSummary } from '../models/exchange/ExchangeSalesOrderMarginSummary';
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -39,6 +43,7 @@ export class ExchangeSalesOrderService {
   selectedParts: any = [];
   totalFreights = 0;
   totalCharges = 0;
+  totalcost=0;
   //salesOrderReferenceSubj = new BehaviorSubject<SalesOrderReference>(null);
   isEditSOSettingsList = false;
   soSettingsData;
@@ -369,5 +374,164 @@ export class ExchangeSalesOrderService {
     return Observable.forkJoin(
       this.exchangeSalesOrderEndpointService.getMultiShippingLabelPrint(salesOrderPackagingSlips)
     );
+  }
+  getExchangeSalesOrderFreights(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreights(id, isDeleted);
+  }
+
+  createFreight(freightsList: IExchangeSalesOrderFreight[]): Observable<IExchangeSalesOrder[]> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.createFreight(freightsList)
+    );
+  }
+
+  getExchangeSalesOrderCharges(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderCharges(id, isDeleted);
+  }
+  createExchangeSalesOrderCharge(chargesList: IExchangeSalesOrderCharge[]): Observable<IExchangeSalesOrder[]> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.createExchangeSalesOrderCharge(chargesList)
+    );
+  }
+  deleteexchangeSalesOrderChargesList(chargesId, userName) {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.deleteexchangeSalesOrderChargesList(chargesId, userName)
+    );
+  }
+
+  deleteexchangeSalesOrderFreightList(friegntId, userName) {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.deleteexchangeSalesOrderFreightList(friegntId, userName)
+    );
+  }
+
+  getExchangeSalesOrderFreightsHistory(id) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreightsHistory(id);
+  }
+  getExchangeSalesOrderChargesHistory(id) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderChargesHistory(id);
+  }
+  getBillingInvoiceList(exchangeSalesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.getBillingInvoiceList(exchangeSalesOrderId)
+    );
+  }
+  getExchangeSalesOrderBillingByShipping(exchangeSalesOrderId, partId, exchangeSalesOrderShippingId) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderBillingByShipping(exchangeSalesOrderId, partId, exchangeSalesOrderShippingId);
+  }
+  createBilling(salesOrderBilling: ExchangeSalesOrderBillingAndInvoicing): any {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.createBilling(salesOrderBilling)
+    );
+  }
+  getExchangeSalesOrderBillingInvoicingById(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.GetExchangeSalesOrderBillingInvoicingById(sobillingInvoicingId)
+    );
+  }
+  updateExchangeSalesOrderBillingInvoicing(sobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.updateExchangeSalesOrderBillingInvoicing(sobillingInvoicingId, billingInvoicing)
+    );
+  }
+  getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.getExchangeSalesOrderBillingInvoicingData(sobillingInvoicingId)
+    );
+  }
+  getExchangeSalesOrderChargesById(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderChargesById(id, isDeleted);
+  }
+  getExchangeSalesOrderFreightsById(id, isDeleted) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderFreightsById(id, isDeleted);
+  }
+  getAllExchangeSalesOrderAnalysis(id) {
+    return this.exchangeSalesOrderEndpointService.getAllExchangeSalesOrderAnalysis(id);
+  }
+  getExchangeSalesOrderMarginSummary(exchangeSalesOrderId) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderMarginSummary(exchangeSalesOrderId);
+  }
+  getExchangeQuoteHeaderMarginDetails(selectedParts, marginSummary) {
+    let sales = 0;
+    let misc = 0;
+    let productCost = 0;
+    let exchangefees=0;
+    let overhaulprice=0;
+    let othercharges=0;
+    let totalestrevenue=0;
+    let cogsfees=0;
+    let overhaulcost=0;
+    let othercost=0;
+    let marginamount=0;
+    let marginpercentage=0;
+    let totalestcost=0;
+    if (selectedParts && selectedParts.length > 0) {
+      selectedParts.forEach(part => {
+        // this.checkNullValuesList.forEach(key => {
+        //   if (!part[key]) {
+        //     part[key] = 0;
+        //   }
+        // })
+        exchangefees=parseFloat(part.exchangeListPrice);
+        overhaulprice= part.exchangeOverhaulPrice ? parseFloat(part.exchangeOverhaulPrice) : 0;
+        othercharges=0;
+        if(part.exchangeSalesOrderScheduleBilling.length>0){
+          cogsfees=parseFloat(part.exchangeSalesOrderScheduleBilling[0].cogsAmount);
+        }
+        else{
+          cogsfees=0;
+        }
+        overhaulcost= part.exchangeOverhaulCost ? parseFloat(part.exchangeOverhaulCost) : 0;
+        othercost=0;
+      })
+      marginSummary.exchangeFees = exchangefees;
+      marginSummary.overhaulPrice = overhaulprice;
+      marginSummary.totalEstRevenue = marginSummary ? this.getTotalEstRevenue(marginSummary) : 0;
+      marginSummary.cogsFees = cogsfees;
+      marginSummary.overhaulCost = overhaulcost;
+      marginSummary.totalEstCost = marginSummary ? this.getTotalEstCost(marginSummary) : 0;;
+      marginSummary.marginAmount = marginSummary ? this.getMarginAmount(marginSummary) : 0;;
+      marginSummary.marginPercentage = marginSummary ? this.getMarginPercentage(marginSummary) : 0;
+    }
+    return marginSummary;
+  }
+
+  getTotalEstRevenue(marginSummary) {
+    let totalEstRevenue: number = 0;
+    totalEstRevenue = marginSummary.exchangeFees + marginSummary.overhaulPrice + this.totalCharges;
+    return totalEstRevenue;
+  }
+
+  getMarginAmount(marginSummary) {
+    let marginAmount: number = 0;
+    marginAmount = marginSummary.totalEstRevenue - marginSummary.totalEstCost;
+    return marginAmount;
+  }
+
+  getMarginPercentage(marginSummary) {
+    let marginPercentage: number = 0;
+    marginPercentage = (marginSummary.marginAmount / marginSummary.totalEstRevenue) * 100;
+    return marginPercentage;
+  }
+
+  getTotalEstCost(marginSummary) {
+    let totalEstCost: number = 0;
+    totalEstCost = marginSummary.cogsFees + marginSummary.overhaulCost + this.totalcost;
+    return totalEstCost;
+  }
+  createExchangeSalesOrderMarginSummary(marginSummary: ExchangeSalesOrderMarginSummary) {
+    return this.exchangeSalesOrderEndpointService.createExchangeSalesOrderMarginSummary(marginSummary);
+  }
+  setTotalCharges(amount) {
+    this.totalCharges = amount;
+  }
+  setTotalFreights(amount) {
+    this.totalFreights = amount;
+  }
+  setTotalcost(amount) {
+    this.totalCharges = amount;
+  }
+  getExchangeSalesOrderHypoAnalysis(id) {
+    return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderHypoAnalysis(id);
   }
 }

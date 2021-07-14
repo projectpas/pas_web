@@ -157,7 +157,7 @@
                   (change)="onChangeAmount($event, objInvoicePayment); formatCheckAmount()" required />
               </div>
               <div class="form-group col-sm-12">
-                <label for="currencyId">Currency <span class="clr-red">*</span></label>
+                <label for="currencyId">Curr <span class="clr-red">*</span></label>
                 <select name="currencyId" [(ngModel)]="objInvoicePayment.checkPayments.currencyId" required
                   id="currencyId" #currencyId="ngModel">
                   <option *ngFor="let item of currencyList" [ngValue]="item.value">
@@ -259,7 +259,7 @@
                   (change)="onChangeAmount($event, objInvoicePayment); formatWireAmount();" required />
               </div>
               <div class="form-group col-sm-12">
-                <label for="wireCurrencyId">Currency <span class="clr-red">*</span></label>
+                <label for="wireCurrencyId">Curr <span class="clr-red">*</span></label>
                 <select name="wireCurrencyId" [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.currencyId"
                   required id="wireCurrencyId" #wireCurrencyId="ngModel">
                   <option *ngFor="let item of currencyList" [ngValue]="item.value">
@@ -350,7 +350,7 @@
                   (change)="onChangeAmount($event, objInvoicePayment); formatCCAmount();" required />
               </div>
               <div class="form-group col-sm-12">
-                <label for="ccCurrencyId">Currency <span class="clr-red">*</span></label>
+                <label for="ccCurrencyId">Curr <span class="clr-red">*</span></label>
                 <select name="ccCurrencyId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.currencyId"
                   required id="ccCurrencyId" #ccCurrencyId="ngModel">
                   <option *ngFor="let item of currencyList" [ngValue]="item.value">
@@ -391,7 +391,7 @@
                 </div>
               </div>
               <div class="form-group col-sm-12">
-                <label>Expiry Date<span class="clr-red">*</span></label>
+                <label>Exp Date<span class="clr-red">*</span></label>
                 <p-calendar name="expiryDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                   [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.expirationDate" [showIcon]="true"
                   id="expiryDate" #expiryDate="ngModel" required>
@@ -528,7 +528,7 @@
         <div class="col-md-12 col-sm-12 col-12">
           <div class="col-2 column">
             <div class="form-group">
-              <label>Customer Name <span class="clr-red">*</span></label>
+              <label>Cust Name <span class="clr-red">*</span></label>
               <div class="inner-addon right-addon inline-block">
                 <p-autoComplete class="autocomp-customer-cstm" name="customerName" [(ngModel)]="objInvoicePayment.name"
                   (onKeyUp)=" checkCustomerNameExist($event.target.value)"

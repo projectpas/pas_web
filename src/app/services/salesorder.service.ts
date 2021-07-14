@@ -619,6 +619,12 @@ export class SalesOrderService {
     );
   }
 
+  getPickTicketPDF(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPickTicketPDF(salesOrderId, salesOrderPartId, soPickTicketId)
+    );
+  }
+
   getMultiPickTicketPrint(salesOrderPickTickets: any): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getMultiPickTicketPrint(salesOrderPickTickets)
@@ -706,5 +712,9 @@ export class SalesOrderService {
 
   getSalesOrderParts(id, isDeleted) {
     return this.salesOrderEndPointSevice.getSalesOrderParts(id, isDeleted);
+  }
+
+  getSalesOrderSummarisedHistoryByPN(itemMasterId, isTwelveMonth) {
+    return this.salesOrderEndPointSevice.GetSalesOrderSummarisedHistoryByPN(itemMasterId, isTwelveMonth);
   }
 }

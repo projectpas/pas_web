@@ -96,7 +96,7 @@
               </span>
               <button class="btn-add" mat-icon-button (click)="createOrder(rowData)"
                 [disabled]="!rowData.isActive || rowData.isDeleted">
-                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Sales Order' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
+                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Exchange Sales Order' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
               </button>
             </div>
           </td>

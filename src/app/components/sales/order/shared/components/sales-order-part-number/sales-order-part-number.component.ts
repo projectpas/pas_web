@@ -19,6 +19,8 @@ import { CommonService } from "../../../../../../services/common.service";
 import { ISalesOrderPart } from "../../../../../../models/sales/ISalesOrderPart";
 declare var $: any;
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-sales-order-part-number",
@@ -80,6 +82,16 @@ export class SalesOrderPartNumberComponent {
   saveButton = false;
   canSaveParts = false;
   inputValidCheckHeader: any;
+  currentStatusSOSummary: any = "1";
+  selectedPNItemMasterId: any;
+  SummaryMonths: number = 1;
+  soSummaryPNData: any = [];
+  soSummaryCustData: any = [];
+  private onDestroy$: Subject<void> = new Subject<void>();
+  modalView: NgbModalRef;
+  paramsData: any = {};
+  salesOrderQuoteId: any;
+  customerId: any;
 
   constructor(
     private modalService: NgbModal,
@@ -149,9 +161,9 @@ export class SalesOrderPartNumberComponent {
       { header: "Cust Promised Date", width: "130px" },
       { header: "Est Ship Date", width: "130px" },
       { header: "Qty Ord", width: "90px" },
-      { header: "Qty Resvd", width: "90px" },
+      { header: "Qty Res'd", width: "90px" },
       { header: "Qty Avail", width: "110px" },
-      { header: "Qty On Hand", width: "110px" },
+      { header: "Qty OH", width: "110px" },
       { header: "Qty Back Ord", width: "100px" },
       { header: "Qty to Ship", width: "90px" },
       { header: "Alt/Equiv", width: "100px" },
@@ -199,11 +211,11 @@ export class SalesOrderPartNumberComponent {
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
       { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Ord', width: "60px" },
-      { field: 'qtyReserved', header: 'Qty Resvd', width: "70px" },
+      { field: 'qtyReserved', header: 'Qty Resd', width: "70px" },
       { field: 'quantityPrevShipped', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
       { field: 'qtyAvailable', header: 'Qty Avail', width: "98px" },
-      { field: 'qtyOnHand', header: 'Qty on Hand', width: "98px" },
+      { field: 'qtyOnHand', header: 'Qty OH', width: "98px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "75px" },
       { field: 'uomName', header: 'UOM', width: "90px" },
@@ -1029,5 +1041,53 @@ export class SalesOrderPartNumberComponent {
       const decodedString = dom.body.textContent;
       return decodedString;
     }
+  }
+
+  openSOSummary(content, salesOrderQuotePartNumber) {
+    this.selectedPNItemMasterId = salesOrderQuotePartNumber.partId;
+    this.getSOSummaryDetails(this.SummaryMonths)
+    this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+  }
+
+  getSOSummaryDetails(monthtatus) {
+    if (this.selectedPNItemMasterId > 0) {
+      this.isSpinnerVisible = true;
+      this.salesOrderService.getSalesOrderSummarisedHistoryByPN(this.selectedPNItemMasterId, monthtatus == 1 || monthtatus == "1" ? true : false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.isSpinnerVisible = false;
+        if (res != undefined && res.mpnSummaryModel != undefined) {
+          this.soSummaryPNData = res.mpnSummaryModel;
+        }
+        if (res != undefined && res.custSummaryModel != undefined) {
+          this.soSummaryCustData = res.custSummaryModel;
+        }
+      }, err => {
+        this.isSpinnerVisible = false;
+      });
+    }
+  }
+
+  dismissModel() {
+    this.modal.close();
+  }
+
+  isOpenViewSO: boolean = false;
+  view(content, rowData) {
+    this.modalView = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+    this.paramsData['salesOrderId'] = rowData.salesOrderId;
+    this.salesOrderId = rowData.salesOrderId;
+    this.customerId = rowData.customerId;
+    this.isSpinnerVisible = false;
+    this.salesOrderService.getview(rowData.salesOrderId).subscribe(res => {
+      this.salesOrderView = res[0];
+      this.isSpinnerVisible = false;
+      this.isOpenViewSO = true;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  closeViewModel() {
+    this.modalView.close();
+    this.isOpenViewSO = false;
   }
 }

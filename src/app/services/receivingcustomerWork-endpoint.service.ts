@@ -197,7 +197,7 @@ export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
             });
     }
     getAuditHistory(receivingCustomerWorkId) {
-        return this.http.get(`${this._actionsUrlAudit}?receivingCustomerWorkId=${receivingCustomerWorkId}`).catch(error => {
+        return this.http.get(`${this._actionsUrlAudit}?receivingCustomerWorkId=${receivingCustomerWorkId}`,this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getAuditHistory(receivingCustomerWorkId));
         });
     }

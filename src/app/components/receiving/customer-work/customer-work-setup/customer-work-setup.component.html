@@ -29,7 +29,7 @@
                                     [(ngModel)]="receivingForm.receivingNumber" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Received Date <span class="text-danger">*</span></label>
+                                <label>Rec'd Date <span class="text-danger">*</span></label>
                                 <p-calendar class="workflow-clder" [maxDate]="currentDate" [showIcon]="true"
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     name="receivedDate" [(ngModel)]="receivingForm.receivedDate"></p-calendar>
@@ -42,14 +42,14 @@
                                     name="workScopeId" [resetFilterOnHide]="true" placeholder="--Select--"></p-dropdown>
                             </div>
                             <div class="form-group">
-                                <label>Customer Request Date <span class="text-danger">*</span></label>
+                                <label>Cust Req Date <span class="text-danger">*</span></label>
                                 <p-calendar class="workflow-clder" [minDate]="receivingForm.receivedDate"
                                     (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [showIcon]="true" name="custReqDate"
                                     [(ngModel)]="receivingForm.custReqDate" required></p-calendar>
                             </div>
                             <div class="form-group">
-                                <label>Customer Ref <span class="text-danger">*</span></label>
+                                <label>Cust Ref <span class="text-danger">*</span></label>
                                 <input class="form-control" maxlength="250 " type="text" name="referenceId" (ngModelChange)="getActive()"
                                     [(ngModel)]="receivingForm.reference" #custRef="ngModel" required>
                                 <div *ngIf="custRef.invalid && (custRef.dirty || custRef.touched)"
@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Customer Name <span class="text-danger">*</span></label>
+                                <label>Cust Name <span class="text-danger">*</span></label>
                                 <p-autoComplete field="name" class="pautocomp-cstm" [disabled]="isEditCustomerWork"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.customerId"
                                     name="customerId" (keyup)="getCustomers($event.target.value, 1)"
@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Customer Code <span class="text-danger">*</span></label>
+                                <label>Cust Code <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" disabled name="customerCode"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.customerCode"
                                     [value]="receivingForm.customerCode">
@@ -132,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Contact Phone <span class="text-danger">*</span></label>
+                                <label>Phone <span class="text-danger">*</span></label>
                                 <p-autoComplete field="workPhone" class="pautocomp-cstm"
                                     (onSelect)="onSelectCustomerContactPhone(receivingForm.customerPhone)"
                                     [(ngModel)]="receivingForm.customerPhone" name="customerPhone"
@@ -308,7 +308,7 @@
                                     <div class="col-md-3" *ngIf="receivingForm.isSerialized">
                                         <div class="form-group" *ngIf="!receivingForm.isSkipSerialNo">
                                             <label>
-                                                Serial Number <span *ngIf="receivingForm.isSerialized"
+                                                Ser Num <span *ngIf="receivingForm.isSerialized"
                                                     class="text-danger">*</span>
                                             </label>
                                             <input class="form-control" type="text" maxlength="100" name="serialNumber"
@@ -794,6 +794,19 @@
 
                             <div class="form-group">
                                 <label>Cert Type</label>
+                                <p-multiSelect [options]="CertTypeList" (input)="onFilterCertType($event)" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.certTypeobject"
+                                    name="certType">
+                                </p-multiSelect>  
+                                
+                                <!-- <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
+                                </p-multiSelect> -->
+
+                            </div> 
+
+                            <div class="form-group">
+                                <label>Cert By</label>
                                 <select [(ngModel)]="receivingForm.certifiedTypeId" name="certifiedTypeId"
                                     (change)="onSelectCertType(receivingForm.certifiedTypeId)" (ngModelChange)="getActive()">
                                     <option value="0">-- Select --</option>
@@ -802,7 +815,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label>
+                                <!-- <label *ngIf="receivingForm.certifiedTypeId > 0 ">Cert By</label> -->
                                 <div class="form-row" *ngIf="receivingForm.certifiedTypeId == customerModuleId">
                                     <div class="col-sm-12">  
                                         <p-autoComplete field="name" class="pautocomp-cstm"
@@ -845,25 +858,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             <div class="form-group">
                                 <label> Cert Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
@@ -890,12 +884,16 @@
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                <!-- <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
-                                </p-multiSelect>
+                                </p-multiSelect> -->
+                                <select class="form-control" (ngModelChange)="getActive()" name="tagType" [(ngModel)]="receivingForm.tagTypeIds">
+                                    <option value="0">--Select--</option>
+                                    <option *ngFor="let tagType of allTagTypes" [value]="tagType.Key">{{tagType.Value}}</option>
+                                </select>
                             </div>                             
                             <div class="form-group">
-                                <label>Tag By</label>
+                                <label>Tagged By</label>
                                 <select [(ngModel)]="receivingForm.taggedByType" name="taggedByType"
                                     (change)="onSelectTaggedType(receivingForm.taggedByType)" (ngModelChange)="getActive()">
                                     <option value="0">-- Select --</option>
@@ -1296,11 +1294,11 @@
                 </div>
             </div>
             <div class="form-row pull-right m-t-10">
-                <button *ngIf="!isEditMode" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
+                <button *ngIf="!isEditMode && isAdd" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
                     [disabled]="!customerWorkForm.valid || disableMagmtStruct ||  disableCondition || disableSite">
                     Save 
                 </button>
-                <button *ngIf="isEditMode" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
+                <button *ngIf="isEditMode && isEdit" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
                     [disabled]="!customerWorkForm.valid  || disableUpdateButton">
                     Update 
                 </button>
@@ -1309,7 +1307,7 @@
        
     </div>
 </p-tabPanel>
-<p-tabPanel header="Documents"   [disabled]="receivingCustomerWorkId ==0 || receivingCustomerWorkId ==null  || receivingCustomerWorkId ==undefined ">
+<p-tabPanel header="Documents" *ngIf="isDocumentInfo"  [disabled]="receivingCustomerWorkId ==0 || receivingCustomerWorkId ==null  || receivingCustomerWorkId ==undefined ">
     <div>
         <app-common-documents [moduleName]="moduleName"  [referenceId]="receivingCustomerWorkId"
             [isViewMode]="false" [offLineUpload]="false"></app-common-documents> 

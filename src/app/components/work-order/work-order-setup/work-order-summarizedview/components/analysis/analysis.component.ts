@@ -198,7 +198,7 @@ export class AnalysisComponent implements OnInit, OnChanges {
                         field: 'status'
                     },
                     {
-                        header: 'Customer Name',
+                        header: 'Cust Name',
                         field: 'customerName'
                     },
                     {
@@ -260,7 +260,7 @@ export class AnalysisComponent implements OnInit, OnChanges {
                         width:"70px" 
                     },
                     {
-                        header: 'Direct Cost Revenue Percentage',
+                        header: 'Direct Cost Rev Percentage',
                         field: 'directCostRevenuePercentage'
                     },
                     {
@@ -347,7 +347,7 @@ export class AnalysisComponent implements OnInit, OnChanges {
                         field: 'mpnStatus'
                     },
                     {
-                        header: 'Work Order Num',
+                        header: 'WO Num',
                         field: 'workOrderNum'
                     },
                     {

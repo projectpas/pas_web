@@ -237,7 +237,7 @@ export class EditUserRolesComponent implements OnInit {
         else{
             this.isSpinnerVisible=false;
         }
-        this.enableDisableViewPermission(null,false);
+        this.enableDisableViewPermission(null,false,0);
     }
     
     setPermissionByType(currentModule: ModuleHierarchyMaster, type: string, value: boolean) {
@@ -365,17 +365,24 @@ export class EditUserRolesComponent implements OnInit {
                 if (currentModule.parentId != null)
                     this.checkParentModule(currentModule,currentModule.parentId,type,value);
             }
-        
-        this.enableDisableViewPermission(currentModule,value);
+        this.enableDisableViewPermission(currentModule,value,type);
     }
 
-    enableDisableViewPermission(currentModule,value){
-       let genInfoCount : number = 0
+    enableDisableViewPermission(currentModule,value,type){
+       let genInfoCount : number = 0;
+       let isAddPermission :boolean = false;
+       let addPermissionCount = 0;
+       let isAllSelected:boolean = type == 1 && currentModule.hasChildren && value ? true :false;
+       let isAllUnSelected:boolean = type == 1 && currentModule.hasChildren && !value ? true :false;
        if(currentModule != null){
             this.sortedHierarchy.filter(function (module) {
                 if(module.parentId != null && (currentModule.parentId == module.parentId)){
                     if(module.displayOrder != null && module.displayOrder == 0){
                         genInfoCount = genInfoCount +1;
+                        isAddPermission = currentModule.rolePermission.canAdd ? true :false;
+                    }
+                    else{
+                        addPermissionCount = module.rolePermission.canAdd ? addPermissionCount+1 :addPermissionCount;
                     }
                 }
          });
@@ -384,14 +391,21 @@ export class EditUserRolesComponent implements OnInit {
                 if(genInfoCount >0){
                     if(module.parentId != null && (currentModule.parentId == module.parentId)){
                         if(module.displayOrder != null && module.displayOrder == 0 && value){
+                            module.rolePermission.canAdd = module.rolePermission.canAdd ? true: isAddPermission ?true :false;
+                            module.rolePermission.isAddDisabled =isAllSelected ?true : addPermissionCount == 0 ?false :  module.rolePermission.isAddDisabled ?true : isAddPermission ?true :false;
                             module.rolePermission.canView = true;
+                        }else{
+                            module.rolePermission.isAddDisabled =isAllSelected ?true :addPermissionCount == 0 ?false :  module.rolePermission.isAddDisabled ?true :false;
                         }
                     }
                 }
                 if(module.rolePermission.canAdd || module.rolePermission.canUpdate || module.rolePermission.canDelete){
+                    module.rolePermission.isAddDisabled = isAllSelected && module.rolePermission.canAdd && module.displayOrder ==0 ?true :module.rolePermission.isAddDisabled;
                     module.rolePermission.canView = true;
                     module.rolePermission.isDisabled = true;
-                }else {
+                }
+                else {
+                    module.rolePermission.isAddDisabled = isAllUnSelected && !module.rolePermission.canAdd && module.displayOrder ==0 ?false :module.rolePermission.isAddDisabled;
                     module.rolePermission.isDisabled = false;
                 }
             return module
@@ -508,7 +522,6 @@ export class EditUserRolesComponent implements OnInit {
 
     UpdateUserRole(): void {
     this.isSpinnerVisible=true;
-    debugger;
         let userRoleID = this.currentUserRole.id
         this.currentUserRole.rolePermissions = [];
         let arrayData :any = [];

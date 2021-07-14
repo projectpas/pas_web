@@ -93,6 +93,8 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.taggedByName = SL.taggedByName;                
                 stockLine.tagType = SL.tagType;
                 stockLine.tagTypeId = SL.tagTypeId;
+                stockLine.certType = SL.certType;
+                stockLine.certTypeId = SL.certTypeId;
                 stockLine.unitOfMeasureId = SL.unitOfMeasureId;
                 stockLine.obtainFrom = SL.obtainFrom;
                 stockLine.obtainFromType = SL.obtainFromType;

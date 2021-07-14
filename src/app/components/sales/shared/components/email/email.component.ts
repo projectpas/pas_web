@@ -1,7 +1,7 @@
 ﻿
 import { Component, OnInit, AfterViewInit, ViewChild, Input, OnChanges, ElementRef } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-declare var $ : any;
+declare var $: any;
 import { CommunicationService } from '../../../../../shared/services/communication.service';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { CommonService } from '../../../../../services/common.service'
@@ -19,7 +19,7 @@ import { ConfigurationService } from '../../../../../services/configuration.serv
 })
 
 export class EmailComponent implements OnInit, OnChanges {
-    @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+    @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
     @Input() customerInfoFromSalesQuote: any = {};
     @Input() workOrderId: any;
     @Input() salesQuoteId: any = null;
@@ -63,7 +63,7 @@ export class EmailComponent implements OnInit, OnChanges {
     emailViewData: any = {};
     moduleId: any = 0;
     referenceId: any = 0;
-    @ViewChild("emailQuotePopup",{static:false}) public emailQuotePopup: ElementRef;
+    @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
     pdfPath: any;
     customerContact: any;
     cusContactList: any;
@@ -102,7 +102,7 @@ export class EmailComponent implements OnInit, OnChanges {
     }
 
     getContactDetailsById(id) {
-        this.commonService.getCustomerContactsById(id,this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getCustomerContactsById(id, this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.customerContactList = res;
             for (let i = 0; i < this.customerContactList.length; i++) {
                 this.customerContactList[i]['contactName'] = this.customerContactList[i].firstName + " " + this.customerContactList[i].lastName;
@@ -345,7 +345,7 @@ export class EmailComponent implements OnInit, OnChanges {
 
 
     getAllEmployees() {
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName',this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName', this.authService.currentUser.masterCompanyId).subscribe(res => {
             console.log("Employee details:", res);
             this.employeesOriginalData = res.map(x => {
                 return {
@@ -378,7 +378,7 @@ export class EmailComponent implements OnInit, OnChanges {
     getAllEmail() {
         //
 
-        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.selectedPartNumber.workOrderPartNumberId,1)
+        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.selectedPartNumber.workOrderPartNumberId, 1)
             .subscribe(
                 (res: any[]) => {
                     this.data = res;
@@ -392,7 +392,7 @@ export class EmailComponent implements OnInit, OnChanges {
     }
 
     getAllEmailType() {
-        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name', this.currentUserMasterCompanyId)
+        this.commonService.smartDropDownList('EmailType', 'EmailTypeId', 'Name', 0)
             .subscribe(
                 (res: any[]) => {
                     this.emailTypes = res;

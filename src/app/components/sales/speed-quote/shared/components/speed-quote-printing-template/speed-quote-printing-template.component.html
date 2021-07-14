@@ -57,7 +57,7 @@
                     disabled>{{this.speedQuote.speedQuoteNumber}}</label>
                 </div>
                 <div class="second-block-div">
-                  <label class="col-sm-6 second-block-label" style="width:100%"> Quote Date</label>
+                  <label class="col-sm-6 second-block-label" style="width:100%"> Qte Date</label>
                   <label class="col-sm-6 second-block-label" style="width:100%"
                     disabled>{{this.speedQuote.createdDate  | date: 'MM/dd/yyyy'}}</label>
                 </div>
@@ -200,13 +200,13 @@
                       <td>{{part.uomName}}</td>
                       <td> Qty</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Repair' "  style="text-align: right;">{{price.quantityRequested}}</td>
+                        <td *ngIf="price.conditionDescription == 'Repair' ||  price.conditionDescription == 'Repaired'"  style="text-align: right;">{{price.quantityRequested}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Overhaul' "  style="text-align: right;">{{price.quantityRequested}}</td>
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ||  price.conditionDescription == 'Overhauled' "  style="text-align: right;">{{price.quantityRequested}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Bench Check' "  style="text-align: right;">{{price.quantityRequested}}</td>
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ||  price.conditionDescription == 'Bench Checked' "  style="text-align: right;">{{price.quantityRequested}}</td>
                       </ng-container>
                     </tr>
                     <tr>
@@ -216,13 +216,13 @@
                       <td></td> -->
                       <td>Unit Price</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Repair' "  style="text-align: right;">{{price.unitPrice | twoDecimalGlobalNumberFormatPipe}}</td>
+                        <td *ngIf="price.conditionDescription == 'Repair' ||  price.conditionDescription == 'Repaired' "  style="text-align: right;">{{price.unitPrice | twoDecimalGlobalNumberFormatPipe}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Overhaul' "  style="text-align: right;">{{price.unitPrice | twoDecimalGlobalNumberFormatPipe }}</td>
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ||  price.conditionDescription == 'Overhauled' "  style="text-align: right;">{{price.unitPrice | twoDecimalGlobalNumberFormatPipe }}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Bench Check' "  style="text-align: right;">{{price.unitPrice | twoDecimalGlobalNumberFormatPipe}}</td>
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ||  price.conditionDescription == 'Bench Checked' "  style="text-align: right;">{{price.unitPrice | twoDecimalGlobalNumberFormatPipe}}</td>
                       </ng-container>
                     </tr>
                     <tr>
@@ -232,13 +232,13 @@
                       <td></td> -->
                       <td>Ext Price</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Repair' "  style="text-align: right;">{{price.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                        <td *ngIf="price.conditionDescription == 'Repair' ||  price.conditionDescription == 'Repaired' "  style="text-align: right;">{{price.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Overhaul' "  style="text-align: right;">{{price.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ||  price.conditionDescription == 'Overhauled' "  style="text-align: right;">{{price.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Bench Check' "  style="text-align: right;">{{price.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ||  price.conditionDescription == 'Bench Checked' "  style="text-align: right;">{{price.salesPriceExtended | twoDecimalGlobalNumberFormatPipe}}</td>
                       </ng-container>
                     </tr>
                     <tr>
@@ -248,13 +248,13 @@
                       <td></td> -->
                       <td>TAT</td>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Repair' "  style="text-align: right;">{{price.tat}}</td>
+                        <td *ngIf="price.conditionDescription == 'Repair' ||  price.conditionDescription == 'Repaired' "  style="text-align: right;">{{price.tat}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Overhaul' "  style="text-align: right;">{{price.tat}}</td>
+                        <td *ngIf="price.conditionDescription == 'Overhaul' ||  price.conditionDescription == 'Overhauled' "  style="text-align: right;">{{price.tat}}</td>
                       </ng-container>
                       <ng-container *ngFor="let price of part.unitPriceData let i=index">
-                        <td *ngIf="price.conditionDescription == 'Bench Check' "  style="text-align: right;">{{price.tat}}</td>
+                        <td *ngIf="price.conditionDescription == 'Bench Check' ||  price.conditionDescription == 'Bench Checked' "  style="text-align: right;">{{price.tat}}</td>
                       </ng-container>
                     </tr>
                     <!-- <tr> -->

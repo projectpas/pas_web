@@ -7,7 +7,7 @@
             </div>
             <div>
                 <button type="button" class="btn-sm header-button" matTooltipPosition="above"
-                    matTooltip="Create Sales Order" [routerLink]="['/exchangemodule/exchangepages/exchange-quote']">
+                    matTooltip="Create Exchange Quote" [routerLink]="['/exchangemodule/exchangepages/exchange-quote']">
                     Create Exchange Quote
                 </button>
             </div>
@@ -262,7 +262,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <h6 class="modal-body">Exchange Quote Number : {{selectedQuoteToDelete}}</h6>
+      <h6 class="modal-body">Exchange Qte Num : {{selectedQuoteToDelete}}</h6>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="deleteQuote()">Yes</button>
@@ -278,7 +278,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <h6 class="modal-body">Exchange Quote Number : {{restorerecord.exchangeQuoteNumber}}</h6>
+      <h6 class="modal-body">Exchange Qte Num : {{restorerecord.exchangeQuoteNumber}}</h6>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
@@ -297,9 +297,9 @@
           <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
             <thead>
               <tr>
-                <th>Exch Quote Num</th>
+                <th>Exch Qte Num</th>
                 <th>Status</th>
-                <th>Customer Name</th>
+                <th>Cust Name</th>
                 <th>Cust Ref</th>
                 <th>Salesperson</th>
                 <th>Created Date</th>

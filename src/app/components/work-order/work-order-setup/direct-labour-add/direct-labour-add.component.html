@@ -8,7 +8,7 @@
                             <li class="breadcrumb-item" aria-current="page">Direct Labor and Overhead Cost</li>
                             <li class="breadcrumb-item active" aria-current="page">{{ isEditMode ? 'Edit' : 'Create' }}
                                 Direct Labor and Overhead Cost</li>
-                        </ol>
+                        </ol> 
                     </nav>
                     <div class="clear"></div>
                     <div class="card new-card">
@@ -168,7 +168,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group m-t-10">
-                                                <label>Functional Currency <span class="clr-red">*</span></label>
+                                                <label>Functional Curr <span class="clr-red">*</span></label>
                                                 <div class="form-row m-b-10">
                                                     <div class="col-md-7">
                                                         <select class="form-control" style="width: 120px;"
@@ -181,7 +181,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Transactional Currency <span class="clr-red">*</span></label>
+                                                <label>Transactional Curr <span class="clr-red">*</span></label>
                                                 <div class="form-row m-b-10">
                                                     <div class="col-md-7">
                                                         <select class="form-control" style="width: 120px;"
@@ -191,6 +191,16 @@
                                                                 value="{{item.value}}">{{item.label}}</option>
                                                         </select>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group"  >
+                                                <div class="col-md-6">
+                                                    <label>Quote Average Rate <span class="clr-red">*</span></label>
+                                                    <input type="number" style="width: 120px;" pKeyFilter="num"
+                                                        name="quoteaverageRate"
+                                                        (focusout)="onChangeCostWoq($event.target.value)"
+                                                        class="form-control text-right" (ngModelChange)="getActive()"
+                                                        [(ngModel)]="directLaborData.quoteAverageRate" required>
                                                 </div>
                                             </div>
                                         </div>

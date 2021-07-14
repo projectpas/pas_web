@@ -661,7 +661,9 @@
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b> Certification Type: </b></span><span class="value">{{
+                                <span class="label"
+                                  ><b> Cert Type: </b></span
+                                ><span class="value">{{
                                   allEmployeelist.employeeCertificationtype[0]
                                     ?.description
                                 }}</span>
@@ -699,22 +701,30 @@
 
                               </p>
 
-                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate">
-                                <span class="label"><b>Expiration Date</b></span>
-                                <span class="value">
-                                  <input type="checkbox" name="resale" checked="true" disabled>
-                                </span>
+                              <p  *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate">
+                                <span class="label"
+                                  ><b>Exp Date</b></span
+                                >
+                                <span class="value" >
+                                  <input type="checkbox" name="resale"
+														             checked="true" disabled>
+                                </span>                                
                               </p>
-                              <p *ngIf="!allEmployeelist.employeeCertification[0]?.isExpirationDate">
-                                <span class="label"><b>Expiration Date</b></span>
-                                <span class="value">
-                                  <input type="checkbox" name="resale" disabled>
+                              <p  *ngIf="!allEmployeelist.employeeCertification[0]?.isExpirationDate">
+                                <span class="label"
+                                  ><b>Exp Date</b></span
+                                >
+                                <span class="value" >
+                                  <input type="checkbox" name="resale"
+														             disabled>
                                 </span>
-
-                              </p>
-                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate">
-                                <span class="label"><b>Certification Expiration Date: </b></span><span class="value">
-                                  {{
+                                
+                              </p>                             
+                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate"> 
+                                <span class="label"
+                                  ><b>Certification Exp Date: </b></span
+                                ><span class="value">
+    {{
                                   allEmployeelist.employeeCertification[0]
                                     ?.expirationDate | date: 'MM/dd/yyyy'
     }}
@@ -809,8 +819,10 @@
                                 </span>
                               </p>
                               <p>
-                                <span class="label"><b>Expiration Date: </b></span><span class="value">
-                                  {{
+                                <span class="label"
+                                  ><b>Exp Date: </b></span
+                                ><span class="value">
+    {{
                                   allEmployeelist.employeeTraining[0]
                                     ?.expirationDate | date: 'MM/dd/yyyy'
     }}

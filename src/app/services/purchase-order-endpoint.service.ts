@@ -29,7 +29,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   }
 
   getVendorPOHeaderById(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poheaderdetails?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poheaderdetails?purchaseOrderId=${purchaseOrderId}`,this.getRequestHeaders() )
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getVendorPOHeaderById(purchaseOrderId));
     });
@@ -38,7 +38,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   
   getPurchaseOrderPartsById(purchaseOrderId, workOrderPartNumberId) {
     const woId = workOrderPartNumberId ? workOrderPartNumberId : 0;
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/purchaseorderparts?purchaseOrderId=${purchaseOrderId}&workOrderPartNoId=${woId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/purchaseorderparts?purchaseOrderId=${purchaseOrderId}&workOrderPartNoId=${woId}` , this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPurchaseOrderPartsById(purchaseOrderId, workOrderPartNumberId));
     });
@@ -47,20 +47,20 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   getPurchaseOrderAllPartsById(purchaseOrderId, employeeID, workOrderPartNumberId) {
     const woId = workOrderPartNumberId ? workOrderPartNumberId : 0;
     const eID = employeeID ? employeeID : 0;
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/purchaseorderpartsAll?purchaseOrderId=${purchaseOrderId}&employeeID=${employeeID}&workOrderPartNoId=${woId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/purchaseorderpartsAll?purchaseOrderId=${purchaseOrderId}&employeeID=${employeeID}&workOrderPartNoId=${woId}` , this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPurchaseOrderAllPartsById(purchaseOrderId, employeeID, workOrderPartNumberId));
     });
   }
   getPOTotalCostById(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getpototalcost?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getpototalcost?purchaseOrderId=${purchaseOrderId}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOTotalCostById(purchaseOrderId));
     });
   }
 
   getAllEditID(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getAllEditID?poID=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getAllEditID?poID=${purchaseOrderId}` , this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getAllEditID(purchaseOrderId));  
     });
@@ -70,7 +70,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   
 
   getApproversListByTaskIdModuleAmt(taskId, moduleAmount) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslist?approvalTaskId=${taskId}&moduleAmount=${moduleAmount}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslist?approvalTaskId=${taskId}&moduleAmount=${moduleAmount}`,this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getApproversListByTaskIdModuleAmt(taskId, moduleAmount));
     });
@@ -78,7 +78,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   }  
 
   approverslistbyTaskId(taskId, id) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}` , this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
     });
@@ -89,7 +89,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   
  
   getPOApprovalListById(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getpoapprovallist?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getpoapprovallist?purchaseOrderId=${purchaseOrderId}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOApprovalListById(purchaseOrderId));
     });
@@ -104,7 +104,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
 	}
   
   getVendorPOAddressById(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poaddressdetails?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poaddressdetails?purchaseOrderId=${purchaseOrderId}` , this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getVendorPOAddressById(purchaseOrderId));
     });
@@ -167,14 +167,14 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
 
   
   getPOStatus(purchaseOrderId, status, updatedBy) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/postatus?purchaseOrderId=${purchaseOrderId}&status=${status}&updatedBy=${updatedBy}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/postatus?purchaseOrderId=${purchaseOrderId}&status=${status}&updatedBy=${updatedBy}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOStatus(purchaseOrderId, status, updatedBy));
     });
   }
 
   deletePO(purchaseOrderId, updatedBy) {
-    return this.http.delete(`${this.configurations.baseUrl}/api/purchaseorder/deletepo?purchaseOrderId=${purchaseOrderId}&updatedBy=${updatedBy}`)
+    return this.http.delete(`${this.configurations.baseUrl}/api/purchaseorder/deletepo?purchaseOrderId=${purchaseOrderId}&updatedBy=${updatedBy}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.deletePO(purchaseOrderId, updatedBy));
     });
@@ -182,28 +182,28 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
 
   
   getPOViewById(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poview?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poview?purchaseOrderId=${purchaseOrderId}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOViewById(purchaseOrderId) );
     });    
   }
 
   getPOPartsViewById(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/popartsview?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/popartsview?purchaseOrderId=${purchaseOrderId}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOPartsViewById(purchaseOrderId));
     }); 
   }  
 
   getPOHistory(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/pohistory?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/pohistory?purchaseOrderId=${purchaseOrderId}`, this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOHistory(purchaseOrderId));
     }); 
   }
 
   purchaseOrderGlobalSearch(filterText, pageNumber, pageSize, vendorId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&vendorId=${vendorId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poglobalsearch?filterText=${filterText}&pageNumber=${pageNumber}&pageSize=${pageSize}&vendorId=${vendorId}`,this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.purchaseOrderGlobalSearch(filterText, pageNumber, pageSize, vendorId));
     });
@@ -243,7 +243,7 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   }
 
   getPOApproverList(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poapproverslist?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/poapproverslist?purchaseOrderId=${purchaseOrderId}`,this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPOApproverList(purchaseOrderId) );
     });
@@ -261,14 +261,14 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
   }
 
   getPurchaseOrderSettingMasterData(currentUserMasterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting?masterCompanyId=${currentUserMasterCompanyId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting?masterCompanyId=${currentUserMasterCompanyId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId));
-            });
+        });
   }
 
   getPrintPurchaseOrderData(purchaseOrderId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPrintPurchaseOrderData?purchaseOrderId=${purchaseOrderId}`)
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPrintPurchaseOrderData?purchaseOrderId=${purchaseOrderId}`,this.getRequestHeaders())
     .catch(error => {
       return this.handleErrorCommon(error, () => this.getPrintPurchaseOrderData(purchaseOrderId) );
     });    

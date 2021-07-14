@@ -14,7 +14,7 @@ import { CommonService } from '../../../../../services/common.service';
     selector: 'app-common-teardown',
     templateUrl: 'common-teardown.component.html',
     styleUrls: ['common-teardown.component.scss']
-}) 
+})
 
 export class CommonTeardownComponent implements OnInit {
     private onDestroy$: Subject<void> = new Subject<void>();
@@ -55,17 +55,17 @@ export class CommonTeardownComponent implements OnInit {
     preAssesmentResults: any;
     prelinnaryReview: any;
     woSettingsTeardownsList: any = [];
-    arrayInsectorlist:any[] = [];
-    arrayTechnicianlist:any[] = [];
+    arrayInsectorlist: any[] = [];
+    arrayTechnicianlist: any[] = [];
     technicianList: any = [];
     inspectionList: any = [];
     reasonarryList: any = [];
     TearDownReasons: any;
-    moduleNameeRemoval:any='RemovalReasons';
-    moduleNameePrellinary:any='PreliinaryReview';
-    moduleNameePreAssesment:any='Pre-AssessmentResults';
-    moduleNameeTearDescovery:any='TeardownDiscovery';
-    moduleNameePreAssembly:any='PreAssemblyInspection';
+    moduleNameeRemoval: any = 'RemovalReasons';
+    moduleNameePrellinary: any = 'PreliinaryReview';
+    moduleNameePreAssesment: any = 'Pre-AssessmentResults';
+    moduleNameeTearDescovery: any = 'TeardownDiscovery';
+    moduleNameePreAssembly: any = 'PreAssemblyInspection';
     constructor(private workOrderService: WorkOrderService, private authService: AuthService,
         private alertService: AlertService, private commonService: CommonService,) {
     }
@@ -73,7 +73,7 @@ export class CommonTeardownComponent implements OnInit {
     ngOnInit(): void {
         // this.getTearDownReasons();
         //this.getTechnicianList();
-       // this.getInspectiorsList();
+        // this.getInspectiorsList();
         this.getTeardownServicesList();
         this.getReasonsByChecked();
         this.getTearDownListFromWOSettings();
@@ -109,276 +109,221 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     getReasonsByChecked() {
-        if (this.getsaveTearDownData) 
-        {
-            if(this.reasonarryList.length == 0) {			
-                this.reasonarryList.push(0); 
-            }	
-            if (this.getsaveTearDownData.isRemovalReasons) 
-            {
-                if(this.getsaveTearDownData.workOrderRemovalReasons.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderRemovalReasons.reasonId); 
+        if (this.getsaveTearDownData) {
+            if (this.reasonarryList.length == 0) {
+                this.reasonarryList.push(0);
+            }
+            if (this.getsaveTearDownData.isRemovalReasons) {
+                if (this.getsaveTearDownData.workOrderRemovalReasons.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderRemovalReasons.reasonId);
                 }
                 this.worOrderTearDownReasonListById(1);
-            } 
-            if (this.getsaveTearDownData.isPmaDerBulletins) 
-            {
+            }
+            if (this.getsaveTearDownData.isPmaDerBulletins) {
                 // if(this.saveTearDownData.workOrderRemovalReasons.reasonId)
                 // {
                 //     this.reasonarryList.push(this.saveTearDownData.workOrderRemovalReasons.reasonId); 
                 // }
 
                 //this.worOrderTearDownReasonListById(2);
-            }  if (this.getsaveTearDownData.isPreliinaryReview) 
-            {
+            } if (this.getsaveTearDownData.isPreliinaryReview) {
 
-                if(this.getsaveTearDownData.workOrderPreliinaryReview.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreliinaryReview.reasonId); 
+                if (this.getsaveTearDownData.workOrderPreliinaryReview.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreliinaryReview.reasonId);
                 }
                 this.worOrderTearDownReasonListById(3);
-            }  
-            if (this.getsaveTearDownData.isPreAssmentResults) 
-            {
-                if(this.getsaveTearDownData.workOrderPreAssmentResults.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreAssmentResults.reasonId); 
+            }
+            if (this.getsaveTearDownData.isPreAssmentResults) {
+                if (this.getsaveTearDownData.workOrderPreAssmentResults.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreAssmentResults.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(4);
-            }  
-            if (this.getsaveTearDownData.isDiscovery) 
-            {
-                if(this.getsaveTearDownData.workOrderDiscovery.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderDiscovery.reasonId); 
+            }
+            if (this.getsaveTearDownData.isDiscovery) {
+                if (this.getsaveTearDownData.workOrderDiscovery.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderDiscovery.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(5);
-            }  
-            if (this.getsaveTearDownData.isPreAssemblyInspection) 
-            {
-                if(this.getsaveTearDownData.workOrderPreAssemblyInspection.reasonId  >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.reasonId); 
+            }
+            if (this.getsaveTearDownData.isPreAssemblyInspection) {
+                if (this.getsaveTearDownData.workOrderPreAssemblyInspection.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(6);
-            }  
-            if (this.getsaveTearDownData.isWorkPerformed) 
-            {
-                if(this.getsaveTearDownData.workOrderWorkPerformed.reasonId>0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderWorkPerformed.reasonId); 
+            }
+            if (this.getsaveTearDownData.isWorkPerformed) {
+                if (this.getsaveTearDownData.workOrderWorkPerformed.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderWorkPerformed.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(7);
-            }  
-            if (this.getsaveTearDownData.isTestDataUsed) 
-            {
-                if(this.getsaveTearDownData.workOrderTestDataUsed.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderTestDataUsed.reasonId); 
+            }
+            if (this.getsaveTearDownData.isTestDataUsed) {
+                if (this.getsaveTearDownData.workOrderTestDataUsed.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderTestDataUsed.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(8);
-            }  
-            if (this.getsaveTearDownData.isBulletinsModification) 
-            {
-                if(this.getsaveTearDownData.workOrderBulletinsModification.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderBulletinsModification.reasonId); 
+            }
+            if (this.getsaveTearDownData.isBulletinsModification) {
+                if (this.getsaveTearDownData.workOrderBulletinsModification.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderBulletinsModification.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(9);
-            } 
-            if (this.getsaveTearDownData.isFinalTest) 
-            {
-                if(this.getsaveTearDownData.workOrderFinalTest.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderFinalTest.reasonId); 
+            }
+            if (this.getsaveTearDownData.isFinalTest) {
+                if (this.getsaveTearDownData.workOrderFinalTest.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderFinalTest.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(10);
-            } if (this.getsaveTearDownData.isFinalInspection) 
-            {
-                if(this.getsaveTearDownData.workOrderFinalInspection.reasonId >0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderFinalInspection.reasonId); 
+            } if (this.getsaveTearDownData.isFinalInspection) {
+                if (this.getsaveTearDownData.workOrderFinalInspection.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderFinalInspection.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(11);
-            } if (this.getsaveTearDownData.isAdditionalComments) 
-            {
-                if(this.getsaveTearDownData.workOrderAdditionalComments.reasonId>0)
-                {
-                    this.reasonarryList.push(this.getsaveTearDownData.workOrderAdditionalComments.reasonId); 
+            } if (this.getsaveTearDownData.isAdditionalComments) {
+                if (this.getsaveTearDownData.workOrderAdditionalComments.reasonId > 0) {
+                    this.reasonarryList.push(this.getsaveTearDownData.workOrderAdditionalComments.reasonId);
                 }
 
                 this.worOrderTearDownReasonListById(12);
-            } 
+            }
         }
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != null) {
             this.showViewTemplate = true;
-          var iscall= false;  
-        //   jobTitleCode
-        const TechnicianId = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
-        if (TechnicianId !== undefined) 
-        {
-            if(this.arrayTechnicianlist.length == 0) 
-            {	
-                if(this.getsaveTearDownData.workOrderPreAssmentResults != null && this.getsaveTearDownData.workOrderPreAssmentResults.technicianId != null)
-                {
-                    if(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId.employeeId != null)
-                    {
-                        iscall= true;
-                       this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId.employeeId);
-                    }else
-                    {
-                        this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId);
-                    }                    
-                }
-                if(this.getsaveTearDownData.workOrderDiscovery != null && this.getsaveTearDownData.workOrderDiscovery.technicianId != null && this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null)
-                {
-                    if(this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null)
-                    {
-                        iscall= true;
-                       this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId);
-                    }else
-                    { 
-                        this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderDiscovery.technicianId);
+            var iscall = false;
+            //   jobTitleCode
+            const TechnicianId = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
+            if (TechnicianId !== undefined) {
+                if (this.arrayTechnicianlist.length == 0) {
+                    if (this.getsaveTearDownData.workOrderPreAssmentResults != null && this.getsaveTearDownData.workOrderPreAssmentResults.technicianId != null) {
+                        if (this.getsaveTearDownData.workOrderPreAssmentResults.technicianId.employeeId != null) {
+                            iscall = true;
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId.employeeId);
+                        } else {
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderDiscovery != null && this.getsaveTearDownData.workOrderDiscovery.technicianId != null && this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null) {
+                        if (this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null) {
+                            iscall = true;
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId);
+                        } else {
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderDiscovery.technicianId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderPreAssemblyInspection != null && this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId != null) {
+                        if (this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId.employeeId != null) {
+                            iscall = true;
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId.employeeId);
+                        } else {
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderWorkPerformed != null && this.getsaveTearDownData.workOrderWorkPerformed.technicianId != null) {
+                        if (this.getsaveTearDownData.workOrderWorkPerformed.technicianId.employeeId != null) {
+                            iscall = true;
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderWorkPerformed.technicianId.employeeId);
+                        } else {
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderWorkPerformed.technicianId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderFinalTest != null && this.getsaveTearDownData.workOrderFinalTest.technicianId != null) {
+                        if (this.getsaveTearDownData.workOrderFinalTest.technicianId.employeeId != null) {
+                            iscall = true;
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderFinalTest.technicianId.employeeId);
+                        } else {
+                            this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderFinalTest.technicianId);
+                        }
                     }
                 }
-                if(this.getsaveTearDownData.workOrderPreAssemblyInspection != null && this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId != null)
-                {
-                    if(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId.employeeId != null)
-                    { iscall= true;
-                       this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId.employeeId);
-                    }else
-                    {
-                        this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId);
-                    }
-                }
-                if(this.getsaveTearDownData.workOrderWorkPerformed != null && this.getsaveTearDownData.workOrderWorkPerformed.technicianId != null)
-                {
-                    if(this.getsaveTearDownData.workOrderWorkPerformed.technicianId.employeeId != null)
-                    { iscall= true;
-                       this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderWorkPerformed.technicianId.employeeId);
-                    }else
-                    {
-                        this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderWorkPerformed.technicianId);
-                    }
-                }
-                if(this.getsaveTearDownData.workOrderFinalTest != null && this.getsaveTearDownData.workOrderFinalTest.technicianId != null)
-                {
-                    if(this.getsaveTearDownData.workOrderFinalTest.technicianId.employeeId != null)
-                    { iscall= true;
-                       this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderFinalTest.technicianId.employeeId);
-                    }else
-                    { 
-                        this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderFinalTest.technicianId);
-                    }
-                }		
-            }	
-                 this.commonService.autoCompleteDropdownsEmployeeByExpertise('',TechnicianId[0].employeeExpertiseId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
-                    this.technicianOriginalList = res; 
+                this.commonService.autoCompleteDropdownsEmployeeByExpertise('', TechnicianId[0].employeeExpertiseId, 20, this.arrayTechnicianlist.join(), this.currentUserManagementStructureId, this.authService.currentUser.masterCompanyId).subscribe(res => {
+                    this.technicianOriginalList = res;
                     this.technicianList = this.technicianOriginalList;
                 }, error => error => this.saveFailedHelper(error))
-        }
-        //  jobTitleCode
-        const id = getValueByFieldFromArrayofObject('empExpCode', 'INSPECTOR', this.jobTitles);
-        if (id !== undefined) 
-        {
-            if(this.arrayInsectorlist.length == 0) 
-            {	
-                if(this.getsaveTearDownData.workOrderPreAssmentResults != null && this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId != null)	
-                {
-                    if(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId.employeeId != null)
-                    { iscall= true;
-                       this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId.employeeId);
-                    }else
-                    { 
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId);
-                    }                  
-                }
-                if(this.getsaveTearDownData.workOrderDiscovery != null && this.getsaveTearDownData.workOrderDiscovery.inspectorId != null)	
-                {
-                     if(this.getsaveTearDownData.workOrderDiscovery.inspectorId.employeeId != null)
-                     { iscall= true;
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderDiscovery.inspectorId.employeeId);
-                     }else
-                     { 
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderDiscovery.inspectorId );
-                     } 
-                }
-                if(this.getsaveTearDownData.workOrderPreAssemblyInspection != null && this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId != null )	
-                {
-                    if(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId.employeeId != null)
-                    { iscall= true;
-                       this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId.employeeId);
-                    }else
-                    {
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId);
+            }
+            //  jobTitleCode
+            const id = getValueByFieldFromArrayofObject('empExpCode', 'INSPECTOR', this.jobTitles);
+            if (id !== undefined) {
+                if (this.arrayInsectorlist.length == 0) {
+                    if (this.getsaveTearDownData.workOrderPreAssmentResults != null && this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderDiscovery != null && this.getsaveTearDownData.workOrderDiscovery.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderDiscovery.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderDiscovery.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderDiscovery.inspectorId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderPreAssemblyInspection != null && this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderWorkPerformed != null && this.getsaveTearDownData.workOrderWorkPerformed.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderWorkPerformed.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderFinalTest != null && this.getsaveTearDownData.workOrderFinalTest.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderFinalTest.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalTest.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalTest.inspectorId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderFinalInspection != null && this.getsaveTearDownData.workOrderFinalInspection.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderFinalInspection.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalInspection.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalInspection.inspectorId);
+                        }
+                    }
+                    if (this.getsaveTearDownData.workOrderPreliinaryReview != null && this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId != null) {
+                        if (this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId.employeeId != null) {
+                            iscall = true;
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId.employeeId);
+                        } else {
+                            this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId);
+                        }
                     }
                 }
-                if( this.getsaveTearDownData.workOrderWorkPerformed != null && this.getsaveTearDownData.workOrderWorkPerformed.inspectorId != null)	
-                {
-                    if(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId.employeeId != null)
-                    { iscall= true;
-                       this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId.employeeId);
-                    }else
-                    {
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId);
+                this.commonService.autoCompleteDropdownsEmployeeByExpertise('', id[0].employeeExpertiseId, 20, this.arrayInsectorlist.join(), this.currentUserManagementStructureId, this.authService.currentUser.masterCompanyId).subscribe(res => {
+                    this.inspectorsOriginalList = res;
+                    this.inspectionList = this.inspectorsOriginalList;
+                    if (!iscall) {
+                        this.assignDatatoFields(this.getsaveTearDownData);
                     }
-                }
-                if(this.getsaveTearDownData.workOrderFinalTest != null && this.getsaveTearDownData.workOrderFinalTest.inspectorId != null)	
-                {
-                    if(this.getsaveTearDownData.workOrderFinalTest.inspectorId.employeeId != null)
-                    { iscall= true;
-                       this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalTest.inspectorId.employeeId);
-                    }else
-                    { 
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalTest.inspectorId);
-                    }
-                }
-                if( this.getsaveTearDownData.workOrderFinalInspection  != null && this.getsaveTearDownData.workOrderFinalInspection.inspectorId != null)	
-                {
-                    if(this.getsaveTearDownData.workOrderFinalInspection.inspectorId.employeeId != null)
-                    {iscall= true;
-                       this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalInspection.inspectorId.employeeId);
-                    }else
-                    {
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalInspection.inspectorId);
-                    }
-                }
-                if(this.getsaveTearDownData.workOrderPreliinaryReview != null && this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId != null)	
-                {
-                    if(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId.employeeId != null)
-                    {iscall= true;
-                       this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId.employeeId);
-                    }else
-                    {
-                        this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId);
-                    }
-                }	
-            }	
-                 this.commonService.autoCompleteDropdownsEmployeeByExpertise('',id[0].employeeExpertiseId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
-                    this.inspectorsOriginalList = res; 
-                    this.inspectionList = this.inspectorsOriginalList; 
-                    if(!iscall) 
-                    {
-                        this.assignDatatoFields(this.getsaveTearDownData);  
-                    }
-                    
+
                 }, error => error => this.saveFailedHelper(error))
-        }
+            }
 
             this.getReasonsByChecked();
-           
+
         } else {
             this.saveTearDownData = { ...new TearDown() };
             this.autoCompleteDropdownsEmployeeByJobTitleInspector('');
@@ -420,40 +365,38 @@ export class CommonTeardownComponent implements OnInit {
         $('#stepadd12').collapse('hide');
     }
 
-    async autoCompleteDropdownsEmployeeByJobTitleInspector(serachtext:string) {
+    async autoCompleteDropdownsEmployeeByJobTitleInspector(serachtext: string) {
         // jobTitleCode
         const id = getValueByFieldFromArrayofObject('empExpCode', 'INSPECTOR', this.jobTitles);
-        if (id !== undefined) 
-        {
-            if(this.arrayInsectorlist.length == 0) {			
-                this.arrayInsectorlist.push(0); 
-            }	
-                await this.commonService.autoCompleteDropdownsEmployeeByExpertise(serachtext,id[0].employeeExpertiseId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
-                    this.inspectorsOriginalList = res; 
-                    this.inspectionList = this.inspectorsOriginalList;           
-                }, error => error => this.saveFailedHelper(error))
-        }		
+        if (id !== undefined) {
+            if (this.arrayInsectorlist.length == 0) {
+                this.arrayInsectorlist.push(0);
+            }
+            await this.commonService.autoCompleteDropdownsEmployeeByExpertise(serachtext, id[0].employeeExpertiseId, 20, this.arrayInsectorlist.join(), this.currentUserManagementStructureId, this.authService.currentUser.masterCompanyId).subscribe(res => {
+                this.inspectorsOriginalList = res;
+                this.inspectionList = this.inspectorsOriginalList;
+            }, error => error => this.saveFailedHelper(error))
+        }
     }
-    
-    async autoCompleteDropdownsEmployeeByJobTitleTechnician(serachtext:string) {
+
+    async autoCompleteDropdownsEmployeeByJobTitleTechnician(serachtext: string) {
         // jobTitleCode
         const id = getValueByFieldFromArrayofObject('empExpCode', 'TECHNICIAN', this.jobTitles);
-        if (id !== undefined) 
-        {
-            if(this.arrayTechnicianlist.length == 0) {			
-                this.arrayTechnicianlist.push(0); 
-            }	
-                await this.commonService.autoCompleteDropdownsEmployeeByExpertise(serachtext,id[0].employeeExpertiseId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
-                    this.technicianOriginalList = res; 
-                    this.technicianList = this.technicianOriginalList;           
-                }, error => error => this.saveFailedHelper(error))
-        }		
+        if (id !== undefined) {
+            if (this.arrayTechnicianlist.length == 0) {
+                this.arrayTechnicianlist.push(0);
+            }
+            await this.commonService.autoCompleteDropdownsEmployeeByExpertise(serachtext, id[0].employeeExpertiseId, 20, this.arrayTechnicianlist.join(), this.currentUserManagementStructureId, this.authService.currentUser.masterCompanyId).subscribe(res => {
+                this.technicianOriginalList = res;
+                this.technicianList = this.technicianOriginalList;
+            }, error => error => this.saveFailedHelper(error))
+        }
     }
-    
+
     get currentUserManagementStructureId(): number {
         return this.authService.currentUser
-          ? this.authService.currentUser.managementStructureId
-          : null;
+            ? this.authService.currentUser.managementStructureId
+            : null;
     }
 
     get userName(): string {
@@ -468,10 +411,10 @@ export class CommonTeardownComponent implements OnInit {
 
     setEditArray: any = []
     getTeardownServicesList() {
-            const strText = '';
-            this.setEditArray.push(0);
-            this.commonService.autoSuggestionSmartDropDownList('TeardownType', 'TeardownTypeId', 'Name', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
-            this.teadownTypesList = res.map(x => { 
+        const strText = '';
+        this.setEditArray.push(0);
+        this.commonService.autoSuggestionSmartDropDownList('TeardownType', 'TeardownTypeId', 'Name', strText, true, 0, this.setEditArray.join(), 0).subscribe(res => {
+            this.teadownTypesList = res.map(x => {
                 return {
                     ...x,
                     teardownTypeId: x.value,
@@ -482,7 +425,7 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     worOrderTearDownReasonListById(id) {
-        this.workOrderService.AutoCompleteDropdownsTeardownReasons(id,this.reasonarryList.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.workOrderService.AutoCompleteDropdownsTeardownReasons(id, this.reasonarryList.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.deStructureReasonsData(id, res);
         })
     }
@@ -519,7 +462,7 @@ export class CommonTeardownComponent implements OnInit {
             this.additionalComments = dataForReasons
         }
     }
-    
+
     getUpdatedvalue(event) {
     }
 
@@ -537,7 +480,7 @@ export class CommonTeardownComponent implements OnInit {
             this.autoCompleteDropdownsEmployeeByJobTitleInspector(event.query);
         }
     }
-    
+
     selectedReason(value, type) {
         if (value != 0) {
             this.workOrderService.getteardownreasonbyidData(value).subscribe(res => {
@@ -586,7 +529,7 @@ export class CommonTeardownComponent implements OnInit {
             this.worOrderTearDownReasonListById(type);
         }
         if (type == 1) {
-            this.moduleNameeRemoval='RemovalReasons';
+            this.moduleNameeRemoval = 'RemovalReasons';
             source.reasonId = 0;
             source.memo = '';
         } else if (type == 2) {
@@ -597,15 +540,15 @@ export class CommonTeardownComponent implements OnInit {
             source.pmaParts = '';
             source.derRepairs = '';
         } else if (type == 3) {
-            this.moduleNameePrellinary='PreliinaryReview';
+            this.moduleNameePrellinary = 'PreliinaryReview';
             source.memo = '';
             source.reasonId = 0;
             source.inspectorId = 0;
             source.inspectorDate = new Date();
         }
-        else if (type == 4) { 
+        else if (type == 4) {
 
-            this.moduleNameePreAssesment='Pre-AssessmentResults';
+            this.moduleNameePreAssesment = 'Pre-AssessmentResults';
 
 
             source.reasonId = 0;
@@ -614,7 +557,7 @@ export class CommonTeardownComponent implements OnInit {
             source.inspectorId = 0;
             source.technicianDate = new Date();
         } else if (type == 5) {
-            this.moduleNameeTearDescovery='TeardownDiscovery';
+            this.moduleNameeTearDescovery = 'TeardownDiscovery';
             source.reasonId = 0;
             source.memo = '';
             source.technicianId = 0;
@@ -623,7 +566,7 @@ export class CommonTeardownComponent implements OnInit {
             source.inspectorDate = new Date();
         }
         else if (type == 6) {
-            this.moduleNameePreAssembly='PreAssemblyInspection';
+            this.moduleNameePreAssembly = 'PreAssemblyInspection';
             source.memo = '';
             source.reasonId = 0;
             source.technicianId = 0;
@@ -672,7 +615,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -683,7 +626,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -693,7 +636,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -703,7 +646,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -713,7 +656,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -723,7 +666,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -733,7 +676,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -743,7 +686,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -753,7 +696,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -763,7 +706,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -773,7 +716,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -783,7 +726,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -793,7 +736,7 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: new Date(),
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: this.authService.currentUser.masterCompanyId, 
+            masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
         }
@@ -815,7 +758,7 @@ export class CommonTeardownComponent implements OnInit {
                 this.saveTearDownData.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId;
             this.saveTearDownData.workOrderId = this.subWorkOrderDetails.workOrderId;
         }
-        var issave= true;       
+        var issave = true;
         if (this.saveTearDownData.isRemovalReasons == true && (this.saveTearDownData.workOrderRemovalReasons.memo == '' || this.saveTearDownData.workOrderRemovalReasons.reasonId == 0)) {
             this.checkMandatoryFields = true;
             issave = this.validator();
@@ -854,8 +797,7 @@ export class CommonTeardownComponent implements OnInit {
             issave = this.validator();
         }
 
-        if(issave)
-        {
+        if (issave) {
             this.isSpinnerVisible = true;
             this.workOrderService.createworkOrderTearDownData(data, this.isSubWorkOrder).subscribe(res => {
                 this.saveTearDownData = res;
@@ -869,10 +811,9 @@ export class CommonTeardownComponent implements OnInit {
             }, err => {
                 this.isSpinnerVisible = false;
             })
-        }else
-        {
+        } else {
             this.assignDatatoFields(this.saveTearDownData);
-        }       
+        }
     }
 
     validator() {
@@ -883,13 +824,12 @@ export class CommonTeardownComponent implements OnInit {
         return false;
     }
 
-    closeViewdiv()
-    {
+    closeViewdiv() {
         this.isView = false;
     }
 
     assignDatatoFields(data) {
-        if (data) {            
+        if (data) {
             data.workOrderPreliinaryReview.inspectorDate = data.workOrderPreliinaryReview.inspectorDate ? new Date(data.workOrderPreliinaryReview.inspectorDate) : null;
             data.workOrderPreAssmentResults.technicianDate = data.workOrderPreAssmentResults.technicianDate ? new Date(data.workOrderPreAssmentResults.technicianDate) : null;
             data.workOrderPreAssmentResults.inspectorDate = data.workOrderPreAssmentResults.inspectorDate ? new Date(data.workOrderPreAssmentResults.inspectorDate) : null;

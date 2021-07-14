@@ -182,7 +182,7 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="!hideSerialNumber">
-                                <label>Serial Num <span class="clr-red">*</span></label>
+                                <label>Ser Num <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="serialNumber" #serialNumber="ngModel"
                                     [(ngModel)]="stockLineForm.serialNumber" (ngModelChange)="enableSave()" required>
                                 <div *ngIf="serialNumber.invalid && (serialNumber.dirty || serialNumber.touched)"
@@ -193,7 +193,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Stockline Num</label>
+                                <label>Stk Line Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber"
                                     [(ngModel)]="stockLineForm.stockLineNumber" (ngModelChange)="enableSave()" disabled>
                             </div>
@@ -213,7 +213,7 @@
                                     [(ngModel)]="stockLineForm.nationalStockNumber" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
-                                <label>Engine Serial Number (ESN)
+                                <label>Engine Ser Num (ESN)
                                 </label>
                                 <input class="form-control" type="text" name="engineSerialNumber"
                                     [(ngModel)]="stockLineForm.engineSerialNumber" (ngModelChange)="enableSave()">
@@ -232,7 +232,7 @@
                                     [(ngModel)]="stockLineForm.daysReceived" (ngModelChange)="enableSave()" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Mfg. Expiration Date</label>
+                                <label>Mfg. Exp Date</label>
                                 <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true"
                                     yearRange="1900:2100" [showIcon]="true" name="expirationDate"
                                     [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate"
@@ -412,7 +412,7 @@
                                 (ngModelChange)="enableSave()" errorMessage="Records not found" [(ngModel)]="receiverNumber" required></p-autoComplete>
                             </div>
                             <div class="form-group">
-                                <label>Received Date <span class="clr-red">*</span></label>
+                                <label>Rec'd Date <span class="clr-red">*</span></label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="receivedDate"
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="stockLineForm.receivedDate" #receivedDate="ngModel"
@@ -624,7 +624,7 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Qty On Hand <span class="clr-red">*</span></label>
+                                <label>Qty OH <span class="clr-red">*</span></label>
                                 <input class="form-control text-right" type="text" pKeyFilter="pint"
                                     name="QuantityOnHand" (change)="resetQtyFields(); calculateQtyAvailable()"
                                     [(ngModel)]="stockLineForm.quantityOnHand" #quantityOnHand="ngModel"
@@ -645,7 +645,7 @@
                                 </p-dropdown>
                             </div>
                             <div class="form-group">
-                                <label>Qty Reserved</label>
+                                <label>Qty Res'd</label>
                                 <input class="form-control  text-right" type="text" name="QuantityReserved"
                                     (change)="resetQtyIssued(); onChangeQtyReserved()"
                                     [(ngModel)]="stockLineForm.quantityReserved" (ngModelChange)="enableSave()"
@@ -653,7 +653,7 @@
                                 <!--pKeyFilter="pint" [disabled]="stockLineForm.quantityOnHand == null" -->
                             </div>
                             <div class="form-group">
-                                <label>Qty Issued</label>
+                                <label>Qty Iss'd</label>
                                 <input class="form-control text-right" type="text" name="QuantityIssued"
                                     (change)="calcQtyReservedByQtyIssued()" [(ngModel)]="stockLineForm.quantityIssued"
                                     (ngModelChange)="enableSave()" disabled>
@@ -930,8 +930,15 @@
                                 <input class="form-control" type="text" name="certifiedBy"
                                     [(ngModel)]="stockLineForm.certifiedBy" (ngModelChange)="enableSave()" />
                             </div> -->
+                            
                             <div class="form-group">
                                 <label>Cert Type</label>
+                                <p-multiSelect [options]="CertTypeList" (ngModelChange)="enableSave()" name="certTypeobject"
+                                    [(ngModel)]="stockLineForm.certTypeobject">
+                                </p-multiSelect>  
+                            </div> 
+                            <div class="form-group">
+                                <label>Cert By</label>
                                 <select [(ngModel)]="stockLineForm.certifiedTypeId" name="certifiedTypeId"
                                     (change)="onSelectCertype()" (ngModelChange)="enableSave()">
                                     <option value="0">-- Select --</option>
@@ -941,7 +948,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label *ngIf="stockLineForm.certifiedTypeId > 0">Cert By</label>
+                                <!-- <label *ngIf="stockLineForm.certifiedTypeId > 0">Cert By</label> -->
                                 <div class="form-row" *ngIf="stockLineForm.certifiedTypeId == 1">
                                     <div class="col-sm-12">
                                         <p-autoComplete field="label" class="pautocomp-cstm"
@@ -1019,12 +1026,16 @@
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
-                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
+                                <!-- <p-multiSelect [options]="allTagTypes" [(ngModel)]="stockLineForm.tagType"
                                     name="tagType" (ngModelChange)="enableSave()">
-                                </p-multiSelect>
+                                </p-multiSelect> -->
+                                <select class="form-control" (ngModelChange)="enableSave()" name="tagType" [(ngModel)]="stockLineForm.tagTypeId">
+                                    <option value="0">--Select--</option>
+                                    <option *ngFor="let tagType of allTagTypes" [value]="tagType.Key">{{tagType.Value}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>Tag By</label>
+                                <label>Tagged By</label>
                                 <select [(ngModel)]="stockLineForm.taggedByType" name="taggedByType"
                                     (change)="onSelectTaggedType()" (ngModelChange)="enableSave()">
                                     <option value="0">-- Select --</option>
