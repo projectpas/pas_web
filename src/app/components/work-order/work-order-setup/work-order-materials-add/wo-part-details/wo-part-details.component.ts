@@ -832,7 +832,7 @@ calculateExtendedCost(): void {
     if(this.formObject.quantity < this.editData.allowbaleRequiredQty){
       debugger;
       const adjqty=this.formObject.quantity-this.editData.allowbaleRequiredQty
-      const message =' You Can not Reduce Qty'
+      const message =' Can not reduce quantity less than stock-line required quantity or reserved quantity'
       this.alertService.showMessage(
         '',message,
         MessageSeverity.warn
