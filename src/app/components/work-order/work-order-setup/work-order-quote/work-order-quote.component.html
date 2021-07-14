@@ -794,7 +794,7 @@
      <div class="table-responsive" *ngIf="gridActiveTab === 'materialList'">
          <div class="header" >
              <div class="row">
-                 <div class="col">
+                 <div class="col-md-1">
                      <h4 class="header-name"> Material list</h4>
                      <!-- {{isQuote? 'Work Order Quote' :'Work Order'}} -->
                  </div>
@@ -858,10 +858,10 @@
                          <th style="width: 100px;">Task</th>
                          <th style="width: 130px;">PN</th>
                          <th style="width: 250px;">PN Description</th>
-                         <th>Provision</th>
+                         <th style="width: 100px !important;">Provision</th>
                          <th>Qty</th>
                          <th>UOM</th>
-                         <th>Cond </th>
+                         <th style="width: 100px !important;">Cond </th>
                          <th style="width: 70px;">Stock Type</th>
                          <th style="width: 70px;">Unit Cost</th>
                          <th style="width: 70px;">Ext Cost</th>
@@ -875,7 +875,7 @@
                          </th>
                          <th class="width-100" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
                      </tr>
-                 </thead>
+                 </thead> 
                  <tbody> 
                      <ng-container *ngFor="let mData of materialListQuotation; let mainIndex=index;">
                          <ng-container *ngFor="let matQuotation of mData; let subIndex=index">
@@ -926,7 +926,7 @@
                                  </td>
                                  <td class="text-right">{{ matQuotation.billingRate }}</td>
                                  <td>
-                                     <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
+                                     <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}"  style="font-size: 10.5px !important;"
                                       value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
                                      </td>
                                  <td >
@@ -942,7 +942,9 @@
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
-                             <td class="content-to-end">{{getTotalTaskQuantity(mData)}}</td>
+                             <td class="content-to-end">
+                                 {{getTotalTaskQuantity(mData)}}
+                                </td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
@@ -970,7 +972,9 @@
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
-                         <td class="content-to-end"><b>{{getTotalQuantity()}}</b></td>
+                         <td class="content-to-end">
+                             <!-- <b>{{getTotalQuantity()}}</b> -->
+                            </td>
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
