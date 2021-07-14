@@ -1427,6 +1427,7 @@ createQuote() {
     onSelectedPartNumber(object, currentRecord, index, from) {
         if (from == 'html') {
             currentRecord.masterCompanyId=this.currentUserMasterCompanyId;
+            currentRecord.managementStructureId=object.managementStructureId;
             currentRecord.workOrderScopeId = object.workOderScopeId;
             if (this.workorderSettings) {
                 currentRecord.conditionId = (this.workorderSettings.defaultConditionId != 0 && this.workorderSettings.defaultConditionId != null) ? this.workorderSettings.defaultConditionId : object.conditionId;
@@ -1487,10 +1488,12 @@ createQuote() {
         }
     }
 
-    onSelectedTechnician(object, currentRecord) {
+    onSelectedTechnician(object, currentRecord) { 
         if (object.employeeId != undefined && object.employeeId > 0) {
             this.commonService.getTechnicianStation(object.employeeId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+              if(res && res.stationId){
                 currentRecord.techStationId = res.stationId;
+              }
             },
                 err => {
                     this.handleError(err);
@@ -1645,6 +1648,7 @@ createQuote() {
         this.modalWorkScopeModel.close();
     }
     triggherWorkScopeData(workOrderPart,index){
+        console.log('wo part',workOrderPart)
         workOrderPart.masterCompanyId=this.currentUserMasterCompanyId;
         // console.log("workOrderPart",workOrderPart)
         this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isWO').subscribe(res => {
@@ -2218,7 +2222,7 @@ x.totalStockLineArray.push(y.sumofStockLine);
         this.workOrderMaterialList.forEach(x => {
             // x.childParts.forEach(y => {
 // console.log("x.totalStockLineSum",y)
-x.allowbaleRequiredQty=Math.min(Number(x.totalStockLineSum),Number(x.totalStocklineQtyReq))
+x.allowbaleRequiredQty=Math.max(Number(x.totalStockLineSum),Number(x.totalStocklineQtyReq))
         // })
         // console.log("x.totalStockLineSum",x)
     });
