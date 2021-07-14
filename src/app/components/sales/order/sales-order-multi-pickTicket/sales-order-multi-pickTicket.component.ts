@@ -6,70 +6,73 @@ import { SalesOrderPickTicketView } from "../../../../models/sales/SalesOrderPic
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
 import { environment } from "../../../../../environments/environment";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
-    selector: "app-sales-order-multi-pickTicket",
-    templateUrl: "./sales-order-multi-pickTicket.component.html",
-    styleUrls: ["./sales-order-multi-pickTicket.component.scss"]
+  selector: "app-sales-order-multi-pickTicket",
+  templateUrl: "./sales-order-multi-pickTicket.component.html",
+  styleUrls: ["./sales-order-multi-pickTicket.component.scss"]
 })
 export class SalesOrderMultiPickTicketComponent implements OnInit {
-    @Input('modal-reference') modalReference: NgbModalRef;
-    @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
-    @Input() salesOrderoView: SalesOrderPickTicketView;
-    salesOrderCopyParameters: ISalesOrderCopyParameters;
-    salesOrder: any = [];
-    todayDate: Date = new Date();
-    parts: any = [];
-    management: any = {};
-    salesOrderpartConditionDescription: any;
-    salesOrderId: number;
-    salesOrderPartId: number;
-    soPickTicketId: number;
-    endPointURL: any;
-    salesOrderPickTickets: any = [];
-    objSalesOrderPickTickets: any = [];
+  @Input('modal-reference') modalReference: NgbModalRef;
+  @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
+  @Input() salesOrderoView: SalesOrderPickTicketView;
+  salesOrderCopyParameters: ISalesOrderCopyParameters;
+  salesOrder: any = [];
+  todayDate: Date = new Date();
+  parts: any = [];
+  management: any = {};
+  salesOrderpartConditionDescription: any;
+  salesOrderId: number;
+  salesOrderPartId: number;
+  soPickTicketId: number;
+  endPointURL: any;
+  salesOrderPickTickets: any = [];
+  objSalesOrderPickTickets: any = [];
+  pdfPath: any;
 
-    constructor(private salesOrderService: SalesOrderService) {
-        this.salesOrderCopyParameters = new SalesOrderCopyParameters();
+  constructor(private salesOrderService: SalesOrderService,
+    private sanitizer: DomSanitizer) {
+    this.salesOrderCopyParameters = new SalesOrderCopyParameters();
+  }
+
+  ngOnInit() {
+    this.endPointURL = environment.baseUrl;
+    this.salesOrderService.getMultiplePickTicketPDF(this.salesOrderPickTickets).subscribe(res => {
+      let pickTicketPDFUrl = res[0];
+      this.pdfPath = this.sanitizer.bypassSecurityTrustResourceUrl(this.endPointURL + pickTicketPDFUrl);
+    });
+    //this.getSalesPickTicketView();
+  }
+
+  getSalesPickTicketView() {
+    this.salesOrderService.getMultiPickTicketPrint(this.salesOrderPickTickets).subscribe(res => {
+      this.objSalesOrderPickTickets = res[0];
+    });
+  }
+
+  close() {
+    if (this.modalReference) {
+      this.modalReference.close();
     }
+  }
 
-    ngOnInit() {
-        this.endPointURL = environment.baseUrl;
-        this.getSalesPickTicketView();
-    }
+  copy() {
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        cp: this.salesOrderCopyParameters.copyParts,
+        cia: this.salesOrderCopyParameters.copyInternalApprovals
+      }
+    };
+    this.onConfirm.emit(navigationExtras);
+  }
 
-    getSalesPickTicketView() {
-        this.salesOrderService.getMultiPickTicketPrint(this.salesOrderPickTickets).subscribe(res => {
-            // this.salesOrderoView = res[0];
-            // this.salesOrder = res[0].soPickTicketViewModel;
-            // this.parts = res[0].soPickTicketPartViewModel;
-            // this.management = res[0].managementStructureHeaderData;
-            this.objSalesOrderPickTickets = res[0];
-        });
-    }
-
-    close() {
-        if (this.modalReference) {
-            this.modalReference.close();
-        }
-    }
-
-    copy() {
-        let navigationExtras: NavigationExtras = {
-            queryParams: {
-                cp: this.salesOrderCopyParameters.copyParts,
-                cia: this.salesOrderCopyParameters.copyInternalApprovals
-            }
-        };
-        this.onConfirm.emit(navigationExtras);
-    }
-
-    print(): void {
-        let printContents, popupWin;
-        printContents = document.getElementById('soPickTicket').innerHTML;
-        popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-        popupWin.document.open();
-        popupWin.document.write(`
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('soPickTicket').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
           <html>
             <head>
               <title>Print tab</title>
@@ -426,7 +429,7 @@ export class SalesOrderMultiPickTicketComponent implements OnInit {
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
           </html>`
-        );
-        popupWin.document.close();
-    }
+    );
+    popupWin.document.close();
+  }
 }
