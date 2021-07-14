@@ -17,7 +17,7 @@
                             <div class="card-header bg-primary new-card-header">
                               <div class="row">
                                 <div class="col">
-                                  <h4 class="new-card-heading">Publication Type</h4>
+                                  <h4 class="new-card-heading">Pub Type</h4>
                                 </div>
                                 <div>
                                   <button
@@ -26,7 +26,7 @@
                                     data-target="#add" data-toggle="modal"
                                      (click)="resetForm()"
                                   >
-                                  Add Publication Type
+                                  Add Pub Type
                                   </button>
                                 </div>
                               </div>
@@ -268,7 +268,7 @@
                 <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
             </div>
             <div class="modal-body">
-                <strong>Publication Type:
+                <strong>Pub Type:
                     <span class="new-label">{{selectedRowforDelete.name}}</span>
                 </strong>
             </div>
@@ -291,7 +291,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add' }} Publication Type</h4>
+                <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add' }} Pub Type</h4>
             </div>
             <div class="modal-body">
                 <form #create="ngForm">
@@ -378,7 +378,7 @@
     </div>
     <div class="modal-body">
         <strong>
-            Publication Type:
+            Pub Type:
             <span class="new-label">{{restorerecord.name}}</span>
         </strong>
     </div>
@@ -503,13 +503,13 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" id="" name=""
                     (click)="resetViewData()">×</button>
-                <h4 class="modal-title">Publication Type Details</h4>
+                <h4 class="modal-title">Pub Type Details</h4>
             </div>
             <div class="modal-body viewform ">
                 <div class="col-sm-12">
                     <p>
                         <span class="label ">
-                            <b class="view-Header">Publication Type: </b>
+                            <b class="view-Header">Pub Type: </b>
                         </span>
                         <span class="value">{{ viewRowData.name}}</span>
                     </p>

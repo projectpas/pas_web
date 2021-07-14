@@ -225,7 +225,7 @@
                                             <p-dropdown  [showClear]="true" class="p-dropdown-100" (input)="onFilterUom($event.target.value)" (ngModelChange)="getmemo($event)" required [options]="allUnitOfMeasureinfo" filter="true" [(ngModel)]="currentAsset.unitOfMeasureId" name="unitOfMeasureId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                         </div>
                                         <div class="form-group ">
-                                            <label>Currency<span class="clr-red">*</span></label>
+                                            <label>Curr<span class="clr-red">*</span></label>
                                          
                                             <p-dropdown  [showClear]="true" class="p-dropdown-100"  (input)="onFilterCurrency($event.target.value)" (ngModelChange)="getmemo($event)" required [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentAsset.currencyId" name="currencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                         </div>

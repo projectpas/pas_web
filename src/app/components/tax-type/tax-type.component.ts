@@ -47,7 +47,7 @@ export class TaxTypeComponent implements OnInit {
     totalPages: number;
     currentModeOfOperation: ModeOfOperation;
     headers = [
-        { field: 'description', header: 'Certification Type' },
+        { field: 'description', header: 'Cert Type' },
         { field: 'memo', header: 'Memo' },
     ]
     selectedColumns = this.headers;

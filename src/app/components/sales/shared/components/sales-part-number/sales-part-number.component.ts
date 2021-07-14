@@ -78,8 +78,13 @@ export class SalesPartNumberComponent {
   isApprovedPartUpdated: boolean = false;
   currentStatusSOQSummary: any = "1";
   selectedMPNItemMasterId: any;
-  SummaryMonths: number = 12;
+  SummaryMonths: number = 1;
   soqSummaryPNData: any = [];
+  soqSummaryCustData: any = [];
+  modalView: NgbModalRef;
+  paramsData: any = {};
+  salesOrderQuoteId: any;
+  customerId: any;
   private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(
@@ -199,11 +204,11 @@ export class SalesPartNumberComponent {
       { field: 'conditionDescription', header: "Cond", width: "70px" },
       // { header: "Customer Ref", width: "100px" },
       { field: 'priorityName', header: "Priority", width: "100px" },
-      { field: 'openDate', header: "Quote Date", width: "100px" },
+      { field: 'openDate', header: "Qte Date", width: "100px" },
       // { header: "UOM", width: "70px" },
       { field: 'qtyAvailable', header: "Qty Req", width: "90px" },
-      { field: 'quantityToBeQuoted', header: "Qty to Quote", width: "70px" },
-      { field: 'quantityAlreadyQuoted', header: "Qty Prev Quoted", width: "70px" },
+      { field: 'quantityToBeQuoted', header: "Qty to Qte", width: "70px" },
+      { field: 'quantityAlreadyQuoted', header: "Qty Prev Qted", width: "70px" },
       { field: 'customerRequestDate', header: "Cust Request Date", width: "155px" },
       { field: 'promisedDate', header: "Cust Promised Date", width: "155px" },
       { field: 'estimatedShipDate', header: "Est.Ship Date", width: "155px" },
@@ -1143,7 +1148,7 @@ export class SalesPartNumberComponent {
           this.soqSummaryPNData = res.mpnSummaryModel;
         }
         if (res != undefined && res.custSummaryModel != undefined) {
-          this.soqSummaryPNData = res.custSummaryModel;
+          this.soqSummaryCustData = res.custSummaryModel;
         }
       }, err => {
         this.isSpinnerVisible = false;
@@ -1153,5 +1158,26 @@ export class SalesPartNumberComponent {
 
   dismissModel() {
     this.modal.close();
+  }
+
+  isOpenViewSOQ: boolean = false;
+  view(content, rowData) {
+    this.modalView = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
+    this.paramsData['salesOrderQuoteId'] = rowData.salesOrderQuoteId;
+    this.salesOrderQuoteId = rowData.salesOrderQuoteId;
+    this.customerId = rowData.customerId;
+    this.isSpinnerVisible = false;
+    this.salesQuoteService.getview(this.salesOrderQuoteId).subscribe(res => {
+      this.salesQuoteView = res[0];
+      this.isSpinnerVisible = false;
+      this.isOpenViewSOQ = true;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  closeViewModel() {
+    this.modalView.close();
+    this.isOpenViewSOQ = false;
   }
 }

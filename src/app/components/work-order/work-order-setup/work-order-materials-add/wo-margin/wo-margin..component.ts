@@ -143,6 +143,17 @@ export class WoMarginComponent implements OnInit, OnChanges {
       this.provisionList();
       this.getMaterailMandatories();
      }
+     if(this.isEdit==true){
+     if(Number(parseInt(this.formObject.quantity)) > Number(parseInt(this.formObject.totalStocklineQtyReq))){
+      this.formObject.stocklineQuantity=Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))
+      // this.invalidQuantityenteredForQuantityFromThis = false;
+    }else if(Number(parseInt(this.formObject.quantity)) == Number(parseInt(this.formObject.totalStocklineQtyReq))){
+      this.formObject.stocklineQuantity=0;
+    }else{
+      this.formObject.stocklineQuantity=Number(parseInt(this.formObject.totalStocklineQtyReq)-parseInt(this.formObject.quantity))
+      // this.invalidQuantityenteredForQuantityFromThis = false;
+    }
+  }
      this.onChangeQuantityFromThis();
      this.enableUpdateBtn=this.enableUpdateBtn;
      if(this.enableUpdateBtn==true){
@@ -296,10 +307,11 @@ calculateExtendedCost(): void {
   } 
 } 
 onChangeQuantityFromThis() {
-
+// this.isSpinnerVisible=true;
  setTimeout(() => {
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
+    // this.isSpinnerVisible=false;
     // if (Number(this.formObject.stocklineQuantity) != 0) {
     //   if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
     //     this.invalidQuantityenteredForQuantityFromThis =true;
@@ -319,7 +331,8 @@ onChangeQuantityFromThis() {
     //   this.disableUpdateButton=true;
     // }
   }else{
-    if (Number(parseInt(this.formObject.stocklineQuantity)) != 0) {
+    // this.isSpinnerVisible=false;
+    if (Number(parseInt(this.formObject.stocklineQuantity)) != 0) { 
       if ( Number(parseInt(this.formObject.stocklineQuantity)) > Number(parseInt(this.formObject.quantity))) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         // this.formObject.stocklineQuantity=this.formObject.quantity;
@@ -333,7 +346,6 @@ onChangeQuantityFromThis() {
       }else if ( !this.isStockLine && Number(parseInt(this.formObject.stocklineQuantity) + parseInt(this.formObject.totalStocklineQtyReq) ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
-        // this.formObject.stocklineQuantity=this.formObject.quantity;
       }
       else if (Number(this.formObject.stocklineQuantity) < 0)
       {

@@ -92,8 +92,8 @@ export class ExchangeQuoteListComponent implements OnInit {
     this.headers = [
       { field: "exchangeQuoteNumber", header: "Exch Num", width: "120px" },
       { field: "customerName", header: "Cust Name", width: "180px" },
-      { field: "customerReference", header: "Customer Ref", width: "130px" },
-      { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
+      { field: "customerReference", header: "Cust Ref", width: "130px" },
+      { field: "versionNumber", header: "Qte Ver Num", width: "130px" },
       //{ field: "quoteExpireDate", header: "Quote Exp Date", width: "130px" },
       { field: "partNumberType", header: "PN", width: "130px" },
       { field: "partDescriptionType", header: "PN Description", width: "180px" },

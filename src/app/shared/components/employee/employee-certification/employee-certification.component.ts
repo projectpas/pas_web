@@ -299,7 +299,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         );
         this.cols = [
             { field: 'certificationNumber', header: 'Certification' },
-            { field: 'employeeCertificationTypeId', header: 'Certification Type' },
+            { field: 'employeeCertificationTypeId', header: 'Cert Type' },
             { field: 'certifyingInstitution', header: 'Certification Institution' },
             { field: 'certificationDate', header: 'certification Date' },
             { field: 'isCertificationInForce', header: 'Certification In Force' },

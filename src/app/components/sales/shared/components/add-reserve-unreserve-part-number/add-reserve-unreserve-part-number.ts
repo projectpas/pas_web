@@ -77,7 +77,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 //{ field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
                 { field: "quantityOnHand", header: "Qty OH", width: "60px" },
                 { field: "quantityAvailable", header: "Qty Avail ", width: "60px" },
-                { field: "quantityOnOrder", header: "Qty On Order", width: "60px" },
+                { field: "quantityOnOrder", header: "Qty On Ord", width: "60px" },
                 { field: "reservedDate", header: "Reserved Date", width: "150px" },
                 { field: "reservedById", header: "Reserved By", width: "150px" }
             ];
@@ -96,7 +96,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "80px" },
                 { field: "quantityOnHand", header: "Qty OH", width: "60px" },
                 { field: "quantityAvailable", header: "Qty Avail ", width: "60px" },
-                { field: "quantityOnOrder", header: "Qty On Order", width: "60px" },
+                { field: "quantityOnOrder", header: "Qty On Ord", width: "60px" },
                 { field: "reservedDate", header: "UnReserved Date", width: "150px" },
                 { field: "reservedById", header: "UnReserved By", width: "150px" }
             ];
