@@ -2207,20 +2207,20 @@ createQuote() {
                 this.totalStockLineSum=undefined;
                 x.childParts.forEach(y => {
 x.totalStockLineArray.push(y.sumofStockLine);
-console.log("x.totalStockLineSum",x)
+// console.log("x.totalStockLineSum",x)
             })
             // x.totalStockLineSum=this.totalStockLineSum
             x.totalStockLineSum = x.totalStockLineArray.reduce(function(a, b){
                 return a + b;
             }, 0);
-            console.log("xxxxx. ",x)
+            // console.log("xxxxx. ",x)
         });
         this.workOrderMaterialList.forEach(x => {
             // x.childParts.forEach(y => {
 // console.log("x.totalStockLineSum",y)
 x.allowbaleRequiredQty=Math.min(Number(x.totalStockLineSum),Number(x.totalStocklineQtyReq))
         // })
-        console.log("x.totalStockLineSum",x)
+        // console.log("x.totalStockLineSum",x)
     });
         }
         this.totalRecords = this.workOrderMaterialList.length;
