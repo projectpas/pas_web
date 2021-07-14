@@ -50,7 +50,7 @@ export class CustomerInvoiceListComponent {
             { field: "invoiceDate", header: "Inv Date", width: "130px" },
             { field: "wosoNum", header: "WO/SO Num", width: "130px" },
             { field: "customerReference", header: "Cust Ref", width: "130px" },
-            { field: "currencyCode", header: "Currency Code", width: "180px" },
+            { field: "currencyCode", header: "Curr Code", width: "180px" },
             { field: "fxRate", header: "FX Rate", width: "100px" },
             { field: "originalAmount", header: "Original Amount", width: "100px" },
             { field: "remainingAmount", header: "Remaining Amount", width: "130px" },

@@ -29,7 +29,7 @@ border-spacing: 0 1em;">
                     <th colspan="2">SALES ORDER QUOTATION </th>
                 </tr>
                 <tr>
-                    <td>Quote Date</td>
+                    <td>Qte Date</td>
                     <td class="td2">{{salesQuote.createdDate  | date: 'MM/dd/yyyy'}}</td>
                 </tr>
                 <tr>
@@ -67,19 +67,19 @@ border-spacing: 0 1em;">
     <tr>
         <td class="tr2 td1"><strong>Open Date</strong></td>
         <td class="tr2 td2">{{salesQuote.openDate | date: 'MM/dd/yyyy'}}</td>
-        <td class="tr2 td3"><strong>Customer Code</strong></td>
+        <td class="tr2 td3"><strong>Cust Code</strong></td>
         <td class="tr2 td24">{{salesQuote.customerName}}</td>
     </tr>
     <tr>
         <td class="tr2 td1"><strong>Valid For</strong></td>
         <td class="tr2 td2">{{salesQuote.validForDays}} Days</td>
-        <td class="tr2 td3"><strong>Customer Contact</strong></td>
+        <td class="tr2 td3"><strong>Cust Contact</strong></td>
         <td class="tr2 td24">{{salesQuote.customerContactName}}</td>
     </tr>
     <tr>
         <td class="tr2 td1"><strong>Quote Exp Date</strong></td>
         <td class="tr2 td2">{{salesQuote.quoteExpireDate | date: 'MM/dd/yyyy'}}</td>
-        <td class="tr2 td3"><strong>Customer Ref</strong></td>
+        <td class="tr2 td3"><strong>Cust Ref</strong></td>
         <td class="tr2 td24">{{salesQuote.customerReference}}</td>
     </tr>
     <tr>
@@ -118,13 +118,13 @@ border-spacing: 0 1em;">
 <table cellpadding=2 cellspacing=0 class="t4" style="font-family: Arial; font-size: 14px;   ">
     <thead>
         <tr>
-            <th>QUOTE NUMBER</th>
+            <th>QTE NUM</th>
             <th>SALES PERSON</th>
             <th>SHIP DATE</th>
             <th>SHIP VIA</th>
             <th>F.O.B. POINT</th>
             <th>TERMS</th>
-            <th>CURRENCY</th>
+            <th>CURR</th>
             <th>UOM</th>
         </tr>
     </thead>

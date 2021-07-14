@@ -5,7 +5,7 @@
             <div class="form-row">
             <div class="col-md-6">
                 <div class="form-group ">
-                <label>Quote Number <span class="clr-red">*</span></label>
+                <label>Qte Num <span class="clr-red">*</span></label>
                 <input class="form-control" type="text" [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly/>
                 </div>
                 <div class="form-group ">
@@ -26,7 +26,7 @@
                 </div>
     
                 <div class="form-group">
-                <label> Quote Status <span class="clr-red">*</span></label>
+                <label> Qte Status <span class="clr-red">*</span></label>
                 <select [(ngModel)]="quoteForm.expirationDateStatus" name="ExpDateStatus" [disabled]="isView">
                     <option value=1>Open</option>
                     <option value=2>Closed</option>
@@ -46,27 +46,27 @@
                 <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly/>
                 </div>
                 <div class="form-group ">
-                <label for="customerCode">Customer Code
+                <label for="customerCode">Cust Code
                 </label>
                 <input class="form-control" type="text" [(ngModel)]="customerCode" name="customerCode" readonly/>
                 </div>
                 <div class="form-group ">
-                <label for="customerContact">Customer Contact
+                <label for="customerContact">Cust Contact
                 </label>
                 <input class="form-control" type="text" [(ngModel)]="customerContact" name="customerContact" readonly/>
                 </div>
                 <div class="form-group ">
-                <label for="customerEmail">Customer email
+                <label for="customerEmail">Cust Email
                 </label>
                 <input class="form-control" type="email" [(ngModel)]="customerEmail" name="customerEmail" readonly/>
                 </div>
                 <div class="form-group ">
-                <label for="customerPhone">Customer phone
+                <label for="customerPhone">Cust phone
                 </label>
                 <input class="form-control" type="number" [(ngModel)]="customerPhone" name="customerPhone" readonly/>
                 </div>
                 <div class="form-group ">
-                <label for="customerRef">Customer Ref
+                <label for="customerRef">Cust Ref
                 </label>
                 <input class="form-control" type="text" [(ngModel)]="customerRef" name="customerRef" readonly/>
                 </div>
@@ -160,7 +160,7 @@
             <label>{{selectedPartDescription}}</label>
         </div>
         <div class="form-group ">
-            <label class="fs12">Stock Line Number:
+            <label class="fs12">Stk Line Num:
             </label>
             <label>{{selectedStockLineNumber}}</label>
         </div>
