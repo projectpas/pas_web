@@ -60,9 +60,11 @@ export class AssetCalibrationComponent implements OnInit {
     isCalibrationNext: Boolean=true;
     isCalibrationPrev: Boolean=true;
     isMaintenancePrev: Boolean=true;
-    constructor(private router: ActivatedRoute, public assetService: AssetService, private vendorService: VendorService, private alertService: AlertService,
+    constructor(private router: ActivatedRoute, public assetService: AssetService, 
+        private vendorService: VendorService, private alertService: AlertService,
         private authService: AuthService,private commonService: CommonService,
-        private modalService: NgbModal, private glAccountService: GlAccountService, private route: Router, private currencyService: CurrencyService) {
+        private modalService: NgbModal, private glAccountService: GlAccountService, 
+        private route: Router, private currencyService: CurrencyService) {
         this.AssetId = this.router.snapshot.params['id'];
         this.activeIndex = 2;
         this.isView=this.authService.checkPermission([ModuleConstants.Asset_Calibration+'.'+PermissionConstants.View]);
