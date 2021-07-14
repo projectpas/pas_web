@@ -26,6 +26,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-edit-po',
@@ -107,6 +108,8 @@ export class EditPoComponent implements OnInit {
     arrayPostatuslist: any[] = [];
     private onDestroy$: Subject<void> = new Subject<void>();
     modal: NgbModalRef;
+    isEditrpo:boolean=true;
+    isDeleterpo:boolean=true;
     /** edit-po ctor */
     constructor(public receivingService: ReceivingService,
         public priority: PriorityService,
@@ -138,6 +141,8 @@ export class EditPoComponent implements OnInit {
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
         this.otherModuleId = AppModuleEnum.Others;
+        this.isEditrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Update]) 
+        this.isDeleterpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Delete])
     }
 
     ngOnInit() {        
@@ -1845,7 +1850,7 @@ export class EditPoComponent implements OnInit {
                 var stockLineToUpdate = part.stockLine;
                 var index = 1;
                 for (var stockLine of stockLineToUpdate) {
-
+                    stockLine.createdBy = this.userName;
                     stockLine.updatedBy = this.userName;
                     stockLine.purchaseOrderId = this.receivingService.purchaseOrderId;
                     stockLine.masterCompanyId = this.currentUserMasterCompanyId;

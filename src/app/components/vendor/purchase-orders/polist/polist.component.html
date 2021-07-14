@@ -181,13 +181,13 @@
 									matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
 							</span>
 
-							<span *ngIf="rowData['statusId'] == fulfillingStatusId && isReceivingPolist == true"
+							<span *ngIf="rowData['statusId'] == fulfillingStatusId && isReceivingPolist == true && isAddrpo"
 								(click)="getSelectedRow(rowData)">
 								<a matTooltip="Receive PO" matTooltipPosition="above" class="btn  nobg btn-users-cstm">
 									<i class=" fa fa-chevron-down"></i>
 								</a>
 							</span>
-							<span *ngIf="rowData['statusId'] == fulfillingStatusId  && isReceivingPolist == true"
+							<span *ngIf="rowData['statusId'] == fulfillingStatusId  && isReceivingPolist == true && isEditrpo"
 								(click)="editStockLine(rowData)">
 								<a class="btn nobg" matTooltip="Edit Received Parts" matTooltip="Edit"
 									matTooltipPosition="above">

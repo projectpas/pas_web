@@ -430,7 +430,7 @@
                                         </select>
                                     </td>
                                     <td colspan="44"></td>
-                                    <td><a matTooltip="Edit" matTooltipPosition="above"
+                                    <td><a matTooltip="Edit" *ngIf="isEditrpo" matTooltipPosition="above"
                                             class="btn boxed-float-btn nobg edit"><i class="fa fa-edit"
                                                 (click)="editPart(part)"></i></a></td>
                                 </tr>
@@ -1345,10 +1345,10 @@
                                             </ng-container>
                                             <td>
                                                 <div *ngIf="!SL.stockLineId > 0">
-                                                    <a href="javascript:void(0);" class="btn boxed-float-btn nobg edit"
+                                                    <a *ngIf="isEditrpo" href="javascript:void(0);" class="btn boxed-float-btn nobg edit"
                                                         matTooltip="Edit" matTooltipPosition="above"><i
                                                             class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
-                                                    <a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL,deletepoConfirm)"
+                                                    <a *ngIf="isDeleterpo" class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL,deletepoConfirm)"
                                                         matTooltip="Delete" matTooltipPosition="above"><i
                                                             class="fa fa-trash"></i></a>
                                                 </div>
@@ -1374,7 +1374,7 @@
         </div>
     </div>
 
-    <button *ngIf="isPOStockline" class="btn btn-primary pull-right" (click)="updateStockLine()">Submit</button>
+    <button *ngIf="isPOStockline && isEditrpo" class="btn btn-primary pull-right" (click)="updateStockLine()">Submit</button>
 </div>
 
 

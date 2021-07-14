@@ -95,6 +95,10 @@ export class ModuleConstants
         static ReceivingCustomer :string  = "ReceivingCustomer";
         static ReceivingCustomer_GeneralInformation :string  = "ReceivingCustomer_GeneralInformation";
         static ReceivingCustomer_Document :string  = "ReceivingCustomer_Document";
+
+        static POSetup:string = "POSetup";
+
+        static ReceivePurchaseOrder:string = "ReceivePurchaseOrder";
 }
 
 export class PermissionConstants

@@ -46,7 +46,7 @@
                         (ngModelChange)="enableHeaderSave()" #startDate="ngModel" required></p-calendar>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary pull-right" (click)="savePurchaseOrderSetting()"
+                    <button class="btn btn-primary pull-right" *ngIf="isAddPOSetup || isEditPOSetup" (click)="savePurchaseOrderSetting()"
                         style="margin-top: 10px;" [disabled]="!enableHeaderSaveBtn">Update</button>
                 </div>
             </form>

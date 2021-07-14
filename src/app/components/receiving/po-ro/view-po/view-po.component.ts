@@ -19,6 +19,8 @@ import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-view-po',
@@ -71,8 +73,12 @@ export class ViewPoComponent implements OnInit {
     headerManagementStructure: any = {};
     isSpinnerVisible: boolean = true;
     poDataHeader: any;
-    modal: NgbModalRef;
-
+    modal: NgbModalRef;    
+    isViewrpo:boolean=true;
+    isAddrpo:boolean=true;
+    isEditrpo:boolean=true;
+    isDeleterpo:boolean=true;
+    
     /** edit-ro ctor */
     constructor(public receivingService: ReceivingService,
         public priority: PriorityService,
@@ -89,12 +95,16 @@ export class ViewPoComponent implements OnInit {
         private shippingService: ShippingService,
         private _actRoute: ActivatedRoute,
         private commonService: CommonService,
-        private purchaseOrderService: PurchaseOrderService
+        private purchaseOrderService: PurchaseOrderService,
+        private authService: AuthService,
     ) {
 
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
-        this.currentDate = new Date();
+        this.currentDate = new Date();       
+        this.isAddrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Add])
+        this.isEditrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Update]) 
+        this.isDeleterpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Delete])
     }
 
     ngOnInit() {        
@@ -253,7 +263,8 @@ export class ViewPoComponent implements OnInit {
 
     deleteStockLine(stockLine) {                       
         if (stockLine) {
-            var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+            //var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
+            var OkCancel = confirm("Are You Sure Want to Delete?");
             if (OkCancel == true) {
                 this.isSpinnerVisible = true;    
                 this.receivingService.deleteStockLineDraft(stockLine.stockLineDraftId, stockLine.quantity).subscribe(res => {

@@ -334,7 +334,7 @@
                             <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
                                 <tr *ngIf="!SL.isDeleted">
                                     <!--<td>{{SL.stockLineNumber}}</td>-->
-                                    <td><a class="btn nobg btn-delete-cstm" (click)="deleteStockLine(SL)"
+                                    <td><a class="btn nobg btn-delete-cstm" *ngIf="isDeleterpo" (click)="deleteStockLine(SL)"
                                             matTooltip="Delete" matTooltipPosition="above"><i
                                                 class="fa fa-trash"></i></a></td>
                                     <td>{{part.itemMaster.partNumber}}</td>
@@ -485,7 +485,7 @@
 
         </div>
 
-        <button class="btn btn-primary pull-right" (click)="CreatePurchaseOrderStockline()">Create Stockline</button>
+        <button class="btn btn-primary pull-right" *ngIf="isAddrpo || isEditrpo" (click)="CreatePurchaseOrderStockline()">Create Stockline</button>
     </div>
 </div>
 

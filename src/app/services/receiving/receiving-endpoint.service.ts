@@ -107,7 +107,7 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     getAllRecevingEditID(purchaseOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/getAllRecevingEditID?poID=${purchaseOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/getAllRecevingEditID?poID=${purchaseOrderId}`,this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getAllRecevingEditID(purchaseOrderId));  
         });
@@ -139,14 +139,14 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     getReceivingPOHeaderById(purchaseOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingpart/getPurchaseOrderHeaderById/${purchaseOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingpart/getPurchaseOrderHeaderById/${purchaseOrderId}`,this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivingPOHeaderById(purchaseOrderId));
         });
     }
 
     getReceivingPOPartsForViewById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivePOPartsForSummary/${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivePOPartsForSummary/${repairOrderId}`,this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivingPOPartsForViewById(repairOrderId));
         });
@@ -154,14 +154,14 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     getReceivingRODataById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivingRepairList/${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivingRepairList/${repairOrderId}`,this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivingRODataById(repairOrderId));
         });        
     }
 
     getReceivingROHeaderById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingRO/getRepairOrderHeaderById/${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingRO/getRepairOrderHeaderById/${repairOrderId}`,this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivingROHeaderById(repairOrderId));
         });   
@@ -199,7 +199,7 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     getReceivingROPartsForViewById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceieveROPartsForView/${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceieveROPartsForView/${repairOrderId}`, this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivingROPartsForViewById(repairOrderId));
         });
@@ -275,7 +275,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     CreateStockLine(purchaseOrderId: any) {
         let url = `${this.CreateStockLinesURL}/${purchaseOrderId}`;
-        return this.http.get<any>(url).catch(error => {
+        return this.http.get<any>(url,this.getRequestHeaders()).catch(error => {
                 return this.handleErrorCommon(error, () => this.CreateStockLine(purchaseOrderId));
             });
     }
@@ -283,34 +283,34 @@ export class ReceivingEndpointService extends EndpointFactory {
     
     CreateStockLineForRepairOrder(repairOrder: any) {
         let url = `${this.createStocklineRo}/${repairOrder}`;
-        return this.http.get<any>(url).catch(error => {
+        return this.http.get<any>(url,this.getRequestHeaders()).catch(error => {
                 return this.handleErrorCommon(error, () => this.CreateStockLineForRepairOrder(repairOrder));
             });
     }
 
     deleteStockLineDraft(stockLineDraftId, quantity) {
-        return this.http.put<any>(`${this.configurations.baseUrl}/api/receivingPart/deletestocklinedraft?stockLineDraftId=${stockLineDraftId}&quantity=${quantity}`, this.getRequestHeaders())
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/deletestocklinedraft?stockLineDraftId=${stockLineDraftId}&quantity=${quantity}`, this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.deleteStockLineDraft(stockLineDraftId, quantity));
         });;
     }
 
     getAllRecevingROEditID(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getAllRecevingROEditID?roID=${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getAllRecevingROEditID?roID=${repairOrderId}`,this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getAllRecevingROEditID(repairOrderId));  
         });
     }
 
     getReceivedPOPartsForView(purchaseOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivedPOPartsForView/${purchaseOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivedPOPartsForView/${purchaseOrderId}`, this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivedPOPartsForView(purchaseOrderId));
         });        
     }
 
     getReceivedROPartsForView(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceievedROPartsForView/${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceievedROPartsForView/${repairOrderId}`,this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getReceivedROPartsForView(repairOrderId));
         });

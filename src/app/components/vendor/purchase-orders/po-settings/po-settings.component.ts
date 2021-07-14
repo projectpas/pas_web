@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-po-settings',
@@ -18,11 +19,17 @@ export class PoSettingsComponent implements OnInit {
     posettingModel: any = {};
     enableHeaderSaveBtn: boolean = false;
     errorMessages: any;
+    isViewSetup:boolean=true;
+    isAddPOSetup:boolean=true;
+    isEditPOSetup:boolean=true;
 
     constructor(private vendoreService: VendorService,
         private alertService: AlertService, private authService: AuthService,
         private purchaseOrderService: PurchaseOrderService) {
         this.vendoreService.ShowPtab = false;
+        this.isViewSetup= this.authService.checkPermission([ModuleConstants.POSetup+'.'+PermissionConstants.View]);
+        this.isAddPOSetup = this.authService.checkPermission([ModuleConstants.POSetup+'.'+PermissionConstants.Add]);
+		this.isEditPOSetup = this.authService.checkPermission([ModuleConstants.POSetup+'.'+PermissionConstants.Update]);		
     }
 
 
