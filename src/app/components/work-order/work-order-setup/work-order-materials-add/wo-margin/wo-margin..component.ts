@@ -46,8 +46,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
     ngOnInit() { 
 }
   ngOnChanges()    { 
-    console.log('this.part',this.part)
-    console.log('this.part',this.editData)
     this.formObject=={
       partNumberObj:undefined,
       quantity:0,
@@ -145,8 +143,6 @@ export class WoMarginComponent implements OnInit, OnChanges {
       this.provisionList();
       this.getMaterailMandatories();
      }
-     console.log("form obj",this.formObject);
-     console.log("form ov",this.editData);
      if(this.isEdit==true && !this.isStockLine){
      if(Number(parseInt(this.formObject.qtyOnHand)) > Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
       this.formObject.stocklineQuantity=Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))
