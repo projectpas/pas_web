@@ -1448,17 +1448,17 @@
                                         <div class="col-md-1 col-md-1-cstm">
                                             <label class="item-master-search">Search :</label>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <div class="form-group ">
-                                                <label>ATA Chapter</label>
+                                                <label style="width:100%">ATA Chapter</label>
                                                 <p-multiSelect [options]="LoadAtachapter"
                                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedATAchapter" (onChange)=" getSubChapterByATAChapter()"
                                                             [panelStyle]="{minWidth:'12em'}" class="pub-multi"></p-multiSelect>
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <div class="form-group">
-                                                <label style="width: 120px !important;">
+                                                <label style="width: 100%;">
                                                     ATA Subchapter
                                                 </label>
                                                 <p-multiSelect [options]="atasubchapterValues" [ngModelOptions]="{standalone: true}"
@@ -1470,7 +1470,7 @@
                                                 <button type="button" class="btn btn-primary mtop20" (click)="searchATA()">
                                                     <i class="pi pi-search pi-search"></i>
                                                 </button>
-                                                <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
+                                                <button type="button" style="margin-left:-5px" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
                                                 class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
                                                   Clear
                                                </button>
@@ -1521,7 +1521,7 @@
                                             {{rowData[col.field]}}
                                         </ng-container>
                                         <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                                            {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
+                                            {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
                                         </ng-container>                                        
                                     </td>
                                     <td class="action-icons-cstm table-column-width">
@@ -2160,7 +2160,7 @@
                             </div>
 
                             <!--<div class="col-sm-12 mt8">-->
-                            <div class="m-t-10">
+                            <div class="m-b-15">
 
                                 <button class="btn btn-primary pull-right" type="button" (click)="navigateToAddNewItemMaster(navigateToAddNewItemMasterPopupContent)">Add New</button>
                                 &nbsp;

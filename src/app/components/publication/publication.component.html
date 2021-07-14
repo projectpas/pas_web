@@ -322,7 +322,7 @@
       <div class="modal-body" *ngIf="auditHistory">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
           <div class="tableFixHead">
-            <table class="table table-bordered" style="white-space: nowrap;" *ngIf="auditHistory.length > 0; else noDatavailable">
+            <table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
               <!-- <div
               class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
               <div class="table-responsive">
@@ -341,7 +341,7 @@
               </thead>
               <tbody class="audithistory-cstm">
                 <tr *ngFor="let audit of auditHistory; let i = index">
-                  <td [ngStyle]="{
+                  <td class="width-80" [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'partNos',
@@ -352,7 +352,7 @@
                 }">
                     {{ audit.partNos }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-200" [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'pnDescription',
@@ -363,7 +363,7 @@
                 }">
                     {{ audit.pnDescription }}
                   </td>
-                  <td [ngStyle]="{
+                  <td style="min-width:82px !important;" [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'revisionNum',
@@ -374,7 +374,7 @@
                 }">
                     {{ audit.revisionNum }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-80" [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publicationId',
@@ -385,7 +385,7 @@
                   }">
                     {{ audit.publicationId }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-200" [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'description',
@@ -397,7 +397,7 @@
                     {{ audit.description }}
                   </td>
 
-                  <td [ngStyle]="{
+                  <td class="width-80" [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publicationType',
@@ -408,7 +408,7 @@
                   }">
                     {{ audit.publicationType }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-80" [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publishedBy',
@@ -419,14 +419,14 @@
                   }">
                     {{ audit.publishedBy }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-80" [ngStyle]="{
                     color: getColorCodeForHistory(i, 'location', audit.location)
                       ? 'black'
                       : 'red'
                   }">
                     {{ audit.location }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-80" [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'verifiedBy',
@@ -437,7 +437,7 @@
                   }">
                     {{ audit.verifiedBy }}
                   </td>
-                  <td [ngStyle]="{
+                  <td class="width-130" [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'verifiedDate',
@@ -457,7 +457,7 @@
                 </td>
                 <td>{{ audit.updatedBy }}</td>
                 <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td> -->
-                <td class="text-center width-60">
+                <td class="text-center width-80">
                   <span class="value">
                     <label class="wauto"> 
                       <input type="checkbox" name="isActive"
@@ -465,19 +465,19 @@
                       </label>
                     </span>
                   </td>
-                  <td
+                  <td class="width-130"
                     [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
                     {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                  <td
+                  <td class="width-80"
                     [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
                     {{audit.createdBy}}</td>
-                  <td
+                  <td class="width-130"
                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
                     {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                  <td
+                  <td class="width-80"
                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                     {{audit.updatedBy}}</td>
-                    <td class="text-center width-60">
+                    <td class="text-center width-80">
                       <span class="value">
                         <label class="wauto">
                        <input type="checkbox" name="isDeleted"
