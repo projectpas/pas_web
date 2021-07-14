@@ -624,7 +624,7 @@
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
 
-                                        <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
+                                        <span *ngIf="col.field != 'dashNumber' && col.field != 'model'">
                                             {{
                                             rowData[col.field] }}
                                         </span>
@@ -822,7 +822,9 @@
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                        {{ rowData[col.field] }}
+                                     <span *ngIf="col.field!='ataChapter' && col.field!='ataSubChapter'">   {{ rowData[col.field] }}</span>
+                                     <span *ngIf="col.field=='ataChapter'">  {{rowData.ataChapterCode}} - {{ rowData[col.field] }}</span>
+                                     <span *ngIf="col.field=='ataSubChapter'">  {{rowData.ataSubChapterCode}} -  {{ rowData[col.field] }}</span>
                                     </td>
                                     <td class="action-icons-cstm table-column-width" style="width:60px !important">
                                         <span data-toggle="modal" data-target="#ataView">

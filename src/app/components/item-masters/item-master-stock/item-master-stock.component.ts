@@ -1412,7 +1412,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.allAircraftsGet = allWorkFlows;
         this.currentItemMasterModels = allWorkFlows;//All Models Data which has for Current Item Master Id
         this.allCurrentItemMasterModels = allWorkFlows;
-        if (this.allAircraftsGet.length > 0) {
+        if (this.allAircraftsGet && this.allAircraftsGet.length > 0) {
             this.enablePlus = true;
             this.allAircraftinfo = JSON.parse(JSON.stringify(this.allAircraftsGet));
             this.isDeleteMode = false;
@@ -3174,7 +3174,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     searchByFieldUrlCreateforAircraftInformation() {
-        if (this.selectAircraftManfacturer.length > 0) {
+        if (this.selectAircraftManfacturer && this.selectAircraftManfacturer.length > 0) {
             const aircraftTypeIds = this.selectAircraftManfacturer.reduce(
                 (acc, value) => {
                     return `${acc},${value}`;
@@ -3186,7 +3186,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.aircraftManfacturerIdsUrl = '';
         }
 
-        if (this.selectedAircraftModel.length > 0) {
+        if (this.selectedAircraftModel && this.selectedAircraftModel.length > 0) {
             const aircraftModelIds = this.selectedAircraftModel.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
@@ -3194,7 +3194,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         } else {
             this.aircraftModelsIdUrl = '';
         }
-        if (this.selectedDashNumbers.length > 0) {
+        if (this.selectedDashNumbers && this.selectedDashNumbers.length > 0) {
             const dashNumberIds = this.selectedDashNumbers.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
@@ -6159,5 +6159,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.selectedAircraftModel=undefined;
         this.selectAircraftManfacturer=undefined; 
         this.getAircraftMappedDataByItemMasterId();
+    }
+    clearSerchData(){
+        this.selectedATAchapter=undefined;
+        this.selectedATASubChapter=undefined;
+        this.getATAMappedDataByItemMasterId();
     }
 }

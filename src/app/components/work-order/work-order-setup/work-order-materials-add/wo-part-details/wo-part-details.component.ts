@@ -829,10 +829,12 @@ saveWorkOrderMaterialList(data) {
 updateQuantiry:boolean=false;
 calculateExtendedCost(): void {
   if(this.editData){
-    if(this.formObject.quantity < this.editData.quantity){
+    if(this.formObject.quantity < this.editData.allowbaleRequiredQty){
+      debugger;
+      const adjqty=this.formObject.quantity-this.editData.allowbaleRequiredQty
+      const message =' You Can not Reduce Qty'
       this.alertService.showMessage(
-        '',
-        ' Qty Req should be greater than Actual Qty Req',
+        '',message,
         MessageSeverity.warn
     );
     this.formObject.quantity= this.editData.quantity;
