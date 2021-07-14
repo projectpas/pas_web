@@ -642,9 +642,8 @@
                                                     class="p-dropdown-custom-md22 p-dropdown-mh120" placeholder="No CMM" 
                                                     [(ngModel)]="workOrderPartNumber.cMMId" 
                                                     [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                                    appendTo="body" required="isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null"> 
+                                                    appendTo="body" [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}"> 
                                                 </p-dropdown>
-                                                <!-- [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}" -->
 
                                                 <span data-toggle="modal" data-target="#cmmView" *ngIf="workOrderPartNumber.cMMId!=0 && workOrderPartNumber.cMMId!=null"
                                                 [ngClass]="{pointerEvents : workOrderPartNumber.cMMId==0 || workOrderPartNumber.cMMId==null}">
@@ -811,7 +810,7 @@
                                 *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer" type="button"
                                 [disabled]="!workOrderForm.valid || checkworkscope() || checkTechnician()"
                                 (click)="saveWorkOrder()">
-                                Save
+                                Save {{!workOrderForm.valid}}-{{checkworkscope()}}--{{checkTechnician()}}
                             </button>
            
                             <button class="btn btn-primary pull-right" *ngIf="isEdit && !isRecCustomer" type="button"
