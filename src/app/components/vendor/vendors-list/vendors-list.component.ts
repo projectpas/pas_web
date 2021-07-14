@@ -20,7 +20,7 @@ import { CommonService } from '../../../services/common.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
-
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 declare var $: any;
 
 
@@ -249,9 +249,9 @@ export class VendorsListComponent implements OnInit {
     isWarningInfo: boolean = true;
     isDocumentInfo: boolean = true;
     isMemoView: boolean = true;
-
+    enum :any;
     constructor(private router: ActivatedRoute, private route: Router, private datePipe: DatePipe, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, private vendorCapesService: VendorCapabilitiesService, public commonService: CommonService) {
-
+        this.enum = AppModuleEnum.Vendor;
         // router.params.subscribe(async val => {
         //     var checksec = await this.authService.CheckSecurity(this.authService.ModuleInfo, route.url);
         //     if (!checksec) {
@@ -259,7 +259,6 @@ export class VendorsListComponent implements OnInit {
         //     }
         //   });
         this.isAdd = this.authService.checkPermission(this.permissionAddCheck);
-        //this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
         this.isEdit = this.authService.checkPermission(this.permissionUpdateCheck);
         this.isActive = this.authService.checkPermission([ModuleConstants.Vendore + '.' + PermissionConstants.Update]);
         this.isDelete = this.authService.checkPermission([ModuleConstants.Vendore + '.' + PermissionConstants.Delete]);

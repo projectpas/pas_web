@@ -7,14 +7,14 @@
       <div>
         <a *ngIf="isViewMode == false">
           <button type="button" class="btn-sm header-button" matTooltip="Add Documents" matTooltipPosition="above"
-            (click)="addDocumentDetails(content);">
+            (click)="addDocumentDetails(content);" *ngIf="isDocAdd">
             Add Documents
           </button>
         </a>
       </div>
     </div>
   </div>
-  <div class="card-body header-body">
+  <div class="card-body header-body" *ngIf="isDocview">
     <p-table #documents class="rpo-table-cstm rro-table-cstm ptable-f10" [value]="documentCollection" [rows]="pageSize"
       [paginator]="true" [pageLinks]="3" [first]="0" [rowsPerPageOptions]="[10, 20,  50, 100]"
       [columns]="selectedColumns" selectionMode="multiple" [metaKeySelection]="true" [resizableColumns]="true"
@@ -36,11 +36,11 @@
         </div>
         <div class="row">
           <div class="col">
-            <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" pButton
+            <button *ngIf="isViewMode == false && isDocDownload" type="button" class="btn btn-primary exports-button" pButton
               icon="fa-download" matTooltip="Download  Data" matTooltipPosition="above" iconPos="left"
               label="Export  Data" (click)="selectedOnly = false; targetData = documents;" data-toggle="modal"
               data-target="#downloadConfirmationDocument"></button>
-            <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" pButton
+            <button *ngIf="isViewMode == false && isDocDownload" type="button" class="btn btn-primary exports-button" pButton
               icon="fa-download" matTooltip="Download Selected Data" matTooltipPosition="above" iconPos="left"
               label="Export Selected Data" (click)="documents.exportCSV({ selectionOnly: true })"></button>
           </div>
@@ -142,10 +142,10 @@
                 <i class="fa fa-eye"></i>
               </a>
             </span>
-            <span  *ngIf="isViewMode == false"  >
+            <span  *ngIf="isViewMode == false && isDocEdit"  >
               <a class="btn nobg" (click)="openEdit(rowData,content)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a> </span>
-            <span *ngIf="isViewMode == false">
+            <span *ngIf="isViewMode == false && isDocDelete">
               <a class="btn nobg" (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Remove"
                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
@@ -193,8 +193,8 @@
     <div class="margin-bottom-30" *ngIf="isViewMode == false && offLineUpload==true">
       <button [disabled]="isEnableUpdateButton" type="button" class="btn btn-primary pull-right submit-btn"
         (click)="onUploadDocumentListToServer()" *ngIf="isViewMode == false && !hideUpoladThing">
-        <span *ngIf="enableUpdate"> Update </span>
-        <span *ngIf="!enableUpdate">Save </span>
+        <span *ngIf="enableUpdate && isDocEdit"> Update </span>
+        <span *ngIf="!enableUpdate && isDocAdd">Save </span>
       </button>
       <button type="button" *ngIf="moduleName == 'LegalEntity'" class="btn btn-primary pull-right submit-btn"
         (click)="backClick()">Previous</button>
@@ -359,11 +359,11 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" *ngIf="!isEditButton" class="btn btn-primary editor-buttons-margin"
+        <button type="button" *ngIf="!isEditButton && isDocAdd" class="btn btn-primary editor-buttons-margin"
           (click)="saveDocumentInformation()" [disabled]="!addDocumentForm.valid || disableSave">
           Save
         </button>
-        <button type="button" *ngIf="isEditButton" class="btn btn-primary editor-buttons-margin"
+        <button type="button" *ngIf="isEditButton && isDocEdit" class="btn btn-primary editor-buttons-margin"
           (click)="saveDocumentInformation()" [disabled]="!addDocumentForm.valid || disableSave">
           Update
         </button>

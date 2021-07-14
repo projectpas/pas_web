@@ -17,7 +17,7 @@ export class ModuleConstants
     static Customers_Documents:string = "Customers_Documents";
 
         static Employees:string = "Employees";
-       static EmployeesList:string = "EmployeesList";
+        static EmployeesList:string = "EmployeesList";
         static Employees_GeneralInformation:string = "Employees_GeneralInformation";
         static Employees_Certification:string = "Employees_Certification";
         static Employees_Training:string = "Employees_Training";
@@ -80,6 +80,7 @@ export class ModuleConstants
         static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
         static Asset_Inventory_List :string  = "Asset_Inventory_List";
         static Asset_Inventory_Create :string  = "Asset_Inventory_Create";
+        static Asset_Inventory_Document :string  = "Asset_Inventory_Document";        
 
         static PurchaseOrder:string = "PurchaseOrder";
         static POList:string = "POList";

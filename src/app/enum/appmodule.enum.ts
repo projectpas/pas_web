@@ -15,4 +15,5 @@
     WorkOrder = 15,
     ExchangeQuote = 17,
     ExchangeSalesOrder = 18,
+    AssetInventory = 20,
 }

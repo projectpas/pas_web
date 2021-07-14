@@ -939,7 +939,7 @@
                         </div>
                         <div class="form-row" *ngIf="currentAsset.assetIsMaintenanceReqd">
                             <div *ngIf="assetInventoryId" class="input-width-100-percent">
-                                <app-common-documents [moduleName]="maintanancemoduleName"  [referenceId]="assetInventoryId"
+                                <app-common-documents [appModuleId]="enum" [moduleName]="maintanancemoduleName"  [referenceId]="assetInventoryId"
                                 [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                             </div>
                             <div class="w-100" style="padding-top: 24px;" style="display: none;">
@@ -1119,7 +1119,7 @@
                         </div>
                         <div class="form-row" *ngIf="currentAsset.isWarrantyRequired">
                             <div *ngIf="assetInventoryId" class="input-width-100-percent">
-                                <app-common-documents [moduleName]="warrantymoduleName"  [referenceId]="assetInventoryId"
+                                <app-common-documents [appModuleId]="enum" [moduleName]="warrantymoduleName"  [referenceId]="assetInventoryId"
                                 [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                             </div>
                             <div class="w-100" style="display: none;">
@@ -1241,7 +1241,7 @@
 
                 <div class="form-row" *ngIf="currentAsset.isIntangible">
                     <div *ngIf="assetInventoryId" class="input-width-100-percent">
-                        <app-common-documents [moduleName]="intangiblemoduleName"  [referenceId]="assetInventoryId"
+                        <app-common-documents [appModuleId]="enum" [moduleName]="intangiblemoduleName"  [referenceId]="assetInventoryId"
                         [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                     </div>
                     <div class="col-md-12" style="display: none;">

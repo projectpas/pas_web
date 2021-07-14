@@ -751,7 +751,7 @@
                                         <p>
                                             <span class="label"><b>Attachment Details: </b></span>
                                         </p>
-                                        <app-common-documents [moduleName]="custfincmoduleName" [referenceId]="customerId" [isViewMode]="true" 
+                                        <app-common-documents  [appModuleId]="enum" [moduleName]="custfincmoduleName" [referenceId]="customerId" [isViewMode]="true" 
                                         [offLineUpload]="false"></app-common-documents>
                                         <!-- <p-table #taxexeptTable
                                                 class="rpo-table-cstm lastcol-fix"
@@ -1093,7 +1093,7 @@
                             <!-- <app-customer-documents [customerDataFromExternalComponents]="
                   viewDataGeneralInformation
                 "></app-customer-documents> -->
-                <app-common-documents [moduleName]="moduleName"  [referenceId]="customerId"
+                <app-common-documents [appModuleId]="enum" [moduleName]="moduleName"  [referenceId]="customerId"
                 [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                         </div>
                     </div>

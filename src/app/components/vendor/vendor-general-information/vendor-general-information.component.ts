@@ -257,6 +257,7 @@ export class VendorGeneralInformationComponent implements OnInit {
     isAdd:boolean=true;
     isEdit:boolean=true;
     isNextVisible:Boolean=true;
+    enum :any;
     constructor(public vendorclassificationService: VendorClassificationService,
         private http: HttpClient,
         private changeDetectorRef: ChangeDetectorRef,
@@ -278,6 +279,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.stopmulticlicks = false;
         this.vendorId = this.acRouter.snapshot.params['id'];
         this.countrylist();
+        this.enum = AppModuleEnum.Vendor;
         if (window.localStorage.getItem('vendorService')) {
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
             if (this.acRouter.snapshot.params['id']) {

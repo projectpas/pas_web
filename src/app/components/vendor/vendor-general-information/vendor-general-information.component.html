@@ -923,7 +923,7 @@
     </div>
   <div class="modal-body">
     <div  style="width: 97%"> 
-        <app-common-documents [moduleName]="CertifiedModuleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="vendorId"
+        <app-common-documents [appModuleId]="enum" [moduleName]="CertifiedModuleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="vendorId"
         [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
         <div style="display: none;">
             <p-table #table4 class="rpo-table-cstm lastcol-fix"
@@ -1077,7 +1077,7 @@
     </div>
   <div class="modal-body">
     <div *ngIf="sourceVendor.vendorAudit" style="width: 97%"> 
-        <app-common-documents [moduleName]="AuditModuleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="vendorId"
+        <app-common-documents [appModuleId]="enum" [moduleName]="AuditModuleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="vendorId"
         [isViewMode]="false" [offLineUpload]="true"></app-common-documents>      
         <div style="display: none;">
             <p-table #table5 class="rpo-table-cstm lastcol-fix"

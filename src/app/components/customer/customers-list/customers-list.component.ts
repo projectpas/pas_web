@@ -20,7 +20,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import * as moment from 'moment';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 import { PermissionMaster } from '../../user-role/ModuleHierarchyMaster.model';
-
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 @Component({
     selector: 'app-customers-list',
     templateUrl: './customers-list.component.html',
@@ -190,6 +190,7 @@ export class CustomersListComponent implements OnInit {
     isDelete: boolean = true;
     isDownload:boolean=true;
     isDocumentview:boolean=true;
+    enum :any;
     permissionAddCheck=[ModuleConstants.Customer+'.'+PermissionConstants.Add,
         ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add,
         ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add,
@@ -225,6 +226,7 @@ export class CustomersListComponent implements OnInit {
         private commonService: CommonService,
         private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
+        this.enum = AppModuleEnum.Customer;
         //this.isAdd=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Add);
         this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
         //this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
