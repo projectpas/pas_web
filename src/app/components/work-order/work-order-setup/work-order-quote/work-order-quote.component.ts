@@ -672,7 +672,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.upDateDisabeldbutton = true;
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
-                                    // this.memo=
+                                    this.isDetailedViewQuote = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
                                     this.getQuoteMaterialListByWorkOrderQuoteId();
                                     this.quoteCreated = true;
@@ -1132,11 +1132,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     // this.selectedBuildMethod = "";
                     // this.currenttaskId = 0;
                 }
-                if (this.workOrderQuoteDetailsId == 0) {
-                    this.isDetailedViewQuote = false;
-                } else {
-                    this.isDetailedViewQuote = true;
-                }
+                // if (this.workOrderQuoteDetailsId == 0) {
+                //     this.isDetailedViewQuote = false;
+                // } else {
+                //     this.isDetailedViewQuote = true;
+                // }
             },
                 err => {
                     this.errorHandling(err);
