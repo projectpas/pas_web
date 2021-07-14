@@ -96,6 +96,20 @@ export class ModuleConstants
         static ReceivingCustomer :string  = "ReceivingCustomer";
         static ReceivingCustomer_GeneralInformation :string  = "ReceivingCustomer_GeneralInformation";
         static ReceivingCustomer_Document :string  = "ReceivingCustomer_Document";
+
+        static SO_List :string = "SO_List";
+        static SO_Create :string = "SO_Create";
+        static SO_Parts :string = "SO_Parts";
+        static SO_Approver_Process :string = "SO_Approver_Process";
+        static SO_Address :string = "SO_Address";
+        static SO_Freight :string = "SO_Freight";
+        static SO_Charges :string = "SO_Charges";
+        static SO_PickTicket :string = "SO_PickTicket";
+        static SO_Shipping :string = "SO_Shipping";
+        static SO_BillingInvoicing :string = "SO_BillingInvoicing";
+        static SO_Document :string = "SO_Document";
+        static SO_Analysis :string = "SO_Analysis";
+        static SO_Communication :string = "SO_Communication";              
 }
 
 export class PermissionConstants
