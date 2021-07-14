@@ -143,17 +143,26 @@ export class WoMarginComponent implements OnInit, OnChanges {
       this.provisionList();
       this.getMaterailMandatories();
      }
-     if(this.isEdit==true){
-     if(Number(parseInt(this.formObject.quantity)) > Number(parseInt(this.formObject.totalStocklineQtyReq))){
+     if(this.isEdit==true && !this.isStockLine){
+     if(Number(parseInt(this.formObject.qtyOnHand)) > Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
       this.formObject.stocklineQuantity=Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))
-      // this.invalidQuantityenteredForQuantityFromThis = false;
-    }else if(Number(parseInt(this.formObject.quantity)) == Number(parseInt(this.formObject.totalStocklineQtyReq))){
+      }else if(Number(parseInt(this.formObject.quantity)) == Number(parseInt(this.formObject.totalStocklineQtyReq))){
       this.formObject.stocklineQuantity=0;
-    }else{
-      this.formObject.stocklineQuantity=Number(parseInt(this.formObject.totalStocklineQtyReq)-parseInt(this.formObject.quantity))
-      // this.invalidQuantityenteredForQuantityFromThis = false;
-    }
+    }else if(Number(parseInt(this.formObject.qtyOnHand)) < Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
+      this.formObject.stocklineQuantity= Number(parseInt(this.formObject.qtyOnHand))
+     }
   }
+
+//   if(this.isEdit==true ){
+//     debugger;
+//   if(Number(parseInt(this.formObject.quantity)) > Number(parseInt(this.formObject.totalStocklineQtyReq))){
+//    this.formObject.stocklineQuantity=Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))
+//    }else if(Number(parseInt(this.formObject.quantity)) == Number(parseInt(this.formObject.totalStocklineQtyReq))){
+//    this.formObject.stocklineQuantity=0;
+//  }else{
+//    this.formObject.stocklineQuantity=Number(parseInt(this.formObject.totalStocklineQtyReq)-parseInt(this.formObject.quantity))
+//   }
+// }
      this.onChangeQuantityFromThis();
      this.enableUpdateBtn=this.enableUpdateBtn;
      if(this.enableUpdateBtn==true){
@@ -306,6 +315,17 @@ calculateExtendedCost(): void {
       this.formObject.extendedCost = "";
   } 
 } 
+
+// if(this.isEdit==true && !this.isStockLine){
+//   if(Number(parseInt(this.formObject.qtyOnHand)) > Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
+//    this.formObject.stocklineQuantity=Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))
+//    }else if(Number(parseInt(this.formObject.quantity)) == Number(parseInt(this.formObject.totalStocklineQtyReq))){
+//    this.formObject.stocklineQuantity=0;
+//  }else if(Number(parseInt(this.formObject.qtyOnHand)) < Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
+//    this.formObject.stocklineQuantity= Number(parseInt(this.formObject.qtyOnHand))
+//   }
+// }
+
 onChangeQuantityFromThis() {
 // this.isSpinnerVisible=true;
  setTimeout(() => {
@@ -331,6 +351,10 @@ onChangeQuantityFromThis() {
     //   this.disableUpdateButton=true;
     // }
   }else{
+    if(Number(parseInt(this.formObject.stocklineQuantity)) > Number(parseInt(this.formObject.qtyOnHand))){
+         this.formObject.stocklineQuantity= Number(parseInt(this.formObject.qtyOnHand))
+         this.invalidQuantityenteredForQuantityFromThis =true;
+        }
     // this.isSpinnerVisible=false;
     if (Number(parseInt(this.formObject.stocklineQuantity)) != 0) { 
       if ( Number(parseInt(this.formObject.stocklineQuantity)) > Number(parseInt(this.formObject.quantity))) {

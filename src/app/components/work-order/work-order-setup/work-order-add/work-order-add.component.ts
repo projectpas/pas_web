@@ -2198,7 +2198,6 @@ createQuote() {
                     })
                 }
             })
-            debugger;
             this.workOrderMaterialList = uniqueParts;
             this.workOrderMaterialList.forEach(x => {
                 x.totalStockLineArray=[];
