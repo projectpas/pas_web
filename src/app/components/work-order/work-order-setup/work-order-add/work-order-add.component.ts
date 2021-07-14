@@ -2172,6 +2172,7 @@ createQuote() {
     summaryParts: any = [];
     totalRecords: number;
     pageLinks: any;
+    totalStockLineSum:any;
     filterParts() {
         this.summaryParts = [];
         let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
@@ -2193,7 +2194,34 @@ createQuote() {
                     })
                 }
             })
+            debugger;
             this.workOrderMaterialList = uniqueParts;
+            this.workOrderMaterialList.forEach(x => {
+                x.totalStockLineArray=[];
+                x.childParts.forEach(y => {
+                    y.sumofStockLine= y.stocklineQtyReserved + y.stocklineQtyIssued
+                    // y.sumofStockRequired= +=
+                });
+            });
+            this.workOrderMaterialList.forEach(x => {
+                this.totalStockLineSum=undefined;
+                x.childParts.forEach(y => {
+x.totalStockLineArray.push(y.sumofStockLine);
+console.log("x.totalStockLineSum",x)
+            })
+            // x.totalStockLineSum=this.totalStockLineSum
+            x.totalStockLineSum = x.totalStockLineArray.reduce(function(a, b){
+                return a + b;
+            }, 0);
+            console.log("xxxxx. ",x)
+        });
+        this.workOrderMaterialList.forEach(x => {
+            // x.childParts.forEach(y => {
+// console.log("x.totalStockLineSum",y)
+x.allowbaleRequiredQty=Math.min(Number(x.totalStockLineSum),Number(x.totalStocklineQtyReq))
+        // })
+        console.log("x.totalStockLineSum",x)
+    });
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(

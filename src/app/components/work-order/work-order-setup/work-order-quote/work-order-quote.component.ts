@@ -3456,7 +3456,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(this.quoteForm.expirationDateStatus ? this.quoteForm.expirationDateStatus : 0);
         } else {
             this.setEditArray.push(0);
-        }
+        } 
         const strText = value ? value : '';
         this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
@@ -3505,7 +3505,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                     this.materialListQuotation.forEach(tcharge => {
-                        tcharge.quantity = tcharge.stocklineQuantity;
+                        // tcharge.quantity = tcharge.stocklineQuantity;
                         if (tcharge.unitCost) {
                             tcharge.unitCost = Number(tcharge.stocklineUnitCost.toString().split(',').join('')).toFixed(2);
                         }
