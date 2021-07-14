@@ -100,7 +100,7 @@ export class ExchangeSalesOrderHypoAnalysisComponent implements OnInit {
       { field: "overhaulCost", header: "Overhaul Cost", width: "120px" },
       { field: "otherCost", header: "Other Cost", width: "120px" },
       { field: "totalEstCost", header: "Total Est Cost", width: "130px" },
-      { field: "marginAmount", header: "Margin Amount", width: "100px" },
+      { field: "marginAmount", header: "Margin Amt", width: "100px" },
       { field: "marginPercentage", header: "Margin Percentage", width: "100px" },
     ];
     this.selectedColumns = this.headers;

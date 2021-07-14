@@ -54,7 +54,7 @@ export class WorkOrderAssetsComponent implements OnInit,OnChanges {
         { header: "Inventory Num", field: "inventoryNumber" },
         { header: "Tool Class", field: "assetType" },
         { header: "Manufacturer", field: "manufacturer" },
-        { header: "Serial Num", field: "serialNo" },
+        { header: "Ser Num", field: "serialNo" },
         { header: "Location", field: "assetLocation" },
         { header: "Status", field: "inventoryStatus" },
         { header: "Checked Out by", field: "checkOutById" },

@@ -313,7 +313,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'Parts Cost',
             field: 'materialCost'
         }, {
-            header: 'Parts Rev %',
+            header: 'Parts Revenue %',
             field: 'materialRevenuePercentage'
         },
         {
@@ -324,13 +324,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'Labour Cost',
             field: 'laborCost'
         }, {
-            header: 'Labour Rev %',
+            header: 'Labour Revenue %',
             field: 'laborRevenuePercentage'
         }, {
             header: 'Overhead Cost',
             field: 'overHeadCost'
         }, {
-            header: 'Overhead Cost Rev %',
+            header: 'Overhead Cost Revenue %',
             field: 'overHeadCostRevenuePercentage'
         },
         {
@@ -404,7 +404,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         { field: 'quantity', header: 'Qty', isRequired: true, isCheckbox: false, isDate: false },
         { field: 'uomName', header: 'UOM', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'conditiontype', header: 'Cond Type', isRequired: true, isCheckbox: false, isDate: false },
-        { field: 'stocktype', header: 'Stock Type', isRequired: false, isCheckbox: false, isDate: false },
+        { field: 'stocktype', header: 'Stk Type', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'unitCost', header: 'Unit Cost', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'totalPartCost', header: 'Total Part Cost', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'billingName', header: 'Billing Method', isRequired: true, isCheckbox: false, isDate: false },

@@ -305,7 +305,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			{ field: 'partDescription', header: 'PN Description',width:"200px" },
 			{ field: 'manufacturerdesc', header: 'Manufacturer' },
 			{ field: 'itemType', header: 'Item Type',width:"90px" },
-			{ field: 'stockType', header: 'Stock Type',width:"90px" },
+			{ field: 'stockType', header: 'Stk Type',width:"90px" },
 			{ field: 'classificationdesc', header: 'Classification' },
 			{ field: 'itemGroup', header: 'Group Name' },
 			{ field: 'isSerialized', header: 'Serialized',width:"90px" },

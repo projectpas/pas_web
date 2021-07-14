@@ -163,7 +163,7 @@
                     <p class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
                       [matTooltip]="parsedText(approver['customerMemo'])" [innerHTML]="approver['customerMemo']"></p>
                     <div class="pencil-div" *ngIf="getApprovalActionCustomerStatus(approver)">
-                      <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
+                      <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
                         matTooltipPosition="above" matTooltip="Add Memo"
                         (click)="onAddTextAreaInfo('customerMemo',i)"></i>
                     </div>
@@ -351,7 +351,7 @@
                     <p class="m-0 p-0 p_textEditor float-left truncate-text" matTooltipPosition="above"
                       [matTooltip]="parsedText(approver['customerMemo'])" [innerHTML]="approver['customerMemo']"></p>
                     <div class="pencil-div" *ngIf="getApprovalActionCustomerStatus(approver)">
-                      <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
+                      <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
                         matTooltipPosition="above" matTooltip="Add Memo"
                         (click)="onAddTextAreaInfo('customerMemo',i)"></i>
                     </div>
@@ -386,7 +386,7 @@
 </div>
 
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>

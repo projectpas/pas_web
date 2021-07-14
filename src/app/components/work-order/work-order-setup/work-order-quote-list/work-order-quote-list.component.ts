@@ -33,15 +33,15 @@ export class WorkOrderQuoteListComponent implements OnInit {
   private table: Table;
   modal: NgbModalRef;
   headers = [
-    { field: 'quoteNumber', header: 'Quote Num' },
+    { field: 'quoteNumber', header: 'Qte Num' },
     { field: 'workOrderNum', header: 'WO Num' },
     { field: 'customerName', header: 'Cust Name' },
     { field: 'customerCode', header: 'Cust Code' },
-    { field: 'versionNo', header: 'Quote Version' },
+    { field: 'versionNo', header: 'Qte Ver' },
     { field: 'openDate', header: 'Open Date' },
     { field: 'promisedDate', header: 'Promise Date' },
     { field: 'estCompletionDate', header: 'Est. Comp Date' },
-    { field: 'quoteStatus', header: 'Quote Status' },
+    { field: 'quoteStatus', header: 'Qte Status' },
     { field: "createdDate", header: "Created Date", width: "130px" },
     { field: "createdBy", header: "Created By", width: "130px" },
     { field: "updatedDate", header: "Updated Date", width: "130px" },
