@@ -78,7 +78,6 @@ export class ModuleConstants
         static Asset_Capes :string  = "Asset_Capes";
         static Asset_Calibration :string  = "Asset_Calibration";
         static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
-
         static AssetMaintenance:string = "AssetMaintenance";
 }
 
