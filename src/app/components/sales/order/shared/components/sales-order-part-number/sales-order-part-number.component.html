@@ -45,7 +45,8 @@
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
-                                        <span class="text-center" style="display: block;" *ngIf="summaryColumn.field == 'itemNo'">
+                                        <span class="text-center" style="display: block;"
+                                            *ngIf="summaryColumn.field == 'itemNo'">
                                             {{summaryPart[summaryColumn.field] }}
                                         </span>
                                         <span *ngIf="summaryColumn.field != 'itemNo'
@@ -127,6 +128,12 @@
                                                 matTooltip="Create PO" matTooltipPosition="above">
                                                 <i class="fa fa-plus"> </i>
                                             </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-hist-cstm view-part-eye"
+                                                (click)="openSOSummary(contentSOSummary, summaryPart)"
+                                                matTooltip="SO History" matTooltipPosition="above"><i
+                                                    class="fa fa-history"></i></a>
                                         </span>
                                     </td>
                                 </tr>
@@ -414,12 +421,12 @@
                                     <td>
                                         {{ part.idNumber }}
                                     </td>
-                                    <td 
-                                        *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
                                         <div class="form-group memo-popup-cstm mat_emo "
                                             style="display: inline-flex; margin-bottom: 0;">
-                                            <div [innerHTML]="part.notes" style="min-width:250px !important" matTooltipPosition="above"
-                                            [matTooltip]="parsedText(part.notes)" class="text_editor_box truncate-text"></div>
+                                            <div [innerHTML]="part.notes" style="min-width:250px !important"
+                                                matTooltipPosition="above" [matTooltip]="parsedText(part.notes)"
+                                                class="text_editor_box truncate-text"></div>
                                             <i class="fa fa-pencil" data-toggle="modal"
                                                 style="position: relative;top: 6px;padding-left:4px;"
                                                 data-target="#textarea-popupNotes" matTooltip="Notes"
@@ -576,7 +583,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <strong>Part Number : 
+        <strong>Part Number :
             <span class="new-label">{{part.partNumber}}</span>
         </strong>
     </div>
@@ -602,12 +609,197 @@
         </button>
     </div>
     <div class="modal-body">
-        <strong>Part Number : 
+        <strong>Part Number :
             <span class="new-label">{{selectedSummaryRow.partNumber}}</span>
         </strong>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="deleteMultiplePart()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="onCloseParMultipletDelete()">No</button>
+    </div>
+</ng-template>
+<ng-template #contentSOSummary let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Sales Order History</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+            <div class="loading">
+                <div class="lds-roller">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="">
+                <div class="col" style="padding:3px 0 0;">
+                    <div class="form-group float-right">
+                        <div class="pull-left radio-buttons-align">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="monthrange" class="form-control" value="1"
+                                    (click)="getSOSummaryDetails('1')" [ngModel]="currentStatusSOSummary" checked>
+                                <span class="checkmark"></span>Last 12 Months
+                            </label>
+                        </div>
+                        <div class="pull-left radio-buttons-align ">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="monthrange" class="form-control" value="2"
+                                    (click)="getSOSummaryDetails('2')" [ngModel]="currentStatusSOSummary">
+                                <span class="checkmark"></span>Last 18 Months
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="table-responsive history_hg" style="overflow-x:auto;">
+                <table class="table table-bordered header-table-width">
+                    <thead>
+                        <tr>
+                            <th>PN</th>
+                            <th>Cond</th>
+                            <th>Curr</th>
+                            <th>Revenue</th>
+                            <th>Direct Cost</th>
+                            <th>Margin Amt</th>
+                            <th>Margin %</th>
+                        </tr>
+                    </thead>
+                    <tr *ngFor="let soSummPN of soSummaryPNData;">
+                        <td>
+                            {{soSummPN.partNumber}}
+                        </td>
+                        <td>
+                            {{soSummPN.condition}}
+                        </td>
+                        <td>
+                            {{soSummPN.currencyName}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.revenue | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.directCost | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.margin | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.marginPercentage | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="table-responsive history_hg" style="overflow-x:auto;">
+                <table class="table table-bordered header-table-width">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Cond</th>
+                            <th>Curr</th>
+                            <th>Revenue</th>
+                            <th>Direct Cost</th>
+                            <th>Margin Amt</th>
+                            <th>Margin %</th>
+                            <th>SO Num</th>
+                            <th>SO Date</th>
+                            <th>Trace</th>
+                            <th>Status</th>
+                            <th class="table-actions-column">Action</th>
+                        </tr>
+                    </thead>
+                    <tr *ngFor="let soSummPN of soSummaryCustData;">
+                        <td>
+                            {{soSummPN.customerName}}
+                        </td>
+                        <td>
+                            {{soSummPN.condition}}
+                        </td>
+                        <td>
+                            {{soSummPN.currencyName}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.revenue | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.directCost | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.margin | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td class="text-right">
+                            {{soSummPN.marginPercentage | twoDecimalGlobalNumberFormatPipe}}
+                        </td>
+                        <td>
+                            {{soSummPN.salesOrderNum}}
+                        </td>
+                        <td>
+                            {{soSummPN.openDate | date: 'MM/dd/yyyy'}}
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            {{soSummPN.salesOrderStatus}}
+                        </td>
+                        <td>
+                            <span>
+                                <a class="btn nobg btn-view-cstm" (click)="view(viewSalesOrder, soSummPN)"
+                                    matTooltip="View SO" matTooltipPosition="above">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+    </div>
+</ng-template>
+<ng-template #viewSalesOrder let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
+    <div class="modal-header">
+        <button type="button" class="close" (click)="closeViewModel(); salesOrderId = 0;">
+            &times;
+        </button>
+        <h4 class="modal-title">Sales Order View</h4>
+    </div>
+    <div class="card-body" *ngIf="isOpenViewSO">
+        <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+            <div class="loading">
+                <div class="lds-roller">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <app-sales-order-view [customerId]="customerId" [salesOrderId]="salesOrderId" [salesOrderView]="salesOrderView">
+        </app-sales-order-view>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeViewModel();">
+            Close
+        </button>
     </div>
 </ng-template>
