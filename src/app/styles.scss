@@ -17375,6 +17375,12 @@ ng-multiselect-dropdown {
 }
 .cmmRequres  .ui-dropdown-label-container {
   border: 1px solid red !important;
+  border-radius: 5px;
+}
+.cmmRequres .ui-dropdown .ui-dropdown-trigger {
+  border-color: red red red #c5c5c5;
+  // margin-top: 0px;
+  height:26px;
 }
 .p-dropdown-custom-md22 .ui-dropdown, .select-cstm {
   min-width: 128px !important;

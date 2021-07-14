@@ -9,12 +9,23 @@
     width: 110px;
     padding: 8px 5px !important;
 }
-.modal-body p .value{
-    width: 60%;
+.control-label {
+margin-top: 10px;
+text-align: left;
+width: 150px !important;
+//font-weight: 500;
 }
-.modal-body p .label {
-    width: 40%;
+
+.labels-font-header {
+width: auto !important;
+margin-top: 0;
 }
+// .modal-body p .value{
+//     width: 60%;
+// }
+// .modal-body p .label {
+//     width: 40%;
+// }
 .width-130{
     min-width:130px;
 }
@@ -26,9 +37,9 @@
 }
 .aligin_cer{
     display: inline-flex;
-    width: 72%;
+    width: 100%;
     text-align: center;
-    padding-left: 8%;
+    // padding-left: 8%;
     .value{
         color: #ff5663;
         padding-left: 4px;

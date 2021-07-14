@@ -513,29 +513,41 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h4 class="modal-title">Publication Details</h4>
+      
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="col-md-12 shadow-box-cstm">
         <div class="aligin_cer">
+          <div class="col-md-2">
           <p style="min-width: 24%;">
-            <span class="label"><b>Pub Id: </b></span><span class="value">{{
+            <label class="control-label labels-font-header">Pub Id:  </label><span class="value" style="text-align:left !important">{{
               generalInfo.publicationId ? generalInfo.publicationId : '-'
               }}</span>
           </p>
+          </div>
+          <div class="col-md-6">
           <p style="min-width: 24%;">
-            <span class="label"><b>Pub Description: </b></span><span class="value">{{
+            <label class="control-label labels-font-header">Pub Description:  </label><span class="value" style="text-align:left !important">{{
               generalInfo.description ? generalInfo.description : '-'
               }}</span>
           </p>
+          </div>
+          <div class="col-md-3">
           <p style="min-width: 30%;">
-            <span class="label"><b>Pub Type: </b></span><span class="value">{{
+            <label class="control-label labels-font-header">Pub Type:  </label><span class="value" style="text-align:left !important">{{
               generalInfo.publicationType ? generalInfo.publicationType : '-'
               }}</span>
           </p>
+          </div>
         </div>
       </div>
-      <div class="modal-body">
+      </div>
         <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
           <!--<a href="#" class="btn btn-primary openall">open all</a> <a href="#" class="btn btn-warning closeall">close all</a>-->
           <div class="panel-group" id="accordion">
             <div class="panel panel-default">
+            
               <div>
                 <button type="button" class="btn btn-primary" data-toggle="collapse" (click)="openAllCollapse()">
                   Open All

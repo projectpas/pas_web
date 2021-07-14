@@ -1167,7 +1167,8 @@
                                         {{approver.rule}}
                                     </td>
                                     <td>
-                                        <p class="m-0 p-0 p_textEditor memo-left"  [innerHTML]="approver['memo']"></p>
+                                        <p class="m-0 p-0 p_textEditor memo-left truncate-text"
+                                        matTooltipPosition="above"  [matTooltip]="parsedText(approver['memo'])"  [innerHTML]="approver['memo']"></p>
                                     </td>
                                     <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
                                 </tr>

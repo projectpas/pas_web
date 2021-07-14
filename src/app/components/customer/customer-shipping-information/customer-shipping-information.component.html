@@ -2790,12 +2790,12 @@
               }">
                 {{ audit.expirationDate | date: 'MM/dd/yyyy h:mm a '}}
               </td>
-              <td [ngStyle]="{
+              <td class="text-right" [ngStyle]="{
                 color: getColorCodeForInterHistory(i, 'amount', audit.amount)
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.amount }}
+                {{ audit.amount | twoDecimalGlobalNumberFormatPipe}}
               </td>
               <td [ngStyle]="{
                 color: getColorCodeForInterHistory(

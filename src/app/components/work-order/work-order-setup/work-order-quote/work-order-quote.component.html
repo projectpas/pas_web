@@ -235,17 +235,18 @@
                  <p-editor [(ngModel)]="tempMemo" (ngModelChange)="memoValidate()" [style]="{'height':'320px'}" name="tempMemo"
                  required>
              </p-editor>
+             <div class="editor-buttons">
+                <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" 
+                [disabled]="disableForMemo"
+                    (click)="onSaveDescription()">
+                    Save
+                </button>
+                <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
              </div>
-                 <div class="modal-footer">
-                     <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" 
-                     [disabled]="disableForMemo"
-                         (click)="onSaveDescription()">
-                         Save
-                     </button>
-                     <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
-                         Close
-                     </button>
-                 </div>
+            
          </div>
      </div>
  </div>
