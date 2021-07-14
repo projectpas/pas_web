@@ -289,7 +289,7 @@
                         <th>NextCalibrationDate</th>
                         <th>LastCalibrationBy</th>
                         <th>CalibrationDate</th>
-                        <th>CurrencyName</th>
+                        <th>Curr Name</th>
                         <th>AssetStatus</th>
                         <th>UnitCost</th>
                         <th>Memo</th>
@@ -412,8 +412,8 @@
                     <p><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{calibrationForm.AltAssetId}}</span></p>
                     <p><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>                    
                     <p><span class="label"><b>Location: </b></span><span class="value">{{calibrationForm.Location}}</span></p>
-                    <p><span class="label"><b>Serial Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
-                    <p><span class="label"><b>Control ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                    <p><span class="label"><b>Ser Num: </b></span><span class="value">{{calibrationForm.SerialNum}}</span></p>                    
+                    <p><span class="label"><b>Cntrl ID: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
                     </div>
                     <div class="col-md-6">
                     <p ><span class="label"><b>Acquisition Type: </b></span><span class="value">{{calibrationForm.AcquisitionType}}</span></p>
@@ -488,7 +488,7 @@
                           </div>
                         </div>
                       <div class="form-group col-sm-12">
-                          <label class="control-label col-sm-4">Currency <span class="clr-red">*</span></label>
+                          <label class="control-label col-sm-4">Curr <span class="clr-red">*</span></label>
                           <div class="col-sm-7">
                             <p-dropdown placeholder="Select Currency" (onChange)="enableSave()"  appendTo="body" [baseZIndex]="9999"  [showClear]="true" (input)="onFilterAction($event.target.value)" filter="true" name="currencyId" [options]="currencyList"
                             class="p-dropdown-100" [(ngModel)]="calibrationForm.currencyId" required>
@@ -536,8 +536,8 @@
                 <p><span class="label"><b>Asset ID: </b></span><span class="value">{{viewcalibrationForm.AssetId}}</span></p>
                 <p><span class="label"><b>Asset Name: </b></span><span class="value">{{viewcalibrationForm.AssetName}}</span></p>
                 <p><span class="label"><b>Alt Asset ID: </b></span><span class="value">{{viewcalibrationForm.AltAssetId}}</span></p>
-                <p><span class="label"><b>Serial Num: </b></span><span class="value">{{viewcalibrationForm.SerialNum}}</span></p>
-                <p><span class="label"><b>Control Num: </b></span><span class="value">{{viewcalibrationForm.ControlName}}</span></p>
+                <p><span class="label"><b>Ser Num: </b></span><span class="value">{{viewcalibrationForm.SerialNum}}</span></p>
+                <p><span class="label"><b>Cntrl Num: </b></span><span class="value">{{viewcalibrationForm.ControlName}}</span></p>
                 <p><span class="label"><b>Item Type: </b></span><span class="value">{{viewcalibrationForm.Itemtype}}</span></p>
                 <p><span class="label"><b>CO: </b></span><span class="value">{{viewcalibrationForm.CompanyName}}</span></p>
                 <p><span class="label"><b>BU: </b></span><span class="value">{{viewcalibrationForm.BuName}}</span></p>
@@ -549,7 +549,7 @@
                 <p><span class="label"><b>Certify Type: </b></span><span class="value">{{viewcalibrationForm.CertifyType}}</span></p>
                 <p><span class="label"><b>UOM: </b></span><span class="value">{{viewcalibrationForm.UOM}}</span></p>
                 <p><span class="label"><b>Qty: </b></span><span class="value">{{viewcalibrationForm.Qty}}</span></p>
-                <p><span class="label"><b>Currency: </b></span><span class="value">{{viewcalibrationForm.CurrencyName}}</span></p>
+                <p><span class="label"><b>Curr: </b></span><span class="value">{{viewcalibrationForm.CurrencyName}}</span></p>
                 <p><span class="label"><b>Updated Cost: </b></span><span class="value">{{viewcalibrationForm.UpdatedCost}}</span></p>
                 <p><span class="label"><b>In Service Date: </b></span><span class="value">{{viewcalibrationForm.Inservicedate}}</span></p>
                 <p><span class="label"><b>Asset Status: </b></span><span class="value">{{viewcalibrationForm.AssetStatus}}</span></p>
@@ -593,7 +593,7 @@
                       <p><span class="label"><b>Asset Name: </b></span><span class="value">{{calibrationForm.AssetName}}</span></p>
                   </div>
                   <div class="col-sm-3">
-                      <p><span class="label"><b>Control Num: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
+                      <p><span class="label"><b>Cntrl Num: </b></span><span class="value">{{calibrationForm.ControlName}}</span></p>
                   </div>
                   <div class="col-sm-3">
                       <p><span class="label"><b>In service Date: </b></span><span class="value">{{calibrationForm.Inservicedate}}</span></p>

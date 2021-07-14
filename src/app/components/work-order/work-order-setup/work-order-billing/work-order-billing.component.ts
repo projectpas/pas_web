@@ -130,7 +130,7 @@ export class WorkOrderBillingComponent implements OnInit {
         { field: 'quantity', header: 'Qty Req', align: 1 },
         { field: 'uom', header: 'UOM' },
         { field: 'condition', header: 'Cond' },
-        { field: 'stockType', header: 'Stock Type' },
+        { field: 'stockType', header: 'Stk Type' },
         { field: 'unitCost', header: 'Unit Cost', align: 1 },
         { field: 'extendedCost', header: 'Ext. Cost', align: 1 }
     ];

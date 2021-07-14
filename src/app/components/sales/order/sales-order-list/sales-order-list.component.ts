@@ -117,10 +117,10 @@ export class SalesOrderListComponent implements OnInit {
     this.headers = [
       { field: "salesOrderNumber", header: "SO Num", width: "110px" },
       { field: "customerName", header: "Cust Name", width: "180px" },
-      { field: "customerReference", header: "Customer Ref", width: "160px" },
-      { field: "salesOrderQuoteNumber", header: "Quote Num", width: "110px" },
-      { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
-      { field: "quoteDate", header: "Quote Date", width: "130px" },
+      { field: "customerReference", header: "Cust Ref", width: "160px" },
+      { field: "salesOrderQuoteNumber", header: "Qte Num", width: "110px" },
+      { field: "versionNumber", header: "Qte Ver Num", width: "120px" },
+      { field: "quoteDate", header: "Qte Date", width: "130px" },
       { field: "partNumberType", header: "PN", width: "130px" },
       { field: "partDescriptionType", header: "PN Description", width: "200px" },
       { field: "status", header: "Status", width: "140px" },
@@ -141,10 +141,10 @@ export class SalesOrderListComponent implements OnInit {
     this.partColumns = [
       { field: "partNumber", header: "PartNumber", width: "200px" },
       { field: "description", header: "Description", width: "200px" },
-      { field: "stockLineNumber", header: "Stock Line Number", width: "200px" },
+      { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
       { field: "method", header: "Method", width: "200px" },
-      { field: "serialNumber", header: "Serial Number", width: "200px" },
-      { field: "stockLineId", header: "Stock Line Num", width: "200px" },
+      { field: "serialNumber", header: "Ser Num", width: "200px" },
+      { field: "stockLineId", header: "Stk Line Num", width: "200px" },
       { field: "idNumber", header: "ID Num", width: "200px" },
       { field: "pmaStatus", header: "OEM/PMA/DE", width: "200px" },
       { field: "conditionType", header: "Cond Type", width: "200px" },
@@ -169,7 +169,7 @@ export class SalesOrderListComponent implements OnInit {
   }
 
   auditHistoryHeader = [
-    { field: 'salesOrderQuoteNumber', header: 'Quote Num', isRequired: 0 },
+    { field: 'salesOrderQuoteNumber', header: 'Qte Num', isRequired: 0 },
     { field: 'status', header: 'Status', isRequired: 1 },
     { field: 'salesOrderNumber', header: 'SO Num', isRequired: 1 },
     { field: 'customerName', header: 'Cust Name', isRequired: 1 },

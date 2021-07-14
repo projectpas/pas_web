@@ -139,7 +139,7 @@
 
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.calibrationDefaultCost !=0">*</span></label>
+                                                    <label>Curr <span class="clr-red" *ngIf="currentCalibration.calibrationDefaultCost !=0">*</span></label>
                                              
                                                     <p-dropdown [required]="currentCalibration.calibrationDefaultCost !=0" [showClear]="true" class="p-dropdown-100" (ngModelChange)="setvaliDate($event)"   [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.calibrationCurrencyId" name="calibrationCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                                 </div>
@@ -283,7 +283,7 @@
                                                            [(ngModel)]="currentCalibration.certificationDefaultCost" type="text">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.certificationDefaultCost !=0">*</span> </label>
+                                                    <label>Curr <span class="clr-red" *ngIf="currentCalibration.certificationDefaultCost !=0">*</span> </label>
                                                   
                                                     <p-dropdown [required]="currentCalibration.certificationDefaultCost !=0" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="setvaliDate($event)"  [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.certificationCurrencyId" name="certificationCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                                 </div>
@@ -368,7 +368,7 @@
                                                            [(ngModel)]="currentCalibration.inspectionDefaultCost">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.inspectionDefaultCost !=0">*</span></label>
+                                                    <label>Curr <span class="clr-red" *ngIf="currentCalibration.inspectionDefaultCost !=0">*</span></label>
                                                 
                                                     <p-dropdown [required]="currentCalibration.inspectionDefaultCost !=0"  [showClear]="true" class="p-dropdown-100" (ngModelChange)="setvaliDate($event)"   [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.inspectionCurrencyId" name="inspectionCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                                 </div>
@@ -450,7 +450,7 @@
                                                            [(ngModel)]="currentCalibration.verificationDefaultCost" type="text">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.verificationDefaultCost !=0">*</span></label>
+                                                    <label>Curr <span class="clr-red" *ngIf="currentCalibration.verificationDefaultCost !=0">*</span></label>
             
                                                     <p-dropdown [required]="currentCalibration.verificationDefaultCost !=0"  [showClear]="true" class="p-dropdown-100" (ngModelChange)="setvaliDate($event)"    [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.verificationCurrencyId" name="verificationCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                                 </div>
