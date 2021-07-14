@@ -1,19 +1,6 @@
 ﻿<div class="x_panel">
     <div class="x_content">
-        <div class="card" *ngIf="repairOrderHeaderData">
-            <!-- <div class="card-header">
-                <nav class="pull-left" aria-label="breadcrumb">
-                    <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                        <li class="breadcrumb-item active" aria-current="page">Receiving</li>
-                       
-                        <li class="breadcrumb-item " aria-current="page">Receiving RO Grid</li>
-                    </ol>
-                </nav>
-                <button class="btn btn-primary" (click)="toggle_epo_header=!toggle_epo_header">
-                    {{toggle_epo_header ? 'Collapse' : 'Expand'}}
-                </button>
-            </div> -->
-
+        <div class="card" *ngIf="repairOrderHeaderData">            
             <div class="card new-card">
                 <div class="card-header header">
                     <div class="row">
@@ -32,24 +19,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body">
-                    <!-- <h4 class="po-head">Receiving - RO Grid (Single RO)</h4> -->
-                    <!-- <form id="" class="ro-grid-form" name=""> -->
-                    <div class="form-row">
-                        <!-- <div class="col-md-8">
-                            <div class="form-group">
-                                <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
-                                <div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of roStatus">
-                                        <label class="radio-cstm radio-cstm-d wauto">
-                                            <input type="radio" [checked]="status.value == repairOrderHeaderData.statusId" name="roStatus" class="form-control" value="{{status.value}}" disabled>
-                                            <span class="checkmark"></span>
-                                            {{status.label}}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+                <div class="card-body">                   
+                    <div class="form-row">                        
                         <div class="col-md-9">
                             <div class="form-row" *ngIf="repairOrderHeaderData">
                                 <div class="col-md-4">
@@ -114,7 +85,7 @@
                                             [(ngModel)]="repairOrderHeaderData.contactName" required disabled>
                                     </div>
                                     <div class="form-group">
-                                        <label>Contact Phone </label>
+                                        <label>Phone </label>
                                         <input class="form-control" type="text" name="contactPhone"
                                             [(ngModel)]="repairOrderHeaderData.workPhone" disabled>
                                     </div>
@@ -164,12 +135,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group memo-popup-cstm">
                                         <label>
-                                            Notes
-                                            <!-- <span class="editor-span">
-                                                <a class="btn nobg" matTooltipPosition="above" matTooltip="Notes">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            </span> -->
+                                            Notes                                          
                                         </label>
                                         <span>
                                             <div [innerHTML]="repairOrderHeaderData.notes"
@@ -184,11 +150,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group memo-popup-cstm">
                                         <label>
-                                            Memo
-                                            <!-- <span class="editor-span">
-                                                <a class="btn nobg" matTooltipPosition="above" matTooltip="Add Memo"
-                                                    disabled="true"><i class="fa fa-pencil"></i></a>
-                                            </span> -->
+                                            Memo                                            
                                         </label>
                                         <span>
                                             <div [innerHTML]="repairOrderHeaderData.roMemo"
@@ -241,11 +203,11 @@
                     <th>Alt PN</th>
                     <th>PN Description</th>
                     <th>Manufacturer</th>
-                    <th>Stock Type</th>
+                    <th>Stk Type</th>
                     <th>Discount</th>
-                    <th>Qty to Repair</th>
+                    <th>Qty to Rep</th>
                     <th>Unit Cost</th>
-                    <th>Extended Cost</th>
+                    <th>Ext. Cost</th>
                     <th>WO</th>
                     <th>SO</th>
                     <th>Sub-WO</th>
@@ -296,13 +258,13 @@
                             <th>Ctrl Num</th>
                             <th>Ctrl Id</th>
                             <th>Cond</th>
-                            <th>Serial Num</th>
+                            <th>Ser Num</th>
                             <th>Receiver No.</th>
 
                             <th>Qty Receieved</th>
-                            <th>Back Ord</th>
+                            <th>Qty Back Ord</th>
                             <th>Unit Cost</th>
-                            <th>Extended Cost</th>
+                            <th>Ext. Cost</th>
                             <th>WO </th>
                             <th>SO </th>
                             <th>Sub-WO </th>
@@ -327,10 +289,11 @@
                             <th>Part Cert Num </th>
                             <th>Cert Type</th>
                             <th>Cert By</th>
+                            <th></th>
                             <th>Certified Date</th>
                             <th class="date">Certified Due Date</th>
                             <th>Tag Type</th>
-                            <th>Tag By</th>
+                            <th>Tagged By</th>
                             <th></th>
                             <th>UOM</th>
                             <th class="date">Tag Date</th>
@@ -432,6 +395,7 @@
                                 </td>
                                 <td>{{SL.manufacturingBatchNumber}}</td>
                                 <td>{{SL.partCertificationNumber}}</td>
+                                <td>{{SL.certType}}</td>
                                 <td>{{SL.certifiedType}}</td>
                                 <td>{{SL.certifiedBy}}</td>
                                 <td>

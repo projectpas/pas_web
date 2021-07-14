@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { VendorService } from '../../../services/vendor.service';
 import { Location } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-create-asset-inventory',
     templateUrl: './create-asset-inventory.component.html',
@@ -123,22 +124,27 @@ export class CreateAssetInventoryComponent implements OnInit {
     intangiblemoduleName = 'AssetInventoryIntangibleFile';
     modalIsMaintannce: NgbModalRef;
     modalWarrenty: NgbModalRef;
+
+    isView:boolean=true;
+    isAdd:boolean=true;
+    isUpdate:boolean=true;
     constructor(private commonService: CommonService, private location: Location, private vendorService: VendorService, private assetService: AssetService, private assetLocationService: AssetLocationService, private alertService: AlertService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private route: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe) {
         this.currentAsset.entryDate = this.currentDate;
         this.currentAsset.isTangible = 1;
         this.currentAsset.assetLocationId = 0;
         this.currentAsset.warrantyStatusId = 0;
+        this.isView=this.authService.checkPermission([ModuleConstants.Asset_Inventory_List+'.'+PermissionConstants.View]);
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Add]);
+        this.isUpdate=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
     }
 
     ngOnInit() {
         if (this.assetService.isEditMode == false) {
-
             this.breadcrumbs = [
                 { label: 'Asset Inventory' },
                 { label: 'Create Asset Inventory' },
             ];
         } else {
-
             this.breadcrumbs = [
                 { label: 'Asset Inventory' },
                 { label: 'Edit Asset Inventory' },
@@ -196,7 +202,7 @@ export class CreateAssetInventoryComponent implements OnInit {
         const strText = value;
 
 
-        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
 
             this.allAssetList = res;
         }, err => {
@@ -245,7 +251,7 @@ export class CreateAssetInventoryComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value;
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
         }, err => {
             const errorLog = err;
@@ -258,7 +264,7 @@ export class CreateAssetInventoryComponent implements OnInit {
     setEditArray: any = [];
     getLocationList() {
 
-        this.commonService.smartDropDownGetNamaWithCode('AssetLocation', 'AssetLocationId', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownGetNamaWithCode('AssetLocation', 'AssetLocationId', 'Name', this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allLocationList = res.map(x => {
                 return {
                     ...x,
@@ -274,7 +280,7 @@ export class CreateAssetInventoryComponent implements OnInit {
 
     }
     getWarrantyStatusList() {
-        this.commonService.smartDropDownList('AssetWarrantyStatus', 'AssetWarrantyStatusId', 'warrantyStatus', this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('AssetWarrantyStatus', 'AssetWarrantyStatusId', 'warrantyStatus', 0).subscribe(response => {
             this.allWarrantyStatusList = response;
         }, err => {
             const errorLog = err;
@@ -1859,7 +1865,7 @@ export class CreateAssetInventoryComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value;
-        this.commonService.autoSuggestionSmartDropDownList('AssetStatus', 'AssetStatusId', 'Name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetStatus', 'AssetStatusId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.assetStatusList = res.map(x => {
                 return {
                     ...x,
@@ -1879,14 +1885,14 @@ export class CreateAssetInventoryComponent implements OnInit {
             this.setEditArray = [];
             this.setEditArray.push(this.currentAsset.inventoryStatusId);
             const strText = '';
-            this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 200, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', strText, true, 0, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
                 this.assetInventoryStatusList = res;
             }, err => {
                 const errorLog = err;
                 this.errorMessageHandler(errorLog);
             });
         } else {
-            this.commonService.smartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', this.currentUserMasterCompanyId).subscribe(res => {
+            this.commonService.smartDropDownList('AssetInventoryStatus', 'AssetInventoryStatusId', 'Status', 0).subscribe(res => {
                 this.assetInventoryStatusList = res;
             }, err => {
                 const errorLog = err;

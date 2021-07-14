@@ -1,4 +1,5 @@
-﻿import { ReceivingCustomerWorkService } from '../../../../services/receivingcustomerwork.service';
+﻿import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { ReceivingCustomerWorkService } from '../../../../services/receivingcustomerwork.service';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -72,14 +73,14 @@ export class CustomerWorksListComponent implements OnInit {
         { label: 'Customer Work List' }
     ];
     cols = [
-        { field: 'customerName', header: 'Customer Name' },
+        { field: 'customerName', header: 'Cust Name' },
         { field: 'partNumber', header: 'MPN' },
         { field: 'partDescription', header: 'MPN Description' },
-        { field: 'serialNumber', header: 'Serial Num', width: "90px" },
-        { field: 'stocklineNumber', header: 'StockLine Num', width: "116px" },
+        { field: 'serialNumber', header: 'Ser Num', width: "90px" },
+        { field: 'stocklineNumber', header: 'Stk Line Num', width: "116px" },
         { field: 'woNumber', header: 'WO Num', width: "90px" },
         { field: 'receivingNumber', header: 'Receiver Num', width: "106px" },
-        { field: 'receivedDate', header: 'Received Date' },
+        { field: 'receivedDate', header: "Rec'd Date" },
         { field: 'receivedBy', header: 'Received By' },
         { field: 'levelCode1', header: 'Level 01' },
         { field: 'levelCode2', header: 'Level 02' },
@@ -130,11 +131,34 @@ export class CustomerWorksListComponent implements OnInit {
     restorerecord: any = {};
     rcId: any;
     dateObject: any = {};
+    isAdd: boolean = true;
+  isEdit: boolean = true;
+  isDownload: boolean = true;
+  isActiveButton: boolean = true;
+  isDelete: boolean = true;
+  isGeneralInforView: boolean = true;
+  isDocumentInfo: boolean = true;
+  permissionAddCheck = [
+    ModuleConstants.ReceivingCustomer + "." + PermissionConstants.Add,
+    ModuleConstants.ReceivingCustomer_GeneralInformation + "." + PermissionConstants.Add,
+    ModuleConstants.ReceivingCustomer_Document + '.' + PermissionConstants.Add,
+    
+  ];
+  permissionUpdateCheck = [
+    ModuleConstants.ReceivingCustomer + "." + PermissionConstants.Update,
+    ModuleConstants.ReceivingCustomer_GeneralInformation + "." + PermissionConstants.Update,
+    ModuleConstants.ReceivingCustomer_Document + '.' + PermissionConstants.Update,
+  ];
 
     constructor(private receivingCustomerWorkService: ReceivingCustomerWorkService,
         private datePipe: DatePipe, private masterComapnyService: MasterComapnyService, private _route: Router, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private commonService: CommonService, private stocklineService: StocklineService, private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
         this.receivingCustomerWorkService.isEditMode = false;
+        this.isAdd = this.authService.checkPermission(this.permissionAddCheck);
+        this.isEdit = this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isDownload = this.authService.checkPermission([ModuleConstants.ReceivingCustomerList + '.' + PermissionConstants.Download]);
+        this.isGeneralInforView = this.authService.checkPermission([ModuleConstants.ReceivingCustomer_GeneralInformation + '.' + PermissionConstants.View]);
+        this.isDocumentInfo = this.authService.checkPermission([ModuleConstants.ReceivingCustomer_Document + '.' + PermissionConstants.View]);
     }
 
     ngOnInit() {

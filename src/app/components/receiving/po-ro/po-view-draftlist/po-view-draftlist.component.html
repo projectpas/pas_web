@@ -13,7 +13,7 @@
                                         <th class="width-60">Qty Ord</th>
                                         <th class="width-60">Qty Drafted</th>
                                         <th class="width-60">Qty Received</th>                                       
-                                        <th class="width-60">Back Ord</th>
+                                        <th class="width-60">Qty Back Ord</th>
                                         <th class="width-60"></th>
                                     </tr>
                                 </thead>
@@ -41,7 +41,7 @@
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>PN Description: </b></span><span class="value">{{part.itemMaster?.partDescription}}</span></p>
-                                                        <p><span class="label"><b>Qty Rejected <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.quantityRejected}}</span></p>
+                                                        <p><span class="label"><b>Qty Rej'd <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.quantityRejected}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>Cond <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].conditionText}}</span></p>
@@ -115,11 +115,12 @@
                                                             <div class="col-sm-3">
 
                                                                 <p><span class="label"><b>MFG Batch Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturingBatchNumber}}</span></p>
-                                                                <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].expirationDate}}</span></p>
+                                                                <p><span class="label"><b>Exp Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].expirationDate}}</span></p>
                                                                 <p><span class="label"><b>UOM <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].unitOfMeasure}}</span></p>
                                                                 <p><span class="label"><b>Unit Cost <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].purchaseOrderUnitCost}}</span></p>
-                                                                <p><span class="label"><b>Extended Cost: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].purchaseOrderExtendedCost}}</span></p>
+                                                                <p><span class="label"><b>Ext. Cost: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].purchaseOrderExtendedCost}}</span></p>
                                                                 <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].partCertificationNumber}}</span></p>
+                                                                <p><span class="label"><b>Cert Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certType}}</span></p>
                                                                 <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedBy}}</span></p>
                                                                 <p><span class="label"><b>Certified Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedDate}}</span></p>
                                                                 <p><span class="label"><b>Certified Due Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedDueDate}}</span></p>
@@ -127,8 +128,8 @@
                                                             <div class="col-sm-3">
                                                                 <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagType}}</span></p>
                                                                 <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagDate}}</span></p>
-                                                                <p><span class="label"><b>Tag By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].taggedByName}}</span></p>
-                                                                <p><span class="label"><b>Engine Serial Number: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
+                                                                <p><span class="label"><b>Tagged By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].taggedByName}}</span></p>
+                                                                <p><span class="label"><b>Engine Ser Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
                                                                 <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].aircraftTailNumber}}</span></p>
                                                                 <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingViaText}}</span></p>
                                                                 <p><span class="label"><b>Shipping Ref#/AWB <span _ngcontent-c22="" class="clr-red">*</span> : </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingReference}}</span></p>
@@ -141,7 +142,7 @@
                                                         <h3 class="add-details-heading" style="text-align: left;padding-top: 30px;">Serialized</h3>
                                                         <div class="form-row">
                                                             <div class="col-md-3">
-                                                                <p><span class="label"><b>Serial Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].serialNumber ? part.stockLine[currentStockLineShowIndex].serialNumber : '-'}}</span></p>
+                                                                <p><span class="label"><b>Ser Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].serialNumber ? part.stockLine[currentStockLineShowIndex].serialNumber : '-'}}</span></p>
                                                             </div>
                                                         </div>
                                                     </section>

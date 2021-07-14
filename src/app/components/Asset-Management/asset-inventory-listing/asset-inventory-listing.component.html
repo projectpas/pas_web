@@ -10,8 +10,7 @@
                                   <button
                                     type="button"
                                     class="btn-sm header-button"
-                                    (click)="navigateTogeneralInfo()"                                
-                                  >
+                                    (click)="navigateTogeneralInfo()" *ngIf="isAdd">
                                   Add Asset Inventory 
                                   </button>
                                 </div>
@@ -61,12 +60,12 @@
                             </div>
                             <div class="row">
                               <div class="col">
-                                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                                <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                                 pButton icon="fa-download" iconPos="left" label="Export All Data"
                                   data-toggle="modal"
                                 (click)="selectedOnly = false; targetData = dt;" 
                                 data-target="#downloadConfirmation"></button>
-                                 <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
+                                 <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
                                 pButton icon="fa-download" iconPos="left"
                                  label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
                                 ></button>
@@ -170,27 +169,27 @@
                                     </td>
                                     <td class="action-icons-cstm" style="width:164px;position:sticky" *ngIf="selectedColumns.length> 0">
                                         <div *ngIf="currentDeletedstatus==false">
-                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                        <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                                            <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                            <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                            <span><a class="btn nobg btn-edit-cstm" data-toggle="modal" data-target="#assetInventoryStatus" (click)="editInventoryStatus(rowData)" matTooltip="Asset Inventory Status" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                            <span *ngIf="isEdit" ><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                            <span *ngIf="isEdit" ><a class="btn nobg btn-edit-cstm" data-toggle="modal" data-target="#assetInventoryStatus" (click)="editInventoryStatus(rowData)" matTooltip="Asset Inventory Status" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                      
                                           
                                           
                                           
-                                            <span><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
-                                            <span data-toggle="modal" data-target="#AssetAdjAudit"><a class="btn nobg btn-adjhist-cstm" (click)="openAssetInventoryAdj(rowData)" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                            <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
-                                            <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                            <span *ngIf="isEdit" ><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
+                                            <span *ngIf="isView"  data-toggle="modal" data-target="#AssetAdjAudit"><a class="btn nobg btn-adjhist-cstm" (click)="openAssetInventoryAdj(rowData)" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                            <span *ngIf="isView"  data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
+                                            <span  *ngIf="isDelete" ><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
                                         </div>
                                         <div *ngIf="currentDeletedstatus==true">
-                                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                            <p-inputSwitch *ngIf="isEdit"  [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
-                                            <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                            <span ><a class="btn nobg btn-restore-cstm" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
-                                            <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
+                                            <span *ngIf="isView"><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                            <span *ngIf="isEdit"><a class="btn nobg btn-restore-cstm" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                            <span *ngIf="isView" data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                         </div>
                                  </td> 
 
@@ -420,7 +419,7 @@
                                 <input type="text" class="form-control" name="unitOfMeasureName" [(ngModel)]="currentAsset.unitOfMeasureName" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Expiration Date</label>
+                                <label>Exp Date</label>
                                 <p-calendar [showIcon]="true"  name="expirationDate" [(ngModel)]="currentAsset.expirationDate" [disabled]="true"></p-calendar>
                             </div>
                             <div class="form-group">
@@ -428,7 +427,7 @@
                                 <input type="text" class="form-control" name="asset_LocationName" [(ngModel)]="currentAsset.asset_LocationName" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Currency <span class="clr-red">*</span></label>
+                                <label>Curr <span class="clr-red">*</span></label>
                                 <input type="text" class="form-control" name="currencyName" [(ngModel)]="currentAsset.currencyName" disabled>
                             </div>
                             <div class="form-group">
@@ -626,7 +625,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                                 <input type="text" class="form-control" name="calibrationCurrencyName" [(ngModel)]="currentAsset.calibrationCurrencyName" disabled>
                             </div>
                         </div>
@@ -740,7 +739,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                                 <input type="text" class="form-control" name="certificationCurrencyName" [(ngModel)]="currentAsset.certificationCurrencyName" disabled>
                             </div>
                         </div>
@@ -802,7 +801,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                                 <input type="text" class="form-control" name="inspectionCurrencyName" [(ngModel)]="currentAsset.inspectionCurrencyName" disabled>
                             </div>
                         </div>
@@ -864,7 +863,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <label>Curr <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
                                 <input type="text" class="form-control" name="verificationCurrencyName" [(ngModel)]="currentAsset.verificationCurrencyName" disabled>
                             </div>
                         </div>
@@ -1411,7 +1410,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" (click)="closeStatusModel()">Cancel</button>
-				<button type="button" class="btn btn-primary" [disabled]="disabledInventoryStatus" (click)="updateInventoryStatus(); closeStatusModel();">Update</button>
+				<button type="button" class="btn btn-primary" [disabled]="disabledInventoryStatus" (click)="updateInventoryStatus(); closeStatusModel();" *ngIf="isEdit">Update</button>
 			</div>
 		</div>
 	</div>
@@ -1586,9 +1585,9 @@
                       <th rowspan="2">Manufacturer</th>
                       <th rowspan="2">Manufactured Date</th>
                       <th rowspan="2">UOM <span class="clr-red">*</span></th>
-                      <th rowspan="2">Expiration Date</th>
+                      <th rowspan="2">Exp Date</th>
                       <th rowspan="2">Asset Location</th>
-                      <th rowspan="2">Currency <span class="clr-red">*</span></th>
+                      <th rowspan="2">Curr <span class="clr-red">*</span></th>
                       <th rowspan="2">Unit Cost <span class="clr-red">*</span></th>
                       <th rowspan="2">Installation Cost</th>
                       <th rowspan="2">Freight</th>
@@ -1611,7 +1610,7 @@
                       <th colspan="2">Calibration Frequency <span class="clr-red">*</span></th>
                       <th rowspan="2">Default Vendor</th>
                       <th rowspan="2">Default Cost </th>
-                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">Curr</th>
                       <th rowspan="2">GL Account</th>
                       <th colspan="6">Tolerance</th>
                       <th rowspan="2">Calibration Memo</th>
@@ -1619,21 +1618,21 @@
                       <th colspan="2">Certification Frequency <span class="clr-red">*</span></th>
                       <th rowspan="2">Default Vendor</th>
                       <th rowspan="2">Default Cost</th>
-                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">Curr</th>
                       <th rowspan="2">GL Account</th>
                       <th rowspan="2">Certification Memo</th>
                       <th rowspan="2">Inspection Required</th>
                       <th colspan="2">Inspection Frequency</th>
                       <th rowspan="2">Default Vendor</th>
                       <th rowspan="2">Default Cost</th>
-                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">Curr</th>
                       <th rowspan="2">GL Account</th>
                       <th rowspan="2">Inspection Memo</th>
                       <th rowspan="2">Verification Required</th>
                       <th colspan="2">Verification Frequency <span class="clr-red">*</span></th>
                       <th rowspan="2">Default Vendor</th>
                       <th rowspan="2">Default Cost </th>
-                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">Curr</th>
                       <th rowspan="2">GL Account</th>
                       <th rowspan="2">Verification Memo</th>
                       <th rowspan="2">Maintenance Required</th>

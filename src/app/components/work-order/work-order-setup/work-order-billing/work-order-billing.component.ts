@@ -130,9 +130,9 @@ export class WorkOrderBillingComponent implements OnInit {
         { field: 'quantity', header: 'Qty Req', align: 1 },
         { field: 'uom', header: 'UOM' },
         { field: 'condition', header: 'Cond' },
-        { field: 'stockType', header: 'Stock Type' },
+        { field: 'stockType', header: 'Stk Type' },
         { field: 'unitCost', header: 'Unit Cost', align: 1 },
-        { field: 'extendedCost', header: 'Extended Cost', align: 1 }
+        { field: 'extendedCost', header: 'Ext. Cost', align: 1 }
     ];
     colums = [
         { field: 'taskName', header: 'Task' },
@@ -239,7 +239,7 @@ export class WorkOrderBillingComponent implements OnInit {
             { field: "partDescription", header: "PN Description", width: "100px" },
             { field: "qtyToBill", header: "Qty Shipped", width: "110px" },
             { field: "qtyBilled", header: "Qty Billed", width: "90px" },
-            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Rem", width: "90px" },
             { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;

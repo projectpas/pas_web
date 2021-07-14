@@ -50,15 +50,15 @@ export class StocklinePartDetailsComponent implements OnChanges {
       { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
       { field: 'conditionType', header: 'Cond Type', width: '80px', textalign: 'left' },
       { field: 'uom', header: 'UOM', width: '60px', textalign: 'left' },
-      { field: 'qtyAvailable', header: 'Qty Available', width: '100px', textalign: 'right' },
-      { field: 'qtyOnHand', header: 'Qty On Hand', width: '100px', textalign: 'right' },
-      { field: 'qtyToOrder', header: 'Qty To Order', width: '100px', textalign: 'right' },
-      { field: 'qtyOnOrder', header: 'Qty On Order', width: '100px', textalign: 'right' },
+      { field: 'qtyAvailable', header: 'Qty Avail', width: '100px', textalign: 'right' },
+      { field: 'qtyOnHand', header: 'Qty OH', width: '100px', textalign: 'right' },
+      { field: 'qtyToOrder', header: 'Qty To Ord', width: '100px', textalign: 'right' },
+      { field: 'qtyOnOrder', header: 'Qty On Ord', width: '100px', textalign: 'right' },
       { field: 'itemClassification', header: 'Item Classification', width: '120px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '80px', textalign: 'left' },
       { field: 'controlName', header: 'Control Name', width: '100px', textalign: 'left' },
       { field: 'idNumber', header: 'Id Num', width: '70px', textalign: 'left' },
-      { field: 'serialNumber', header: 'Serial Num', width: '80px', textalign: 'left' }
+      { field: 'serialNumber', header: 'Ser Num', width: '80px', textalign: 'left' }
     ]
   }
 

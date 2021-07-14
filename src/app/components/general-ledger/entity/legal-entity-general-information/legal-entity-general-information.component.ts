@@ -97,8 +97,8 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
     disableSaveParentName: boolean;
     disablesaveForClassification: boolean;
     selectedClass: any;
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     filteredBrands: any[];
     displayedColumns = ['actionId', 'companyName', 'description', 'memo', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     dataSource: MatTableDataSource<any>;
@@ -167,7 +167,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
         private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
         let entityId = this.acRouter.snapshot.params['id'];
-        
+
         this.countrylist();
         this.loadData();
         this.loadGeneralObject();
@@ -179,7 +179,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
                 this.newentityId = res.entityId;
                 this.parententityList(res.entityId);
                 this.forceSelectionOfentityName = true;
-               // this.entityService.currentUrl = '/entitysmodule/entitypages/app-entity-general-information/edit';
+                // this.entityService.currentUrl = '/entitysmodule/entitypages/app-entity-general-information/edit';
                 this.entityService.bredcrumbObj.next(this.entityService.currentUrl);
                 this.entityService.ShowPtab = true;
                 this.entityService.alertObj.next(this.entityService.ShowPtab);
@@ -232,7 +232,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
         });
         this.editModeDataBinding();
         this.loadDataentityData();
-        this.getAllentityCapabilities();
+        // this.getAllentityCapabilities();
         this.getAllIntegrations();
         this.getentityIntegrationByentityrId();
     }
@@ -249,7 +249,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
             this.sourceentity = this.entityService.listCollection;
             console.log(this.sourceentity);
             this.sourceentity.entityName = getObjectById('entityId', this.sourceentity.entityId, this.allActions);
-           // this.toGetentityGeneralDocumentsList(this.sourceentity.entityId);
+            // this.toGetentityGeneralDocumentsList(this.sourceentity.entityId);
             this.sourceentity.address1 = this.entityService.listCollection.address1;
             this.sourceentity.address2 = this.entityService.listCollection.address2;
             this.sourceentity.address3 = this.entityService.listCollection.address3;
@@ -278,7 +278,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
         this.closeCmpny = false;
     }
     public allWorkFlows: any[] = [];
-    async  loadData() {
+    async loadData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
         await this.entityService.getEntityList().subscribe(res =>
@@ -309,7 +309,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
         if (this.entityService.isEditMode && this.sourceentity.country != null) {
         }
     }
-    
+
     public addEntity() {
         let dialogRef = this.dialog.open(AddActionsDialogComponent,
             {
@@ -363,7 +363,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
 
         })
     }
-    async  getentityIntegrationByentityrId() {
+    async getentityIntegrationByentityrId() {
         if (this.sourceentity.entityId > 0) {
             await this.commonService.getIntegrationMapping(this.sourceentity.entityId, 3).subscribe(res => {
                 this.sourceentity.integrationPortalIds = res.map(x => x.integrationPortalId);
@@ -737,7 +737,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
     nextClick() {
         console.log(this.sourceentity);
 
-       // this.entityService.entitygeneralcollection = this.local;
+        // this.entityService.entitygeneralcollection = this.local;
         this.activeIndex = 2;
         this.entityService.changeofTab(this.activeIndex);
     }
@@ -870,7 +870,7 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
 
     getAllentityCapabilities(): void {
 
-        this.commonService.smartDropDownList('entityCapabiliy', 'entityCapabilityId', 'capabilityDescription',this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('entityCapabiliy', 'entityCapabilityId', 'capabilityDescription', this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.dropDownentityCapabilitiesList = res;
         })
     }

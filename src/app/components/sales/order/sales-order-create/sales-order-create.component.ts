@@ -1624,7 +1624,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.arraySOTypelist.push(0);
     }
     this.isSpinnerVisible = true;
-    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 20, this.arraySOTypelist.join(), this.masterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 20, this.arraySOTypelist.join(), 0).subscribe(res => {
       this.soTypeList = res;
       this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       this.isSpinnerVisible = false;

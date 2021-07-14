@@ -71,18 +71,16 @@ export class ModuleConstants
         static Stockline:string = "Stockline";
         static Stockline_Adjustment:string = "Stockline_Adjustment";
         static GLAccount:string = "GLAccount";
-
+        static Workflow:string = "Workflow";
         static Asset_List :string  = "Asset_List";
         static Asset_Create :string  = "Asset_Create";
         static Asset_GeneralInformation :string  = "Asset_GeneralInformation";
         static Asset_Capes :string  = "Asset_Capes";
         static Asset_Calibration :string  = "Asset_Calibration";
         static Asset_MaintenanceAndWarranty :string  = "Asset_MaintenanceAndWarranty";
-
-        static AssetMaintenance:string = "AssetMaintenance";
-        
         static Asset_Inventory_List :string  = "Asset_Inventory_List";
         static Asset_Inventory_Create :string  = "Asset_Inventory_Create";
+
         static PurchaseOrder:string = "PurchaseOrder";
         static POList:string = "POList";
         static PO_Header:string = "PO_Header";

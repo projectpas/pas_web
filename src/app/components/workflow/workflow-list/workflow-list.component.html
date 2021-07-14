@@ -9,7 +9,7 @@
                         <h4 class="header-name">Workflow List</h4>
                       </div>
                       <div>
-                        <button
+                        <button *ngIf="isAdd"
                            type="button"
                            class="btn-sm header-button"
                            (click)="AddPage()">
@@ -68,7 +68,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button type="button"
+                            <button *ngIf="isDownload" type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
                                     matTooltipPosition="above"
@@ -80,7 +80,7 @@
                                     (click)="selectedOnly = false; targetData = dt;"
                                      data-target="#downloadConfirmation">
                             </button> 
-                            <button type="button"
+                            <button *ngIf="isDownload" type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
                                     matTooltipPosition="above"
@@ -178,13 +178,13 @@
                         <td class="action-icons-cstm table-column-width">
                             <div *ngIf="currentDeletedstatus == false">
                                 <p-inputSwitch
-                                    [(ngModel)]="rowData['isActive']"
+                                *ngIf="isEdit" [(ngModel)]="rowData['isActive']"
                                     name="isActive{{ rowIndex }}"
                                     matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
                                     matTooltipPosition="above"
                                     (onChange)="toggleIsActive(rowData, $event)">
                                 </p-inputSwitch>
-                            <span data-toggle="modal" data-target="#view"
+                            <span *ngIf="isView" data-toggle="modal" data-target="#view"
                                 (click)="onViewWFDetails(rowData,'html')">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
@@ -192,14 +192,14 @@
                                     <i class="fa fa-eye"></i>
                                 </a>
                             </span>
-                            <span (click)="openEdit(rowData)" data-toggle="modal" data-target="#edit">
+                            <span  *ngIf="isEdit" (click)="openEdit(rowData)" data-toggle="modal" data-target="#edit">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="Edit"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
                                     data-original-title="" edit="">
                                     <i class="fa fa-pencil"></i>
                                 </a>
                             </span>
-                            <span data-toggle="modal" data-target="#view-material-lists"
+                            <span *ngIf="isView" data-toggle="modal" data-target="#view-material-lists"
                                 (click)="onViewMaterialList(rowData)"> 
                                 <a data-toggle="tooltip" matTooltipPosition="above"
                                     matTooltip="View Material Lists" tooltipPosition="bottom" title=""
@@ -208,14 +208,14 @@
                                 </a>
                             </span>
                             <!-- data-toggle="modal" data-target="#history"/ -->
-                            <span >
+                            <span *ngIf="isView" >
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
                                     data-original-title="History" (click)="auditHistory(rowData)">
                                     <i class="fa fa-history"></i>
                                 </a>
                             </span>
-                            <span (click)="confirmDelete(deleteConfirm, rowData)" data-toggle="modal"
+                            <span *ngIf="isDelete" (click)="confirmDelete(deleteConfirm, rowData)" data-toggle="modal"
                                 data-target="#delete">
                                 <a class="btn btn-danger nobg" matTooltipPosition="above"
                                     matTooltip="Delete" tooltipPosition="bottom" data-toggle="tooltip"
@@ -226,12 +226,12 @@
                             </div>
                             <div *ngIf="currentDeletedstatus == true">
                                 <p-inputSwitch
-                                  [(ngModel)]="rowData['isActive']"
+                                *ngIf="isEdit" [(ngModel)]="rowData['isActive']"
                                   name="isActive{{ rowIndex }}"
                                   matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
                                   matTooltipPosition="above"                                                  
                                   [disabled]="true"></p-inputSwitch>
-                             <span data-toggle="modal" data-target="#view"
+                             <span  *ngIf="isView" data-toggle="modal" data-target="#view"
                                 (click)="onViewWFDetails(rowData,'html')">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
@@ -240,14 +240,14 @@
                                 </a>
                             </span>
                                    
-                            <span data-toggle="modal" data-target="#history">
+                            <span *ngIf="isView" data-toggle="modal" data-target="#history">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
                                     data-original-title="History">
                                     <i class="fa fa-history"></i>
                                 </a>
                             </span>
-                                <span><a
+                                <span *ngIf="isDelete" ><a
                                     class="btn nobg btn-users-cstm"
                                     (click)="restore(restoreConfirm, rowData)"
                                     matTooltip="Restore Record"
@@ -388,7 +388,7 @@
                                                     </label> <span class="value col-md-6">{{sourceWorkFlow.workflowCreateDate}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="col-md-6">Expiration Date:
+                                                    <label class="col-md-6">Exp Date:
                                                     </label> <span class="value col-md-6">{{sourceWorkFlow.workflowExpirationDate}}</span>
                                                 </div>
                                                 <div class="form-group col-md-12" style="display: flex;">
@@ -422,7 +422,7 @@
 
                                                 
                                                 <div class="form-group col-md-12" style="display: flex;">
-                                                    <label class="col-md-6">Customer Name: <span class="clr-red">*</span>
+                                                    <label class="col-md-6">Cust Name: <span class="clr-red">*</span>
                                                     </label><span class="value col-md-6">{{sourceWorkFlow.customerName}}</span>
                                                 </div>
                                             </div>
@@ -619,7 +619,7 @@
                                                         <th>Description</th>
                                                         <th>Qty<span class="clr-red">*</span></th>
                                                         <th style="width: 84px;">Unit Cost <span class="clr-red">*</span></th>
-                                                        <th style="width: 90px;">Extended Cost<span class="clr-red">*</span></th>
+                                                        <th style="width: 90px;">Ext. Cost<span class="clr-red">*</span></th>
                                                         <th style="width: 120px;">Vendor Name</th>
                                                         <th>Memo</th>
                                                     </tr>
@@ -729,10 +729,10 @@
                                                         <th>Description</th>
                                                         <th>Condition<span class="clr-red">*</span></th>
                                                         <th>Item Classification</th>
-                                                        <th>Stock Type</th>
+                                                        <th>Stk Type</th>
                                                         <th style="width:60px">Qty</th>
                                                         <th style="width:60px">Unit Cost</th>
-                                                        <th style="width:60px">Extended Cost</th>
+                                                        <th style="width:60px">Ext. Cost</th>
                                                         <th style="width:60px">Estimated % Occurance</th>
                                                         <th>Memo</th>
                                                     </tr>
@@ -835,7 +835,7 @@
                                                         <th style="width:60px">Qty<span class="clr-red">*</span></th>
                                                         <th>UOM<span class="clr-red">*</span></th>
                                                         <th style="width:60px">Unit Cost<span class="clr-red">*</span></th>
-                                                        <th style="width:60px">Extended Cost<span class="clr-red">*</span></th>
+                                                        <th style="width:60px">Ext. Cost<span class="clr-red">*</span></th>
                                                         <th>Memo</th>
                                                         <th>Deferred</th>
                                                     </tr>
@@ -1278,7 +1278,7 @@
                                         <label class="margin-bottom-10">Create Date: <span class="clr-red">*</span></label>{{sourceWorkFlow.workflowCreateDate}}
                                     </div>
                                     <div class="form-group">
-                                        <label class="margin-bottom-10">Expiration Date:
+                                        <label class="margin-bottom-10">Exp Date:
                                         </label>{{sourceWorkFlow.workflowExpirationDate}}
                                     </div>
                                     <div class="form-group">
@@ -1307,7 +1307,7 @@
 
                                     
                                     <div class="form-group">
-                                        <label class="margin-bottom-10">Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
+                                        <label class="margin-bottom-10">Cust Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
                                     </div>
                                 </div>
                             </div>
@@ -1560,10 +1560,10 @@
                                                 <th> Description</th>
                                                 <th> Condition</th>
                                                 <th>Item Classification</th>
-                                                <th>Stock Type</th>
+                                                <th>Stk Type</th>
                                                 <th style="width:60px">Qty</th>
                                                 <th style="width:60px">Unit Cost</th>
-                                                <th style="width:60px">Extended Cost</th>
+                                                <th style="width:60px">Ext. Cost</th>
                                                 <th style="width:60px">Estimated % Occurance</th>
                                                 <th>Memo</th>
                                             </tr>
@@ -1664,7 +1664,7 @@
                                                 <th>Description</th>
                                                 <th style="width:60px">Qty</th>
                                                 <th style="width:84px">Unit Cost</th>
-                                                <th style="width:90px">Extended Cost</th>
+                                                <th style="width:90px">Ext. Cost</th>
                                                <th style="width:120px;">Vendor Name</th>
                                                <th>Memo</th>
                                             </tr>
@@ -1714,7 +1714,7 @@
                                                 <th style="width:60px">Qty</th>
                                                 <th>UOM</th>
                                                 <th style="width:60px">Unit Cost</th>
-                                                <th style="width:60px">Extended Cost</th>
+                                                <th style="width:60px">Ext. Cost</th>
                                                 <th>Memo</th>
                                                 <th style="width:60px">Deferred</th>
                                             </tr>

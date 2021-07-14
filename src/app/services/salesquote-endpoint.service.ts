@@ -503,4 +503,10 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getSalesQuoteParts(id, isDeleted));
       });
   }
+
+  GetSalesOrderQuoteSummarisedHistoryByPN(itemMasterId: number, isTwelveMonth: boolean) {
+    return this.http.get(`${this.configurations.baseUrl}/api/SalesQuote/GetSalesOrderQuoteSummarisedHistoryByPN?ItemMasterId=${itemMasterId}&IsTwelveMonth=${isTwelveMonth}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.GetSalesOrderQuoteSummarisedHistoryByPN(itemMasterId, isTwelveMonth));
+    });
+  }
 }

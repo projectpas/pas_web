@@ -106,7 +106,7 @@ export class AssetDisposalSaleComponent implements OnInit {
             { field: 'assetId', header: 'Asset ID', colspan: '1' },
             { field: 'alternateAssetId', header: 'Alt Asset ID', colspan: '1' },
             { field: 'manufacturer', header: 'Manufacturer', colspan: '1' },
-            { field: 'isSerializedNew', header: 'Serial Num', colspan: '1' },
+            { field: 'isSerializedNew', header: 'Ser Num', colspan: '1' },
             { field: 'companyName', header: 'Level 01', colspan: '1' },
             { field: 'buName', header: 'Level 02', colspan: '1' },
             { field: 'deptName', header: 'Level 03', colspan: '1' },

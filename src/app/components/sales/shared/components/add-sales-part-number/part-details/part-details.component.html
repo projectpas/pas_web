@@ -182,7 +182,7 @@
                         </span>
                         <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
                             {{ part.qtyAvailable | globalNmberFormat }}
-                            <span matTooltip="Qty Available" matTooltipPosition="above" class="
+                            <span matTooltip="Qty Avail" matTooltipPosition="above" class="
                                             alternate-part-label"
                                 *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
                             </span>
@@ -197,7 +197,8 @@
                             {{ part.unitCost | twoDecimalGlobalNumberFormatPipe }}
                         </span>
                         <span *ngIf="col.field == 'memo'" class="float-right1">
-                            <p class="m-0 p-0 p_textEditor" [innerHTML]=part.memo></p>
+                            <p class="m-0 p-0 p_textEditor truncate-text" matTooltipPosition="above"
+                            [matTooltip]="parsedText(part.memo)" [innerHTML]=part.memo></p>
                         </span>
                     </td>
                     <td>
@@ -284,12 +285,12 @@
                                     <th>Item Group</th>
                                     <th>Cond</th>
                                     <th class="min-width-60">Is Serialized</th>
-                                    <th>Serial Num</th>
-                                    <th>Stockline Num<span class="clr-red">*</span></th>
+                                    <th>Ser Num</th>
+                                    <th>Stk Line Num<span class="clr-red">*</span></th>
                                     <th>NSN</th>
                                     <th>ESN</th>
-                                    <th>Control Num <span class="clr-red">*</span></th>
-                                    <th>Control ID Num <span class="clr-red">*</span></th>
+                                    <th>Cntrl Num <span class="clr-red">*</span></th>
+                                    <th>Cntrl ID Num <span class="clr-red">*</span></th>
                                     <th class="min-width-60">Days Since Received</th>
                                     <th class="min-width-60">Days Since Mfg</th>
                                     <th class="min-width-60">Days Since Tagged</th>
@@ -306,12 +307,12 @@
                                     <th>Acquisition Type</th>
                                     <th>Order Date</th>
                                     <th>Entry Date</th>
-                                    <th>Expiration Date</th>
+                                    <th>Exp Date</th>
                                     <th>Vendor</th>
                                     <th>PO Num</th>
                                     <th>RO Num</th>
                                     <th>Requestor</th>
-                                    <th>Received Date</th>
+                                    <th>Rec'd Date</th>
                                     <th>Receiver Num</th>
                                     <th>Reconciliation Num</th>
                                     <th>WO Num</th>
@@ -323,9 +324,9 @@
                                     <th>Traceable To</th>
                                     <th>ECCN</th>
                                     <th>ITAR</th>
-                                    <th class="min-width-60">Qty On Hand <span class="clr-red">*</span></th>
-                                    <th class="min-width-60">Qty Reserved</th>
-                                    <th class="min-width-60">Qty Issued</th>
+                                    <th class="min-width-60">Qty OH<span class="clr-red">*</span></th>
+                                    <th class="min-width-60">Qty Res'd</th>
+                                    <th class="min-width-60">Qty Iss'd</th>
                                     <th class="min-width-60">Qty Avail <span class="clr-red">*</span></th>
                                     <th class="min-width-60">PO Unit Cost</th>
                                     <th class="min-width-60">RO Unit Cost</th>

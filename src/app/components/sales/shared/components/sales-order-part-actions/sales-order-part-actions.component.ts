@@ -59,10 +59,10 @@ export class SalesOrderPartActionsComponent implements OnInit {
       { field: "condition", header: "Condition Type    ", width: "100px" },
       { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
       { field: "quantity", header: "Qty Required ", width: "100px" },
-      { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
-      { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
-      { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
-      { field: "quantityOnOrder", header: "Qty On Order", width: "100px" }
+      { field: "quantityReserved", header: "Qty Res'd", width: "100px" },
+      { field: "quantityOnHand", header: "Qty OH", width: "100px" },
+      { field: "quantityAvailable", header: "Qty Avail ", width: "100px" },
+      { field: "quantityOnOrder", header: "Qty On Ord", width: "100px" }
     ];
   }
 

@@ -1,4 +1,5 @@
-﻿import { Component, OnInit,  Input, SimpleChanges } from '@angular/core';
+﻿import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { Component, OnInit,  Input, SimpleChanges } from '@angular/core';
 import {  MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
@@ -106,7 +107,7 @@ export class WorkflowListComponent implements OnInit {
         { field: 'partNumber', header: 'PN' , width:"160px"},
         { field: 'partDescription', header: 'PN Description', width:"240px"},
         { field: 'description', header: 'Work Scope' },
-        { field: 'name', header: 'Customer Name', width:"200px"},
+        { field: 'name', header: 'Cust Name', width:"200px"},
         { field: 'workflowExpirationDate', header: 'Exp Date' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
@@ -125,13 +126,13 @@ export class WorkflowListComponent implements OnInit {
     auditHistoryHeaders = [
         { field: 'workOrderNumber', header: 'Workflow ID',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'workflowDescription', header: 'Workflow Description',isRequired:false ,isCheckbox:false,isDate:false},
-        { field: 'version', header: 'Version Number',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'version', header: 'Ver Num',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'partNumber', header: 'PN',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'partNumberDescription', header: 'PN Description',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'workScope', header: 'Work Scope',isRequired:false ,isCheckbox:false,isDate:false},
-        { field: 'customerName', header: 'Customer Name',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'customerName', header: 'Cust Name',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'workflowCreateDate', header: 'WF Created Date',isRequired:false ,isCheckbox:false,isDate:false},
-        { field: 'workflowExpirationDate', header: 'Expiration Date',isRequired:false ,isCheckbox:false,isDate:false},
+        { field: 'workflowExpirationDate', header: 'Exp Date',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'revisedPartNumber', header: 'Revised PN',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'currency', header: 'Currency',isRequired:false ,isCheckbox:false,isDate:false},
         { field: 'berThresholdAmount', header: 'Amount',isRequired:false ,isCheckbox:false,isDate:false},
@@ -146,6 +147,14 @@ export class WorkflowListComponent implements OnInit {
         { field: 'updatedDate', header: 'Updated Date',isRequired:false ,isCheckbox:false,isDate:true},
         { field: 'updatedBy', header: 'Updated By',isRequired:false ,isCheckbox:false,isDate:false},
       ]
+
+      isAdd:boolean=true;
+      isEdit:boolean=true;
+      isDelete:boolean=true;
+      isView:boolean=true;
+      isDownload:boolean=true;
+      isActive:boolean=true;
+      isworkflowmaterialView:boolean=true;
 
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
@@ -172,6 +181,12 @@ export class WorkflowListComponent implements OnInit {
     ) {
         this.workFlowGridSource = new MatTableDataSource();
         this.workFlowtService.listCollection = null;
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Update]);
+        this.isView=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.View]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.Download])
+        this.isworkflowmaterialView=this.authService.checkPermission([ModuleConstants.Workflow+'.'+PermissionConstants.View]);
     }
 
     ngOnInit() { 

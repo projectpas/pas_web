@@ -122,16 +122,16 @@ export class SalesQuoteListComponent implements OnInit {
 
     initColumns() {
         this.headers = [
-            { field: "customerName", header: "Customer Name", width: "160px" },
-            { field: "salesOrderQuoteNumber", header: "Quote Num", width: "120px" },
-            { field: "quoteDate", header: "Quote Date", width: "120px" },
+            { field: "customerName", header: "Cust Name", width: "160px" },
+            { field: "salesOrderQuoteNumber", header: "Qte Num", width: "120px" },
+            { field: "quoteDate", header: "Qte Date", width: "120px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "200px" },
             { field: "salesOrderNumber", header: "SO Num", width: "120px" },
             { field: "status", header: "Qte Status", width: "100px" },
             { field: "customerType", header: "Customer Type", width: "120px" },
-            { field: "versionNumber", header: "Quote Ver Num", width: "120px" },
-            { field: "quoteAmount", header: "Quote Amount", width: "110px", style: "text-align:right" },
+            { field: "versionNumber", header: "Qte Ver Num", width: "120px" },
+            { field: "quoteAmount", header: "Qte Amt", width: "110px", style: "text-align:right" },
             // { field: "soAmount", header: "SO Amount", width: "110px", style: "text-align:right" },
             { field: "priorityType", header: "Priority", width: "100px" },
             { field: "customerReference", header: "Cust Ref", width: "130px" },

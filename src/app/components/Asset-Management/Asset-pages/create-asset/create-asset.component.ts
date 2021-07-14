@@ -27,7 +27,7 @@ import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ManufacturerService } from '../../../../services/manufacturer.service';
 // declare var $ : any;
-declare var $ : any;
+declare var $: any;
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';
@@ -40,7 +40,7 @@ import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleCons
     providers: [DatePipe]
 })
 export class CreateAssetComponent implements OnInit {
-    @ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
+    @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
     userData: any = {};
     activeIndex: number;
     currentAsset: any = {};
@@ -218,7 +218,7 @@ export class CreateAssetComponent implements OnInit {
                 { label: 'Asset' },
                 { label: 'Edit Asset' },
             ];
-        } 
+        }
         this.activeIndex = 0;
         let id = this.assetService.listCollection ? this.assetService.listCollection.assetRecordId : null;
         this.AssetId = this.router.snapshot.params['id'] ? this.router.snapshot.params['id'] : id;
@@ -292,7 +292,7 @@ export class CreateAssetComponent implements OnInit {
         this.assetService.bredcrumbObj.next(this.assetService.currentUrl);
         this.assetService.ShowPtab = true;
         this.assetService.alertObj.next(this.assetService.ShowPtab); //steps
-  
+
     }
     onAddTextAreaInfo(material) {
         this.disableEditor = true;
@@ -312,7 +312,7 @@ export class CreateAssetComponent implements OnInit {
         $("#textarea-popup").modal("hide");
     }
     onCloseTextAreaInfo() {
-        $("#textarea-popup").modal("hide"); 
+        $("#textarea-popup").modal("hide");
     }
     async GetAssetData(assetid) {
         if (assetid == undefined) assetid = this.assetService.listCollection.assetRecordId;
@@ -333,9 +333,9 @@ export class CreateAssetComponent implements OnInit {
         getAssetData.alternateAssetRecordId = { assetRecordId: getAssetData.alternateAssetRecordId, assetId: getAssetData.alternateAssetName };
         getAssetData.assetParentRecordId = { assetRecordId: getAssetData.assetParentRecordId, assetId: getAssetData.assetParentName };
         getAssetData.assetId = { label: getAssetData.assetId, value: getAssetData.assetRecordId };
-        getAssetData.entryDate=getAssetData.entryDate !=null ? new Date(getAssetData.entryDate):null;
-        getAssetData.manufacturedDate=getAssetData.manufacturedDate !=null  ? new Date(getAssetData.manufacturedDate):null;
-        getAssetData.expirationDate=getAssetData.expirationDate !=null ? new Date(getAssetData.expirationDate):null;
+        getAssetData.entryDate = getAssetData.entryDate != null ? new Date(getAssetData.entryDate) : null;
+        getAssetData.manufacturedDate = getAssetData.manufacturedDate != null ? new Date(getAssetData.manufacturedDate) : null;
+        getAssetData.expirationDate = getAssetData.expirationDate != null ? new Date(getAssetData.expirationDate) : null;
         this.getManagementStructureDetails(getAssetData
             ? getAssetData.managementStructureId
             : null, this.authService.currentUser ? this.authService.currentUser.employeeId : 0);
@@ -379,7 +379,7 @@ export class CreateAssetComponent implements OnInit {
             this.AcquisitionloadData('');
             this.CurrencyData('');
         }
- 
+
         this.assetService.bredcrumbObj.next(this.assetService.currentUrl);
         this.assetService.ShowPtab = true;
         this.assetService.alertObj.next(this.assetService.ShowPtab); //steps
@@ -399,7 +399,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('AssetAttributeType', 'TangibleClassId', 'AssetAttributeTypeName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetAttributeType', 'TangibleClassId', 'AssetAttributeTypeName', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allAssetTypeInfo = res.map(x => {
                     return {
@@ -427,7 +427,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.getAutoCompleteDropDownsByTwoTables('AssetIntangibleAttributeType', 'AssetIntangibleType', 'AssetIntangibleTypeId', 'AssetIntangibleName', strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getAutoCompleteDropDownsByTwoTables('AssetIntangibleAttributeType', 'AssetIntangibleType', 'AssetIntangibleTypeId', 'AssetIntangibleName', strText, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allIntangibleInfo = res.map(x => {
                     return {
@@ -453,19 +453,19 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Asset', 'AssetRecordId', 'AssetId', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allAssetList = res;
-     if(value){
-        this.allAssetList.forEach(element => {
-             if(element.label ==value){
-                this.showExistMsg = true; 
-             }else{
-                this.showExistMsg = false;
-             }
-         });
-     }
-     
-     
+            if (value) {
+                this.allAssetList.forEach(element => {
+                    if (element.label == value) {
+                        this.showExistMsg = true;
+                    } else {
+                        this.showExistMsg = false;
+                    }
+                });
+            }
+
+
         }, err => {
             const errorLog = err;
             this.errorMessageHandler(errorLog);
@@ -503,9 +503,9 @@ export class CreateAssetComponent implements OnInit {
         // this.filterAssetIdInEdit('',null);
         this.selectedColumns = this.cols;
     }
-    localCollectionExcAlter:any=[];
-    localCollectionExcParent:any=[];
-    filterAssetIdInEdit(value,type) {
+    localCollectionExcAlter: any = [];
+    localCollectionExcParent: any = [];
+    filterAssetIdInEdit(value, type) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
             let id1 = this.currentAsset.alternateAssetRecordId ? this.currentAsset.alternateAssetRecordId : 0;
@@ -515,7 +515,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.getAssetListBasedOnType('Asset', 'AssetRecordId', 'AssetId', strText, this.tableColumnName, 1, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonservice.getAssetListBasedOnType('Asset', 'AssetRecordId', 'AssetId', strText, this.tableColumnName, 1, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             const newResp = res.map(x => {
                 return {
                     ...x,
@@ -536,19 +536,19 @@ export class CreateAssetComponent implements OnInit {
             }
             // this.localCollectionExc=newResp;
 
-            if ( this.currentAsset.alternateAssetRecordId !=null && this.currentAsset.alternateAssetRecordId !=undefined && this.currentAsset.alternateAssetRecordId !="") {
+            if (this.currentAsset.alternateAssetRecordId != null && this.currentAsset.alternateAssetRecordId != undefined && this.currentAsset.alternateAssetRecordId != "") {
 
-                
-                    for (let i = 0; i < this.allAssetParentInfo.length; i++) {
-                        if (this.allAssetParentInfo[i].assetRecordId == this.currentAsset.alternateAssetRecordId.assetRecordId) {
-                            this.allAssetParentInfo.splice(i, 1);
-                        }
+
+                for (let i = 0; i < this.allAssetParentInfo.length; i++) {
+                    if (this.allAssetParentInfo[i].assetRecordId == this.currentAsset.alternateAssetRecordId.assetRecordId) {
+                        this.allAssetParentInfo.splice(i, 1);
                     }
-                    this.localCollectionExcParent = this.allAssetParentInfo;
                 }
+                this.localCollectionExcParent = this.allAssetParentInfo;
+            }
 
-            if ((this.currentAsset.assetParentRecordId !=null && this.currentAsset.assetParentRecordId !=undefined && this.currentAsset.assetParentRecordId !="")) {
- 
+            if ((this.currentAsset.assetParentRecordId != null && this.currentAsset.assetParentRecordId != undefined && this.currentAsset.assetParentRecordId != "")) {
+
                 for (let i = 0; i < this.allAlternateAssetInfo.length; i++) {
                     if (this.allAlternateAssetInfo[i].assetRecordId == this.currentAsset.assetParentRecordId.assetRecordId) {
                         this.allAlternateAssetInfo.splice(i, 1);
@@ -567,20 +567,20 @@ export class CreateAssetComponent implements OnInit {
         this.localCollectionExc = this.allAlternateAssetInfo;
 
         if (event.query !== undefined && event.query !== null) {
-            this.filterAssetIdInEdit(event.query,1);
-        }else{
-                this.filterAssetIdInEdit('',1); 
-            }        
+            this.filterAssetIdInEdit(event.query, 1);
+        } else {
+            this.filterAssetIdInEdit('', 1);
+        }
     }
 
     filterExcParentAssetId(event) {
         this.localCollectionExc = this.allAssetParentInfo;
         if (event.query !== undefined && event.query !== null) {
-            this.filterAssetIdInEdit(event.query,2);
-        }else{
-                this.filterAssetIdInEdit('',2); 
-            }
-  
+            this.filterAssetIdInEdit(event.query, 2);
+        } else {
+            this.filterAssetIdInEdit('', 2);
+        }
+
     }
 
     get userName(): string {
@@ -600,7 +600,7 @@ export class CreateAssetComponent implements OnInit {
                     audits => {
                         this.currentSelectedAssetAttributeType = audits[0];
                         this.currentSelectedAssetAttributeType.residualPercentage = this.currentSelectedAssetAttributeType.residualPercentage ? formatNumberAsGlobalSettingsModule(this.currentSelectedAssetAttributeType.residualPercentage, 2) : '0.00';
-                      
+
                     }, err => {
                         const errorLog = err;
                         this.errorMessageHandler(errorLog);
@@ -615,9 +615,10 @@ export class CreateAssetComponent implements OnInit {
                 this.assetIntangibleService.getById(rowData).subscribe(
                     audits => {
                         this.currentSelectedIntangibleAssetType = audits[0][0];
-                    },err => {			
+                    }, err => {
                         const errorLog = err;
-                        this.errorMessageHandler(errorLog);}
+                        this.errorMessageHandler(errorLog);
+                    }
                 );
             }
         }
@@ -687,7 +688,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.AssetAcquisitionTypeList = res.map(x => {
                 return {
                     ...x,
@@ -714,7 +715,7 @@ export class CreateAssetComponent implements OnInit {
     getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
         empployid = empployid == 0 ? this.employeeId : empployid;
         editMSID = this.isEditMode ? editMSID = id : 0;
-        this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.authService.currentUser.masterCompanyId).subscribe(response => {
+        this.commonService.getManagmentStrctureData(id, empployid, editMSID, this.authService.currentUser.masterCompanyId).subscribe(response => {
             if (response) {
                 const result = response;
                 if (result[0] && result[0].level == 'Level1') {
@@ -792,7 +793,7 @@ export class CreateAssetComponent implements OnInit {
         if (legalEntityId) {
             this.currentAsset.companyId = legalEntityId;
             this.currentAsset.managementStructureId = legalEntityId;
-            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.bulist = res;
                 this.currentAsset.buisinessUnitId = 0;
                 this.currentAsset.divisionId = 0;
@@ -807,7 +808,7 @@ export class CreateAssetComponent implements OnInit {
         if (businessUnitId) {
             this.currentAsset.buisinessUnitId = businessUnitId;
             this.currentAsset.managementStructureId = businessUnitId;
-            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(businessUnitId, this.employeeId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.divisionlist = res;
                 this.currentAsset.divisionId = 0;
                 this.currentAsset.departmentId = 0;
@@ -821,7 +822,7 @@ export class CreateAssetComponent implements OnInit {
         if (divisionId) {
             this.currentAsset.divisionId = divisionId;
             this.currentAsset.managementStructureId = divisionId;
-            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId, 0, this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.departmentList = res;
                 this.currentAsset.departmentId = 0;
             }, err => {
@@ -847,7 +848,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Manufacturer ', 'ManufacturerId', 'Name', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer ', 'ManufacturerId', 'Name', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allManufacturerInfo = res;
             this.ManufactureData = res;
         }, err => {
@@ -869,7 +870,7 @@ export class CreateAssetComponent implements OnInit {
             }
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allUnitOfMeasureinfo = res;
 
         }, err => {
@@ -888,14 +889,14 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
         }, err => {
             const errorLog = err;
             this.errorMessageHandler(errorLog);
         });
     }
-    onFilterLocation(value) { 
+    onFilterLocation(value) {
         this.assetLocationData(value);
     }
     assetLocationData(value) {
@@ -906,7 +907,7 @@ export class CreateAssetComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.getAutoCompleteDropDownsByCodeWithName('AssetLocation', 'AssetLocationId', 'Name', 'Code', strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.getAutoCompleteDropDownsByCodeWithName('AssetLocation', 'AssetLocationId', 'Name', 'Code', strText, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allAssetLocations = res;
 
         }, err => {
@@ -936,7 +937,7 @@ export class CreateAssetComponent implements OnInit {
         }
     }
     getAmortizationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetAmortizationInterval', 'AssetAmortizationIntervalId', 'AssetAmortizationIntervalCode',this.authService.currentUser.masterCompanyId,'','',0).subscribe(res => {
+        this.commonservice.smartDropDownList('AssetAmortizationInterval', 'AssetAmortizationIntervalId', 'AssetAmortizationIntervalCode', this.authService.currentUser.masterCompanyId, '', '', 0).subscribe(res => {
             this.amortizationFrequencyList = res;
         }, err => {
             const errorLog = err;
@@ -944,7 +945,7 @@ export class CreateAssetComponent implements OnInit {
         })
     }
     getDepreciationFrequencyList() {
-        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name',this.authService.currentUser.masterCompanyId,'','',0).subscribe(res => {
+        this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name', this.authService.currentUser.masterCompanyId, '', '', 0).subscribe(res => {
             this.depreciationFrequencyList = res;
         }, err => {
             const errorLog = err;
@@ -1044,24 +1045,25 @@ export class CreateAssetComponent implements OnInit {
     onClearParentId() {
         this.currentAsset.assetParentRecordId = undefined;
     }
-    showExistMsgForAsset:any=false;
-    showExistMsgForAssetParent:any=false;
-    onAssetParentAlt(value,type){
-        
+    showExistMsgForAsset: any = false;
+    showExistMsgForAssetParent: any = false;
+    onAssetParentAlt(value, type) {
+
         if (this.currentAsset.alternateAssetRecordId != null && this.currentAsset.assetParentRecordId != null) {
             if (this.currentAsset.alternateAssetRecordId.assetRecordId == this.currentAsset.assetParentRecordId.assetRecordId) {
-              if(type==1){
-                  this.showExistMsgForAsset=true;
-              }else{
-                this.showExistMsgForAssetParent=true;
-              }
-            }else{
-                this.showExistMsgForAsset=false;
-              this.showExistMsgForAssetParent=false; 
+                if (type == 1) {
+                    this.showExistMsgForAsset = true;
+                } else {
+                    this.showExistMsgForAssetParent = true;
+                }
+            } else {
+                this.showExistMsgForAsset = false;
+                this.showExistMsgForAssetParent = false;
             }
         }
     }
     saveAsset(): void {
+
         if (this.currentAsset.isIntangible == false && this.currentAsset.expirationDate != null) {
             if (this.currentAsset.expirationDate < moment(this.currentDate).format('MM/DD/YYYY')) {
                 this.isSaving = false;
@@ -1089,7 +1091,7 @@ export class CreateAssetComponent implements OnInit {
         //         );
         //     }
         // }
-    
+
         if (this.currentAsset.isDepreciable == true) {
             if (this.currentAsset.assetId != null && this.currentAsset.assetParentRecordId != null) {
                 if (this.currentAsset.assetId == this.currentAsset.assetParentRecordId) {
@@ -1267,9 +1269,9 @@ export class CreateAssetComponent implements OnInit {
                     const newData = { ...this.currentAsset };
                     newData.alternateAssetRecordId = newData.alternateAssetRecordId ? newData.alternateAssetRecordId.assetRecordId : 0;
                     newData.assetParentRecordId = newData.assetParentRecordId ? newData.assetParentRecordId.assetRecordId : 0;
-                    if (typeof newData.assetId === 'string' || newData.assetId instanceof String){
+                    if (typeof newData.assetId === 'string' || newData.assetId instanceof String) {
                         newData.assetId = newData.assetId ? newData.assetId : '';
-                    }else{
+                    } else {
                         newData.assetId = newData.assetId ? newData.assetId.label : '';
                     }
                     this.isSpinnerEnable = true;
@@ -1293,9 +1295,9 @@ export class CreateAssetComponent implements OnInit {
                     this.currentAsset.entryDate = d;
                     const newData = { ...this.currentAsset };
                     newData.alternateAssetRecordId = newData.alternateAssetRecordId ? newData.alternateAssetRecordId.assetRecordId : 0;
-                    if (typeof newData.assetId === 'string' || newData.assetId instanceof String){
+                    if (typeof newData.assetId === 'string' || newData.assetId instanceof String) {
                         newData.assetId = newData.assetId ? newData.assetId : '';
-                    }else{
+                    } else {
                         newData.assetId = newData.assetId ? newData.assetId.label : '';
                     }
                     this.assetService.updateAssetIntangible(newData).subscribe(data => {
@@ -1367,9 +1369,8 @@ export class CreateAssetComponent implements OnInit {
         }
     }
     formatToGlobal(obj) {
-        if(obj.unitCost <0)
-        {
-            obj.unitCost=0; 
+        if (obj.unitCost < 0) {
+            obj.unitCost = 0;
         }
 
         obj.unitCost = obj.unitCost ? formatNumberAsGlobalSettingsModule(obj.unitCost, 2) : '0.00';
@@ -1387,14 +1388,14 @@ export class CreateAssetComponent implements OnInit {
             return decodedString;
         }
     }
-    omit_special_char(event){   
-   var k;  
-   k = event.charCode;  
-   return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57) || k == 45 || k == 95 ); 
-}
-addNew(){
-    this.route.navigateByUrl('/assetmodule/assetpages/app-create-asset');
-    this.assetService.listCollection={};
-    this.assetService.isEditMode = false;
-}
+    omit_special_char(event) {
+        var k;
+        k = event.charCode;
+        return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57) || k == 45 || k == 95);
+    }
+    addNew() {
+        this.route.navigateByUrl('/assetmodule/assetpages/app-create-asset');
+        this.assetService.listCollection = {};
+        this.assetService.isEditMode = false;
+    }
 }

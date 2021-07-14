@@ -75,35 +75,36 @@ export class EntityShippingComponent implements OnInit {
   mindate: any;
   formData = new FormData();
 
-  domesticShippingHeaders = [
-    { field: "tagName", header: "Tag Name" },
-    { field: "siteName", header: "Site Name" },
-    { field: "attention", header: "Attention" },
-    { field: "address1", header: "Address1" },
-    { field: "address2", header: "Address2" },
-    { field: "city", header: "City" },
-    { field: "state", header: "State / Prov" },
-    { field: "postalCode", header: "Postal Code" },
-    { field: "country", header: "Country" },
-    { field: "createdDate", header: "Created Date" },
-    { field: "createdBy", header: "Created By" },
-    { field: "updatedDate", header: "Updated Date" },
-    { field: "updatedBy", header: "Updated By" },
-  ];
-  internationalShippingHeaders = [
-    { field: "exportLicense", header: "Export License" },
-    { field: "description", header: "Description" },
-    { field: "startDate", header: "Start Date" },
-    { field: "expirationDate", header: "Expiration Date" },
-    { field: "amount", header: "Amount" },
-    { field: "country", header: "Country" },
-    { field: "createdDate", header: "Created Date" },
-    { field: "createdBy", header: "Created By" },
-    { field: "updatedDate", header: "Updated Date" },
-    { field: "updatedBy", header: "Updated By" },
-  ];
-  selectedColumnsForDomesticTable = this.domesticShippingHeaders;
-  selectedColumnsForInternationTable = this.internationalShippingHeaders;
+    domesticShippingHeaders = [
+        { field: 'tagName', header: 'Tag Name' },
+        { field: 'siteName', header: 'Site Name' },
+        { field: 'attention', header: 'Attention' },
+        { field: 'address1', header: 'Address1' },
+        { field: 'address2', header: 'Address2' },
+        { field: 'city', header: 'City' },
+        { field: 'state', header: 'State / Prov' },
+        { field: 'postalCode', header: 'Postal Code' },
+        { field: 'country', header: 'Country' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'createdBy', header: 'Created By' },
+        { field: 'updatedDate', header: 'Updated Date' },
+        { field: 'updatedBy', header: 'Updated By' },
+    ]
+    internationalShippingHeaders = [
+        { field: 'exportLicense', header: 'Export License' },
+        { field: 'description', header: 'Description' },
+        { field: 'startDate', header: 'Start Date' },
+        { field: 'expirationDate', header: 'Exp Date' },
+        { field: 'amount', header: 'Amount' },
+        { field: 'country', header: 'Country' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'createdBy', header: 'Created By' },
+        { field: 'updatedDate', header: 'Updated Date' },
+        { field: 'updatedBy', header: 'Updated By' },
+
+    ]
+    selectedColumnsForDomesticTable = this.domesticShippingHeaders;
+    selectedColumnsForInternationTable = this.internationalShippingHeaders;
 
   domesticShippingData: any[] = [];
   sourceViewforShipping: any;

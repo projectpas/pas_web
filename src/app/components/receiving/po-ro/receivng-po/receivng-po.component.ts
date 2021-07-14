@@ -70,6 +70,7 @@ export class ReceivngPoComponent implements OnInit {
     GLAccountList: DropDownData[] = [];
     ShippingViaList: DropDownData[] = [];
     TagTypeList: any = [];
+    CertTypeList: any = [];
     receiving_po_header: boolean = false;
     ConditionId: number = 0;
     allPartGLAccountId: number;
@@ -116,6 +117,8 @@ export class ReceivngPoComponent implements OnInit {
     arrayglaccountlist: any[] = [];
     arrayshipvialist: any[] = [];
     arraytagtypelist: any[] = [];
+    arraycerttypelist: any[] = [];
+
     companyModuleId: number = 0;
     vendorModuleId: number = 0;
     customerModuleId: number = 0;
@@ -157,6 +160,7 @@ export class ReceivngPoComponent implements OnInit {
         this.getAllGLAccount();
         this.getShippingVia();
         this.getTagType();
+        this.getCertType();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
         this.Purchaseunitofmeasure();
@@ -304,10 +308,24 @@ export class ReceivngPoComponent implements OnInit {
         if (this.arraytagtypelist.length == 0) {
             this.arraytagtypelist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,
-            true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-                this.TagTypeList = res;
-            })
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            // this.TagTypeList = res;
+            for (let tag of res) {
+                var dropdown = new DropDownData();
+                dropdown.Key = tag.value.toLocaleString();
+                dropdown.Value = tag.label
+                this.TagTypeList.push(dropdown);
+            }
+        })
+    }
+
+    getCertType(strText = '') {
+        if (this.arraycerttypelist.length == 0) {
+            this.arraycerttypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('CertificationType', 'CertificationTypeId', 'CertificationName', strText,true, 0, this.arraycerttypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            this.CertTypeList = res;
+        })
     }
 
     getLegalEntity(strText = '') {
@@ -776,7 +794,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.taggedByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());
             stockLine.certByObject = this.VendorList.find(x => x.Key == this.purchaseOrderData.vendor.vendorId.toString());            
-
+            stockLine.tagTypeId = 0;
             if (part.itemMaster != undefined) {
                 stockLine.purchaseOrderUnitCost = part.unitCost;
                 if (!part.itemMaster.isSerialized) {
@@ -1601,20 +1619,34 @@ export class ReceivngPoComponent implements OnInit {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;                 
-                if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
-                    sl.tagTypeId = sl.tagTypeobject.join();                
-                    sl.tagType = sl.tagTypeId.split(',');
-                    for (let i = 0; i < sl.tagType.length; i++) {
-                        sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                    }
-                    sl.tagType = sl.tagType.join();
-                } else {
-                    sl.tagType = "";
-                    sl.tagTypeId = "";
-                }
+                // if (sl.tagTypeobject && sl.tagTypeobject.length > 0) {
+                //     sl.tagTypeId = sl.tagTypeobject.join();                
+                //     sl.tagType = sl.tagTypeId.split(',');
+                //     for (let i = 0; i < sl.tagType.length; i++) {
+                //         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
+                //     }
+                //     sl.tagType = sl.tagType.join();
+                // } else {
+                //     sl.tagType = "";
+                //     sl.tagTypeId = "";
+                // }
+                sl.tagTypeId = sl.tagTypeId > 0 ? sl.tagTypeId : null;                
                 //sl.taggedBy = sl.taggedBy ? this.getValueFromObj(sl.taggedBy) : null ; 
                 sl.unitOfMeasureId =  sl.unitOfMeasureId > 0 ? sl.unitOfMeasureId : null ;
-            }             
+
+                if (sl.certTypeobject && sl.certTypeobject.length > 0) {
+                    sl.certTypeId = sl.certTypeobject.join();                
+                    sl.certType = sl.certTypeId.split(',');
+                    for (let i = 0; i < sl.certType.length; i++) {
+                        sl.certType[i] = getValueFromArrayOfObjectById('label', 'value', sl.certType[i], this.CertTypeList);
+                    }
+                    sl.certType = sl.certType.join();
+                } else {
+                    sl.certType = "";
+                    sl.certTypeId = "";
+                }
+            }    
+
             if (part.isSameDetailsForAllParts) {
                 // for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 //     part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;

@@ -29,6 +29,7 @@ export class DirectLabourComponent implements OnInit {
 		{ field: 'burdenRateIdText', header: 'Overhead Burden Rate Text' },
 		{ field: 'flatAmount', header: 'Overhead Burden Rate' },
         { field: 'laborHoursMedthodId', header: 'Labor Hours Method'},
+        { field: 'quoteAverageRate', header: 'Quote Average Rate'},
         
 	];
 	selectedColumns = this.cols;
@@ -57,7 +58,8 @@ export class DirectLabourComponent implements OnInit {
 			this.directLaborList = res.map(x => {
                 return {
                     ...x,
-                    averageRate: x.averageRate ? x.averageRate : '-'
+                    averageRate: x.averageRate ? x.averageRate : '-' ,
+                    quoteAverageRate:x.quoteAverageRate ? formatNumberAsGlobalSettingsModule(x.quoteAverageRate, 2) : '0.00'
                 }
             });
 		});

@@ -34,11 +34,14 @@
             <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
               <tbody>
                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                  <td *ngFor="let summaryColumn of headers" style="width:auto; background-color: #EAF2C5 !important;"
+                  <td *ngFor="let summaryColumn of headers"   
+                  [ngClass]="( summaryColumn.field == 'qty' ||summaryColumn.field == 'qtyToShip' ||summaryColumn.field == 'qtyToPick' 
+                  ||summaryColumn.field == 'quantityAvailable' ||summaryColumn.field == 'readyToPick')?'text-right':''  " style="width:auto; background-color: #EAF2C5 !important;"
                     pReorderableRowHandle>
                     <span>
                       {{summaryPart[summaryColumn.field]}}
                     </span>
+                
                   </td>
                   <td *ngIf="isView == false" style="min-width: 120px; position: sticky !important">
                     <span>
@@ -54,7 +57,7 @@
                 <tr class="child-header splitship-head child-header-back">
                   <th style="background-color: #fff !important;"></th>
                   <th>PT Num</th>
-                  <th>Serial Num </th>
+                  <th>Ser Num </th>
                   <th>Stk Line Num</th>
                   <th>Qty Picked</th>
                   <th>Picked By</th>
@@ -81,7 +84,7 @@
                   <td>
                     {{ part.stockLineNumber }}
                   </td>
-                  <td>
+                  <td class="text-right">
                     {{ part.qtyToShip }}
                   </td>
                   <td>
@@ -177,10 +180,10 @@
                 <th>PT Num</th>
                 <th>PN</th>
                 <th>PN Description</th>
-                <th>Qty Ordered</th>
+                <th>Qty Ord</th>
                 <th>Qty To Pick</th>
                 <th>Qty Picked</th>
-                <th>Qty Remaining</th>
+                <th>Qty Rem</th>
                 <th>Status</th>
                 <th>Created Date</th>
                 <th>Created By</th>

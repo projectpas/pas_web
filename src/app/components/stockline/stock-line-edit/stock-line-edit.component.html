@@ -65,14 +65,14 @@
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4">Stock Line Num<strong class="clr-red">*</strong></label>
+                    <label class="control-label col-sm-4">Stk Line Num<strong class="clr-red">*</strong></label>
                     <div class="col-sm-7">
                         <input class="form-control" [disabled]=true type="text" id="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.stockLineNumber">
                     </div>
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4">Control Num<strong class="clr-red">*</strong></label>
+                    <label class="control-label col-sm-4">Cntrl Num<strong class="clr-red">*</strong></label>
                     <div class="col-sm-7">
                         <input class="form-control" [disabled]=true type="text" id="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.controlNumber">
                     </div>
@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4">Qty On Hand<strong style="color:red">*</strong></label>
+                    <label class="control-label col-sm-4">Qty OH<strong style="color:red">*</strong></label>
                     <div class="col-sm-7">
                         <input class="form-control qty-input" *ngIf="showRestrictQuantity" type="number" min="0" max="1" (change)="calculateQtyAvailable($event)"  [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.quantityOnHand">
                         <input class="form-control qty-input" *ngIf="showNormalQuantity" type="number" min="0" (change)="calculateQtyAvailable($event)" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.quantityOnHand">
@@ -101,21 +101,21 @@
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4">Qty Reserved</label>
+                    <label class="control-label col-sm-4">Qty Res'd</label>
                     <div class="col-sm-7">
                         <input class="form-control qty-input" type="number" [ngModelOptions]="{standalone: true}" (change)="calculateQtyAvailable($event)" [(ngModel)]="sourceStockLineSetup.quantityReserved">
                     </div>
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4">Qty Issued</label>
+                    <label class="control-label col-sm-4">Qty Iss'd</label>
                     <div class="col-sm-7">
                         <input class="form-control qty-input" type="number" [ngModelOptions]="{standalone: true}" (change)="calculateQtyAvailable($event)"showf [(ngModel)]="sourceStockLineSetup.quantityIssued">
                     </div>
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4">Qty Available</label>
+                    <label class="control-label col-sm-4">Qty Avail</label>
                     <div class="col-sm-7">
                         <input class="form-control qty-input" type="number" [disabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.quantityAvailable">
                     </div>
@@ -131,7 +131,7 @@
                 </div>
 
                 <div class="form-group col-sm-12 is-serialized-content" *ngIf="hideSerialNumber">
-                    <label class="control-label col-sm-4">Serial Num</label>
+                    <label class="control-label col-sm-4">Ser Num</label>
                     <div class="col-sm-7">
                         <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.serialNumber">
                     </div>
@@ -342,7 +342,7 @@
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <label class="control-label col-sm-4" matTooltip="Engine Serial Number" matTooltipPosition="above">ESN</label>
+                    <label class="control-label col-sm-4" matTooltip="Engine Serial Num" matTooltipPosition="above">ESN</label>
                     <div class="col-sm-7">
                         <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.engineSerialNumber">
                     </div>
@@ -551,7 +551,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        <label class="control-label col-sm-4">Received Date<strong class="clr-red">*</strong></label>
+                        <label class="control-label col-sm-4">Rec'd Date<strong class="clr-red">*</strong></label>
                         <div class="col-sm-7">
                             <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceStockLineSetup.receivedDate"></p-calendar>
                         </div>
@@ -688,7 +688,7 @@
 								</tr>
 								<tr>
 									
-									<td>Control Num</td>
+									<td>Cntrl Num</td>
 									<td class="clr1">Since New</td>
 									<td class="clr1">Since OVH</td>
 									<td class="clr1">Since Insp</td>
@@ -737,7 +737,7 @@
           [minY]="1050" [baseZIndex]="1100000">
     <p *ngIf="showCompanyError" [ngStyle]="{'color':'red'}"> Please Enter Company</p>
     <p *ngIf="showPartNumberError" [ngStyle]="{'color':'red'}"> Please Enter Part Number</p>
-    <p *ngIf="showSerialNumberError" [ngStyle]="{'color':'red'}"> Please Enter Serial Number </p>
+    <p *ngIf="showSerialNumberError" [ngStyle]="{'color':'red'}"> Please Enter Ser Num </p>
     <p *ngIf="showConditionError" [ngStyle]="{'color':'red'}"> Please Enter Condition</p>
     <p *ngIf="showSiteError" [ngStyle]="{'color':'red'}"> Please Select Site</p>
     <p *ngIf="showReceiveDateError" [ngStyle]="{'color':'red'}"> Please Select Receive Date</p>

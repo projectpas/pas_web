@@ -33,6 +33,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
   private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
   private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticketforprint";
+  private readonly getSalesOrdePickTicketPDF: string = environment.baseUrl + "/api/SalesOrder/GetPickTicketPDF";
   private readonly getShippingDataListURL: string = environment.baseUrl + "/api/SalesOrder/getsalesordershippinglist";
   private readonly getBillingInvoiceListUrl: string = environment.baseUrl + "/api/SalesOrder/salesorderBillingInvoicelist";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
@@ -755,6 +756,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
+  getPickTicketPDF(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
+    const URL = `${this.getSalesOrdePickTicketPDF}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soPickTicketId=${soPickTicketId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId));
+      });
+  }
+
   getMultiPickTicketPrint(multiPickTicket: any): Observable<any> {
     const URL = `${this.getMultiPickTicketForPrint}`;
     return this.http
@@ -886,5 +896,11 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getSalesOrderParts(id, isDeleted));
       });
+  }
+
+  GetSalesOrderSummarisedHistoryByPN(itemMasterId: number, isTwelveMonth: boolean) {
+    return this.http.get(`${this.configurations.baseUrl}/api/salesorder/GetSalesOrderSummarisedHistoryByPN?ItemMasterId=${itemMasterId}&IsTwelveMonth=${isTwelveMonth}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.GetSalesOrderSummarisedHistoryByPN(itemMasterId, isTwelveMonth));
+    });
   }
 }

@@ -6,7 +6,7 @@
                   <h4 class="header-name">Receiving - Customer Work List</h4>
                 </div>
                 <div>
-                  <button
+                  <button *ngIf="isAdd"
                     type="button"
                     class="btn-sm header-button"
                     [routerLink]="['/receivingmodule/receivingpages/app-customer-work-setup']">
@@ -54,12 +54,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
+                        <button *ngIf="isDownload" class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
                             label="Export  Data" matTooltip="Download Data" matTooltipPosition="above"
                             data-toggle="modal"
                             (click)="selectedOnly = false; targetData = dt;" 
                             data-target="#downloadConfirmation"></button>
-                        <button class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
+                        <button *ngIf="isDownload" class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
                             label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                             (click)="dt.exportCSV({selectionOnly:true})">
                         </button>
@@ -149,7 +149,7 @@
                                 <a class="btn nobg" (click)="openView(rowData)"
                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                             </span>
-                            <span> 
+                            <span *ngIf="isEdit"> 
                                 <button class="btn  nobg padding-0" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="openEdits(rowData)"
                                  matTooltip="Edit" matTooltipPosition="above" >
                                     <i class="fa fa-pencil" ></i>
@@ -258,10 +258,10 @@
                         <th>Part Number</th>
                         <th>Revised PN</th>
                         <th>Employee Name</th>
-                        <th>Customer Name</th>
-                        <th>Customer Reference</th>
+                        <th>Cust Name</th>
+                        <th>Cust Ref</th>
                         <th>Contact</th>
-                        <th>Contact Phone</th>
+                        <th>Phone</th>
                         <th>Manufacturer</th>
                         <th>Quantity</th>
                         <th>Condition</th>
@@ -372,10 +372,10 @@
                     <h4 class="modal-title">Details of Receiving - Customer</h4>
                 </div>
                 <div class="col-sm-3 padding-top-5">
-                    Customer Name<span class="text-danger"> : {{viewCustWorkInfo.customerName}}</span>
+                    Cust Name<span class="text-danger"> : {{viewCustWorkInfo.customerName}}</span>
                 </div>
                 <div class="col-sm-3 padding-top-5">
-                    Customer Code<span class="text-danger"> : {{viewCustWorkInfo.customerCode}}</span>
+                    Cust Code<span class="text-danger"> : {{viewCustWorkInfo.customerCode}}</span>
                 </div>
             </div>
             <div class="modal-body" *ngIf="viewCustWorkInfo">
@@ -385,16 +385,16 @@
                             <span class="label"><b>Receiving Num: </b></span><span class="value">{{ viewCustWorkInfo.receivingNumber }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Received Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.receivedDate | date: 'MM/dd/yyyy'}}</span>
+                            <span class="label"><b>Rec'd Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.receivedDate | date: 'MM/dd/yyyy'}}</span>
                         </p>
                         <p>
                             <span class="label"><b>Work Scope: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.workScopeName}}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Customer Request Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.custReqDate | date: 'MM/dd/yyyy'}}</span>
+                            <span class="label"><b>Cust Req Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.custReqDate | date: 'MM/dd/yyyy'}}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Customer Ref: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.reference }}</span>
+                            <span class="label"><b>Cust Ref: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.reference }}</span>
                         </p>
                         <p >
                             <span class="label"><b>Employee Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.employeeName }}</span>
@@ -417,16 +417,16 @@
                             </div>
                         </div>
                         <p class="mantstr">
-                            <span class="label"><b>Customer Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerName }}</span>
+                            <span class="label"><b>Cust Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerName }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Customer Code: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerCode }}</span>
+                            <span class="label"><b>Cust Code: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerCode }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Contact: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerContact }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Contact Phone: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.contactPhone }}</span>
+                            <span class="label"><b>Phone: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.contactPhone }}</span>
                         </p>
                         
                         <p>
@@ -477,7 +477,10 @@
                             <span class="label"><b>Bin: </b></span><span class="value">{{ viewCustWorkInfo.bin ? viewCustWorkInfo.bin : '-' }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Certify By: </b></span><span class="value">{{ viewCustWorkInfo.certifiedBy ? viewCustWorkInfo.certifiedBy : '-' }}</span>
+                            <span class="label"><b>Cert Type: </b></span><span class="value">{{ viewCustWorkInfo.certType ? viewCustWorkInfo.certType : '-' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Cert By: </b></span><span class="value">{{ viewCustWorkInfo.certifiedBy ? viewCustWorkInfo.certifiedBy : '-' }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Parts Cert Num: </b></span><span class="value">{{ viewCustWorkInfo.partCertificationNumber ? viewCustWorkInfo.partCertificationNumber : '-' }}</span>
@@ -492,10 +495,10 @@
                             <span class="label"><b>Tag Type: </b></span><span class="value">{{ viewCustWorkInfo.tagType ? viewCustWorkInfo.tagType : '-' }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Tag by: </b></span><span class="value">{{  viewCustWorkInfo.taggedByTypeName ? viewCustWorkInfo.taggedByTypeName : '-' }}</span>
+                            <span class="label"><b>Tagged by: </b></span><span class="value">{{  viewCustWorkInfo.taggedByTypeName ? viewCustWorkInfo.taggedByTypeName : '-' }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Tag by Name: </b></span><span class="value">{{ viewCustWorkInfo.taggedBy? viewCustWorkInfo.taggedBy : '-' }}</span>
+                            <span class="label"><b>Tagged by: </b></span><span class="value">{{ viewCustWorkInfo.taggedBy? viewCustWorkInfo.taggedBy : '-' }}</span>
                         </p>
                     
                      
@@ -618,7 +621,7 @@
                             </div>
                             <div class="col-md-4" *ngIf="viewCustWorkInfo.serialNumber">
                                 <p>
-                                    <span class="label"><b>Serial Number: </b></span><span class="value">{{ viewCustWorkInfo.serialNumber ? viewCustWorkInfo.serialNumber : '-' }}</span>
+                                    <span class="label"><b>Ser Num: </b></span><span class="value">{{ viewCustWorkInfo.serialNumber ? viewCustWorkInfo.serialNumber : '-' }}</span>
                                 </p>
                             </div>
                         </div>
@@ -738,7 +741,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 tableview" *ngIf="rcId">
+                <div class="col-md-12 tableview" *ngIf="rcId && isDocumentInfo">
                     <app-common-documents [moduleName]="moduleName" [referenceId]="rcId" [isViewMode]="true"
                     [offLineUpload]="true"></app-common-documents>
                 </div>

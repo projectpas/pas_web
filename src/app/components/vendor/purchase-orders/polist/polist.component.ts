@@ -20,6 +20,7 @@ import { ReceivingService } from '../../../../services/receiving/receiving.servi
 import { AllViewComponent } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
 import { StatusEnum } from '../../../../enum/status.enum';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-polist',
@@ -39,22 +40,22 @@ export class PolistComponent implements OnInit {
     orderId: number;
     orderType: string = 'Purchase Order';
     PovendorId: number;
-    isReceivingpo:boolean;
+    isReceivingpo: boolean;
     dateObject: any = {};
     filterSearchText: string;
     strVendorName: string;
     strVendorCode: string;
     headers = [
-        { field: 'purchaseOrderNumber', header: 'PO Num',width:"90px" },
-        { field: 'openDate', header: 'Open Date',width:"100px" },
+        { field: 'purchaseOrderNumber', header: 'PO Num', width: "90px" },
+        { field: 'openDate', header: 'Open Date', width: "100px" },
         // { field: 'closedDate', header: 'Closed/Cancelled Date' },
         { field: 'vendorName', header: 'Vendor Name' },
         // { field: 'vendorCode', header: 'Vendor Code' },
-        { field: 'status', header: 'Status', width:"90px" },
+        { field: 'status', header: 'Status', width: "90px" },
         { field: 'requestedBy', header: 'Requested By' },
-        { field: 'approvedBy', header: 'Approved By' },        
+        { field: 'approvedBy', header: 'Approved By' },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },        
+        { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'Updated By' },
     ]
@@ -152,19 +153,19 @@ export class PolistComponent implements OnInit {
             header: 'PN',
             field: 'partNumber'
         }, {
-            header: 'PN Desc',
+            header: 'PN Description',
             field: 'partDescription'
         }, {
             header: 'ALT/Equiv PN',
             field: 'altEquiPartNumber'
         }, {
-            header: 'ALT/Equiv PN Desc',
+            header: 'ALT/Equiv PN Description',
             field: 'altEquiPartDescription'
         }, {
             header: 'Item Type',
             field: 'itemType'
         }, {
-            header: 'Stock Type',
+            header: 'Stk Type',
             field: 'stockType'
         }, {
             header: 'Qty',
@@ -180,14 +181,37 @@ export class PolistComponent implements OnInit {
     approvalProcessList: any = [];
     moduleName: any = "PurchaseOrder";
 
-    openStatusId: number  = 0
-    pendingStatusId: number  = 0
-    fulfillingStatusId: number  = 0
-    closedStatusId: number  = 0
-    canceledStatusId: number  = 0
-    descriptionStatusId: number  = 0
-    closingStatusId: number  = 0
+    openStatusId: number = 0
+    pendingStatusId: number = 0
+    fulfillingStatusId: number = 0
+    closedStatusId: number = 0
+    canceledStatusId: number = 0
+    descriptionStatusId: number = 0
+    closingStatusId: number = 0
+    isViewpo:boolean=true;
+    isAddpo:boolean=true;
+    isEditpo:boolean=true;
+    isDeletepo:boolean=true;
+    isDownload:boolean=true;
 
+    permissionAddCheck = [ModuleConstants.PurchaseOrder + '.' + PermissionConstants.Add,
+    ModuleConstants.POList + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Header + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Address + '.' + PermissionConstants.Add,    
+    ModuleConstants.PO_Approver_Process + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Vendor_Capes + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Documents + '.' + PermissionConstants.Add,
+    ModuleConstants.PO_Communication + '.' + PermissionConstants.Add];
+
+    permissionUpdateCheck = [ModuleConstants.PurchaseOrder + '.' + PermissionConstants.Update,
+    ModuleConstants.POList + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Header + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Address + '.' + PermissionConstants.Update,    
+    ModuleConstants.PO_Approver_Process + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Vendor_Capes + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Documents + '.' + PermissionConstants.Update,
+    ModuleConstants.PO_Communication + '.' + PermissionConstants.Update];
+    
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -202,13 +226,17 @@ export class PolistComponent implements OnInit {
         private datePipe: DatePipe,
         private receivingService: ReceivingService) {
         this.vendorService.ShowPtab = false;
-        this.openStatusId = StatusEnum.Open;    
-        this.pendingStatusId = StatusEnum.Pending;    
-        this.fulfillingStatusId = StatusEnum.Fulfilling;    
-        this.closedStatusId = StatusEnum.Closed;    
-        this.canceledStatusId = StatusEnum.Canceled;    
-        this.descriptionStatusId = StatusEnum.Description;    
-        this.closingStatusId = StatusEnum.Closing;    
+        this.openStatusId = StatusEnum.Open;
+        this.pendingStatusId = StatusEnum.Pending;
+        this.fulfillingStatusId = StatusEnum.Fulfilling;
+        this.closedStatusId = StatusEnum.Closed;
+        this.canceledStatusId = StatusEnum.Canceled;
+        this.descriptionStatusId = StatusEnum.Description;
+        this.closingStatusId = StatusEnum.Closing;
+        this.isAddpo=this.authService.checkPermission(this.permissionAddCheck)
+		this.isEditpo=this.authService.checkPermission(this.permissionUpdateCheck)
+        this.isDeletepo=this.authService.checkPermission([ModuleConstants.POList+'.'+PermissionConstants.Delete])
+        this.isDownload=this.authService.checkPermission([ModuleConstants.POList+'.'+PermissionConstants.Download]) 
     }
     ngOnInit() {
         this.loadPOStatus();
@@ -231,8 +259,8 @@ export class PolistComponent implements OnInit {
                 { label: 'Purchase Order' },
                 { label: 'Purchase Order List' },
             ];
-        }else{
-            this.currentStatusPO="Fulfilling";
+        } else {
+            this.currentStatusPO = "Fulfilling";
             this.breadcrumbs = [
                 { label: 'Receiving' },
                 { label: 'Purchase Order' },
@@ -255,7 +283,7 @@ export class PolistComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
     loadPOStatus() {
-        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description', this.authService.currentUser.masterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description', 0).subscribe(response => {
             this.poStatusList = response;
             this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         }, err => {
@@ -337,7 +365,7 @@ export class PolistComponent implements OnInit {
     }
 
     loadApprovalProcessStatus() {
-        this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', this.currentUserMasterCompanyId).subscribe(response => {
+        this.commonService.smartDropDownList('ApprovalProcess', 'ApprovalProcessId', 'Name', 0).subscribe(response => {
             response.forEach(x => {
                 if (x.label.toUpperCase() == "APPROVED") {
                     this.ApprovedstatusId = x.value;
@@ -727,7 +755,7 @@ export class PolistComponent implements OnInit {
         this.PovendorId = rowData.vendorId;
         this.orderId = rowData.purchaseOrderId;
         this.orderType = 'Purchase Order';
-        if(this.isReceivingPolist == true){
+        if (this.isReceivingPolist == true) {
             this.isReceivingpo = true;
         }
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
@@ -736,7 +764,7 @@ export class PolistComponent implements OnInit {
     WarningsList: any;
     WarningListId: any;
     getWarningsList(): void {
-        this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name',this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name', 0).subscribe(res => {
             res.forEach(element => {
                 if (element.label == 'Create Purchase Order') {
                     this.WarningListId = element.value;
@@ -1043,7 +1071,7 @@ export class PolistComponent implements OnInit {
     }
 
     public getSelectedRow(rowData) {
-        this.receivingService.purchaseOrderId = rowData.purchaseOrderId;        
+        this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
         this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receivng-po?purchaseorderid=${rowData.purchaseOrderId}`);
     }
 
