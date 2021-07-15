@@ -30,6 +30,7 @@ import { MenuItem } from 'primeng/api';
 import { CalibrationMgmt } from '../../../models/calibration-mgmt.model'
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
   selector: 'app-calibration-mgmt-listing',
@@ -164,6 +165,12 @@ disableSaveForEdit: boolean = true;
     calibrationForm : any = {};
     viewcalibrationForm : any = {};
     CalibrationProcessHisory: any[];
+    isSecurityAdd:boolean=true;
+    isSecurityEdit:boolean=true;
+    isSecurityDelete:boolean=true;
+    isSecurityView:boolean=true;
+    isSecurityDownload:boolean=true;
+    isSecurityActive:boolean=true;
 
   constructor(
     private alertService: AlertService, public assetService: AssetService, private _route: Router,
@@ -172,7 +179,14 @@ disableSaveForEdit: boolean = true;
         private vendorEndpointService: VendorEndpointService, private depriciationMethodService: DepriciationMethodService, private commonservice: CommonService,
         private datePipe: DatePipe,
         private assetLocationService: AssetLocationService, private authService: AuthService, public unitService: UnitOfMeasureService, private commonService: CommonService,
-  ) { }
+  ) {
+    this.isSecurityAdd=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Add]);
+    this.isSecurityEdit=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Update]);
+    this.isSecurityView=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.View]);
+    this.isSecurityActive=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Update]);
+    this.isSecurityDelete=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Delete]);
+    this.isSecurityDownload=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Download])
+   }
 
   ngOnInit() {
 

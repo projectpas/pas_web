@@ -99,12 +99,12 @@
                           </div>
                           <div class="row">
                             <div class="col">
-                              <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                              <button *ngIf="isSecurityDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                               pButton icon="fa-download" iconPos="left" label="Export All Data"
                                 data-toggle="modal"
                               (click)="selectedOnly = false; targetData = dt;" 
                               data-target="#downloadConfirmation"></button>
-                               <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
+                               <button *ngIf="isSecurityDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
                               pButton icon="fa-download" iconPos="left"
                                label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
                               ></button>
@@ -213,19 +213,19 @@
                                   </td>
                                   <td class="action-icons-cstm" style="width:150px;position:sticky" *ngIf="selectedColumns.length> 0">
                                       <div *ngIf="rowData['calibrationId'] !=0">
-                                      <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                      <p-inputSwitch *ngIf="isSecurityActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                          matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                                          <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewcalibration" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                          <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                          <span><a class="btn nobg btn-edit-cstm" *ngIf="isSecurityEdit" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                           <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                           <!-- <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span> -->
 
                                       </div>
                                       <div  *ngIf="rowData['calibrationId'] ==0">
-                                          <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                          <p-inputSwitch *ngIf="isSecurityActive" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                           matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                           <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewcalibration"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                          <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                          <span><a class="btn nobg btn-edit-cstm" *ngIf="isSecurityEdit" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                           <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                       </div>
                                </td> 
