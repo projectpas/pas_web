@@ -39,9 +39,9 @@ export class CurrencyComponent implements OnInit {
     modal: NgbModalRef;
     pageSize: number = 10;
     headers = [
-        { field: 'displayName', header: 'Currency Name' },
-        { field: 'code', header: 'Currency Code' },
-        { field: 'symbol', header: 'Currency Symbol' },
+        { field: 'displayName', header: 'Curr Name' },
+        { field: 'code', header: 'Curr Code' },
+        { field: 'symbol', header: 'Curr Symbol' },
         { field: 'countryName', header: 'Country' },
 
         { field: 'memo', header: 'Memo' }

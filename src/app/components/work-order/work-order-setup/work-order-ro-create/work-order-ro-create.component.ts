@@ -27,11 +27,11 @@ export class WorkOrderROCreateComponent implements OnInit {
         { field: 'mcpn', header: 'MCPN' },
         { field: 'mcpndescription', header: 'MCPN Description' },
         { field: 'mcserial', header: 'MC Serial #' },
-        { field: 'stockline', header: 'Stock Line ' },
-        { field: 'control', header: 'Control' },
-        { field: 'controlid', header: 'Control #' },
-        { field: 'controllerId', header: 'Control Id' },
-        { field: 'qtytorepair', header: 'Qty to Repair' },
+        { field: 'stockline', header: 'Stk Line ' },
+        { field: 'control', header: 'Cntrl' },
+        { field: 'controlid', header: 'Cntrl #' },
+        { field: 'controllerId', header: 'Cntrl ID' },
+        { field: 'qtytorepair', header: 'Qty to Rep' },
         { field: 'qtyreserved', header: 'Qty to Reserved' },
 
     ]

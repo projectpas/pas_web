@@ -41,14 +41,14 @@
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label>Customer Code</label>
+              <label>Cust Code</label>
               <input type="text" [(ngModel)]="exchangeQuote.customerCode" name="customerCode" class="form-control"
                 [disabled]="true" id="customerCode" #customerCode="ngModel" />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label>Exch Quote Num <span class="clr-red">*</span></label>
+              <label>Exch Qte Num <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="exchangeQuoteNumber"
                 [(ngModel)]="exchangeQuote.exchangeQuoteNumber" [disabled]="true" #accountTypeId="ngModel"
                 id="exchangeQuoteNumber" #exchangeQuoteNumber="ngModel" />
@@ -83,7 +83,7 @@
                         </label>
                       </div>
                       <div class="form-group" style="padding-top: 5px;">
-                        <label>Exch Quote Num <span class="clr-red">*</span></label>
+                        <label>Exch Qte Num <span class="clr-red">*</span></label>
                         <input type="text" class="form-control" name="exchangeQuoteNumber"
                           [(ngModel)]="exchangeQuote.exchangeQuoteNumber" [disabled]="true" #accountTypeId="ngModel"
                           id="exchangeQuoteNumber" #exchangeQuoteNumber="ngModel" />
@@ -96,7 +96,7 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label>Customer Ref<span class="clr-red">*</span></label>
+                        <label>Cust Ref<span class="clr-red">*</span></label>
                         <input type="text" required name="customerReference" id="customerReference"
                           #customerReference="ngModel" class="form-control"
                           [(ngModel)]="exchangeQuote.customerReference" (change)="onChangeInput()"
@@ -211,7 +211,7 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label>Customer Contact<span class="clr-red">*</span></label>
+                        <label>Cust Contact<span class="clr-red">*</span></label>
                         <select [(ngModel)]="exchangeQuote.customerContactId" required (change)="onChangeInput()"
                           [ngModelOptions]="{standalone: true}" name="customerContactId" id="customerContactId"
                           #customerContactId="ngModel">
@@ -604,7 +604,7 @@
   <form #quoteConversionForm="ngForm" class="form-horizontal">
     <div class="modal-body">
       <div class="form-group">
-        <label>Enter Customer Refrence<span class="clr-red">*</span></label>
+        <label>Enter Cust Ref<span class="clr-red">*</span></label>
         <input type="text" required class="form-control" name="customerReference" style="max-width: 60%;"
           [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
       </div>
@@ -615,12 +615,12 @@
       </div>
       <div class="form-group popup_checkbox_considerations stock-check-box">
         <p-checkbox name="transferStockline" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.transferStockline"
-          binary="true" label="Transfer Stockline">
+          binary="true" label="Transfer Stk Line">
         </p-checkbox>
       </div>
       <div class="form-group popup_checkbox_considerations stock-check-box">
         <p-checkbox name="reserveStockline" [(ngModel)]="exchangeSalesOrderConversionCriteriaObj.reserveStockline"
-          binary="true" label="Reserve Stockline">
+          binary="true" label="Reserve Stk Line">
         </p-checkbox>
       </div>
       <div class="form-group popup_checkbox_considerations stock-check-box">
@@ -654,7 +654,7 @@
   </form>
 </ng-template>
 <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+  <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
               <button type="button" class="close" aria-label="Close" (click)="closeModal()">&times;</button>

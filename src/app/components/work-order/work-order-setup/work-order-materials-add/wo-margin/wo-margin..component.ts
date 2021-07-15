@@ -115,8 +115,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
      this.formObject.taskId=this.editData.taskId;
      this.formObject.provisionId=this.editData.provisionId;
      this.formObject.isDeferred=this.editData.isDeferred;
-     this.formObject.memo=this.editData.memo;
-    //  this.formObject.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+     this.formObject.memo=this.editData.memo; 
     if(this.isSubWorkOrder){
       this.formObject.subWorkOrderMaterialsId=this.editData.subWorkOrderMaterialsId;
       this.formObject.workOrderMaterialsId=0;
@@ -125,14 +124,7 @@ export class WoMarginComponent implements OnInit, OnChanges {
       this.formObject.subWorkOrderMaterialsId=0;
      }
      this.formObject.materialMandatoriesId=this.editData.materialMandatoriesId;
-    //  if(this.isSubWorkOrder){
-    //   this.formObject.subWorkOrderMaterialsId=this.formObject.subWorkOrderMaterialsId;
-    //   this.formObject.materialMandatoriesId=0;
-    //  }else{
-    //   this.formObject.materialMandatoriesId=this.formObject.materialMandatoriesId;
-    //   this.formObject.subWorkOrderMaterialsId=0;
-    //  }
-     this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
+  this.formObject.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
       this.getTaskList();
       this.provisionList();
       this.getMaterailMandatories();
@@ -143,6 +135,17 @@ export class WoMarginComponent implements OnInit, OnChanges {
       this.provisionList();
       this.getMaterailMandatories();
      }
+     if(this.isEdit==true && !this.isStockLine){
+     if(Number(parseInt(this.formObject.qtyOnHand)) > Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
+     if(Number(parseInt(this.formObject.quantity)) == Number(parseInt(this.formObject.totalStocklineQtyReq))){
+        this.formObject.stocklineQuantity=this.formObject.quantity;
+      }else{
+        this.formObject.stocklineQuantity=Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))
+      }
+    }else if(Number(parseInt(this.formObject.qtyOnHand)) < Number(parseInt(this.formObject.quantity)-parseInt(this.formObject.totalStocklineQtyReq))){
+      this.formObject.stocklineQuantity= Number(parseInt(this.formObject.qtyOnHand))
+     }
+  }
      this.onChangeQuantityFromThis();
      this.enableUpdateBtn=this.enableUpdateBtn;
      if(this.enableUpdateBtn==true){
@@ -270,8 +273,7 @@ onSaveTextAreaInfo() {
  
       this.formObject.memo = this.textAreaInfoModel;
   
-  this.disableEditor = true;
-  // $("#textarea-popup24").modal("hide");
+  this.disableEditor = true; 
   this.modalMemo.close();
   if(this.isEdit==true){
     this.disableUpdateButton = false;
@@ -281,8 +283,7 @@ onClose() {
   this.close.emit(true);
 }
 onCloseTextAreaInfo() {
-  this.disableEditor = true;
-  // $("#textarea-popup24").modal("hide");
+  this.disableEditor = true; 
   this.modalMemo.close();
 }
 calculateExtendedCost(): void {
@@ -295,11 +296,11 @@ calculateExtendedCost(): void {
       this.formObject.extendedCost = "";
   } 
 } 
-onChangeQuantityFromThis() {
-
+onChangeQuantityFromThis() { 
  setTimeout(() => {
   this.invalidQuantityenteredForQuantityFromThis =false;
   if(this.part.method=='ItemMaster'){
+    // this.isSpinnerVisible=false;
     // if (Number(this.formObject.stocklineQuantity) != 0) {
     //   if ( Number(this.formObject.stocklineQuantity) > Number(this.formObject.quantity)) {
     //     this.invalidQuantityenteredForQuantityFromThis =true;
@@ -319,40 +320,35 @@ onChangeQuantityFromThis() {
     //   this.disableUpdateButton=true;
     // }
   }else{
-    if (Number(parseInt(this.formObject.stocklineQuantity)) != 0) {
+    if(Number(parseInt(this.formObject.stocklineQuantity)) > Number(parseInt(this.formObject.qtyOnHand))){
+         this.formObject.stocklineQuantity= Number(parseInt(this.formObject.qtyOnHand))
+         this.invalidQuantityenteredForQuantityFromThis =true;
+        } 
+    if (Number(parseInt(this.formObject.stocklineQuantity)) != 0) { 
       if ( Number(parseInt(this.formObject.stocklineQuantity)) > Number(parseInt(this.formObject.quantity))) {
-        this.invalidQuantityenteredForQuantityFromThis =true;
-        // this.formObject.stocklineQuantity=this.formObject.quantity;
+        this.invalidQuantityenteredForQuantityFromThis =true; 
         this.disableUpdateButton=true;
       }
    
       else if ( this.isStockLine && Number(parseInt(this.formObject.stocklineQuantity)-parseInt(this.formObject.newStocklineqty) ) > Number(parseInt(this.part.quantity)-parseInt(this.formObject.totalStocklineQtyReq))) {
         this.invalidQuantityenteredForQuantityFromThis =true;
-        this.disableUpdateButton=true;
-        // this.formObject.stocklineQuantity=this.formObject.quantity;
+        this.disableUpdateButton=true; 
       }else if ( !this.isStockLine && Number(parseInt(this.formObject.stocklineQuantity) + parseInt(this.formObject.totalStocklineQtyReq) ) > Number(this.formObject.quantity)) {
         this.invalidQuantityenteredForQuantityFromThis =true;
         this.disableUpdateButton=true;
-        // this.formObject.stocklineQuantity=this.formObject.quantity;
       }
       else if (Number(this.formObject.stocklineQuantity) < 0)
       {
         this.invalidQuantityenteredForQuantityFromThis = true;
         this.disableUpdateButton=true;
-      }
-      // else if (  Number(this.formObject.stocklineQuantity) > Number(this.formObject.qtyAvailable)) {
-      //   this.invalidQuantityenteredForQuantityFromThis = true;
-      //   this.disableUpdateButton=true;
-      // } 
+      } 
     } else {
       this.invalidQuantityenteredForQuantityFromThis = false;
       this.disableUpdateButton=true;
     }
   }
  }, 1000);
- 
-
-  // qtyAvailable
+  
 }
 
 
@@ -377,8 +373,7 @@ savePart(){
   this.materialCreateObject.subWorkOrderMaterialsId=0;
  }
   this.saveFinalMaterialListData.emit(this.materialCreateObject);
-  this.close.emit(true);
-  // $("#showMarginDetails").modal("hide");
+  this.close.emit(true); 
 }
 
 getActive(){
@@ -386,9 +381,7 @@ getActive(){
   this.onChangeQuantityFromThis();
 }
 upDatePart(){ 
-  if(this.isEdit){
-    // this.part= this.editData
-    // this.part.workOrderMaterialsId=this.editData.workOrderMaterialsId;
+  if(this.isEdit){ 
   } 
   this.materialCreateObject={...this.formObject}
   this.materialCreateObject.mandatorySupplementalId=this.materialCreateObject.materialMandatoriesId;
@@ -415,8 +408,7 @@ if(this.isStockLine==true){
 }else{
   this.updateFinalMaterialListData.emit(this.materialCreateObject)
 }
-  this.disableUpdateButton=true;
-  // $("#showMarginDetails").modal("hide");
+  this.disableUpdateButton=true; 
   this.close.emit(true);
 }
 

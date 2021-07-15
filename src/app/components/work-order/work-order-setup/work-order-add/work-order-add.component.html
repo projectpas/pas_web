@@ -223,7 +223,7 @@
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="workflownum">
-                                                        Contact Phone
+                                                        Phone
                                                     </label>
                                                     <input class="form-control" matTooltipPosition="above" type="text"
                                                         name="customerPhoneNo" #contactPhone="ngModel" disabled
@@ -405,7 +405,7 @@
                                             <th rowspan="2">MPN <span class="clr-red">*</span></th>
                                             <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                             <th rowspan="2">Revised MPN</th>
-                                            <th rowspan="2" style="min-width:90px !important">Serial Num </th>
+                                            <th rowspan="2" style="min-width:90px !important">Ser Num </th>
                                             <th rowspan="2" style="min-width:60px !important">Qty</th>
                                             <th rowspan="2" style="min-width:80px !important">Rec'd Date </th>
                                             <th rowspan="2" style="min-width:80px !important">Cust Req Date <span
@@ -642,9 +642,8 @@
                                                     class="p-dropdown-custom-md22 p-dropdown-mh120" placeholder="No CMM" 
                                                     [(ngModel)]="workOrderPartNumber.cMMId" 
                                                     [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                                    appendTo="body" required="isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null"> 
+                                                    appendTo="body" [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}"> 
                                                 </p-dropdown>
-                                                <!-- [ngClass]="{cmmRequres :isPublicationExpired==true ||  workOrderPartNumber.cmmId==null || workOrderPartNumber.cMMId==null}" -->
 
                                                 <span data-toggle="modal" data-target="#cmmView" *ngIf="workOrderPartNumber.cMMId!=0 && workOrderPartNumber.cMMId!=null"
                                                 [ngClass]="{pointerEvents : workOrderPartNumber.cMMId==0 || workOrderPartNumber.cMMId==null}">
@@ -1837,7 +1836,7 @@
                                         <th>Margin Amt</th>
                                         <th>Margin %</th>
                                         <th>TAT</th>
-                                        <th>WO Number</th>
+                                        <th>WO Num</th>
                                         <th>WO Date</th>
                                         <th>Stage</th>
                                         <th>Status</th>

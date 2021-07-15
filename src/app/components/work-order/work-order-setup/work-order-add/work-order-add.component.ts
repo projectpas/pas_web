@@ -1427,6 +1427,7 @@ createQuote() {
     onSelectedPartNumber(object, currentRecord, index, from) {
         if (from == 'html') {
             currentRecord.masterCompanyId=this.currentUserMasterCompanyId;
+            currentRecord.managementStructureId=object.managementStructureId;
             currentRecord.workOrderScopeId = object.workOderScopeId;
             if (this.workorderSettings) {
                 currentRecord.conditionId = (this.workorderSettings.defaultConditionId != 0 && this.workorderSettings.defaultConditionId != null) ? this.workorderSettings.defaultConditionId : object.conditionId;
@@ -1487,10 +1488,12 @@ createQuote() {
         }
     }
 
-    onSelectedTechnician(object, currentRecord) {
+    onSelectedTechnician(object, currentRecord) { 
         if (object.employeeId != undefined && object.employeeId > 0) {
             this.commonService.getTechnicianStation(object.employeeId, this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+              if(res && res.stationId){
                 currentRecord.techStationId = res.stationId;
+              }
             },
                 err => {
                     this.handleError(err);
@@ -1645,6 +1648,7 @@ createQuote() {
         this.modalWorkScopeModel.close();
     }
     triggherWorkScopeData(workOrderPart,index){
+        console.log('wo part',workOrderPart)
         workOrderPart.masterCompanyId=this.currentUserMasterCompanyId;
         // console.log("workOrderPart",workOrderPart)
         this.commonService.getDataWorkScopeByItemMasterCaps(workOrderPart,'isWO').subscribe(res => {
@@ -2172,6 +2176,7 @@ createQuote() {
     summaryParts: any = [];
     totalRecords: number;
     pageLinks: any;
+    totalStockLineSum:any;
     filterParts() {
         this.summaryParts = [];
         let uniqueParts = this.getUniqueParts(this.workOrderMaterial, 'partNumber', 'conditionCodeId', 'stockType');
@@ -2194,6 +2199,32 @@ createQuote() {
                 }
             })
             this.workOrderMaterialList = uniqueParts;
+            this.workOrderMaterialList.forEach(x => {
+                x.totalStockLineArray=[];
+                x.childParts.forEach(y => {
+                    y.sumofStockLine= y.stocklineQtyReserved + y.stocklineQtyIssued
+                    // y.sumofStockRequired= +=
+                });
+            });
+            this.workOrderMaterialList.forEach(x => {
+                this.totalStockLineSum=undefined;
+                x.childParts.forEach(y => {
+x.totalStockLineArray.push(y.sumofStockLine);
+// console.log("x.totalStockLineSum",x)
+            })
+            // x.totalStockLineSum=this.totalStockLineSum
+            x.totalStockLineSum = x.totalStockLineArray.reduce(function(a, b){
+                return a + b;
+            }, 0);
+            // console.log("xxxxx. ",x)
+        });
+        this.workOrderMaterialList.forEach(x => {
+            // x.childParts.forEach(y => {
+// console.log("x.totalStockLineSum",y)
+x.allowbaleRequiredQty=Math.max(Number(x.totalStockLineSum),Number(x.totalStocklineQtyReq))
+        // })
+        // console.log("x.totalStockLineSum",x)
+    });
         }
         this.totalRecords = this.workOrderMaterialList.length;
         this.pageLinks = Math.ceil(

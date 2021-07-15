@@ -56,7 +56,7 @@ export class CustomerPaymentListComponent {
             { field: "amount", header: "Amount", width: "180px" },
             { field: "amtApplied", header: "Amt Applied", width: "100px" },
             { field: "amtRemaining", header: "Amt Remaining", width: "100px" },
-            { field: "currency", header: "Currency", width: "130px" },
+            { field: "currency", header: "Curr", width: "130px" },
             { field: "cntrlNum", header: "Cntrl Num", width: "130px" },
             { field: "level1", header: "CO", width: "130px" },
             { field: "level2", header: "BU", width: "130px" },

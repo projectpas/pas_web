@@ -550,7 +550,7 @@
                                         <!--/Consume UOM-->
                                         <!--Purchase Currency-->
                                             <label class="control-label spacing-label">
-                                                Purchase Currency <strong class="clr-red">*</strong>
+                                                Purchase Curr <strong class="clr-red">*</strong>
                                             </label>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required (onChange)="SetSalesCurrency()"></p-dropdown>
@@ -559,7 +559,7 @@
                                         <div class="clear"></div>
                                         <!--Purchase Currency--> 
                                             <label class="control-label spacing-label">
-                                                Sales Currency <strong class="clr-red">*</strong>
+                                                Sales Curr <strong class="clr-red">*</strong>
                                             </label>
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="salesCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.salesCurrencyId" name="salesCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
@@ -1458,7 +1458,7 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
-                                                <label>
+                                                <label style="width: 120px !important;">
                                                     ATA Subchapter
                                                 </label>
                                                 <p-multiSelect [options]="atasubchapterValues" [ngModelOptions]="{standalone: true}"
@@ -1671,7 +1671,7 @@
                                         <tr>
                                             <th style="z-index:1">Cond <span class="clr-red">*</span></th>
                                             <th style="z-index:1">UOM <span class="clr-red">*</span></th>
-                                            <th style="z-index:1">Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1">Curr <span class="clr-red">*</span></th>
                                             <th>FX Rate <span class="clr-red">*</span></th>
                                             <th>Vendor List Price</th>
                                             <th>Last List Price Date</th>
@@ -1681,7 +1681,7 @@
                                             <th>Unit Purchase Price</th>
                                             <th style="z-index:1" class="bg4">Sale Price <span class="clr-red">*</span></th>
                                             <th style="z-index:1" class="bg2">UOM <span class="clr-red">*</span></th>
-                                            <th style="z-index:1" class="bg2">Currency <span class="clr-red">*</span></th>
+                                            <th style="z-index:1" class="bg2">Curr <span class="clr-red">*</span></th>
                                             <th class="bg2">FX Rate <span class="clr-red">*</span></th>
                                             <th class="bg2">Flat Price Amount</th>
                                             <th class="bg2">Last Flat Price Date</th>
@@ -2072,7 +2072,7 @@
                                         <label class="control-label">Value </label>
                                         <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="exportInfo.exportValue" (change)="onChangeExportVal()" name="exportValue" id="exportValue" title="Export Value" (keyup)="btnChange()" />
                                       
-                                        <label class="control-label">Currency </label>
+                                        <label class="control-label">Curr </label>
                                         <p-dropdown class="p-dropdown-100" [options]="allCurrencyInfo" filter="true" 
                                         [(ngModel)]="exportInfo.exportCurrencyId" name="exportCurrencyId" 
                                         [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
@@ -2185,7 +2185,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" (click)="closeAddAircraftModel()">×</button>
-                    <h5 class="modal-title">Aircraft Info</h5>
+                    <h5 class="modal-title">Add Aircraft information</h5>
                 </div>
                 <div class="modal-body">
                     <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
@@ -2213,7 +2213,7 @@
                             <div class="col-md-2" *ngIf="!modelUnknown">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm" style="width: 190px !important;">
-                                        DashNumber <span class="clr-red">*</span>
+                                        Dash Number <span class="clr-red">*</span>
                                         
                                         <input type="checkbox" name="unknownDashNumber" [(ngModel)]="dashNumberUnknown"  [disabled]="selectedModelId.length == 0" 
                                       style="width: 20px !important; margin-left: 7px;"  (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
@@ -4103,7 +4103,7 @@
                     <tr>
                         <th >Cond <span class="clr-red">*</span></th>
                         <th >UOM <span class="clr-red">*</span></th>
-                        <th >Currency <span class="clr-red">*</span></th>
+                        <th >Curr <span class="clr-red">*</span></th>
                         <th >FX Rate <span class="clr-red">*</span></th>
                         <th >Vendor List Price</th>
                         <th >Last List Price Date</th>
@@ -4113,7 +4113,7 @@
                         <th >Unit Purchase Price</th>
                         <th  class="bg4">Sale Price <span class="clr-red">*</span></th>
                         <th  class="bg2">UOM <span class="clr-red">*</span></th>
-                        <th  class="bg2">Currency <span class="clr-red">*</span></th>
+                        <th  class="bg2">Curr <span class="clr-red">*</span></th>
                         <th  class="bg2">FX Rate <span class="clr-red">*</span></th>
                         <th  class="bg2">Flat Price Amount</th>
                         <th  class="bg2">Last Flat Price Date</th>

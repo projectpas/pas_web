@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Customer Code</label>
+                            <label>Cust Code</label>
                             <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
                                 class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
                         </div>
@@ -105,7 +105,7 @@
                                 <div class="form-row">
                                     <div class="col-md-6 padding-10" style="padding-bottom: 0px !important">
                                         <div class="form-group">
-                                            <label>Speed Quote Num</label>
+                                            <label>Speed Qte Num</label>
                                             <input type="text" [(ngModel)]="salesQuote.speedQuoteNumber"
                                                 name="speedQuoteNumber" class="form-control" [disabled]="true"
                                                 id="speedQuoteNumber" #speedQuoteNumber="ngModel" />
@@ -131,7 +131,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Customer Ref<span class="clr-red">*</span></label>
+                                            <label>Cust Ref<span class="clr-red">*</span></label>
                                             <input type="text" required name="customerReferenceName"
                                                 id="customerReferenceName" #customerReferenceName="ngModel"
                                                 class="form-control" [(ngModel)]="salesQuote.customerReferenceName"
@@ -253,7 +253,7 @@
                                                 </div>
                                         </div>
                                         <div class="form-group padding-top-4">
-                                            <label>Customer Contact<span class="clr-red">*</span></label>
+                                            <label>Cust Contact<span class="clr-red">*</span></label>
                                             <select [(ngModel)]="salesQuote.customerContactId" required
                                                 [ngModelOptions]="{standalone: true}" name="customerContactId"
                                                 (change)="onChangeInput(); onChangeCustomerContact(salesQuote.customerContactId)" id="customerContactId"
@@ -445,7 +445,7 @@
                                        
                                         <div class="form-group col-md-12">
                                             <div class="col-md-6" style="padding-left:0px">
-                                            <label>Speed Quote Status<span class="clr-red">*</span></label>
+                                            <label>Speed Qte Status<span class="clr-red">*</span></label>
                                             
                                                 <!-- <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
@@ -878,7 +878,7 @@
     <form #quoteConversionForm="ngForm" class="form-horizontal">
         <div class="modal-body">
             <div class="form-group">
-                <label>Enter Customer Refrence<span class="clr-red">*</span></label>
+                <label>Enter Cust Ref<span class="clr-red">*</span></label>
                 <input type="text" required class="form-control" name="customerReference" style="max-width: 60%;"
                     [(ngModel)]="salesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
             </div>

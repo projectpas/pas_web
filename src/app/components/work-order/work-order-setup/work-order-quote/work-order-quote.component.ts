@@ -313,7 +313,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'Parts Cost',
             field: 'materialCost'
         }, {
-            header: 'Parts Rev %',
+            header: 'Parts Revenue %',
             field: 'materialRevenuePercentage'
         },
         {
@@ -324,13 +324,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             header: 'Labour Cost',
             field: 'laborCost'
         }, {
-            header: 'Labour Rev %',
+            header: 'Labour Revenue %',
             field: 'laborRevenuePercentage'
         }, {
             header: 'Overhead Cost',
             field: 'overHeadCost'
         }, {
-            header: 'Overhead Cost Rev %',
+            header: 'Overhead Cost Revenue %',
             field: 'overHeadCostRevenuePercentage'
         },
         {
@@ -404,7 +404,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         { field: 'quantity', header: 'Qty', isRequired: true, isCheckbox: false, isDate: false },
         { field: 'uomName', header: 'UOM', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'conditiontype', header: 'Cond Type', isRequired: true, isCheckbox: false, isDate: false },
-        { field: 'stocktype', header: 'Stock Type', isRequired: false, isCheckbox: false, isDate: false },
+        { field: 'stocktype', header: 'Stk Type', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'unitCost', header: 'Unit Cost', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'totalPartCost', header: 'Total Part Cost', isRequired: false, isCheckbox: false, isDate: false },
         { field: 'billingName', header: 'Billing Method', isRequired: true, isCheckbox: false, isDate: false },
@@ -672,7 +672,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.upDateDisabeldbutton = true;
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
-                                    // this.memo=
+                                    this.isDetailedViewQuote = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
                                     this.getQuoteMaterialListByWorkOrderQuoteId();
                                     this.quoteCreated = true;
@@ -1132,11 +1132,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     // this.selectedBuildMethod = "";
                     // this.currenttaskId = 0;
                 }
-                if (this.workOrderQuoteDetailsId == 0) {
-                    this.isDetailedViewQuote = false;
-                } else {
-                    this.isDetailedViewQuote = true;
-                }
+                // if (this.workOrderQuoteDetailsId == 0) {
+                //     this.isDetailedViewQuote = false;
+                // } else {
+                //     this.isDetailedViewQuote = true;
+                // }
             },
                 err => {
                     this.errorHandling(err);
@@ -3456,7 +3456,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(this.quoteForm.expirationDateStatus ? this.quoteForm.expirationDateStatus : 0);
         } else {
             this.setEditArray.push(0);
-        }
+        } 
         const strText = value ? value : '';
         this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
@@ -3505,7 +3505,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                     this.materialListQuotation.forEach(tcharge => {
-                        tcharge.quantity = tcharge.stocklineQuantity;
+                        // tcharge.quantity = tcharge.stocklineQuantity;
                         if (tcharge.unitCost) {
                             tcharge.unitCost = Number(tcharge.stocklineUnitCost.toString().split(',').join('')).toFixed(2);
                         }

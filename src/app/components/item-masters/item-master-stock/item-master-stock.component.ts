@@ -1412,7 +1412,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.allAircraftsGet = allWorkFlows;
         this.currentItemMasterModels = allWorkFlows;//All Models Data which has for Current Item Master Id
         this.allCurrentItemMasterModels = allWorkFlows;
-        if (this.allAircraftsGet.length > 0) {
+        if (this.allAircraftsGet && this.allAircraftsGet.length > 0) {
             this.enablePlus = true;
             this.allAircraftinfo = JSON.parse(JSON.stringify(this.allAircraftsGet));
             this.isDeleteMode = false;
@@ -1744,7 +1744,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     saverange(selectedRow) {
         let ischange = false;
-        if (this.selectedModels.length > 0) {
+        if (this.selectedModels && this.selectedModels.length > 0) {
             this.selectedModels.map((row) => {
                 if (selectedRow.aircraftModelId == row.aircraftModelId) {
                     row = selectedRow;
@@ -1947,7 +1947,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     ItemHandler(field, value) {
         const exists = validateRecordExistsOrNot(field, value, this.allitemclassificationInfo, false);
 
-        if (exists.length > 0) {
+        if (exists && exists.length > 0) {
 
             this.disableClassdesc = true;
             this.disableSaveItemClassficationCodeMsg = true;
@@ -2215,7 +2215,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             error => { this.isSpinnerVisible = false });
     }
     loadModalsForExistingRecords(capData) {
-        if (capData.selectedAircraftTypes.length > 0) {
+        if (capData && capData.selectedAircraftTypes && capData.selectedAircraftTypes.length > 0) {
 
             let arr = [];
             capData.selectedAircraftTypes.forEach(element => {
@@ -2579,7 +2579,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     dismissAircraftModel() {
-        if (this.selectedModels.length > 0) {
+        if (this.selectedModels && this.selectedModels.length > 0) {
             this.manfacturerAircraftmodelsarray = [];
             this.distributionAircraftmodelsarray = [];
             this.overhaulAircraftmodelsarray = [];
@@ -2635,7 +2635,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     public getSelectedItem(selectedRow, event) {
         let ischange = false;
-        if (this.selectedModels.length > 0) {
+        if (this.selectedModels && this.selectedModels.length > 0) {
             this.selectedModels.map((row) => {
                 if (selectedRow.aircraftModelId == row.aircraftModelId) {
                     row.priority = event.target.value;
@@ -3174,7 +3174,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     searchByFieldUrlCreateforAircraftInformation() {
-        if (this.selectAircraftManfacturer.length > 0) {
+        if (this.selectAircraftManfacturer && this.selectAircraftManfacturer.length > 0) {
             const aircraftTypeIds = this.selectAircraftManfacturer.reduce(
                 (acc, value) => {
                     return `${acc},${value}`;
@@ -3186,7 +3186,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.aircraftManfacturerIdsUrl = '';
         }
 
-        if (this.selectedAircraftModel.length > 0) {
+        if (this.selectedAircraftModel && this.selectedAircraftModel.length > 0) {
             const aircraftModelIds = this.selectedAircraftModel.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
@@ -3194,7 +3194,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         } else {
             this.aircraftModelsIdUrl = '';
         }
-        if (this.selectedDashNumbers.length > 0) {
+        if (this.selectedDashNumbers && this.selectedDashNumbers.length > 0) {
             const dashNumberIds = this.selectedDashNumbers.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
@@ -3381,7 +3381,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     updatedDate: x.updatedDate
                 }
             })
-            if (this.aircraftListDataValues.length > 0) {
+            if (this.aircraftListDataValues && this.aircraftListDataValues.length > 0) {
                 this.totalAircraftRecords = this.aircraftListDataValues.length;
                 this.totalAircraftPages = Math.ceil(this.totalAircraftRecords / this.aircraftTablePageSize);
             }
@@ -3875,7 +3875,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     // ata search by itemmaster  id
     searchByFieldUrlCreateforATA() {
 
-        if (this.selectedATAchapter.length > 0) {
+        if (this.selectedATAchapter && this.selectedATAchapter.length > 0) {
             const ataIds = this.selectedATAchapter.reduce((acc, value) => {
                 return `${acc},${value}`;
             }, '');
@@ -3883,7 +3883,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         } else {
             this.ataChapterIdUrl = '';
         }
-        if (this.selectedATASubChapter.length > 0) {
+        if (this.selectedATASubChapter && this.selectedATASubChapter.length > 0) {
             const ataSubchapterIds = this.selectedATASubChapter.reduce((acc, id) => {
                 return `${acc},${id}`;
             }, '');
@@ -4068,7 +4068,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if (value == 'Yes') {
             const i = this.deletePSRecordRowIndex
             if (this.fieldArray[i].itemMasterPurchaseSaleId) {
-                if (this.fieldArray.length > 0) {
+                if (this.fieldArray && this.fieldArray.length > 0) {
 
                     this.fieldArray[i].isDeleted = true;
                 }
@@ -4086,7 +4086,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 })
 
             } else {
-                if (this.fieldArray.length > 0) {
+                if (this.fieldArray && this.fieldArray.length > 0) {
                     this.fieldArray.splice(i, 1);
                     this.alertService.showMessage(
                         'Success',
@@ -4321,7 +4321,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     saveItemMasterGeneralInformation(addItemMasterStockForm) {
         this.listOfErrors = pulloutRequiredFieldsOfForm(addItemMasterStockForm);
-        if (this.listOfErrors.length > 0) {
+        if (this.listOfErrors && this.listOfErrors.length > 0) {
 
             this.display = true;
             this.modelValue = true;
@@ -4472,7 +4472,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                         localStorage.setItem('commonId', this.itemMasterId.toString())
                         this.uploadDocs.next(true);
                         if (data.partId && data.itemMasterId) {
-                            if (this.selectedModels.length > 0) {
+                            if (this.selectedModels && this.selectedModels.length > 0) {
                                 this.saveAircraftmodelinfo(data.partId, data.itemMasterId, this.selectedModels);
                             }
                         }
@@ -4541,7 +4541,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.manufacturerCollection = [];
         this.manufacturerNumber = [];
         if (this.allManufacturerInfo) {
-            if (this.allpnNumbers.length > 0) {
+            if (this.allpnNumbers && this.allpnNumbers.length > 0) {
                 for (let i = 0; i < this.allManufacturerInfo.length; i++) {
                     let name = this.allManufacturerInfo[i].name;
                     if (name) {
@@ -5916,7 +5916,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceViewforDocumentList = res || [];
             this.allDocumentListOriginal = res;
 
-            if (this.sourceViewforDocumentList.length > 0) {
+            if (this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0) {
                 this.sourceViewforDocumentList.forEach(item => {
                     item["isFileFromServer"] = true;
 
@@ -6159,5 +6159,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.selectedAircraftModel=undefined;
         this.selectAircraftManfacturer=undefined; 
         this.getAircraftMappedDataByItemMasterId();
+    }
+    clearSerchData(){
+        this.selectedATAchapter=undefined;
+        this.selectedATASubChapter=undefined;
+        this.getATAMappedDataByItemMasterId();
     }
 }

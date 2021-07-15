@@ -200,7 +200,7 @@
                     </div>
                     <div class="col-md-6">
                       <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                        <label class="control-label labels-font-header" style="width: auto;">Cust Code:
                         </label>
                         <span class="span-header-red" style="text-transform: capitalize">
                             {{customerInfoFromSalesQuote.customerCode}}
@@ -215,7 +215,7 @@
                 <div class="form-row">                   
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-md-12">Customer Contact <span class="clr-red">*</span></label>
+                            <label class="col-md-12">Cust Contact <span class="clr-red">*</span></label>
                             <p-autoComplete field="firstName"
                             [(ngModel)]="firstName" required
                             name="cusContact" #cusContact="ngModel"
@@ -283,7 +283,7 @@
             <div class="modal-body">
                 <div class="col-sm-12" *ngIf="phoneViewData">
                     <p>
-                        <span class="label"><strong> Customer Contact: </strong></span><span class="value">{{
+                        <span class="label"><strong> Cust Contact: </strong></span><span class="value">{{
                             phoneViewData.customerContact
                         }}</span>
                     </p>

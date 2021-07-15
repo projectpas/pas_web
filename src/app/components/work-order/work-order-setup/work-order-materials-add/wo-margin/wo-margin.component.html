@@ -38,7 +38,7 @@
   <div class="row">
     <div class="col-2 column"> 
       <div class="form-group">
-        <label>Quantity requested</label> 
+        <label>Qty requested</label> 
         <input type="text" class="form-control   text-right" pInputText pKeyFilter="num" name="quantityRequest"
           disabled="true" [(ngModel)]="part.quantity " style="width: 100%;" />
       </div>
@@ -46,7 +46,7 @@
     <div class="col-2 column">
       <div class="form-group"> 
         <!-- [disabled]="!isStockLine" onChangeQuantityFromThis();-->
-        <label>Quantity from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
+        <label>Qty from this <span *ngIf="part.method=='ItemMaster'">PN</span><span
             *ngIf="part.method=='StockLine'">{{part.stockLineNumber}}</span></label>
         <input type="number" class="form-control   text-right" name="stocklineQuantity"
          [(ngModel)]="formObject.stocklineQuantity" 
@@ -170,3 +170,17 @@
     </div>
   </div>
 </ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>
