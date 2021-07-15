@@ -806,7 +806,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
         const strText = value ? value : '';
         this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join(), this.authService.currentUser.masterCompanyId).subscribe(res => {
-            res = res.map(x => { return { 'conditionId': x.value, 'description': x.label } })
+            res = res.map(x => { return { 'conditionCodeId':x.value,'conditionId': x.value, 'description': x.label } })
             this.conditions = res;
         },
             err => {
