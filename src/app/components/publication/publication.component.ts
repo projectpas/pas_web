@@ -215,7 +215,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'pnDescription', header: 'PN Description' ,width:"200px"},
             { field: 'revisionNum', header: 'Revision Num' ,width:"110px"},
             { field: 'publicationId', header: 'Pub ID' },
-            { field: 'description', header: 'Pub Description' },
+            { field: 'description', header: 'Pub Description',width:"200px" },
             { field: 'publicationType', header: 'Pub Type' },
             { field: 'publishedBy', header: 'Published By' },
             { field: 'revisionDate', header: 'Revision Date',width:"110px" },

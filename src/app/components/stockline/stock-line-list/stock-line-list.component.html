@@ -257,7 +257,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
           <div class="tableFixHead">
-          <table class="table table-bordered" style="white-space:nowrap" *ngIf="auditHistory.length > 0; else noDatavailable">
+          <table class="table table-bordered min-width-100" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
                 <tr>
                     <th colspan="16">General</th>
@@ -328,14 +328,14 @@
                 <th>Traceable To</th>
                 <th>ECCN</th>
                 <th>ITAR</th>
-                <th class="min-width-90">Qty OH <span class="clr-red">*</span></th>
-                <th class="min-width-90">Qty Res'd</th>
-                <th class="min-width-90">Qty Iss'd</th>
-                <th class="min-width-90">Qty Avail</th>
-                <th class="min-width-90">PO Unit Cost</th>
-                <th class="min-width-90">RO Unit Cost</th>
-                <th class="min-width-90">Unit Sale Price</th>
-                <th class="min-width-90">Core Cost/Unit</th>
+                <th class="min-width-60">Qty OH <span class="clr-red">*</span></th>
+                <th class="min-width-60">Qty Res'd</th>
+                <th class="min-width-60">Qty Iss'd</th>
+                <th class="min-width-60">Qty Avail</th>
+                <th class="min-width-80">PO Unit Cost</th>
+                <th class="min-width-80">RO Unit Cost</th>
+                <th class="min-width-80">Unit Sale Price</th>
+                <th class="min-width-80">Core Cost/Unit</th>
                 <th>GL Account</th>
                 <th>Site <span class="clr-red">*</span></th>
                 <th>Warehouse</th>
@@ -385,7 +385,7 @@
             </thead>
             <tbody *ngIf="auditHistory.length > 0">
               <tr *ngFor="let audit of auditHistory; let i = index">
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> 
                       <input type="checkbox" name="isCustomerStock"
@@ -395,20 +395,20 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partNumber', audit.partNumber) ? 'black' : 'red'}">{{ audit.partNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partDescription', audit.partDescription) ? 'black' : 'red'}">{{ audit.partDescription }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'revisedPart', audit.revisedPart) ? 'black' : 'red'}">{{ audit.revisedPart }}</td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto">
                        <input type="checkbox" name="oem" [(ngModel)]="audit.oem" disabled>
                       </label></span></td>
-                      <td class="text-center width-60">
+                      <td class="text-center min-width-60">
                         <span class="value">
                           <label class="wauto"> <input type="checkbox" name="isPMA" [(ngModel)]="audit.isPMA" disabled></label></span></td>
-                            <td class="text-center width-60">
+                            <td class="text-center min-width-60">
                               <span class="value">
                                 <label class="wauto"> <input type="checkbox" name="isDER" [(ngModel)]="audit.isDER" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'itemGroup', audit.itemGroup) ? 'black' : 'red'}">{{ audit.itemGroup }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'condition', audit.condition) ? 'black' : 'red'}">{{ audit.condition }}</td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="isSerialized" [(ngModel)]="audit.isSerialized" disabled></label></span></td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'serialNumber', audit.serialNumber) ? 'black' : 'red'}">{{ audit.serialNumber }}</td>
@@ -421,26 +421,26 @@
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingDays', audit.manufacturingDays) ? 'black' : 'red'}">{{ audit.manufacturingDays }}</td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'tagDays', audit.tagDays) ? 'black' : 'red'}">{{ audit.tagDays }}</td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'openDays', audit.openDays) ? 'black' : 'red'}">{{ audit.openDays }}</td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="shelfLife" [(ngModel)]="audit.shelfLife" disabled></label></span></td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'shelfLifeExpirationDate', audit.shelfLifeExpirationDate) ? 'black' : 'red'}">{{ audit.shelfLifeExpirationDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'shelfLifeExpirationDate', audit.shelfLifeExpirationDate) ? 'black' : 'red'}">{{ audit.shelfLifeExpirationDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'nha', audit.nha) ? 'black' : 'red'}">{{ audit.nha }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'tla', audit.tla) ? 'black' : 'red'}">{{ audit.tla }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'aircraftTailNumber', audit.aircraftTailNumber) ? 'black' : 'red'}">{{ audit.aircraftTailNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturer', audit.manufacturer) ? 'black' : 'red'}">{{ audit.manufacturer }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturerLotNumber', audit.manufacturerLotNumber) ? 'black' : 'red'}">{{ audit.manufacturerLotNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingBatchNumber', audit.manufacturingBatchNumber) ? 'black' : 'red'}">{{ audit.manufacturingBatchNumber }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingDate', audit.manufacturingDate) ? 'black' : 'red'}">{{ audit.manufacturingDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px"[ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingDate', audit.manufacturingDate) ? 'black' : 'red'}">{{ audit.manufacturingDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'acquistionTypeName', audit.acquistionTypeName) ? 'black' : 'red'}">{{ audit.acquistionTypeName }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'orderDate', audit.orderDate) ? 'black' : 'red'}">{{ audit.orderDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'entryDate', audit.entryDate) ? 'black' : 'red'}">{{ audit.entryDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'expirationDate', audit.expirationDate) ? 'black' : 'red'}">{{ audit.expirationDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'orderDate', audit.orderDate) ? 'black' : 'red'}">{{ audit.orderDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'entryDate', audit.entryDate) ? 'black' : 'red'}">{{ audit.entryDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'expirationDate', audit.expirationDate) ? 'black' : 'red'}">{{ audit.expirationDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'vendorName', audit.vendorName) ? 'black' : 'red'}">{{ audit.vendorName }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderNumber', audit.purchaseOrderNumber) ? 'black' : 'red'}">{{ audit.purchaseOrderNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">{{ audit.repairOrderNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'requestedByName', audit.requestedByName) ? 'black' : 'red'}">{{ audit.requestedByName }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'receivedDate', audit.receivedDate) ? 'black' : 'red'}">{{ audit.receivedDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'receivedDate', audit.receivedDate) ? 'black' : 'red'}">{{ audit.receivedDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">{{ audit.receiver }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'reconciliationNumber', audit.reconciliationNumber) ? 'black' : 'red'}">{{ audit.reconciliationNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'workOrderNumber', audit.workOrderNumber) ? 'black' : 'red'}">{{ audit.workOrderNumber }}</td>
@@ -452,11 +452,11 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'tracableToName', audit.tracableToName) ? 'black' : 'red'}">{{ audit.tracableToName }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'exportECCN', audit.exportECCN) ? 'black' : 'red'}">{{ audit.exportECCN }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'itarNumber', audit.itarNumber) ? 'black' : 'red'}">{{ audit.itarNumber }}</td>
-                <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityOnHand', audit.quantityOnHand) ? 'black' : 'red'}">{{ audit.quantityOnHand }}</td>
-                <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityReserved', audit.quantityReserved) ? 'black' : 'red'}">{{ audit.quantityReserved }}</td>
-                <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}">{{ audit.quantityIssued }}</td>
-                <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityAvailable', audit.quantityAvailable) ? 'black' : 'red'}">{{ audit.quantityAvailable }}</td>
-                <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderUnitCost', audit.purchaseOrderUnitCost) ? 'black' : 'red'}">{{ audit.purchaseOrderUnitCost }}</td>
+                <td class="text-right min-width-60" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityOnHand', audit.quantityOnHand) ? 'black' : 'red'}">{{ audit.quantityOnHand }}</td>
+                <td class="text-right min-width-60" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityReserved', audit.quantityReserved) ? 'black' : 'red'}">{{ audit.quantityReserved }}</td>
+                <td class="text-right min-width-60" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}">{{ audit.quantityIssued }}</td>
+                <td class="text-right min-width-60" [ngStyle]="{color: getColorCodeForHistory(i, 'quantityAvailable', audit.quantityAvailable) ? 'black' : 'red'}">{{ audit.quantityAvailable }}</td>
+                <td class="text-right min-width-60" [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderUnitCost', audit.purchaseOrderUnitCost) ? 'black' : 'red'}">{{ audit.purchaseOrderUnitCost }}</td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderUnitCost', audit.repairOrderUnitCost) ? 'black' : 'red'}">{{ audit.repairOrderUnitCost }}</td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'unitSalesPrice', audit.unitSalesPrice) ? 'black' : 'red'}">{{ audit.unitSalesPrice }}</td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'coreUnitCost', audit.coreUnitCost) ? 'black' : 'red'}">{{ audit.coreUnitCost }}</td>
@@ -469,19 +469,19 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'lotNum', audit.lotNum) ? 'black' : 'red'}">{{ audit.lotNum }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'lotDescription', audit.lotDescription) ? 'black' : 'red'}">{{ audit.lotDescription }}</td>
                 <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'lotCost', audit.lotCost) ? 'black' : 'red'}">{{ audit.lotCost }}</td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="blackListed" [(ngModel)]="audit.blackListed" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'blackListedReason', audit.blackListedReason) ? 'black' : 'red'}">
                     <p [matTooltip]="parsedText(audit.blackListedReason)" matTooltipPosition="above" [innerHTML]="audit.blackListedReason"></p>    
                 </td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="accident" [(ngModel)]="audit.accident" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'accidentReason', audit.accidentReason) ? 'black' : 'red'}">
                     <p [matTooltip]="parsedText(audit.accidentReason)" matTooltipPosition="above" [innerHTML]="audit.accidentReason"></p>    
                 </td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="incident" [(ngModel)]="audit.incident" disabled></label></span></td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'incidentReason', audit.incidentReason) ? 'black' : 'red'}">
@@ -493,13 +493,13 @@
                 <td class="min-w-130" [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">{{ audit.deptName }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partCertificationNumber', audit.partCertificationNumber) ? 'black' : 'red'}">{{ audit.partCertificationNumber }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedByName', audit.certifiedByName) ? 'black' : 'red'}">{{ audit.certifiedByName }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDate', audit.certifiedDate) ? 'black' : 'red'}">{{ audit.certifiedDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDueDate', audit.certifiedDueDate) ? 'black' : 'red'}">{{ audit.certifiedDueDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDate', audit.certifiedDate) ? 'black' : 'red'}">{{ audit.certifiedDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDueDate', audit.certifiedDueDate) ? 'black' : 'red'}">{{ audit.certifiedDueDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'tagTypeName', audit.tagTypeName) ? 'black' : 'red'}">{{ audit.tagTypeName }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'tagNum', audit.tagNum) ? 'black' : 'red'}">{{ audit.tagNum }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'tagDate', audit.tagDate) ? 'black' : 'red'}">{{ audit.tagDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'tagDate', audit.tagDate) ? 'black' : 'red'}">{{ audit.tagDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionByName', audit.inspectionByName) ? 'black' : 'red'}">{{ audit.inspectionByName }}</td>
-                <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDate', audit.inspectionDate) ? 'black' : 'red'}">{{ audit.inspectionDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px" [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDate', audit.inspectionDate) ? 'black' : 'red'}">{{ audit.inspectionDate |  date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'integrationPortal', audit.integrationPortal) ? 'black' : 'red'}">{{ audit.integrationPortal }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
                     <p class="m-0 p-0 p_textEditor truncate-text" 
@@ -518,13 +518,13 @@
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceNew', audit.lastSinceNew) ? 'black' : 'red'}">{{ audit.lastSinceNew }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceOVH', audit.lastSinceOVH) ? 'black' : 'red'}">{{ audit.lastSinceOVH }}</td>
                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceInspection', audit.lastSinceInspection) ? 'black' : 'red'}">{{ audit.lastSinceInspection }}</td>
-                <td class="text-center width-60">
+                <td class="text-center min-width-60">
                   <span class="value">
                     <label class="wauto"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled></label></span></td>
                 
-                <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px">{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td>{{ audit.createdBy }}</td>                
-                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td style="min-width:110px">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                 <td>{{ audit.updatedBy }}</td>
               </tr>
             </tbody>
@@ -560,7 +560,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">
-						<table class="table table-bordered" style="white-space: nowrap;" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
+						<table class="table table-bordered min-width-100" style="white-space: nowrap;" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Adjustment Data Type</th>

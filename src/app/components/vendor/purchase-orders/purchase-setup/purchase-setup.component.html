@@ -750,8 +750,8 @@
                                         <td>
 
                                             <div [innerHTML]="partList.memo" [matTooltip]="parsedText(partList.memo)"
-                                                matTooltipPosition="above" class="form-control"
-                                                class="text_editor_box parts-memo truncate-text"></div>
+                                                matTooltipPosition="above" class="form-control" style="width:92%"
+                                                class="text_editor_box truncate-text"></div>
                                             <!-- <i class="fa fa-info-circle fa-lg pull-right" style="margin-top:-16px"
                                            data-toggle="modal"
                                            data-target="#parts-memo-popup" matTooltip="Notes"
@@ -1167,7 +1167,8 @@
                                         {{approver.rule}}
                                     </td>
                                     <td>
-                                        <p class="m-0 p-0 p_textEditor memo-left"  [innerHTML]="approver['memo']"></p>
+                                        <p class="m-0 p-0 p_textEditor memo-left truncate-text"
+                                        matTooltipPosition="above"  [matTooltip]="parsedText(approver['memo'])"  [innerHTML]="approver['memo']"></p>
                                     </td>
                                     <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
                                 </tr>

@@ -790,7 +790,7 @@
                                                         matTooltip="Remove" matTooltipPosition="above">
                                                         <i class="fa fa-trash"></i>
                                                     </button> </span>
-                                                <span> 
+                                                <span style="margin-left:-10px"> 
                                                     <a class="btn nobg" (click)="openWOSummary(contentWOSummary,workOrderPartNumber, i)"
                                                         matTooltip="WO Summary" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                 </span>
@@ -986,7 +986,7 @@
             <div class="card-body">
                 <div class="col-md-12 cls_ad"  [hidden]="workOrderGeneralInformation.isSinglePN && !showTabsGrid">
                     <div class="col-md-2">
-                        <label class="control-label col-sm-3 label_adjf">MPN
+                        <label class="control-label fs12 col-sm-3 label_adjf"><b>MPN</b>
                         </label>
                         <div class="col-sm-7">
                             <p-dropdown [options]="mpnPartNumbersList" name="partNumber" #partNumber="ngModel"
@@ -997,28 +997,28 @@
                     </div>
                     <div class="col-md-10 mpn-grid" *ngIf="mpnGridData">
                         <div class="col-md-3">
-                            <label class="fs12">Description : </label>
+                            <label class="fs12"><b>Description : </b></label>
                             <span>{{mpnGridData.description}}</span>
                         </div>
                         <div class="col-md-2">
-                            <label class="fs12">Workscope : </label>
+                            <label class="fs12"><b>Workscope :</b> </label>
                             <span>{{mpnGridData.workscope}}</span>
                         </div>
                         <div class="col-md-2">
-                            <label class="fs12">NTE : </label>
+                            <label class="fs12"><b>NTE : </b></label>
                             <span>{{mpnGridData.nte}}</span>
                         </div>
 
                         <div class="col-md-1">
-                            <label class="fs12">Qty :</label>
+                            <label class="fs12"><b>Qty :</b></label>
                             <span class="text_right">{{mpnGridData.qty}}</span>
                         </div>
                         <div class="col-md-2">
-                            <label class="fs12 stage-align">Stage : </label>
+                            <label class="fs12 stage-align"><b>Stage : </b></label>
                             <span>{{mpnGridData.stage}}</span>
                         </div>
                         <div class="col-md-2">
-                            <label class="fs12">Priority :</label>
+                            <label class="fs12"><b>Priority :</b></label>
                             <span>{{mpnGridData.priority}}</span>
                         </div>
                     </div>
@@ -1780,7 +1780,7 @@
                         </div>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered header-table-width">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>MPN</th>
@@ -1793,6 +1793,7 @@
                                         <th>TAT</th>
                                     </tr>
                                 </thead>
+                                <tbody>
                                 <tr *ngFor="let wosummpn of woSummaryMPNData;">
                                     <td >
                                         {{wosummpn.partNumber}}
@@ -1803,29 +1804,30 @@
                                     <td >
                                         {{wosummpn.currencyName}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.revenue}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.directCost}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.margin}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.revenuePercentage}}
                                     </td>
                                     <td >
                                         {{wosummpn.tatdays}}
                                     </td>
                                 </tr>
+                                </tbody>
                             </table>
                             </div>
                         </div>
 
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered header-table-width">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Customer</th>
@@ -1843,6 +1845,7 @@
                                         <th class="table-actions-column">Action</th>
                                     </tr>
                                 </thead>
+                                <tbody>
                                 <tr *ngFor="let wosummpn of woSummaryCustData;">
                                     <td >
                                         {{wosummpn.customerName}}
@@ -1853,19 +1856,19 @@
                                     <td >
                                         {{wosummpn.currencyName}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.revenue}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.directCost}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.margin}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.revenuePercentage}}
                                     </td>
-                                    <td >
+                                    <td class="text-right">
                                         {{wosummpn.tatdays}}
                                     </td>
                                     <td >
@@ -1880,7 +1883,7 @@
                                     <td >
                                         {{wosummpn.workOrderStatus}}
                                     </td>
-                                    <td >
+                                    <td style="text-align:center">
                                         <span>
                                             <a class="btn nobg btn-view-cstm" (click)="view(viewWorkOrder,wosummpn)" matTooltip="View WO"
                                                 matTooltipPosition="above">
@@ -1889,6 +1892,7 @@
                                         </span>
                                     </td>
                                 </tr>
+                                </tbody>
                             </table>
                             </div>
                         </div>
