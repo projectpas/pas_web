@@ -90,7 +90,7 @@
                                         [(ngModel)]="poDataHeader.vendorContact" disabled required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Contact Phone</label>
+                                    <label>Phone</label>
                                     <input class="form-control" type="text" name="contactPhone"
                                         [(ngModel)]="poDataHeader.workPhone" disabled>
                                 </div>
@@ -217,12 +217,12 @@
                             <th colspan="5">PN Description</th>
                             <th>Alt/Equiv</th>
                             <th>Item Type</th>
-                            <th>Stock Type</th>
+                            <th>Stk Type</th>
                             <th class="min-width-80">Qty Ord </th>
                             <th class="min-width-80">Qty Drafted</th>
                             <th class="min-width-80">Qty Received</th>
-                            <th class="min-width-80">Qty Rejected</th>
-                            <th class="min-width-80">Back Ord </th>
+                            <th class="min-width-80">Qty Rej'd</th>
+                            <th class="min-width-80">Qty Back Ord </th>
                             <th class="min-width-60">Status</th>
                             <!-- <th [attr.colspan]="disableParentSpace ? '0' : '3'" class="text-center"></th> -->
                             <th colspan="4" class="mgmt-structure-td-width">
@@ -311,8 +311,8 @@
                                 <th class="min-width-60">Qty Ord</th>
                                 <th class="min-width-80">Qty Drafted</th>
                                 <th class="min-width-80">Qty Received</th>
-                                <th class="min-width-80">Qty Rejected</th>
-                                <th class="min-width-60">Back Ord</th>
+                                <th class="min-width-80">Qty Rej'd</th>
+                                <th class="min-width-60">Qty Back Ord</th>
                                 <th class="min-width-60">Status</th>
                                 <th class="min-width-60">User Type</th>
                                 <th>User Name</th>
@@ -419,7 +419,7 @@
 
                                         <div class="col-md-1" style="left:0px">
                                             <div class="form-group">
-                                                <label>Qty Rejected <span class="clr-red">*</span></label>
+                                                <label>Qty Rej'd <span class="clr-red">*</span></label>
                                                 <input type="text" maxlength="12" [(ngModel)]="part.quantityRejected"
                                                     (focusin)="quantityRejectedFocusIn($event, part)"
                                                     (focusout)="quantityRejectedFocusOut($event, part)" pInputText
@@ -1180,7 +1180,7 @@
                                                     </div> -->
                                                     <!-- (onSelect)="onTagbySelect(part.stocklineListObj[part.currentSLIndex])"  -->
                                                     <div class="form-group">
-                                                        <label>Engine Serial Number</label>
+                                                        <label>Engine Ser Num</label>
                                                         <!--matTooltip="Engine Serial Number"-->
                                                         <input class="form-control" type="text"
                                                             [(ngModel)]="part.stocklineListObj[part.currentSLIndex].engineSerialNumber"
@@ -1246,7 +1246,7 @@
                                             <div class="form-row" *ngIf="part.itemMaster.isSerialized">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Serial Num <span *ngIf="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided == false" class="clr-red">*</span></label>
+                                                        <label>Ser Num <span *ngIf="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided == false" class="clr-red">*</span></label>
                                                         <input class="form-control" (keyup)="moveByKey($event, part)"
                                                             disabled="{{part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided}}"
                                                             [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumber"

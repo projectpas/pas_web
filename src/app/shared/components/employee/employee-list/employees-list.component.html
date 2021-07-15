@@ -661,7 +661,9 @@
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b> Certification Type: </b></span><span class="value">{{
+                                <span class="label"
+                                  ><b> Cert Type: </b></span
+                                ><span class="value">{{
                                   allEmployeelist.employeeCertificationtype[0]
                                     ?.description
                                 }}</span>
@@ -836,7 +838,7 @@
                                 <div>
                                   <div class="clear"></div>
                                   <hr /> 
-                                  <app-common-documents [moduleName]="moduleName" [referenceId]="viewEmpID" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                                  <app-common-documents [appModuleId]="enum"  [moduleName]="moduleName" [referenceId]="viewEmpID" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
                                </div>                              
 
                            </div>

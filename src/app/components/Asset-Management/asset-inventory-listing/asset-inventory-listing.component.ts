@@ -18,6 +18,7 @@ import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
 import { DatePipe } from '@angular/common';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 @Component({
     selector: 'app-asset-inventory-listing',
     templateUrl: './asset-inventory-listing.component.html',
@@ -112,7 +113,7 @@ export class AssetInventoryListingComponent implements OnInit {
         { field: 'assetId', header: 'Asset ID', colspan: '1' },
         { field: 'alternateAssetId', header: 'Alt Asset ID', colspan: '1' },
         { field: 'manufacturerName', header: 'Manufacturer', colspan: '1' },
-        { field: 'serialNumber', header: 'Serial Num', colspan: '1' },
+        { field: 'serialNumber', header: 'Ser Num', colspan: '1' },
         { field: 'calibrationRequiredNew', header: 'Calibrated', colspan: '1' },
         { field: 'assetStatus', header: 'Asset Status', colspan: '1' },
 
@@ -190,6 +191,7 @@ export class AssetInventoryListingComponent implements OnInit {
     isDelete:boolean=true;
     isView:boolean=true;
     isDownload:boolean=true;
+    enum :any;
     constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,public assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
         this.isAdd=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Add]);
         this.isEdit=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
@@ -197,6 +199,7 @@ export class AssetInventoryListingComponent implements OnInit {
         this.isActive=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
         this.isDelete=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Delete]);
         this.isDownload=this.authService.checkPermission([ModuleConstants.Asset_Inventory_List+'.'+PermissionConstants.Download])
+        this.enum = AppModuleEnum.AssetInventory;
     }
 
     ngOnInit(): void {

@@ -40,7 +40,7 @@
                                       </div>
                                       <div class="form-group">
                                           <label>
-                                              Certification Type                                              
+                                              Cert Type                                              
                                           </label>
                                           <!-- <select class="form-control" name="employeeCertificationTypeId" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.employeeCertificationTypeId">
                                             <option value="0">-- Select --</option>  
@@ -129,7 +129,7 @@
             <div class="form-group">
                 <div class="col-sm-12">
                     <div class="col-sm-4">
-                        <label class="control-label">Certification Type <span class="clr-red">*</span></label>
+                        <label class="control-label">Cert Type <span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
                             <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="description" [ngModelOptions]="{standalone: true}" (onKeyUp)=certificationHandlerHandler($event) (onSelect)="certificationType($event)" [suggestions]="certificationtypeCollection" (completeMethod)="filtercertificationType($event)" [size]="30"

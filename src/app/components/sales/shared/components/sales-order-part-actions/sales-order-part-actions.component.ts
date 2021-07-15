@@ -62,7 +62,7 @@ export class SalesOrderPartActionsComponent implements OnInit {
       { field: "quantityReserved", header: "Qty Res'd", width: "100px" },
       { field: "quantityOnHand", header: "Qty OH", width: "100px" },
       { field: "quantityAvailable", header: "Qty Avail ", width: "100px" },
-      { field: "quantityOnOrder", header: "Qty On Order", width: "100px" }
+      { field: "quantityOnOrder", header: "Qty On Ord", width: "100px" }
     ];
   }
 

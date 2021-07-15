@@ -348,7 +348,7 @@ export class PurchaseSetupComponent implements OnInit {
 			header: 'Item Type',
 			field: 'itemType'
 		}, {
-			header: 'Stock Type',
+			header: 'Stk Type',
 			field: 'stockType'
 		}, {
 			header: 'Qty',
@@ -414,7 +414,7 @@ export class PurchaseSetupComponent implements OnInit {
 	isViewVendorCapes:boolean=true;
 	isViewPODocuments:boolean=true;
 	isViewPOCommunication:boolean=true;
-
+	enum :any;
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		private modalService: NgbModal,
@@ -490,7 +490,7 @@ export class PurchaseSetupComponent implements OnInit {
 		this.isViewVendorCapes = this.authService.checkPermission([ModuleConstants.PO_Vendor_Capes+'.'+PermissionConstants.View]);
 		this.isViewPODocuments = this.authService.checkPermission([ModuleConstants.PO_Documents+'.'+PermissionConstants.View]);
 	    this.isViewPOCommunication = this.authService.checkPermission([ModuleConstants.PO_Communication+'.'+PermissionConstants.View]);	
-
+		this.enum = AppModuleEnum.PurchaseOrder;
 	}
 
 	ngOnInit() {

@@ -30,6 +30,7 @@ import { MenuItem } from 'primeng/api';
 import { CalibrationMgmt } from '../../../models/calibration-mgmt.model'
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
   selector: 'app-calibration-mgmt-listing',
@@ -46,8 +47,8 @@ export class CalibrationMgmtListingComponent implements OnInit {
     { field: 'assetId', header: 'Asset Identification', colspan: '1' },
     { field: 'assetName', header: 'Asset Name', colspan: '1' },
     { field: 'altAssetId', header: 'Alt Asset ID', colspan: '1' },
-    { field: 'serialNum', header: 'Serial Num', colspan: '1' },
-    { field: 'controlName', header: 'Control Num', colspan: '1' },
+    { field: 'serialNum', header: 'Ser Num', colspan: '1' },
+    { field: 'controlName', header: 'Cntrl Num', colspan: '1' },
     { field: 'itemtype', header: 'Item Type', colspan: '1' },
     { field: 'companyName', header: 'Level 01', colspan: '1' },
     { field: 'buName', header: 'Level 02', colspan: '1' },
@@ -57,7 +58,7 @@ export class CalibrationMgmtListingComponent implements OnInit {
     { field: 'certifyType', header: 'Certify Type', colspan: '1' },
     { field: 'uOM', header: 'UOM', colspan: '1' },
     { field: 'qty', header: 'Qty', colspan: '1' },
-    { field: 'currencyName', header: 'Currency', colspan: '1' },
+    { field: 'currencyName', header: 'Curr', colspan: '1' },
     { field: 'unitCost', header: 'Updated Cost', colspan: '1' },
     { field: 'inservicesdate', header: 'In Service Date', colspan: '1' },
     { field: 'assetStatus', header: 'Asset Status', colspan: '1' },
@@ -164,6 +165,12 @@ disableSaveForEdit: boolean = true;
     calibrationForm : any = {};
     viewcalibrationForm : any = {};
     CalibrationProcessHisory: any[];
+    isSecurityAdd:boolean=true;
+    isSecurityEdit:boolean=true;
+    isSecurityDelete:boolean=true;
+    isSecurityView:boolean=true;
+    isSecurityDownload:boolean=true;
+    isSecurityActive:boolean=true;
 
   constructor(
     private alertService: AlertService, public assetService: AssetService, private _route: Router,
@@ -172,7 +179,14 @@ disableSaveForEdit: boolean = true;
         private vendorEndpointService: VendorEndpointService, private depriciationMethodService: DepriciationMethodService, private commonservice: CommonService,
         private datePipe: DatePipe,
         private assetLocationService: AssetLocationService, private authService: AuthService, public unitService: UnitOfMeasureService, private commonService: CommonService,
-  ) { }
+  ) {
+    this.isSecurityAdd=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Add]);
+    this.isSecurityEdit=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Update]);
+    this.isSecurityView=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.View]);
+    this.isSecurityActive=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Update]);
+    this.isSecurityDelete=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Delete]);
+    this.isSecurityDownload=this.authService.checkPermission([ModuleConstants.AssetMaintenance+'.'+PermissionConstants.Download])
+   }
 
   ngOnInit() {
 

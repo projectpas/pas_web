@@ -897,4 +897,10 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getSalesOrderParts(id, isDeleted));
       });
   }
+
+  GetSalesOrderSummarisedHistoryByPN(itemMasterId: number, isTwelveMonth: boolean) {
+    return this.http.get(`${this.configurations.baseUrl}/api/salesorder/GetSalesOrderSummarisedHistoryByPN?ItemMasterId=${itemMasterId}&IsTwelveMonth=${isTwelveMonth}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.GetSalesOrderSummarisedHistoryByPN(itemMasterId, isTwelveMonth));
+    });
+  }
 }

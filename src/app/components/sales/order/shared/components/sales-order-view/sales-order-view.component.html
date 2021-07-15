@@ -12,7 +12,7 @@
             {{salesOrder.salesOrderNumber ? salesQuote.salesOrderNumber : '-'}}
           </span>
         </p>
-        <p><span class="label"><b>Sales Quote Num: </b></span>
+        <p><span class="label"><b>Sales Qte Num: </b></span>
           <span class="value">
             {{salesOrder.salesOrderQuoteNumber ? salesQuote.salesOrderQuoteNumber : '-'}}
           </span>
@@ -22,11 +22,11 @@
             {{salesOrder.versionNumber ? salesQuote.versionNumber : '-'}}
           </span>
         </p>
-        <p><span class="label"><b>SO Num: </b></span>
+        <!-- <p><span class="label"><b>SO Num: </b></span>
           <span class="value">
             {{salesOrder.salesOrderNumber ? salesQuote.salesOrderNumber : '-'}}
           </span>
-        </p>
+        </p> -->
         <p><span class="label"><b>Open Date <span class="clr-red">*</span>: </b></span>
           <span class="value">{{salesOrder.openDate | date: 'MM/dd/yyyy'}}
           </span>
@@ -58,7 +58,7 @@
             {{salesOrder.customerName}}
           </span>
         </p>
-        <p><span class="label"><b>Customer Contact <span class="clr-red">*</span>: </b></span>
+        <p><span class="label"><b>Cust Contact <span class="clr-red">*</span>: </b></span>
           <span class="value">
             {{salesOrder.customerContactName}}
           </span>

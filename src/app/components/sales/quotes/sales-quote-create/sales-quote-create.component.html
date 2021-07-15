@@ -41,14 +41,14 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Customer Code</label>
+                            <label>Cust Code</label>
                             <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
                                 class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>SO Quote Num</label>
+                            <label>SO Qte Num</label>
                             <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
                                 name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
                                 id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
@@ -87,7 +87,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group padding-top-5">
-                                            <label>SO Quote Num</label>
+                                            <label>SO Qte Num</label>
                                             <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
                                                 name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
                                                 id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
@@ -113,7 +113,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Customer Ref<span class="clr-red">*</span></label>
+                                            <label>Cust Ref<span class="clr-red">*</span></label>
                                             <input type="text" required name="customerReferenceName"
                                                 id="customerReferenceName" #customerReferenceName="ngModel"
                                                 class="form-control" [(ngModel)]="salesQuote.customerReferenceName"
@@ -211,7 +211,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Customer Contact<span class="clr-red">*</span></label>
+                                            <label>Cust Contact<span class="clr-red">*</span></label>
                                             <select [(ngModel)]="salesQuote.customerContactId" required
                                                 [ngModelOptions]="{standalone: true}" name="customerContactId"
                                                 (change)="onChangeInput()" id="customerContactId"
@@ -373,7 +373,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label>SO Quote Status<span class="clr-red">*</span></label>
+                                            <label>SO Qte Status<span class="clr-red">*</span></label>
                                             <div class="col-md-6">
                                                 <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
@@ -650,10 +650,10 @@
     </div>
 </div>
 <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" aria-label="Close" (click)="closeModal()">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
                 <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
             </div>
             <div class="modal-body">
@@ -756,7 +756,7 @@
     <form #quoteConversionForm="ngForm" class="form-horizontal">
         <div class="modal-body">
             <div class="form-group">
-                <label>Enter Customer Refrence<span class="clr-red">*</span></label>
+                <label>Enter Cust Ref<span class="clr-red">*</span></label>
                 <input type="text" required class="form-control" name="customerReference" style="max-width: 60%;"
                     [(ngModel)]="salesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
             </div>

@@ -1106,7 +1106,7 @@
                     <p>
                       <span class="label">
                         <b>
-                          Currency: <span class="text-danger">*</span>
+                          Curr: <span class="text-danger">*</span>
                         </b> </span
                       ><span class="value">{{
                         vendorFinData.currency ? vendorFinData.currency : '-'
@@ -1587,7 +1587,7 @@
               >
               </app-vendor-documents> -->
 
-              <app-common-documents [moduleName]="moduleNameVendor" [referenceId]="vendorId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+              <app-common-documents [appModuleId]="enum" [moduleName]="moduleNameVendor" [referenceId]="vendorId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
             </div>
           </div>
         </div>
@@ -2180,7 +2180,7 @@
         </tr>
       </ng-template>
     </p-table> -->
-    <app-common-documents [moduleName]="CertifiedModuleName"   [referenceId]="vendorId"
+    <app-common-documents [appModuleId]="enum" [moduleName]="CertifiedModuleName"   [referenceId]="vendorId"
     [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
   </div>
   <div class="modal-footer">
@@ -2369,7 +2369,7 @@
         </tr>
       </ng-template>
     </p-table> -->
-    <app-common-documents [moduleName]="AuditModuleName"   [referenceId]="vendorId"
+    <app-common-documents [appModuleId]="enum" [moduleName]="AuditModuleName"   [referenceId]="vendorId"
     [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
   </div>
   <div class="modal-footer">

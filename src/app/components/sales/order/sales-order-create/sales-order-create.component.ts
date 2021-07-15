@@ -52,6 +52,7 @@ import { SalesOrderBillingComponent } from "../shared/components/sales-order-bil
 import { SalesOrderAnalysisComponent } from "../sales-order-analysis/sales-order-analysis.component";
 import { SalesOrderShippingComponent } from "../shared/components/sales-order-shipping/sales-order-shipping.component";
 import { SalesOrderPickTicketsComponent } from "../sales-order-pick-tickets/sales-order-pick-tickets.component";
+import { AppModuleEnum } from "src/app/enum/appmodule.enum";
 
 @Component({
   selector: "app-sales-order-create",
@@ -181,7 +182,7 @@ export class SalesOrderCreateComponent implements OnInit {
   showAddresstab: boolean = false;
   isContactsLoaded: boolean = false;
   todayDate: Date = new Date();
-
+  enum :any;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -198,6 +199,7 @@ export class SalesOrderCreateComponent implements OnInit {
     this.salesOrderCopyParameters = null;
     this.copyMode = false;
     this.copy = null;
+    this.enum = AppModuleEnum.SalesOrder;
   }
 
   ngOnInit() {

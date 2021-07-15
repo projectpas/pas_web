@@ -33,6 +33,7 @@ import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete
 import { ThrowStmt } from '@angular/compiler';
 import { DatePipe } from '@angular/common';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 declare let $: any;
 
 
@@ -279,6 +280,7 @@ export class EmployeesListComponent implements OnInit {
     ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Update,
     ModuleConstants.Employees_Training + '.' + PermissionConstants.Update];
     /** employees-list ctor */
+    enum :any;
     constructor(private modalService: NgbModal,
         private translationService: AppTranslationService,
         private empService: EmployeeService,
@@ -300,6 +302,7 @@ export class EmployeesListComponent implements OnInit {
         this.isCert = this.authService.checkPermission([ModuleConstants.Employees_Certification + '.' + PermissionConstants.View]);
         this.isTraining = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.View]);
         this.isMgmtStruct = this.authService.checkPermission([ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.View]);
+    	this.enum = AppModuleEnum.Employee;
     }
     private onDataLoadSuccessful(allWorkFlows: any[]) {
         //this.alertService.stopLoadingMessage();
