@@ -210,7 +210,7 @@ export class SalesOrderPartNumberComponent {
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
       { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Ord', width: "60px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Fulfilled', width: "75px" },
       { field: 'qtyReserved', header: 'Qty Resd', width: "70px" },
       { field: 'quantityPrevShipped', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },

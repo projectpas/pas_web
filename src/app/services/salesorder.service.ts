@@ -625,6 +625,12 @@ export class SalesOrderService {
     );
   }
 
+  getMultiplePickTicketPDF(salesOrderPickTickets: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getMultiplePickTicketPDF(salesOrderPickTickets)
+    );
+  }
+
   getMultiPickTicketPrint(salesOrderPickTickets: any): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getMultiPickTicketPrint(salesOrderPickTickets)
