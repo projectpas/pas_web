@@ -288,6 +288,7 @@ import { ExchangeSalesOrderShippingLabelComponent } from "./components/exchange-
 import { ExchangeSalesOrderPackagingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-Packaging-Label/exchange-sales-order-Packaging-Label.component";
 import { ExchangeSalesOrderMultiPackagingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-Packaging-Label/exchange-sales-order-multi-Packaging-Label.component";
 import { ExchangeSalesOrderMultiShippingLabelComponent } from "./components/exchange-sales-order/shared/components/exchange-sales-order-multi-shipping-label/exchange-sales-order-multi-shipping-label.component";
+//import { ExchangeSalesOrderSettingsComponent } from './exchange-sales-order-settings/exchange-sales-order-settings.component';
 @NgModule({
   imports: [
     CardModule,
@@ -319,7 +320,7 @@ import { ExchangeSalesOrderMultiShippingLabelComponent } from "./components/exch
     CommonPublicationViewModule,
     CalendarModule,
   ],
-  declarations: [
+  declarations: [	
     AppComponent,
     LoginComponent,
     LoginControlComponent,
@@ -362,8 +363,9 @@ import { ExchangeSalesOrderMultiShippingLabelComponent } from "./components/exch
     ExchangeSalesOrderShippingLabelComponent,
     ExchangeSalesOrderPackagingLabelComponent,
     ExchangeSalesOrderMultiPackagingLabelComponent,
-    ExchangeSalesOrderMultiShippingLabelComponent
-  ],
+    ExchangeSalesOrderMultiShippingLabelComponent,
+    //ExchangeSalesOrderSettingsComponent
+   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
     { provide: ErrorHandler, useClass: AppErrorHandler },

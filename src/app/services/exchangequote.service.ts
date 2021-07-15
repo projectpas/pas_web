@@ -44,6 +44,8 @@ export class ExchangequoteService {
   totalFreights = 0;
   totalCharges = 0;
   totalcost=0;
+  isEditSOSettingsList = false;
+  soSettingsData;
   constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
 
   getNewExchangeQuoteInstance(customerId: number) {
@@ -471,5 +473,16 @@ export class ExchangequoteService {
       observer.next(this.exchangeOrderQuote);
       observer.complete();
     });
+  }
+  saveOrUpdateExchangeSOSettings(data) {
+    return this.exchangeQuoteEndpointService.saveOrUpdateExchangeSOSettings(data);
+  }
+  deleteSoSetting(salesOrdersettingsId: number, updatedBy): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.deleteSoSetting(salesOrdersettingsId, updatedBy)
+    );
+  }
+  getSOSettingHistory(id) {
+    return this.exchangeQuoteEndpointService.getSOSettingHistory(id);
   }
 }

@@ -172,8 +172,7 @@
                 <input type="text" (ngModelChange)="validated()" pInputText pKeyFilter="money"
                   class="form-control text_right" value="{{ formateCurrency(charge.billingAmount) }}"
                   (blur)="charge.billingAmount = (charge.billingAmount)?formateCurrency(charge.billingAmount):'0.00'"
-                  (change)="charge.billingAmount = formateCurrency(charge.billingAmount)"
-                  [(ngModel)]="charge.billingAmount" [disabled]="isView || charge.billingMethodId != '2'" />
+                  [ngModelOptions]="{updateOn:'blur'}" [(ngModel)]="charge.billingAmount" [disabled]="isView || charge.billingMethodId != '2'" />
               </td>
             </ng-container>
             <td class="table-column-width" class="btn-spaces text-center">

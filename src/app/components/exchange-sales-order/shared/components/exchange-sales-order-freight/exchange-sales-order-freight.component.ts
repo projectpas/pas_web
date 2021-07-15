@@ -95,15 +95,19 @@ export class ExchangeSalesOrderFreightComponent implements OnInit {
 
   deletedStatusInfo: boolean = false;
   arrayEmplsit: any = [];
+  arrayPercentList: any = [];
   refresh(isview) {
     this.isSpinnerVisible = true;
     this.arrayEmplsit.push(0);
+    this.arrayPercentList.push(0);
     forkJoin(this.exchangeSalesOrderService.getExchangeSalesOrderFreights(this.exchangeQuoteId, this.deletedStatusInfo),
-      this.commonService.getShipVia(this.currentUserMasterCompanyId)
+      this.commonService.getShipVia(this.currentUserMasterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)
     ).subscribe(response => {
       this.isSpinnerVisible = false;
       this.setFreightsData(response[0]);
       this.setShipViaList(response[1]);
+      this.markupList = response[2];
     }, error => {
       this.isSpinnerVisible = false;
     })

@@ -75,6 +75,9 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
     private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangesalesorder/get-exchange-sales-order-margin-data";
     private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangesalesorder/create-exchange-sales-order-margin-data";
     private readonly getExchangeSalesOrderHypothAnalysis: string = environment.baseUrl + "/api/exchangesalesorder/togetexchangesalesorderhypoanalysis";
+    private readonly saveSalesOrderSettigns: string = environment.baseUrl + "/api/exchangesalesorder/save";
+    private readonly deleteSalesOrderSettings: string = environment.baseUrl + "/api/exchangesalesorder/delete";
+    private readonly getSalesOrderSettingsAuditHistory: string = environment.baseUrl + "/api/exchangesalesorder/getauditdatabyid";
     constructor(
         http: HttpClient,
         configurations: ConfigurationService,
@@ -459,6 +462,31 @@ export class ExchangeSalesOrderEndpointService extends EndpointFactory {
       return this.http.get<T>(endPointUrl, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.getExchangeSalesOrderHypoAnalysis(id));
+        });
+    }
+    saveOrUpdateExchangeSOSettings(data) {
+      return this.http
+        .post(
+          this.saveSalesOrderSettigns,
+          JSON.stringify(data),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.saveOrUpdateExchangeSOSettings(data));
+        });
+    }
+    deleteSoSetting(salesOrderSettingId: number, updatedBy): Observable<boolean> {
+      let endpointUrl = `${this.deleteSalesOrderSettings}?settingsId=${salesOrderSettingId}&updatedBy=${updatedBy}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.deleteSoSetting(salesOrderSettingId, updatedBy));
+        });
+    }
+    getSOSettingHistory(id) {
+      return this.http.get<any>(`${this.getSalesOrderSettingsAuditHistory}/${id}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getSOSettingHistory(id));
         });
     }
 }

@@ -88,14 +88,18 @@ export class ExchangeQuoteChargesComponent implements OnChanges, OnInit {
       }
     }
   }
+  arrayPercentList: any = [];
   refresh(isView) {
     this.isSpinnerVisible = true;
+    this.arrayPercentList.push(0);
     forkJoin(this.exchangequoteService.getExchangeQuoteCharges(this.exchangeQuoteId, this.deletedStatusInfo),
-      this.actionService.getCharges()
+      this.actionService.getCharges(),
+      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)
     ).subscribe(res => {
       this.isSpinnerVisible = false;
       this.setChargesData(res[0]);
       this.setVendors();
+      this.markupList = res[2];
     }, error => {
       this.isSpinnerVisible = false;
     });

@@ -1340,8 +1340,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink: '/salesmodule/salespages/app-so-approval-rule',
                 },
                 {
-                  label: 'Sales Order Exch Setup List',
-                  routerLink: '',
+                  label: 'Exch Sales Order Setup List',
+                  routerLink: '/exchangesalesordersettingsmodule/exchangesalesordersettings/app-exchange-sales-order-settings-list',
+                },
+                {
+                  label: 'Exch Quote Setup List',
+                  routerLink: '/exchangesalesordersettingsmodule/exchangesalesordersettings/app-exchange-quote-settings-list',
                 }
               ],
             },

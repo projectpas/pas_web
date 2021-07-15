@@ -153,7 +153,7 @@
                                                   <option value='-1'>--Select--</option>
                                                   <option *ngFor="let item of soStatusList" [ngValue]="item.value">
                                                       {{ item.label }}</option>
-                                              </select>
+                                              </select>+
                                               <div *ngIf="statusId.invalid && (statusId.dirty || statusId.touched)"
                                                   class="alert alert-danger alert-danger-cstm">
                                                   <div *ngIf="statusId.errors.required">
@@ -623,6 +623,10 @@
                             <app-exchange-sales-order-hypo-analysis>
                             </app-exchange-sales-order-hypo-analysis>
                         </p-tabPanel>
+                        <p-tabPanel header="Document">
+                            <app-common-documents [moduleName]="moduleName" [referenceId]="id" [isViewMode]="false"
+                              [offLineUpload]="true"></app-common-documents>
+                          </p-tabPanel>
                           <!-- <p-tabPanel header="Internal Approvers" *ngIf="checkEnforceInternalApproval()">
                               <app-sales-order-approve>
                               </app-sales-order-approve>

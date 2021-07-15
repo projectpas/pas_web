@@ -1,0 +1,168 @@
+<div class="card">
+  <div class="card new-card">
+      <div class="card-header header">
+          <div class="row">
+              <div class="col">
+                  <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Exchange Quote Settings</h4>
+              </div>
+              <div>
+                  <button type="button" class="btn-sm header-button"
+                      [routerLink]="['/exchangesalesordersettingsmodule/exchangesalesordersettings/app-exchange-quote-settings-list']">
+                      Exchange Quote Settings List
+                  </button>
+              </div>
+          </div>
+      </div>
+      <!-- <div class="card-body">
+          <form #soQuoteSettingsForm="ngForm">
+              <h4 class="head_lis">Exchange Sales Order Listing</h4>
+              <div class="form-row">
+                  <div class="col-md-12">
+                      <div class="col-md-3 work_order_teardown">
+                          <div class="form-group">
+                              <label>Exch SO List View <span class="text-danger">*</span></label>
+                              <p-dropdown name="company1" #wocompanyId="ngModel" required
+                                  [options]="salesOrderViewList" placeholder="Select SO List View"
+                                  class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.soListViewId">
+                              </p-dropdown>
+                          </div>
+                      </div>
+                      <div class="col-md-3 work_order_teardown">
+                          <div class="form-group">
+                              <label>SO List Status <span class="text-danger">*</span></label>
+                              <p-dropdown name="company12" #wocompanyId1="ngModel" required
+                                  [options]="salesOrderStatusList" placeholder="Select SO List Status"
+                                  class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.soListStatusId">
+                              </p-dropdown>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <hr> -->
+      <div class="card-body">
+          <h4 class="head_lis">Exchange Quote</h4>
+          <form #soQuoteSettingsForm="ngForm">
+              <div class="form-row">
+                  <div class="col-md-12">
+                      <div class="col-md-3 work_order_teardown">
+                          <div class="form-group">
+                              <label>Exch Quote Type <span class="clr-red">*</span></label>
+                              <p-dropdown name="typeid" #typeId="ngModel" required [options]="salesOrderTypes"
+                                  placeholder="Select Exch Quote Type" class="p-dropdown-custom-md-2"
+                                  [(ngModel)]="receivingForm.typeid">
+                              </p-dropdown>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label>Prefix</label>
+                              <input type="text" name="prefix" class="form-control ui-autocomplete-input"
+                                  [(ngModel)]="receivingForm.prefix" required>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label>Sufix</label>
+                              <input type="text" name="sufix" class="form-control ui-autocomplete-input"
+                                  [(ngModel)]="receivingForm.sufix">
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label> Start Code</label>
+                              <input type="number" name="startCode" class="form-control ui-autocomplete-input"
+                                  [(ngModel)]="receivingForm.startCode" required>
+                              <!-- <input type="text" name="startCode" class="form-control ui-autocomplete-input"
+                                  [(ngModel)]="receivingForm.startCode" required> -->
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12">
+                      <div class="col-md-3 work_order_teardown">
+                          <div class="form-group">
+                              <label>Priority <span class="clr-red">*</span></label>
+                              <p-dropdown name="company12" #company12="ngModel" required
+                                  [options]="salesOrderPriorityList" placeholder="Select Exch Quote Priority"
+                                  class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.defaultPriorityId">
+                              </p-dropdown>
+                          </div>
+                      </div>
+                      <div class="col-md-3 work_order_teardown">
+                          <div class="form-group">
+                              <label>Exch Quote Status <span class="clr-red">*</span></label>
+                              <p-dropdown name="company1" #company1="ngModel" required
+                                  [options]="salesOrderStatusList" placeholder="Select Exch Quote Status"
+                                  class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.defaultStatusId">
+                              </p-dropdown>
+                          </div>
+                      </div>
+                      <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
+                          <div class="form-group">
+                              <!-- <p-checkbox name="isApprovalRule" binary="true"
+                                  [(ngModel)]="receivingForm.isApprovalRule">
+                              </p-checkbox>
+                              <label style="padding-left:10px;">Enforce Approval
+                              </label> -->
+                              <label> COGS</label>
+                              <input type="number" name="cogs" class="form-control ui-autocomplete-input"
+                                  [(ngModel)]="receivingForm.cogs" required>
+                          </div>
+                      </div>
+                      <div class="col-md-3 work_order_teardown">
+                          <div class="form-group">
+                              <!-- <label>Effective Date </label>
+                              <p-calendar class="calendar" [showIcon]="true" appendTo="body" name="effectiveDate"
+                                  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                  [(ngModel)]="receivingForm.effectiveDate" #startDate="ngModel" [required]="receivingForm.isApprovalRule == true"></p-calendar> -->
+                                  <label> Days for core retun</label>
+                                  <input type="number" name="dayForCoreReturn" class="form-control ui-autocomplete-input"
+                                      [(ngModel)]="receivingForm.dayForCoreReturn" required>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="col-md-3 work_order_teardown">
+                      <div class="form-group">
+                              <label> Valid Days</label>
+                              <input type="number" name="dayForCoreReturn" class="form-control ui-autocomplete-input"
+                                  [(ngModel)]="receivingForm.validDays" required>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row pull-right m-t-10">
+                  <button type="submit" class="btn btn-primary" (click)="saveOrUpdateSOSetting()"
+                      [disabled]="!soQuoteSettingsForm.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  <ng-template #errorMessagePop let-c="close" let-d="dismiss">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
+          <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
+      </div>
+      <div class="modal-body">
+          <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal"
+              (click)="closeErrorMessage()">Close</button>
+      </div>
+  </ng-template>
+  <div class="preloader" *ngIf="isSpinnerVisible">
+      <div class="loading">
+          <div class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+          </div>
+      </div>
+  </div>

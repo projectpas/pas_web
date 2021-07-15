@@ -1,0 +1,234 @@
+<div>
+  <div class="page-content">
+      <div class="right_col" role="main">
+          <div class="x_content">
+              <div class="card new-card">
+                  <div class="card-header header">
+                      <div class="row">
+                          <div class="col">
+                              <h4 class="header-name">Exchange Quote Settings</h4>
+                          </div>
+                          <div *ngIf="!disableCreateNewSettings">
+                              <button type="button" class="btn-sm header-button" (click)="AddPage()"
+                                  [disabled]="disableCreateNewSettings">
+                                  Create New Setting
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="card-body header-body">
+                      <p-table #dt [value]="soqSettingsList" class="rpo-table-cstm rro-table-cstm" [rows]="10"
+                          [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
+                          [columns]="selectedGridColumns" [metaKeySelection]="true" selectionMode="multiple"
+                          [metaKeySelection]="true" [scrollable]="true" scrollHeight="450px"
+                          [(selection)]="selectedGridColumn" [resizableColumns]="true" [reorderableColumns]="true">
+                          <ng-template pTemplate="caption">
+                              <div class="row">
+                                  <div class="col">
+                                      <p-multiSelect [maxSelectedLabels]="2" [options]="gridColumns"
+                                          optionLabel="header" [(ngModel)]="selectedGridColumns"
+                                          [style]="{ minWidth: '220px' }" style="float:left"
+                                          (onChange)="columnsChanges()">
+                                      </p-multiSelect>
+                                  </div>
+                                  <div class="col">
+                                      <div style="width: auto !important; float: right;"
+                                          class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                                          <i class="fa fa-search"></i>
+                                          <input type="text" pInputText size="50" class="form-control"
+                                              (input)="globalSearch($event.target.value)" placeholder="Filter"
+                                              style="height: 28px !important;" />
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col">
+                                      <button type="button" class="btn btn-primary new-table-button"
+                                          matTooltip="Download Data" matTooltipPosition="above" pButton
+                                          icon="fa-download" iconPos="left" label="Export Data" data-toggle="modal"
+                                          (click)="selectedOnly = false; targetData = dt;"
+                                          data-target="#downloadConfirmation"></button>
+                                      <button type="button" class="btn btn-primary new-table-button" pButton
+                                          icon="fa-download" iconPos="left" label="Export Selected Data"
+                                          style="padding: 5px 12px !important;" matTooltip="Download Selected Data"
+                                          matTooltipPosition="above"
+                                          (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                  </div>
+                              </div>
+                          </ng-template>
+                          <ng-template pTemplate="colgroup" let-columns>
+                              <colgroup>
+                                  <col *ngFor="let col of columns" style="width:130px">
+                              </colgroup>
+                          </ng-template>
+                          <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                  <th style="width:auto" *ngFor="let col of columns" pResizableColumn
+                                      pReorderableColumn [pSortableColumn]="col.field">
+                                      {{col.header}}
+                                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                                  </th>
+                                  <th style="width:200px;position:sticky">Actions</th>
+                              </tr>
+                              <tr>
+                                  <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                      <input style="width:100%;" pInputText type="text"
+                                          (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                                  </th>
+                                  <th style="width:200px;position:sticky"></th>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-rowData let-columns="columns">
+                              <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
+                                  <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+                                      pReorderableRowHandle>
+                                      <span>
+                                          {{rowData[col.field]}}
+                                      </span>
+                                  </td>
+                                  <td class="action-icons-cstm" style="width:200px">
+                                      <div>
+                                          <span>
+                                              <a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
+                                                  matTooltipPosition="above">
+                                                  <i class="fa fa-pencil"></i>
+                                              </a>
+                                          </span>
+                                          <span>
+                                              <a class="btn nobg" (click)="openDelete(content,rowData)"
+                                                  matTooltip="Remove" matTooltipPosition="above">
+                                                  <i class="fa fa-trash"></i>
+                                              </a>
+                                          </span>
+                                          <span data-toggle="modal" data-target="#history">
+                                              <a class="btn nobg btn-hist-cstm" data-target="#history"
+                                                  (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                                  matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                          </span>
+                                      </div>
+                                  </td>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="summary" id="footer">
+                              <label id="footer" class="footer">Total:</label>
+                              <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText
+                                  type="text" />
+                              &nbsp;&nbsp;
+                              <label id="footer" class="footer1">Pages Count:</label>
+                              <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText
+                                  type="text" />
+                          </ng-template>
+                      </p-table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="modal fade bd-example-modal-xl" tabindex="-1" id="history" role="dialog"
+      aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
+                      name="">×</button>
+                  <h4 class="modal-title">History of exchange quote settings</h4>
+              </div>
+              <div class="modal-body" *ngIf="auditHistory">
+                  <table class="table table-bordered table-fixed wfl-table-popup-cstm"
+                      *ngIf="auditHistory.length> 0 else noDatavailable">
+                      <thead>
+                          <tr>
+                              <th>Exchange Quote Type</th>
+                              <th>Prefix</th>
+                              <th>Suffix</th>
+                              <th>Start Code</th>
+                              <th>Status</th>
+                              <th>Priority</th>
+                              <th>Last Updated By</th>
+                              <th>Last Updated Date</th>
+                          </tr>
+                      </thead>
+                      <tbody class="audithistory-cstm">
+                          <tr *ngFor="let audit of auditHistory; let i = index;">
+                              <td
+                                  [ngStyle]="{'color':  getColorCodeForHistory(i, 'typeName', audit.typeName)  ? 'black' : 'red'  }">
+                                  {{audit.typeName}}</td>
+                              <td
+                                  [ngStyle]="{'color': getColorCodeForHistory(i, 'prefix', audit.prefix)  ? 'black' : 'red'  }">
+                                  {{audit.prefix}}</td>
+                              <td
+                                  [ngStyle]="{'color': getColorCodeForHistory(i, 'sufix', audit.sufix)  ? 'black' : 'red'  }">
+                                  {{audit.sufix}}</td>
+                              <td
+                                  [ngStyle]="{'color': getColorCodeForHistory(i, 'startCode', audit.startCode)  ? 'black' : 'red'  }">
+                                  {{audit.startCode}}</td>
+                              <td
+                                  [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultStatusName', audit.defaultStatusName)  ? 'black' : 'red'  }">
+                                  {{audit.defaultStatusName}}</td>
+                              <td
+                                  [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultPriorityName', audit.defaultPriorityName)  ? 'black' : 'red'  }">
+                                  {{audit.defaultPriorityName}}</td>
+                              <td
+                                  [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                  {{audit.updatedBy}}</td>
+                              <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal" id="" name=""
+                      (click)="dismissModel()">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <ng-template #content let-c="close" let-d="dismiss">
+      <div class="modal-header">
+          <h4 class="modal-title">Are You Sure Want to Remove?</h4>
+          <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="deleteSettings()">Yes</button>
+          <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+      </div>
+  </ng-template>
+</div>
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" (click)="closeModal()">&times;</button>
+              <h4 class="modal-title">Are You Sure Want to Download?</h4>
+          </div>
+          <div class="modal-body" *ngIf="targetData && !selectedOnly">
+              <strong>
+                  <span>
+                      You are attempting to export {{targetData.totalRecords}} of records.
+                  </span>
+              </strong>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary"
+                  (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeModal();">Confirm</button>
+              <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>

@@ -178,8 +178,8 @@
                   matTooltipPosition="above"><i class="fa fa-eye"></i></a>
               </span>
               <span>
-                <a [class.disabled]="rowData.status === 'Closed' || rowData.isNewVersionCreated || rowData.status === 'Expired'"
-                  [ngClass]="{'btn_disabled': rowData.status === 'Closed' || rowData.isNewVersionCreated || rowData.status === 'Expired'}"
+                <a [class.disabled]="rowData.status === 'Closed' || rowData.isNewVersionCreated"
+                  [ngClass]="{'btn_disabled': rowData.status === 'Closed' || rowData.isNewVersionCreated}"
                   class="btn nobg" (click)="openQuoteToEdit(rowData)" matTooltip="Edit" matTooltipPosition="above">
                   <i class="fa fa-pencil"></i>
                 </a>

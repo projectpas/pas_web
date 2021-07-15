@@ -16,7 +16,8 @@ export class VerifyExchangeQuoteModel {
 
 export class ExchangeQuoteSettingsModel {
     exchangeQuoteSettingId: Number;
-    quoteTypeId: Number;
+    //quoteTypeId: Number;
+    typeid: Number;
     validDays: Number;
     masterCompanyId: Number;
     createdBy: String;
@@ -31,7 +32,7 @@ export class ExchangeQuoteSettingsModel {
     currentNumber: Number;
     defaultStatusId: Number;
     defaultPriorityId: Number;
-    soqListViewId: Number;
-    soqListStatusId: Number;
+    // soqListViewId: Number;
+    // soqListStatusId: Number;
     isApprovalRule: Boolean = false;
 }
