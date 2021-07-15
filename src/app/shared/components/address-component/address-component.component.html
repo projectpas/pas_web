@@ -1,6 +1,6 @@
 <ng-container>
     <form #createPOAddressForm="ngForm">
-        <div>
+        <div *ngIf="isAddressAdd || isAddressEdit">
             <button class="btn btn-primary pull-right" (click)="savePurchaseOrderAddress()"
                 [disabled]="!enableAddSaveBtn">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
         </div>
@@ -365,7 +365,7 @@
         </div>
 
         <div>
-            <button class="btn btn-primary pull-right" (click)="savePurchaseOrderAddress()"
+            <button *ngIf="isAddressAdd || isAddressEdit"  class="btn btn-primary pull-right" (click)="savePurchaseOrderAddress()"
                 [disabled]="!enableAddSaveBtn">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
         </div>
       
@@ -449,13 +449,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary editor-buttons-margin"
-                    *ngIf="(!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShipping"
+                    *ngIf="((!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShipping)&& (isAddressAdd || isAddressEdit)"
                     (click)="saveShippingAddress();"
                     [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"
                     data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button>
                 <!--resetAddressShippingForm();-->
                 <button type="button" class="btn btn-primary editor-buttons-margin"
-                    *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly"
+                    *ngIf="(showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly)&& (isAddressAdd || isAddressEdit)"
                     [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists) || addressFormForShipping.isPrimary"
                     (click)="saveShippingAddressToPO();"
                     data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
@@ -557,12 +557,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="saveBillingAddress();"
-                    *ngIf="(!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBilling"
+                    *ngIf="((!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBilling) && (isAddressAdd || isAddressEdit)"
                     [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)"
                     data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>
 
                 <button type="button" class="btn btn-primary"
-                    *ngIf="showIsPoOnlyButton && ((!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBillingPoOnly)"
+                    *ngIf="(showIsPoOnlyButton && ((!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBillingPoOnly))&& (isAddressAdd || isAddressEdit)"
                     [disabled]="!addBillNameForm.valid" (click)="saveBillingAddressToPO();"
                     [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists) || addressFormForBilling.isPrimary"
                     data-dismiss="modal">{{isEditModeBillingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
@@ -651,10 +651,10 @@
         </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" style="display: none;"
-                    [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this
+                    [disabled]="!addShipViaForm.valid " *ngIf="isAddressAdd || isAddressEdit" (click)="saveShipToShipViaDetailsToPO()">Save to this
                     PO</button>
 
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                <button *ngIf="isAddressAdd || isAddressEdit" type="button" class="btn btn-primary" data-dismiss="modal"
                     [disabled]="!(addShipViaForm.valid && ShipViabutton)"
                     (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -689,7 +689,7 @@
                 <p-editor [(ngModel)]="tempAddshipViaMemo" [style]="{'height':'320px'}" name="tempAddshipViaMemo"
                     required></p-editor>
                 <div class="editor-buttons">
-                    <button type="button" class="btn btn-primary editor-buttons-margin"
+                    <button *ngIf="isAddressAdd"  type="button" class="btn btn-primary editor-buttons-margin"
                         (click)="onSaveTextAreaInfo()">Save</button>
                     <button type="button" class="btn btn-danger editor-buttons-margin"
                         (click)="closeMemoModel()">Close</button>
@@ -728,7 +728,7 @@
                 </table> -->
                 <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required></p-editor>
                 <div class="editor-buttons">
-                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+                    <button *ngIf="isAddressAdd" type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
                         (click)="onSaveAddressMemo()">
                         Save
                     </button>

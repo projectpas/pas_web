@@ -10,6 +10,7 @@ import { CreditTermsService } from '../../../services/Credit Terms.service';
 import { CommonService } from '../../../services/common.service';
 import { AuthService } from '../../../services/auth.service';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 declare var $: any;
 
 @Component({
@@ -44,6 +45,7 @@ export class CustomerStepsPrimengComponent {
 	arrayCustlist:any[] = [];
 	isView:boolean=true;
 	isShowGeneralInfo
+	enum :any;
 	constructor(private customerService: CustomerService,
 		private acRouter: ActivatedRoute,
 		public employeeService: EmployeeService,
@@ -56,6 +58,7 @@ export class CustomerStepsPrimengComponent {
 		private authService: AuthService,
 	) {
 		this.isView=this.authService.checkPermission([ModuleConstants.CustomerList+'.'+PermissionConstants.View]);
+		this.enum = AppModuleEnum.Customer;
 	}
 
 	isShowTab(value){

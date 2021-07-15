@@ -8,7 +8,7 @@ declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
 import { AssetService } from '../../../services/asset/Assetservice';
-
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 @Component({
     selector: 'app-asset-inventory-view',
     templateUrl: './asset-inventory-view.component.html',
@@ -23,11 +23,14 @@ export class AssetInventoryViewComponent implements OnInit {
     maintanancemoduleName='AssetInventoryMaintenanceFile';
     warrantymoduleName='AssetInventoryWarrantyFile';
     intangiblemoduleName='AssetInventoryIntangibleFile';
+    enum :any;
     constructor(private commonService: CommonService,
          private activeModal: NgbActiveModal,public assetService: AssetService,
         private alertService: AlertService,
         private modalService: NgbModal,
-    ) {}
+    ) {
+        this.enum = AppModuleEnum.AssetInventory;
+    }
     ngOnInit(): void {
         this.getAssetinventory();
     }

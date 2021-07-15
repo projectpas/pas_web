@@ -708,7 +708,7 @@
             </div>
             <div class="form-row" *ngIf="currentAsset.assetIsMaintenanceReqd">
                 <div *ngIf="assetInventoryId" style="width:100%;">
-                    <app-common-documents [moduleName]="maintanancemoduleName"  [referenceId]="assetInventoryId"
+                    <app-common-documents  [appModuleId]="enum" [moduleName]="maintanancemoduleName"  [referenceId]="assetInventoryId"
                     [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                 </div>
             </div>
@@ -769,7 +769,7 @@
             </div>
             <div class="form-row" *ngIf="currentAsset.isWarrantyRequired">
                 <div *ngIf="assetInventoryId" style="width:100%;">
-                    <app-common-documents [moduleName]="warrantymoduleName"  [referenceId]="assetInventoryId"
+                    <app-common-documents [appModuleId]="enum" [moduleName]="warrantymoduleName"  [referenceId]="assetInventoryId"
                     [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                 </div>
             </div>
@@ -778,7 +778,7 @@
 
     <div class="form-row" *ngIf="currentAsset.isIntangible">
         <div *ngIf="assetInventoryId" style="width:100%;">
-            <app-common-documents [moduleName]="intangiblemoduleName"  [referenceId]="assetInventoryId"
+            <app-common-documents [appModuleId]="enum" [moduleName]="intangiblemoduleName"  [referenceId]="assetInventoryId"
             [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
         </div>
     </div>

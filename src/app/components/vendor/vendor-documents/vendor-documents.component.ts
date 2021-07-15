@@ -16,6 +16,7 @@ import { Documents } from '../../../models/documents.model';
 import { CustomerService } from '../../../services/customer.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 @Component({
 	selector: 'app-vendor-documents',
 	templateUrl: './vendor-documents.component.html',
@@ -83,7 +84,7 @@ export class VendorDocumentsComponent implements OnInit {
 	referenceId:any;
 	savedGeneralInformationData: any;
 	editGeneralInformationData: any;
-
+	enum :any;
 	constructor(public vendorService: VendorService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService,
 		private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, public customerService: CustomerService, private datePipe: DatePipe) {
 			if(window.localStorage.getItem('vendorService')){
@@ -108,6 +109,7 @@ export class VendorDocumentsComponent implements OnInit {
                 }
 			}
 			else { this.getVendorCodeandNameByVendorId(); }
+			this.enum = AppModuleEnum.Vendor;
 	}
 
 	ngOnInit() { 

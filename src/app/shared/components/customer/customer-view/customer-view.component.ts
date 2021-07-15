@@ -12,6 +12,7 @@ import { AlertService, MessageSeverity } from '../../../../services/alert.servic
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 
 @Component({
     selector: 'app-customer-view',
@@ -174,6 +175,7 @@ export class CustomerViewComponent implements OnInit {
     isSalesPersonAgentInfo:boolean=true;
     isWarningInfo:boolean=true;
     isDocumentInfo:boolean=true;
+    enum :any;
     constructor(public customerService: CustomerService, private commonService: CommonService,
         private activeModal: NgbActiveModal,
         private configurations: ConfigurationService,
@@ -193,6 +195,7 @@ export class CustomerViewComponent implements OnInit {
         this.isSalesPersonAgentInfo = this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation +'.'+PermissionConstants.View]);
         this.isWarningInfo = this.authService.checkPermission([ModuleConstants.Customers_Warnings +'.'+PermissionConstants.View]);
         this.isDocumentInfo = this.authService.checkPermission([ModuleConstants.Customers_Documents +'.'+PermissionConstants.View]);
+    	this.enum = AppModuleEnum.Customer;
     }
 
     ngOnInit(): void {

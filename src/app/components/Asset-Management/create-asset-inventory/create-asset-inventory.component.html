@@ -847,7 +847,7 @@
                         </div>
                       <div class="modal-body">
                         <div  class="docs-div" *ngIf="maintanancemoduleName"> 
-                            <app-common-documents [moduleName]="maintanancemoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
+                            <app-common-documents [appModuleId]="enum"  [moduleName]="maintanancemoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
                             [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
    
                         </div>
@@ -1115,7 +1115,7 @@
                         </div>
                       <div class="modal-body">
                         <div class="docs-div" *ngIf="warrantymoduleName"> 
-                            <app-common-documents [moduleName]="warrantymoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
+                            <app-common-documents [appModuleId]="enum"  [moduleName]="warrantymoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
                             [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
    
                         </div>
@@ -1286,7 +1286,7 @@
             </div>
         </div>
         <div *ngIf="currentAsset.isIntangible"> 
-            <app-common-documents [moduleName]="intangiblemoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
+            <app-common-documents  [appModuleId]="enum" [moduleName]="intangiblemoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
             [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
         </div>
         <div class="form-row" *ngIf="currentAsset.isIntangible" style="display: none;">

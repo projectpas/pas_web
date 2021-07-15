@@ -25,6 +25,8 @@ import { AccountService } from './account.service';
 import { CommonService } from './common.service';
 import { decode } from 'punycode';
 import { BehaviorSubject } from 'rxjs';
+import { AppModuleEnum } from '../enum/appmodule.enum';
+import { ModuleConstants } from '../generic/ModuleConstant';
 // import { AccountService } from "../services/account.service";
 
 @Injectable()
@@ -449,7 +451,31 @@ export class AuthService {
                 permissionName.includes(value));
             isAllowed = getData.length > 0;
         }
+        return isAllowed;
+    }
 
+    public checkDocumentPermission(appModuleId :any,permission : string): boolean {
+        let isAllowed: boolean = false;
+        let permissionName: string[];
+        if(appModuleId != null && appModuleId != undefined){
+            if(appModuleId == AppModuleEnum.Customer){
+                permissionName = [ModuleConstants.Customers_Documents+'.'+permission];
+            }else if(appModuleId == AppModuleEnum.Vendor){
+                permissionName = [ModuleConstants.Vendors_Documents+'.'+permission];
+            }else if(appModuleId == AppModuleEnum.AssetInventory){
+                permissionName = [ModuleConstants.Asset_Inventory_Document+'.'+permission];
+            }else if(appModuleId == AppModuleEnum.Employee){
+                permissionName = [ModuleConstants.EmployeesList + '.' + permission,ModuleConstants.Employees_Training+'.'+permission];
+            }
+            else if(appModuleId == AppModuleEnum.PurchaseOrder){
+                permissionName = [ModuleConstants.PO_Documents + '.' + permission];
+            }
+            if (this.currentUser && this.currentUser.permissionName != null) {
+                let getData = this.currentUser.permissionName.filter((value) =>
+                    permissionName.includes(value));
+                isAllowed = getData.length > 0;
+            }
+        }      
         return isAllowed;
     }
 
@@ -480,5 +506,20 @@ export class AuthService {
         if (this.currentUser != null) {
             return this.currentUser.roleName;
         }
+    }
+    public checkAddressPermission(appModuleId :any,permission : string): boolean {
+        let isAllowed: boolean = false;
+        let permissionName: string[];
+        if(appModuleId != null && appModuleId != undefined){
+            if(appModuleId == AppModuleEnum.PurchaseOrder){
+                permissionName = [ModuleConstants.PO_Address+'.'+permission];
+            }
+            if (this.currentUser && this.currentUser.permissionName != null) {
+                let getData = this.currentUser.permissionName.filter((value) =>
+                    permissionName.includes(value));
+                isAllowed = getData.length > 0;
+            }
+        }      
+        return isAllowed;
     }
 }

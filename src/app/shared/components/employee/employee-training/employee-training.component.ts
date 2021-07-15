@@ -24,6 +24,7 @@ import { AircraftModelService } from '../../../../services/aircraft-model/aircra
 //import * as $ from 'jquery';
 import * as moment from 'moment';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 declare let $: any;
 
 @Component({
@@ -144,6 +145,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     moduleName='Employee'
     isNextVisible: Boolean=true;
     isPrevVisible: Boolean=true;
+    enum :any;
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -168,6 +170,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.Update]);
         this.isNextVisible=this.authService.ShowTab("Create Employee",'Management Structure');
         this.isPrevVisible=this.authService.ShowTab("Create Employee",'Certification');
+        this.enum = AppModuleEnum.Employee;
     }
     ngOnInit(): void {
         this.isSpinnerVisible = true;

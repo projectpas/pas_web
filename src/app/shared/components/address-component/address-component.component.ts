@@ -14,6 +14,7 @@ import { SalesQuoteService } from '../../../services/salesquote.service';
 import { AddressTypeEnum } from './Address-type-enum';
 import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByValue, getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectByKey } from '../../../generic/autocomplete';
 import { AppModuleEnum } from '../../../enum/appmodule.enum';
+import { PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-address-component',
@@ -21,7 +22,7 @@ import { AppModuleEnum } from '../../../enum/appmodule.enum';
 	styleUrls: ['./address-component.component.scss']
 })
 export class AddressComponentComponent implements OnInit {
-
+	@Input() appModuleId;
 	@Input() addressType: any;
 	@Input() id: any;
 	@ViewChild('createPOAddressForm', { static: true }) createPOAddressForm: NgForm;
@@ -101,6 +102,9 @@ export class AddressComponentComponent implements OnInit {
 	billAddbutton: boolean = false;
 	defaultMSCOMPANYID: number = 0;
 	ModuleID: Number;
+	isAddressAdd:boolean=true;
+    isAddressEdit:boolean=true;
+	isAddressView:boolean=true;
 	constructor(
 		private alertService: AlertService,
 		private commonService: CommonService,
@@ -109,9 +113,12 @@ export class AddressComponentComponent implements OnInit {
 		private authService: AuthService,
 		private purchaseOrderService: PurchaseOrderService,
 		private salesQuoteService: SalesQuoteService,
-	) { }
+	) { 
+		
+	}
 
 	ngOnInit() {
+		this.checkAddressPermission();
 		this.loadModuleListForVendorComp();
 		this.getCountriesList();
 		this.loadShippingViaList();
@@ -157,10 +164,14 @@ export class AddressComponentComponent implements OnInit {
 				});
 			}
 		}
-
 	}
 
-
+    checkAddressPermission(){
+		this.isAddressAdd=this.authService.checkAddressPermission(this.appModuleId, PermissionConstants.Add);
+        this.isAddressEdit=this.authService.checkAddressPermission(this.appModuleId, PermissionConstants.Update);
+		this.isAddressView=this.authService.checkAddressPermission(this.appModuleId, PermissionConstants.View);
+    }
+	
 	getShipToBillToDropDown(res) {
 		const result = res;
 		var shipUsertype = 2;

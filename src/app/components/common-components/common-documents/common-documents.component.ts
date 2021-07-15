@@ -14,6 +14,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { Subject } from 'rxjs/Subject';
 import { DatePipe } from '@angular/common';
 import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByValue, getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectByKey } from '../../../generic/autocomplete';
+import { PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-common-documents',
@@ -29,6 +30,7 @@ export class CommonDocumentsComponent implements OnInit, OnChanges, OnDestroy {
     selectedOnly: any;
     @Input() isViewMode: any = false;
     @Input() moduleName;
+    @Input() appModuleId;
     @Input() referenceId;
     @Input() editMode;
     @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
@@ -125,11 +127,19 @@ export class CommonDocumentsComponent implements OnInit, OnChanges, OnDestroy {
     attachmoduleList: any = [];
     arrayCustlist: any = [];
     itemmasterIdReferenceId: number;
+    isDocAdd:boolean=true;
+    isDocEdit:boolean=true;
+    isDocActive:boolean=true;
+    isDocDelete: boolean = true;
+    isDocDownload:boolean=true;
+    isDocview:boolean=true;
+
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
         private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
 
     ngOnInit() {
+        this.checkAllDocumentPermission()
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         if (this.generalInformtionData) {
             this.id = this.referenceId;
@@ -148,7 +158,14 @@ export class CommonDocumentsComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-
+    checkAllDocumentPermission(){
+        this.isDocAdd=this.authService.checkDocumentPermission(this.appModuleId, PermissionConstants.Add);
+        this.isDocEdit=this.authService.checkDocumentPermission(this.appModuleId, PermissionConstants.Update);
+        this.isDocActive=this.authService.checkDocumentPermission(this.appModuleId, PermissionConstants.Update);
+        this.isDocDelete=this.authService.checkDocumentPermission(this.appModuleId, PermissionConstants.Delete);
+        this.isDocDownload=this.authService.checkDocumentPermission(this.appModuleId, PermissionConstants.Download);
+        this.isDocview=this.authService.checkDocumentPermission(this.appModuleId, PermissionConstants.View);
+    }
 
     ngOnDestroy() {
         // if (this.uploadDocsToser) this.uploadDocsToser.unsubscribe();

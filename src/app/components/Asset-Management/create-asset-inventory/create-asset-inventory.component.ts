@@ -18,6 +18,7 @@ import { MenuItem } from 'primeng/api';
 import { VendorService } from '../../../services/vendor.service';
 import { Location } from '@angular/common';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { AppModuleEnum } from 'src/app/enum/appmodule.enum';
 @Component({
     selector: 'app-create-asset-inventory',
     templateUrl: './create-asset-inventory.component.html',
@@ -128,6 +129,7 @@ export class CreateAssetInventoryComponent implements OnInit {
     isView:boolean=true;
     isAdd:boolean=true;
     isUpdate:boolean=true;
+    enum :any;
     constructor(private commonService: CommonService, private location: Location, private vendorService: VendorService, private assetService: AssetService, private assetLocationService: AssetLocationService, private alertService: AlertService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private route: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe) {
         this.currentAsset.entryDate = this.currentDate;
         this.currentAsset.isTangible = 1;
@@ -136,6 +138,7 @@ export class CreateAssetInventoryComponent implements OnInit {
         this.isView=this.authService.checkPermission([ModuleConstants.Asset_Inventory_List+'.'+PermissionConstants.View]);
         this.isAdd=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Add]);
         this.isUpdate=this.authService.checkPermission([ModuleConstants.Asset_Inventory_Create+'.'+PermissionConstants.Update]);
+        this.enum = AppModuleEnum.AssetInventory;
     }
 
     ngOnInit() {
