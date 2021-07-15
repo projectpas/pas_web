@@ -36,6 +36,7 @@ import { PurchaseOrderService } from '../../../../services/purchase-order.servic
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 
 
@@ -126,6 +127,8 @@ export class ReceivngPoComponent implements OnInit {
     alertText: string = '';
     modal: NgbModalRef;
     private onDestroy$: Subject<void> = new Subject<void>();
+    isAddrpo:boolean=true;
+    isEditrpo:boolean=true;
     constructor(public binservice: BinService,
         private purchaseOrderService: PurchaseOrderService,
         public manufacturerService: ManufacturerService,
@@ -167,8 +170,11 @@ export class ReceivngPoComponent implements OnInit {
         this.companyModuleId = AppModuleEnum.Company;
         this.vendorModuleId = AppModuleEnum.Vendor;
         this.customerModuleId = AppModuleEnum.Customer;
-        this.otherModuleId = AppModuleEnum.Others;
+        this.otherModuleId = AppModuleEnum.Others;       
+        this.isAddrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Add])
+        this.isEditrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Update]) 
     }
+
 
     private getAllSite() {
         if (this.arraySitelist.length == 0) {
@@ -1461,9 +1467,14 @@ export class ReceivngPoComponent implements OnInit {
         this.isSpinnerVisible = true;        
         this.shippingService.receiveParts(partsToPost).subscribe(data => {
             this.isSpinnerVisible = false;
-            this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
-            this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
-            return;
+            if(this.isEditrpo){
+                this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
+                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
+                return;
+            } else {
+                this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);                
+                return;
+            }
         }, err => {
             this.isSpinnerVisible = false;            
         });

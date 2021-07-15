@@ -100,7 +100,8 @@ export class ModuleConstants
         static ReceivingCustomer :string  = "ReceivingCustomer";
         static ReceivingCustomer_GeneralInformation :string  = "ReceivingCustomer_GeneralInformation";
         static ReceivingCustomer_Document :string  = "ReceivingCustomer_Document";
-
+        static POSetup:string = "POSetup";
+        static ReceivePurchaseOrder:string = "ReceivePurchaseOrder";
         static SO_List :string = "SO_List";
         static SO_Create :string = "SO_Create";
         static SO_Parts :string = "SO_Parts";

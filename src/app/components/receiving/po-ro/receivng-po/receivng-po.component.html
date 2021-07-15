@@ -1557,7 +1557,7 @@
     <div class="clear"></div>
     <hr>
     <!--<a class="btn btn-primary pull-right" [disabled]="quantityreceivebtn" (click)="onSubmitToReceive()">Submit to Receive</a>-->
-    <button class="btn btn-primary pull-right" [disabled]="!quantityreceivebtn" (click)="onSubmitToReceive()">
+    <button class="btn btn-primary pull-right" *ngIf="isAddrpo" [disabled]="!quantityreceivebtn" (click)="onSubmitToReceive()">
         Submit to
         Receive
     </button>

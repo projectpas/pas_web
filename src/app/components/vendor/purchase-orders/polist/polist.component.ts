@@ -194,6 +194,12 @@ export class PolistComponent implements OnInit {
     isDeletepo:boolean=true;
     isDownload:boolean=true;
 
+    isViewrpo:boolean=true;
+    isAddrpo:boolean=true;
+    isEditrpo:boolean=true;
+    isDeleterpo:boolean=true;
+    isDownloadrpo:boolean=true;
+
     permissionAddCheck = [ModuleConstants.PurchaseOrder + '.' + PermissionConstants.Add,
     ModuleConstants.POList + '.' + PermissionConstants.Add,
     ModuleConstants.PO_Header + '.' + PermissionConstants.Add,
@@ -236,8 +242,15 @@ export class PolistComponent implements OnInit {
         this.isAddpo=this.authService.checkPermission(this.permissionAddCheck)
 		this.isEditpo=this.authService.checkPermission(this.permissionUpdateCheck)
         this.isDeletepo=this.authService.checkPermission([ModuleConstants.POList+'.'+PermissionConstants.Delete])
-        this.isDownload=this.authService.checkPermission([ModuleConstants.POList+'.'+PermissionConstants.Download]) 
+        this.isDownload=this.authService.checkPermission([ModuleConstants.POList+'.'+PermissionConstants.Download])
+
+        this.isViewrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.View])
+        this.isAddrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Add])
+        this.isEditrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Update]) 
+        this.isDeleterpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Delete])
+        this.isDownloadrpo = this.authService.checkPermission([ModuleConstants.ReceivePurchaseOrder+'.'+PermissionConstants.Download])         
     }
+
     ngOnInit() {
         this.loadPOStatus();
         //this.loadApprovalProcessStatus();
