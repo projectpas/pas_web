@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { ExchangeSalesOrderService } from "../../../../../services/exchangesalesorder.service";
 import { ExchangequoteService } from "../../../../../services/exchangequote.service";
 declare var $: any;
@@ -55,7 +55,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   pageLinks: any;
   @Input() exchangeSalesOrderId: any;
   summaryColumns: any[] = [];
-  IsRestrictOnePN:boolean=false;
+  IsRestrictOnePN: boolean = false;
   @Input() defaultSettingPriority;
   selectedPartActionType: any;
   @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
@@ -66,9 +66,9 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
     private authService: AuthService,
     private modalService: NgbModal,
     private alertService: AlertService,) {
-      this.show = false;
-      this.part = new PartDetail();
-    }
+    this.show = false;
+    this.part = new PartDetail();
+  }
 
   ngOnInit() {
     //this.getDefaultCurrency();
@@ -89,7 +89,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   }
   initColumns() {
     this.summaryColumns = [
-      { field: 'partNumber', header: 'PN',  width: "140px" },
+      { field: 'partNumber', header: 'PN', width: "140px" },
       { field: 'partDescription', header: 'PN Description', width: '200px' },
     ]
   }
@@ -318,7 +318,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
       const partsList = this.selectedParts;
       partsList.push(partObj);
       this.exchangeSalesOrderService.selectedParts = partsList;
-      console.log("margin_summaryParts",this.summaryParts);
+      console.log("margin_summaryParts", this.summaryParts);
     }
     this.filterParts();
     this.salesMarginModal.close();
@@ -351,9 +351,8 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
         }
       });
       this.summaryParts = uniqueParts;
-      console.log("filterParts_summaryParts",this.summaryParts);
-      if(this.summaryParts.length > 0)
-      {
+      console.log("filterParts_summaryParts", this.summaryParts);
+      if (this.summaryParts.length > 0) {
         this.IsRestrictOnePN = true;
       }
     }
@@ -426,7 +425,7 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
   enableUpdateButton: boolean = false;
 
   approve() {
-    console.log("selectedParts",this.selectedParts);
+    console.log("selectedParts", this.selectedParts);
     this.enableUpdateButton = true;
     let partList: any = [];
     this.exchangeQuoteView.parts = [];
@@ -503,27 +502,34 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
       if (!invalidParts && !invalidDate) {
         let partNumberObj = this.exchangeSalesOrderService.marshalExchangeSalesOrderPartToSave(selectedPart, this.userName);
         this.exchangeQuoteView.parts.push(partNumberObj);
-        console.log("this.exchangeQuoteView.parts" , this.exchangeQuoteView.parts);
+        console.log("this.exchangeQuoteView.parts", this.exchangeQuoteView.parts);
       }
     }
-    this.isSpinnerVisible = true;
-    this.exchangeSalesOrderService.update(this.exchangeQuoteView).subscribe(data => {
-      this.canSaveParts = true;
-      this.alertService.stopLoadingMessage();
-      this.isSpinnerVisible = false;
-      this.inputValidCheckHeader = true;
-      this.alertService.showMessage(
-        "Success",
-        `PN  updated successfully.`,
-        MessageSeverity.success
-      );
-      this.onPartsSavedEvent.emit(this.selectedParts);
-    }, error => {
-      this.isSpinnerVisible = false;
-      const errorLog = error;
-      //this.onDataLoadFailed(errorLog)
-    });
-
+    if (invalidParts) {
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Exchange Sales Order', errmessage, MessageSeverity.error);
+    } else if (invalidDate) {
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Exchange Sales Order', "Please select valid Dates for Exchange Sales Order PartsList!", MessageSeverity.error);
+    } else {
+      this.isSpinnerVisible = true;
+      this.exchangeSalesOrderService.update(this.exchangeQuoteView).subscribe(data => {
+        this.canSaveParts = true;
+        this.alertService.stopLoadingMessage();
+        this.isSpinnerVisible = false;
+        this.inputValidCheckHeader = true;
+        this.alertService.showMessage(
+          "Success",
+          `PN  updated successfully.`,
+          MessageSeverity.success
+        );
+        this.onPartsSavedEvent.emit(this.selectedParts);
+      }, error => {
+        this.isSpinnerVisible = false;
+        const errorLog = error;
+        //this.onDataLoadFailed(errorLog)
+      });
+    }
   }
 
   checkUpdateOrsaveButton() {
@@ -554,16 +560,16 @@ export class ExchangeSalesOrderPartNumberComponent implements OnInit {
     this.isEdit = true;
     let contentPartEdit = this.salesMargin;
     this.part = part;
-    // if (this.part) {
-    //   this.exchangequoteService.getSearchPartObject().subscribe(data => {
-    //     this.query = data;
-    //     this.part = part;
-    //     // this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
-    //     // this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
-    //     // this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
-    //   });
-    //   this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
-    // }
+    if (this.part) {
+      this.exchangeSalesOrderService.getSearchPartObject().subscribe(data => {
+        this.query = data;
+        this.part = part;
+        // this.query.partSearchParamters.quantityRequested = this.part.quantityRequested;
+        // this.query.partSearchParamters.quantityToQuote = this.part.quantityToBeQuoted;
+        // this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
+      });
+      this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
+    }
   }
   onCustomerDateChange(stockIndex, rowIndex) {
     let requestDate = this.summaryParts[rowIndex].childParts[stockIndex].customerRequestDate;

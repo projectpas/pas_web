@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { ExchangequoteService } from "../../../../../services/exchangequote.service";
 declare var $: any;
 import { SummaryPart } from "../../../../../models/exchange/SummaryPart";
@@ -53,14 +53,14 @@ export class ExchangeQuotePartNumberComponent {
   pageLinks: any;
   @Input() exchangeQuoteId: any;
   summaryColumns: any[] = [];
-  IsRestrictOnePN:boolean=false;
+  IsRestrictOnePN: boolean = false;
   constructor(private exchangequoteService: ExchangequoteService,
     private authService: AuthService,
     private modalService: NgbModal,
     private alertService: AlertService,) {
-      this.show = false;
-      this.part = new PartDetail();
-     }
+    this.show = false;
+    this.part = new PartDetail();
+  }
 
   ngOnInit() {
     this.initColumns();
@@ -68,7 +68,7 @@ export class ExchangeQuotePartNumberComponent {
 
   initColumns() {
     this.summaryColumns = [
-      { field: 'partNumber', header: 'PN',  width: "140px" },
+      { field: 'partNumber', header: 'PN', width: "140px" },
       { field: 'partDescription', header: 'PN Description', width: '200px' },
       // { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       // { field: 'conditionDescription', header: 'Cond', width: "70px" },
@@ -321,7 +321,7 @@ export class ExchangeQuotePartNumberComponent {
       const partsList = this.selectedParts;
       partsList.push(partObj);
       this.exchangequoteService.selectedParts = partsList;
-      console.log("margin_summaryParts",this.summaryParts);
+      console.log("margin_summaryParts", this.summaryParts);
     }
     this.filterParts();
     this.salesMarginModal.close();
@@ -353,9 +353,8 @@ export class ExchangeQuotePartNumberComponent {
         }
       });
       this.summaryParts = uniqueParts;
-      console.log("filterParts_summaryParts",this.summaryParts);
-      if(this.summaryParts.length > 0)
-      {
+      console.log("filterParts_summaryParts", this.summaryParts);
+      if (this.summaryParts.length > 0) {
         this.IsRestrictOnePN = true;
       }
     }
@@ -503,26 +502,34 @@ export class ExchangeQuotePartNumberComponent {
       if (!invalidParts && !invalidDate) {
         let partNumberObj = this.exchangequoteService.marshalExchangeQuotePartToSave(selectedPart, this.userName);
         this.exchangeQuoteView.parts.push(partNumberObj);
-        console.log("this.exchangeQuoteView.parts" , this.exchangeQuoteView.parts);
+        console.log("this.exchangeQuoteView.parts", this.exchangeQuoteView.parts);
       }
     }
-    this.isSpinnerVisible = true;
-    this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
-      this.canSaveParts = true;
-      this.alertService.stopLoadingMessage();
-      this.isSpinnerVisible = false;
-      this.inputValidCheckHeader = true;
-      this.alertService.showMessage(
-        "Success",
-        `PN  updated successfully.`,
-        MessageSeverity.success
-      );
-      this.onPartsSavedEvent.emit(this.selectedParts);
-    }, error => {
-      this.isSpinnerVisible = false;
-      const errorLog = error;
-      //this.onDataLoadFailed(errorLog)
-    });
+    if (invalidParts) {
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Exchange Quote', errmessage, MessageSeverity.error);
+    } else if (invalidDate) {
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Exchange Quote', "Please select valid Dates for Exchange Quote PartsList!", MessageSeverity.error);
+    } else {
+      this.isSpinnerVisible = true;
+      this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
+        this.canSaveParts = true;
+        this.alertService.stopLoadingMessage();
+        this.isSpinnerVisible = false;
+        this.inputValidCheckHeader = true;
+        this.alertService.showMessage(
+          "Success",
+          `PN  updated successfully.`,
+          MessageSeverity.success
+        );
+        this.onPartsSavedEvent.emit(this.selectedParts);
+      }, error => {
+        this.isSpinnerVisible = false;
+        const errorLog = error;
+        //this.onDataLoadFailed(errorLog)
+      });
+    }
   }
 
   checkUpdateOrsaveButton() {

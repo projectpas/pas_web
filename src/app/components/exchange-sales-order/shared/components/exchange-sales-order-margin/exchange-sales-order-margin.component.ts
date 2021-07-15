@@ -36,14 +36,14 @@ export class ExchangeSalesOrderMarginComponent implements OnInit {
     this.calculate();
     this.getCurrency();
     this.isDisable = false;
-    if (this.part.exchangeQuotePartId > 0) {
+    if (this.part.exchangeSalesOrderPartId > 0) {
       this.isDisable = true;
       this.part.entryDate = new Date(this.part.entryDate);
       this.part.billingStartDate = new Date(this.part.billingStartDate);
       this.part.coreDueDate = new Date(this.part.coreDueDate);
       setTimeout(() => {
         this.setSchesuleBilling(this.part.exchangeSalesOrderScheduleBilling.length);
-      }, 500);
+      }, 1000);
     }
   }
   formatStringToNumberGlobal(val) {

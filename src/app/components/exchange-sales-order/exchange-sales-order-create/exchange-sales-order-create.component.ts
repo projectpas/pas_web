@@ -762,7 +762,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
         }
         this.salesQuote.shippedDate = null;
         this.salesQuote.openDate = new Date();
-        this.salesQuote.statusId = 1;
+        //this.salesQuote.statusId = "1";
         this.salesQuote.validForDays = 10;
         this.salesQuote.quoteExpiryDate = new Date();
         this.onChangeValidForDays();
@@ -804,7 +804,7 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   setValidDaysBasedOnSettings(isEditMode) {
     if (this.soSettingsList.length > 0) {
       let settingsObject = this.soSettingsList[0];
-
+      console.log(this.soStatusList);
       if (settingsObject) {
         if (!isEditMode) {
           this.salesQuote.quoteTypeId = settingsObject.typeid.toString();
@@ -1260,7 +1260,6 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
   }
 
   updateMarginSummary() {
-    debugger;
     this.isSpinnerVisible = true;
     this.marginSummary.exchangeSalesOrderId = this.id;
     this.exchangeSalesOrderService.createExchangeSalesOrderMarginSummary(this.marginSummary).subscribe(result => {
@@ -1275,13 +1274,11 @@ export class ExchangeSalesOrderCreateComponent implements OnInit {
     if (savedParts) {
       this.marginSummary = this.exchangeSalesOrderService.getExchangeQuoteHeaderMarginDetails(savedParts, this.marginSummary);
       this.updateMarginSummary();
-      console.log("summarydata", this.marginSummary);
       this.getSalesOrderInstance(this.id, true);
     }
   }
 
   setFreightsOrCharges() {
-    debugger;
     if (this.exchangeSalesOrderService.selectedParts && this.exchangeSalesOrderService.selectedParts.length > 0) {
       this.exchangeSalesOrderService.selectedParts.forEach((part, i) => {
         this.exchangeSalesOrderService.selectedParts[i].freight = this.totalFreights;

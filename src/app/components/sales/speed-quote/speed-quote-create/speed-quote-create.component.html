@@ -450,9 +450,8 @@
                                                 <!-- <input type="text" class="form-control"
                                                     [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
                                                     [disabled]="true" required/> -->
-                                                
                                                     <select name="status" [(ngModel)]="salesQuote.statusId"
-                                                    [disabled]="true" #statusId="ngModel">
+                                                    [disabled]="salesQuote.statusId != 6" #statusId="ngModel" (change)="onChangeInput()">
                                                     <option value='-1'>--Select--</option>
                                                     <option *ngFor="let item of soStatusList" [ngValue]="item.value">
                                                         {{ item.label }}</option>

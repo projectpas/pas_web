@@ -534,4 +534,15 @@ export class ExchangeSalesOrderService {
   getExchangeSalesOrderHypoAnalysis(id) {
     return this.exchangeSalesOrderEndpointService.getExchangeSalesOrderHypoAnalysis(id);
   }
+  saveOrUpdateExchangeSOSettings(data) {
+    return this.exchangeSalesOrderEndpointService.saveOrUpdateExchangeSOSettings(data);
+  }
+  deleteSoSetting(salesOrdersettingsId: number, updatedBy): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.exchangeSalesOrderEndpointService.deleteSoSetting(salesOrdersettingsId, updatedBy)
+    );
+  }
+  getSOSettingHistory(id) {
+    return this.exchangeSalesOrderEndpointService.getSOSettingHistory(id);
+  }
 }

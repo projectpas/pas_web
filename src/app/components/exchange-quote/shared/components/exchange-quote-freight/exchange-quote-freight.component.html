@@ -162,7 +162,7 @@
               </td>
               <td class="table-column-width">
                 <input (ngModelChange)="validated()" type="text" pInputText pKeyFilter="money"
-                  class="form-control text_right" value="{{ formateCurrency(freight.billingAmount) }}"
+                  class="form-control text_right"
                   (change)="freight.billingAmount = formateCurrency(freight.billingAmount)"
                   [(ngModel)]="freight.billingAmount" [disabled]="isView || freight.billingMethodId != '2'" />
               </td>

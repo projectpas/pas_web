@@ -2,7 +2,6 @@ import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
-
 import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
 import { IExchangeQuote } from "../models/exchange/IExchangeQuote.model";
@@ -35,6 +34,9 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getChargesAudihistory: string = environment.baseUrl + '/api/exchangequote/quote-charges-history';
     private readonly getExchangeQuoteViewDetails: string = environment.baseUrl + "/api/exchangequote/getview";
     private readonly getConvertfromquoteEndPoint: string = environment.baseUrl + "/api/exchangesalesorder/convertfromquote"
+    private readonly saveSalesOrderSettigns: string = environment.baseUrl + "/api/exchangequote/save";
+    private readonly deleteSalesOrderSettings: string = environment.baseUrl + "/api/exchangequote/delete";
+    private readonly getSalesOrderSettingsAuditHistory: string = environment.baseUrl + "/api/exchangequote/getauditdatabyid";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -255,6 +257,31 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
         .post(URL, salesQuoteConversionCriteria, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.convertfromquoteEndPoint(salesQuoteConversionCriteria, currentEmployeeId));
+        });
+    }
+    saveOrUpdateExchangeSOSettings(data) {
+      return this.http
+        .post(
+          this.saveSalesOrderSettigns,
+          JSON.stringify(data),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.saveOrUpdateExchangeSOSettings(data));
+        });
+    }
+    deleteSoSetting(salesOrderSettingId: number, updatedBy): Observable<boolean> {
+      let endpointUrl = `${this.deleteSalesOrderSettings}?settingsId=${salesOrderSettingId}&updatedBy=${updatedBy}`;
+      return this.http
+        .delete<boolean>(endpointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.deleteSoSetting(salesOrderSettingId, updatedBy));
+        });
+    }
+    getSOSettingHistory(id) {
+      return this.http.get<any>(`${this.getSalesOrderSettingsAuditHistory}/${id}`, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getSOSettingHistory(id));
         });
     }
 }

@@ -90,6 +90,7 @@ import { ResetPassComponent } from './components/login/reset-password-ui/resetpa
             },
             { path: "home", redirectTo: "/", pathMatch: "full" },
             { path: "updatepassword", component:UpdatepasswordComponent ,data: { title: "UpdatePassword" } },
+            { path: "exchangesalesordersettingsmodule", loadChildren: './exchange-sales-order-settings/exchange-sales-order-settings.module#ExchangeSalesOrderSettingsModule' },
             { path: "**", component: NotFoundComponent, data: { title: "Page Not Found" } },
         ], {
             preloadingStrategy: PreloadAllModules

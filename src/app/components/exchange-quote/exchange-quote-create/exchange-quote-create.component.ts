@@ -527,6 +527,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
           //this.exchangeQuote.type = validDaysObject.typeId.toString();
           this.exchangeQuote.statusId = validDaysObject.defaultStatusId;
           this.exchangeQuote.statusName = validDaysObject.defaultStatusName;
+          this.exchangeQuote.priorityId = validDaysObject.priorityId;
         }
         this.exchangeQuote.cogs = validDaysObject.cogs;
         this.exchangeQuote.daysForCoreReturn = validDaysObject.daysForCoreReturn;
@@ -569,7 +570,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
             isDefaultContactFound = true;
             this.exchangeQuote.customerContactId = this.customerContactList[
               i
-            ].customerContactId;
+            ].contactId;
           } else if (!isDefaultContactFound) {
             this.exchangeQuote.customerContactId = 0;
           }
