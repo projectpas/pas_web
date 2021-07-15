@@ -40,6 +40,12 @@
                                     [disabled]="!saveTearDownData.isRemovalReasons">
                                 </p-dropdown>
                             </div>
+                            
+                       <div class="view_tel">
+                        <input type="checkbox" name="allow1" [(ngModel)]="saveTearDownData.workOrderRemovalReasons.isDocument"
+                        [disabled]="saveTearDownData.workOrderRemovalReasons.reasonId ==0 ||  !saveTearDownData.isRemovalReasons"  
+                      class="form-control mat_r"/> <span>Documents</span>
+                       </div>
                             <div
                                 *ngIf="f.submitted && saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
                                 <div class="red_bomb">Reason is required</div>
@@ -61,7 +67,7 @@
                                 <div class="red_bomb">Memo is required</div>
                             </div>
                         </div>
-                        <div class="col-md-12"  *ngIf="saveTearDownData &&  saveTearDownData.workOrderRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId">
+                        <div class="col-md-12"  *ngIf="saveTearDownData && saveTearDownData.workOrderRemovalReasons && saveTearDownData.workOrderRemovalReasons.isDocument">
                             <app-common-documents [moduleName]="moduleNameeRemoval"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView"   [offLineUpload]="false"></app-common-documents>
@@ -202,6 +208,7 @@
                                 *ngIf="f.submitted &&  saveTearDownData.isRemovalReasons && saveTearDownData.workOrderRemovalReasons.reasonId ==0">
                                 <div class="red_bomb">Reason is required</div>
                             </div>
+                            
                             <div>
                                 <label for="dataentered">Inspector <span class="clr-red"
                                         *ngIf="saveTearDownData.isPreliinaryReview">*</span></label>
@@ -228,6 +235,11 @@
                                     [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 || !saveTearDownData.isPreliinaryReview"
                                     [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.inspectorDate"></p-calendar>
                             </div>
+                            <div class="view_tel">
+                                <input type="checkbox" name="allow1" [(ngModel)]="saveTearDownData.workOrderPreliinaryReview.isDocument"
+                                [disabled]="saveTearDownData.workOrderPreliinaryReview.reasonId ==0 ||  !saveTearDownData.isPreliinaryReview"  
+                              class="form-control mat_r"/> <span>Documents</span>
+                               </div>
                         </div>
                         <div class="col-md-9">
                             <div>
@@ -243,7 +255,7 @@
                                 <div class="red_bomb">Memo is required</div>
                             </div>
                         </div>
-                        <div class="col-md-12"  *ngIf="saveTearDownData && saveTearDownData.workOrderPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.reasonId">
+                        <div class="col-md-12"  *ngIf="saveTearDownData && saveTearDownData.workOrderPreliinaryReview && saveTearDownData.workOrderPreliinaryReview.isDocument">
                             <app-common-documents [moduleName]="moduleNameePrellinary"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
@@ -349,6 +361,11 @@
                                     [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.inspectorDate">
                                 </p-calendar>
                             </div>
+                            <div class="view_tel">
+                                <input type="checkbox" name="allow1" [(ngModel)]="saveTearDownData.workOrderPreAssmentResults.isDocument"
+                                [disabled]="saveTearDownData.workOrderPreAssmentResults.reasonId ==0 ||  !saveTearDownData.isPreAssmentResults"  
+                              class="form-control mat_r"/> <span>Documents</span>
+                               </div>
                         </div>
                         <div class="col-md-9">
                             <div>
@@ -365,7 +382,7 @@
                             </div>
 
                         </div>
-                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.reasonId">
+                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssmentResults && saveTearDownData.workOrderPreAssmentResults.isDocument">
                             <app-common-documents [moduleName]="moduleNameePreAssesment"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
@@ -463,6 +480,11 @@
                                     [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 || !saveTearDownData.isDiscovery"
                                     [(ngModel)]="saveTearDownData.workOrderDiscovery.inspectorDate"></p-calendar>
                             </div>
+                            <div class="view_tel">
+                                <input type="checkbox" name="allow1" [(ngModel)]="saveTearDownData.workOrderDiscovery.isDocument"
+                                [disabled]="saveTearDownData.workOrderDiscovery.reasonId ==0 ||  !saveTearDownData.isDiscovery"  
+                              class="form-control mat_r"/> <span>Documents</span>
+                               </div>
                         </div>
                         <div class="col-md-9">
                             <div>
@@ -477,7 +499,7 @@
                                 <div class="red_bomb">Memo is required</div>
                             </div>
                         </div>
-                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderDiscovery && saveTearDownData.workOrderDiscovery.reasonId">
+                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderDiscovery && saveTearDownData.workOrderDiscovery.isDocument">
                             <app-common-documents [moduleName]="moduleNameeTearDescovery"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>
@@ -577,6 +599,11 @@
                                     [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.inspectorDate">
                                 </p-calendar>
                             </div>
+                            <div class="view_tel">
+                                <input type="checkbox" name="allow1" [(ngModel)]="saveTearDownData.workOrderPreAssemblyInspection.isDocument"
+                                [disabled]="saveTearDownData.workOrderPreAssemblyInspection.reasonId ==0 ||  !saveTearDownData.isPreAssemblyInspection"  
+                              class="form-control mat_r"/> <span>Documents</span>
+                               </div>
                         </div>
                         <div class="col-md-9">
                             <div>
@@ -592,7 +619,7 @@
                                 <div class="red_bomb">Memo is required</div>
                             </div>
                         </div>
-                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.reasonId">
+                        <div class="col-md-12" *ngIf="saveTearDownData && saveTearDownData.workOrderPreAssemblyInspection && saveTearDownData.workOrderPreAssemblyInspection.isDocument">
                             <app-common-documents [moduleName]="moduleNameePreAssembly"  
                                 [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"
                                 [isViewMode]="isView" [offLineUpload]="false"></app-common-documents>

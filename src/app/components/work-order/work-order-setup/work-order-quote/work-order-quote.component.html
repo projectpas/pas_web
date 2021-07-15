@@ -858,19 +858,19 @@
                          <th style="width: 100px;">Task</th>
                          <th style="width: 130px;">PN</th>
                          <th style="width: 250px;">PN Description</th>
-                         <th style="width: 100px !important;">Provision</th>
-                         <th>Qty</th>
-                         <th>UOM</th>
+                         <th style="width: 110px !important;">Provision</th>
+                         <th style="width: 60px;">Qty</th>
+                         <th style="width: 100px;">UOM</th>
                          <th style="width: 100px !important;">Cond </th>
-                         <th style="width: 70px;">Stock Type</th>
-                         <th style="width: 70px;">Unit Cost</th>
-                         <th style="width: 70px;">Ext Cost</th>
+                         <th style="width: 90px;">Stock Type</th>
+                         <th style="width: 84px;">Unit Cost</th>
+                         <th style="width: 84px;">Ext Cost</th>
                          <th style="width: 100px;">Billing Method</th>
                          <th style="width: 70px !important;">Mark Up</th>
-                         <th>
+                         <th style="width: 100px;">
                              Billing Rate
                          </th>
-                         <th style="width: 90px;">
+                         <th style="width: 110px;">
                              Billing Amount
                          </th>
                          <th class="width-100" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
@@ -905,14 +905,14 @@
                                  <td>
                                      <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.conditionCodeId" disabled>
                                          <option value="">Select</option>
-                                         <option *ngFor="let condition of conditions" [value]="condition.conditionId">{{condition.description}}</option>
+                                         <option *ngFor="let condition of conditions" [value]="condition.conditionCodeId">{{condition.description}}</option>
                                      </select>
                                  </td>
                                  <td>{{matQuotation.stockType}}</td>
                                  <td class="text-right">{{formateCurrency(matQuotation.unitCost)}}</td>
                                  <td class="text-right">{{formateCurrency((matQuotation.quantity * matQuotation.unitCost).toFixed(2))}}</td>
                                  <td>
-                                     <select class="form-control width-130" (ngModelChange)="getValidMat()" (change)="billingChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.billingMethodId"
+                                     <select class="form-control width-94" (ngModelChange)="getValidMat()" (change)="billingChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.billingMethodId"
                                        [disabled]="isView || costPlusType == 3 || isViewForApprovedPart">
                                          <option value="">Select</option>
                                          <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]" [value]="bm.value">{{bm.label}}</option>
@@ -926,7 +926,7 @@
                                  </td>
                                  <td class="text-right">{{ matQuotation.billingRate }}</td>
                                  <td>
-                                     <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}"  style="font-size: 10.5px !important;"
+                                     <input type="text" pInputText pKeyFilter="money"  (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right fotSz" name="unitcost_{{mainIndex }}_{{subIndex}}"  style="font-size: 10.5px !important;"
                                       value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
                                      </td>
                                  <td >
@@ -935,7 +935,7 @@
                                  </td>  
                              </tr>
                          </ng-container>
-                         <tr class="task-total">
+                         <!-- <tr class="task-total">
                              <td class="padding-4">
                                  Total ({{mData[0].taskName}})
                              </td>
@@ -949,13 +949,15 @@
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
-                             <td class="content-to-end">{{ formateCurrency(getTotalTaskUnitCost(mData)) }}</td>
+                             <td class="content-to-end">
+                                 {{ formateCurrency(getTotalTaskUnitCost(mData)) }}
+                                </td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
                              <td>&nbsp;</td>
                              <td class="content-to-end">{{ formateCurren(totalTaskMaterialBillingAmount(mData))}}</td>
                              <td *ngIf="!isView && !isViewForApprovedPart"></td>
-                         </tr>
+                         </tr> -->
                      </ng-container>
                      
                      <tr *ngIf="materialListQuotation && materialListQuotation.length==0">
@@ -979,7 +981,9 @@
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
-                         <td class="content-to-end"><b>{{ formateCurrency(getTotalUnitCost()) }}</b></td>
+                         <td class="content-to-end">
+                             <!-- <b>{{ formateCurrency(getTotalUnitCost()) }}</b> -->
+                            </td>
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>
                          <td>&nbsp;</td>

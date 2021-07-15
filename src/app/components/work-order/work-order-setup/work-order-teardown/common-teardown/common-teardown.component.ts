@@ -619,7 +619,6 @@ export class CommonTeardownComponent implements OnInit {
             isActive: true,
             isDeleted: false,
         }
-
         this.saveTearDownData.workOrderAdditionalComments = {
             ...this.saveTearDownData.workOrderAdditionalComments,
             createdDate: new Date(),
@@ -649,6 +648,7 @@ export class CommonTeardownComponent implements OnInit {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
+            isDocument:this.saveTearDownData.workOrderDiscovery.isDocument ? this.saveTearDownData.workOrderDiscovery.isDocument :false
         }
         this.saveTearDownData.workOrderFinalInspection = {
             ...this.saveTearDownData.workOrderFinalInspection,
@@ -689,6 +689,7 @@ export class CommonTeardownComponent implements OnInit {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
+            isDocument:this.saveTearDownData.workOrderPreAssemblyInspection.isDocument ? this.saveTearDownData.workOrderPreAssemblyInspection.isDocument :false
         }
         this.saveTearDownData.workOrderPreAssmentResults = {
             ...this.saveTearDownData.workOrderPreAssmentResults,
@@ -699,6 +700,7 @@ export class CommonTeardownComponent implements OnInit {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
+            isDocument:this.saveTearDownData.workOrderPreAssmentResults.isDocument ? this.saveTearDownData.workOrderPreAssmentResults.isDocument :false
         }
         this.saveTearDownData.workOrderPreliinaryReview = {
             ...this.saveTearDownData.workOrderPreliinaryReview,
@@ -709,6 +711,7 @@ export class CommonTeardownComponent implements OnInit {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
+            isDocument:this.saveTearDownData.workOrderPreliinaryReview.isDocument ? this.saveTearDownData.workOrderPreliinaryReview.isDocument :false
         }
         this.saveTearDownData.workOrderRemovalReasons = {
             ...this.saveTearDownData.workOrderRemovalReasons,
@@ -719,6 +722,7 @@ export class CommonTeardownComponent implements OnInit {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             isActive: true,
             isDeleted: false,
+            isDocument:this.saveTearDownData.workOrderRemovalReasons.isDocument ? this.saveTearDownData.workOrderRemovalReasons.isDocument :false
         }
         this.saveTearDownData.workOrderTestDataUsed = {
             ...this.saveTearDownData.workOrderTestDataUsed,
